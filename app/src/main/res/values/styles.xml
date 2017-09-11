@@ -21,6 +21,7 @@
     <style name="btn_style" parent="android:Widget.Button">
         <item name="android:color">@color/maroon</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/btn_draw</item>
 
     </style>

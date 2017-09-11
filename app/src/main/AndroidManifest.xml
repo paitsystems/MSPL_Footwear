@@ -20,7 +20,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name="com.lnbinfotech.msplfootwear.FirstActivity">
+        <activity android:name=".FirstActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,38 +28,38 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.lnbinfotech.msplfootwear.LoginActivity"
+            android:name=".LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.lnbinfotech.msplfootwear.MainActivity"
+            android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.lnbinfotech.msplfootwear.AllTicketListActivity"
+            android:name=".AllTicketListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name="com.lnbinfotech.msplfootwear.AddNewTicketActivity"
+            android:name=".AddNewTicketActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.lnbinfotech.msplfootwear.UpdateTicketActivity"
+            android:name=".UpdateTicketActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.lnbinfotech.msplfootwear.ReplyResponseActivity"
+            android:name=".ReplyResponseActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".FullImageActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name="com.lnbinfotech.msplfootwear.FullImageActivity"
-            android:screenOrientation="portrait"/>
+        <service android:name=".services.DownloadImageService" />
+        <service android:name=".services.CheckNewTicketService" />
 
-        <service android:name="com.lnbinfotech.msplfootwear.services.DownloadImageService" />
-        <service android:name="com.lnbinfotech.msplfootwear.services.CheckNewTicketService" />
-
-        <receiver android:name="com.lnbinfotech.msplfootwear.braodcasts.AutoUpdateBroadcastReceiver" />
+        <receiver android:name=".braodcasts.AutoUpdateBroadcastReceiver" />
         <receiver
-            android:name="com.lnbinfotech.msplfootwear.braodcasts.RebootBroadcastReceiver"
+            android:name=".braodcasts.RebootBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -70,7 +70,7 @@
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
-
+        <activity android:name=".UpdateProfileActivity"></activity>
     </application>
 
 </manifest>
