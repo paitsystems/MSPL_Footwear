@@ -6,7 +6,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.lnbinfotech.smartorder"
+        applicationId "com.lnbinfotech.msplfootwear"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1

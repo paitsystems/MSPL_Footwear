@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lnbinfotech.paragaon">
+    package="com.lnbinfotech.msplfootwear">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -20,7 +20,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name="com.lnbinfotech.paragaon.FirstActivity">
+        <activity android:name="com.lnbinfotech.msplfootwear.FirstActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,38 +28,38 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.lnbinfotech.paragaon.LoginActivity"
+            android:name="com.lnbinfotech.msplfootwear.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.lnbinfotech.paragaon.MainActivity"
+            android:name="com.lnbinfotech.msplfootwear.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.lnbinfotech.paragaon.AllTicketListActivity"
+            android:name="com.lnbinfotech.msplfootwear.AllTicketListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name="com.lnbinfotech.paragaon.AddNewTicketActivity"
+            android:name="com.lnbinfotech.msplfootwear.AddNewTicketActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.lnbinfotech.paragaon.UpdateTicketActivity"
+            android:name="com.lnbinfotech.msplfootwear.UpdateTicketActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.lnbinfotech.paragaon.ReplyResponseActivity"
+            android:name="com.lnbinfotech.msplfootwear.ReplyResponseActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
 
-        <activity android:name="com.lnbinfotech.paragaon.FullImageActivity"
+        <activity android:name="com.lnbinfotech.msplfootwear.FullImageActivity"
             android:screenOrientation="portrait"/>
 
-        <service android:name="com.lnbinfotech.paragaon.services.DownloadImageService" />
-        <service android:name="com.lnbinfotech.paragaon.services.CheckNewTicketService" />
+        <service android:name="com.lnbinfotech.msplfootwear.services.DownloadImageService" />
+        <service android:name="com.lnbinfotech.msplfootwear.services.CheckNewTicketService" />
 
-        <receiver android:name="com.lnbinfotech.paragaon.braodcasts.AutoUpdateBroadcastReceiver" />
+        <receiver android:name="com.lnbinfotech.msplfootwear.braodcasts.AutoUpdateBroadcastReceiver" />
         <receiver
-            android:name="com.lnbinfotech.paragaon.braodcasts.RebootBroadcastReceiver"
+            android:name="com.lnbinfotech.msplfootwear.braodcasts.RebootBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
