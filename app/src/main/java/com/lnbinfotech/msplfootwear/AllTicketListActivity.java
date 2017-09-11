@@ -41,7 +41,7 @@ public class AllTicketListActivity extends AppCompatActivity {
     static String selStat;
     AllTicketListAdapter adapter;
     EditText ed_search;
-    //This is Master Entry
+    //Comment Added
     AdView mAdView;
 
     @Override
