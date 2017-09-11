@@ -45,6 +45,7 @@ public class AllTicketListActivity extends AppCompatActivity {
     //Edit from github
     AdView mAdView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
