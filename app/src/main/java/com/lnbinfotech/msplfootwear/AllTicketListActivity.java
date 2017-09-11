@@ -41,7 +41,7 @@ public class AllTicketListActivity extends AppCompatActivity {
     static String selStat;
     AllTicketListAdapter adapter;
     EditText ed_search;
-    //Comment Added
+    //This is Master Branch Entry
     AdView mAdView;
 
     @Override
