@@ -44,6 +44,7 @@ public class AllTicketListActivity extends AppCompatActivity {
     //This is Master Entry
     AdView mAdView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
