@@ -41,8 +41,7 @@ public class AllTicketListActivity extends AppCompatActivity {
     static String selStat;
     AllTicketListAdapter adapter;
     EditText ed_search;
-    //Test Branch Entry
-    //Edit from github
+    //This is Master Entry
     AdView mAdView;
 
 
