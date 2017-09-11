@@ -51,7 +51,7 @@
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_weight="0.3"
                     android:layout_gravity="center">
 
@@ -66,7 +66,7 @@
                     android:maxLength="10"
                     android:background="@drawable/border_draw_profile"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:id="@+id/ed_mobno" />
                     </LinearLayout>
@@ -89,7 +89,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_weight="0.3"
                 android:layout_gravity="center">
 
@@ -102,7 +102,7 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/border_draw_profile"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:id="@+id/ed_emailid" />
             </LinearLayout>
@@ -124,7 +124,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_weight="0.3"
                 android:layout_gravity="center">
 
@@ -138,7 +138,7 @@
                 android:background="@drawable/border_draw_profile"
                 android:inputType="textEmailAddress"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:id="@+id/ed_cc" />
                 </LinearLayout>

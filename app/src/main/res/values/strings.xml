@@ -149,7 +149,8 @@
     <string name="email_id">Email Id:</string>
     <string name="_cc">cc:</string>
     <string name="_save">Save</string>
-
+    <string name="enterdescription">Enter Description Here</string>
+    <string name="sendfed">Send</string>
 
     <string name="banner_home_footer">ca-app-pub-3940256099942544/6300978111</string>
 

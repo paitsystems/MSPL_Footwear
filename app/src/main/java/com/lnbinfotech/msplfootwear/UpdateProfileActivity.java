@@ -1,11 +1,14 @@
 package com.lnbinfotech.msplfootwear;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.model.UserGetterSetterClass;
@@ -27,7 +30,23 @@ public class UpdateProfileActivity extends AppCompatActivity {
         bt_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (ed_mobno.getText().toString().equals("") & ed_emailid.getText().toString().equals("")){
+                    Toast toast = Toast.makeText(getApplicationContext(),"Please,enter mobile no and  email id..",Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+                }else if(ed_mobno.getText().toString().equals("")){
+                   Toast toast =  Toast.makeText(getApplicationContext(),"Please,enter mobile no..",Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+
+                }else if(ed_emailid.getText().toString().equals("")){
+                    Toast toast = Toast.makeText(getApplicationContext(),"Please,enter email id..",Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+                }
               getvalue();
+                Intent i = new Intent(UpdateProfileActivity.this,FeedbackActivity.class);
+                startActivity(i);
             }
         });
 
@@ -46,7 +65,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         user.setMob_no( ed_emailid.getText().toString());
         user.setEmail_id( ed_mobno.getText().toString());
         user.setCc(ed_cc.getText().toString());
-        db.addProfileDetail(user);
+       // db.addProfileDetail(user);
 
 
     }
