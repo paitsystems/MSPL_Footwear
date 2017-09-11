@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--TODO: Check App Name-->
-    <string name="app_name">Paragaon</string>
-    <string name="title_activity_login">Paragaon</string>
+    <string name="app_name">MSPL Footwear</string>
+    <string name="title_activity_login">MSPL Footwear</string>
 
     <string name="error_invalid_password">This field is required</string>
     <string name="error_field_required">This field is required</string>
