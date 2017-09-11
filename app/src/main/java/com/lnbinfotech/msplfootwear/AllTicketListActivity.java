@@ -42,6 +42,7 @@ public class AllTicketListActivity extends AppCompatActivity {
     AllTicketListAdapter adapter;
     EditText ed_search;
     //This is TestBranch Entry
+    //Edit from github
     AdView mAdView;
 
     @Override
