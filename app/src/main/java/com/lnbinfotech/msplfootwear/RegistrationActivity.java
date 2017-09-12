@@ -21,7 +21,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
     }
 
     @Override
