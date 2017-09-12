@@ -110,6 +110,14 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="btnStyleMobWcur" parent="android:Widget.Button">
+        <item name="android:color">@color/lightpurple</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/btndraw_wblue_curv</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="btnStyleMob" parent="android:Widget.Button">
         <item name="android:color">@color/maroon</item>
         <item name="android:textColor">@color/black</item>

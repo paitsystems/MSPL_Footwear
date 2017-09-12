@@ -3,6 +3,7 @@ package com.lnbinfotech.msplfootwear;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +18,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     DBHandler db;
     TextView tv_cusname;
     EditText ed_mobno,ed_emailid,ed_cc;
-    Button bt_save;
+    AppCompatButton bt_save;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         ed_mobno = (EditText) findViewById(R.id.ed_mobno);
         ed_emailid = (EditText) findViewById(R.id.ed_emailid);
         ed_cc = (EditText) findViewById(R.id.ed_cc);
-        bt_save = (Button) findViewById(R.id.bt_save);
+        bt_save = (AppCompatButton) findViewById(R.id.bt_save);
     }
     void getvalue(){
         UserGetterSetterClass user = new UserGetterSetterClass();

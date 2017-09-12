@@ -3,160 +3,181 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".UpdateProfileActivity">
+
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <android.support.v7.widget.AppCompatButton
+            app:backgroundTint="@color/lightpurple"
+            android:drawableLeft="@drawable/cusname_draw"
+            style="@style/textViewMob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/customer_name"
+            android:textColor="@color/white"
+            android:id="@+id/bt_cusname" />
+
+    <TextView
+        style="@style/textViewMob"
+        android:background="@drawable/border_draw_profile"
+        android:gravity="center"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/tv_cusname"
+        android:layout_weight="0.02" />
+
+        <android.support.v7.widget.AppCompatButton
+            app:backgroundTint="@color/lightpurple"
+            android:drawableLeft="@drawable/mobno_draw"
+            style="@style/textViewMob"
+            android:layout_width="156dp"
+            android:layout_height="wrap_content"
+            android:text="@string/mobile_no"
+            android:textColor="@color/white"
+            android:id="@+id/bt_mobno"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.02" />
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.04">
+            android:layout_height="50dp"
+            android:layout_gravity="center">
 
-            <TextView
-                style="@style/textViewMob"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/customer_name"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_weight="0.7" />
-
-            <TextView
-                style="@style/textViewMob"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:id="@+id/tv_cusname"
-                android:layout_weight="0.3" />
-        </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.04">
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mobile_no"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:layout_weight="0.7" />
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_weight="0.3"
-                    android:layout_gravity="center">
-
-                <EditText
-                    style="@style/textViewMob"
-                    android:layout_gravity="center"
-                    android:paddingLeft="2dp"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
-                    android:layout_marginRight="5dp"
-                    android:inputType="number"
-                    android:maxLength="10"
-                    android:background="@drawable/border_draw_profile"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:id="@+id/ed_mobno" />
-                    </LinearLayout>
+        <EditText
+            style="@style/textViewMob"
+            android:layout_marginLeft="5dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:inputType="number"
+            android:maxLength="10"
+            android:background="@drawable/border_draw_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/ed_mobno" />
             </LinearLayout>
 
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.04">
-            <TextView
-                style="@style/textViewMob"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/email_id"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_weight="0.7" />
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="0.3"
-                android:layout_gravity="center">
 
-            <EditText
-                style="@style/textViewMob"
-                android:inputType="textEmailAddress"
-                android:paddingLeft="2dp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/border_draw_profile"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:id="@+id/ed_emailid" />
-            </LinearLayout>
+        <android.support.v7.widget.AppCompatButton
+            app:backgroundTint="@color/lightpurple"
+            android:drawableLeft="@drawable/email_draw"
+            style="@style/textViewMob"
+            android:layout_width="117dp"
+            android:layout_height="wrap_content"
+            android:text="@string/email_id"
+            android:textColor="@color/white"
+            android:id="@+id/bt_email"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.02" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_weight="0.02">
+
+    <EditText
+        style="@style/textViewMob"
+        android:inputType="textEmailAddress"
+        android:layout_marginLeft="5dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border_draw_profile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/ed_emailid" />
+    </LinearLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            app:backgroundTint="@color/lightpurple"
+            style="@style/textViewMob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_cc"
+            android:textColor="@color/white"
+            android:id="@+id/bt_cc"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.02" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_weight="0.02">
+
+    <EditText
+        style="@style/textViewMob"
+        android:paddingLeft="2dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:paddingBottom="3dp"
+        android:layout_marginRight="5dp"
+        android:layout_gravity="center"
+        android:background="@drawable/border_draw_profile"
+        android:inputType="textEmailAddress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/ed_cc" />
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.04">
-            <TextView
-                style="@style/textViewMob"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/_cc"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_weight="0.7" />
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="0.3"
-                android:layout_gravity="center">
-
-            <EditText
-                style="@style/textViewMob"
-                android:paddingLeft="2dp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
-                android:layout_marginRight="5dp"
-                android:layout_gravity="center"
-                android:background="@drawable/border_draw_profile"
-                android:inputType="textEmailAddress"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:id="@+id/ed_cc" />
-                </LinearLayout>
-        </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.04">
+            android:layout_weight="0.02"
+            android:gravity="center">
 
-        <Button
-            style="@style/btnStyleMobWcurve"
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
+        <android.support.v7.widget.AppCompatButton
+            android:gravity="center"
+            app:backgroundTint="@color/red"
+            android:layout_marginTop="10dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:drawableLeft="@drawable/btn_img_background"
+            style="@style/textViewMob"
+            android:layout_width="112dp"
             android:layout_height="wrap_content"
-            android:text="@string/_save"
+            android:text="@string/save"
+            android:textColor="@color/white"
             android:id="@+id/bt_save" />
         </LinearLayout>
     </LinearLayout>
+
+    <ScrollView
+
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/scroll_lay"
+            android:layout_weight="1">
+
+    </ScrollView>
+    <TextView
+        style="@style/footerstyleMob"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
