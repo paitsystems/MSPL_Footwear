@@ -28,7 +28,7 @@
 
             <Spinner
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="50dp"
                 android:id="@+id/fedback_spinner" />
         </LinearLayout>
         </LinearLayout>
@@ -169,11 +169,17 @@
 
             <EditText
                 style="@style/textViewMob"
-                android:gravity="top|center"
+                android:gravity="top"
                 android:background="@drawable/border_draw_profile"
                 android:paddingLeft="4dp"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:padding="5sp"
+                android:ems="10"
+                android:lines="5"
+                android:inputType="textMultiLine"
+                android:focusable="false"
                 android:hint="@string/enterdescription"
                 android:id="@+id/ed_description" />
         </LinearLayout>
@@ -183,11 +189,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.02"
-            android:gravity="center"
+            android:gravity="left"
             android:weightSum="1">
 
             <android.support.v7.widget.AppCompatButton
-                app:backgroundTint="@color/lightpurple"
+                app:backgroundTint="@color/white"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:drawableLeft="@drawable/camera_background"
@@ -195,9 +201,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/attach_image"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:id="@+id/bt_camera"
                 android:layout_weight="0.09" />
+            <!--<ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/camera" />-->
         </LinearLayout>
 
         <LinearLayout
@@ -208,20 +218,23 @@
             android:id="@+id/attach_img_lay">
 
             <ImageView
+                android:background="@drawable/border_draw_profile"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/imgv_img1"
                 android:layout_weight="0.3"
                 android:src="@drawable/camera"/>
             <ImageView
+                android:background="@drawable/border_draw_profile"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/imgv_img2"
                 android:layout_weight="0.3"
                 android:src="@drawable/camera"/>
             <ImageView
+                android:background="@drawable/border_draw_profile"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/imgv_img3"
                 android:layout_weight="0.3"
                 android:src="@drawable/camera"/>
@@ -249,7 +262,7 @@
                 android:text="@string/sendfed"
                 android:textColor="@color/white"
                 android:id="@+id/bt_send"
-                android:layout_weight="0.07" />
+                android:layout_weight="0.4" />
         </LinearLayout>
     </LinearLayout>
     <TextView
