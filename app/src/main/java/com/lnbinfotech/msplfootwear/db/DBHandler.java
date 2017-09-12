@@ -32,8 +32,8 @@ public class DBHandler extends SQLiteOpenHelper {
        // cv.put(,userClass.getMob_no());
        // cv.put(,userClass.getEmail_id());
          //cv.put(,userClass.getCc());
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(Table_Table,null,cv);
+        //SQLiteDatabase db = this.getWritableDatabase();
+       // db.insert(Table_Table,null,cv);
     }
 
 }
