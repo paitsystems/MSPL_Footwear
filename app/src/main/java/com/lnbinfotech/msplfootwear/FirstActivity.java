@@ -20,10 +20,10 @@ public class FirstActivity extends AppCompatActivity {
 
     public static SharedPreferences pref;
     public static String PREF_NAME = "Tickets";
-    GetPermission permission;
-    Constant constant;
-    static Context context;
-    Toast toast;
+    private GetPermission permission;
+    private Constant constant;
+    public static Context context;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class FirstActivity extends AppCompatActivity {
         checkpermmission();
     }
 
-    void checkpermmission(){
+    private void checkpermmission(){
         if(!permission.checkCameraPermission(getApplicationContext())){
             permission.requestCameraPermission(getApplicationContext(),FirstActivity.this);//1
         }else if(!permission.checkReadExternalStoragePermission(getApplicationContext())){
@@ -54,7 +54,7 @@ public class FirstActivity extends AppCompatActivity {
         }
     }
 
-    void doThis(){
+    private void doThis(){
         if (pref.contains(getString(R.string.pref_logged))) {
             if (pref.getBoolean(getString(R.string.pref_logged), false)) {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -62,7 +62,7 @@ public class FirstActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }
         } else {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
         }
         overridePendingTransition(R.anim.enter,R.anim.exit);
         doFinish();
@@ -97,7 +97,7 @@ public class FirstActivity extends AppCompatActivity {
         doFinish();
     }
 
-    void doFinish(){
+    private void doFinish(){
         finish();
         toast.cancel();
         overridePendingTransition(R.anim.enter,R.anim.exit);

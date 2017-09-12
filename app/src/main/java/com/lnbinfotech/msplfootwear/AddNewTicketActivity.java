@@ -59,7 +59,7 @@ public class AddNewTicketActivity extends AppCompatActivity implements View.OnCl
     String imagePath = "";
     Constant constant;
     AtomicInteger atomicInteger;
-
+    //comment
     AdView mAdView;
 
     @Override
