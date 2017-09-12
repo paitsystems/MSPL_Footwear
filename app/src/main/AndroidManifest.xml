@@ -70,7 +70,15 @@
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
-        <activity android:name=".UpdateProfileActivity"></activity>
+        <activity android:name=".UpdateProfileActivity"/>
+        <activity android:name=".RegistrationActivity"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".CheckOTP"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".CustomerDetailsActivity"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".CustomerLoginActivity"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>
