@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MSPL_Footwear.iml" filepath="$PROJECT_DIR$/MSPL_Footwear.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/executive_app/executive_app.iml" filepath="$PROJECT_DIR$/executive_app/executive_app.iml" />
     </modules>
   </component>
 </project>

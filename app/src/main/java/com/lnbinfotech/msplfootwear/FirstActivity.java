@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import com.lnbinfotech.msplfootwear.constant.Constant;
+import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.permission.GetPermission;
 
@@ -21,7 +21,6 @@ public class FirstActivity extends AppCompatActivity {
     public static SharedPreferences pref;
     public static String PREF_NAME = "Tickets";
     private GetPermission permission;
-    private Constant constant;
     public static Context context;
     private Toast toast;
 
@@ -31,7 +30,6 @@ public class FirstActivity extends AppCompatActivity {
         setContentView(R.layout.activity_first);
         pref = getSharedPreferences(PREF_NAME,MODE_PRIVATE);
         permission = new GetPermission();
-        constant = new Constant(FirstActivity.this);
         context = getApplicationContext();
         toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER,0,0);
@@ -50,17 +48,18 @@ public class FirstActivity extends AppCompatActivity {
         }else if(!permission.checkRebootPermission(getApplicationContext())){
             permission.requestRebootPermission(getApplicationContext(),FirstActivity.this);//7
         }else {
-            doThis();
+            if(ConnectivityTest.getNetStat(getApplicationContext())) {
+                doThis();
+            }else{
+                toast.setText(getString(R.string.you_are_offline));
+                toast.show();
+            }
         }
     }
 
     private void doThis(){
-        if (pref.contains(getString(R.string.pref_logged))) {
-            if (pref.getBoolean(getString(R.string.pref_logged), false)) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            } else {
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            }
+        if (pref.contains(getString(R.string.pref_isRegistered))) {
+            startActivity(new Intent(getApplicationContext(), CustomerDetailsActivity.class));
         } else {
             startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
         }
@@ -85,7 +84,7 @@ public class FirstActivity extends AppCompatActivity {
                 break;
             case 7:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    writeLog("FirstAcitivity_All_Permission_Granted");
+                    writeLog("All_Permission_Granted");
                     doThis();
                 }
                 break;
@@ -104,6 +103,6 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void writeLog(String _data){
-        new WriteLog().writeLog(getApplicationContext(),_data);
+        new WriteLog().writeLog(getApplicationContext(),"FirstAcitivity_"+_data);
     }
 }
