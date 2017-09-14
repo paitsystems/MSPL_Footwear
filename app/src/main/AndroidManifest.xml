@@ -40,7 +40,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".UpdateProfileActivity"/>
         <activity android:name=".RegistrationActivity"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".CheckOTPActivity"
