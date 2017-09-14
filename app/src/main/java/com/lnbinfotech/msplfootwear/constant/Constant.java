@@ -24,7 +24,7 @@ public class Constant {
 
     //TODO: Check VersionCode and Version Name
 
-    public static String folder_name = "Ticket",
+    public static String folder_name = "Ticket",image_folder = "Caputured_img",
             log_file_name = "Ticket",
             automailID = "automail@lnbinfotech.com",
             autoamilPass = "auto#456",

@@ -76,6 +76,7 @@
     <string name="qty">Qty</string>
     <string name="amount">Amnt</string>
     <string name="_0">0</string>
+    <string name="entertexthere">Enter text here</string>
     <string name="paired_devices">Paired Devices</string>
     <string name="new_devices_available">New Devices Available</string>
     <string name="scan_new_device">Scan New Device</string>
