@@ -8,13 +8,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.StringRequest;
+import com.lnbinfotech.msplfootwear.constant.AppSingleton;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 
 public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
@@ -83,6 +90,62 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         return super.onOptionsItemSelected(item);
     }
 
+    private void requestOTP(){
+        String mobNo = ed_mobNo.getText().toString();
+        String url = Constant.ipaddress+"/GetOTPCode?mobileno="+mobNo;
+
+        StringRequest request = new StringRequest(url,
+            new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                }
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }
+        );
+
+        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(request,"OTP");
+
+        //startActivity(new Intent(getApplicationContext(),CheckOTP.class));
+        //overridePendingTransition(R.anim.enter,R.anim.exit);
+    }
+
+    private void LoadImage(){
+        String url = "https://androidtutorialpoint.com/api/lg_nexus_5x";
+        ImageLoader imageLoader = AppSingleton.getInstance(getApplicationContext()).getImageLoader();
+        imageLoader.get(url, new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                if (response.getBitmap() != null) {
+                    LayoutInflater li = LayoutInflater.from(RegistrationActivity.this);
+                    View showDialogView = li.inflate(R.layout.test, null);
+                    ImageView ig = (ImageView)showDialogView.findViewById(R.id.image_view_dialog);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(RegistrationActivity.this);
+                    alertDialogBuilder.setView(showDialogView);
+                    alertDialogBuilder
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                }
+                            })
+                            .setCancelable(false)
+                            .create();
+                    ig.setImageBitmap(response.getBitmap());
+                    alertDialogBuilder.show();
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Constant.showLog(error.getMessage());
+            }
+        });
+    }
+
     private void init() {
         ed_mobNo = (EditText) findViewById(R.id.ed_mobno);
         btn_otp = (Button) findViewById(R.id.btn_otp);
@@ -114,8 +177,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(getApplicationContext(),CheckOTP.class));
-                    overridePendingTransition(R.anim.enter,R.anim.exit);
+                    requestOTP();
                     dialog.dismiss();
                 }
             });

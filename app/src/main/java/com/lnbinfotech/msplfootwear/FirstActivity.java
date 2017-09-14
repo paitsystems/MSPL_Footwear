@@ -21,7 +21,6 @@ public class FirstActivity extends AppCompatActivity {
     public static SharedPreferences pref;
     public static String PREF_NAME = "Tickets";
     private GetPermission permission;
-    private Constant constant;
     public static Context context;
     private Toast toast;
 
@@ -31,7 +30,6 @@ public class FirstActivity extends AppCompatActivity {
         setContentView(R.layout.activity_first);
         pref = getSharedPreferences(PREF_NAME,MODE_PRIVATE);
         permission = new GetPermission();
-        constant = new Constant(FirstActivity.this);
         context = getApplicationContext();
         toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER,0,0);
