@@ -34,6 +34,7 @@
 
     <string name="pref_IMEI">IMEI</string>
     <string name="pref_logged">logged</string>
+    <string name="pref_isRegistered">isRegistered</string>
     <string name="enter_client_id_here">Enter Client Id Here</string>
     <string name="verify">Verify</string>
     <string name="company_details">Company Details</string>
@@ -158,22 +159,20 @@
     <string name="invoice_no">Invoice No:</string>
     <string name="_qty">Qty:</string>
 
-    <string name="banner_home_footer">ca-app-pub-3940256099942544/6300978111</string>
-
-    <!--TODO: Uncomment for Test-->
-    <string name="main_screen_banner">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="add_new_ticket_banner">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="ticket_list_banner">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="update_ticket_banner">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="massage_activity_banner">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="fullimg_activity_banner">ca-app-pub-3940256099942544/6300978111</string>
-
-    <!--TODO: Uncomment for Live-->
-    <!--<string name="main_screen_banner">ca-app-pub-6568644984087031/6645892269</string>
-    <string name="add_new_ticket_banner">ca-app-pub-6568644984087031/1880828352</string>
-    <string name="ticket_list_banner">ca-app-pub-6568644984087031/1905890843</string>
-    <string name="update_ticket_banner">ca-app-pub-6568644984087031/3353336904</string>
-    <string name="massage_activity_banner">ca-app-pub-6568644984087031/3932276625</string>
-    <string name="fullimg_activity_banner">ca-app-pub-6568644984087031/2197087773</string>-->
-
+    <string name="you_are_offline">You Are Offline</string>
+    <string name="invalid_mob_no">Invalid Mobile Number</string>
+    <string name="invalid_otp">Invalid OTP</string>
+    <string name="pleaseenterotp">Please Enter OTP</string>
+    <string name="doyouwanttoexitfromapp">Do You Want To Exit From App?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ok">Ok</string>
+    <string name="done">Done</string>
+    <string name="areyousuretoreceiveotponthisnumber">Are You Sure To Receive OTP On This Number ?</string>
+    <string name="edit">Edit</string>
+    <string name="numbernotmatch">Number Not Match</string>
+    <string name="pleaseenterregisteredmobilenumber">Please Enter Registered Mobile Number</string>
+    <string name="somethingwentwrong">Something Went Wrong</string>
+    <string name="pleasecontactyouradministrator">Please Contact Your Administrator</string>
+    <string name="registrationdonesuccessfully">Registration Done Successfully</string>
 </resources>

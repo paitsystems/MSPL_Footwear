@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--<color name="colorAccent">#FF4081</color>-->
+
+    <color name="white">#ffffff</color>
+    <color name="maroon">#990000</color>
+    <color name="black">#000000</color>
+    <color name="darkgreen">#025F1E</color>
+    <color name="lightgreen">#00A933</color>
+    <color name="lightyellow">#FFCC00</color>
+    <color name="lightgray">#b3b3b3</color>
+    <color name="faintgray">#CABBBBBB</color>
+    <color name="orange">#fa6c04</color>
+    <color name="red">#FF0000</color>
+    <color name="purpule">#660394</color>
+    <color name="yellogreen">#19A89F</color>
+    <color name="whiteblue">#1293DE</color>
+    <color name="lightpurple">#9B68DE</color>
+</resources>
