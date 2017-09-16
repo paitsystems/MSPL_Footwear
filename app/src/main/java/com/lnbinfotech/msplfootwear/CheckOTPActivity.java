@@ -2,6 +2,7 @@ package com.lnbinfotech.msplfootwear;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +17,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwear.constant.Constant;
+import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
+import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.CheckOtpClass;
+import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
 
 public class CheckOTPActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -24,6 +28,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     private Button btn_verifyotp;
     private Toast toast;
     private CheckOtpClass otpClass;
+    private Constant constant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +40,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         otpClass = (CheckOtpClass) getIntent().getSerializableExtra("otp");
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
 
         btn_verifyotp.setOnClickListener(this);
@@ -179,13 +184,44 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             if(otp.equals(otpClass.getOtp())) {
                 showDia(1);
             }else{
-                toast.setText(R.string.invalid_mob_no);
+                toast.setText(R.string.invalid_otp);
                 toast.show();
             }
         }else{
             toast.setText(R.string.pleaseenterotp);
             toast.show();
         }
+    }
+
+    private void getCustInfo(){
+        String url = Constant.ipaddress+"/GetCustomerDetail?mobileno="+otpClass.getMobileno()+"&IMEINo="+otpClass.getImeino();
+        Constant.showLog(url);
+        writeLog("requestOTP_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(CheckOTPActivity.this);
+        requests.getCustomerDetail(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                doFinish();
+            }
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                showDia(-1);
+            }
+        });
+    }
+
+    private void doFinish(){
+        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+        editor.putBoolean(getString(R.string.pref_isRegistered),true);
+        editor.apply();
+        finish();
+        Intent intent = new Intent(getApplicationContext(), CustomerDetailsActivity.class);
+        intent.putExtra("otp",otpClass);
+        startActivity(intent);
+        overridePendingTransition(R.anim.enter,R.anim.exit);
     }
 
     private void init() {
@@ -198,16 +234,27 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         btn_verifyotp = (Button) findViewById(R.id.btn_verifyotp);
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
+        constant = new Constant(CheckOTPActivity.this);
     }
 
     private void showDia(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(CheckOTPActivity.this);
-        if (a == 0) {
+        if (a == -1) {
+            builder.setTitle(R.string.somethingwentwrong);
+            builder.setMessage(R.string.pleasecontactyouradministrator);
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 0) {
             builder.setMessage(R.string.doyouwanttoexitfromapp);
             builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     new Constant(CheckOTPActivity.this).doFinish();
+                    toast.cancel();
                     dialog.dismiss();
                 }
             });
@@ -223,15 +270,14 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    finish();
-                    Intent intent = new Intent(getApplicationContext(), CustomerDetailsActivity.class);
-                    intent.putExtra("otp",otpClass);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                    getCustInfo();
                 }
             });
         }
         builder.create().show();
     }
 
+    private void writeLog(String _data){
+        new WriteLog().writeLog(getApplicationContext(),"RegistrationActivity_"+_data);
+    }
 }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.lnbinfotech.msplfootwearex.adapter.CustomerDetailListAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 
 public class CustomerDetailsActivity extends AppCompatActivity implements View.OnClickListener {

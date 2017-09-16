@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
+import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.permission.GetPermission;
 
@@ -58,6 +59,7 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void doThis(){
+        new DBHandler(getApplicationContext());
         if (pref.contains(getString(R.string.pref_isRegistered))) {
             startActivity(new Intent(getApplicationContext(), CustomerDetailsActivity.class));
         } else {

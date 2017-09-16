@@ -9,7 +9,6 @@
     <string name="footer">© Copyright 2017 LNB Infotech Pvt.Ltd. All Rights Reserved.</string>
 
     <!-- PREF -->
-    <string name="pref_isRegister">isRegister</string>
     <string name="pref_isTableSaved">isTableSaved</string>
     <string name="pref_isCategorySaved">isCategorySaved</string>
     <string name="pref_compName">compName</string>
@@ -30,7 +29,7 @@
     <string name="pref_FTPPass">FTPPass</string>
     <string name="pref_FTPImgFolder">FTPImgFolder</string>
     <string name="pref_CustomerName">CustomerName</string>
-
+    <string name="pref_savedpin">savedPIN</string>
 
     <string name="pref_IMEI">IMEI</string>
     <string name="pref_logged">logged</string>
@@ -163,6 +162,8 @@
     <string name="invalid_mob_no">Invalid Mobile Number</string>
     <string name="invalid_otp">Invalid OTP</string>
     <string name="pleaseenterotp">Please Enter OTP</string>
+    <string name="pleaseenterpin">Please Enter PIN</string>
+    <string name="pleasereenterpin">Please ReEnter PIN</string>
     <string name="doyouwanttoexitfromapp">Do You Want To Exit From App?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -175,4 +176,5 @@
     <string name="somethingwentwrong">Something Went Wrong</string>
     <string name="pleasecontactyouradministrator">Please Contact Your Administrator</string>
     <string name="registrationdonesuccessfully">Registration Done Successfully</string>
+    <string name="alreadyregistered">You Are Already Registered On Another Device</string>
 </resources>

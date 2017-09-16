@@ -1,12 +1,10 @@
 package com.lnbinfotech.msplfootwear;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -26,8 +24,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.constant.AppSingleton;
 import com.lnbinfotech.msplfootwear.constant.Constant;
+import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.CheckOtpClass;
+import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
+
+import java.net.URLEncoder;
 
 public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -97,85 +99,65 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void requestOTP(){
-        constant.showPD();
-        String mobNo = ed_mobNo.getText().toString();
-        String url = Constant.ipaddress+"/GetOTPCode?mobileno="+mobNo;
-        Constant.showLog(url);
-        writeLog("requestOTP_"+url);
-        StringRequest request = new StringRequest(url,
-            new Response.Listener<String>() {
+        try {
+            constant.showPD();
+            final String mobNo = ed_mobNo.getText().toString();
+            final String imeino = new Constant(getApplicationContext()).getIMEINo();
+            String _mobNo = URLEncoder.encode(mobNo, "UTF-8");
+            String _imeino = URLEncoder.encode(imeino, "UTF-8");
+            String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"&IMEINo="+_imeino;
+            Constant.showLog(url);
+            writeLog("requestOTP_" + url);
+
+            VolleyRequests requests = new VolleyRequests(RegistrationActivity.this);
+            requests.getOTPCode(url, new ServerCallback() {
                 @Override
-                public void onResponse(String response) {
-                    Constant.showLog(response);
-                    response = response.replace("\\","");
-                    response = response.replace("\"","");
-                    Constant.showLog(response);
+                public void onSuccess(String response) {
                     constant.showPD();
-                    if(!response.equals("0")) {
-                        String arr[] = response.split("-");
-                        if(arr.length>1) {
-                            writeLog("requestOTP_Success_"+response);
-                            CheckOtpClass otp = new CheckOtpClass();
-                            otp.setCustId(arr[0]);
-                            otp.setOtp(arr[1]);
-                            otp.setMobileno(ed_mobNo.getText().toString());
-                            otp.setImeino(constant.getIMEINo());
-                            finish();
-                            Intent intent = new Intent(getApplicationContext(), CheckOTPActivity.class);
-                            intent.putExtra("otp",otp);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.enter, R.anim.exit);
-                        }else{
-                            showDia(3);
-                            writeLog("requestOTP_"+response);
-                        }
-                    }else{
+                    if (!response.equals("0") && !response.equals("-1") && !response.equals("-2")) {
+                        //On Success
+                        doThis(response,mobNo,imeino);
+                    } else if (!response.equals("0") && response.equals("-1") && !response.equals("-2")) {
+                        //Already Registered
+                        showDia(3);
+                        writeLog("requestOTP_Fail_" + response);
+                    } else if (!response.equals("0") && !response.equals("-1") && response.equals("-2")) {
+                        //Registered Mobile Number Not Found
                         showDia(2);
-                        writeLog("requestOTP_Fail_"+response);
+                        writeLog("requestOTP_Fail_" + response);
                     }
                 }
-            },
-            new Response.ErrorListener() {
                 @Override
-                public void onErrorResponse(VolleyError error) {
-                    Constant.showLog(error.getMessage());
+                public void onFailure(String result) {
                     constant.showPD();
-                    writeLog("requestOTP_VolleyError_"+error.getMessage());
+                    writeLog("requestOTP_VolleyError_");
                 }
-            }
-        );
-        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(request,"OTP");
+            });
+        }catch (Exception e){
+            showDia(-1);
+            e.printStackTrace();
+            writeLog("requestOTP_Exception_" + e.getMessage());
+        }
     }
 
-    private void LoadImage(){
-        String url = "https://androidtutorialpoint.com/api/lg_nexus_5x";
-        ImageLoader imageLoader = AppSingleton.getInstance(getApplicationContext()).getImageLoader();
-        imageLoader.get(url, new ImageLoader.ImageListener() {
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                if (response.getBitmap() != null) {
-                    LayoutInflater li = LayoutInflater.from(RegistrationActivity.this);
-                    View showDialogView = li.inflate(R.layout.test, null);
-                    ImageView ig = (ImageView)showDialogView.findViewById(R.id.image_view_dialog);
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(RegistrationActivity.this);
-                    alertDialogBuilder.setView(showDialogView);
-                    alertDialogBuilder
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                }
-                            })
-                            .setCancelable(false)
-                            .create();
-                    ig.setImageBitmap(response.getBitmap());
-                    alertDialogBuilder.show();
-                }
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Constant.showLog(error.getMessage());
-            }
-        });
+    private void doThis(String response, String mobNo, String imeino){
+        String arr[] = response.split("-");
+        if (arr.length > 1) {
+            writeLog("requestOTP_Success_" + response);
+            CheckOtpClass otp = new CheckOtpClass();
+            otp.setCustId(arr[0]);
+            otp.setOtp(arr[1]);
+            otp.setMobileno(mobNo);
+            otp.setImeino(imeino);
+            finish();
+            Intent intent = new Intent(getApplicationContext(), CheckOTPActivity.class);
+            intent.putExtra("otp", otp);
+            startActivity(intent);
+            overridePendingTransition(R.anim.enter, R.anim.exit);
+        } else {
+            showDia(-1);
+            writeLog("requestOTP_" + response);
+        }
     }
 
     private void init() {
@@ -189,12 +171,22 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private void showDia(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(RegistrationActivity.this);
         builder.setCancelable(false);
-        if (a == 0) {
+        if (a == -1) {
+            builder.setTitle(R.string.somethingwentwrong);
+            builder.setMessage(R.string.pleasecontactyouradministrator);
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 0) {
             builder.setMessage(R.string.doyouwanttoexitfromapp);
             builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     new Constant(RegistrationActivity.this).doFinish();
+                    toast.cancel();
                     dialog.dismiss();
                 }
             });
@@ -235,7 +227,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 }
             });
         }else if (a == 3) {
-            builder.setTitle(R.string.somethingwentwrong);
+            builder.setTitle(R.string.alreadyregistered);
             builder.setMessage(R.string.pleasecontactyouradministrator);
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
@@ -250,5 +242,39 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private void writeLog(String _data){
         new WriteLog().writeLog(getApplicationContext(),"RegistrationActivity_"+_data);
     }
+
+/*
+    private void LoadImage(){
+        String url = "https://androidtutorialpoint.com/api/lg_nexus_5x";
+        ImageLoader imageLoader = AppSingleton.getInstance(getApplicationContext()).getImageLoader();
+        imageLoader.get(url, new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                if (response.getBitmap() != null) {
+                    LayoutInflater li = LayoutInflater.from(RegistrationActivity.this);
+                    View showDialogView = li.inflate(R.layout.test, null);
+                    ImageView ig = (ImageView)showDialogView.findViewById(R.id.image_view_dialog);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(RegistrationActivity.this);
+                    alertDialogBuilder.setView(showDialogView);
+                    alertDialogBuilder
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                }
+                            })
+                            .setCancelable(false)
+                            .create();
+                    ig.setImageBitmap(response.getBitmap());
+                    alertDialogBuilder.show();
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Constant.showLog(error.getMessage());
+            }
+        });
+    }
+
+*/
 
 }

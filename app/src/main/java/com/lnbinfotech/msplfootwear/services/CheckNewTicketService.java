@@ -30,40 +30,7 @@ public class CheckNewTicketService extends IntentService{
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        FirstActivity.pref = getApplicationContext().getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
-        Constant.showLog("Service Started");
-        writeLog(getApplicationContext(),"CheckNewTicketService_onHandleIntent_Service_Started");
-        String url1 = Constant.ipaddress+"/GetCount?clientAuto="+ FirstActivity.pref.getInt(getString(R.string.pref_auto),0);
-        StringRequest countRequest = new StringRequest(url1,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String result) {
-                        Constant.showLog(result);
-                        result = result.replace("\\", "");
-                        result = result.replace("''", "");
-                        result = result.substring(1,result.length()-1);
-                        String _data = new ParseJSON(result).parseGetCountData();
-                        int lastTotal = FirstActivity.pref.getInt(getString(R.string.pref_ticketTotal),0);
-                        if(_data!=null && !_data.equals("0")){
-                            String[] data = _data.split("\\^");
-                            int _total = Integer.parseInt(data[0]);
-                            if(_total>lastTotal){
-                                showNotification();
-                                writeLog(getApplicationContext(),"CheckNewTicketService_onHandleIntent_Notification_Showed");
-                            }
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        writeLog(getApplicationContext(),"CheckNewTicketService_onHandleIntent_"+error.getMessage());
-                    }
-                }
-        );
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        queue.add(countRequest);
+
     }
 
     private void showNotification(){

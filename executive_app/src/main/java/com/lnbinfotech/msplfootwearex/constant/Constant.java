@@ -50,7 +50,7 @@ public class Constant {
     static ProgressDialog pd;
 
     public static void showLog(String log) {
-        Log.d("Log", log);
+        Log.d("Log", ""+log);
     }
 
     public Constant(Activity activity) {

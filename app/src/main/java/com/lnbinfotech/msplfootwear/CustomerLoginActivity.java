@@ -1,9 +1,12 @@
 package com.lnbinfotech.msplfootwear;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -12,15 +15,26 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwear.constant.Constant;
+import com.lnbinfotech.msplfootwear.db.DBHandler;
+import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
+
+import java.util.List;
 
 public class CustomerLoginActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private TextView tv_custname, tv_custaddress, tv_custmobile, tv_custemail;
     private EditText ed1,ed2,ed3,ed4,ed5,ed6,ed7,ed8,ed9,ed10,ed11,ed12;
     private Button btn_save;
     private Toast toast;
+    private CustomerDetailClass custClass;
+    private CardView lay_setpin, lay_enterpin;
+    private int setEnterPINFlag = -1;
+    private String PIN = null;
+    private DBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +46,9 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        custClass = (CustomerDetailClass) getIntent().getExtras().get("cust");
+        setData();
 
         btn_save.setOnClickListener(this);
 
@@ -244,27 +261,123 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case 0:
+            case R.id.btn_save:
+                if(setEnterPINFlag == 0){
+                    setNewPIN();
+                }else if(setEnterPINFlag == 1){
+                    verifyPin();
+                }
                 break;
         }
     }
 
     @Override
     public void onBackPressed() {
-        showDia(0);
+        new Constant(CustomerLoginActivity.this).doFinish();
+        toast.cancel();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                showDia(0);
+                new Constant(CustomerLoginActivity.this).doFinish();
+                toast.cancel();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void setData(){
+        tv_custname.setText(custClass.getName());
+        tv_custaddress.setText(custClass.getAddress());
+        tv_custmobile.setText(custClass.getMobile());
+        tv_custemail.setText(custClass.getEmail());
+
+        String custid = String.valueOf(custClass.getCustID());
+        PIN = db.getCustPIN(custid);
+
+        if(PIN.equals("-1")) {
+            setEnterPINFlag = 0;
+            lay_setpin.setVisibility(View.VISIBLE);
+            lay_enterpin.setVisibility(View.GONE);
+        }else {
+            setEnterPINFlag = 1;
+            lay_setpin.setVisibility(View.GONE);
+            lay_enterpin.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void verifyPin(){
+        if (ed9.getText().toString().length() == 1 && ed10.getText().toString().length() == 1 &&
+                ed11.getText().toString().length() == 1 && ed12.getText().toString().length() == 1) {
+            String pin1 = ed9.getText().toString() + ed10.getText().toString() +
+                    ed11.getText().toString() + ed12.getText().toString();
+            Constant.showLog(pin1);
+            if(pin1.equals(PIN)){
+                String pin = custClass.getCustID()+"-"+PIN;
+                SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                editor.putString(getString(R.string.pref_savedpin),pin);
+                editor.apply();
+                List<String> _list = db.checkPINUnsetID();
+                if(_list.size()!=0){
+                    showDia(1);
+                }else{
+                    showDia(2);
+                }
+            }else{
+                showDia(4);
+            }
+        }
+    }
+
+    private void setNewPIN(){
+        if (ed1.getText().toString().length() == 1 && ed2.getText().toString().length() == 1 &&
+                ed3.getText().toString().length() == 1 && ed4.getText().toString().length() == 1) {
+            String pin1 = ed1.getText().toString() + ed2.getText().toString() +
+                    ed3.getText().toString() + ed4.getText().toString();
+            Constant.showLog(pin1);
+            if (ed5.getText().toString().length() == 1 && ed6.getText().toString().length() == 1 &&
+                    ed7.getText().toString().length() == 1 && ed8.getText().toString().length() == 1) {
+                String pin2 = ed5.getText().toString() + ed6.getText().toString() +
+                        ed7.getText().toString() + ed8.getText().toString();
+                Constant.showLog(pin2);
+                if (pin1.equals(pin2)) {
+                    savePin(pin1);
+                } else {
+                    showDia(5);
+                }
+            } else {
+                toast.setText(R.string.pleasereenterpin);
+                toast.show();
+            }
+        } else {
+            toast.setText(R.string.pleaseenterpin);
+            toast.show();
+        }
+    }
+
+    private void savePin(String _pin){
+        db.updatePIN(String.valueOf(custClass.getCustID()),_pin);
+        showDia(3);
+    }
+
+    private void clearFields(int a){
+        if(a==1){
+            ed9.setText(null);ed10.setText(null);ed11.setText(null);ed12.setText(null);
+            ed9.requestFocus();
+        }else if(a==2){
+            ed1.setText(null);ed2.setText(null);ed3.setText(null);ed4.setText(null);
+            ed5.setText(null);ed6.setText(null);ed7.setText(null);ed8.setText(null);
+            ed1.requestFocus();
+        }
+    }
+
     private void init() {
+        tv_custname = (TextView) findViewById(R.id.tv_custname);
+        tv_custaddress = (TextView) findViewById(R.id.tv_custaddress);
+        tv_custmobile = (TextView) findViewById(R.id.tv_custmobile);
+        tv_custemail = (TextView) findViewById(R.id.tv_custemail);
         ed1 = (EditText) findViewById(R.id.ed1);
         ed2 = (EditText) findViewById(R.id.ed2);
         ed3 = (EditText) findViewById(R.id.ed3);
@@ -277,7 +390,10 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         ed10 = (EditText) findViewById(R.id.ed10);
         ed11 = (EditText) findViewById(R.id.ed11);
         ed12 = (EditText) findViewById(R.id.ed12);
+        lay_setpin = (CardView) findViewById(R.id.lay_setpin);
+        lay_enterpin = (CardView) findViewById(R.id.lay_enterpin);
         btn_save = (Button) findViewById(R.id.btn_save);
+        db = new DBHandler(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
     }
@@ -296,6 +412,63 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 1) {
+            builder.setTitle("Login Successfull");
+            builder.setMessage("Do You Want Set PIN To Other Details?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new Constant(CustomerLoginActivity.this).doFinish();
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                    startActivity(new Intent(getApplicationContext(),FirstActivity.class));
+                    overridePendingTransition(R.anim.enter,R.anim.exit);
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 2) {
+            builder.setMessage("Login Successfull");
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                    startActivity(new Intent(getApplicationContext(),FirstActivity.class));
+                    overridePendingTransition(R.anim.enter,R.anim.exit);
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 3) {
+            builder.setMessage("PIN Set Successfully");
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new Constant(CustomerLoginActivity.this).doFinish();
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 4) {
+            builder.setMessage("Invalid PIN");
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    clearFields(1);
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 5) {
+            builder.setMessage("PIN Not Matched");
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    clearFields(2);
                     dialog.dismiss();
                 }
             });

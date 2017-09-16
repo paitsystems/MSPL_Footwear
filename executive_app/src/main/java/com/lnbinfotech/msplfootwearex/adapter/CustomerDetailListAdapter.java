@@ -1,4 +1,4 @@
-package com.lnbinfotech.msplfootwearex;
+package com.lnbinfotech.msplfootwearex.adapter;
 
 //Created by lnb on 8/15/2017.
 
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.lnbinfotech.msplfootwearex.R;
 
 public class CustomerDetailListAdapter extends BaseAdapter {
 

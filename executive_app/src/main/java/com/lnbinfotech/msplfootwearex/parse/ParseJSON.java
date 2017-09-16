@@ -5,9 +5,6 @@ import android.content.SharedPreferences;
 
 import com.lnbinfotech.msplfootwearex.FirstActivity;
 import com.lnbinfotech.msplfootwearex.R;
-import com.lnbinfotech.msplfootwearex.model.ShortDescClass;
-import com.lnbinfotech.msplfootwearex.model.TicketDetailClass;
-import com.lnbinfotech.msplfootwearex.model.TicketMasterClass;
 
 import org.json.JSONArray;
 

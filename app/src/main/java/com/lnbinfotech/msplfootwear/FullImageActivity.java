@@ -14,8 +14,6 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 
 import java.io.File;
@@ -26,7 +24,6 @@ public class FullImageActivity extends AppCompatActivity {
 
     TouchImageView imageView;
     Toast toast;
-    AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,20 +33,6 @@ public class FullImageActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-        mAdView = (AdView) findViewById(R.id.adView);
-
-        AdRequest adRequest;
-        if(Constant.liveTestFlag==1) {
-            adRequest = new AdRequest.Builder().build();
-        }else {
-            adRequest = new AdRequest.Builder()
-                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .addTestDevice("0558B791C50AB34B5650C3C48C9BD15E")
-                    .build();
-        }
-
-        mAdView.loadAd(adRequest);
 
         imageView = (TouchImageView) findViewById(R.id.touch_imageview);
         toast = Toast.makeText(getApplicationContext(),"File Not Found",Toast.LENGTH_LONG);
@@ -65,31 +48,6 @@ public class FullImageActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(getApplicationContext(),"File Not Found",Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER,0,0);
             toast.show();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(mAdView!=null){
-            mAdView.resume();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if(mAdView!=null){
-            mAdView.pause();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if(mAdView!=null){
-            mAdView.destroy();
         }
     }
 
