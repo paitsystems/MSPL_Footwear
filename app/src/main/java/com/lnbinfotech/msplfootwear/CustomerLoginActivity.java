@@ -429,7 +429,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     finish();
-                    startActivity(new Intent(getApplicationContext(),FirstActivity.class));
+                    startActivity(new Intent(getApplicationContext(),OptionsActivity.class));
                     overridePendingTransition(R.anim.enter,R.anim.exit);
                     dialog.dismiss();
                 }
@@ -440,7 +440,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     finish();
-                    startActivity(new Intent(getApplicationContext(),FirstActivity.class));
+                    startActivity(new Intent(getApplicationContext(),OptionsActivity.class));
                     overridePendingTransition(R.anim.enter,R.anim.exit);
                     dialog.dismiss();
                 }

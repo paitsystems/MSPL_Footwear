@@ -48,6 +48,8 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".CustomerLoginActivity"
             android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".OptionsActivity"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>
