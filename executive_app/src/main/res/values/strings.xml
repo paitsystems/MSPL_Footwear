@@ -40,6 +40,7 @@
     <string name="company_details">Company Details</string>
     <string name="company_name">Company</string>
     <string name="address">Address</string>
+
     <string name="contact_no">Contact No</string>
     <string name="expiry_date">Expiry Date</string>
     <string name="enter_your_credentials">Enter Your Credentials</string>
@@ -50,6 +51,7 @@
     <string name="register">Register</string>
     <string name="enter_number_of_tables">Enter Number Of Tables</string>
     <string name="save">Save</string>
+    <string name="enteraddresshere">Enter Address Here</string>
     <string name="total_number_of_tables_you_have">Total Number Of Tables You Have</string>
     <string name="count">Count</string>
     <string name="cat1">Cat1</string>
@@ -124,6 +126,20 @@
     <string name="to_date">To Date</string>
     <string name="all_dates">All Dates</string>
     <string name="show">Show</string>
+    <string name="enternewcustomername">Enter New Customer Name</string>
+    <string name="mobileno">Mobile Number</string>
+    <string name="emailid">Email Id</string>
+    <string name="selectaddressproof">Select Address Proof</string>
+    <string name="selectidproof">Select Id Proof</string>
+    <string name="addressproofimage">Attach Address Proof Image</string>
+    <string name="customerimage">Attach Customer Image</string>
+    <string name="idproofimage">Attach Id Proof Image</string>
+    <string name="gstno">GST No</string>
+    <string name="panno">PAN No</string>
+    <string name="enterpanno">Enter PAN No</string>
+    <string name="entergstno">Enter GST No</string>
+    <string name="gstnoimage">Attach GST No Image</string>
+    <string name="pannoimage">Attach PAN No Image</string>
 
     <string-array name="navigationName">
         <item>Home</item>

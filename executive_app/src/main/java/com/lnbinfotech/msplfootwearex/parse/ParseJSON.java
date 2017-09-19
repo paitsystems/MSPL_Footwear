@@ -44,23 +44,6 @@ public class ParseJSON {
         return data;
     }
 
-    public ArrayList<ShortDescClass> parseShortDesc(){
-        ArrayList<ShortDescClass> list = new ArrayList<>();
-        try{
-            JSONArray jsonArray = new JSONArray(json);
-            if (jsonArray.length() >= 1) {
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    ShortDescClass descClass = new ShortDescClass();
-                    descClass.setDesc(jsonArray.getJSONObject(i).getString("Particular"));
-                    list.add(descClass);
-                }
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return list;
-    }
-
     public int parseUserData() {
         int result = 0;
         try {
@@ -105,56 +88,4 @@ public class ParseJSON {
         return result;
     }
 
-    public ArrayList<TicketMasterClass> parseAllTicket(){
-        ArrayList<TicketMasterClass> list = new ArrayList<>();
-        try{
-            JSONArray jsonArray = new JSONArray(json);
-            if (jsonArray.length() >= 1) {
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    TicketMasterClass pendingTicketClass = new TicketMasterClass();
-                    pendingTicketClass.setAuto(jsonArray.getJSONObject(i).getInt("auto"));
-                    pendingTicketClass.setId(jsonArray.getJSONObject(i).getInt("id"));
-                    pendingTicketClass.setClientAuto(jsonArray.getJSONObject(i).getInt("ClientAuto"));
-                    pendingTicketClass.setFinyr(jsonArray.getJSONObject(i).getString("finyr"));
-                    pendingTicketClass.setType(jsonArray.getJSONObject(i).getString("type"));
-                    pendingTicketClass.setTicketNo(jsonArray.getJSONObject(i).getString("ticketNo"));
-                    pendingTicketClass.setParticular(jsonArray.getJSONObject(i).getString("Particular"));
-                    pendingTicketClass.setSubject(jsonArray.getJSONObject(i).getString("Subject"));
-                    pendingTicketClass.setImagePAth(jsonArray.getJSONObject(i).getString("ImagePAth"));
-                    pendingTicketClass.setStatus(jsonArray.getJSONObject(i).getString("Status"));
-                    pendingTicketClass.setCrBy(jsonArray.getJSONObject(i).getString("CrBy"));
-                    pendingTicketClass.setCrDate(jsonArray.getJSONObject(i).getString("CrDate"));
-                    pendingTicketClass.setCrTime(jsonArray.getJSONObject(i).getString("CrTime"));
-                    pendingTicketClass.setAssignTO(jsonArray.getJSONObject(i).getString("AssignTo"));
-                    list.add(pendingTicketClass);
-                }
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    public ArrayList<TicketDetailClass> parseTicketDetail(){
-        ArrayList<TicketDetailClass> list = new ArrayList<>();
-        try{
-            JSONArray jsonArray = new JSONArray(json);
-            if (jsonArray.length() >= 1) {
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    TicketDetailClass ticketDetailClass = new TicketDetailClass();
-                    ticketDetailClass.setAuto(jsonArray.getJSONObject(i).getInt("Auto"));
-                    ticketDetailClass.setMastAuto(jsonArray.getJSONObject(i).getInt("MastAuto"));
-                    ticketDetailClass.setDesc(jsonArray.getJSONObject(i).getString("Description"));
-                    ticketDetailClass.setCrby(jsonArray.getJSONObject(i).getString("CrBy"));
-                    ticketDetailClass.setCrDate(jsonArray.getJSONObject(i).getString("CrDate"));
-                    ticketDetailClass.setCrTime(jsonArray.getJSONObject(i).getString("CrTime"));
-                    ticketDetailClass.setType(jsonArray.getJSONObject(i).getString("Type"));
-                    list.add(ticketDetailClass);
-                }
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return list;
-    }
 }
