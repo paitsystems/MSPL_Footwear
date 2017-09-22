@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.lnbinfotech.msplfootwearex.ChequeDetailsActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+            <TextView
+                style="@style/textViewMob"
+                android:layout_margin="10sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/enterdate"
+                android:id="@+id/tv_cheque_date" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:visibility="visible">
+
+            <EditText
+                android:textColor="@color/black"
+                android:drawableRight="@drawable/cheque_date"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:inputType="date"
+                android:ems="10"
+                android:padding="5sp"
+                android:id="@+id/ed_chq_date"
+                android:visibility="visible" />
+        </LinearLayout>
+
+            <TextView
+                style="@style/textViewMob"
+                android:layout_margin="10sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/enterno"
+                android:id="@+id/tv_cheque_no"
+                android:layout_weight="0.3" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:visibility="visible">
+
+            <EditText
+
+                android:drawableRight="@drawable/cheque_number"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:inputType="numberDecimal"
+                android:ems="10"
+                android:padding="5sp"
+                android:id="@+id/ed_chq_no"
+                android:visibility="visible"/>
+        </LinearLayout>
+
+            <TextView
+                style="@style/textViewMob"
+                android:layout_margin="10sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/enteramount"
+                android:id="@+id/tv_cheque_amount"
+                android:layout_weight="0.3" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:visibility="visible">
+
+            <EditText
+
+                android:drawableRight="@drawable/cheque_amount"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:inputType="numberDecimal"
+                android:ems="10"
+                android:padding="5sp"
+                android:id="@+id/ed_chq_amt"
+                android:visibility="visible" />
+        </LinearLayout>
+
+            <TextView
+                style="@style/textViewMob"
+                android:layout_margin="10sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/enteragainstref"
+                android:id="@+id/tv_cheque_against_ref"
+                android:layout_weight="0.3" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:visibility="visible">
+
+            <EditText
+                android:drawableRight="@drawable/cheque_ref"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:inputType="text"
+                android:ems="10"
+                android:padding="5sp"
+                android:id="@+id/ed_chq_ref"
+                android:visibility="visible" />
+        </LinearLayout>
+
+
+
+            <android.support.v7.widget.AppCompatButton
+                android:layout_gravity="center"
+                app:backgroundTint="@color/maroon"
+                android:drawableLeft="@drawable/save_button_back"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/submit"
+                android:id="@+id/btn_submt" />
+
+
+    </LinearLayout>
+</LinearLayout>

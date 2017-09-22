@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.lnbinfotech.msplfootwearex.VisitPaymentFormActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollView2"
+            android:padding="5sp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5sp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:drawableRight="@drawable/search"
+                    style="@style/textViewMob"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/selectcustomername"
+                    android:id="@+id/ed_cus_name" />
+            </android.support.design.widget.TextInputLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/paymenttype"
+                    style="@style/textViewMob"
+                    android:id="@+id/textView2" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5sp">
+
+                    <RadioButton
+                        style="@style/textViewMob"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_cash"
+                        android:id="@+id/rdo_cash"
+                        android:layout_weight="0.5"
+                        android:checked="true"/>
+
+                    <RadioButton
+                        style="@style/textViewMob"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cheque"
+                        android:id="@+id/rdo_cheque"
+                        android:layout_weight="0.5"
+                        android:checked="false"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/enteramount"
+                    style="@style/textViewMob"
+                    android:id="@+id/textView1" />
+
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5sp"
+                    android:visibility="visible">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:ems="10"
+                        android:id="@+id/ed_amount"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/cheque_lay"
+                    android:visibility="gone">
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:drawableEnd="@drawable/search"
+                    style="@style/textViewMob"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/selectbank"
+                    android:id="@+id/ed_bank" />
+            </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:drawableRight="@drawable/search"
+                            style="@style/textViewMob"
+                            android:focusable="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="@string/selectbranch"
+                            android:id="@+id/ed_branch" />
+                    </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/white_button_background"
+                    android:layout_margin="5sp"
+                    android:gravity="center"
+                    android:weightSum="1">
+
+                    <android.support.v7.widget.AppCompatButton
+                        app:backgroundTint="@color/white"
+                        android:drawableLeft="@drawable/cheque_button_back"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/enterchequedetails"
+                        android:id="@+id/btn_cheque_details"
+                        android:layout_weight="0.21" />
+                </LinearLayout>
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:id="@+id/lv_show_chq_detail">
+
+                    </ListView>
+
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/attachchequeimage"/>
+
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5sp"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:src="@drawable/camera"
+                        android:id="@+id/imageView_cheque_img" />
+                </LinearLayout>
+                </LinearLayout>
+
+
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:layout_gravity="center"
+                        app:backgroundTint="@color/maroon"
+                        android:drawableLeft="@drawable/save_button_back"
+                        android:textColor="@color/white"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/save"
+                        android:id="@+id/btn_save" />
+
+
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</LinearLayout>

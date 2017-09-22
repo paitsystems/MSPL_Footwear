@@ -41,6 +41,11 @@
     <string name="company_name">Company</string>
     <string name="address">Address</string>
 
+    <string name="enterdate">Enter Date</string>
+    <string name="enterno">Enter Number</string>
+    <string name="enteramt">Enter Amount</string>
+    <string name="enteragainstref">Enter Against Ref</string>
+
     <string name="contact_no">Contact No</string>
     <string name="expiry_date">Expiry Date</string>
     <string name="enter_your_credentials">Enter Your Credentials</string>
@@ -51,6 +56,9 @@
     <string name="register">Register</string>
     <string name="enter_number_of_tables">Enter Number Of Tables</string>
     <string name="save">Save</string>
+    <string name="next">Next</string>
+    <string name="submit">Submit</string>
+    <string name="enterchequedetails">Enter Cheque Details</string>
     <string name="enteraddresshere">Enter Address Here</string>
     <string name="total_number_of_tables_you_have">Total Number Of Tables You Have</string>
     <string name="count">Count</string>
@@ -65,6 +73,7 @@
     <string name="change_cat1">Change Cat1</string>
     <string name="add">Add</string>
     <string name="attach_image">Attach Image</string>
+    <string name="attachchequeimage">Attach Cheque Image</string>
     <string name="salesman">Salesman:</string>
     <string name="frontoffice">FrontOffice:</string>
     <string name="proceed">Proceed</string>
@@ -92,6 +101,7 @@
     <string name="tab1">TAB1</string>
     <string name="total">Total</string>
     <string name="cash">Cash</string>
+    <string name="_cash">Cash</string>
     <string name="credit_card">Credit Card</string>
     <string name="enter_cash_amount">Enter Cash Amount</string>
     <string name="enter_card_amount">Enter Card Amount</string>
@@ -129,6 +139,13 @@
     <string name="enternewcustomername">Enter New Customer Name</string>
     <string name="mobileno">Mobile Number</string>
     <string name="emailid">Email Id</string>
+    <string name="paymenttype">Payment Type</string>
+    <string name="cheque">Cheque</string>
+    <string name="enteramount">Enter Amount</string>
+    <string name="selectcustomername">Select Customer Name</string>
+    <string name="enetrcustomername">Enter Customer Name</string>
+    <string name="selectbranch">Select Branch</string>
+    <string name="selectbank">Select Bank</string>
     <string name="selectaddressproof">Select Address Proof</string>
     <string name="selectidproof">Select Id Proof</string>
     <string name="addressproofimage">Attach Address Proof Image</string>

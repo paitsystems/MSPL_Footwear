@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.lnbinfotech.msplfootwearex.SelectAutoItemActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cus_lay">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5sp">
+
+            <android.support.design.widget.TextInputEditText
+                android:drawableRight="@drawable/search"
+                style="@style/textViewMob"
+                android:focusable="false"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/selectcustomername"
+                android:id="@+id/ed_cus_name" />
+        </android.support.design.widget.TextInputLayout>
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/lv_cus"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/bank_lay"
+            android:visibility="gone">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5sp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:drawableRight="@drawable/search"
+                    style="@style/textViewMob"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/selectbank"
+                    android:id="@+id/ed_bank" />
+            </android.support.design.widget.TextInputLayout>
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/lv_bank"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/branch_lay"
+            android:visibility="gone">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5sp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:drawableRight="@drawable/search"
+                    style="@style/textViewMob"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/selectbranch"
+                    android:id="@+id/ed_branch" />
+            </android.support.design.widget.TextInputLayout>
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/lv_branch"
+                android:layout_weight="1" />
+            </LinearLayout>
+            <android.support.v7.widget.AppCompatButton
+                android:layout_gravity="center"
+                app:backgroundTint="@color/maroon"
+                android:drawableLeft="@drawable/next_button_back"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/next"
+                android:id="@+id/btn_next"
+                android:visibility="gone" />
+
+
+    </LinearLayout>
+</LinearLayout>
