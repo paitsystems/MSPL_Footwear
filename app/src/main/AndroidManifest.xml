@@ -41,14 +41,19 @@
         </receiver>
 
         <activity android:name=".RegistrationActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".CheckOTPActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".CustomerDetailsActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".CustomerLoginActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".OptionsActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
     </application>
 

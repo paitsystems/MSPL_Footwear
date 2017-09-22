@@ -5,18 +5,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.lnbinfotech.msplfootwearex.adapter.CustomerDetailListAdapter;
+import com.lnbinfotech.msplfootwearex.adapters.CustomerDetailListAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.db.DBHandler;
+import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
+
+import java.util.ArrayList;
 
 public class CustomerDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ListView listView;
     private CustomerDetailListAdapter adapter;
+    private DBHandler db;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,14 +34,18 @@ public class CustomerDetailsActivity extends AppCompatActivity implements View.O
         init();
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
+
+        loadData();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                listView.getAdapter().getItem(i);
-                startActivity(new Intent(getApplicationContext(),CustomerLoginActivity.class));
+                CustomerDetailClass custClass = (CustomerDetailClass) listView.getAdapter().getItem(i);
+                Intent intent = new Intent(getApplicationContext(),CustomerLoginActivity.class);
+                intent.putExtra("cust",custClass);
+                startActivity(intent);
                 overridePendingTransition(R.anim.enter,R.anim.exit);
             }
         });
@@ -63,10 +75,17 @@ public class CustomerDetailsActivity extends AppCompatActivity implements View.O
         return super.onOptionsItemSelected(item);
     }
 
+    private void loadData(){
+        ArrayList<CustomerDetailClass> list = db.getCustomerDetail();
+        adapter = new CustomerDetailListAdapter(CustomerDetailsActivity.this,list);
+        listView.setAdapter(adapter);
+    }
+
     private void init() {
         listView = (ListView) findViewById(R.id.listView);
-        adapter = new CustomerDetailListAdapter(CustomerDetailsActivity.this);
-        listView.setAdapter(adapter);
+        db = new DBHandler(getApplicationContext());
+        toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
     }
 
     private void showDia(int a) {
@@ -77,6 +96,7 @@ public class CustomerDetailsActivity extends AppCompatActivity implements View.O
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     new Constant(CustomerDetailsActivity.this).doFinish();
+                    toast.cancel();
                     dialog.dismiss();
                 }
             });

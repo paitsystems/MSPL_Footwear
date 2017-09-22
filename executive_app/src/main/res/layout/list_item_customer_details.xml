@@ -2,83 +2,76 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:elevation="5dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="5dp">
 
-        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:elevation="5dp"
-            card_view:cardCornerRadius="4dp"
-            card_view:cardElevation="5dp">
+            android:orientation="vertical"
+            android:padding="@dimen/mobpadding2">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/mobpadding2">
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/img_cust"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.8"
+                    android:src="@drawable/user32" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_weight="0.2"
+                    android:orientation="vertical">
 
-                    <ImageView
+                    <TextView
+                        android:id="@+id/tv_custname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/imageView2"
-                        android:src="@drawable/user32"
-                        android:layout_weight="0.8"
-                        android:layout_gravity="center" />
+                        android:text="Name"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/black" />
 
-                    <LinearLayout
-                        android:orientation="vertical"
+                    <TextView
+                        android:id="@+id/tv_custaddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.2">
+                        android:text="Address"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/black" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textColor="@color/black"
-                            android:text="RAVINDRA GHANSHYAM NAGARKAR"
-                            android:id="@+id/textView" />
+                    <TextView
+                        android:id="@+id/tv_custmobile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="MobileNo"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/black" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:text="SR.NO. 137, SASAR GREEN PARK, BANER, Pune-21"
-                            android:textColor="@color/black"
-                            android:id="@+id/textView2" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:text="9850871164"
-                            android:textColor="@color/black"
-                            android:id="@+id/textView3" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textColor="@color/black"
-                            android:text="pawanraskar@gmail.com"
-                            android:id="@+id/textView4" />
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_custemail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="EmailId"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/black" />
                 </LinearLayout>
             </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-
-    </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>

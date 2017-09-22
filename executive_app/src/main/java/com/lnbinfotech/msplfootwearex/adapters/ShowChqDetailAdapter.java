@@ -1,4 +1,4 @@
-package com.lnbinfotech.msplfootwearex.adapter;// Created by anup on 9/21/2017.
+package com.lnbinfotech.msplfootwearex.adapters;// Created by anup on 9/21/2017.
 
 import android.app.Activity;
 import android.view.LayoutInflater;

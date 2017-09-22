@@ -14,16 +14,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
-import com.lnbinfotech.msplfootwearex.adapter.ShowChqDetailAdapter;
+import com.lnbinfotech.msplfootwearex.adapters.ShowChqDetailAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.ChequeDetailsGetterSetter;

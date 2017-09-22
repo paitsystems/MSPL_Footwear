@@ -208,4 +208,10 @@
     <string name="somethingwentwrong">Something Went Wrong</string>
     <string name="pleasecontactyouradministrator">Please Contact Your Administrator</string>
     <string name="registrationdonesuccessfully">Registration Done Successfully</string>
+    <string name="pref_savedpin">savedPIN</string>
+
+    <string name="pleaseenterpin">Please Enter PIN</string>
+    <string name="pleasereenterpin">Please ReEnter PIN</string>
+    <string name="alreadyregistered">You Are Already Registered On Another Device</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.lnbinfotech.msplfootwearex.adapter;// Created by anup on 9/20/2017.
+package com.lnbinfotech.msplfootwearex.adapters;// Created by anup on 9/20/2017.
 
 import android.app.Activity;
 import android.content.Context;

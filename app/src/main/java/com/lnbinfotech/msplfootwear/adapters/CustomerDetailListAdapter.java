@@ -1,4 +1,4 @@
-package com.lnbinfotech.msplfootwear.adpaters;
+package com.lnbinfotech.msplfootwear.adapters;
 
 //Created by lnb on 8/15/2017.
 

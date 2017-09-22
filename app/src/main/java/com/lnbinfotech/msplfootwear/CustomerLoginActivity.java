@@ -299,10 +299,12 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
         if(PIN.equals("-1")) {
             setEnterPINFlag = 0;
+            btn_save.setText("SAVE");
             lay_setpin.setVisibility(View.VISIBLE);
             lay_enterpin.setVisibility(View.GONE);
         }else {
             setEnterPINFlag = 1;
+            btn_save.setText("LOGIN");
             lay_setpin.setVisibility(View.GONE);
             lay_enterpin.setVisibility(View.VISIBLE);
         }
@@ -319,12 +321,13 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                 SharedPreferences.Editor editor = FirstActivity.pref.edit();
                 editor.putString(getString(R.string.pref_savedpin),pin);
                 editor.apply();
-                List<String> _list = db.checkPINUnsetID();
+                showDia(2);
+                /*List<String> _list = db.checkPINUnsetID();
                 if(_list.size()!=0){
                     showDia(1);
                 }else{
                     showDia(2);
-                }
+                }*/
             }else{
                 showDia(4);
             }
@@ -373,6 +376,14 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+    private void startNewActivity(){
+        finish();
+        Intent intent = new Intent(getApplicationContext(),OptionsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        overridePendingTransition(R.anim.enter,R.anim.exit);
+    }
+
     private void init() {
         tv_custname = (TextView) findViewById(R.id.tv_custname);
         tv_custaddress = (TextView) findViewById(R.id.tv_custaddress);
@@ -416,7 +427,6 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                 }
             });
         }else if (a == 1) {
-            builder.setTitle("Login Successfull");
             builder.setMessage("Do You Want Set PIN To Other Details?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -428,9 +438,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                    startActivity(new Intent(getApplicationContext(),OptionsActivity.class));
-                    overridePendingTransition(R.anim.enter,R.anim.exit);
+                    startNewActivity();
                     dialog.dismiss();
                 }
             });
@@ -439,9 +447,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                    startActivity(new Intent(getApplicationContext(),OptionsActivity.class));
-                    overridePendingTransition(R.anim.enter,R.anim.exit);
+                    startNewActivity();
                     dialog.dismiss();
                 }
             });
@@ -450,8 +456,13 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    new Constant(CustomerLoginActivity.this).doFinish();
                     dialog.dismiss();
+                    List<String> _list = db.checkPINUnsetID();
+                    if(_list.size()!=0){
+                        showDia(1);
+                    }else{
+                        showDia(6);
+                    }
                 }
             });
         }else if (a == 4) {
@@ -469,6 +480,22 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     clearFields(2);
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 6) {
+            builder.setMessage("Do you want to continue with this login?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startNewActivity();
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new Constant(CustomerLoginActivity.this).doFinish();
                     dialog.dismiss();
                 }
             });

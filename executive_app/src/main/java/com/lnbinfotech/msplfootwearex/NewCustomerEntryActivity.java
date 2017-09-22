@@ -23,9 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.lnbinfotech.msplfootwearex.constant.Constant;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -76,10 +74,10 @@ public class NewCustomerEntryActivity extends AppCompatActivity implements Adapt
         spinner_addproof = (Spinner) findViewById(R.id.spinner_addproof);
         spinner_idproof = (Spinner) findViewById(R.id.spinner_idproof);
 
-        adapter_address = new ArrayAdapter<String>(this,R.layout.address_list,add_proof);
+        adapter_address = new ArrayAdapter<>(this,R.layout.address_list,add_proof);
         spinner_addproof.setAdapter(adapter_address);
         spinner_addproof.setOnItemSelectedListener(this);
-        adapter_id = new ArrayAdapter<String>(this,R.layout.id_list,id_proof);
+        adapter_id = new ArrayAdapter<>(this,R.layout.id_list,id_proof);
         spinner_idproof.setAdapter(adapter_id);
         spinner_idproof.setOnItemSelectedListener(this);
 

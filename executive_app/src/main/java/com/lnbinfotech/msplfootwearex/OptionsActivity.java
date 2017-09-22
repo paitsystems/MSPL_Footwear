@@ -1,4 +1,4 @@
-package com.lnbinfotech.msplfootwear;
+package com.lnbinfotech.msplfootwearex;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.lnbinfotech.msplfootwear.constant.Constant;
+import com.lnbinfotech.msplfootwearex.constant.Constant;
 
 public class OptionsActivity extends AppCompatActivity implements View.OnClickListener {
 

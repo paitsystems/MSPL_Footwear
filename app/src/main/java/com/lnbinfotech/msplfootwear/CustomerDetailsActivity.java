@@ -12,7 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.lnbinfotech.msplfootwear.adpaters.CustomerDetailListAdapter;
+import com.lnbinfotech.msplfootwear.adapters.CustomerDetailListAdapter;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
