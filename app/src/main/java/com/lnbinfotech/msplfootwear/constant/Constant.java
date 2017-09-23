@@ -9,7 +9,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.lnbinfotech.msplfootwear.R;
@@ -25,8 +24,8 @@ public class Constant {
 
     //TODO: Check VersionCode and Version Name
 
-    public static String folder_name = "MSPL Footwear",
-            log_file_name = "MSPL_Footwear",
+    public static String folder_name = "Ticket",image_folder = "Caputured_img",
+            log_file_name = "Ticket",
             automailID = "automail@lnbinfotech.com",
             autoamilPass = "auto#456",
             mail_subject = "Log File",
@@ -38,8 +37,8 @@ public class Constant {
     //ftp_directory = "SMVisit_Indus",
 
     //TODO: Check Ip Address
-    public static final String ipaddress = "http://172.30.1.38/MSPL/service.svc";
-    //public static final String ipaddress = "http://license.lnbinfotech.com/LNBTCK/service.svc";
+    //public static final String ipaddress = "http://172.30.1.38/LNBTCK/service.svc";
+    public static final String ipaddress = "http://license.lnbinfotech.com/LNBTCK/service.svc";
 
     //TODO: Check liveTestFlag 1-Live, 0-Test
     public static int liveTestFlag = 0;
@@ -50,7 +49,7 @@ public class Constant {
     static ProgressDialog pd;
 
     public static void showLog(String log) {
-        Log.d("Log", ""+log);
+        Log.d("Log", log);
     }
 
     public Constant(Activity activity) {
@@ -109,11 +108,6 @@ public class Constant {
                 showLog("Log File Delete");
             }
         }
-    }
-
-    public String getIMEINo(){
-        TelephonyManager manager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-        return manager.getDeviceId();
     }
 
     private void writeLog(String _data) {

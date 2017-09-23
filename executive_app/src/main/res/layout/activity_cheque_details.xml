@@ -7,14 +7,52 @@
     android:orientation="vertical"
     tools:context="com.lnbinfotech.msplfootwearex.ChequeDetailsActivity">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView" >
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5sp">
+
+            <EditText
+                android:drawableRight="@drawable/search"
+                style="@style/textViewMob"
+                android:focusable="false"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/selectbank"
+                android:id="@+id/ed_bank" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5sp">
+
+            <EditText
+                android:drawableRight="@drawable/search"
+                style="@style/textViewMob"
+                android:focusable="false"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/selectbranch"
+                android:id="@+id/ed_branch" />
+        </android.support.design.widget.TextInputLayout>
 
 
-            <TextView
+
+
+        <TextView
                 style="@style/textViewMob"
                 android:layout_margin="10sp"
                 android:layout_width="match_parent"
@@ -126,6 +164,26 @@
                 android:visibility="visible" />
         </LinearLayout>
 
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/attachchequeimage"/>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5sp"
+            android:visibility="visible">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:src="@drawable/camera"
+                android:id="@+id/imageView_cheque_img" />
+        </LinearLayout>
 
 
             <android.support.v7.widget.AppCompatButton
@@ -138,6 +196,7 @@
                 android:text="@string/submit"
                 android:id="@+id/btn_submt" />
 
-
     </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>

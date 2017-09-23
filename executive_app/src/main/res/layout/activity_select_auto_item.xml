@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5sp">
 
-            <android.support.design.widget.TextInputEditText
+            <EditText
                 android:drawableRight="@drawable/search"
                 style="@style/textViewMob"
                 android:focusable="false"
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5sp">
 
-                <android.support.design.widget.TextInputEditText
+                <EditText
                     android:drawableRight="@drawable/search"
                     style="@style/textViewMob"
                     android:focusable="false"
@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5sp">
 
-                <android.support.design.widget.TextInputEditText
+                <EditText
                     android:drawableRight="@drawable/search"
                     style="@style/textViewMob"
                     android:focusable="false"

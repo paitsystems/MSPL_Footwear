@@ -14,12 +14,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.adapters.ShowChqDetailAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
@@ -40,17 +43,17 @@ import java.util.Locale;
 
 public class VisitPaymentFormActivity extends AppCompatActivity {
 
-    private EditText ed_amount;
-    private TextInputEditText ed_cus_name,ed_branch,ed_bank;
+    private EditText ed_amount,ed_cus_name;
     private RadioButton rdo_cash,rdo_cheque;
-    private LinearLayout cheque_lay;
+    private LinearLayout cheque_lay,add_more_lay,chqbtn_det_lay;
     private ListView lv_show_chq_detail;
-    String auto_type, current_time;
-    ImageView imageView_cheque_img;
-    AppCompatButton btn_cheque_details,btn_save;
-    Bitmap bmp;
-    List<ChequeDetailsGetterSetter> ls;
-    static ChequeDetailsGetterSetter cheque;
+    private TextView tv_cheque_details;
+    private String auto_type, current_time;
+    private ImageView imageView_cheque_img;
+    private AppCompatButton btn_save;
+    private Bitmap bmp;
+    static List<ChequeDetailsGetterSetter> ls;
+    private ChequeDetailsGetterSetter cheque;
     static VisitPaymentFormGetterSetter visit;
 
     @Override
@@ -59,29 +62,29 @@ public class VisitPaymentFormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_visit_payment_form);
 
         init();
-        visit = new VisitPaymentFormGetterSetter();
-        cheque = new ChequeDetailsGetterSetter();
-        setAmount();
-
 
     }
 
     void init(){
         ed_amount = (EditText) findViewById(R.id.ed_amount);
 
-        ed_cus_name = (TextInputEditText) findViewById(R.id.ed_cus_name);
-        ed_bank = (TextInputEditText) findViewById(R.id.ed_bank);
-        ed_branch = (TextInputEditText) findViewById(R.id.ed_branch);
+        ed_cus_name = (EditText) findViewById(R.id.ed_cus_name);
 
-        btn_cheque_details = (AppCompatButton) findViewById(R.id.btn_cheque_details);
+
+        tv_cheque_details = (TextView) findViewById(R.id.tv_cheque_details);
         btn_save = (AppCompatButton) findViewById(R.id.btn_save);
         lv_show_chq_detail = (ListView) findViewById(R.id.lv_show_chq_detail);
 
         rdo_cash = (RadioButton) findViewById(R.id.rdo_cash);
         rdo_cheque = (RadioButton) findViewById(R.id.rdo_cheque);
         cheque_lay = (LinearLayout) findViewById(R.id.cheque_lay);
+        chqbtn_det_lay= (LinearLayout) findViewById(R.id.chqbtn_det_lay);
+        add_more_lay = (LinearLayout) findViewById(R.id.add_more_lay);
         imageView_cheque_img = (ImageView) findViewById(R.id.imageView_cheque_img);
 
+        /*if(ls.size() != 0){
+            add_more_lay.setVisibility(View.VISIBLE);
+        }*/
 
         ed_cus_name.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,35 +115,16 @@ public class VisitPaymentFormActivity extends AppCompatActivity {
             }
         });
 
-
-
-        ed_bank.setOnClickListener(new View.OnClickListener() {
+        tv_cheque_details.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //VisitPaymentFormGetterSetter getterSetter = new VisitPaymentFormGetterSetter();
-                String amt =  ed_amount.getText().toString();
-                visit.setCheque_amount(amt);
-                Intent intent = new Intent(VisitPaymentFormActivity.this,SelectAutoItemActivity.class);
-                auto_type = "bank";
-                intent.putExtra("Auto_type",auto_type);
+                Intent intent = new Intent(VisitPaymentFormActivity.this,ChequeDetailsActivity.class);
                 startActivity(intent);
-                writeLog("goes to SelectAutoItemActivity");
+                writeLog("goes to ChequeDetailsActivity");
             }
         });
 
-        ed_branch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(VisitPaymentFormActivity.this,SelectAutoItemActivity.class);
-                auto_type = "branch";
-                intent.putExtra("Auto_type",auto_type);
-                startActivity(intent);
-                writeLog("goes to SelectAutoItemActivity");
-            }
-        });
-
-        btn_cheque_details.setOnClickListener(new View.OnClickListener() {
+        add_more_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(VisitPaymentFormActivity.this,ChequeDetailsActivity.class);
@@ -153,14 +137,28 @@ public class VisitPaymentFormActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showPopup(0);
+
             }
         });
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(ed_cus_name.getText().toString().equals("")){
+                    Toast toast  = Toast.makeText(getApplicationContext(),"Please enter customer name",Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+                }
+                if(rdo_cheque.isChecked()){
+                    validation();
+                }
 
             }
         });
+
+        visit = new VisitPaymentFormGetterSetter();
+        cheque = new ChequeDetailsGetterSetter();
+        ls = new ArrayList<>();
+        setAmount();
 
     }
 
@@ -168,9 +166,17 @@ public class VisitPaymentFormActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         get_auto_cuslist();
-        get_auto_banklist();
-        get_auto_branchlist();
-        show_chq_adapter();
+        //if(!lv_show_chq_detail.getAdapter().equals(null)) {
+         show_chq_adapter();
+         if(ls.size() != 0){
+             add_more_lay.setVisibility(View.VISIBLE);
+             chqbtn_det_lay.setEnabled(false);
+         }else {
+             add_more_lay.setVisibility(View.GONE);
+             chqbtn_det_lay.setEnabled(true);
+         }
+        //add_more_lay.setVisibility(View.VISIBLE);
+       // }
 
     }
 
@@ -192,7 +198,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity {
                     writeLog("Image cputure canceled from camera..");
                 }
                 break;
-            case 2:
+            /*case 2:
                 if(data != null && resultCode == RESULT_OK ){
                     Cursor cursor;
 
@@ -216,7 +222,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity {
                 }else {
                 writeLog("Photopicker canceled from gallery..");
             }
-                break;
+                break;*/
         }
 
     }
@@ -224,30 +230,28 @@ public class VisitPaymentFormActivity extends AppCompatActivity {
     private void get_auto_cuslist(){
        //VisitPaymentFormGetterSetter getterSetter = new VisitPaymentFormGetterSetter();
        // get_cust = getIntent().getStringExtra("Customer_name");
-        Log.d("Log","cus: "+visit.getCustomer_name());
+         Log.d("Log","cus: "+visit.getCustomer_name());
          ed_cus_name.setText(visit.getCustomer_name());
     }
-    private void get_auto_banklist(){
-        // get_bank = getIntent().getStringExtra("Bank_name");
-        ed_bank.setText(visit.getCheque_bank());
-        ed_amount.setText(visit.getCheque_amount());
-    }
-    private void get_auto_branchlist(){
-        // get_branch = getIntent().getStringExtra("Branch_name");
-        ed_branch.setText(visit.getCheque_branch());
-        ed_amount.setText(visit.getCheque_amount());
 
-    }
 
     private void setAmount(){
-
+        String amt =  ed_amount.getText().toString();
+        VisitPaymentFormActivity.visit.setCheque_amount(amt);
     }
 
     private void show_chq_adapter(){
-        ls = new ArrayList<>();
+        //ls = new ArrayList<>();
+        lv_show_chq_detail.setAdapter(null);
+
+        //ls.add(cheque);
         //TODO create function in database getting all valuse of cheque and iterate cursor.and then set ls to adapter
-        ShowChqDetailAdapter adapter = new ShowChqDetailAdapter(this,ls);
-        lv_show_chq_detail.setAdapter(adapter);
+        //for(int i = 0; i <= ls.size(); i++) {
+            ShowChqDetailAdapter adapter = new ShowChqDetailAdapter(this, ls);
+            Log.d("Log", "listchq: " + ls.size());
+            lv_show_chq_detail.setAdapter(adapter);
+        //}
+       // add_more_lay.setVisibility(View.VISIBLE);
         /*Toast toast  = Toast.makeText(getApplicationContext(),"Cheque details added successfully",Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER,0,0);
         toast.show();*/
@@ -255,7 +259,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity {
 
 
 
-    public void store_CameraPhoto_InSdCard(Bitmap bitmap, String currentdate){
+    private void store_CameraPhoto_InSdCard(Bitmap bitmap, String currentdate){
         File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + "img_"+currentdate+".jpg");
         //File file = new File(Environment.getExternalStorageDirectory() + "img_"+currentdate+".jpeg");
 
@@ -278,7 +282,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity {
         }*/
     }
 
-    public Bitmap get_Image_from_sd_card(String filename){
+    private Bitmap get_Image_from_sd_card(String filename){
         Bitmap bitmap = null;
         File imgfile = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + filename);
 
@@ -292,11 +296,29 @@ public class VisitPaymentFormActivity extends AppCompatActivity {
         return bitmap;
     }
 
-    public String currentDateFormat(){
+    private String currentDateFormat(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HH_mm", Locale.ENGLISH);
          current_time = sdf.format(new Date());
         return current_time;
     }
+
+    private void validation(){
+         if(ed_amount.getText().toString().equals("")){
+            Toast toast  = Toast.makeText(getApplicationContext(),"Please enter amount",Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+         }else if(lv_show_chq_detail.getAdapter().getCount() == 0){
+             Log.d("Log","list_sie:"+lv_show_chq_detail.getAdapter().getCount());
+         //}else if(ls.size() == 0){
+            Toast toast  = Toast.makeText(getApplicationContext(),"Please enter cheque details",Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+        }
+
+    }
+
+
+
 
     private void showPopup(int id){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -305,7 +327,9 @@ public class VisitPaymentFormActivity extends AppCompatActivity {
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    showPopup(1);
+                    //showPopup(1);
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent,1);
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -314,7 +338,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity {
                     dialogInterface.dismiss();
                 }
             });
-        }else if(id == 1){
+        }/*else if(id == 1){
             builder.setMessage("Attach image");
             builder.setPositiveButton("Camera", new DialogInterface.OnClickListener() {
                 @Override
@@ -330,7 +354,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity {
                     startActivityForResult(intent1,2);
                 }
             });
-        }
+        }*/
         builder.create().show();
     }
 

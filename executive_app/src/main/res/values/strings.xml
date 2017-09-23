@@ -58,6 +58,7 @@
     <string name="save">Save</string>
     <string name="next">Next</string>
     <string name="submit">Submit</string>
+    <string name="addmore">Add more cheque..</string>
     <string name="enterchequedetails">Enter Cheque Details</string>
     <string name="enteraddresshere">Enter Address Here</string>
     <string name="total_number_of_tables_you_have">Total Number Of Tables You Have</string>
@@ -213,5 +214,6 @@
     <string name="pleaseenterpin">Please Enter PIN</string>
     <string name="pleasereenterpin">Please ReEnter PIN</string>
     <string name="alreadyregistered">You Are Already Registered On Another Device</string>
+    <string name="title_activity_main">MainActivity</string>
 
 </resources>

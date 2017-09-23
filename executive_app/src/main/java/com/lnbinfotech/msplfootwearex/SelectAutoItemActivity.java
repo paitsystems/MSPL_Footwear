@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import com.lnbinfotech.msplfootwearex.adapters.SetAutoItemAdapter;
@@ -14,11 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelectAutoItemActivity extends AppCompatActivity {
-   private TextInputEditText ed_cus_name,ed_branch,ed_bank;
+   private EditText ed_cus_name,ed_branch,ed_bank;
    private List<String> cus_list,bank_list,branch_list ;
 
     private LinearLayout cus_lay,bank_lay,branch_lay;
-   private ListView lv_cus,lv_bank,lv_branch;
+    private ListView lv_cus,lv_bank,lv_branch;
 
     //String[] cus_name = {"sneha","pooja","rohini","poonam","nikita","karan","neha","nita"};
     //String[] bank_name = {"SBI","BOM","BOB","BOI","ICC Bank","kotak","RBI"};
@@ -36,9 +37,9 @@ public class SelectAutoItemActivity extends AppCompatActivity {
     }
 
     void init(){
-        ed_cus_name = (TextInputEditText) findViewById(R.id.ed_cus_name);
-        ed_bank = (TextInputEditText) findViewById(R.id.ed_bank);
-        ed_branch = (TextInputEditText) findViewById(R.id.ed_branch);
+        ed_cus_name = (EditText) findViewById(R.id.ed_cus_name);
+        ed_bank = (EditText) findViewById(R.id.ed_bank);
+        ed_branch = (EditText) findViewById(R.id.ed_branch);
 
         cus_lay = (LinearLayout) findViewById(R.id.cus_lay);
         bank_lay = (LinearLayout) findViewById(R.id.bank_lay);
@@ -73,19 +74,19 @@ public class SelectAutoItemActivity extends AppCompatActivity {
         ed_cus_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setCusList();
+                //setCusList();
             }
         });
         ed_bank.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setBankList();
+                //setBankList();
             }
         });
         ed_branch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setBranchList();
+                //setBranchList();
 
             }
         });
@@ -184,6 +185,7 @@ public class SelectAutoItemActivity extends AppCompatActivity {
     public void setBranchList(){
         //TODO create db.getBranchList()to database containing query "select branch_name from table";
      /*TODO   Cursor cur = db.getBranchList();
+
         while(cur.moveToNext()){
             branch_list.add(cur.getString(cur.getColumnIndex("Branch_name")));
         }
@@ -191,12 +193,14 @@ public class SelectAutoItemActivity extends AppCompatActivity {
         lv_branch.setAdapter(new SetAutoItemAdapter(this,branch_list));
 
     }
-    void get_auto_type(){
+
+    private void get_auto_type(){
         if(get_type.equals("cus")) {
 
             cus_lay.setVisibility(View.VISIBLE);
             bank_lay.setVisibility(View.GONE);
             branch_lay.setVisibility(View.GONE);
+            setCusList();
 
         }
         if(get_type.equals("bank")) {
@@ -204,6 +208,7 @@ public class SelectAutoItemActivity extends AppCompatActivity {
             cus_lay.setVisibility(View.GONE);
             bank_lay.setVisibility(View.VISIBLE);
             branch_lay.setVisibility(View.GONE);
+            setBankList();
 
         }
         if(get_type.equals("branch")) {
@@ -211,6 +216,7 @@ public class SelectAutoItemActivity extends AppCompatActivity {
             cus_lay.setVisibility(View.GONE);
             bank_lay.setVisibility(View.GONE);
             branch_lay.setVisibility(View.VISIBLE);
+            setBranchList();
 
         }
 

@@ -6,9 +6,10 @@
 
     <string name="error_invalid_password">This field is required</string>
     <string name="error_field_required">This field is required</string>
-    <string name="footer">© Copyright 2017 LNB Infotech Pvt.Ltd. All Rights Reserved.</string>
+    <string name="footer">Â© Copyright 2017 LNB Infotech Pvt.Ltd. All Rights Reserved.</string>
 
     <!-- PREF -->
+    <string name="pref_isRegister">isRegister</string>
     <string name="pref_isTableSaved">isTableSaved</string>
     <string name="pref_isCategorySaved">isCategorySaved</string>
     <string name="pref_compName">compName</string>
@@ -29,11 +30,10 @@
     <string name="pref_FTPPass">FTPPass</string>
     <string name="pref_FTPImgFolder">FTPImgFolder</string>
     <string name="pref_CustomerName">CustomerName</string>
-    <string name="pref_savedpin">savedPIN</string>
+
 
     <string name="pref_IMEI">IMEI</string>
     <string name="pref_logged">logged</string>
-    <string name="pref_isRegistered">isRegistered</string>
     <string name="enter_client_id_here">Enter Client Id Here</string>
     <string name="verify">Verify</string>
     <string name="company_details">Company Details</string>
@@ -49,6 +49,9 @@
     <string name="register">Register</string>
     <string name="enter_number_of_tables">Enter Number Of Tables</string>
     <string name="save">Save</string>
+    <string name="update">Update</string>
+    <string name="feedbacktype">Feedback Type</string>
+    <string name="description">Description</string>
     <string name="total_number_of_tables_you_have">Total Number Of Tables You Have</string>
     <string name="count">Count</string>
     <string name="cat1">Cat1</string>
@@ -76,6 +79,7 @@
     <string name="qty">Qty</string>
     <string name="amount">Amnt</string>
     <string name="_0">0</string>
+    <string name="entertexthere">Enter text here</string>
     <string name="paired_devices">Paired Devices</string>
     <string name="new_devices_available">New Devices Available</string>
     <string name="scan_new_device">Scan New Device</string>
@@ -105,7 +109,7 @@
     <string name="remember_me">Remember Me</string>
     <string name="login">LogIn</string>
     <string name="previous_name">Previous Name</string>
-    <string name="update">Update</string>
+
     <string name="print_bill">Print Bill</string>
     <string name="add_masters">Add Masters</string>
     <string name="add_tax">Add Tax</string>
@@ -148,6 +152,8 @@
     <string name="cess_per">Cess Per</string>
     <string name="report_error">Report Error</string>
     <string name="customer_name">Customer Name</string>
+    <string name="cgst">GST</string>
+    <string name="panno">PAN number</string>
     <string name="mobile_no">Mobile Number</string>
     <string name="email_id">Email Id</string>
     <string name="_cc">cc</string>
@@ -158,23 +164,4 @@
     <string name="invoice_no">Invoice No:</string>
     <string name="_qty">Qty:</string>
 
-    <string name="you_are_offline">You Are Offline</string>
-    <string name="invalid_mob_no">Invalid Mobile Number</string>
-    <string name="invalid_otp">Invalid OTP</string>
-    <string name="pleaseenterotp">Please Enter OTP</string>
-    <string name="pleaseenterpin">Please Enter PIN</string>
-    <string name="pleasereenterpin">Please ReEnter PIN</string>
-    <string name="doyouwanttoexitfromapp">Do You Want To Exit From App?</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="ok">Ok</string>
-    <string name="done">Done</string>
-    <string name="areyousuretoreceiveotponthisnumber">Are You Sure To Receive OTP On This Number ?</string>
-    <string name="edit">Edit</string>
-    <string name="numbernotmatch">Number Not Match</string>
-    <string name="pleaseenterregisteredmobilenumber">Please Enter Registered Mobile Number</string>
-    <string name="somethingwentwrong">Something Went Wrong</string>
-    <string name="pleasecontactyouradministrator">Please Contact Your Administrator</string>
-    <string name="registrationdonesuccessfully">Registration Done Successfully</string>
-    <string name="alreadyregistered">You Are Already Registered On Another Device</string>
 </resources>

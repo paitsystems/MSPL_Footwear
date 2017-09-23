@@ -1,6 +1,7 @@
 package com.lnbinfotech.msplfootwearex.adapters;// Created by anup on 9/21/2017.
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.lnbinfotech.msplfootwearex.R;
+import com.lnbinfotech.msplfootwearex.VisitPaymentFormActivity;
 import com.lnbinfotech.msplfootwearex.model.ChequeDetailsGetterSetter;
 
 import java.util.List;
@@ -42,7 +44,7 @@ public class ShowChqDetailAdapter extends BaseAdapter{
         final ViewHolder holder;
         LayoutInflater inflater = activity.getLayoutInflater();
         if(convertView == null){
-            v = inflater.inflate(R.layout.chq_detail_show_list,viewGroup);
+            v = inflater.inflate(R.layout.chq_detail_show_list,null);
             holder = new ViewHolder();
             holder.tv_date = (TextView) v.findViewById(R.id.tv_date);
             holder.tv_number = (TextView) v.findViewById(R.id.tv_number);
@@ -55,9 +57,13 @@ public class ShowChqDetailAdapter extends BaseAdapter{
         }
            ChequeDetailsGetterSetter cd = getItem(position);
            holder.tv_date.setText(cd.getChq_det_date());
+           Log.d("Log","tv_date: "+cd.getChq_det_date());
            holder.tv_number.setText(cd.getChq_det_number());
+           Log.d("Log","tv_number: "+cd.getChq_det_number());
            holder.tv_amount.setText(cd.getChq_det_amt());
+           Log.d("Log","tv_amount: "+cd.getChq_det_amt());
            holder.tv_ref.setText(cd.getChq_det_ref());
+           Log.d("Log","tv_ref: "+cd.getChq_det_ref());
 
         return v;
     }

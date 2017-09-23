@@ -7,17 +7,14 @@
     android:orientation="vertical"
     tools:context="com.lnbinfotech.msplfootwearex.VisitPaymentFormActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:id="@+id/scrollView2"
-            android:padding="5sp">
+            android:padding="5sp"
+            android:layout_weight="1">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -29,15 +26,16 @@
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/selectcustomername"
                 android:layout_margin="5sp">
 
-                <android.support.design.widget.TextInputEditText
+                <EditText
                     android:drawableRight="@drawable/search"
                     style="@style/textViewMob"
                     android:focusable="false"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/selectcustomername"
+
                     android:id="@+id/ed_cus_name" />
             </android.support.design.widget.TextInputLayout>
 
@@ -105,89 +103,83 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:id="@+id/cheque_lay"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
 
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_gravity="center"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5sp">
-
-                <android.support.design.widget.TextInputEditText
-                    android:drawableEnd="@drawable/search"
-                    style="@style/textViewMob"
-                    android:focusable="false"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="@string/selectbank"
-                    android:id="@+id/ed_bank" />
-            </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_gravity="center"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5sp">
-
-                        <android.support.design.widget.TextInputEditText
-                            android:drawableRight="@drawable/search"
-                            style="@style/textViewMob"
-                            android:focusable="false"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:hint="@string/selectbranch"
-                            android:id="@+id/ed_branch" />
-                    </android.support.design.widget.TextInputLayout>
 
                 <LinearLayout
                     android:orientation="horizontal"
+                    android:id="@+id/chqbtn_det_lay"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/white_button_background"
+                    android:layout_height="wrap_content"
                     android:layout_margin="5sp"
-                    android:gravity="center"
-                    android:weightSum="1">
+                    android:gravity="center|right">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:background="@drawable/white_button_background"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="5sp">
 
-                    <android.support.v7.widget.AppCompatButton
-                        app:backgroundTint="@color/white"
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4sp"
+                        android:src="@drawable/cheque_"
+                        android:id="@+id/imageView_cheque" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="@string/enterchequedetails"
+                        style="@style/textViewMob"
+                        android:id="@+id/tv_cheque_details" />
+                    </LinearLayout>
+
+
+                    <!--<android.support.v7.widget.AppCompatButton
+
+                        app:backgroundTint="@color/lightpeach"
                         android:drawableLeft="@drawable/cheque_button_back"
                         android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/enterchequedetails"
                         android:id="@+id/btn_cheque_details"
-                        android:layout_weight="0.21" />
+                        android:layout_weight="0.19" />-->
                 </LinearLayout>
+
                     <ListView
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:id="@+id/lv_show_chq_detail">
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lv_show_chq_detail"
+                        android:visibility="visible">
 
                     </ListView>
 
 
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/attachchequeimage"/>
-
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5sp"
-                    android:visibility="visible">
-
-                    <ImageView
+                    <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:src="@drawable/camera"
-                        android:id="@+id/imageView_cheque_img" />
-                </LinearLayout>
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="5sp"
+                        android:id="@+id/add_more_lay"
+                        android:visibility="gone">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/orange"
+                            android:text="@string/addmore"
+                            style="@style/textViewMob"
+                            android:id="@+id/tv_add_more" />
+                        </LinearLayout>
+
+
+
                 </LinearLayout>
 
 
@@ -206,5 +198,4 @@
 
             </LinearLayout>
         </ScrollView>
-    </LinearLayout>
 </LinearLayout>

@@ -16,7 +16,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".FirstActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,21 +39,29 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".RegistrationActivity"
+        <activity
+            android:name=".RegistrationActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".CheckOTPActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".CheckOTPActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".CustomerDetailsActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".CustomerDetailsActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".CustomerLoginActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".CustomerLoginActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".OptionsActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".OptionsActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".UpdateProfileActivity" />
+        <activity android:name=".Update_ProfileData_Activity" />
+        <activity android:name=".FeedbackActivity"></activity>
     </application>
 
 </manifest>
