@@ -159,6 +159,20 @@
     <string name="gstnoimage">Attach GST No Image</string>
     <string name="pannoimage">Attach PAN No Image</string>
 
+    <string name="customername">Customer Name</string>
+    <string name="_selectaddressproof">Address Proof</string>
+    <string name="_selectidproof">Id Proof</string>
+    <string name="_addressproofimage">Address Proof Image</string>
+    <string name="_customerimage">Customer Image</string>
+    <string name="_idproofimage">Id Proof Image</string>
+    <string name="_gstnoimage">GST No Image</string>
+    <string name="_pannoimage">PAN No Image</string>
+    <string name="date">Date</string>
+    <string name="number">Number</string>
+    <string name="amt">Amount</string>
+    <string name="_cancel">Cancel</string>
+    <string name="againstref">Against Ref</string>
+
     <string-array name="navigationName">
         <item>Home</item>
         <item>Table Master</item>

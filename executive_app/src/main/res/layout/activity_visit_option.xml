@@ -1,35 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/btn_take_order"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Take Order"
         android:layout_margin="@dimen/mobmargin5"
-        android:text="Take Order" />
+        android:id="@+id/btn_take_order" />
 
     <Button
-        android:id="@+id/btn_visit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Payment"
         android:layout_margin="@dimen/mobmargin5"
-        android:text="Visit" />
+        android:id="@+id/btn_payment" />
 
     <Button
-        android:id="@+id/btn_reports"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Ledger Report"
         android:layout_margin="@dimen/mobmargin5"
-        android:text="Reports" />
+        android:id="@+id/btn_ledger_report" />
 
     <Button
-        android:id="@+id/btn_new_cust_entry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Complaint/Feedback"
         android:layout_margin="@dimen/mobmargin5"
-        android:text="New Customer Entry" />
+        android:id="@+id/btn_feedback" />
 
 </LinearLayout>

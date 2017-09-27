@@ -1,6 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
+    <Button
+        android:id="@+id/btn_give_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/mobmargin5"
+        android:text="Give Order" />
+
+    <Button
+        android:id="@+id/btn_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/mobmargin5"
+        android:text="Account" />
+
+    <Button
+        android:id="@+id/btn_track_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/mobmargin5"
+        android:text="Track Order" />
+
+    <Button
+        android:id="@+id/btn_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/mobmargin5"
+        android:text="Profile" />
+
+    <Button
+        android:id="@+id/btn_scheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/mobmargin5"
+        android:text="Scheme" />
+
+    <Button
+        android:id="@+id/btn_whats_new"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/mobmargin5"
+        android:text="Whats New" />
+
+    <Button
+        android:id="@+id/btn_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/mobmargin5"
+        android:text="Feedback" />
 </LinearLayout>

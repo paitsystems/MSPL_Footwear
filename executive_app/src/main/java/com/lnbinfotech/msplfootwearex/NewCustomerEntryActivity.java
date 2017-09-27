@@ -93,8 +93,6 @@ public class NewCustomerEntryActivity extends AppCompatActivity {
         });
     }
 
-
-
     private void add_value() {
         String cus = ed_cus_name.getText().toString();
         OptionsActivity.new_cus.setCust_name(cus);

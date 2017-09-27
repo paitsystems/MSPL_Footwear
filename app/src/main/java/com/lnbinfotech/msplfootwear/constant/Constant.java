@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.lnbinfotech.msplfootwear.R;
@@ -108,6 +109,11 @@ public class Constant {
                 showLog("Log File Delete");
             }
         }
+    }
+
+    public String getIMEINo(){
+        TelephonyManager manager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        return manager.getDeviceId();
     }
 
     private void writeLog(String _data) {

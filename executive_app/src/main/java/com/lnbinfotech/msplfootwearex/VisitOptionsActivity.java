@@ -1,4 +1,4 @@
-package com.lnbinfotech.msplfootwear;
+package com.lnbinfotech.msplfootwearex;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,16 +9,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.lnbinfotech.msplfootwear.constant.Constant;
+import com.lnbinfotech.msplfootwearex.constant.Constant;
+import android.widget.Toast;
+import android.view.Gravity;
 
-public class OptionsActivity extends AppCompatActivity implements View.OnClickListener {
+public class VisitOptionsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button btn_give_order, btn_account, btn_track_order, btn_profile, btn_scheme, btn_whats_new, btn_feedback;
+    private Constant constant;
+    private Toast toast;
+    private Button btn_take_order, btn_payment, btn_ledger_report, btn_feedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_options);
+        setContentView(R.layout.activity_visit_option);
 
         init();
 
@@ -26,12 +30,9 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        btn_give_order.setOnClickListener(this);
-        btn_account.setOnClickListener(this);
-        btn_track_order.setOnClickListener(this);
-        btn_profile.setOnClickListener(this);
-        btn_scheme.setOnClickListener(this);
-        btn_whats_new.setOnClickListener(this);
+        btn_take_order.setOnClickListener(this);
+        btn_payment.setOnClickListener(this);
+        btn_ledger_report.setOnClickListener(this);
         btn_feedback.setOnClickListener(this);
 
     }
@@ -39,66 +40,56 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_give_order:
+            case R.id.btn_take_order:
                 showDia(1);
                 break;
-            case R.id.btn_account:
-                startActivity(new Intent(getApplicationContext(),CustomerAccountActivity.class));
+            case R.id.btn_payment:
+                startActivity(new Intent(getApplicationContext(),VisitPaymentFormActivity.class));
                 overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
-            case R.id.btn_track_order:
-                startActivity(new Intent(getApplicationContext(),TrackOrderActivity.class));
-                overridePendingTransition(R.anim.enter,R.anim.exit);
-                break;
-            case R.id.btn_profile:
-                startActivity(new Intent(getApplicationContext(),UpdateProfileActivity.class));
-                overridePendingTransition(R.anim.enter,R.anim.exit);
-                break;
-            case R.id.btn_scheme:
-                break;
-            case R.id.btn_whats_new:
+            case R.id.btn_ledger_report:
                 break;
             case R.id.btn_feedback:
-                startActivity(new Intent(getApplicationContext(),FeedbackActivity.class));
-                overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
         }
     }
 
     @Override
     public void onBackPressed() {
-        showDia(0);
+        //showDia(0);
+        new Constant(VisitOptionsActivity.this).doFinish();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                showDia(0);
+                //showDia(0);
+                new Constant(VisitOptionsActivity.this).doFinish();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void init() {
-        btn_give_order = (Button) findViewById(R.id.btn_give_order);
-        btn_account = (Button) findViewById(R.id.btn_account);
-        btn_track_order = (Button) findViewById(R.id.btn_track_order);
-        btn_profile = (Button) findViewById(R.id.btn_profile);
-        btn_scheme = (Button) findViewById(R.id.btn_scheme);
-        btn_whats_new = (Button) findViewById(R.id.btn_whats_new);
+        btn_take_order = (Button) findViewById(R.id.btn_take_order);
+        btn_payment = (Button) findViewById(R.id.btn_payment);
+        btn_ledger_report = (Button) findViewById(R.id.btn_ledger_report);
         btn_feedback = (Button) findViewById(R.id.btn_feedback);
+        toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER,0,0);
+
     }
 
     private void showDia(int a) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(OptionsActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(VisitOptionsActivity.this);
         builder.setCancelable(false);
         if (a == 0) {
             builder.setMessage("Do You Want To Exit App?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    new Constant(OptionsActivity.this).doFinish();
+                    new Constant(VisitOptionsActivity.this).doFinish();
                     dialog.dismiss();
                 }
             });
@@ -136,5 +127,6 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         }
         builder.create().show();
     }
+
 
 }

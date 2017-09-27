@@ -5,31 +5,31 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/btn_take_order"
+        android:id="@+id/btn_gents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/mobmargin5"
-        android:text="Take Order" />
+        android:text="Gents" />
 
     <Button
-        android:id="@+id/btn_visit"
+        android:id="@+id/btn_ladiesnboys"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/mobmargin5"
-        android:text="Visit" />
+        android:text="Ladies And Boys" />
 
     <Button
-        android:id="@+id/btn_reports"
+        android:id="@+id/btn_hawaineva"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/mobmargin5"
-        android:text="Reports" />
+        android:text="Hawai And Eva" />
 
     <Button
-        android:id="@+id/btn_new_cust_entry"
+        android:id="@+id/btn_schoolshoe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/mobmargin5"
-        android:text="New Customer Entry" />
+        android:text="School Shoes" />
 
 </LinearLayout>
