@@ -15,17 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelectAutoItemActivity extends AppCompatActivity {
-   private EditText ed_cus_name,ed_branch,ed_bank;
-   private List<String> cus_list,bank_list,branch_list ;
-
+    private EditText ed_cus_name,ed_branch,ed_bank;
+    private List<String> cus_list,bank_list,branch_list ;
     private LinearLayout cus_lay,bank_lay,branch_lay;
     private ListView lv_cus,lv_bank,lv_branch;
-
-    //String[] cus_name = {"sneha","pooja","rohini","poonam","nikita","karan","neha","nita"};
-    //String[] bank_name = {"SBI","BOM","BOB","BOI","ICC Bank","kotak","RBI"};
-    //String[] branch_name = {"pune","mumbai","satara","nashik","karad","mahabaleshwar","dhule"};
-   // int flag;
-    String get_type="";
+    private String get_type="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +126,7 @@ public class SelectAutoItemActivity extends AppCompatActivity {
 
 
                 String select_item = bank_list.get(position);
-                VisitPaymentFormActivity.visit.setCheque_bank(select_item);
+                ChequeDetailsActivity.selectAuto.setChq_auto_bank(select_item);
                 ed_bank.setText(select_item);
                 Log.d("Log", "selcted_item: " + select_item);
                 finish();
@@ -147,7 +141,7 @@ public class SelectAutoItemActivity extends AppCompatActivity {
 
 
                 String select_item = branch_list.get(position);
-                VisitPaymentFormActivity.visit.setCheque_branch(select_item);
+                ChequeDetailsActivity.selectAuto.setChq_auto_branch(select_item);
                 ed_branch.setText(select_item);
                 Log.d("Log", "selcted_item: " + select_item);
                 finish();

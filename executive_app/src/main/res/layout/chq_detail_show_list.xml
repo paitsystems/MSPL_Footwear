@@ -15,27 +15,31 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             style="@style/textViewMob"
             android:id="@+id/tv_date"
-            android:layout_weight="0.3" />
+            android:layout_weight="0.3"
+            android:gravity="left" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             style="@style/textViewMob"
             android:id="@+id/tv_number"
-            android:layout_weight="0.3" />
+            android:layout_weight="0.3"
+            android:gravity="left" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             style="@style/textViewMob"
             android:id="@+id/tv_amount"
-            android:layout_weight="0.3" />
+            android:layout_weight="0.3"
+            android:gravity="right" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             style="@style/textViewMob"
             android:id="@+id/tv_ref"
-            android:layout_weight="0.3" />
+            android:layout_weight="0.3"
+            android:gravity="right" />
     </LinearLayout>
 </LinearLayout>

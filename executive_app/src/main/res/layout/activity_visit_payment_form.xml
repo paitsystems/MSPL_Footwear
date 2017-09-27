@@ -7,14 +7,16 @@
     android:orientation="vertical"
     tools:context="com.lnbinfotech.msplfootwearex.VisitPaymentFormActivity">
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:id="@+id/scrollView2"
-            android:padding="5sp"
-            android:layout_weight="1">
+            android:padding="5sp">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -103,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:id="@+id/cheque_lay"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
 
 
@@ -138,7 +140,27 @@
                         style="@style/textViewMob"
                         android:id="@+id/tv_cheque_details" />
                     </LinearLayout>
+                </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="5sp"
+                        android:id="@+id/add_more_lay"
+                        android:visibility="visible">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/orange"
+                            android:text="@string/addmore"
+                            style="@style/textViewMob"
+                            android:id="@+id/tv_add_more" />
+                    </LinearLayout>
 
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
 
                     <!--<android.support.v7.widget.AppCompatButton
 
@@ -150,43 +172,72 @@
                         android:text="@string/enterchequedetails"
                         android:id="@+id/btn_cheque_details"
                         android:layout_weight="0.19" />-->
-                </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:id="@+id/list_lay"
+            android:layout_weight="1"
+            android:visibility="gone">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/lightpurple"
+            android:padding="5sp">
+            <TextView
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/date"
+                android:textColor="@color/white"
+                android:gravity="left"
+                android:layout_weight="0.3" />
+            <TextView
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/number"
+                android:textColor="@color/white"
+                android:gravity="left"
+                android:layout_weight="0.3" />
+            <TextView
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/amt"
+                android:textColor="@color/white"
+                android:gravity="right"
+                android:layout_weight="0.3" />
+            <TextView
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/againstref"
+                android:textColor="@color/white"
+                android:gravity="right"
+                android:layout_weight="0.3" />
+
+        </LinearLayout>
+
 
                     <ListView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:id="@+id/lv_show_chq_detail"
-                        android:visibility="visible">
+                        android:visibility="visible"
+                        android:layout_weight="1">
 
                     </ListView>
-
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:padding="5sp"
-                        android:id="@+id/add_more_lay"
-                        android:visibility="gone">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/orange"
-                            android:text="@string/addmore"
-                            style="@style/textViewMob"
-                            android:id="@+id/tv_add_more" />
-                        </LinearLayout>
+            </LinearLayout>
 
 
 
-                </LinearLayout>
 
-
-
-                    <android.support.v7.widget.AppCompatButton
+                <android.support.v7.widget.AppCompatButton
                         android:layout_gravity="center"
-                        app:backgroundTint="@color/maroon"
+                        app:backgroundTint="@color/orange"
                         android:drawableLeft="@drawable/save_button_back"
                         android:textColor="@color/white"
                         android:layout_width="wrap_content"
@@ -196,6 +247,6 @@
 
 
 
-            </LinearLayout>
-        </ScrollView>
+
+</LinearLayout>
 </LinearLayout>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5sp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/gstno"
+                android:id="@+id/rdo_gstno"
+                android:layout_weight="0.5"
+                android:checked="true"/>
+
+            <RadioButton
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/panno"
+                android:id="@+id/rdo_panno"
+                android:layout_weight="0.5"
+                android:checked="false"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/gst_lay"
+            android:visibility="visible"
+            android:layout_weight="0.05">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.01"
+                android:gravity="center">
+
+            <EditText
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text|number"
+                android:ems="10"
+                android:id="@+id/ed_gstno"
+                android:visibility="visible"
+                android:hint="@string/entergstno"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/gstnoimage"
+                    style="@style/textViewMob" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_margin="5sp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.02"
+                android:gravity="center">
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:id="@+id/imageView_gst_img"
+                    android:src="@drawable/camera"/>
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/pan_lay"
+            android:visibility="gone"
+            android:layout_weight="0.05">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.01"
+                android:gravity="center">
+
+
+            <EditText
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text|number"
+                android:ems="10"
+                android:id="@+id/ed_panno"
+                android:visibility="visible"
+                android:hint="@string/enterpanno" />
+                </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/pannoimage"
+                    style="@style/textViewMob" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_margin="5sp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.02"
+                android:gravity="center">
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:id="@+id/imageView_pan_img"
+                    android:src="@drawable/camera"/>
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5sp"
+            android:gravity="center"
+            android:layout_weight="0.02">
+
+            <Button
+                android:padding="10sp"
+                android:drawableLeft="@drawable/next"
+                android:background="@drawable/btn_draw_maroon_curve"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/next"
+                android:textColor="@color/white"
+                android:id="@+id/btn_next" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
