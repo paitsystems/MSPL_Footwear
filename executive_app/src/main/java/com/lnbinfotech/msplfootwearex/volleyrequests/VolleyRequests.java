@@ -69,4 +69,26 @@ public class VolleyRequests {
         );
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
+
+
+
+    public void saveCustomerDetail(String url, final ServerCallback callback){
+        StringRequest request = new StringRequest(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+              Constant.showLog(response);
+                response = response.replace("\\","");
+                response = response.replace("''","");
+                response = response.substring(1,response.length() - 1);
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onFailure("Error");
+                Constant.showLog(error.getMessage());
+            }
+        });
+      AppSingleton.getInstance(context).addToRequestQueue(request,"");
+    }
 }

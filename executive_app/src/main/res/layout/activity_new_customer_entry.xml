@@ -1,201 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.lnbinfotech.msplfootwearex.NewCustomerEntryActivity">
 
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/scrollView2"
-            android:padding="5sp">
+            android:layout_margin="@dimen/mobmargin5">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10sp"
-                android:layout_marginBottom="10sp">
-
+                android:layout_marginBottom="@dimen/mobmargin5"
+                android:layout_marginTop="@dimen/mobmargin5"
+                android:orientation="vertical">
 
                 <TextView
+                    style="@style/textViewMob"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/enternewcustomername"
-                    style="@style/textViewMob"
-                    android:id="@+id/textView5" />
-
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                android:layout_marginTop="10sp"
-                android:layout_marginBottom="10sp"
-                android:layout_weight="0.5">
-
-                <EditText
-                    style="@style/textViewMob"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:ems="10"
-                    android:id="@+id/ed_cus_name"
-                    android:visibility="visible" />
-                </LinearLayout>
-                   <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="@string/mobile_no"
-                        style="@style/textViewMob"
-                        android:id="@+id/textView" />
-
+                    android:text="@string/enternewcustomername" />
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10sp"
-                    android:layout_marginBottom="10sp"
-                    android:visibility="visible">
-                    <EditText
-                        style="@style/textViewMob"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="phone"
-                        android:maxLength="10"
-                        android:ems="10"
-                        android:id="@+id/ed_mobile_no" />
-                </LinearLayout>
-
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="@string/email_id"
-                        style="@style/textViewMob"
-                        android:id="@+id/textView1" />
-
-                <LinearLayout
+                    android:layout_marginBottom="@dimen/mobmargin5"
+                    android:layout_marginTop="@dimen/mobmargin5"
                     android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:visibility="visible">
 
                     <EditText
+                        android:id="@+id/ed_cus_name"
                         style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
                         android:ems="10"
-                        android:layout_marginTop="10sp"
-                        android:layout_marginBottom="10sp"
-                        android:id="@+id/ed_emailid" />
+                        android:inputType="textPersonName"
+                        android:visibility="visible"/>
                 </LinearLayout>
 
                 <TextView
+                    style="@style/textViewMob"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/address"
-                    style="@style/textViewMob"
-                    android:id="@+id/textView2" />
+                    android:text="@string/mobile_no" />
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10sp"
-                    android:layout_marginBottom="10sp"
+                    android:layout_marginBottom="@dimen/mobmargin5"
+                    android:layout_marginTop="@dimen/mobmargin5"
+                    android:orientation="horizontal"
                     android:visibility="visible">
 
-
                     <EditText
+                        android:id="@+id/ed_mobile_no"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:hint="@string/enteraddresshere"
+                        android:inputType="number"
+                        android:maxLength="10"/>
+                </LinearLayout>
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/email_id"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <EditText
+                        android:id="@+id/ed_emailid"
                         style="@style/textViewMob"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/mobmargin5"
+                        android:layout_marginTop="@dimen/mobmargin5"
+                        android:ems="10"
+                        android:inputType="textEmailAddress"/>
+                </LinearLayout>
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/address" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/mobmargin5"
+                    android:layout_marginTop="@dimen/mobmargin5"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <EditText
+                        android:id="@+id/ed_address"
+                        style="@style/textViewMob"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
                         android:gravity="top"
-                        android:lines="2"
-                        android:id="@+id/ed_address" />
+                        android:hint="@string/enteraddresshere"
+                        android:lines="2" />
                 </LinearLayout>
 
 
                 <LinearLayout
                     android:id="@+id/save_lay"
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5sp"
-                    android:layout_marginTop="20sp"
-                    android:layout_marginBottom="20sp"
+                    android:layout_margin="@dimen/mobmargin5"
                     android:gravity="center"
-                    android:layout_weight="0.94"
+                    android:orientation="vertical"
                     android:visibility="visible">
 
-                    <Button
-                        android:padding="10sp"
-                        android:drawableLeft="@drawable/next"
-                        android:background="@drawable/btn_draw_maroon_curve"
-                        style="?android:attr/buttonStyleSmall"
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/btn_next"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawableLeft="@drawable/next"
                         android:text="@string/next"
                         android:textColor="@color/white"
-                        android:id="@+id/btn_next" />
+                        app:backgroundTint="@color/buttoncolor" />
                 </LinearLayout>
+
+
                 <LinearLayout
                     android:id="@+id/update_lay"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5sp"
-                    android:layout_marginTop="20sp"
-                    android:layout_marginBottom="20sp"
+                    android:layout_margin="@dimen/mobmargin5"
+                    android:orientation="horizontal"
                     android:visibility="gone">
 
-                    <Button
-                        android:layout_margin="10sp"
-                        android:padding="10sp"
-                        android:drawableLeft="@drawable/update"
-                        android:background="@drawable/btn_draw_maroon_curve"
-                        style="?android:attr/buttonStyleSmall"
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/btn_update"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/mobmargin5"
+                        android:layout_weight="0.2"
+                        android:drawableLeft="@drawable/update"
                         android:text="@string/update"
                         android:textColor="@color/white"
-                        android:id="@+id/btn_update"
-                        android:layout_weight="0.5" />
-                    <Button
-                        android:layout_margin="10sp"
-                        android:padding="10sp"
-                        android:drawableLeft="@drawable/cancel"
-                        android:background="@drawable/btn_draw_maroon_curve"
-                        style="?android:attr/buttonStyleSmall"
+                        app:backgroundTint="@color/buttoncolor" />
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/btn_cancel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/_cancel"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/mobmargin5"
+                        android:layout_weight="0.2"
+                        android:drawableLeft="@drawable/cancel"
+                        android:text="@string/cancel"
                         android:textColor="@color/white"
-                        android:id="@+id/btn_cancel"
-                        android:layout_weight="0.5" />
+                        app:backgroundTint="@color/buttoncolor" />
                 </LinearLayout>
-
-
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
+
+
 </LinearLayout>

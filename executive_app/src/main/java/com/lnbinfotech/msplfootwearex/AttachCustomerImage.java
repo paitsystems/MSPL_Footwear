@@ -13,74 +13,127 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.log.WriteLog;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
-public class AttachCustomerImage extends AppCompatActivity {
+public class AttachCustomerImage extends AppCompatActivity implements View.OnClickListener {
     private ImageView imageView_cus_image;
-    private Bitmap bmp;
-    private Button bt_next;
-    static int flag = 2;
+    //private Bitmap bmp;
+    private AppCompatButton bt_next, bt_update, bt_cancel;
+    private LinearLayout save_lay, update_lay;
+    public static int flag = 2;
+    // private String file_name;
+    private String imagePath;
+    private Toast toast;
+    private final int requestCode = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attach_customer_image);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.custimage);
+        }
         init();
     }
 
-    private void init(){
+    private void init() {
+        toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
         imageView_cus_image = (ImageView) findViewById(R.id.imageView_cus_image);
-        bt_next = (Button) findViewById(R.id.btn_next);
+        bt_next = (AppCompatButton) findViewById(R.id.btn_next);
+        bt_cancel = (AppCompatButton) findViewById(R.id.btn_cancel);
+        bt_update = (AppCompatButton) findViewById(R.id.btn_update);
+        save_lay = (LinearLayout) findViewById(R.id.save_lay);
+        update_lay = (LinearLayout) findViewById(R.id.update_lay);
 
-        if(flag == 0){
+        if (flag == 0) {
+            save_lay.setVisibility(View.GONE);
+            update_lay.setVisibility(View.VISIBLE);
             set_value_attachCusImage();
-
+            bt_update.setOnClickListener(this);
+            bt_cancel.setOnClickListener(this);
+        } else {
+            save_lay.setVisibility(View.VISIBLE);
+            update_lay.setVisibility(View.GONE);
         }
+        imageView_cus_image.setOnClickListener(this);
+        bt_next.setOnClickListener(this);
 
-        imageView_cus_image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    }
 
-                showPopup(0);
-            }
-        });
-
-        bt_next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (flag == 0) {
-                    Intent i = new Intent(AttachCustomerImage.this, NewCustomerEntryDetailFormActivity.class);
-                    startActivity(i);
-                    finish();
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_next:
+                OptionsActivity.new_cus.setCus_image(imagePath);
+                String filename = OptionsActivity.new_cus.getCus_image();
+                if (filename == null) {
+                    toast.setText("Please, attach customer image.");
+                    toast.show();
                 } else {
-                    validation();
+                    Constant.showLog("filename:" + OptionsActivity.new_cus.getCus_image());
                     Intent i = new Intent(AttachCustomerImage.this, AttachAddressProofImage.class);
                     startActivity(i);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                    writeLog("Next button of onclick():data saved and goes to DetailFormActivity ");
                     finish();
                 }
-            }
-        });
+                break;
+            case R.id.btn_update:
+                OptionsActivity.new_cus.setCus_image(imagePath);
+                Intent intent = new Intent(AttachCustomerImage.this, NewCustomerEntryDetailFormActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                writeLog("Update button of onclick():data updated and goes to DetailFormActivity ");
+                finish();
+                break;
+            case R.id.btn_cancel:
+                Intent j = new Intent(AttachCustomerImage.this, NewCustomerEntryDetailFormActivity.class);
+                startActivity(j);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                writeLog("Cancel button of onclick():data canceled and goes to DetailFormActivity ");
+                finish();
+                break;
+            case R.id.imageView_cus_image:
+                Intent intent_ = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File f = Constant.checkFolder(Constant.folder_name);
+                f = new File(f.getAbsolutePath(), "temp.jpg");
+                intent_.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                startActivityForResult(intent_, requestCode);
+                break;
+        }
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        showPopup();
+        /*super.onBackPressed();
+        Intent j = new Intent(AttachCustomerImage.this, NewCustomerEntryDetailFormActivity.class);
+        startActivity(j);
+        writeLog("onBackPressed():data canceled and goes to DetailFormActivity ");
+        finish();*/
     }
 
     @Override
@@ -90,126 +143,112 @@ public class AttachCustomerImage extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //new Constant(AttachCustomerImage.this).doFinish();
+                showPopup();
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
-            case 1:
-                if (resultCode == RESULT_OK) {
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    Constant.checkFolder(Constant.captured_images_folder);
-                    String dateformat = currentDateFormat();
-                    String file_name = "cus_img_" + dateformat + ".jpg";
-                    store_CameraPhoto_InSdCard(bitmap, dateformat);
-                    Bitmap mbitmap = get_Image_from_sd_card(file_name);
-                    Log.d("Log", "imgename:" + mbitmap);
+        if (this.requestCode == requestCode && resultCode == RESULT_OK) {
+            try {
+                imageView_cus_image.setVisibility(View.VISIBLE);
+                String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + "temp.jpg");
+                imageView_cus_image.setImageBitmap(scaleBitmap(_imagePath));
+                long datetime = System.currentTimeMillis();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
+                Date resultdate = new Date(datetime);
 
-                    imageView_cus_image.setImageBitmap(mbitmap);
-                    OptionsActivity.new_cus.setCus_image(file_name);
-                    Log.d("Log", "filname:" + OptionsActivity.new_cus.getCus_image());
+                imagePath = "Cust_Img_" + sdf.format(resultdate) + ".jpg";
 
-                }
-                break;
-            case 2:
-                if (data != null && resultCode == RESULT_OK)
-                {
-
-                    Uri selectedImage = data.getData();
-
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String filePath = cursor.getString(columnIndex);
-                    cursor.close();
-
-                    if(bmp != null && !bmp.isRecycled())
-                    {
-                        bmp = null;
+                File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name);
+                for (File temp : f.listFiles()) {
+                    if (temp.getName().equals("temp.jpg")) {
+                        f = temp;
+                        break;
                     }
-                    bmp = BitmapFactory.decodeFile(filePath);
-
-                    //imgv_img1.setBackgroundResource(0);
-
-                        imageView_cus_image.setImageBitmap(bmp);
-
                 }
-                else
-                {
-                    Log.d("Status:", "Photopicker canceled");
+
+                OutputStream outFile;
+                Bitmap bitmap;
+                BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+                bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name, imagePath);
+                try {
+                    outFile = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 15, outFile);
+                    outFile.flush();
+                    outFile.close();
+                } catch (Exception e) {
+                    writeLog("onActivityResult():FileNotFoundException:" + e);
+                    //writeLog("AddNewTicketActivity_onActivityResult_outFile_"+e.getMessage());
+                    e.printStackTrace();
                 }
-                break;
-
-
+            } catch (Exception e) {
+                writeLog("onActivityResult():Exception:" + e);
+                //writeLog("AddNewTicketActivity_onActivityResult_"+e.getMessage());
+                e.printStackTrace();
+            }
         }
-    }
-
-    private void validation(){
 
     }
 
-    private void store_CameraPhoto_InSdCard(Bitmap bitmap,String currentdate){
-        File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + "cus_img_"+currentdate+".jpg");
+    /*private void store_CameraPhoto_InSdCard(Bitmap bitmap, String currentdate) {
+        File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder + File.separator + "cus_img_" + currentdate + ".jpg");
         //File file = new File(Environment.getExternalStorageDirectory() + "img_"+currentdate+".jpeg");
 
-        Log.d("Log","File path:"+file);
-        try{
-
+        Log.d("Log", "File path:" + file);
+        try {
             FileOutputStream fos = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 15, fos);
             fos.flush();
             fos.close();
-        }catch (FileNotFoundException f){
+        } catch (Exception f) {
             f.printStackTrace();
-        }catch (IOException io){
-            io.printStackTrace();
-        }catch (NullPointerException w){
-            w.printStackTrace();
+            writeLog("FileNotFoundException and IOException found:" + f);
         }
     }
 
-
-
-    private Bitmap get_Image_from_sd_card(String filename){
+    private Bitmap get_Image_from_sd_card(String filename) {
         Bitmap bitmap = null;
-        File imgfile = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + filename);
-
+        File imgfile = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder + File.separator + filename);
 
         try {
             FileInputStream fis = new FileInputStream(imgfile);
-            bitmap  = BitmapFactory.decodeStream(fis);
-        }catch (FileNotFoundException e){
+            bitmap = BitmapFactory.decodeStream(fis);
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
+            writeLog("FileNotFound Exception found:" + e);
         }
         return bitmap;
     }
 
-    private String currentDateFormat(){
+    private String currentDateFormat() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HH_mm");
         String current_time = sdf.format(new Date());
         return current_time;
-    }
+    }*/
 
     private void set_value_attachCusImage() {
-        AttachCustomerImage.flag = 0;
+        //AttachCustomerImage.flag = 0;
         String filename = OptionsActivity.new_cus.getCus_image();
-        Log.d("Log","filename: "+OptionsActivity.new_cus.getCus_image());
-        //imageView_cus_image.setImageBitmap();
+        Constant.showLog("filename: " + OptionsActivity.new_cus.getCus_image());
 
-        File file = Constant.checkFolder(Constant.captured_images_folder);
+        File file = Constant.checkFolder(Constant.folder_name);
         File fileArray[] = file.listFiles();
-        /// int isAvailable = 0;
+
         if (fileArray.length != 0) {
             for (File f : fileArray) {
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
-                        //String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
-                        String _imagePath = getRealPathFromURI( Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + filename);
+                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
                         imageView_cus_image.setImageBitmap(scaleBitmap(_imagePath));
-                        //isAvailable = 1;
+                        writeLog("set_value_attachCusImage():imageView_cus_image is attched:" + f);
                     }
                     break;
                 }
@@ -231,7 +270,7 @@ public class AttachCustomerImage extends AppCompatActivity {
         }
     }
 
-    public Bitmap scaleBitmap(String imagePath) {
+    private Bitmap scaleBitmap(String imagePath) {
         Bitmap resizedBitmap = null;
         try {
             int inWidth, inHeight;
@@ -258,51 +297,40 @@ public class AttachCustomerImage extends AppCompatActivity {
             resizedBitmap = Bitmap.createScaledBitmap(roughBitmap, (int) (roughBitmap.getWidth() * values[0]), (int) (roughBitmap.getHeight() * values[4]), true);
         } catch (Exception e) {
             e.printStackTrace();
-            //pb.setVisibility(View.GONE);
-            //img.setImageResource(R.drawable.bg);
-            // toast.show();
+            writeLog("scaleBitmap():FileNotFoundException and IOException found:" + e);
         }
         return resizedBitmap;
     }
 
-
-
-    private void showPopup(int id) {
+    private void showPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Do you want to attach image?");
-        if (id == 0) {
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    showPopup(1);
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
-        }else if (id == 1) {
-            builder.setMessage("Attach image");
-            builder.setPositiveButton("Camera", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent1 = new Intent( MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent1,1);
+        builder.setMessage("Do you want to clear this data");
 
-                }
-            });
-            builder.setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent2 = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent2,2);
-                }
-            });
-        }
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent in = new Intent(AttachCustomerImage.this, OptionsActivity.class);
+                OptionsActivity.new_cus = null;
+                startActivity(in);
+                new Constant(AttachCustomerImage.this).doFinish();
+                //finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
         builder.create().show();
     }
+
+    private void writeLog(String _data) {
+        new WriteLog().writeLog(getApplicationContext(), "AttachCustomerImageActivity_" + _data);
+    }
+
+
 }
 
 

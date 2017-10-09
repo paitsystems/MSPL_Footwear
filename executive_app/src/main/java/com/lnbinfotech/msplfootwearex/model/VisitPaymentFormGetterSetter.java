@@ -11,13 +11,11 @@ public  class VisitPaymentFormGetterSetter {
         this.customer_name = customer_name;
     }
 
-    public String getamount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void set_amount(String amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
-
-
 }

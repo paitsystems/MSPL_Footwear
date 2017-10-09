@@ -13,7 +13,9 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,9 +23,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.log.WriteLog;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,86 +36,129 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
-public class AttachAddressProofImage extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class AttachAddressProofImage extends AppCompatActivity implements View.OnClickListener {
     private ImageView imageView_addproof;
-    private Bitmap bmp;
-    private Button bt_next;
+    //private Bitmap bmp;
+    //private int position;
+    //private String file_name;
+    private String imagePath;
+    private AppCompatButton bt_next, bt_update, bt_cancel;
+    private LinearLayout save_lay, update_lay;
     private Spinner spinner_addproof;
-    private String[] add_proof = {"Aadhaar","Light bill","Aggreement copy","Index 0"};
+    private String[] add_proof = {"Aadhaar", "Light bill", "Aggreement copy", "Index 0"};
     private ArrayAdapter<String> adapter_address;
-    static int flag = 3;
+    public static int flag = 3;
+    private Toast toast;
+    private final int requestCode = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attach_address_proof_image);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.addressproof);
+        }
         init();
     }
-    private void init(){
+
+    private void init() {
+        toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
         imageView_addproof = (ImageView) findViewById(R.id.imageView_addproof);
-        bt_next = (Button) findViewById(R.id.btn_next);
+        bt_next = (AppCompatButton) findViewById(R.id.btn_next);
+        bt_update = (AppCompatButton) findViewById(R.id.btn_update);
+        bt_cancel = (AppCompatButton) findViewById(R.id.btn_cancel);
+        save_lay = (LinearLayout) findViewById(R.id.save_lay);
+        update_lay = (LinearLayout) findViewById(R.id.update_lay);
         spinner_addproof = (Spinner) findViewById(R.id.spinner_addproof);
 
-
-        adapter_address = new ArrayAdapter<>(this,R.layout.address_list,add_proof);
+        adapter_address = new ArrayAdapter<>(this, R.layout.address_list, add_proof);
         spinner_addproof.setAdapter(adapter_address);
 
-        if(flag == 0){
+        if (flag == 0) {
+            save_lay.setVisibility(View.GONE);
+            update_lay.setVisibility(View.VISIBLE);
+
             set_value_attachAddressProof();
             set_value_attachAddressProofImage();
 
-            spinner_addproof.setOnItemSelectedListener(this);
+            imageView_addproof.setOnClickListener(this);
+            bt_update.setOnClickListener(this);
+            bt_cancel.setOnClickListener(this);
+        } else {
+            save_lay.setVisibility(View.VISIBLE);
+            update_lay.setVisibility(View.GONE);
 
-            imageView_addproof.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    showPopup(0);
-
-                }
-            });
-
-            bt_next.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(AttachAddressProofImage.this,NewCustomerEntryDetailFormActivity.class);
-                    startActivity(i);
-                    finish();
-                }
-            });
-
-        }else {
-
-            spinner_addproof.setOnItemSelectedListener(this);
-
-            imageView_addproof.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    showPopup(0);
-
-                }
-            });
-
-            bt_next.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(AttachAddressProofImage.this, AttachIdProofImageActivity.class);
-                    startActivity(i);
-                    finish();
-                }
-            });
+            imageView_addproof.setOnClickListener(this);
+            bt_next.setOnClickListener(this);
         }
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_next:
+                int position = spinner_addproof.getSelectedItemPosition();
+                Constant.showLog("positon:" + spinner_addproof.getSelectedItemPosition());
+                OptionsActivity.new_cus.setAddress_proof(String.valueOf(position));
 
+                OptionsActivity.new_cus.setAddress_proof_image(imagePath);
+                String filename = OptionsActivity.new_cus.getAddress_proof_image();
+                if (filename == null) {
+                    toast.setText("Please, attach address proof image.");
+                    toast.show();
+                } else {
+                    Intent i = new Intent(AttachAddressProofImage.this, AttachIdProofImageActivity.class);
+                    startActivity(i);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                    writeLog("Next button of onclick():data saved and goes to DetailFormActivity ");
+                    finish();
+                }
+                break;
+            case R.id.btn_update:
+                OptionsActivity.new_cus.setAddress_proof_image(imagePath);
+
+                int position_ = spinner_addproof.getSelectedItemPosition();
+                Constant.showLog("positon:" + spinner_addproof.getSelectedItemPosition());
+                OptionsActivity.new_cus.setAddress_proof(String.valueOf(position_));
+
+                Intent intent = new Intent(AttachAddressProofImage.this, NewCustomerEntryDetailFormActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                writeLog("Update button of onclick():data updated and goes to DetailFormActivity ");
+                finish();
+                break;
+            case R.id.btn_cancel:
+                Intent j = new Intent(AttachAddressProofImage.this, NewCustomerEntryDetailFormActivity.class);
+                startActivity(j);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                writeLog("Cancel button of onclick():data canceled and goes to DetailFormActivity ");
+                finish();
+                break;
+            case R.id.imageView_addproof:
+                Intent intent_ = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File f = Constant.checkFolder(Constant.folder_name);
+                f = new File(f.getAbsolutePath(), "temp.jpg");
+                intent_.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                startActivityForResult(intent_, requestCode);
+                break;
+        }
+    }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        showPopup();
+       /* super.onBackPressed();
+        Intent j = new Intent(AttachAddressProofImage.this, NewCustomerEntryDetailFormActivity.class);
+        startActivity(j);
+        writeLog("onBackPressed():data canceled and goes to DetailFormActivity ");
+        finish();*/
     }
 
     @Override
@@ -120,77 +168,61 @@ public class AttachAddressProofImage extends AppCompatActivity implements Adapte
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //new Constant(AttachAddressProofImage.this).doFinish();
+                showPopup();
+                break;
+        }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        String item_add = spinner_addproof.getSelectedItem().toString();
-        Log.d("Log","address_value:"+item_add);
-        //OptionsActivity.new_cus.setAddress_proof(item_add);
-        int position = spinner_addproof.getSelectedItemPosition();
-        Log.d("Log","positon:"+spinner_addproof.getSelectedItemPosition());
-        OptionsActivity.new_cus.setAddress_proof(String.valueOf(position));
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
-            case 1:
-                if (resultCode == RESULT_OK) {
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    Constant.checkFolder(Constant.captured_images_folder);
-                    String dateformat = currentDateFormat();
-                    String file_name = "address_img_" + dateformat + ".jpg";
-                    store_CameraPhoto_InSdCard(bitmap, dateformat);
-                    Bitmap mbitmap = get_Image_from_sd_card(file_name);
-                    Log.d("Log", "imgename:" + mbitmap);
+        if (this.requestCode == requestCode && resultCode == RESULT_OK) {
+            try {
+                imageView_addproof.setVisibility(View.VISIBLE);
+                String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + "temp.jpg");
+                imageView_addproof.setImageBitmap(scaleBitmap(_imagePath));
+                long datetime = System.currentTimeMillis();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
+                Date resultdate = new Date(datetime);
 
-                    imageView_addproof.setImageBitmap(mbitmap);
-                    OptionsActivity.new_cus.setAddress_proof_image(file_name);
-                }
-                break;
-            case 2:
-                if (data != null && resultCode == RESULT_OK)
-                {
+                imagePath = "Address_Img_" + sdf.format(resultdate) + ".jpg";
 
-                    Uri selectedImage = data.getData();
-
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String filePath = cursor.getString(columnIndex);
-                    cursor.close();
-
-                    if(bmp != null && !bmp.isRecycled())
-                    {
-                        bmp = null;
+                File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name);
+                for (File temp : f.listFiles()) {
+                    if (temp.getName().equals("temp.jpg")) {
+                        f = temp;
+                        break;
                     }
-                    bmp = BitmapFactory.decodeFile(filePath);
-
-                    //imgv_img1.setBackgroundResource(0);
-
-                    imageView_addproof.setImageBitmap(bmp);
-
                 }
-                else
-                {
-                    Log.d("Status:", "Photopicker canceled");
+
+                OutputStream outFile;
+                Bitmap bitmap;
+                BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+                bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name, imagePath);
+                try {
+                    outFile = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 15, outFile);
+                    outFile.flush();
+                    outFile.close();
+                } catch (Exception e) {
+                    writeLog("onActivityResult():FileNotFoundException:" + e);
+                    //writeLog("AddNewTicketActivity_onActivityResult_outFile_"+e.getMessage());
+                    e.printStackTrace();
                 }
-                break;
-
-
+            } catch (Exception e) {
+                writeLog("onActivityResult():Exception:" + e);
+                //writeLog("AddNewTicketActivity_onActivityResult_"+e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 
-    private void store_CameraPhoto_InSdCard(Bitmap bitmap,String currentdate){
+    /*private void store_CameraPhoto_InSdCard(Bitmap bitmap,String currentdate){
         File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + "address_img_"+currentdate+".jpg");
         //File file = new File(Environment.getExternalStorageDirectory() + "img_"+currentdate+".jpeg");
 
@@ -201,27 +233,22 @@ public class AttachAddressProofImage extends AppCompatActivity implements Adapte
             bitmap.compress(Bitmap.CompressFormat.JPEG, 15, fos);
             fos.flush();
             fos.close();
-        }catch (FileNotFoundException f){
+        }catch (Exception f){
             f.printStackTrace();
-        }catch (IOException io){
-            io.printStackTrace();
-        }catch (NullPointerException w){
-            w.printStackTrace();
-        }
+            writeLog("FileNotFoundException and IOException found:"+f);
+       }
     }
-
-
 
     private Bitmap get_Image_from_sd_card(String filename){
         Bitmap bitmap = null;
         File imgfile = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + filename);
-
 
         try {
             FileInputStream fis = new FileInputStream(imgfile);
             bitmap  = BitmapFactory.decodeStream(fis);
         }catch (FileNotFoundException e){
             e.printStackTrace();
+            writeLog("FileNotFoundException:"+e);
         }
         return bitmap;
     }
@@ -230,35 +257,28 @@ public class AttachAddressProofImage extends AppCompatActivity implements Adapte
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HH_mm");
         String current_time = sdf.format(new Date());
         return current_time;
-    }
+    }*/
 
-
-    private void set_value_attachAddressProof(){
-        // String address_proof = OptionsActivity.new_cus.getAddress_proof();
-        //  Log.d("Log","address_proof: "+OptionsActivity.new_cus.getAddress_proof());
+    private void set_value_attachAddressProof() {
         String address_proof = OptionsActivity.new_cus.getAddress_proof();
-        int  position = Integer.parseInt(address_proof);
-        Log.d("Log","val: "+position);
+        int position = Integer.parseInt(address_proof);
+        Log.d("Log", "val: " + position);
         spinner_addproof.setSelection(position);
     }
 
-    private void set_value_attachAddressProofImage(){
-
+    private void set_value_attachAddressProofImage() {
         String filename = OptionsActivity.new_cus.getAddress_proof_image();
-        Log.d("Log","filename: "+OptionsActivity.new_cus.getAddress_proof_image());
-
-
-        File file = Constant.checkFolder(Constant.captured_images_folder);
+        Log.d("Log", "filename: " + OptionsActivity.new_cus.getAddress_proof_image());
+        File file = Constant.checkFolder(Constant.folder_name);
         File fileArray[] = file.listFiles();
 
         if (fileArray.length != 0) {
             for (File f : fileArray) {
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
-                        //String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
-                        String _imagePath = getRealPathFromURI( Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + filename);
+                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
                         imageView_addproof.setImageBitmap(scaleBitmap(_imagePath));
-                        //isAvailable = 1;
+                        writeLog("set_value_attachCusImage():imageView_addproof is attched:");
                     }
                     break;
                 }
@@ -280,7 +300,7 @@ public class AttachAddressProofImage extends AppCompatActivity implements Adapte
         }
     }
 
-    public Bitmap scaleBitmap(String imagePath) {
+    private Bitmap scaleBitmap(String imagePath) {
         Bitmap resizedBitmap = null;
         try {
             int inWidth, inHeight;
@@ -307,54 +327,38 @@ public class AttachAddressProofImage extends AppCompatActivity implements Adapte
             resizedBitmap = Bitmap.createScaledBitmap(roughBitmap, (int) (roughBitmap.getWidth() * values[0]), (int) (roughBitmap.getHeight() * values[4]), true);
         } catch (Exception e) {
             e.printStackTrace();
-            //pb.setVisibility(View.GONE);
-            //img.setImageResource(R.drawable.bg);
-            // toast.show();
+            writeLog("FileNotFoundException and IOException found:" + e);
         }
         return resizedBitmap;
     }
 
+    private void showPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Do you want to clear this data");
 
-
-        private void showPopup(int id) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Do you want to attach image?");
-            if (id == 0) {
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        showPopup(1);
-                    }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-            }else if (id == 1) {
-                builder.setMessage("Attach image");
-                builder.setPositiveButton("Camera", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent intent1 = new Intent( MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent1,1);
-
-                    }
-                });
-                builder.setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent intent2 = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(intent2,2);
-                    }
-                });
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent in = new Intent(AttachAddressProofImage.this, OptionsActivity.class);
+                OptionsActivity.new_cus = null;
+                startActivity(in);
+                new Constant(AttachAddressProofImage.this).doFinish();
+                //finish();
             }
-            builder.create().show();
-        }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
 
+        builder.create().show();
+    }
 
-
+    private void writeLog(String _data) {
+        new WriteLog().writeLog(getApplicationContext(), "AttachAddressProofImage_" + _data);
+    }
 }
 
 

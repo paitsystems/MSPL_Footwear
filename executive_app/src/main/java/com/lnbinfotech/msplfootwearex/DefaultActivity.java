@@ -29,7 +29,7 @@ public class DefaultActivity extends AppCompatActivity implements View.OnClickLi
     }
     private void init(){
          sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-         toast = new Toast(this);
+         toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
          toast.setGravity(Gravity.CENTER,0,0);
     }
 

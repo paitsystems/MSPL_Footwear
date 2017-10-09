@@ -42,9 +42,10 @@
     <string name="address">Address</string>
 
     <string name="enterdate">Enter Date</string>
-    <string name="enterno">Enter Number</string>
+    <string name="enterno">Enter Cheque Number</string>
     <string name="enteramt">Enter Amount</string>
     <string name="enteragainstref">Enter Against Ref</string>
+
 
     <string name="contact_no">Contact No</string>
     <string name="expiry_date">Expiry Date</string>
@@ -115,6 +116,7 @@
     <string name="balance_amount_will_show_here">Balance Amount Will Show Here</string>
     <string name="_5000">5000</string>
     <string name="cancel">Cancel</string>
+    <string name="_cancel">Cancel</string>
     <string name="reset">Reset</string>
     <string name="remember_me">Remember Me</string>
     <string name="login">LogIn</string>
@@ -137,6 +139,7 @@
     <string name="to_date">To Date</string>
     <string name="all_dates">All Dates</string>
     <string name="show">Show</string>
+    <string name="customername">Customer Name</string>
     <string name="enternewcustomername">Enter New Customer Name</string>
     <string name="mobileno">Mobile Number</string>
     <string name="emailid">Email Id</string>
@@ -145,32 +148,31 @@
     <string name="enteramount">Enter Amount</string>
     <string name="selectcustomername">Select Customer Name</string>
     <string name="enetrcustomername">Enter Customer Name</string>
-    <string name="selectbranch">Select Branch</string>
-    <string name="selectbank">Select Bank</string>
+    <string name="selectbranch">Select Branch Name</string>
+    <string name="selectbank">Select Bank Name</string>
     <string name="selectaddressproof">Select Address Proof</string>
+    <string name="_selectaddressproof">Address Proof</string>
     <string name="selectidproof">Select Id Proof</string>
+    <string name="_selectidproof">Id Proof</string>
     <string name="addressproofimage">Attach Address Proof Image</string>
+    <string name="_addressproofimage">Address Proof Image</string>
     <string name="customerimage">Attach Customer Image</string>
+    <string name="_customerimage">Customer Image</string>
     <string name="idproofimage">Attach Id Proof Image</string>
-    <string name="gstno">GST No</string>
+    <string name="_idproofimage">Id Proof Image</string>
+    <string name="gstno">GSTIN No</string>
     <string name="panno">PAN No</string>
     <string name="enterpanno">Enter PAN No</string>
     <string name="entergstno">Enter GST No</string>
     <string name="gstnoimage">Attach GST No Image</string>
     <string name="pannoimage">Attach PAN No Image</string>
-
-    <string name="customername">Customer Name</string>
-    <string name="_selectaddressproof">Address Proof</string>
-    <string name="_selectidproof">Id Proof</string>
-    <string name="_addressproofimage">Address Proof Image</string>
-    <string name="_customerimage">Customer Image</string>
-    <string name="_idproofimage">Id Proof Image</string>
     <string name="_gstnoimage">GST No Image</string>
     <string name="_pannoimage">PAN No Image</string>
+
+
     <string name="date">Date</string>
     <string name="number">Number</string>
     <string name="amt">Amount</string>
-    <string name="_cancel">Cancel</string>
     <string name="againstref">Against Ref</string>
 
     <string-array name="navigationName">
@@ -230,4 +232,14 @@
     <string name="alreadyregistered">You Are Already Registered On Another Device</string>
     <string name="title_activity_main">MainActivity</string>
 
+    <!--sneha string name-->
+    <string name="newcustomerentry">New Customer Entry</string>
+    <string name="custimage">Attach Customer Image</string>
+    <string name="addressproof">Attach Address Proof</string>
+    <string name="idproof">Attach Id Proof</string>
+    <string name="gstpanproof">Attach GSTIN/PAN Proof</string>
+    <string name="customerentrydata">New Customer Entry Data</string>
+    <string name="visitpayment">Visit Payment Form</string>
+    <string name="selectitem">Select Item</string>
+    <string name="chequedetail">Enter Cheque Detail</string>
 </resources>

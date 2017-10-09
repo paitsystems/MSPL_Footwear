@@ -1,202 +1,223 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.lnbinfotech.msplfootwearex.ChequeDetailsActivity">
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView" >
-
-    <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_gravity="center"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5sp">
+            android:orientation="vertical">
 
-            <EditText
-                android:drawableRight="@drawable/search"
-                style="@style/textViewMob"
-                android:focusable="false"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/selectbank"
-                android:id="@+id/ed_bank" />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5sp">
-
-            <EditText
-                android:drawableRight="@drawable/search"
-                style="@style/textViewMob"
-                android:focusable="false"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/selectbranch"
-                android:id="@+id/ed_branch" />
-        </android.support.design.widget.TextInputLayout>
-
-
-
-
-        <TextView
-                style="@style/textViewMob"
-                android:layout_margin="10sp"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_gravity="center"
+                android:layout_margin="5sp">
+
+                <EditText
+                    android:id="@+id/ed_bank"
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:drawableRight="@drawable/search"
+                    android:focusable="false"
+                    android:hint="@string/selectbank" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5sp">
+
+                <EditText
+                    android:id="@+id/ed_branch"
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:drawableRight="@drawable/search"
+                    android:focusable="false"
+                    android:hint="@string/selectbranch" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tv_cheque_date"
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
                 android:text="@string/enterdate"
-                android:id="@+id/tv_cheque_date" />
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10sp"
-            android:visibility="visible">
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
-            <EditText
-                android:textColor="@color/black"
-                android:drawableRight="@drawable/cheque_date"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:inputType="date"
-                android:ems="10"
-                android:padding="5sp"
-                android:id="@+id/ed_chq_date"
-                android:visibility="visible" />
-        </LinearLayout>
-
-            <TextView
-                style="@style/textViewMob"
-                android:layout_margin="10sp"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/enterno"
+                android:layout_margin="10sp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/tv_chq_date"
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:drawableRight="@drawable/cheque_date"
+                    android:gravity="left|center"
+                    android:text="bvndn"
+                    android:textColor="@color/black" />
+
+                <!-- <EditText
+                     android:id="@+id/ed_chq_date"
+                     android:layout_width="match_parent"
+                     android:layout_height="50dp"
+                     android:drawableRight="@drawable/cheque_date"
+                     android:ems="10"
+                     android:inputType="date"
+                     android:padding="5sp"
+                     android:textColor="@color/black"
+                     android:visibility="visible" />-->
+            </LinearLayout>
+
+            <TextView
                 android:id="@+id/tv_cheque_no"
-                android:layout_weight="0.3" />
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10sp"
-            android:visibility="visible">
-
-            <EditText
-
-                android:drawableRight="@drawable/cheque_number"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:inputType="numberDecimal"
-                android:ems="10"
-                android:padding="5sp"
-                android:id="@+id/ed_chq_no"
-                android:visibility="visible"/>
-        </LinearLayout>
-
-            <TextView
                 style="@style/textViewMob"
-                android:layout_margin="10sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/enteramount"
+                android:layout_margin="10sp"
+                android:text="@string/enterno"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <EditText
+
+                    android:id="@+id/ed_chq_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:drawableRight="@drawable/cheque_number"
+                    android:ems="10"
+                    android:inputType="numberDecimal"
+                    android:padding="5sp"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <TextView
                 android:id="@+id/tv_cheque_amount"
-                android:layout_weight="0.3" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10sp"
-            android:visibility="visible">
-
-            <EditText
-
-                android:drawableRight="@drawable/cheque_amount"
+                style="@style/textViewMob"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:inputType="numberDecimal"
-                android:ems="10"
-                android:padding="5sp"
-                android:id="@+id/ed_chq_amt"
-                android:visibility="visible" />
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:layout_weight="0.3"
+                android:text="@string/enteramount"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <EditText
+
+                    android:id="@+id/ed_chq_amt"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:drawableRight="@drawable/cheque_amount"
+                    android:ems="10"
+                    android:inputType="numberDecimal"
+                    android:padding="5sp"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_cheque_against_ref"
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:layout_weight="0.3"
+                android:text="@string/enteragainstref"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <EditText
+                    android:id="@+id/ed_chq_ref"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:drawableRight="@drawable/cheque_ref"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:padding="5sp"
+                    android:visibility="visible" />
+            </LinearLayout>
 
             <TextView
                 style="@style/textViewMob"
-                android:layout_margin="10sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/enteragainstref"
-                android:id="@+id/tv_cheque_against_ref"
-                android:layout_weight="0.3" />
+                android:layout_margin="10sp"
+                android:text="@string/attachchequeimage" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10sp"
-            android:visibility="visible">
 
-            <EditText
-                android:drawableRight="@drawable/cheque_ref"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:inputType="text"
-                android:ems="10"
-                android:padding="5sp"
-                android:id="@+id/ed_chq_ref"
-                android:visibility="visible" />
-        </LinearLayout>
-
-        <TextView
-            style="@style/textViewMob"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/attachchequeimage"/>
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/mobmargin5"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible">
 
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5sp"
-            android:visibility="visible">
+                <LinearLayout
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/black_border_draw"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:src="@drawable/camera"
-                android:id="@+id/imageView_cheque_img" />
-        </LinearLayout>
-
+                    <ImageView
+                        android:id="@+id/imageView_cheque_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/camera"
+                        android:visibility="visible" />
+                </LinearLayout>
+            </LinearLayout>
 
             <android.support.v7.widget.AppCompatButton
-                android:layout_gravity="center"
-                app:backgroundTint="@color/maroon"
-                android:drawableLeft="@drawable/save_button_back"
-                android:textColor="@color/white"
+                android:id="@+id/btn_submt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/save_button_back"
                 android:text="@string/submit"
-                android:id="@+id/btn_submt" />
+                android:textColor="@color/white"
+                app:backgroundTint="@color/maroon" />
 
-    </LinearLayout>
+        </LinearLayout>
     </ScrollView>
 
 </LinearLayout>

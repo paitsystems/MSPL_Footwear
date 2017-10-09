@@ -13,42 +13,52 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
+import com.lnbinfotech.msplfootwearex.log.WriteLog;
+import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URLEncoder;
 
-public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    EditText ed_cus_name,ed_mobile_no,ed_email_id,ed_address,ed_gstno,ed_panno;
-    Spinner spinner_addproof,spinner_idproof;
-    String[] add_proof = {"Aadhaar","Light bill","Aggreement copy","Index 0"};
-    String[] id_proof = {"Aadhaar","Pan card","Driving license","Election card"};
-    ArrayAdapter<String> adapter_address;
-    ArrayAdapter<String> adapter_id;
-    RadioButton rdo_gst,rdo_pan;
-    LinearLayout gst_lay,pan_lay;
-    Button bt_save;
-    ImageView imageView_edit,imageView_cus_edit,imageView_address_edit,imageView_id_edit,imageView_gstpan_edit,imageView_cus_image,imageView_addproof,imageView_idproof,imageView_pan_img,imageView_gst_img;
-
+public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implements View.OnClickListener {
+    private EditText ed_cus_name, ed_mobile_no, ed_email_id, ed_address, ed_gstno, ed_panno;
+    private Spinner spinner_addproof, spinner_idproof;
+    private String[] add_proof = {"Aadhaar", "Light bill", "Aggreement copy", "Index 0"};
+    private String[] id_proof = {"Aadhaar", "Pan card", "Driving license", "Election card"};
+    private ArrayAdapter<String> adapter_address;
+    private ArrayAdapter<String> adapter_id;
+    private RadioButton rdo_gst, rdo_pan;
+    private LinearLayout gst_lay, pan_lay;
+    private AppCompatButton bt_save;
+    private ImageView imageView_edit, imageView_cus_edit, imageView_address_edit, imageView_id_edit, imageView_gstpan_edit, imageView_cus_image, imageView_addproof, imageView_idproof, imageView_pan_img, imageView_gst_img;
+    private Constant constant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_customer_entry_detail_form);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.customerentrydata);
+        }
         init();
-
         set_value_newCusEntry();
         set_value_attachCusImage();
         set_value_attachAddressProof();
@@ -56,8 +66,12 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
         set_value_attachIdProof();
         set_value_attachIdProofImage();
         set_value_attachgstpan_no();
+        //set_value_attachGstProofImage();
+        //set_value_attachPanProofImage();
     }
-    void init(){
+
+    private void init() {
+
         ed_cus_name = (EditText) findViewById(R.id.ed_cus_name);
         ed_mobile_no = (EditText) findViewById(R.id.ed_mobile_no);
         ed_email_id = (EditText) findViewById(R.id.ed_emailid);
@@ -70,7 +84,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
 
         gst_lay = (LinearLayout) findViewById(R.id.gst_lay);
         pan_lay = (LinearLayout) findViewById(R.id.pan_lay);
-        bt_save = (Button) findViewById(R.id.btn_save);
+        bt_save = (AppCompatButton) findViewById(R.id.btn_save);
 
         imageView_gstpan_edit = (ImageView) findViewById(R.id.imageView_gstpan_edit);
         imageView_id_edit = (ImageView) findViewById(R.id.imageView_id_edit);
@@ -86,82 +100,96 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
         spinner_addproof = (Spinner) findViewById(R.id.spinner_addproof);
         spinner_idproof = (Spinner) findViewById(R.id.spinner_idproof);
 
-        adapter_address = new ArrayAdapter<String>(this,R.layout.address_list,add_proof);
+        adapter_address = new ArrayAdapter<String>(this, R.layout.address_list, add_proof);
         spinner_addproof.setAdapter(adapter_address);
         spinner_addproof.setEnabled(false);
 
-        adapter_id = new ArrayAdapter<String>(this,R.layout.id_list,id_proof);
+        adapter_id = new ArrayAdapter<String>(this, R.layout.id_list, id_proof);
         spinner_idproof.setAdapter(adapter_id);
         spinner_idproof.setEnabled(false);
 
-
-        imageView_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(NewCustomerEntryDetailFormActivity.this,NewCustomerEntryActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        imageView_cus_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(NewCustomerEntryDetailFormActivity.this,AttachCustomerImage.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        imageView_address_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(NewCustomerEntryDetailFormActivity.this,AttachAddressProofImage.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        imageView_id_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(NewCustomerEntryDetailFormActivity.this,AttachIdProofImageActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        imageView_gstpan_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(NewCustomerEntryDetailFormActivity.this,AttachGSTnoPANnoImageActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        bt_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-              showPopup();
-            }
-        });
+        bt_save.setOnClickListener(this);
+        imageView_edit.setOnClickListener(this);
+        imageView_cus_edit.setOnClickListener(this);
+        imageView_address_edit.setOnClickListener(this);
+        imageView_id_edit.setOnClickListener(this);
+        imageView_gstpan_edit.setOnClickListener(this);
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        String item_add = spinner_addproof.getSelectedItem().toString();
-        String item_id = spinner_idproof.getSelectedItem().toString();
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_save:
+                showPopup();
+                writeLog("all data succcessfully saved from NewCustomerEntryDetailFormActivity:");
+                break;
+
+            case R.id.imageView_edit:
+                Intent i = new Intent(NewCustomerEntryDetailFormActivity.this, NewCustomerEntryActivity.class);
+                startActivity(i);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                writeLog("activity goes to NewCustomerEntryActivity :");
+                finish();
+                break;
+
+            case R.id.imageView_cus_edit:
+                Intent in = new Intent(NewCustomerEntryDetailFormActivity.this, AttachCustomerImage.class);
+                startActivity(in);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                writeLog("activity goes to AttachCustomerImage :");
+                finish();
+                break;
+
+            case R.id.imageView_address_edit:
+                Intent intent_ = new Intent(NewCustomerEntryDetailFormActivity.this, AttachAddressProofImage.class);
+                startActivity(intent_);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                writeLog("activity goes to AttachAddressProofImage :");
+                finish();
+                break;
+
+            case R.id.imageView_id_edit:
+                Intent k = new Intent(NewCustomerEntryDetailFormActivity.this, AttachIdProofImageActivity.class);
+                startActivity(k);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                writeLog("activity goes to AttachIdProofImageActivity :");
+                finish();
+                break;
+
+            case R.id.imageView_gstpan_edit:
+                Intent intent = new Intent(NewCustomerEntryDetailFormActivity.this, AttachGSTnoPANnoImageActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                writeLog("activity goes to AttachGSTnoPANnoImageActivity:");
+                finish();
+                break;
+        }
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
+    public void onBackPressed() {
+        showPopup();
     }
 
-    private void  set_value_newCusEntry(){
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //new Constant(NewCustomerEntryDetailFormActivity.this).doFinish();
+                showPopup();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void set_value_newCusEntry() {
         NewCustomerEntryActivity.flag = 0;
-        Log.d("Log","cus_name: "+OptionsActivity.new_cus.getCust_name());
+        Constant.showLog("cus_name: " + OptionsActivity.new_cus.getCust_name());
         ed_cus_name.setText(OptionsActivity.new_cus.getCust_name());
         ed_mobile_no.setText(OptionsActivity.new_cus.getMobile_no());
         ed_email_id.setText(OptionsActivity.new_cus.getEmail_id());
@@ -171,17 +199,18 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
     private void set_value_attachCusImage() {
         AttachCustomerImage.flag = 0;
         String filename = OptionsActivity.new_cus.getCus_image();
-        Log.d("Log","filename: "+OptionsActivity.new_cus.getCus_image());
+        Constant.showLog("filename: " + OptionsActivity.new_cus.getCus_image());
 
-        File file = Constant.checkFolder(Constant.captured_images_folder);
+        File file = Constant.checkFolder(Constant.folder_name);
         File fileArray[] = file.listFiles();
 
         if (fileArray.length != 0) {
             for (File f : fileArray) {
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
-                        String _imagePath = getRealPathFromURI( Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + filename);
+                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
                         imageView_cus_image.setImageBitmap(scaleBitmap(_imagePath));
+                        writeLog("imageView_cus_image is disply to form activity:");
                     }
                     break;
                 }
@@ -189,21 +218,21 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
         }
     }
 
-        private String getRealPathFromURI(String contentURI) {
-            Uri contentUri = Uri.parse(contentURI);
-            Cursor cursor = getContentResolver().query(contentUri, null, null, null, null);
-            if (cursor == null) {
-                return contentUri.getPath();
-            } else {
-                cursor.moveToFirst();
-                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-                String s = cursor.getString(idx);
-                cursor.close();
-                return s;
-            }
+    private String getRealPathFromURI(String contentURI) {
+        Uri contentUri = Uri.parse(contentURI);
+        Cursor cursor = getContentResolver().query(contentUri, null, null, null, null);
+        if (cursor == null) {
+            return contentUri.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            String s = cursor.getString(idx);
+            cursor.close();
+            return s;
         }
+    }
 
-    public Bitmap scaleBitmap(String imagePath) {
+    private Bitmap scaleBitmap(String imagePath) {
         Bitmap resizedBitmap = null;
         try {
             int inWidth, inHeight;
@@ -235,28 +264,37 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
         return resizedBitmap;
     }
 
-    private void set_value_attachAddressProof(){
-        String address_proof = OptionsActivity.new_cus.getAddress_proof();
-        int position = Integer.parseInt(address_proof);
-        Log.d("Log","val: "+position);
-        spinner_addproof.setSelection(position);
-        spinner_addproof.setSelection(Integer.parseInt(OptionsActivity.new_cus.getAddress_proof()));
+    private void set_value_attachAddressProof() {
+        try {
+            String address_proof = OptionsActivity.new_cus.getAddress_proof();
+            int position = Integer.parseInt(address_proof);
+            Constant.showLog("val: " + position);
+            spinner_addproof.setSelection(position);
+            spinner_addproof.setSelection(Integer.parseInt(OptionsActivity.new_cus.getAddress_proof()));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            writeLog("NumberFormatException" + e);
+            Toast toast = Toast.makeText(getApplicationContext(), "NumberFormatException", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+        }
     }
 
-    private void set_value_attachAddressProofImage(){
+    private void set_value_attachAddressProofImage() {
         AttachAddressProofImage.flag = 0;
         String filename = OptionsActivity.new_cus.getAddress_proof_image();
-        Log.d("Log","filename: "+OptionsActivity.new_cus.getAddress_proof_image());
+        Constant.showLog("filename: " + OptionsActivity.new_cus.getAddress_proof_image());
 
-        File file = Constant.checkFolder(Constant.captured_images_folder);
+        File file = Constant.checkFolder(Constant.folder_name);
         File fileArray[] = file.listFiles();
 
         if (fileArray.length != 0) {
             for (File f : fileArray) {
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
-                        String _imagePath = getRealPathFromURI( Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + filename);
+                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
                         imageView_addproof.setImageBitmap(scaleBitmap(_imagePath));
+                        writeLog("imageView_addproof is disply to form activity:");
                     }
                     break;
                 }
@@ -264,27 +302,28 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
         }
     }
 
-    private void set_value_attachIdProof(){
+    private void set_value_attachIdProof() {
         String id_proof = OptionsActivity.new_cus.getId_proof();
-        int  position = Integer.parseInt(id_proof);
-        Log.d("Log","val: "+position);
+        int position = Integer.parseInt(id_proof);
+        Constant.showLog("val: " + position);
         spinner_idproof.setSelection(position);
     }
 
-    private void set_value_attachIdProofImage(){
+    private void set_value_attachIdProofImage() {
         AttachIdProofImageActivity.flag = 0;
         String filename = OptionsActivity.new_cus.getId_proof_image();
-        Log.d("Log","filename: "+OptionsActivity.new_cus.getId_proof_image());
+        Constant.showLog("filename: " + OptionsActivity.new_cus.getId_proof_image());
 
-        File file = Constant.checkFolder(Constant.captured_images_folder);
+        File file = Constant.checkFolder(Constant.folder_name);
         File fileArray[] = file.listFiles();
 
         if (fileArray.length != 0) {
             for (File f : fileArray) {
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
-                        String _imagePath = getRealPathFromURI( Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + filename);
+                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
                         imageView_idproof.setImageBitmap(scaleBitmap(_imagePath));
+                        writeLog("imageView_idproof is disply to form activity:");
                     }
                     break;
                 }
@@ -292,20 +331,21 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
         }
     }
 
-    private void set_value_attachGstProofImage(){
+    private void set_value_attachGstProofImage() {
         //AttachIdProofImageActivity.flag = 0;
         String filename = OptionsActivity.new_cus.getGst_no_image();
-        Log.d("Log","filename: "+filename);
+        Constant.showLog("filename: " + filename);
 
-        File file = Constant.checkFolder(Constant.captured_images_folder);
+        File file = Constant.checkFolder(Constant.folder_name);
         File fileArray[] = file.listFiles();
 
         if (fileArray.length != 0) {
             for (File f : fileArray) {
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
-                        String _imagePath = getRealPathFromURI( Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + filename);
+                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
                         imageView_gst_img.setImageBitmap(scaleBitmap(_imagePath));
+                        writeLog("imageView_gst_img is disply to form activity:");
                     }
                     break;
                 }
@@ -313,20 +353,23 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
         }
     }
 
-    private void set_value_attachPanProofImage(){
+    private void set_value_attachPanProofImage() {
         //AttachIdProofImageActivity.flag = 0;
         String filename = OptionsActivity.new_cus.getPan_no_image();
-        Log.d("Log","filename: "+filename);
+        Constant.showLog("filename: " + filename);
+        writeLog("filename:" + filename);
 
-        File file = Constant.checkFolder(Constant.captured_images_folder);
+
+        File file = Constant.checkFolder(Constant.folder_name);
         File fileArray[] = file.listFiles();
 
         if (fileArray.length != 0) {
             for (File f : fileArray) {
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
-                        String _imagePath = getRealPathFromURI( Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + filename);
+                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
                         imageView_pan_img.setImageBitmap(scaleBitmap(_imagePath));
+                        writeLog("imageView_pan_img is disply to form activity:");
                     }
                     break;
                 }
@@ -334,29 +377,91 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
         }
     }
 
-    private void set_value_attachgstpan_no(){
+    private void set_value_attachgstpan_no() {
         AttachGSTnoPANnoImageActivity.flag = 0;
-
-        if(AttachGSTnoPANnoImageActivity.radio_flag == 1){
+        if (AttachGSTnoPANnoImageActivity.radio_flag == 1) {
 
             gst_lay.setVisibility(View.VISIBLE);
             pan_lay.setVisibility(View.GONE);
             rdo_gst.setChecked(true);
             rdo_pan.setChecked(false);
             String gst = OptionsActivity.new_cus.getGst_no();
-            Log.d("Log","gst: "+gst);
+            Constant.showLog("gst: " + gst);
             ed_gstno.setText(gst);
             set_value_attachGstProofImage();
-        }else if(AttachGSTnoPANnoImageActivity.radio_flag == 2){
-
+        } else if (AttachGSTnoPANnoImageActivity.radio_flag == 2) {
             gst_lay.setVisibility(View.GONE);
             pan_lay.setVisibility(View.VISIBLE);
             rdo_pan.setChecked(true);
             rdo_gst.setChecked(false);
             String pan = OptionsActivity.new_cus.getPan_no();
-            Log.d("Log","pan_no: "+pan);
+            Constant.showLog("pan_no: " + pan);
             ed_panno.setText(pan);
             set_value_attachPanProofImage();
+        }
+    }
+
+    private void saveData() {
+        try {
+            String url = "";
+            constant = new Constant(NewCustomerEntryDetailFormActivity.this);
+            constant.showPD();
+            String cust_name = OptionsActivity.new_cus.getCust_name();
+            String mob_no = OptionsActivity.new_cus.getMobile_no();
+            String email_id = OptionsActivity.new_cus.getEmail_id();
+            String address = OptionsActivity.new_cus.getAddress();
+            String cust_img = OptionsActivity.new_cus.getCus_image();
+            String address_proof = OptionsActivity.new_cus.getAddress_proof();
+            String address_proof_img = OptionsActivity.new_cus.getAddress_proof_image();
+            String id_proof = OptionsActivity.new_cus.getId_proof();
+            String id_proof_img = OptionsActivity.new_cus.getId_proof_image();
+            String gst_no = OptionsActivity.new_cus.getGst_no();
+            String gstno_img = OptionsActivity.new_cus.getGst_no_image();
+            String pan_no = OptionsActivity.new_cus.getPan_no();
+            String panno_img = OptionsActivity.new_cus.getPan_no_image();
+
+            String _cust_name = URLEncoder.encode(cust_name, "UTF-8");
+            String _mob_no = URLEncoder.encode(mob_no, "UTF-8");
+            String _email_id = URLEncoder.encode(email_id, "UTF-8");
+            String _address = URLEncoder.encode(address, "UTF-8");
+            String _cust_img = URLEncoder.encode(cust_img, "UTF-8");
+            String _address_proof = URLEncoder.encode(address_proof, "UTF-8");
+            String _address_proof_img = URLEncoder.encode(address_proof_img, "UTF-8");
+            String _id_proof = URLEncoder.encode(id_proof, "UTF-8");
+            String _id_proof_img = URLEncoder.encode(id_proof_img, "UTF-8");
+            String _gst_no = URLEncoder.encode(gst_no, "UTF-8");
+            String _gstno_img = URLEncoder.encode(gstno_img, "UTF-8");
+            String _pan_no = URLEncoder.encode(pan_no, "UTF-8");
+            String _panno_img = URLEncoder.encode(panno_img, "UTF-8");
+
+            if(AttachGSTnoPANnoImageActivity.radio_flag == 1) {
+                url = Constant.ipaddress + "/SaveCustomerDetail?custname="+_cust_name+"&mobno="+_mob_no+"&email="+_email_id+"&address="+_address+"&custimg="+_cust_img+"&addressproof="+_address_proof+"&addressproofimg="+_address_proof_img+"&idproof="+_id_proof+"&idproofimg="+_id_proof_img+"&GSTINNo="+_gst_no+"&GSTINimg="+_gstno_img;
+                Constant.showLog(url);
+                writeLog("saveData():url called" + url);
+            }else if(AttachGSTnoPANnoImageActivity.radio_flag == 2) {
+                url = Constant.ipaddress + "/SaveCustomerDetail?custname="+_cust_name+"&mobno="+_mob_no+"&email="+_email_id+"&address="+_address+"&custimg="+_cust_img+"&addressproof="+_address_proof+"&addressproofimg="+_address_proof_img+"&idproof="+_id_proof+"&idproofimg="+_id_proof_img+"&PANNo="+_pan_no+"&PANimg="+_panno_img;
+                Constant.showLog(url);
+                writeLog("saveData():url called" + url);
+            }
+
+            VolleyRequests requests = new VolleyRequests(NewCustomerEntryDetailFormActivity.this);
+            requests.saveCustomerDetail(url, new ServerCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    constant.showPD();
+                    Constant.showLog("Volly request success");
+                    writeLog("saveData():Volley_success");
+                }
+
+                @Override
+                public void onFailure(String result) {
+                    constant.showPD();
+                    writeLog("saveData():Volley_error");
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("saveData();customer data save exception");
         }
     }
 
@@ -365,24 +470,38 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Do you want to save data?");
 
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Data saved successfully..", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
-                    //finish();
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                saveData();
+                Toast toast = Toast.makeText(getApplicationContext(), "Data saved successfully..", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+                NewCustomerEntryActivity.flag = 1;
+                AttachCustomerImage.flag = 2;
+                AttachAddressProofImage.flag = 3;
+                AttachIdProofImageActivity.flag = 4;
+                AttachGSTnoPANnoImageActivity.flag = 5;
+                Intent in = new Intent(NewCustomerEntryDetailFormActivity.this, OptionsActivity.class);
+                startActivity(in);
+                new Constant(NewCustomerEntryDetailFormActivity.this).doFinish();
+                //finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
 
-           builder.create().show();
+        builder.create().show();
     }
+
+    private void writeLog(String _data) {
+        new WriteLog().writeLog(getApplicationContext(), "NewCustomerEntryDetailFormActivity_" + _data);
+    }
+
 
 }
 
