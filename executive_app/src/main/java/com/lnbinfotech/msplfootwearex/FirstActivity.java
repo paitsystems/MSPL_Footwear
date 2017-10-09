@@ -3,6 +3,7 @@ package com.lnbinfotech.msplfootwearex;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,9 +12,16 @@ import android.view.Gravity;
 import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
+import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.permission.GetPermission;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 // Created by lnb on 8/11/2016.
 
@@ -24,6 +32,8 @@ public class FirstActivity extends AppCompatActivity {
     private GetPermission permission;
     public static Context context;
     private Toast toast;
+    private String dbpath;
+    private Constant constant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +44,7 @@ public class FirstActivity extends AppCompatActivity {
         context = getApplicationContext();
         toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER,0,0);
+        constant = new Constant(FirstActivity.this);
         checkpermmission();
     }
 
@@ -59,7 +70,15 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void doThis(){
-        new DBHandler(getApplicationContext());
+        //new DBHandler(getApplicationContext());
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            dbpath = pInfo.applicationInfo.dataDir+"/databases";
+            Constant.showLog(dbpath);
+            CopyDb();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (pref.contains(getString(R.string.pref_isRegistered))) {
             startActivity(new Intent(getApplicationContext(), CustomerDetailsActivity.class));
         } else {
@@ -67,6 +86,32 @@ public class FirstActivity extends AppCompatActivity {
         }
         overridePendingTransition(R.anim.enter,R.anim.exit);
         doFinish();
+    }
+
+    private void CopyDb() throws IOException {
+        if(!checkDB()){
+            constant.showPD();
+            InputStream is = getApplicationContext().getAssets().open(DBHandler.Database_Name);
+            File file = new File(dbpath);
+            if(!file.exists()){
+                if(file.mkdir())
+                    Constant.showLog("Database Created");
+            }
+            OutputStream os = new FileOutputStream(dbpath+"/"+DBHandler.Database_Name);
+            byte[] buffer = new byte[2014];
+            while (is.read(buffer)>0){
+                os.write(buffer);
+            }
+            os.flush();
+            os.close();
+            is.close();
+            constant.showPD();
+        }
+    }
+
+    private boolean checkDB(){
+        File file = getApplicationContext().getDatabasePath(DBHandler.Database_Name);
+        return file.exists();
     }
 
     @Override

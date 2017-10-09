@@ -7,7 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.model.AreaMasterClass;
+import com.lnbinfotech.msplfootwearex.model.CityMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
+import com.lnbinfotech.msplfootwearex.model.EmployeeMasterClass;
+import com.lnbinfotech.msplfootwearex.model.HOMasterClass;
+import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
+import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,29 +25,159 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String Database_Name = "SmartGST.db";
     public static final int Database_Version = 1;
 
+    //retailCustID,name,address,mobile,status,branchId,email,District,Taluka,cityId,areaId,
+    // Panno,ImagePath,HoCode,GSTNo,IMEINo,isRegistered,AadharNo,PIN
     public static final String Table_Customermaster = "CustomerMaster";
     public static final String CM_RetailCustID = "CustID";
     public static final String CM_Name = "Name";
     public static final String CM_Address = "Address";
     public static final String CM_MobileNo = "MobileNo";
+    public static final String CM_Status = "Status";
+    public static final String CM_BranchId = "BranchId";
     public static final String CM_Email = "Email";
+    public static final String CM_District = "District";
+    public static final String CM_Taluka = "Taluka";
+    public static final String CM_CityId = "CityId";
+    public static final String CM_AreaId = "AreaId";
     public static final String CM_PANNo = "PANNo";
-    public static final String CM_GSTNo = "GSTNo";
     public static final String CM_ImagePath = "ImagePath";
+    public static final String CM_HOCode = "HOCode";
+    public static final String CM_GSTNo = "GSTNo";
+    public static final String CM_IMEINo = "IMEINo";
+    public static final String CM_isRegistered = "isRegistered";
+    public static final String CM_AadhaarNo = "AadhaarNo";
     public static final String CM_PIN = "PIN";
+
+    //Product_id,Cat1,Cat2,Cat3,Cat4,Cat5,Cat6,Final_prod,Uom,Srate,Prate,Branchid,Status,NoOfPices,
+    // Company_Id,MRPRate,ProductId,Cat7,Cat8,MinStkQty,MaxStkQty,GSTGroup,HSNCode,Cat9
+    public static final String Table_ProductMaster = "ProductMaster";
+    public static final String PM_ProductID = "Product_id";
+    public static final String PM_Cat1 = "Cat1";
+    public static final String PM_Cat2 = "Cat2";
+    public static final String PM_Cat3 = "Cat3";
+    public static final String PM_Cat4 = "Cat4";
+    public static final String PM_Cat5 = "Cat5";
+    public static final String PM_Cat6 = "Cat6";
+    public static final String PM_Finalprod = "Final_Prod";
+    public static final String PM_UOM = "UOM";
+    public static final String PM_SRate = "SRate";
+    public static final String PM_PRate = "PRate";
+    public static final String PM_BranchId = "BranchId";
+    public static final String PM_Status = "Status";
+    public static final String PM_NoOfPieces = "NoOfPieces";
+    public static final String PM_CompanyId = "Company_id";
+    public static final String PM_MRPRate = "MRPRate";
+    public static final String PM_ProdId = "ProductID";
+    public static final String PM_Cat7 = "Cat7";
+    public static final String PM_Cat8 = "Cat8";
+    public static final String PM_MinStkQty = "MinStkQty";
+    public static final String PM_MaxStkQty = "MaxStkQty";
+    public static final String PM_GSTGroup = "GSTGroup";
+    public static final String PM_HSNCode = "HSNCode";
+    public static final String PM_Cat9 = "Cat9";
+
+    public static final String Table_StockInfo = "StockInfo";
+    public static final String SI_Company = "Company";
+    public static final String SI_ProdId = "ProductID";
+    public static final String SI_Color = "Color";
+    public static final String SI_Size = "Size";
+    public static final String SI_Rate = "Rate";
+    public static final String SI_LQty = "LQty";
+    public static final String SI_PQty = "PQty";
+    public static final String SI_PackUnpack = "PackUnpack";
+    public static final String SI_PerPackQty = "PerPackQTy";
+    public static final String SI_SaleRate = "SaleRate";
+    public static final String SI_ProductID = "Product_id";
+
+    //Emp_Id,Emp_Name,Emp_mobno,Emp_Add,Desig_Id,Branch_Id,Emp_Status,
+    // Desig_Name,Company_Name,Company_Initial,HoCode,PIN
+    public static final String Table_Employee = "Employee_Master";
+    public static final String EMP_EmpId = "EmpID";
+    public static final String EMP_Name = "Name";
+    public static final String EMP_MobNo = "MobileNo";
+    public static final String EMP_Adress = "Adress";
+    public static final String EMP_DesignId = "DesignId";
+    public static final String EMP_BranchId = "BranchId";
+    public static final String EMP_Status = "Status";
+    public static final String EMP_DesignName = "DesignName";
+    public static final String EMP_CompName = "CompanyName";
+    public static final String EMP_CompInit = "CompanyInitial";
+    public static final String EMP_HoCode = "HoCode";
+    public static final String EMP_PIN = "PIN";
+
+    //auto,id,Name,City,State,ini
+    public static final String Table_HOMaster = "HOMaster";
+    public static final String HO_Auto = "Auto";
+    public static final String HO_Id = "Id";
+    public static final String HO_Name = "Name";
+    public static final String HO_City = "City";
+    public static final String HO_State = "State";
+    public static final String HO_ini = "ini";
+
+    //auto,id,area,cityid
+    public static final String Table_AreaMaster = "AreaMaster";
+    public static final String Area_Auto = "Auto";
+    public static final String Area_Id = "Id";
+    public static final String Area_Area = "Area";
+    public static final String Area_Cityid = "Cityid";
+
+    //auto,id,city,stId
+    public static final String Table_CityMaster = "CityMaster";
+    public static final String City_Auto = "Auto";
+    public static final String City_Id = "Id";
+    public static final String City_City = "City";
+    public static final String City_Stateid = "StateId";
 
     public DBHandler(Context context) {
         super(context, Database_Name, null, Database_Version);
     }
 
     String create_cust_master = "create table if not exists "+Table_Customermaster+"("+
-            CM_RetailCustID+" int,"+CM_Name+" text,"+CM_Address+" text,"+CM_MobileNo+" text,"+
-            CM_Email+" text,"+CM_PANNo+" text,"+CM_GSTNo+" text,"+CM_ImagePath+" text,"+CM_PIN+" text)";
+            CM_RetailCustID+" int,"+CM_Name+" text,"+CM_Address+" text,"+CM_MobileNo+" text,"+CM_Status+" text,"+
+            CM_BranchId+" int,"+CM_Email+" text,"+CM_District+" text,"+CM_Taluka+" text,"+CM_CityId+" int,"+
+            CM_AreaId+" int,"+CM_PANNo+" text,"+CM_ImagePath+" text,"+CM_HOCode+" int,"+CM_GSTNo+" text,"+CM_IMEINo+" text,"+
+            CM_isRegistered+" text,"+CM_AadhaarNo+" text,"+CM_PIN+" int)";
+
+    String create_prod_master = "create table if not exists "+Table_ProductMaster+"("+
+            PM_ProductID+" int,"+PM_Cat1+" text,"+PM_Cat2+" text,"+PM_Cat3+" text,"+PM_Cat4+" text,"+PM_Cat5+" text,"+PM_Cat6+" text,"+
+            PM_Finalprod+" text,"+PM_UOM+" text,"+PM_SRate+" text,"+PM_PRate+" text,"+PM_BranchId+" int,"+PM_Status+" text,"+PM_NoOfPieces+" int,"+
+            PM_CompanyId+" int,"+PM_MRPRate+" text,"+PM_ProdId+" text,"+PM_Cat7+" text,"+PM_Cat8+" text,"+PM_MinStkQty+" int,"+
+            PM_MaxStkQty+" int,"+PM_GSTGroup+" text,"+PM_HSNCode+" text,"+PM_Cat9+" text)";
+
+    String create_si_master = "create table if not exists "+Table_StockInfo+"("+
+            SI_Company+" text,"+SI_ProdId+" text,"+SI_Color+" text,"+SI_Size+" text,"+SI_Rate+" text,"+
+            SI_LQty+" int,"+SI_PQty+" int,"+SI_PackUnpack+" text,"+SI_PerPackQty+" int,"+SI_SaleRate+" text,"+
+            SI_ProductID+" int)";
+
+    String create_emp_master = "create table if not exists "+Table_Employee+"("+
+            EMP_EmpId+" int,"+EMP_Name+" text,"+EMP_MobNo+" text,"+EMP_Adress+" text,"+EMP_DesignId+" int,"+EMP_BranchId+" int,"+
+            EMP_Status+" text,"+EMP_DesignName+" text,"+EMP_CompName+" text,"+EMP_CompInit+" text,"+EMP_HoCode+" int,"+EMP_PIN+" text)";
+
+    String create_ho_master = "create table if not exists "+Table_HOMaster+"("+
+            HO_Auto+" int,"+HO_Id+" int,"+HO_Name+" text,"+HO_City+" int,"+HO_State+" int,"+HO_ini+" text)";
+
+    String create_area_master = "create table if not exists "+Table_AreaMaster+"("+
+            Area_Auto+" int,"+Area_Id+" int,"+Area_Area+" text,"+Area_Cityid+" int)";
+
+    String create_city_master = "create table if not exists "+Table_CityMaster+"("+
+            City_Auto+" int,"+City_Id+" int,"+City_City+" text,"+City_Stateid+" int)";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         Constant.showLog(create_cust_master);
         db.execSQL(create_cust_master);
+        Constant.showLog(create_prod_master);
+        db.execSQL(create_prod_master);
+        Constant.showLog(create_si_master);
+        db.execSQL(create_si_master);
+        Constant.showLog(create_emp_master);
+        db.execSQL(create_emp_master);
+        Constant.showLog(create_ho_master);
+        db.execSQL(create_ho_master);
+        Constant.showLog(create_area_master);
+        db.execSQL(create_area_master);
+        Constant.showLog(create_city_master);
+        db.execSQL(create_city_master);
     }
 
     @Override
@@ -59,6 +195,121 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(CM_GSTNo,cust.getGSTNo());
         cv.put(CM_ImagePath,cust.getImagePath());
         cv.put(CM_PIN,"-1");
+        getWritableDatabase().insert(Table_Customermaster,null,cv);
+    }
+
+    public void addAreaMaster(AreaMasterClass areaClass) {
+        ContentValues cv = new ContentValues();
+        cv.put(Area_Auto,areaClass.getAuto());
+        cv.put(Area_Id,areaClass.getId());
+        cv.put(Area_Area,areaClass.getArea());
+        cv.put(Area_Cityid,areaClass.getCityid());
+        getWritableDatabase().insert(Table_AreaMaster,null,cv);
+    }
+
+    public void addCityMaster(CityMasterClass cityClass) {
+        ContentValues cv = new ContentValues();
+        cv.put(City_Auto,cityClass.getAuto());
+        cv.put(City_Id,cityClass.getId());
+        cv.put(City_City,cityClass.getCity());
+        cv.put(City_Stateid,cityClass.getStId());
+        getWritableDatabase().insert(Table_CityMaster,null,cv);
+    }
+
+    public void addHOMaster(HOMasterClass hoClass) {
+        ContentValues cv = new ContentValues();
+        cv.put(HO_Auto,hoClass.getAuto());
+        cv.put(HO_Id,hoClass.getId());
+        cv.put(HO_Name,hoClass.getName());
+        cv.put(HO_City,hoClass.getCity());
+        cv.put(HO_State,hoClass.getState());
+        cv.put(HO_ini,hoClass.getIni());
+        getWritableDatabase().insert(Table_HOMaster,null,cv);
+    }
+
+    public void addEmployeeMaster(EmployeeMasterClass empClass) {
+        ContentValues cv = new ContentValues();
+        cv.put(EMP_EmpId,empClass.getEmp_Id());
+        cv.put(EMP_Name,empClass.getName());
+        cv.put(EMP_MobNo,empClass.getMobno());
+        cv.put(EMP_Adress,empClass.getAdd());
+        cv.put(EMP_DesignId,empClass.getDesig_Id());
+        cv.put(EMP_BranchId,empClass.getBranch_Id());
+        cv.put(EMP_Status,empClass.getStatus());
+        cv.put(EMP_DesignName,empClass.getDesigName());
+        cv.put(EMP_CompName,empClass.getCompanyName());
+        cv.put(EMP_CompInit,empClass.getCompanyInit());
+        cv.put(EMP_HoCode,empClass.getHoCode());
+        cv.put(EMP_PIN,empClass.getPIN());
+        getWritableDatabase().insert(Table_Employee,null,cv);
+    }
+
+    public void addStockInfo(StockInfoMasterClass stockInfo) {
+        ContentValues cv = new ContentValues();
+        cv.put(SI_Company,stockInfo.getCompany());
+        cv.put(SI_ProdId,stockInfo.getProductId());
+        cv.put(SI_Color,stockInfo.getColor());
+        cv.put(SI_Size,stockInfo.getSize());
+        cv.put(SI_Rate,stockInfo.getRate());
+        cv.put(SI_LQty,stockInfo.getLQty());
+        cv.put(SI_PQty,stockInfo.getPQty());
+        cv.put(SI_PackUnpack,stockInfo.getPackUnpack());
+        cv.put(SI_PerPackQty,stockInfo.getPerPackQty());
+        cv.put(SI_SaleRate,stockInfo.getSaleRate());
+        cv.put(SI_ProductID,stockInfo.getProduct_id());
+        getWritableDatabase().insert(Table_StockInfo,null,cv);
+    }
+
+    public void addProductMaster(ProductMasterClass prodClass) {
+        ContentValues cv = new ContentValues();
+        cv.put(PM_ProductID,prodClass.getProduct_id());
+        cv.put(PM_Cat1,prodClass.getCat1());
+        cv.put(PM_Cat2,prodClass.getCat2());
+        cv.put(PM_Cat3,prodClass.getCat3());
+        cv.put(PM_Cat4,prodClass.getCat4());
+        cv.put(PM_Cat5,prodClass.getCat5());
+        cv.put(PM_Cat6,prodClass.getCat6());
+        cv.put(PM_Finalprod,prodClass.getFinal_prod());
+        cv.put(PM_UOM,prodClass.getUom());
+        cv.put(PM_SRate,prodClass.getSrate());
+        cv.put(PM_PRate,prodClass.getPrate());
+        cv.put(PM_BranchId,prodClass.getBranchid());
+        cv.put(PM_Status,prodClass.getStatus());
+        cv.put(PM_NoOfPieces,prodClass.getNoOfPices());
+        cv.put(PM_CompanyId,prodClass.getCompany_Id());
+        cv.put(PM_MRPRate,prodClass.getMRPRate());
+        cv.put(PM_ProdId,prodClass.getProductId());
+        cv.put(PM_Cat7,prodClass.getCat7());
+        cv.put(PM_Cat8,prodClass.getCat8());
+        cv.put(PM_MinStkQty,prodClass.getMinStkQty());
+        cv.put(PM_MaxStkQty,prodClass.getMaxStkQty());
+        cv.put(PM_GSTGroup,prodClass.getGSTGroup());
+        cv.put(PM_HSNCode,prodClass.getHSNCode());
+        cv.put(PM_Cat9,prodClass.getCat9());
+        getWritableDatabase().insert(Table_ProductMaster,null,cv);
+    }
+
+    public void addCustomerMaster(CustomerDetailClass cust) {
+        ContentValues cv = new ContentValues();
+        cv.put(CM_RetailCustID,cust.getCustID());
+        cv.put(CM_Name,cust.getName());
+        cv.put(CM_Address,cust.getAddress());
+        cv.put(CM_MobileNo,cust.getMobile());
+        cv.put(CM_Status,cust.getStatus());
+        cv.put(CM_BranchId,cust.getBranchId());
+        cv.put(CM_Email,cust.getEmail());
+        cv.put(CM_District,cust.getDistrict());
+        cv.put(CM_Taluka,cust.getTaluka());
+        cv.put(CM_CityId,cust.getCityId());
+        cv.put(CM_AreaId,cust.getAreaId());
+        cv.put(CM_PANNo,cust.getPANno());
+        cv.put(CM_ImagePath,cust.getImagePath());
+        cv.put(CM_HOCode,cust.getHOCode());
+        cv.put(CM_GSTNo,cust.getGSTNo());
+        cv.put(CM_IMEINo,cust.getIMEINo());
+        cv.put(CM_isRegistered,cust.getIsRegistered());
+        cv.put(CM_AadhaarNo,cust.getAadharNo());
+        cv.put(CM_PIN,cust.getPIN());
         getWritableDatabase().insert(Table_Customermaster,null,cv);
     }
 
@@ -115,6 +366,10 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put(CM_PIN,pin);
         getWritableDatabase().update(Table_Customermaster,cv,CM_RetailCustID+"=?",new String[]{custid});
+    }
+
+    public void deleteTable(String tableName){
+        getWritableDatabase().execSQL("delete from "+tableName);
     }
 }
 

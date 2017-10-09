@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -59,10 +60,24 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.mainactivity_menu,menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 showDia(0);
+                break;
+            case R.id.refresh:
+                startActivity(new Intent(getApplicationContext(),DataRefreshActivity.class));
+                overridePendingTransition(R.anim.enter,R.anim.exit);
+                break;
+            case R.id.logout:
+                break;
+            case R.id.report_error:
                 break;
         }
         return super.onOptionsItemSelected(item);

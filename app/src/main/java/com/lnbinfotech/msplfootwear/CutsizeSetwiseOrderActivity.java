@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
 import com.lnbinfotech.msplfootwear.constant.Constant;
 
 public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements View.OnClickListener {
@@ -61,8 +62,8 @@ public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements Vi
     }
 
     private void init() {
-        toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER,0,0);
+        toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
         btn_gents = (Button) findViewById(R.id.btn_gents);
         btn_ladiesnboys = (Button) findViewById(R.id.btn_ladiesnboys);
         btn_hawaineva = (Button) findViewById(R.id.btn_hawaineva);

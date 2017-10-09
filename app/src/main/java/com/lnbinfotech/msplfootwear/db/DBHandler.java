@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
-import com.lnbinfotech.msplfootwear.model.UserGetterSetterClass;
 
 import java.util.ArrayList;
 import java.util.List;

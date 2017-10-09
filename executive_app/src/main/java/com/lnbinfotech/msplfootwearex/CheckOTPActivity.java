@@ -239,6 +239,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
 
     private void showDia(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(CheckOTPActivity.this);
+        builder.setCancelable(false);
         if (a == -1) {
             builder.setTitle(R.string.somethingwentwrong);
             builder.setMessage(R.string.pleasecontactyouradministrator);
