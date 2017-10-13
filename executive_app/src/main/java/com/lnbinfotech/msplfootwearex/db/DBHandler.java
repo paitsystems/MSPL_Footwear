@@ -511,6 +511,10 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().execSQL(str);
     }
 
+    public Cursor getSubCategory(String catName){
+        String str = "select distinct "+PM_Cat2+" from "+Table_ProductMaster+" where "+PM_Cat9+"='"+catName+"' order by "+PM_Cat2;
+        return getWritableDatabase().rawQuery(str,null);
+    }
 
     public void deleteTable(String tableName) {
         getWritableDatabase().execSQL("delete from " + tableName);

@@ -140,7 +140,7 @@ public class NewCustomerEntryActivity extends AppCompatActivity implements View.
     }
 
     private void validation() {
-        if (ed_cus_name.getText().toString().equals("") & ed_mobile_no.getText().equals("")
+        if (ed_cus_name.getText().toString().equals("") & ed_mobile_no.getText().toString().equals("")
                 & ed_email_id.getText().toString().equals("") & ed_address.getText().toString().equals("")) {
             toast.setText("Please,fill all the fields");
             toast.show();
@@ -162,8 +162,6 @@ public class NewCustomerEntryActivity extends AppCompatActivity implements View.
             overridePendingTransition(R.anim.enter, R.anim.exit);
             writeLog("validation(): data saved and goes to DetailFormActivity ");
             finish();
-
-
         }
     }
 

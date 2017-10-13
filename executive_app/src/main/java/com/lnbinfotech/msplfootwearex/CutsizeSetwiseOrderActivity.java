@@ -2,16 +2,27 @@ package com.lnbinfotech.msplfootwearex;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import android.view.Gravity;
+
+import com.lnbinfotech.msplfootwearex.adapters.CutsizewiseViewPagerAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.fragments.GentsCategoryFragment;
+import com.lnbinfotech.msplfootwearex.fragments.HawaiNEvaCategoryFragment;
+import com.lnbinfotech.msplfootwearex.fragments.LadiesNBoysCategoryFragment;
+import com.lnbinfotech.msplfootwearex.fragments.SchoolShoesCategoryFragment;
 
 public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private TabLayout tabLayout;
+    private ViewPager pager;
+    private CutsizewiseViewPagerAdapter adapter;
     private Constant constant;
     private Toast toast;
 
@@ -26,6 +37,8 @@ public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements Vi
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        setViewPager();
+        tabLayout.setupWithViewPager(pager);
     }
 
     @Override
@@ -53,13 +66,23 @@ public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements Vi
         return super.onOptionsItemSelected(item);
     }
 
-    void init() {
-        toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER,0,0);
-
+    private void setViewPager(){
+        adapter = new CutsizewiseViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new GentsCategoryFragment(),"GENTS");
+        adapter.addFragment(new LadiesNBoysCategoryFragment(),"LADIES & BOYS");
+        adapter.addFragment(new HawaiNEvaCategoryFragment(),"HAWAI & EVA");
+        adapter.addFragment(new SchoolShoesCategoryFragment(),"SCHOOL SHOES");
+        pager.setAdapter(adapter);
     }
 
-    void showDia(int a) {
+    private void init() {
+        toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER,0,0);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        pager = (ViewPager) findViewById(R.id.pager);
+    }
+
+    private void showDia(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(CutsizeSetwiseOrderActivity.this);
         if (a == 0) {
             builder.setMessage("Do You Want To Exit App?");
