@@ -11,9 +11,8 @@ import com.lnbinfotech.msplfootwearex.model.ConnectivityTest;
 
 import java.io.File;
 
-/**
- * Created by SNEHA on 12-10-2017.
- */
+//Created by SNEHA on 12-10-2017.
+
 public class ImageUplaodBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {

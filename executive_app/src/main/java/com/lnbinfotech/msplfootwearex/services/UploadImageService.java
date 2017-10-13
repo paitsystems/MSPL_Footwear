@@ -17,9 +17,8 @@ import org.apache.commons.net.ftp.FTPClient;
 import java.io.File;
 import java.io.FileInputStream;
 
-/**
- * Created by SNEHA on 12-10-2017.
- */
+// Created by SNEHA on 12-10-2017.
+
 public class UploadImageService extends IntentService {
     public static final String BROADCAST = "imageUploadBroadcast";//android.net.conn.CONNECTIVITY_CHANGE
 
