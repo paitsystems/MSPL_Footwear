@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
+import com.lnbinfotech.msplfootwearex.services.UploadImageService;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
 import java.io.File;
@@ -461,7 +462,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
             });
         } catch (Exception e) {
             e.printStackTrace();
-            writeLog("saveData();customer data save exception");
+            writeLog("saveData():customer data save exception");
         }
     }
 
@@ -477,6 +478,11 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                 Toast toast = Toast.makeText(getApplicationContext(), "Data saved successfully..", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
+
+                Intent intent1 = new Intent("test");//UploadImageService.BROADCAST
+                sendBroadcast(intent1);
+                writeLog("DownloadImageService_onHandleIntent_broadcastSend");
+
                 NewCustomerEntryActivity.flag = 1;
                 AttachCustomerImage.flag = 2;
                 AttachAddressProofImage.flag = 3;

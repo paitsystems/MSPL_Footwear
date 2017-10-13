@@ -139,7 +139,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
 
     @Override
     public void onBackPressed() {
-        // showPopup(1);
+         showPopup(1);
     }
 
     @Override
@@ -151,7 +151,8 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                new Constant(VisitPaymentFormActivity.this).doFinish();
+                //new Constant(VisitPaymentFormActivity.this).doFinish();
+                showPopup(1);
                 break;
         }
         return super.onOptionsItemSelected(item);

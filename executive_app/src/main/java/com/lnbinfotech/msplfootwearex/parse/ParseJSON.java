@@ -5,7 +5,10 @@ import android.content.Context;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.AreaMasterClass;
+import com.lnbinfotech.msplfootwearex.model.BankBranchMasterClass;
+import com.lnbinfotech.msplfootwearex.model.BankMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CityMasterClass;
+import com.lnbinfotech.msplfootwearex.model.CompanyMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwearex.model.EmployeeMasterClass;
 import com.lnbinfotech.msplfootwearex.model.HOMasterClass;
@@ -255,6 +258,75 @@ public class ParseJSON {
         }catch (Exception e){
             e.printStackTrace();
             writeLog("parseCustomerMaster_"+e.getMessage());
+        }
+    }
+
+    public void parseCompanyMaster(){
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                db.deleteTable(DBHandler.Table_CompanyMaster);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    CompanyMasterClass companyClass = new CompanyMasterClass();
+                    companyClass.setCompanyId(jsonArray.getJSONObject(i).getString("Id"));
+                    companyClass.setCompanyName(jsonArray.getJSONObject(i).getString("Name"));
+                    companyClass.setCompanyInitial(jsonArray.getJSONObject(i).getString("Initial"));
+                    companyClass.setCompanyPan(jsonArray.getJSONObject(i).getString("Pan"));
+                    companyClass.setDisplayCmp(jsonArray.getJSONObject(i).getString("DisplayCmp"));
+                    companyClass.setGSTNo(jsonArray.getJSONObject(i).getString("GSTNo"));
+                    companyClass.setHOCode(jsonArray.getJSONObject(i).getString("HOCode"));
+                    db.addCompanyMaster(companyClass);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseCompanyMaster_"+e.getMessage());
+        }
+    }
+    public void parseBankMaster(){
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                db.deleteTable(DBHandler.Table_BankMaster);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    BankMasterClass bankClass = new BankMasterClass();
+                    bankClass.setBankId(jsonArray.getJSONObject(i).getString("Id"));
+                    bankClass.setBranchId(jsonArray.getJSONObject(i).getString("BranchId"));
+                    bankClass.setBankName(jsonArray.getJSONObject(i).getString("Name"));
+                    bankClass.setAccountNo(jsonArray.getJSONObject(i).getString("AccountNo"));
+                    bankClass.setStatus(jsonArray.getJSONObject(i).getString("Status"));
+                    bankClass.setIFSC(jsonArray.getJSONObject(i).getString("IFSC"));
+                    bankClass.setMICR(jsonArray.getJSONObject(i).getString("MICR"));
+                    bankClass.setCustType(jsonArray.getJSONObject(i).getString("CustType"));
+                    bankClass.setHoCode(jsonArray.getJSONObject(i).getString("HOCode"));
+                    db.addBankMaster(bankClass);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseBankMaster_"+e.getMessage());
+        }
+    }
+
+    public void parseBankBranchMaster(){
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            db.deleteTable(DBHandler.Table_BankBranchMaster);
+            for(int i = 0; i < jsonArray.length(); i++){
+                BankBranchMasterClass branchClass = new BankBranchMasterClass();
+                branchClass.setAutoid(jsonArray.getJSONObject(i).getString("AutoId"));
+                branchClass.setId(jsonArray.getJSONObject(i).getString("Id"));
+                branchClass.setBranch(jsonArray.getJSONObject(i).getString("Branch"));
+                branchClass.setCustid(jsonArray.getJSONObject(i).getString("CustId"));
+                branchClass.setAccountNo(jsonArray.getJSONObject(i).getString("AccountNo"));
+                branchClass.setcBankid(jsonArray.getJSONObject(i).getString("CBankId"));
+                branchClass.setcBranch(jsonArray.getJSONObject(i).getString("CBranch"));
+                db.addBankBranchMaster(branchClass);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseBankBranchMaster_" + e.getMessage());
         }
     }
 

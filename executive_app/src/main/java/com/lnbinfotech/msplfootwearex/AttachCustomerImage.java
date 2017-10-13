@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
+import com.lnbinfotech.msplfootwearex.services.UploadImageService;
 
 import java.io.File;
 import java.io.FileInputStream;

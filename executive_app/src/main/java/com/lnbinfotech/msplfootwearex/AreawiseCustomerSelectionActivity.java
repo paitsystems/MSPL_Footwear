@@ -2,6 +2,7 @@ package com.lnbinfotech.msplfootwearex;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,9 +16,11 @@ import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.adapters.AreawiseCustSelListAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.model.AreawiseCustomerSelectionClass;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AreawiseCustomerSelectionActivity extends AppCompatActivity implements View.OnClickListener {
@@ -26,7 +29,9 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
     private Toast toast;
     private ListView listView;
     private List<AreawiseCustomerSelectionClass> areaList;
+    public static HashMap<String ,String> hashmap;
     private AreawiseCustSelListAdapter adapter;
+    private DBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,17 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 AreawiseCustomerSelectionClass areaClass = (AreawiseCustomerSelectionClass) listView.getItemAtPosition(i);
                 Constant.showLog(areaClass.getAreaname());
+                String area_name = areaClass.getAreaname();
+                Cursor cursor = db.getAreaId(area_name);
+                if(cursor.moveToFirst()){
+                    do{
+                       // AreawiseCustomerSelectionClass areaClass_ = new AreawiseCustomerSelectionClass();
+                        String id = cursor.getString(cursor.getColumnIndex("Id"));
+                        Constant.showLog("id:"+id);
+                        hashmap.put(area_name,id);
+                    }while (cursor.moveToNext());
+                }
+                cursor.close();
                 startActivity(new Intent(getApplicationContext(),VisitOptionsActivity.class));
                 overridePendingTransition(R.anim.enter,R.anim.exit);
             }
@@ -77,13 +93,19 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
     }
 
     private void init() {
+        hashmap = new HashMap<>();
+        db = new DBHandler(AreawiseCustomerSelectionActivity.this);
         constant = new Constant(AreawiseCustomerSelectionActivity.this);
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER,0,0);
         listView = (ListView) findViewById(R.id.listView);
         areaList = new ArrayList<>();
-        AreawiseCustomerSelectionClass areaClass = new AreawiseCustomerSelectionClass();
+
+
+        areaName();
+
+        /*AreawiseCustomerSelectionClass areaClass = new AreawiseCustomerSelectionClass();
         areaClass.setAreaname("Aundh Line");
         areaList.add(areaClass);
         AreawiseCustomerSelectionClass areaClass1 = new AreawiseCustomerSelectionClass();
@@ -101,8 +123,24 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         AreawiseCustomerSelectionClass areaClass5 = new AreawiseCustomerSelectionClass();
         areaClass5.setAreaname("Shirur Line");
         areaList.add(areaClass5);
+        AreawiseCustomerSelectionClass areaClass6 = new AreawiseCustomerSelectionClass();
+        areaClass5.setAreaname("Area Line");
+        areaList.add(areaClass6);*/
         adapter = new AreawiseCustSelListAdapter(getApplicationContext(),areaList);
         listView.setAdapter(adapter);
+    }
+
+    private  void areaName(){
+        Cursor cursor =  db.getAreaName();
+        if(cursor.moveToFirst()){
+            do{
+                AreawiseCustomerSelectionClass  areaclass = new AreawiseCustomerSelectionClass();
+                areaclass.setAreaname(cursor.getString(cursor.getColumnIndex("Area")));
+                areaList.add(areaclass);
+                Constant.showLog("arealist:"+areaList.size());
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
     }
 
     private void showDia(int a) {

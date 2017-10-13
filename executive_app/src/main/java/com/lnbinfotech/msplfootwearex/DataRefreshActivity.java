@@ -1,6 +1,8 @@
 package com.lnbinfotech.msplfootwearex;
 
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -40,6 +42,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private ListView listView;
     private List<String> refreshList;
     private String writeFilename = "Write.txt";
+    private DBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,12 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                         refreshDataDia(5);
                     } else if (i == 6) {
                         refreshDataDia(6);
+                    }else if (i == 7) {
+                        refreshDataDia(7);
+                    }else if (i == 8) {
+                        refreshDataDia(8);
+                    }else if(i == 9){
+                        refreshDataDia(9);
                     }
                 }else{
                     toast.setText("You Are Offline");
@@ -251,7 +260,73 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
+    private void loadCompanyMaster(){
+        db.createCompanyMaster();
+        String url = Constant.ipaddress+"/GetCompanyMaster?Id=0";
+        Constant.showLog(url);
+        writeLog("loadCompanyMaster_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
+        requests.refreshCompanyMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                showDia(1);
+            }
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                showDia(2);
+            }
+        });
+    }
+
+    private void loadBankMaster(){
+        db.createBankMaster();
+        String url = Constant.ipaddress+"/GetBankMaster?Id=0";
+        Constant.showLog(url);
+        writeLog("loadBankMaster_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
+        requests.refreshBankMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                showDia(1);
+            }
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                showDia(2);
+            }
+        });
+    }
+
+    private void loadBankBranchMaster(){
+        db.createBankBranchMaster();
+        String url = Constant.ipaddress+"/GetBankBranchMaster?Id=0";
+        Constant.showLog(url);
+        writeLog("loadBankBranchMaster_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
+        requests.refreshBankBranchMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                showDia(1);
+            }
+
+            @Override
+            public void onFailure(String result) {
+               constant.showPD();
+                showDia(2);
+            }
+        });
+
+    }
+
     private void init() {
+        db = new DBHandler(DataRefreshActivity.this);
         constant = new Constant(DataRefreshActivity.this);
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
@@ -262,6 +337,9 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         refreshList.add("Customer Master");refreshList.add("Employee Master");
         refreshList.add("HOMaster Master");refreshList.add("Product Master");
         refreshList.add("Stock Master");
+        refreshList.add("Company Master");
+        refreshList.add("Bank Master");
+        refreshList.add("Bank_Branch Master");
         listView.setAdapter(new ArrayAdapter<>(getApplicationContext(),R.layout.list_item_data_refresh,refreshList));
     }
 
@@ -333,6 +411,12 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     loadProductMaster();
                 }else if (a == 6) {
                     loadStockInfo();
+                }else if(a == 7){
+                    loadCompanyMaster();
+                }else if(a == 8){
+                    loadBankMaster();
+                }else if(a == 9){
+                    loadBankBranchMaster();
                 }
             }
         });
