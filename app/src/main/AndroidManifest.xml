@@ -75,7 +75,7 @@
         <activity android:name=".CustomerAccountActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".FeedbackAc tivity"
+        <activity android:name=".FeedbackActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Update_ProfileData_Activity"

@@ -55,8 +55,7 @@ public class AppSingleton {
 
     public <T> void addToRequestQueue(Request<T> request, String tag){
         request.setShouldCache(false);
-        request.setRetryPolicy(new DefaultRetryPolicy(60000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        request.setRetryPolicy(new DefaultRetryPolicy(30000,0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         request.setTag(tag);
         getRequestQueue().add(request);

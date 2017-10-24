@@ -109,5 +109,41 @@ public class GetPermission {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WAKE_LOCK}, 8);
         }
     }
+
+    public boolean checkReceiveSMSPermission(Context context) {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void requestReceiveSMSPermission(Context context, Activity activity) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.RECEIVE_SMS)) {
+            Toast.makeText(context, "READ SMS PERMISSION REQUIRED", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.RECEIVE_SMS}, 9);
+        }
+    }
+
+    public boolean checkReadSMSPermission(Context context) {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void requestReadSMSPermission(Context context, Activity activity) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_SMS)) {
+            Toast.makeText(context, "READ SMS PERMISSION REQUIRED", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_SMS}, 10);
+        }
+    }
+
+    public boolean checkSendSMSPermission(Context context) {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void requestSendSMSPermission(Context context, Activity activity) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.SEND_SMS)) {
+            Toast.makeText(context, "SEND SMS PERMISSION REQUIRED", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.SEND_SMS}, 11);
+        }
+    }
 }
 

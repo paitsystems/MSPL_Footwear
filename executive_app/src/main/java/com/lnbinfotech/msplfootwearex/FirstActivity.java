@@ -59,6 +59,12 @@ public class FirstActivity extends AppCompatActivity {
             permission.requestReadPhoneStatPermission(getApplicationContext(),FirstActivity.this);//4
         }else if(!permission.checkRebootPermission(getApplicationContext())){
             permission.requestRebootPermission(getApplicationContext(),FirstActivity.this);//7
+        }else if(!permission.checkReceiveSMSPermission(getApplicationContext())){
+            permission.requestReceiveSMSPermission(getApplicationContext(),FirstActivity.this);//9
+        }else if(!permission.checkReadSMSPermission(getApplicationContext())){
+            permission.requestReadSMSPermission(getApplicationContext(),FirstActivity.this);//10
+        }else if(!permission.checkSendSMSPermission(getApplicationContext())){
+            permission.requestSendSMSPermission(getApplicationContext(),FirstActivity.this);//11
         }else {
             if(ConnectivityTest.getNetStat(getApplicationContext())) {
                 doThis();
@@ -139,6 +145,15 @@ public class FirstActivity extends AppCompatActivity {
                 checkpermmission();
                 break;
             case 7:
+                checkpermmission();
+                break;
+            case 9:
+                checkpermmission();
+                break;
+            case 10:
+                checkpermmission();
+                break;
+            case 11:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     writeLog("All_Permission_Granted");
                     doThis();

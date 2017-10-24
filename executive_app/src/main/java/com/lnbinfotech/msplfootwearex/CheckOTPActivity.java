@@ -110,7 +110,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             public void afterTextChanged(Editable editable) {
                 if(ed1.getText().toString().length()==1){
                     ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(ed1.getWindowToken(),0);
-                    //ed2.requestFocus();
+                    ed2.requestFocus();
                 }
             }
         });
@@ -127,7 +127,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void afterTextChanged(Editable editable) {
                 if(ed2.getText().toString().length()==1){
-                    //ed3.requestFocus();
+                    ed3.requestFocus();
                 }
             }
         });
@@ -144,7 +144,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void afterTextChanged(Editable editable) {
                 if(ed3.getText().toString().length()==1){
-                    //ed4.requestFocus();
+                    ed4.requestFocus();
                 }
             }
         });
@@ -161,7 +161,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void afterTextChanged(Editable editable) {
                 if(ed4.getText().toString().length()==1){
-                   // ed5.requestFocus();
+                    ed5.requestFocus();
                 }
             }
         });
@@ -373,7 +373,6 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void doThis(String response, String _mobNo, String _imeino){
-
         String arr[] = response.split("-");
         if (arr.length > 1) {
             writeLog("requestOTP_Success_" + response);
@@ -386,13 +385,13 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void getCustInfo(){
-        String url = Constant.ipaddress+"/GetCustomerDetail?mobileno="+otpClass.getMobileno()+"&IMEINo="+otpClass.getImeino();
+    private void getUserInfo(){
+        String url = Constant.ipaddress+"/GetUserDetail?mobileno="+otpClass.getMobileno()+"&IMEINo="+otpClass.getImeino()+"&type=E";
         Constant.showLog(url);
         writeLog("requestOTP_" + url);
         constant.showPD();
         VolleyRequests requests = new VolleyRequests(CheckOTPActivity.this);
-        requests.getCustomerDetail(url, new ServerCallback() {
+        requests.getUserDetail(url, new ServerCallback() {
             @Override
             public void onSuccess(String result) {
                 constant.showPD();
@@ -407,6 +406,9 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void doFinish(){
+        if(countDown!=null) {
+            countDown.cancel();
+        }
         SharedPreferences.Editor editor = FirstActivity.pref.edit();
         editor.putBoolean(getString(R.string.pref_isRegistered),true);
         editor.apply();
@@ -469,7 +471,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    getCustInfo();
+                    getUserInfo();
                 }
             });
         }else if (a == 2) {

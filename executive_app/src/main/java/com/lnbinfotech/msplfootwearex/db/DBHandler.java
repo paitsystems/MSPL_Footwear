@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.lnbinfotech.msplfootwearex.VisitPaymentFormActivity;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.model.AreaMasterClass;
 import com.lnbinfotech.msplfootwearex.model.BankBranchMasterClass;
@@ -29,10 +28,8 @@ import java.util.List;
 public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
-    public static final int Database_Version = 1;
+    public static final int Database_Version = 2;
 
-    //retailCustID,name,address,mobile,status,branchId,email,District,Taluka,cityId,areaId,
-    // Panno,ImagePath,HoCode,GSTNo,IMEINo,isRegistered,AadharNo,PIN
     public static final String Table_Customermaster = "CustomerMaster";
     public static final String CM_RetailCustID = "CustID";
     public static final String CM_Name = "Name";
@@ -54,8 +51,6 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String CM_AadhaarNo = "AadhaarNo";
     public static final String CM_PIN = "PIN";
 
-    //Product_id,Cat1,Cat2,Cat3,Cat4,Cat5,Cat6,Final_prod,Uom,Srate,Prate,Branchid,Status,NoOfPices,
-    // Company_Id,MRPRate,ProductId,Cat7,Cat8,MinStkQty,MaxStkQty,GSTGroup,HSNCode,Cat9
     public static final String Table_ProductMaster = "ProductMaster";
     public static final String PM_ProductID = "Product_id";
     public static final String PM_Cat1 = "Cat1";
@@ -95,8 +90,6 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String SI_SaleRate = "SaleRate";
     public static final String SI_ProductID = "Product_id";
 
-    //Emp_Id,Emp_Name,Emp_mobno,Emp_Add,Desig_Id,Branch_Id,Emp_Status,
-    // Desig_Name,Company_Name,Company_Initial,HoCode,PIN
     public static final String Table_Employee = "Employee_Master";
     public static final String EMP_EmpId = "EmpID";
     public static final String EMP_Name = "Name";
@@ -111,7 +104,6 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String EMP_HoCode = "HoCode";
     public static final String EMP_PIN = "PIN";
 
-    //auto,id,Name,City,State,ini
     public static final String Table_HOMaster = "HOMaster";
     public static final String HO_Auto = "Auto";
     public static final String HO_Id = "Id";
@@ -120,21 +112,18 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String HO_State = "State";
     public static final String HO_ini = "ini";
 
-    //auto,id,area,cityid
     public static final String Table_AreaMaster = "AreaMaster";
     public static final String Area_Auto = "Auto";
     public static final String Area_Id = "Id";
     public static final String Area_Area = "Area";
     public static final String Area_Cityid = "Cityid";
 
-    //auto,id,city,stId
     public static final String Table_CityMaster = "CityMaster";
     public static final String City_Auto = "Auto";
     public static final String City_Id = "Id";
     public static final String City_City = "City";
     public static final String City_Stateid = "StateId";
 
-    //Company_id,Company_Name,Company_Initial,Company_Pan,DisplayCmp,HOCode,GSTNo
     public static final String Table_CompanyMaster = "CompanyMaster";
     public static final String Company_Id = "Id";
     public static final String Company_Name = "Name";
@@ -144,7 +133,6 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String Company_HOCode = "HOCode";
     public static final String Company_GSTNo = "GSTNo";
 
-    //bankid,branchid,bankName,accountno,status,IFSC,MICR,CustType,HoCode
     public static final String Table_BankMaster = "BankMaster";
     public static final String Bank_Id = "Id";
     public static final String Bank_BranchId = "BranchId";
@@ -156,7 +144,6 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String Bank_CustType = "CustType";
     public static final String Bank_HoCode = "HoCode";
 
-    //Autoid,Branch,id,Custid,AccountNo,CBankid,CBranch
     public static final String Table_BankBranchMaster = "BankBranchMaster";
     public static final String Branch_AutoId = "AutoId";
     public static final String Branch_Id = "Id";
@@ -278,6 +265,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if(oldVersion<newVersion){
+            Constant.showLog(create_user_master);
+            db.execSQL(create_user_master);
+        }
     }
 
     public void addCustomerDetail(CustomerDetailClass cust) {
@@ -287,6 +278,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(CM_Address, cust.getAddress());
         cv.put(CM_MobileNo, cust.getMobile());
         cv.put(CM_Email, cust.getEmail());
+        cv.put(CM_BranchId,cust.getBranchId());
         cv.put(CM_PANNo, cust.getPANno());
         cv.put(CM_GSTNo, cust.getGSTNo());
         cv.put(CM_ImagePath, cust.getImagePath());
@@ -459,15 +451,15 @@ public class DBHandler extends SQLiteOpenHelper {
     //name,Address,Mobile,Email,Panno,ImagePath,GSTNo,AadharNo
     public void addUserDetail(UserClass user) {
         ContentValues cv = new ContentValues();
-        cv.put(CM_RetailCustID, user.getCustID());
-        cv.put(CM_Name, user.getName());
-        cv.put(CM_Address, user.getAddress());
-        cv.put(CM_MobileNo, user.getMobile());
-        cv.put(CM_Email, user.getEmail());
-        cv.put(CM_PANNo, user.getPANno());
-        cv.put(CM_GSTNo, user.getGSTNo());
-        cv.put(CM_ImagePath, user.getImagePath());
-        cv.put(CM_PIN, "-1");
+        cv.put(UM_RetailCustID, user.getCustID());
+        cv.put(UM_Name, user.getName());
+        cv.put(UM_Address, user.getAddress());
+        cv.put(UM_MobileNo, user.getMobile());
+        cv.put(UM_Email, user.getEmail());
+        cv.put(UM_PANNo, user.getPANno());
+        cv.put(UM_GSTNo, user.getGSTNo());
+        cv.put(UM_ImagePath, user.getImagePath());
+        cv.put(UM_PIN, "-1");
         getWritableDatabase().insert(Table_Usermaster, null, cv);
     }
 
@@ -518,7 +510,6 @@ public class DBHandler extends SQLiteOpenHelper {
         res.close();
         return list;
     }
-
 
     public void updatePIN(String custid, String pin) {
         ContentValues cv = new ContentValues();

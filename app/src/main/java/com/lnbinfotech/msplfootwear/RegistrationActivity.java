@@ -98,7 +98,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             final String imeino = new Constant(getApplicationContext()).getIMEINo();
             String _mobNo = URLEncoder.encode(mobNo, "UTF-8");
             String _imeino = URLEncoder.encode(imeino, "UTF-8");
-            String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"&IMEINo="+_imeino;
+            String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"&IMEINo="+_imeino+"&type=C";
             Constant.showLog(url);
             writeLog("requestOTP_" + url);
 

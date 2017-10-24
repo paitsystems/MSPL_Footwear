@@ -96,7 +96,6 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             constant.showPD();
             final String mobNo = ed_mobNo.getText().toString();
             final String imeino = new Constant(getApplicationContext()).getIMEINo();
-
             String _mobNo = URLEncoder.encode(mobNo, "UTF-8");
             String _imeino = URLEncoder.encode(imeino, "UTF-8");
             String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"&IMEINo="+_imeino+"&type=E";
@@ -121,10 +120,10 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                         writeLog("requestOTP_Fail_" + response);
                     }
                 }
-
                 @Override
                 public void onFailure(String result) {
                     constant.showPD();
+                    showDia(4);
                     writeLog("requestOTP_VolleyError_"+result);
                 }
             });
@@ -227,6 +226,20 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 4) {
+            builder.setTitle(R.string.somethingwentwrong);
+            builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(ConnectivityTest.getNetStat(getApplicationContext())) {
+                        requestOTP();
+                    }else{
+                        toast.setText(getString(R.string.you_are_offline));
+                        toast.show();
+                    }
                     dialog.dismiss();
                 }
             });

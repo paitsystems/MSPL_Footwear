@@ -1,7 +1,10 @@
 package com.lnbinfotech.msplfootwearex.parse;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
+import com.lnbinfotech.msplfootwearex.FirstActivity;
+import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.AreaMasterClass;
@@ -15,6 +18,7 @@ import com.lnbinfotech.msplfootwearex.model.EmployeeMasterClass;
 import com.lnbinfotech.msplfootwearex.model.HOMasterClass;
 import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
+import com.lnbinfotech.msplfootwearex.model.UserClass;
 
 import org.json.JSONArray;
 
@@ -38,6 +42,40 @@ public class ParseJSON {
         db = new DBHandler(context);
     }
 
+    public ArrayList<UserClass> parseUserDetail(){
+        ArrayList<UserClass> list = new ArrayList<>();
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    UserClass userClass = new UserClass();
+                    userClass.setCustID(jsonArray.getJSONObject(i).getInt("retailCustID"));
+                    userClass.setName(jsonArray.getJSONObject(i).getString("name"));
+                    userClass.setAddress(jsonArray.getJSONObject(i).getString("address"));
+                    userClass.setMobile(jsonArray.getJSONObject(i).getString("mobile"));
+                    userClass.setEmail(jsonArray.getJSONObject(i).getString("email"));
+                    userClass.setBranchId(jsonArray.getJSONObject(i).getInt("branchId"));
+                    userClass.setPANno(jsonArray.getJSONObject(i).getString("Panno"));
+                    userClass.setGSTNo(jsonArray.getJSONObject(i).getString("GSTNo"));
+                    userClass.setImagePath(jsonArray.getJSONObject(i).getString("ImagePath"));
+
+                    SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                    editor.putInt(context.getString(R.string.pref_branchid),userClass.getBranchId());
+                    editor.putInt(context.getString(R.string.pref_retailCustId),userClass.getCustID());
+                    editor.apply();
+
+                    db.addUserDetail(userClass);
+                    list.add(userClass);
+                }
+                db.close();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseCustDetail_"+e.getMessage());
+        }
+        return list;
+    }
+
     public ArrayList<CustomerDetailClass> parseCustDetail(){
         ArrayList<CustomerDetailClass> list = new ArrayList<>();
         try{
@@ -50,9 +88,16 @@ public class ParseJSON {
                     custClass.setAddress(jsonArray.getJSONObject(i).getString("address"));
                     custClass.setMobile(jsonArray.getJSONObject(i).getString("mobile"));
                     custClass.setEmail(jsonArray.getJSONObject(i).getString("email"));
+                    custClass.setBranchId(jsonArray.getJSONObject(i).getInt("branchId"));
                     custClass.setPANno(jsonArray.getJSONObject(i).getString("Panno"));
                     custClass.setGSTNo(jsonArray.getJSONObject(i).getString("GSTNo"));
                     custClass.setImagePath(jsonArray.getJSONObject(i).getString("ImagePath"));
+
+                    SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                    editor.putInt(context.getString(R.string.pref_branchid),custClass.getBranchId());
+                    editor.putInt(context.getString(R.string.pref_retailCustId),custClass.getCustID());
+                    editor.apply();
+
                     db.addCustomerDetail(custClass);
                     list.add(custClass);
                 }
@@ -284,6 +329,7 @@ public class ParseJSON {
             writeLog("parseCompanyMaster_"+e.getMessage());
         }
     }
+
     public void parseBankMaster(){
         try{
             JSONArray jsonArray = new JSONArray(json);

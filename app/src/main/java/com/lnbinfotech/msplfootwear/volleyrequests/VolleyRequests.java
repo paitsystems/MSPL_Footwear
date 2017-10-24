@@ -18,6 +18,7 @@ import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwear.model.StockInfoMasterClass;
+import com.lnbinfotech.msplfootwear.model.UserClass;
 import com.lnbinfotech.msplfootwear.parse.ParseJSON;
 
 import org.codehaus.jackson.JsonFactory;
@@ -60,6 +61,32 @@ public class VolleyRequests {
                 }
         );
        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
+    }
+
+    public void getUserDetail(String url, final ServerCallback callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\", "");
+                        response = response.replace("''", "");
+                        response = response.substring(1, response.length() - 1);
+                        ArrayList<UserClass> list = new ParseJSON(response, context).parseUserDetail();
+                        Constant.showLog(list.size()+"");
+                        callback.onSuccess(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("Error");
+                        Constant.showLog(error.getMessage());
+                        writeLog("getCustomerDetail_"+error.getMessage());
+                    }
+                }
+        );
+        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
     public void getCustomerDetail(String url, final ServerCallback callback) {

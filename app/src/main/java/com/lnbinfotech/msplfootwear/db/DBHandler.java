@@ -28,7 +28,7 @@ import java.util.List;
 public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
-    public static final int Database_Version = 1;
+    public static final int Database_Version = 2;
 
     //retailCustID,name,address,mobile,status,branchId,email,District,Taluka,cityId,areaId,
     // Panno,ImagePath,HoCode,GSTNo,IMEINo,isRegistered,AadharNo,PIN
@@ -248,8 +248,6 @@ public class DBHandler extends SQLiteOpenHelper {
             UM_AreaId + " int," + UM_PANNo + " text," + UM_ImagePath + " text," + UM_HOCode + " int," + UM_GSTNo + " text," + UM_IMEINo + " text," +
             UM_isRegistered + " text," + UM_AadhaarNo + " text," + UM_PIN + " int)";
 
-    String create_feedback_master = "create table if not exists " ;
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         Constant.showLog(create_cust_master);
@@ -276,12 +274,14 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(create_document_master);
         Constant.showLog(create_user_master);
         db.execSQL(create_user_master);
-        Constant.showLog(create_feedback_master);
-        db.execSQL(create_user_master);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if(oldVersion<newVersion){
+            Constant.showLog(create_user_master);
+            db.execSQL(create_user_master);
+        }
     }
 
     public void addCustomerDetail(CustomerDetailClass cust) {
@@ -448,15 +448,15 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void addUserDetail(UserClass user) {
         ContentValues cv = new ContentValues();
-        cv.put(CM_RetailCustID, user.getCustID());
-        cv.put(CM_Name, user.getName());
-        cv.put(CM_Address, user.getAddress());
-        cv.put(CM_MobileNo, user.getMobile());
-        cv.put(CM_Email, user.getEmail());
-        cv.put(CM_PANNo, user.getPANno());
-        cv.put(CM_GSTNo, user.getGSTNo());
-        cv.put(CM_ImagePath, user.getImagePath());
-        cv.put(CM_PIN, "-1");
+        cv.put(UM_RetailCustID, user.getCustID());
+        cv.put(UM_Name, user.getName());
+        cv.put(UM_Address, user.getAddress());
+        cv.put(UM_MobileNo, user.getMobile());
+        cv.put(UM_Email, user.getEmail());
+        cv.put(UM_PANNo, user.getPANno());
+        cv.put(UM_GSTNo, user.getGSTNo());
+        cv.put(UM_ImagePath, user.getImagePath());
+        cv.put(UM_PIN, "-1");
         getWritableDatabase().insert(Table_Usermaster, null, cv);
     }
 

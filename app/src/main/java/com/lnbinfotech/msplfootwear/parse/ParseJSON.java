@@ -1,7 +1,10 @@
 package com.lnbinfotech.msplfootwear.parse;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
+import com.lnbinfotech.msplfootwear.FirstActivity;
+import com.lnbinfotech.msplfootwear.R;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.AreaMasterClass;
@@ -15,6 +18,7 @@ import com.lnbinfotech.msplfootwear.model.EmployeeMasterClass;
 import com.lnbinfotech.msplfootwear.model.HOMasterClass;
 import com.lnbinfotech.msplfootwear.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwear.model.StockInfoMasterClass;
+import com.lnbinfotech.msplfootwear.model.UserClass;
 
 import org.json.JSONArray;
 
@@ -36,6 +40,40 @@ public class ParseJSON {
         this.json = _json;
         this.context = _context;
         db = new DBHandler(context);
+    }
+
+    public ArrayList<UserClass> parseUserDetail(){
+        ArrayList<UserClass> list = new ArrayList<>();
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    UserClass userClass = new UserClass();
+                    userClass.setCustID(jsonArray.getJSONObject(i).getInt("retailCustID"));
+                    userClass.setName(jsonArray.getJSONObject(i).getString("name"));
+                    userClass.setAddress(jsonArray.getJSONObject(i).getString("address"));
+                    userClass.setMobile(jsonArray.getJSONObject(i).getString("mobile"));
+                    userClass.setEmail(jsonArray.getJSONObject(i).getString("email"));
+                    userClass.setBranchId(jsonArray.getJSONObject(i).getInt("branchId"));
+                    userClass.setPANno(jsonArray.getJSONObject(i).getString("Panno"));
+                    userClass.setGSTNo(jsonArray.getJSONObject(i).getString("GSTNo"));
+                    userClass.setImagePath(jsonArray.getJSONObject(i).getString("ImagePath"));
+
+                    SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                    editor.putInt(context.getString(R.string.pref_branchid),userClass.getBranchId());
+                    editor.putInt(context.getString(R.string.pref_retailCustId),userClass.getCustID());
+                    editor.apply();
+
+                    db.addUserDetail(userClass);
+                    list.add(userClass);
+                }
+                db.close();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseCustDetail_"+e.getMessage());
+        }
+        return list;
     }
 
     public ArrayList<CustomerDetailClass> parseCustDetail(){

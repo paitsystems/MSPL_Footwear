@@ -30,6 +30,8 @@
     <string name="pref_FTPImgFolder">FTPImgFolder</string>
     <string name="pref_CustomerName">CustomerName</string>
     <string name="pref_savedpin">savedPIN</string>
+    <string name="pref_retailCustId">retailCustId</string>
+    <string name="pref_branchid">branchid</string>
 
     <string name="pref_IMEI">IMEI</string>
     <string name="pref_logged">logged</string>
