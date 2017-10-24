@@ -2,6 +2,7 @@ package com.lnbinfotech.msplfootwear.interfaces;
 
 //Created by lnb on 9/15/2017.
 
+
 public interface ServerCallback {
 
     void onSuccess(String result);
@@ -9,3 +10,4 @@ public interface ServerCallback {
     void onFailure(String result);
 
 }
+

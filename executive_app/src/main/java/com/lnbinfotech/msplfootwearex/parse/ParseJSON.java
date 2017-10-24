@@ -10,6 +10,7 @@ import com.lnbinfotech.msplfootwearex.model.BankMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CityMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CompanyMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
+import com.lnbinfotech.msplfootwearex.model.DocumentMasterClass;
 import com.lnbinfotech.msplfootwearex.model.EmployeeMasterClass;
 import com.lnbinfotech.msplfootwearex.model.HOMasterClass;
 import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
@@ -327,6 +328,25 @@ public class ParseJSON {
         }catch (Exception e){
             e.printStackTrace();
             writeLog("parseBankBranchMaster_" + e.getMessage());
+        }
+    }
+
+    public void parseDocumentMaster(){
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            db.deleteTable(DBHandler.Table_DocumentMaster);
+            for(int i = 0; i < jsonArray.length(); i++){
+                DocumentMasterClass documentClass = new DocumentMasterClass();
+                documentClass.setId(jsonArray.getJSONObject(i).getString("Id"));
+                documentClass.setDocName(jsonArray.getJSONObject(i).getString("DocName"));
+                documentClass.setForWhom(jsonArray.getJSONObject(i).getString("ForWhom"));
+                documentClass.setCompulsary(jsonArray.getJSONObject(i).getString("Compulsary"));
+                db.addDocumentMaster(documentClass);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseDocumentMaster_" + e.getMessage());
         }
     }
 

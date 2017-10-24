@@ -1,11 +1,11 @@
-package com.lnbinfotech.msplfootwear.model;
-
-//Created by lnb on 9/15/2017.
+package com.lnbinfotech.msplfootwearex.model;
 
 import java.io.Serializable;
 
-public class CustomerDetailClass implements Serializable{
-
+/**
+ * Created by SNEHA on 10/16/2017.
+ */
+public class UserClass implements Serializable {
     public String name,address,mobile,PANno,GSTNo,ImagePath, email,status,district,taluka,
             IMEINo,isRegistered,AadharNo,PIN;
     public int custID,branchId,cityId,areaId, HOCode;
@@ -58,14 +58,6 @@ public class CustomerDetailClass implements Serializable{
         ImagePath = imagePath;
     }
 
-    public int getCustID() {
-        return custID;
-    }
-
-    public void setCustID(int custID) {
-        this.custID = custID;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -75,7 +67,6 @@ public class CustomerDetailClass implements Serializable{
     }
 
     public String getStatus() {
-
         return status;
     }
 
@@ -123,6 +114,22 @@ public class CustomerDetailClass implements Serializable{
         AadharNo = aadharNo;
     }
 
+    public String getPIN() {
+        return PIN;
+    }
+
+    public void setPIN(String PIN) {
+        this.PIN = PIN;
+    }
+
+    public int getCustID() {
+        return custID;
+    }
+
+    public void setCustID(int custID) {
+        this.custID = custID;
+    }
+
     public int getBranchId() {
         return branchId;
     }
@@ -153,13 +160,5 @@ public class CustomerDetailClass implements Serializable{
 
     public void setHOCode(int HOCode) {
         this.HOCode = HOCode;
-    }
-
-    public String getPIN() {
-        return PIN;
-    }
-
-    public void setPIN(String PIN) {
-        this.PIN = PIN;
     }
 }

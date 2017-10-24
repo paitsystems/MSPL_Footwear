@@ -27,6 +27,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 
 import java.io.File;
@@ -54,6 +55,7 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
     public static int flag = 5;
     private Toast toast;
     private final int requestCode = 1;
+    private DBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,7 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
     }
 
     private void init() {
+        db = new DBHandler(AttachGSTnoPANnoImageActivity.this);
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         rdo_gst = (RadioButton) findViewById(R.id.rdo_gstno);
@@ -107,6 +110,7 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
         switch (view.getId()) {
             case R.id.btn_next:
                 gstpan_no_value();
+                setIdValue();
                 String filename = "";
                 if (_flag == 0) {
                     OptionsActivity.new_cus.setPan_no_image(imagePath);
@@ -129,6 +133,7 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
                 break;
             case R.id.btn_update:
                 gstpan_no_value();
+                setIdValue();
                 if (_flag == 0) {
                     String gst = null;
 
@@ -318,6 +323,25 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
         String current_time = sdf.format(new Date());
         return current_time;
     }*/
+
+    private void setIdValue(){
+        String value = "";
+        if (_flag == 0) {
+            value = "PAN CARD";
+            Constant.showLog("setIdValue():panvalue:"+value);
+        } else if (_flag == 1) {
+            value = "GST NO";
+            Constant.showLog("setIdValue():gstvalue:"+value);
+        }
+        Cursor cursor =  db.getIdOfDocType(value);
+        if(cursor.moveToFirst()){
+            do{
+                OptionsActivity.new_cus.setId_addressproof(cursor.getString(cursor.getColumnIndex("Id")));
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+
+    }
 
     private void gstpan_no_value() {
         if (radio_flag == 1) {

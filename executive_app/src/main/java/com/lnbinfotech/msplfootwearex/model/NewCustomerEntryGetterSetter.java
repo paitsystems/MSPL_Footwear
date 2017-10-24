@@ -1,7 +1,31 @@
 package com.lnbinfotech.msplfootwearex.model;// Created by anup on 9/26/2017.
 
 public class NewCustomerEntryGetterSetter {
-    private String Cust_name,mobile_no,email_id,address,cus_image,address_proof,address_proof_image, id_proof,id_proof_image, gst_no,gst_no_image, pan_no,pan_no_image;
+    private String id_addressproof,id_idproof,id_gstpan_proof,Cust_name,mobile_no,email_id,address,cus_image,address_proof,address_proof_image, id_proof,id_proof_image, gst_no,gst_no_image, pan_no,pan_no_image;
+
+    public String getId_addressproof() {
+        return id_addressproof;
+    }
+
+    public void setId_addressproof(String id_addressproof) {
+        this.id_addressproof = id_addressproof;
+    }
+
+    public String getId_idproof() {
+        return id_idproof;
+    }
+
+    public void setId_idproof(String id_idproof) {
+        this.id_idproof = id_idproof;
+    }
+
+    public String getId_gstpan_proof() {
+        return id_gstpan_proof;
+    }
+
+    public void setId_gstpan_proof(String id_gstpan_proof) {
+        this.id_gstpan_proof = id_gstpan_proof;
+    }
 
     public String getCust_name() {
         return Cust_name;

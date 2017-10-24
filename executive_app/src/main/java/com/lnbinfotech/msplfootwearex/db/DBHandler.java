@@ -14,10 +14,12 @@ import com.lnbinfotech.msplfootwearex.model.BankMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CityMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CompanyMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
+import com.lnbinfotech.msplfootwearex.model.DocumentMasterClass;
 import com.lnbinfotech.msplfootwearex.model.EmployeeMasterClass;
 import com.lnbinfotech.msplfootwearex.model.HOMasterClass;
 import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
+import com.lnbinfotech.msplfootwearex.model.UserClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,6 +166,34 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String Branch_CBankId = "CBankId";
     public static final String Branch_CBranch = "CBranch";
 
+    //id,DocName,Alias,ForWhom,Compulsary
+    public static final String Table_DocumentMaster = "DocumentMaster";
+    public static final String Document_Id = "Id";
+    public static final String Document_DocName = "DocName";
+    public static final String Document_ForWhom = "ForWhom";
+    public static final String Document_Compulsary = "Compulsary";
+
+    public static final String Table_Usermaster = "User";
+    public static final String UM_RetailCustID = "CustID";
+    public static final String UM_Name = "Name";
+    public static final String UM_Address = "Address";
+    public static final String UM_MobileNo = "MobileNo";
+    public static final String UM_Status = "Status";
+    public static final String UM_BranchId = "BranchId";
+    public static final String UM_Email = "Email";
+    public static final String UM_District = "District";
+    public static final String UM_Taluka = "Taluka";
+    public static final String UM_CityId = "CityId";
+    public static final String UM_AreaId = "AreaId";
+    public static final String UM_PANNo = "PANNo";
+    public static final String UM_ImagePath = "ImagePath";
+    public static final String UM_HOCode = "HOCode";
+    public static final String UM_GSTNo = "GSTNo";
+    public static final String UM_IMEINo = "IMEINo";
+    public static final String UM_isRegistered = "isRegistered";
+    public static final String UM_AadhaarNo = "AadhaarNo";
+    public static final String UM_PIN = "PIN";
+
 
     public DBHandler(Context context) {
         super(context, Database_Name, null, Database_Version);
@@ -208,6 +238,15 @@ public class DBHandler extends SQLiteOpenHelper {
     String create_bank_branch_master = "create table if not exists " + Table_BankBranchMaster + "(" + Branch_AutoId + " int," + Branch_Id + " int,"
             + Branch_Branch + " text," + Branch_CustId + " int," + Branch_AccountNo + " text," + Branch_CBankId + " int," + Branch_CBranch + " text)";
 
+    String create_document_master = "create table if not exists " + Table_DocumentMaster + "(" + Document_Id + " int,"
+            + Document_DocName + " text," + Document_ForWhom + " text," + Document_Compulsary + " text)";
+
+    String create_user_master = "create table if not exists " + Table_Usermaster + "(" +
+            UM_RetailCustID + " int," + UM_Name + " text," + UM_Address + " text," + UM_MobileNo + " text," + UM_Status + " text," +
+            UM_BranchId + " int," + UM_Email + " text," + UM_District + " text," + UM_Taluka + " text," + UM_CityId + " int," +
+            UM_AreaId + " int," + UM_PANNo + " text," + UM_ImagePath + " text," + UM_HOCode + " int," + UM_GSTNo + " text," + UM_IMEINo + " text," +
+            UM_isRegistered + " text," + UM_AadhaarNo + " text," + UM_PIN + " int)";
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -231,6 +270,10 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(create_bank_master);
         Constant.showLog(create_bank_branch_master);
         db.execSQL(create_bank_branch_master);
+        Constant.showLog(create_document_master);
+        db.execSQL(create_document_master);
+        Constant.showLog(create_user_master);
+        db.execSQL(create_user_master);
     }
 
     @Override
@@ -404,21 +447,45 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().insert(Table_BankBranchMaster,null,cv);
     }
 
+    public void addDocumentMaster(DocumentMasterClass documentClass) {
+        ContentValues cv = new ContentValues();
+        cv.put(Document_Id,documentClass.getId());
+        cv.put(Document_DocName,documentClass.getDocName());
+        cv.put(Document_ForWhom,documentClass.getForWhom());
+        cv.put(Document_Compulsary,documentClass.getCompulsary());
+        getWritableDatabase().insert(Table_DocumentMaster,null,cv);
+    }
+
+    //name,Address,Mobile,Email,Panno,ImagePath,GSTNo,AadharNo
+    public void addUserDetail(UserClass user) {
+        ContentValues cv = new ContentValues();
+        cv.put(CM_RetailCustID, user.getCustID());
+        cv.put(CM_Name, user.getName());
+        cv.put(CM_Address, user.getAddress());
+        cv.put(CM_MobileNo, user.getMobile());
+        cv.put(CM_Email, user.getEmail());
+        cv.put(CM_PANNo, user.getPANno());
+        cv.put(CM_GSTNo, user.getGSTNo());
+        cv.put(CM_ImagePath, user.getImagePath());
+        cv.put(CM_PIN, "-1");
+        getWritableDatabase().insert(Table_Usermaster, null, cv);
+    }
+
     public ArrayList<CustomerDetailClass> getCustomerDetail() {
         ArrayList<CustomerDetailClass> list = new ArrayList<>();
-        String str = "select * from " + Table_Customermaster;
+        String str = "select * from " + Table_Usermaster;
         Cursor res = getWritableDatabase().rawQuery(str, null);
         if (res.moveToFirst()) {
             do {
                 CustomerDetailClass custClass = new CustomerDetailClass();
-                custClass.setCustID(res.getInt(res.getColumnIndex(CM_RetailCustID)));
-                custClass.setName(res.getString(res.getColumnIndex(CM_Name)));
-                custClass.setAddress(res.getString(res.getColumnIndex(CM_Address)));
-                custClass.setMobile(res.getString(res.getColumnIndex(CM_MobileNo)));
-                custClass.setEmail(res.getString(res.getColumnIndex(CM_Email)));
-                custClass.setPANno(res.getString(res.getColumnIndex(CM_PANNo)));
-                custClass.setGSTNo(res.getString(res.getColumnIndex(CM_GSTNo)));
-                custClass.setImagePath(res.getString(res.getColumnIndex(CM_ImagePath)));
+                custClass.setCustID(res.getInt(res.getColumnIndex(UM_RetailCustID)));
+                custClass.setName(res.getString(res.getColumnIndex(UM_Name)));
+                custClass.setAddress(res.getString(res.getColumnIndex(UM_Address)));
+                custClass.setMobile(res.getString(res.getColumnIndex(UM_MobileNo)));
+                custClass.setEmail(res.getString(res.getColumnIndex(UM_Email)));
+                custClass.setPANno(res.getString(res.getColumnIndex(UM_PANNo)));
+                custClass.setGSTNo(res.getString(res.getColumnIndex(UM_GSTNo)));
+                custClass.setImagePath(res.getString(res.getColumnIndex(UM_ImagePath)));
                 list.add(custClass);
             } while (res.moveToNext());
         }
@@ -428,11 +495,11 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public String getCustPIN(String custid) {
         String pin = "-1";
-        String str = "select " + CM_PIN + " from " + Table_Customermaster + " where " + CM_RetailCustID + "=" + custid;
+        String str = "select " + UM_PIN + " from " + Table_Usermaster + " where " + UM_RetailCustID + "=" + custid;
         Cursor res = getWritableDatabase().rawQuery(str, null);
         if (res.moveToFirst()) {
             do {
-                pin = res.getString(res.getColumnIndex(CM_PIN));
+                pin = res.getString(res.getColumnIndex(UM_PIN));
             } while (res.moveToNext());
         }
         res.close();
@@ -441,11 +508,11 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public List<String> checkPINUnsetID() {
         List<String> list = new ArrayList<>();
-        String str = "select " + CM_PIN + " from " + Table_Customermaster + " where " + CM_PIN + "=-1";
+        String str = "select " + UM_PIN + " from " + Table_Usermaster + " where " + UM_PIN + "=-1";
         Cursor res = getWritableDatabase().rawQuery(str, null);
         if (res.moveToFirst()) {
             do {
-                list.add(res.getString(res.getColumnIndex(CM_PIN)));
+                list.add(res.getString(res.getColumnIndex(UM_PIN)));
             } while (res.moveToNext());
         }
         res.close();
@@ -455,8 +522,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void updatePIN(String custid, String pin) {
         ContentValues cv = new ContentValues();
-        cv.put(CM_PIN, pin);
-        getWritableDatabase().update(Table_Customermaster, cv, CM_RetailCustID + "=?", new String[]{custid});
+        cv.put(UM_PIN, pin);
+        getWritableDatabase().update(Table_Usermaster, cv, UM_RetailCustID + "=?", new String[]{custid});
     }
 
     // public Cursor getAreaName(String cityid){
@@ -510,9 +577,26 @@ public class DBHandler extends SQLiteOpenHelper {
         Constant.showLog(str);
         getWritableDatabase().execSQL(str);
     }
+    public void createDocumentMaster() {
+        String str = "create table if not exists " + Table_DocumentMaster + "(" + Document_Id + " int,"
+                + Document_DocName + " text," + Document_ForWhom + " text," + Document_Compulsary + " text)";
+        Constant.showLog(str);
+        getWritableDatabase().execSQL(str);
+    }
 
     public Cursor getSubCategory(String catName){
         String str = "select distinct "+PM_Cat2+" from "+Table_ProductMaster+" where "+PM_Cat9+"='"+catName+"' order by "+PM_Cat2;
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
+
+    public Cursor getIdOfDocType(String docName){
+        String str = "select "+Document_Id+" from "+Table_DocumentMaster+" where "+Document_DocName+" = '"+docName+"'";
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
+    public Cursor getUserDetails(){
+        String str = "select * from "+Table_Usermaster;
         return getWritableDatabase().rawQuery(str,null);
     }
 

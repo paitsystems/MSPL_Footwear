@@ -38,9 +38,8 @@ public class Constant {
     //ftp_directory = "SMVisit_Indus",
 
     //TODO: Check Ip Address
-    //public static final String ipaddress = "http://172.30.1.38/LNBTCK/service.svc";
-    public static final String ipaddress = "http://license.lnbinfotech.com/LNBTCK/service.svc";
-
+    // public static final String ipaddress = "http://172.30.1.38/MSPL/service.svc";
+    public static final String ipaddress = "http://license.lnbinfotech.com/MSPL/service.svc";
     //TODO: Check liveTestFlag 1-Live, 0-Test
     public static int liveTestFlag = 0;
 
@@ -50,7 +49,7 @@ public class Constant {
     static ProgressDialog pd;
 
     public static void showLog(String log) {
-        Log.d("Log", log);
+        Log.d("Log", ""+log);
     }
 
     public Constant(Activity activity) {

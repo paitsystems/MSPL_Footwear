@@ -1,28 +1,26 @@
-package com.lnbinfotech.msplfootwearex;
+package com.lnbinfotech.msplfootwear;
 
 import android.content.DialogInterface;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.view.Gravity;
 
-import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
-import com.lnbinfotech.msplfootwearex.constant.Constant;
-import com.lnbinfotech.msplfootwearex.db.DBHandler;
-import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
-import com.lnbinfotech.msplfootwearex.log.WriteLog;
-import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
-import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
+import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
+import com.lnbinfotech.msplfootwear.constant.Constant;
+import com.lnbinfotech.msplfootwear.db.DBHandler;
+import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
+import com.lnbinfotech.msplfootwear.log.WriteLog;
+import com.lnbinfotech.msplfootwear.model.StockInfoMasterClass;
+import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
@@ -208,15 +206,12 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         requests.refreshStockInfo(url, new ServerCallback() {
             @Override
             public void onSuccess(String result) {
-                AtomicInteger workInteger = new AtomicInteger(1);
-                new readJSON(workInteger,result).execute();
-                //showDia(1);
+
             }
 
             @Override
             public void onFailure(String result) {
-                constant.showPD();
-                showDia(2);
+
             }
         });
     }

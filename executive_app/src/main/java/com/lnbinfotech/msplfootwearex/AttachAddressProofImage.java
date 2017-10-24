@@ -28,7 +28,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
+
+import org.xml.sax.DTDHandler;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,6 +58,7 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
     public static int flag = 3;
     private Toast toast;
     private final int requestCode = 1;
+    private DBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,7 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
     }
 
     private void init() {
+        db = new DBHandler(AttachAddressProofImage.this);
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         imageView_addproof = (ImageView) findViewById(R.id.imageView_addproof);
@@ -107,6 +112,7 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
                 int position = spinner_addproof.getSelectedItemPosition();
                 Constant.showLog("positon:" + spinner_addproof.getSelectedItemPosition());
                 OptionsActivity.new_cus.setAddress_proof(String.valueOf(position));
+                setIdSpinnerValue();
 
                 OptionsActivity.new_cus.setAddress_proof_image(imagePath);
                 String filename = OptionsActivity.new_cus.getAddress_proof_image();
@@ -127,6 +133,7 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
                 int position_ = spinner_addproof.getSelectedItemPosition();
                 Constant.showLog("positon:" + spinner_addproof.getSelectedItemPosition());
                 OptionsActivity.new_cus.setAddress_proof(String.valueOf(position_));
+                setIdSpinnerValue();
 
                 Intent intent = new Intent(AttachAddressProofImage.this, NewCustomerEntryDetailFormActivity.class);
                 startActivity(intent);
@@ -258,6 +265,19 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
         String current_time = sdf.format(new Date());
         return current_time;
     }*/
+
+    private void setIdSpinnerValue(){
+        String value = spinner_addproof.getSelectedItem().toString();
+        Constant.showLog("setIdSpinnerValue():spinner_addproofvalue"+value);
+        Cursor cursor =  db.getIdOfDocType(value);
+
+        if(cursor.moveToFirst()){
+            do{
+               OptionsActivity.new_cus.setId_addressproof(cursor.getString(cursor.getColumnIndex("Id")));
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+    }
 
     private void set_value_attachAddressProof() {
         String address_proof = OptionsActivity.new_cus.getAddress_proof();

@@ -76,6 +76,15 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             case android.R.id.home:
                 showDia(0);
                 break;
+            case R.id.refresh:
+                startActivity(new Intent(getApplicationContext(), DataRefreshActivity.class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                break;
+            case R.id.logout:
+                break;
+            case R.id.report_error:
+                showDia(6);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

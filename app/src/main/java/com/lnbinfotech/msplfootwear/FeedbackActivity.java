@@ -25,15 +25,12 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.lnbinfotech.msplfootwear.constant.Constant;
-
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -59,7 +56,6 @@ public class FeedbackActivity extends AppCompatActivity implements AdapterView.O
     void init(){
         fedback_spinner = (Spinner) findViewById(R.id.fedback_spinner);
         ed_description = (EditText) findViewById(R.id.ed_description);
-
         bt_send = (AppCompatButton) findViewById(R.id.bt_send);
 
         imgv_img1 = (ImageView) findViewById(R.id.imgv_img1);
@@ -393,7 +389,6 @@ public class FeedbackActivity extends AppCompatActivity implements AdapterView.O
             case 6:
                 if (data != null && resultCode == RESULT_OK)
                 {
-
                     Uri selectedImage = data.getData();
 
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};

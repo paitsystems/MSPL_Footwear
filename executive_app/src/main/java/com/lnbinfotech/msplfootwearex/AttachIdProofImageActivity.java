@@ -28,6 +28,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 
 import java.io.File;
@@ -54,6 +55,7 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
     public static int flag = 4;
     private Toast toast;
     private final int requestCode = 1;
+    private DBHandler db;
 
 
     @Override
@@ -68,6 +70,7 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
     }
 
     private void init() {
+        db = new DBHandler(AttachIdProofImageActivity.this);
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         imageView_idproof = (ImageView) findViewById(R.id.imageView_idproof);
@@ -107,6 +110,7 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
                 int position = spinner_idproof.getSelectedItemPosition();
                 Constant.showLog("positon:" + spinner_idproof.getSelectedItemPosition());
                 OptionsActivity.new_cus.setId_proof(String.valueOf(position));
+                setIdSpinnerValue();
 
                 OptionsActivity.new_cus.setId_proof_image(imagePath);
                 String filename = OptionsActivity.new_cus.getId_proof_image();
@@ -127,6 +131,7 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
                 int position_ = spinner_idproof.getSelectedItemPosition();
                 Constant.showLog("positon:" + spinner_idproof.getSelectedItemPosition());
                 OptionsActivity.new_cus.setId_proof(String.valueOf(position_));
+                setIdSpinnerValue();
 
                 Intent i = new Intent(AttachIdProofImageActivity.this, NewCustomerEntryDetailFormActivity.class);
                 startActivity(i);
@@ -257,6 +262,19 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
         String current_time = sdf.format(new Date());
         return current_time;
     }*/
+
+    private void setIdSpinnerValue(){
+        String value = spinner_idproof.getSelectedItem().toString();
+        Constant.showLog("setIdSpinnerValue():spinner_idproofvalue"+value);
+        Cursor cursor =  db.getIdOfDocType(value);
+
+        if(cursor.moveToFirst()){
+            do{
+                OptionsActivity.new_cus.setId_idproof(cursor.getString(cursor.getColumnIndex("Id")));
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+    }
 
     private void set_value_attachIdProof() {
 

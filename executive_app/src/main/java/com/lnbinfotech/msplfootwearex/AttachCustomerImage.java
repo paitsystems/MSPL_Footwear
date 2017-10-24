@@ -89,6 +89,8 @@ public class AttachCustomerImage extends AppCompatActivity implements View.OnCli
         switch (view.getId()) {
             case R.id.btn_next:
                 OptionsActivity.new_cus.setCus_image(imagePath);
+
+
                 String filename = OptionsActivity.new_cus.getCus_image();
                 if (filename == null) {
                     toast.setText("Please, attach customer image.");

@@ -96,9 +96,10 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             constant.showPD();
             final String mobNo = ed_mobNo.getText().toString();
             final String imeino = new Constant(getApplicationContext()).getIMEINo();
+
             String _mobNo = URLEncoder.encode(mobNo, "UTF-8");
             String _imeino = URLEncoder.encode(imeino, "UTF-8");
-            String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"&IMEINo="+_imeino;
+            String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"&IMEINo="+_imeino+"&type=E";
             Constant.showLog(url);
             writeLog("requestOTP_" + url);
 
@@ -120,10 +121,11 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                         writeLog("requestOTP_Fail_" + response);
                     }
                 }
+
                 @Override
                 public void onFailure(String result) {
                     constant.showPD();
-                    writeLog("requestOTP_VolleyError_");
+                    writeLog("requestOTP_VolleyError_"+result);
                 }
             });
         }catch (Exception e){

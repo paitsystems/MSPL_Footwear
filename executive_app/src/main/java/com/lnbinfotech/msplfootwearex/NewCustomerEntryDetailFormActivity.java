@@ -28,6 +28,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.services.UploadImageService;
@@ -50,6 +51,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
     private AppCompatButton bt_save;
     private ImageView imageView_edit, imageView_cus_edit, imageView_address_edit, imageView_id_edit, imageView_gstpan_edit, imageView_cus_image, imageView_addproof, imageView_idproof, imageView_pan_img, imageView_gst_img;
     private Constant constant;
+    private DBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +74,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
     }
 
     private void init() {
-
+        db = new DBHandler(NewCustomerEntryDetailFormActivity.this);
         ed_cus_name = (EditText) findViewById(R.id.ed_cus_name);
         ed_mobile_no = (EditText) findViewById(R.id.ed_mobile_no);
         ed_email_id = (EditText) findViewById(R.id.ed_emailid);
@@ -435,7 +437,29 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
             String _pan_no = URLEncoder.encode(pan_no, "UTF-8");
             String _panno_img = URLEncoder.encode(panno_img, "UTF-8");
 
-            if(AttachGSTnoPANnoImageActivity.radio_flag == 1) {
+            String custId = "", BranchId = "", District = "", Taluka = "", CityId = "", AreaId = "", HOCode = "";
+            Cursor cursor = db.getUserDetails();
+            if (cursor.moveToFirst()) {
+                do {
+                    custId = cursor.getString(cursor.getColumnIndex("CustId"));
+                    BranchId = cursor.getString(cursor.getColumnIndex("BranchId"));
+                    District = cursor.getString(cursor.getColumnIndex("District"));
+                    Taluka = cursor.getString(cursor.getColumnIndex("Taluka"));
+                    CityId = cursor.getString(cursor.getColumnIndex("CityId"));
+                    AreaId = cursor.getString(cursor.getColumnIndex("AreaId"));
+                    HOCode = cursor.getString(cursor.getColumnIndex("HOCode"));
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            String _custId = URLEncoder.encode(custId, "UTF-8");
+            String _BranchId = URLEncoder.encode(BranchId, "UTF-8");
+            String _District = URLEncoder.encode(District, "UTF-8");
+            String _Taluka = URLEncoder.encode(Taluka, "UTF-8");
+            String _CityId = URLEncoder.encode(CityId, "UTF-8");
+            String _AreaId = URLEncoder.encode(AreaId, "UTF-8");
+            String _HOCode = URLEncoder.encode(HOCode, "UTF-8");
+
+            /*if(AttachGSTnoPANnoImageActivity.radio_flag == 1) {
                 url = Constant.ipaddress + "/SaveCustomerDetail?custname="+_cust_name+"&mobno="+_mob_no+"&email="+_email_id+"&address="+_address+"&custimg="+_cust_img+"&addressproof="+_address_proof+"&addressproofimg="+_address_proof_img+"&idproof="+_id_proof+"&idproofimg="+_id_proof_img+"&GSTINNo="+_gst_no+"&GSTINimg="+_gstno_img;
                 Constant.showLog(url);
                 writeLog("saveData():url called" + url);
@@ -443,7 +467,14 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                 url = Constant.ipaddress + "/SaveCustomerDetail?custname="+_cust_name+"&mobno="+_mob_no+"&email="+_email_id+"&address="+_address+"&custimg="+_cust_img+"&addressproof="+_address_proof+"&addressproofimg="+_address_proof_img+"&idproof="+_id_proof+"&idproofimg="+_id_proof_img+"&PANNo="+_pan_no+"&PANimg="+_panno_img;
                 Constant.showLog(url);
                 writeLog("saveData():url called" + url);
-            }
+            }*/
+
+
+            url = Constant.ipaddress + "/SaveCustomerDetail?custname=" + _cust_name + "&mobno=" + _mob_no + "&email=" + _email_id + "&address=" + _address + "&custimg="
+                    + _cust_img + "&addressproof=" + _address_proof + "&addressproofimg=" + _address_proof_img + "&idproof=" + _id_proof + "&idproofimg=" + _id_proof_img + "&GSTINNo=" + _gst_no + "&GSTINimg=" + _gstno_img + "&PANNo=" + _pan_no + "&PANimg=" + _panno_img
+                    + "&custid=" + _custId + "&Branchid=" + _BranchId + "&district=" + _District + "&taluka=" + _Taluka + "&cityid=" + _CityId + "&areaid=" + _AreaId + "&HOCode=" + _HOCode;
+            Constant.showLog(url);
+            writeLog("saveData():url called" + url);
 
             VolleyRequests requests = new VolleyRequests(NewCustomerEntryDetailFormActivity.this);
             requests.saveCustomerDetail(url, new ServerCallback() {
