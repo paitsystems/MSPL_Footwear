@@ -28,7 +28,7 @@ import java.util.List;
 public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
-    public static final int Database_Version = 2;
+    public static final int Database_Version = 1;
 
     public static final String Table_Customermaster = "CustomerMaster";
     public static final String CM_RetailCustID = "CustID";
@@ -160,7 +160,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String Document_ForWhom = "ForWhom";
     public static final String Document_Compulsary = "Compulsary";
 
-    public static final String Table_Usermaster = "User";
+    public static final String Table_Usermaster = "UserMaster";
     public static final String UM_RetailCustID = "CustID";
     public static final String UM_Name = "Name";
     public static final String UM_Address = "Address";
@@ -217,10 +217,10 @@ public class DBHandler extends SQLiteOpenHelper {
             City_Auto + " int," + City_Id + " int," + City_City + " text," + City_Stateid + " int)";
 
     String create_compamy_master = "create table if not exists " + Table_CompanyMaster + "(" + Company_Id + " int," + Company_Name + " text,"
-            + Company_Initial + " text," + Company_Pan + " text," + Company_DisplayCmp + " text," + Company_GSTNo + " text" + Company_HOCode + "text)";
+            + Company_Initial + " text," + Company_Pan + " text," + Company_DisplayCmp + " text," + Company_GSTNo + " text," + Company_HOCode + "text)";
 
     String create_bank_master = "create table if not exists " + Table_BankMaster + "(" + Bank_Id + " int," + Bank_BranchId + " int," + Bank_Name + " text,"
-            + Bank_AccountNo + " text," + Bank_Status + " text," + Bank_IFSC + " text" + Bank_MICR + "text," + Bank_CustType + " text," + Bank_HoCode + " text)";
+            + Bank_AccountNo + " text," + Bank_Status + " text," + Bank_IFSC + " text," + Bank_MICR + "text," + Bank_CustType + " text," + Bank_HoCode + " text)";
 
     String create_bank_branch_master = "create table if not exists " + Table_BankBranchMaster + "(" + Branch_AutoId + " int," + Branch_Id + " int,"
             + Branch_Branch + " text," + Branch_CustId + " int," + Branch_AccountNo + " text," + Branch_CBankId + " int," + Branch_CBranch + " text)";
@@ -265,10 +265,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if(oldVersion<newVersion){
-            Constant.showLog(create_user_master);
-            db.execSQL(create_user_master);
-        }
     }
 
     public void addCustomerDetail(CustomerDetailClass cust) {
@@ -601,6 +597,12 @@ public class DBHandler extends SQLiteOpenHelper {
     public void deleteTable(String tableName) {
         getWritableDatabase().execSQL("delete from " + tableName);
     }
+
+    public Cursor getFinalProduct(String cat2,String cat9) {
+        String str = "select distinct "+PM_Finalprod +" from "+ Table_ProductMaster+" where "+PM_Cat2+"='"+cat2+"' and "+PM_Cat9+"='"+cat9+"'";
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
 }
 
 

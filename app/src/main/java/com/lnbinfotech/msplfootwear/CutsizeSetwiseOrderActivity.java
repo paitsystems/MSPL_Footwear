@@ -2,6 +2,8 @@ package com.lnbinfotech.msplfootwear;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -10,13 +12,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.lnbinfotech.msplfootwear.adapters.CutsizewiseViewPagerAdapter;
 import com.lnbinfotech.msplfootwear.constant.Constant;
+import com.lnbinfotech.msplfootwear.fragments.GentsCategoryFragment;
+import com.lnbinfotech.msplfootwear.fragments.HawaiNEvaCategoryFragment;
+import com.lnbinfotech.msplfootwear.fragments.LadiesNBoysCategoryFragment;
+import com.lnbinfotech.msplfootwear.fragments.SchoolShoesCategoryFragment;
 
 public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private TabLayout tabLayout;
+    private ViewPager pager;
+    private CutsizewiseViewPagerAdapter adapter;
     private Constant constant;
     private Toast toast;
-    Button btn_gents, btn_ladiesnboys, btn_hawaineva, btn_schoolshoe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +38,8 @@ public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements Vi
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        btn_gents.setOnClickListener(this);
-        btn_ladiesnboys.setOnClickListener(this);
-        btn_hawaineva.setOnClickListener(this);
-        btn_schoolshoe.setOnClickListener(this);
-
+        setViewPager();
+        tabLayout.setupWithViewPager(pager);
     }
 
     @Override
@@ -61,13 +67,20 @@ public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements Vi
         return super.onOptionsItemSelected(item);
     }
 
+    private void setViewPager(){
+        adapter = new CutsizewiseViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new GentsCategoryFragment(),"GENTS");
+        adapter.addFragment(new LadiesNBoysCategoryFragment(),"LADIES & BOYS");
+        adapter.addFragment(new HawaiNEvaCategoryFragment(),"HAWAI & EVA");
+        adapter.addFragment(new SchoolShoesCategoryFragment(),"SCHOOL SHOES");
+        pager.setAdapter(adapter);
+    }
+
     private void init() {
-        toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        btn_gents = (Button) findViewById(R.id.btn_gents);
-        btn_ladiesnboys = (Button) findViewById(R.id.btn_ladiesnboys);
-        btn_hawaineva = (Button) findViewById(R.id.btn_hawaineva);
-        btn_schoolshoe = (Button) findViewById(R.id.btn_schoolshoe);
+        toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER,0,0);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        pager = (ViewPager) findViewById(R.id.pager);
     }
 
     private void showDia(int a) {

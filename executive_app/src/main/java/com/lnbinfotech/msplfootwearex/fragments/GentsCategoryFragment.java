@@ -1,5 +1,6 @@
 package com.lnbinfotech.msplfootwearex.fragments;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.lnbinfotech.msplfootwearex.AddToCartActivity;
 import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.adapters.GentsCategoryListAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
@@ -29,10 +31,11 @@ public class GentsCategoryFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gents_category,container,false);
         listView = (ListView) view.findViewById(R.id.listView);
         db = new DBHandler(getContext());
+
         setData();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -40,6 +43,11 @@ public class GentsCategoryFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 GentsCategoryClass getClass = (GentsCategoryClass) adapter.getItem(i);
                 Constant.showLog(getClass.getCategoryName());
+                Intent intent = new Intent(getContext(), AddToCartActivity.class);
+                intent.putExtra("cat9","Gents");
+                intent.putExtra("cat2",getClass.getCategoryName());
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.enter,R.anim.exit);
             }
         });
 

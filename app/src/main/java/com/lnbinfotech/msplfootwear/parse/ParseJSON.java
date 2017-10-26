@@ -47,6 +47,7 @@ public class ParseJSON {
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
+                db.deleteTable(DBHandler.Table_Usermaster);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     UserClass userClass = new UserClass();
                     userClass.setCustID(jsonArray.getJSONObject(i).getInt("retailCustID"));
@@ -103,7 +104,8 @@ public class ParseJSON {
         return list;
     }
 
-    public void parseAreaMaster(){
+    public int parseAreaMaster(){
+        int ret = 0;
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
@@ -117,14 +119,17 @@ public class ParseJSON {
                     db.addAreaMaster(areaClass);
                 }
                 db.close();
+                ret = 1;
             }
         }catch (Exception e){
             e.printStackTrace();
             writeLog("parseAreaMaster_"+e.getMessage());
         }
+        return ret;
     }
 
-    public void parseCityMaster(){
+    public int parseCityMaster(){
+        int ret = 0;
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
@@ -138,14 +143,17 @@ public class ParseJSON {
                     db.addCityMaster(cityClass);
                 }
                 db.close();
+                ret = 1;
             }
         }catch (Exception e){
             e.printStackTrace();
             writeLog("parseCityMaster_"+e.getMessage());
         }
+        return ret;
     }
 
-    public void parseHOMaster(){
+    public int parseHOMaster(){
+        int ret = 0;
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
@@ -161,14 +169,17 @@ public class ParseJSON {
                     db.addHOMaster(hoClass);
                 }
                 db.close();
+                ret = 1;
             }
         }catch (Exception e){
             e.printStackTrace();
             writeLog("parseHOMaster_"+e.getMessage());
         }
+        return ret;
     }
 
-    public void parseEmployeeMaster(){
+    public int parseEmployeeMaster(){
+        int ret = 0;
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
@@ -190,11 +201,13 @@ public class ParseJSON {
                     db.addEmployeeMaster(empClass);
                 }
                 db.close();
+                ret = 1;
             }
         }catch (Exception e){
             e.printStackTrace();
             writeLog("parseEmployeeMaster_"+e.getMessage());
         }
+        return ret;
     }
 
     public void parseStockInfo(){
@@ -225,7 +238,8 @@ public class ParseJSON {
         }
     }
 
-    public void parseProductMaster(){
+    public int parseProductMaster(){
+        int ret = 0;
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
@@ -258,14 +272,18 @@ public class ParseJSON {
                     prodClass.setCat9(jsonArray.getJSONObject(i).getString("Cat9"));
                     db.addProductMaster(prodClass);
                 }
+                db.close();
+                ret = 1;
             }
         }catch (Exception e){
             e.printStackTrace();
             writeLog("parseProductMaster_"+e.getMessage());
         }
+        return ret;
     }
 
-    public void parseCustomerMaster(){
+    public int parseCustomerMaster(){
+        int ret = 0;
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
@@ -293,99 +311,121 @@ public class ParseJSON {
                     custClass.setPIN(jsonArray.getJSONObject(i).getString("PIN"));
                     db.addCustomerMaster(custClass);
                 }
+                db.close();
+                ret = 1;
             }
         }catch (Exception e){
             e.printStackTrace();
             writeLog("parseCustomerMaster_"+e.getMessage());
         }
+        return ret;
     }
 
-    public void parseCompanyMaster(){
+    public int parseCompanyMaster(){
+        int ret = 0;
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 db.deleteTable(DBHandler.Table_CompanyMaster);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     CompanyMasterClass companyClass = new CompanyMasterClass();
-                    companyClass.setCompanyId(jsonArray.getJSONObject(i).getString("Id"));
-                    companyClass.setCompanyName(jsonArray.getJSONObject(i).getString("Name"));
-                    companyClass.setCompanyInitial(jsonArray.getJSONObject(i).getString("Initial"));
-                    companyClass.setCompanyPan(jsonArray.getJSONObject(i).getString("Pan"));
+                    companyClass.setCompanyId(jsonArray.getJSONObject(i).getString("Company_id"));
+                    companyClass.setCompanyName(jsonArray.getJSONObject(i).getString("Company_Name"));
+                    companyClass.setCompanyInitial(jsonArray.getJSONObject(i).getString("Company_Initial"));
+                    companyClass.setCompanyPan(jsonArray.getJSONObject(i).getString("Company_Pan"));
                     companyClass.setDisplayCmp(jsonArray.getJSONObject(i).getString("DisplayCmp"));
                     companyClass.setGSTNo(jsonArray.getJSONObject(i).getString("GSTNo"));
                     companyClass.setHOCode(jsonArray.getJSONObject(i).getString("HOCode"));
                     db.addCompanyMaster(companyClass);
                 }
+                db.close();
+                ret = 1;
             }
         }catch (Exception e){
             e.printStackTrace();
             writeLog("parseCompanyMaster_"+e.getMessage());
         }
+        return ret;
     }
-    public void parseBankMaster(){
+
+    public int parseBankMaster(){
+        int ret = 0;
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 db.deleteTable(DBHandler.Table_BankMaster);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     BankMasterClass bankClass = new BankMasterClass();
-                    bankClass.setBankId(jsonArray.getJSONObject(i).getString("Id"));
-                    bankClass.setBranchId(jsonArray.getJSONObject(i).getString("BranchId"));
-                    bankClass.setBankName(jsonArray.getJSONObject(i).getString("Name"));
-                    bankClass.setAccountNo(jsonArray.getJSONObject(i).getString("AccountNo"));
-                    bankClass.setStatus(jsonArray.getJSONObject(i).getString("Status"));
+                    bankClass.setBankId(jsonArray.getJSONObject(i).getString("bankId"));
+                    bankClass.setBranchId(jsonArray.getJSONObject(i).getString("branchid"));
+                    bankClass.setBankName(jsonArray.getJSONObject(i).getString("bankName"));
+                    bankClass.setAccountNo(jsonArray.getJSONObject(i).getString("accountNo"));
+                    bankClass.setStatus(jsonArray.getJSONObject(i).getString("status"));
                     bankClass.setIFSC(jsonArray.getJSONObject(i).getString("IFSC"));
                     bankClass.setMICR(jsonArray.getJSONObject(i).getString("MICR"));
                     bankClass.setCustType(jsonArray.getJSONObject(i).getString("CustType"));
-                    bankClass.setHoCode(jsonArray.getJSONObject(i).getString("HOCode"));
+                    bankClass.setHoCode(jsonArray.getJSONObject(i).getString("HoCode"));
                     db.addBankMaster(bankClass);
                 }
+                db.close();
+                ret = 1;
             }
         }catch (Exception e){
             e.printStackTrace();
             writeLog("parseBankMaster_"+e.getMessage());
         }
+        return ret;
     }
 
-    public void parseBankBranchMaster(){
+    public int parseBankBranchMaster(){
+        int ret = 0;
         try{
             JSONArray jsonArray = new JSONArray(json);
-            db.deleteTable(DBHandler.Table_BankBranchMaster);
-            for(int i = 0; i < jsonArray.length(); i++){
-                BankBranchMasterClass branchClass = new BankBranchMasterClass();
-                branchClass.setAutoid(jsonArray.getJSONObject(i).getString("AutoId"));
-                branchClass.setId(jsonArray.getJSONObject(i).getString("Id"));
-                branchClass.setBranch(jsonArray.getJSONObject(i).getString("Branch"));
-                branchClass.setCustid(jsonArray.getJSONObject(i).getString("CustId"));
-                branchClass.setAccountNo(jsonArray.getJSONObject(i).getString("AccountNo"));
-                branchClass.setcBankid(jsonArray.getJSONObject(i).getString("CBankId"));
-                branchClass.setcBranch(jsonArray.getJSONObject(i).getString("CBranch"));
-                db.addBankBranchMaster(branchClass);
+            if (jsonArray.length() >= 1) {
+                db.deleteTable(DBHandler.Table_BankBranchMaster);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    BankBranchMasterClass branchClass = new BankBranchMasterClass();
+                    branchClass.setAutoid(jsonArray.getJSONObject(i).getString("Autoid"));
+                    branchClass.setId(jsonArray.getJSONObject(i).getString("id"));
+                    branchClass.setBranch(jsonArray.getJSONObject(i).getString("Branch"));
+                    branchClass.setCustid(jsonArray.getJSONObject(i).getString("Custid"));
+                    branchClass.setAccountNo(jsonArray.getJSONObject(i).getString("AccountNo"));
+                    branchClass.setcBankid(jsonArray.getJSONObject(i).getString("Custid"));
+                    branchClass.setcBranch(jsonArray.getJSONObject(i).getString("CBranch"));
+                    db.addBankBranchMaster(branchClass);
+                }
+                db.close();
+                ret = 1;
             }
-
         }catch (Exception e){
             e.printStackTrace();
             writeLog("parseBankBranchMaster_" + e.getMessage());
         }
+        return ret;
     }
 
-    public void parseDocumentMaster(){
+    public int parseDocumentMaster(){
+        int ret = 0;
         try{
             JSONArray jsonArray = new JSONArray(json);
             db.deleteTable(DBHandler.Table_DocumentMaster);
-            for(int i = 0; i < jsonArray.length(); i++){
-                DocumentMasterClass documentClass = new DocumentMasterClass();
-                documentClass.setId(jsonArray.getJSONObject(i).getString("Id"));
-                documentClass.setDocName(jsonArray.getJSONObject(i).getString("DocName"));
-                documentClass.setForWhom(jsonArray.getJSONObject(i).getString("ForWhom"));
-                documentClass.setCompulsary(jsonArray.getJSONObject(i).getString("Compulsary"));
-                db.addDocumentMaster(documentClass);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    DocumentMasterClass documentClass = new DocumentMasterClass();
+                    documentClass.setId(jsonArray.getJSONObject(i).getString("Id"));
+                    documentClass.setDocName(jsonArray.getJSONObject(i).getString("DocName"));
+                    documentClass.setForWhom(jsonArray.getJSONObject(i).getString("ForWhom"));
+                    documentClass.setCompulsary(jsonArray.getJSONObject(i).getString("Compulsary"));
+                    db.addDocumentMaster(documentClass);
+                }
+                db.close();
+                ret = 1;
             }
-
         }catch (Exception e){
             e.printStackTrace();
             writeLog("parseDocumentMaster_" + e.getMessage());
         }
+        return ret;
     }
 
     private void writeLog(String _data){

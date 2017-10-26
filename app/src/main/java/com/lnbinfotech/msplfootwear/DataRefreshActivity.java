@@ -324,7 +324,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
 
     private void loadDocumentMaster(){
         db.createDocumentMaster();
-        String url = Constant.ipaddress+"/GetDocumentMaster?Id==0";
+        String url = Constant.ipaddress+"/GetDocumentMaster?Id=0";
         Constant.showLog(url);
         writeLog("loadDocumentMaster_" + url);
         constant.showPD();
@@ -342,7 +342,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 showDia(2);
             }
         });
-
     }
 
     private void init() {
