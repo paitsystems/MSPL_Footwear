@@ -114,9 +114,11 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
                 String filename = "";
                 if (_flag == 0) {
                     OptionsActivity.new_cus.setPan_no_image(imagePath);
+                    OptionsActivity.new_cus.setGst_no_image("NA");
                     OptionsActivity.new_cus.setGstpan_img(imagePath);
                     filename = OptionsActivity.new_cus.getPan_no_image();
                 } else if (_flag == 1) {
+                    OptionsActivity.new_cus.setPan_no_image("NA");
                     OptionsActivity.new_cus.setGst_no_image(imagePath);
                     OptionsActivity.new_cus.setGstpan_img(imagePath);
                     filename = OptionsActivity.new_cus.getGst_no_image();
@@ -296,9 +298,6 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
             writeLog("FileNotFoundException and IOException found:"+f);
         }
     }
-
-
-
     private Bitmap get_Image_from_sd_card(String filename){
         Bitmap bitmap = null;
         File imgfile = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + filename);
@@ -324,9 +323,8 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
         if (_flag == 0) {
             value = "PAN CARD";
             Constant.showLog("setIdValue():panvalue:"+value);
-
         } else if (_flag == 1) {
-            value = "GST NO";
+            value = "GSTIN";
             Constant.showLog("setIdValue():gstvalue:"+value);
         }
         Cursor cursor =  db.getIdOfDocType(value);
@@ -336,7 +334,6 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
             }while (cursor.moveToNext());
         }
         cursor.close();
-
     }
 
     private void gstpan_no_value() {
@@ -344,15 +341,16 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
             String gst_no = ed_gstno.getText().toString();
             Constant.showLog("gst_no: " + gst_no);
             OptionsActivity.new_cus.setGst_no(gst_no);
+            OptionsActivity.new_cus.setPan_no("NA");
         } else if (radio_flag == 2) {
             String pan_no = ed_panno.getText().toString();
             Constant.showLog("pan_no: " + pan_no);
+            OptionsActivity.new_cus.setGst_no("NA");
             OptionsActivity.new_cus.setPan_no(pan_no);
         }
     }
 
     private void set_value_attachgstpan_no() {
-
         if (radio_flag == 1) {
             gst_lay.setVisibility(View.VISIBLE);
             pan_lay.setVisibility(View.GONE);
@@ -363,7 +361,6 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
             ed_gstno.setText(gst);
             set_value_attachGstProofImage();
         } else if (radio_flag == 2) {
-
             gst_lay.setVisibility(View.GONE);
             pan_lay.setVisibility(View.VISIBLE);
             rdo_pan.setChecked(true);
@@ -468,7 +465,6 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
     private void showPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Do you want to clear this data");
-
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

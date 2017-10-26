@@ -50,6 +50,8 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
             case R.id.btn_ledger_report:
                 break;
             case R.id.btn_feedback:
+                startActivity(new Intent(getApplicationContext(),FeedbackActivity.class));
+                overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
         }
     }

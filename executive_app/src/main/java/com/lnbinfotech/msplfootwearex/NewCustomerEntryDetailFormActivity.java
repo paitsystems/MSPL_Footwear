@@ -8,13 +8,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,21 +30,20 @@ import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
-import com.lnbinfotech.msplfootwearex.services.UploadImageService;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText ed_cus_name, ed_mobile_no, ed_email_id, ed_address, ed_gstno, ed_panno;
     private Spinner spinner_addproof, spinner_idproof;
-    private String[] add_proof = {"Aadhaar", "Light bill", "Aggreement copy", "Index 0"};
-    private String[] id_proof = {"Aadhaar", "Pan card", "Driving license", "Election card"};
-    private ArrayAdapter<String> adapter_address;
-    private ArrayAdapter<String> adapter_id;
+    private List<String> add_proof;
+    private ArrayAdapter<String> adapter_address, adapter_id;
     private RadioButton rdo_gst, rdo_pan;
     private LinearLayout gst_lay, pan_lay;
     private AppCompatButton bt_save;
@@ -103,11 +101,14 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
         spinner_addproof = (Spinner) findViewById(R.id.spinner_addproof);
         spinner_idproof = (Spinner) findViewById(R.id.spinner_idproof);
 
-        adapter_address = new ArrayAdapter<String>(this, R.layout.address_list, add_proof);
+        add_proof = new ArrayList<>();
+        setDocList();
+
+        adapter_address = new ArrayAdapter<>(this, R.layout.address_list, add_proof);
         spinner_addproof.setAdapter(adapter_address);
         spinner_addproof.setEnabled(false);
 
-        adapter_id = new ArrayAdapter<String>(this, R.layout.id_list, id_proof);
+        adapter_id = new ArrayAdapter<>(this, R.layout.id_list, add_proof);
         spinner_idproof.setAdapter(adapter_id);
         spinner_idproof.setEnabled(false);
 
@@ -123,10 +124,9 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_save:
-                showPopup();
+                showPopup(0);
                 writeLog("all data succcessfully saved from NewCustomerEntryDetailFormActivity:");
                 break;
-
             case R.id.imageView_edit:
                 Intent i = new Intent(NewCustomerEntryDetailFormActivity.this, NewCustomerEntryActivity.class);
                 startActivity(i);
@@ -171,7 +171,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
 
     @Override
     public void onBackPressed() {
-        showPopup();
+        showPopup(3);
     }
 
     @Override
@@ -184,10 +184,20 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
         switch (item.getItemId()) {
             case android.R.id.home:
                 //new Constant(NewCustomerEntryDetailFormActivity.this).doFinish();
-                showPopup();
+                showPopup(3);
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setDocList(){
+        Cursor cursor = db.getDocName();
+        if(cursor.moveToFirst()){
+            do{
+                add_proof.add(cursor.getString(cursor.getColumnIndex(DBHandler.Document_DocName)));
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
     }
 
     private void set_value_newCusEntry() {
@@ -422,21 +432,20 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
             String _gstno_img = URLEncoder.encode(OptionsActivity.new_cus.getGst_no_image(), "UTF-8");
             String _pan_no = URLEncoder.encode(OptionsActivity.new_cus.getPan_no(), "UTF-8");
             String _panno_img = URLEncoder.encode(OptionsActivity.new_cus.getPan_no_image(), "UTF-8");
-
-            String custId = "", BranchId = "", District = "", Taluka = "", CityId = "", AreaId = "", HOCode = "";
-            Cursor cursor = db.getUserDetails();
+            String custId = "1", BranchId = "1", District = "Pune", Taluka = "Pune", CityId = "1", AreaId = "1", HOCode = "1";
+            /*Cursor cursor = db.getUserDetails();
             if (cursor.moveToFirst()) {
                 do {
-                    custId = cursor.getString(cursor.getColumnIndex("CustId"));
-                    BranchId = cursor.getString(cursor.getColumnIndex("BranchId"));
-                    District = cursor.getString(cursor.getColumnIndex("District"));
-                    Taluka = cursor.getString(cursor.getColumnIndex("Taluka"));
-                    CityId = cursor.getString(cursor.getColumnIndex("CityId"));
-                    AreaId = cursor.getString(cursor.getColumnIndex("AreaId"));
-                    HOCode = cursor.getString(cursor.getColumnIndex("HOCode"));
+                    custId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_RetailCustID));
+                    BranchId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_BranchId));
+                    District = cursor.getString(cursor.getColumnIndex(DBHandler.UM_District));
+                    Taluka = cursor.getString(cursor.getColumnIndex(DBHandler.UM_Taluka));
+                    CityId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_CityId));
+                    AreaId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_AreaId));
+                    HOCode = cursor.getString(cursor.getColumnIndex(DBHandler.UM_HOCode));
                 } while (cursor.moveToNext());
             }
-            cursor.close();
+            cursor.close();*/
             String _custId = URLEncoder.encode(custId, "UTF-8");
             String _BranchId = URLEncoder.encode(BranchId, "UTF-8");
             String _District = URLEncoder.encode(District, "UTF-8");
@@ -456,76 +465,119 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                 writeLog("saveData():url called" + url);
             }*/
 
-
             url = Constant.ipaddress + "/SaveCustomerDetail?custname=" + _cust_name + "&mobno=" + _mob_no + "&email=" + _email_id + "&address=" + _address + "&custimg="
                     + _cust_img + "&addressproof=" + _address_proof + "&addressproofimg=" + _address_proof_img + "&idproof=" + _id_proof + "&idproofimg=" + _id_proof_img + "&GSTINNo=" + _gst_no + "&GSTINimg=" + _gstno_img + "&PANNo=" + _pan_no + "&PANimg=" + _panno_img
                     + "&custid=" + _custId + "&Branchid=" + _BranchId + "&district=" + _District + "&taluka=" + _Taluka + "&cityid=" + _CityId + "&areaid=" + _AreaId + "&HOCode=" + _HOCode + "&data="+data;
             Constant.showLog(url);
-            writeLog("saveData():url called" + url);
+            writeLog("saveData_url_called" + url);
 
             VolleyRequests requests = new VolleyRequests(NewCustomerEntryDetailFormActivity.this);
             requests.saveCustomerDetail(url, new ServerCallback() {
                 @Override
                 public void onSuccess(String result) {
-                    constant.showPD();
-                    Constant.showLog("Volly request success");
-                    writeLog("saveData():Volley_success");
+                    showPopup(1);
                 }
-
                 @Override
                 public void onFailure(String result) {
                     constant.showPD();
-                    writeLog("saveData():Volley_error");
+                    showPopup(2);
+                    writeLog("saveData_"+result);
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
-            writeLog("saveData():customer data save exception");
+            constant.showPD();
+            showPopup(2);
+            writeLog("saveData_"+e.getMessage());
         }
     }
 
-    public void showPopup() {
-
+    public void showPopup(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Do you want to save data?");
+        builder.setCancelable(false);
+        if(a==0) {
+            builder.setMessage("Do you want to save data?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    saveData();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+        }else if(a==1){
+            builder.setMessage("Data Saved Successfully");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    NewCustomerEntryActivity.flag = 1;
+                    AttachCustomerImage.flag = 2;
+                    AttachAddressProofImage.flag = 3;
+                    AttachIdProofImageActivity.flag = 4;
+                    AttachGSTnoPANnoImageActivity.flag = 5;
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                saveData();
-                Toast toast = Toast.makeText(getApplicationContext(), "Data saved successfully..", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
+                    Intent intent1 = new Intent("test");//UploadImageService.BROADCAST
+                    sendBroadcast(intent1);
+                    writeLog("UploadImageService_onHandleIntent_broadcastSend");
 
-                Intent intent1 = new Intent("test");//UploadImageService.BROADCAST
-                sendBroadcast(intent1);
-                writeLog("UploadImageService_onHandleIntent_broadcastSend");
+                    constant.showPD();
+                    Constant.showLog("Volly request success");
+                    writeLog("saveData():Volley_success");
 
-                NewCustomerEntryActivity.flag = 1;
-                AttachCustomerImage.flag = 2;
-                AttachAddressProofImage.flag = 3;
-                AttachIdProofImageActivity.flag = 4;
-                AttachGSTnoPANnoImageActivity.flag = 5;
-                Intent in = new Intent(NewCustomerEntryDetailFormActivity.this, OptionsActivity.class);
-                startActivity(in);
-                new Constant(NewCustomerEntryDetailFormActivity.this).doFinish();
-                //finish();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-
+                    finish();
+                    Intent in = new Intent(NewCustomerEntryDetailFormActivity.this, OptionsActivity.class);
+                    startActivity(in);
+                    overridePendingTransition(R.anim.left_to_right,R.anim.right_to_left);
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+        }else if(a==2) {
+            builder.setMessage("Error While Saving Data");
+            builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    saveData();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+        }else if (a==3){
+            builder.setMessage("Do you want to clear this data");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent in = new Intent(NewCustomerEntryDetailFormActivity.this, OptionsActivity.class);
+                    OptionsActivity.new_cus = null;
+                    startActivity(in);
+                    new Constant(NewCustomerEntryDetailFormActivity.this).doFinish();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+        }
         builder.create().show();
     }
 
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "NewCustomerEntryDetailFormActivity_" + _data);
     }
-
 
 }
 

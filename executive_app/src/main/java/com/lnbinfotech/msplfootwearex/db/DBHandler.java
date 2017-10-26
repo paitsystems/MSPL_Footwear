@@ -577,7 +577,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str,null);
     }
 
-
     public Cursor getIdOfDocType(String docName){
         String str = "select "+Document_Id+" from "+Table_DocumentMaster+" where "+Document_DocName+" = '"+docName+"'";
         return getWritableDatabase().rawQuery(str,null);

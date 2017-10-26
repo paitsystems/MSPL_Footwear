@@ -46,7 +46,6 @@ import java.util.Locale;
 
 public class AttachIdProofImageActivity extends AppCompatActivity implements View.OnClickListener {
     private Spinner spinner_idproof;
-    private String[] id_proof = {"Aadhaar", "Pan card", "Driving license", "Election card"};
     private ArrayAdapter<String> adapter_id;
     private ImageView imageView_idproof;
     private String imagePath;
@@ -272,7 +271,7 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
         Cursor cursor = db.getDocName();
         if(cursor.moveToFirst()){
             do{
-                doc_list.add(cursor.getString(cursor.getColumnIndex("DocName")));
+                doc_list.add(cursor.getString(cursor.getColumnIndex(DBHandler.Document_DocName)));
             }while (cursor.moveToNext());
         }
         cursor.close();

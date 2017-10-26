@@ -6,11 +6,11 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -38,6 +38,7 @@ import java.net.URLEncoder;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class FeedbackActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private Spinner fedback_spinner;
@@ -482,9 +483,8 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public String currentDateFormat() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HH_mm");
-        String current_time = sdf.format(new Date());
-        return current_time;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
+        return sdf.format(new Date());
     }
 
     private void saveFeedbackdetail() {

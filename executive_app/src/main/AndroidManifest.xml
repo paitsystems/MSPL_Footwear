@@ -19,7 +19,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".OptionsActivity">
+        <activity android:name=".FirstActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -72,14 +72,12 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".NewCustomerEntryActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Test"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".FirstActivity"
+            android:name=".OptionsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
@@ -136,14 +134,6 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".FeedbackActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".AccountBillsActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity
-            android:name=".TrackOrderActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
     </application>

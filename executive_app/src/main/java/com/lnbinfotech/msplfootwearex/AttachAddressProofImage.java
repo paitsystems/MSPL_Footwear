@@ -55,7 +55,6 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
     private AppCompatButton bt_next, bt_update, bt_cancel;
     private LinearLayout save_lay, update_lay;
     private Spinner spinner_addproof;
-    private String[] add_proof = {"Aadhaar", "Light bill", "Aggreement copy", "Index 0"};
     private ArrayAdapter<String> adapter_address;
     public static int flag = 3;
     private Toast toast;
@@ -275,7 +274,7 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
         Cursor cursor = db.getDocName();
         if(cursor.moveToFirst()){
             do{
-                doc_list.add(cursor.getString(cursor.getColumnIndex("DocName")));
+                doc_list.add(cursor.getString(cursor.getColumnIndex(DBHandler.Document_DocName)));
             }while (cursor.moveToNext());
         }
         cursor.close();

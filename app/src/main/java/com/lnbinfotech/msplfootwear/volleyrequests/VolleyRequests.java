@@ -124,11 +124,10 @@ public class VolleyRequests {
             public void onResponse(String response) {
                 Constant.showLog(response);
                 response = response.replace("\\","");
-                response = response.replace("''","");
-                response = response.substring(1,response.length() - 1);
-                if(response.equals("1")){
+                response = response.replace("\"","");
+                if(response.equals("1")) {
                     callback.onSuccess(response);
-                }else {
+                }else{
                     callback.onFailure("Error");
                 }
             }
@@ -152,8 +151,12 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        new ParseJSON(response, context).parseAreaMaster();
-                        callback.onSuccess(response);
+                        int ret = new ParseJSON(response, context).parseAreaMaster();
+                        if(ret == 1) {
+                            callback.onSuccess(response);
+                        }else{
+                            callback.onFailure("Error");
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -177,8 +180,12 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        new ParseJSON(response, context).parseCityMaster();
-                        callback.onSuccess(response);
+                        int ret = new ParseJSON(response, context).parseCityMaster();
+                        if(ret == 1) {
+                            callback.onSuccess(response);
+                        }else{
+                            callback.onFailure("Error");
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -202,8 +209,12 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        new ParseJSON(response, context).parseHOMaster();
-                        callback.onSuccess(response);
+                        int ret = new ParseJSON(response, context).parseHOMaster();
+                        if(ret == 1) {
+                            callback.onSuccess(response);
+                        }else{
+                            callback.onFailure("Error");
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -227,8 +238,12 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        new ParseJSON(response, context).parseEmployeeMaster();
-                        callback.onSuccess(response);
+                        int ret = new ParseJSON(response, context).parseEmployeeMaster();
+                        if(ret == 1) {
+                            callback.onSuccess(response);
+                        }else{
+                            callback.onFailure("Error");
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -441,8 +456,12 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        new ParseJSON(response, context).parseProductMaster();
-                        callback.onSuccess(response);
+                        int ret = new ParseJSON(response, context).parseProductMaster();
+                        if(ret == 1) {
+                            callback.onSuccess(response);
+                        }else{
+                            callback.onFailure("Error");
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -466,8 +485,12 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        new ParseJSON(response, context).parseCustomerMaster();
-                        callback.onSuccess(response);
+                        int ret = new ParseJSON(response, context).parseCustomerMaster();
+                        if(ret == 1) {
+                            callback.onSuccess(response);
+                        }else{
+                            callback.onFailure("Error");
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -491,8 +514,12 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        new ParseJSON(response, context).parseCompanyMaster();
-                        callback.onSuccess(response);
+                        int ret = new ParseJSON(response, context).parseCompanyMaster();
+                        if(ret == 1) {
+                            callback.onSuccess(response);
+                        }else{
+                            callback.onFailure("Error");
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -516,8 +543,12 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        new ParseJSON(response, context).parseBankMaster();
-                        callback.onSuccess(response);
+                        int ret = new ParseJSON(response, context).parseBankMaster();
+                        if(ret == 1) {
+                            callback.onSuccess(response);
+                        }else{
+                            callback.onFailure("Error");
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -533,17 +564,22 @@ public class VolleyRequests {
     }
 
     public void refreshBankBranchMaster(String url, final ServerCallback callback){
-        StringRequest request = new StringRequest(url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Constant.showLog(response);
-                response = response.replace("\\", "");
-                response = response.replace("''", "");
-                response = response.substring(1,response.length() - 1);
-                new ParseJSON(response,context).parseBankBranchMaster();
-                callback.onSuccess(response);
-            }
-        },
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\", "");
+                        response = response.replace("''", "");
+                        response = response.substring(1, response.length() - 1);
+                        int ret = new ParseJSON(response, context).parseBankBranchMaster();
+                        if (ret == 1) {
+                            callback.onSuccess(response);
+                        } else {
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -556,17 +592,22 @@ public class VolleyRequests {
     }
 
     public void refreshDocumentMaster(String url, final ServerCallback callback){
-        StringRequest request = new StringRequest(url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Constant.showLog(response);
-                response = response.replace("\\", "");
-                response = response.replace("''", "");
-                response = response.substring(1,response.length() - 1);
-                new ParseJSON(response,context).parseDocumentMaster();
-                callback.onSuccess(response);
-            }
-        },
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\", "");
+                        response = response.replace("''", "");
+                        response = response.substring(1, response.length() - 1);
+                        int ret = new ParseJSON(response, context).parseDocumentMaster();
+                        if (ret == 1) {
+                            callback.onSuccess(response);
+                        } else {
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -577,28 +618,29 @@ public class VolleyRequests {
                 });
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
-    /****************************************sneha code**********************************************/
+
     public void saveFeedbackDetail(String url, final ServerCallback callback){
-        StringRequest request = new StringRequest(url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Constant.showLog(response);
-                response = response.replace("\\","");
-                response = response.replace("''","");
-                response = response.substring(1,response.length() - 1);
-                if(response.equals("1")){
-                    callback.onSuccess(response);
-                }else {
-                    callback.onFailure("Error");
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                callback.onFailure("Error");
-                Constant.showLog(error.getMessage());
-            }
-        });
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\", "");
+                        response = response.replace("\"", "");
+                        if (response.equals("1")) {
+                            callback.onSuccess(response);
+                        } else {
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("Error");
+                        Constant.showLog(error.getMessage());
+                    }
+                });
         AppSingleton.getInstance(context).addToRequestQueue(request,"");
 
     }
