@@ -508,7 +508,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return list;
     }
 
-
     public void updatePIN(String custid, String pin){
         ContentValues cv = new ContentValues();
         cv.put(UM_PIN,pin);
@@ -554,18 +553,21 @@ public class DBHandler extends SQLiteOpenHelper {
         Constant.showLog(str);
         getWritableDatabase().execSQL(str);
     }
+
     public void createCompanyMaster() {
         String str = "create table if not exists " + Table_CompanyMaster + "(" + Company_Id + " int," + Company_Name + " text,"
                 + Company_Initial + " text," + Company_Pan + " text," + Company_DisplayCmp + " text," + Company_GSTNo + " text" + Company_HOCode + "text)";
         Constant.showLog(str);
         getWritableDatabase().execSQL(str);
     }
+
     public void createBankBranchMaster() {
         String str = "create table if not exists " + Table_BankBranchMaster + "(" + Branch_AutoId + " int," + Branch_Id + " int,"
                 + Branch_Branch + " text," + Branch_CustId + " int," + Branch_AccountNo + " text," + Branch_CBankId + " int," + Branch_CBranch + " text)";
         Constant.showLog(str);
         getWritableDatabase().execSQL(str);
     }
+
     public void createDocumentMaster() {
         String str = "create table if not exists " + Table_DocumentMaster + "(" + Document_Id + " int,"
                 + Document_DocName + " text," + Document_ForWhom + " text," + Document_Compulsary + " text)";
@@ -578,13 +580,11 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str,null);
     }
 
-
     public Cursor getIdOfDocType(String docName){
         String str = "select "+Document_Id+" from "+Table_DocumentMaster+" where "+Document_DocName+" = '"+docName+"'";
         return getWritableDatabase().rawQuery(str,null);
     }
 
-   /************sneha changes25oct**********************/
     public void getDocName(){
         String str = "select "+Document_DocName+" from "+Table_DocumentMaster;
         Cursor res = getWritableDatabase().rawQuery(str,null);

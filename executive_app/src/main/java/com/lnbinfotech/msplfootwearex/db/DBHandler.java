@@ -588,7 +588,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str,null);
     }
 
-    /************sneha changes25oct**********************/
     public Cursor getDocName(){
         String str = "select "+Document_DocName+" from "+Table_DocumentMaster;
         return getWritableDatabase().rawQuery(str,null);
