@@ -15,9 +15,11 @@ import com.lnbinfotech.msplfootwear.constant.AppSingleton;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
+import com.lnbinfotech.msplfootwear.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwear.model.StockInfoMasterClass;
+import com.lnbinfotech.msplfootwear.model.TrackOrderClass;
 import com.lnbinfotech.msplfootwear.model.UserClass;
 import com.lnbinfotech.msplfootwear.parse.ParseJSON;
 
@@ -29,6 +31,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class VolleyRequests {
@@ -598,6 +601,33 @@ public class VolleyRequests {
         });
         AppSingleton.getInstance(context).addToRequestQueue(request,"");
 
+    }
+
+    public void loadTrackOrederDetail(String url, final ServerCallbackList callback){
+        StringRequest request = new StringRequest(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Constant.showLog(response);
+                response = response.replace("\\", "");
+                response = response.replace("''", "");
+                response = response.substring(1,response.length() - 1);
+                List<TrackOrderClass> list  = new ParseJSON(response,context).parseloadTrackOrederDetail();
+                if(list.size() != 0) {
+                    callback.onSuccess(list);
+                }else {
+                    callback.onFailure("Error");
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("Error");
+                        Constant.showLog(error.getMessage());
+                        writeLog("loadTrackOrederDetail_" + error.getMessage());
+                    }
+                });
+        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
 

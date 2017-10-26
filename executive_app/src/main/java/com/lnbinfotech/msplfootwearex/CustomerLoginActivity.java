@@ -317,10 +317,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                     ed11.getText().toString() + ed12.getText().toString();
             Constant.showLog(pin1);
             if(pin1.equals(PIN)){
-                String pin = custClass.getCustID()+"-"+PIN;
-                SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                editor.putString(getString(R.string.pref_savedpin),pin);
-                editor.apply();
+
                 showDia(2);
                 /*List<String> _list = db.checkPINUnsetID();
                 if(_list.size()!=0){
@@ -377,6 +374,11 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     }
 
     private void startNewActivity(){
+        String pin = custClass.getCustID()+"-"+PIN;
+        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+        editor.putString(getString(R.string.pref_savedpin),pin);
+        editor.putInt(getString(R.string.pref_retailCustId), custClass.getCustID());
+        editor.apply();
         finish();
         Intent intent = new Intent(getApplicationContext(),OptionsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -246,4 +246,14 @@
     <string name="description">Description</string>
     <string name="entertexthere">Enter text here</string>
     <string name="feedbacktype">Feedback Type</string>
+    <!---sneha changes26oct17- - - - - - - - - - -  -->
+    <string name="bills">Bills</string>
+    <string name="gstreport">GST Report</string>
+    <string name="ledgerstatement">Ledger Statement</string>
+    <string name="allbills">All Bills</string>
+    <string name="outstanding">Outstanding Bills</string>
+    <string name="orderno">Order No</string>
+    <string name="orderamt">Order Amount</string>
+    <string name="orderqty">Order Qty</string>
+
 </resources>

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.lnbinfotech.msplfootwearex.FirstActivity;
 import com.lnbinfotech.msplfootwearex.R;
+import com.lnbinfotech.msplfootwearex.TrackOrderActivity;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.AreaMasterClass;
@@ -18,11 +19,13 @@ import com.lnbinfotech.msplfootwearex.model.EmployeeMasterClass;
 import com.lnbinfotech.msplfootwearex.model.HOMasterClass;
 import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
+import com.lnbinfotech.msplfootwearex.model.TrackOrderClass;
 import com.lnbinfotech.msplfootwearex.model.UserClass;
 
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.List;
 
 // Created by lnb on 8/11/2016.
 
@@ -433,6 +436,36 @@ public class ParseJSON {
             writeLog("parseDocumentMaster_" + e.getMessage());
         }
         return ret;
+    }
+
+    public List<TrackOrderClass> parseloadTrackOrederDetail(){
+
+        List<TrackOrderClass> list = new ArrayList<>();
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    TrackOrderClass trackOrderClass = new TrackOrderClass();
+                    trackOrderClass.setAuto(jsonArray.getJSONObject(i).getString("auto"));
+                    trackOrderClass.setBranchid(jsonArray.getJSONObject(i).getString("branchid"));
+                    trackOrderClass.setId(jsonArray.getJSONObject(i).getString("id"));
+                    trackOrderClass.setPODate(jsonArray.getJSONObject(i).getString("PODate"));
+                    trackOrderClass.setPono(jsonArray.getJSONObject(i).getString("PONO"));
+                    trackOrderClass.setCustid(jsonArray.getJSONObject(i).getString("CUstid"));
+                    trackOrderClass.setSalesExe(jsonArray.getJSONObject(i).getString("SalesExe"));
+                    trackOrderClass.setLooseQty(jsonArray.getJSONObject(i).getString("LooseQty"));
+                    trackOrderClass.setNetAmt(jsonArray.getJSONObject(i).getString("NetAmt"));
+                    trackOrderClass.setApprove(jsonArray.getJSONObject(i).getString("Approve"));
+                    list.add(trackOrderClass);
+
+                }
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("_" + e.getMessage());
+        }
+        return list;
     }
 
     private void writeLog(String _data){

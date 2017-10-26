@@ -16,9 +16,11 @@ import com.lnbinfotech.msplfootwearex.constant.AppSingleton;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
+import com.lnbinfotech.msplfootwearex.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
+import com.lnbinfotech.msplfootwearex.model.TrackOrderClass;
 import com.lnbinfotech.msplfootwearex.model.UserClass;
 import com.lnbinfotech.msplfootwearex.parse.ParseJSON;
 
@@ -592,6 +594,33 @@ public class VolleyRequests {
         });
         AppSingleton.getInstance(context).addToRequestQueue(request,"");
 
+    }
+
+    public void loadTrackOrederDetail(String url, final ServerCallbackList callback){
+        StringRequest request = new StringRequest(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Constant.showLog(response);
+                response = response.replace("\\", "");
+                response = response.replace("''", "");
+                response = response.substring(1,response.length() - 1);
+                List<TrackOrderClass> list  = new ParseJSON(response,context).parseloadTrackOrederDetail();
+                if(list.size() != 0) {
+                    callback.onSuccess(list);
+                }else {
+                    callback.onFailure("Error");
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("Error");
+                        Constant.showLog(error.getMessage());
+                        writeLog("loadTrackOrederDetail_" + error.getMessage());
+                    }
+                });
+        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
     private void writeLog(String _data){

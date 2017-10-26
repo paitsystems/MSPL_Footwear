@@ -3,14 +3,64 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lnbinfotech.msplfootwear.TrackOrderActivity">
+    tools:context=".AccountBillsActivity">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/mobmargin2">
+        android:layout_height="wrap_content">
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/allbills"
+                android:id="@+id/rd_all_bills"
+                android:layout_weight="0.5"
+                android:checked="false" />
+
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/outstanding"
+                android:id="@+id/rd_outs_bills"
+                android:layout_weight="0.5"
+                android:checked="false" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/lay_branch_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/mobmargin5"
+            android:background="@drawable/black_border_draw"
+            android:baselineAligned="false"
+            android:elevation="5dp"
+            android:orientation="horizontal"
+            android:padding="@dimen/mobpadding5">
+
+            <EditText
+                android:id="@+id/ed_search"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="0.1"
+                android:background="@null"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.9"
+                android:src="@drawable/search24" />
+        </LinearLayout>
         <LinearLayout
             android:background="@color/maroon"
             android:orientation="horizontal"
@@ -26,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/date"
+                android:text=""
                 android:layout_weight="0.2" />
             <TextView
                 style="@style/textViewMob"
@@ -36,27 +86,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/orderno"
+                android:text=""
                 android:layout_weight="0.2" />
             <TextView
                 style="@style/textViewMob"
                 android:textColor="@color/white"
-                android:layout_gravity="right|center"
-                android:gravity="right"
+                android:layout_gravity="left|center"
+                android:gravity="left"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/orderqty"
+                android:text=""
                 android:layout_weight="0.2" />
             <TextView
                 style="@style/textViewMob"
                 android:textColor="@color/white"
-                android:layout_gravity="right|center"
-                android:gravity="right"
+                android:layout_gravity="left|center"
+                android:gravity="left"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/orderamt"
+                android:text=""
                 android:layout_weight="0.2" />
         </LinearLayout>
         <ListView
@@ -67,4 +117,3 @@
 
     </LinearLayout>
 </LinearLayout>
-

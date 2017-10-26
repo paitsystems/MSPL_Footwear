@@ -185,4 +185,14 @@
     <string name="cgst">GST</string>
     <string name="panno">PAN number</string>
 
+    <!---sneha changes26oct17- - - - - - - - - - -  -->
+    <string name="bills">Bills</string>
+    <string name="gstreport">GST Report</string>
+    <string name="ledgerstatement">Ledger Statement</string>
+    <string name="allbills">All Bills</string>
+    <string name="orderno">Order No</string>
+    <string name="orderamt">Order Amount</string>
+    <string name="orderqty">Order Qty</string>
+    <string name="date">Date</string>
+
 </resources>

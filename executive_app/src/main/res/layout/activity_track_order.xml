@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lnbinfotech.msplfootwear.TrackOrderActivity">
+    tools:context="com.lnbinfotech.msplfootwearex.TrackOrderActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -66,5 +66,5 @@
             android:layout_weight="1" />
 
     </LinearLayout>
-</LinearLayout>
+    </LinearLayout>
 
