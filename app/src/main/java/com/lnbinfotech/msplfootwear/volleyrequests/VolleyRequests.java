@@ -123,7 +123,11 @@ public class VolleyRequests {
                 response = response.replace("\\","");
                 response = response.replace("''","");
                 response = response.substring(1,response.length() - 1);
-                callback.onSuccess(response);
+                if(response.equals("1")){
+                    callback.onSuccess(response);
+                }else {
+                    callback.onFailure("Error");
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -569,6 +573,31 @@ public class VolleyRequests {
                     }
                 });
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
+    }
+    /****************************************sneha code**********************************************/
+    public void saveFeedbackDetail(String url, final ServerCallback callback){
+        StringRequest request = new StringRequest(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Constant.showLog(response);
+                response = response.replace("\\","");
+                response = response.replace("''","");
+                response = response.substring(1,response.length() - 1);
+                if(response.equals("1")){
+                    callback.onSuccess(response);
+                }else {
+                    callback.onFailure("Error");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onFailure("Error");
+                Constant.showLog(error.getMessage());
+            }
+        });
+        AppSingleton.getInstance(context).addToRequestQueue(request,"");
+
     }
 
 

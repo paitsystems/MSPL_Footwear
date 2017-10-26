@@ -39,7 +39,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class AttachIdProofImageActivity extends AppCompatActivity implements View.OnClickListener {
@@ -56,6 +58,7 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
     private Toast toast;
     private final int requestCode = 1;
     private DBHandler db;
+    private List<String> doc_list;
 
 
     @Override
@@ -70,6 +73,7 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
     }
 
     private void init() {
+        doc_list = new ArrayList<>();
         db = new DBHandler(AttachIdProofImageActivity.this);
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
@@ -79,9 +83,10 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
         bt_cancel = (AppCompatButton) findViewById(R.id.btn_cancel);
         save_lay = (LinearLayout) findViewById(R.id.save_lay);
         update_lay = (LinearLayout) findViewById(R.id.update_lay);
-
         spinner_idproof = (Spinner) findViewById(R.id.spinner_idproof);
-        adapter_id = new ArrayAdapter<>(this, R.layout.id_list, id_proof);
+
+        setDocList();
+        adapter_id = new ArrayAdapter<>(this, R.layout.id_list, doc_list);
         spinner_idproof.setAdapter(adapter_id);
 
         if (flag == 0) {
@@ -262,6 +267,16 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
         String current_time = sdf.format(new Date());
         return current_time;
     }*/
+
+    private void setDocList(){
+        Cursor cursor = db.getDocName();
+        if(cursor.moveToFirst()){
+            do{
+                doc_list.add(cursor.getString(cursor.getColumnIndex("DocName")));
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+    }
 
     private void setIdSpinnerValue(){
         String value = spinner_idproof.getSelectedItem().toString();

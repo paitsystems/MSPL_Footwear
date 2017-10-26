@@ -80,7 +80,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 Constant.showLog("message:"+message.substring(4,5));
                 ed6.setText(message.substring(5,6));
                 Constant.showLog("message:"+message.substring(5,6));
-                timer.cancel();
+               // timer.cancel();
                 countDown.cancel();
                 tv_text1.setText("OTP get successfully");
                 Constant.showLog("CheckOTPActivity_onReceivedMessage_Called");

@@ -243,4 +243,7 @@
     <string name="visitpayment">Visit Payment Form</string>
     <string name="selectitem">Select Item</string>
     <string name="chequedetail">Enter Cheque Detail</string>
+    <string name="description">Description</string>
+    <string name="entertexthere">Enter text here</string>
+    <string name="feedbacktype">Feedback Type</string>
 </resources>

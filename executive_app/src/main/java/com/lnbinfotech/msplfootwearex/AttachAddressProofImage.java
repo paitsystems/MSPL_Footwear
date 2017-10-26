@@ -41,7 +41,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class AttachAddressProofImage extends AppCompatActivity implements View.OnClickListener {
@@ -59,6 +61,7 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
     private Toast toast;
     private final int requestCode = 1;
     private DBHandler db;
+    private List<String> doc_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
     }
 
     private void init() {
+        doc_list = new ArrayList<>();
         db = new DBHandler(AttachAddressProofImage.this);
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
@@ -83,7 +87,8 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
         update_lay = (LinearLayout) findViewById(R.id.update_lay);
         spinner_addproof = (Spinner) findViewById(R.id.spinner_addproof);
 
-        adapter_address = new ArrayAdapter<>(this, R.layout.address_list, add_proof);
+        setDocList();
+        adapter_address = new ArrayAdapter<>(this, R.layout.address_list, doc_list);
         spinner_addproof.setAdapter(adapter_address);
 
         if (flag == 0) {
@@ -265,6 +270,16 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
         String current_time = sdf.format(new Date());
         return current_time;
     }*/
+
+    private void setDocList(){
+        Cursor cursor = db.getDocName();
+        if(cursor.moveToFirst()){
+            do{
+                doc_list.add(cursor.getString(cursor.getColumnIndex("DocName")));
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+    }
 
     private void setIdSpinnerValue(){
         String value = spinner_addproof.getSelectedItem().toString();

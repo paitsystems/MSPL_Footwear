@@ -114,9 +114,11 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
                 String filename = "";
                 if (_flag == 0) {
                     OptionsActivity.new_cus.setPan_no_image(imagePath);
+                    OptionsActivity.new_cus.setGstpan_img(imagePath);
                     filename = OptionsActivity.new_cus.getPan_no_image();
                 } else if (_flag == 1) {
                     OptionsActivity.new_cus.setGst_no_image(imagePath);
+                    OptionsActivity.new_cus.setGstpan_img(imagePath);
                     filename = OptionsActivity.new_cus.getGst_no_image();
                 }
 
@@ -135,20 +137,13 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
                 gstpan_no_value();
                 setIdValue();
                 if (_flag == 0) {
-                    String gst = null;
-
-                    /*String pan = OptionsActivity.new_cus.getPan_no_image();
-                    pan = null;
-                    Log.d("Log","pan:"+pan);*/
                     OptionsActivity.new_cus.setPan_no_image(imagePath);
+                    OptionsActivity.new_cus.setGstpan_img(imagePath);
                     //OptionsActivity.new_cus.setGst_no_image(gst);
                     Log.d("Log","imagePath:"+imagePath);
                 } else if (_flag == 1) {
-                    String pan = null;
-                   /* String gst = OptionsActivity.new_cus.getGst_no_image();
-                    gst = null;
-                    Log.d("Log","gst:"+gst);*/
                     OptionsActivity.new_cus.setGst_no_image(imagePath);
+                    OptionsActivity.new_cus.setGstpan_img(imagePath);
                    // OptionsActivity.new_cus.setPan_no_image(pan);
                     Log.d("Log","imagePath:"+imagePath);
                 }
@@ -329,6 +324,7 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
         if (_flag == 0) {
             value = "PAN CARD";
             Constant.showLog("setIdValue():panvalue:"+value);
+
         } else if (_flag == 1) {
             value = "GST NO";
             Constant.showLog("setIdValue():gstvalue:"+value);
@@ -336,7 +332,7 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
         Cursor cursor =  db.getIdOfDocType(value);
         if(cursor.moveToFirst()){
             do{
-                OptionsActivity.new_cus.setId_addressproof(cursor.getString(cursor.getColumnIndex("Id")));
+                OptionsActivity.new_cus.setId_gstpan_proof(cursor.getString(cursor.getColumnIndex("Id")));
             }while (cursor.moveToNext());
         }
         cursor.close();

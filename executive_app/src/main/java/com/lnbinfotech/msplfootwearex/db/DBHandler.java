@@ -449,6 +449,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     //name,Address,Mobile,Email,Panno,ImagePath,GSTNo,AadharNo
+    //TODO ALL FIELDS OF USER TO BE ADDED
     public void addUserDetail(UserClass user) {
         ContentValues cv = new ContentValues();
         cv.put(UM_RetailCustID, user.getCustID());
@@ -588,6 +589,12 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public Cursor getUserDetails(){
         String str = "select * from "+Table_Usermaster;
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
+    /************sneha changes25oct**********************/
+    public Cursor getDocName(){
+        String str = "select "+Document_DocName+" from "+Table_DocumentMaster;
         return getWritableDatabase().rawQuery(str,null);
     }
 

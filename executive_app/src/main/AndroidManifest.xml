@@ -10,8 +10,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.READ_SMS"/>
-    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:allowBackup="true"
@@ -32,7 +32,7 @@
 
         <service android:name=".services.DownloadImageService" />
         <service android:name=".services.CheckNewTicketService" />
-        <service android:name=".services.UploadImageService"/>
+        <service android:name=".services.UploadImageService" />
 
         <receiver android:name=".braodcasts.AutoUpdateBroadcastReceiver" />
         <receiver
@@ -42,17 +42,15 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
         <receiver android:name=".services.ImageUplaodBroadcastReceiver">
-            <intent-filter >
-                <action android:name="test"/>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            <intent-filter>
+                <action android:name="test" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-
         <receiver android:name=".braodcasts.ReadSms">
             <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 
@@ -72,52 +70,69 @@
             android:name=".CustomerLoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".NewCustomerEntryActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Test"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".OptionsActivity"
+        <activity
+            android:name=".NewCustomerEntryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Test"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OptionsActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".VisitPaymentFormActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".VisitPaymentFormActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".SelectAutoItemActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".SelectAutoItemActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".ChequeDetailsActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ChequeDetailsActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".VisitOptionsActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".VisitOptionsActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".ImagewiseSetwiseOrderActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ImagewiseSetwiseOrderActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".CutsizeSetwiseOrderActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".CutsizeSetwiseOrderActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".AreawiseCustomerSelectionActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".AreawiseCustomerSelectionActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".AttachCustomerImage"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".AttachCustomerImage"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".AttachAddressProofImage"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".AttachAddressProofImage"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".AttachIdProofImageActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".AttachIdProofImageActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".AttachGSTnoPANnoImageActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".AttachGSTnoPANnoImageActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".NewCustomerEntryDetailFormActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".NewCustomerEntryDetailFormActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".DataRefreshActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".DataRefreshActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".FeedbackActivity"></activity>
     </application>
 
 </manifest>

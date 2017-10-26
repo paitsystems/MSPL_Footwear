@@ -1,4 +1,4 @@
-package com.lnbinfotech.msplfootwear.model;
+package com.lnbinfotech.msplfootwearex.model;
 
 /**
  * Created by SNEHA on 10/17/2017.

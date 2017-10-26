@@ -1,22 +1,18 @@
-package com.lnbinfotech.msplfootwear;
-
+package com.lnbinfotech.msplfootwearex;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,25 +23,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
-import com.lnbinfotech.msplfootwear.constant.Constant;
-import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
-import com.lnbinfotech.msplfootwear.log.WriteLog;
-import com.lnbinfotech.msplfootwear.model.FeedbackClass;
-import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
+import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
+import com.lnbinfotech.msplfootwearex.log.WriteLog;
+import com.lnbinfotech.msplfootwearex.model.FeedbackClass;
+import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-
 import java.io.FileOutputStream;
-
 import java.io.IOException;
-
 import java.net.URLEncoder;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 
 public class FeedbackActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private Spinner fedback_spinner;
@@ -355,14 +347,14 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 } else {
                     writeLog("Statusimg1:Photopicker canceled");
                 }*/
-                  try {
-                      String dateformat = currentDateFormat();
-                      String file_name = "feedbkimg_" + dateformat + ".jpg";
-                      File destFile = new File((Environment.getExternalStorageDirectory() + File.separator + Constant.image_folder + File.separator + file_name));
-                      copyFile(new File(getPath(data.getData())), destFile);
-                  }catch (Exception e){
+                    try {
+                        String dateformat = currentDateFormat();
+                        String file_name = "feedbkimg_" + dateformat + ".jpg";
+                        File destFile = new File((Environment.getExternalStorageDirectory() + File.separator + Constant.image_folder + File.separator + file_name));
+                        copyFile(new File(getPath(data.getData())), destFile);
+                    } catch (Exception e) {
 
-                  }
+                    }
                 }
 
                 break;
@@ -431,7 +423,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public String getPath(Uri uri) {
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = managedQuery(uri, projection, null, null, null);
         startManagingCursor(cursor);
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
@@ -521,18 +513,18 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             String _qty = URLEncoder.encode(qty, "UTF-8");
             String _salesmanid = URLEncoder.encode(salesmanid, "UTF-8");
             String _officetype = URLEncoder.encode(officetype, "UTF-8");
-            String _description = URLEncoder.encode(description,"UTF-8");
+            String _description = URLEncoder.encode(description, "UTF-8");
             String _img1 = URLEncoder.encode(img1, "UTF-8");
             String _img2 = URLEncoder.encode(img2, "UTF-8");
             String _img3 = URLEncoder.encode(img3, "UTF-8");
             String _crby = URLEncoder.encode(crby, "UTF-8");
             //String _crdate = URLEncoder.encode(crdate, "UTF-8");
-           // String _crtime = URLEncoder.encode(crtime, "UTF-8");
+            // String _crtime = URLEncoder.encode(crtime, "UTF-8");
             String _usertype = URLEncoder.encode(usertype, "UTF-8");
 
-            url = "/SaveFeedbackDetail?feedbk_type="+_feedtype+"&article_no="+_articleno+"&invoice_no"+_invoiceno+"&qty="+_qty+"&salesman_id="+_salesmanid+"&office_type="+_officetype+"&description="+_description+"&img1="+_img1+"&img2="+_img2+"&img3="+_img3+"&crby="+_crby+"&user_type="+_usertype;
+            url = "/SaveFeedbackDetail?feedbk_type=" + _feedtype + "&article_no=" + _articleno + "&invoice_no" + _invoiceno + "&qty=" + _qty + "&salesman_id=" + _salesmanid + "&office_type=" + _officetype + "&description=" + _description + "&img1=" + _img1 + "&img2=" + _img2 + "&img3=" + _img3 + "&crby=" + _crby + "&user_type=" + _usertype;
             Constant.showLog(url);
-            writeLog("savefeedback():url called:"+url);
+            writeLog("savefeedback():url called:" + url);
             VolleyRequests requests = new VolleyRequests(FeedbackActivity.this);
             requests.saveFeedbackDetail(url, new ServerCallback() {
                 @Override
@@ -549,16 +541,15 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 }
             });
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             writeLog("saveFeedbackdetail():feedback data save exception");
         }
 
-        }
+    }
 
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "FeedbackActivity_" + _data);
     }
-
-
 }
+

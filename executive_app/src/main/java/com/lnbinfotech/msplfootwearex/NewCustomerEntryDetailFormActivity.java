@@ -409,33 +409,19 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
             String url = "";
             constant = new Constant(NewCustomerEntryDetailFormActivity.this);
             constant.showPD();
-            String cust_name = OptionsActivity.new_cus.getCust_name();
-            String mob_no = OptionsActivity.new_cus.getMobile_no();
-            String email_id = OptionsActivity.new_cus.getEmail_id();
-            String address = OptionsActivity.new_cus.getAddress();
-            String cust_img = OptionsActivity.new_cus.getCus_image();
-            String address_proof = OptionsActivity.new_cus.getAddress_proof();
-            String address_proof_img = OptionsActivity.new_cus.getAddress_proof_image();
-            String id_proof = OptionsActivity.new_cus.getId_proof();
-            String id_proof_img = OptionsActivity.new_cus.getId_proof_image();
-            String gst_no = OptionsActivity.new_cus.getGst_no();
-            String gstno_img = OptionsActivity.new_cus.getGst_no_image();
-            String pan_no = OptionsActivity.new_cus.getPan_no();
-            String panno_img = OptionsActivity.new_cus.getPan_no_image();
-
-            String _cust_name = URLEncoder.encode(cust_name, "UTF-8");
-            String _mob_no = URLEncoder.encode(mob_no, "UTF-8");
-            String _email_id = URLEncoder.encode(email_id, "UTF-8");
-            String _address = URLEncoder.encode(address, "UTF-8");
-            String _cust_img = URLEncoder.encode(cust_img, "UTF-8");
-            String _address_proof = URLEncoder.encode(address_proof, "UTF-8");
-            String _address_proof_img = URLEncoder.encode(address_proof_img, "UTF-8");
-            String _id_proof = URLEncoder.encode(id_proof, "UTF-8");
-            String _id_proof_img = URLEncoder.encode(id_proof_img, "UTF-8");
-            String _gst_no = URLEncoder.encode(gst_no, "UTF-8");
-            String _gstno_img = URLEncoder.encode(gstno_img, "UTF-8");
-            String _pan_no = URLEncoder.encode(pan_no, "UTF-8");
-            String _panno_img = URLEncoder.encode(panno_img, "UTF-8");
+            String _cust_name = URLEncoder.encode(OptionsActivity.new_cus.getCust_name(), "UTF-8");
+            String _mob_no = URLEncoder.encode(OptionsActivity.new_cus.getMobile_no(), "UTF-8");
+            String _email_id = URLEncoder.encode(OptionsActivity.new_cus.getEmail_id(), "UTF-8");
+            String _address = URLEncoder.encode(OptionsActivity.new_cus.getAddress(), "UTF-8");
+            String _cust_img = URLEncoder.encode(OptionsActivity.new_cus.getCus_image(), "UTF-8");
+            String _address_proof = URLEncoder.encode(OptionsActivity.new_cus.getAddress_proof(), "UTF-8");
+            String _address_proof_img = URLEncoder.encode(OptionsActivity.new_cus.getAddress_proof_image(), "UTF-8");
+            String _id_proof = URLEncoder.encode(OptionsActivity.new_cus.getId_proof(), "UTF-8");
+            String _id_proof_img = URLEncoder.encode(OptionsActivity.new_cus.getId_proof_image(), "UTF-8");
+            String _gst_no = URLEncoder.encode(OptionsActivity.new_cus.getGst_no(), "UTF-8");
+            String _gstno_img = URLEncoder.encode(OptionsActivity.new_cus.getGst_no_image(), "UTF-8");
+            String _pan_no = URLEncoder.encode(OptionsActivity.new_cus.getPan_no(), "UTF-8");
+            String _panno_img = URLEncoder.encode(OptionsActivity.new_cus.getPan_no_image(), "UTF-8");
 
             String custId = "", BranchId = "", District = "", Taluka = "", CityId = "", AreaId = "", HOCode = "";
             Cursor cursor = db.getUserDetails();
@@ -458,6 +444,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
             String _CityId = URLEncoder.encode(CityId, "UTF-8");
             String _AreaId = URLEncoder.encode(AreaId, "UTF-8");
             String _HOCode = URLEncoder.encode(HOCode, "UTF-8");
+            String data = OptionsActivity.new_cus.getId_addressproof()+"-"+OptionsActivity.new_cus.getAddress_proof_image()+","+ OptionsActivity.new_cus.getId_idproof()+"-"+OptionsActivity.new_cus.getId_proof_image()+","+OptionsActivity.new_cus.getId_gstpan_proof()+"-"+OptionsActivity.new_cus.getGstpan_img();
 
             /*if(AttachGSTnoPANnoImageActivity.radio_flag == 1) {
                 url = Constant.ipaddress + "/SaveCustomerDetail?custname="+_cust_name+"&mobno="+_mob_no+"&email="+_email_id+"&address="+_address+"&custimg="+_cust_img+"&addressproof="+_address_proof+"&addressproofimg="+_address_proof_img+"&idproof="+_id_proof+"&idproofimg="+_id_proof_img+"&GSTINNo="+_gst_no+"&GSTINimg="+_gstno_img;
@@ -472,7 +459,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
 
             url = Constant.ipaddress + "/SaveCustomerDetail?custname=" + _cust_name + "&mobno=" + _mob_no + "&email=" + _email_id + "&address=" + _address + "&custimg="
                     + _cust_img + "&addressproof=" + _address_proof + "&addressproofimg=" + _address_proof_img + "&idproof=" + _id_proof + "&idproofimg=" + _id_proof_img + "&GSTINNo=" + _gst_no + "&GSTINimg=" + _gstno_img + "&PANNo=" + _pan_no + "&PANimg=" + _panno_img
-                    + "&custid=" + _custId + "&Branchid=" + _BranchId + "&district=" + _District + "&taluka=" + _Taluka + "&cityid=" + _CityId + "&areaid=" + _AreaId + "&HOCode=" + _HOCode;
+                    + "&custid=" + _custId + "&Branchid=" + _BranchId + "&district=" + _District + "&taluka=" + _Taluka + "&cityid=" + _CityId + "&areaid=" + _AreaId + "&HOCode=" + _HOCode + "&data="+data;
             Constant.showLog(url);
             writeLog("saveData():url called" + url);
 
@@ -512,7 +499,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
 
                 Intent intent1 = new Intent("test");//UploadImageService.BROADCAST
                 sendBroadcast(intent1);
-                writeLog("DownloadImageService_onHandleIntent_broadcastSend");
+                writeLog("UploadImageService_onHandleIntent_broadcastSend");
 
                 NewCustomerEntryActivity.flag = 1;
                 AttachCustomerImage.flag = 2;
