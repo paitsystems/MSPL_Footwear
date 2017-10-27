@@ -54,7 +54,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                 if(cursor.moveToFirst()){
                     do{
                        // AreawiseCustomerSelectionClass areaClass_ = new AreawiseCustomerSelectionClass();
-                        String id = cursor.getString(cursor.getColumnIndex("Id"));
+                        String id = cursor.getString(cursor.getColumnIndex(DBHandler.Area_Id));
                         Constant.showLog("id:"+id);
                         hashmap.put(area_name,id);
                     }while (cursor.moveToNext());
@@ -135,7 +135,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         if(cursor.moveToFirst()){
             do{
                 AreawiseCustomerSelectionClass  areaclass = new AreawiseCustomerSelectionClass();
-                areaclass.setAreaname(cursor.getString(cursor.getColumnIndex("Area")));
+                areaclass.setAreaname(cursor.getString(cursor.getColumnIndex(DBHandler.Area_Area)));
                 areaList.add(areaclass);
                 Constant.showLog("arealist:"+areaList.size());
             }while (cursor.moveToNext());

@@ -194,5 +194,6 @@
     <string name="orderamt">Order Amount</string>
     <string name="orderqty">Order Qty</string>
     <string name="date">Date</string>
+    <string name="orderstatus">Order Status:</string>
 
 </resources>

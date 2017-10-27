@@ -330,7 +330,7 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
         Cursor cursor =  db.getIdOfDocType(value);
         if(cursor.moveToFirst()){
             do{
-                OptionsActivity.new_cus.setId_gstpan_proof(cursor.getString(cursor.getColumnIndex("Id")));
+                OptionsActivity.new_cus.setId_gstpan_proof(cursor.getString(cursor.getColumnIndex(DBHandler.Document_Id)));
             }while (cursor.moveToNext());
         }
         cursor.close();

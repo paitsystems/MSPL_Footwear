@@ -307,7 +307,7 @@
                             android:layout_weight="0.05"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
 
                             <LinearLayout
@@ -337,7 +337,7 @@
                             android:layout_weight="0.05"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
 
                             <LinearLayout

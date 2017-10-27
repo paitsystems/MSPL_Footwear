@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/mobpadding2">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:padding="@dimen/mobpadding5">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="prodid"
+                android:id="@+id/tv_finalprodid" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:background="@color/maroon"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:textColor="@color/white"
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="sizegroup"
+                android:id="@+id/tv_sizegroup"
+                android:layout_weight="0.5" />
+
+            <TextView
+                android:textColor="@color/white"
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="color"
+                android:id="@+id/tv_color"
+                android:layout_weight="0.5" />
+
+            <TextView
+
+                android:textColor="@color/white"
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="mrp"
+                android:id="@+id/tv_mrp"
+                android:layout_weight="0.5" />
+
+            <TextView
+                android:textColor="@color/white"
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="qty"
+                android:id="@+id/tv_qty"
+                android:layout_weight="0.5" />
+            <TextView
+                android:textColor="@color/white"
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="packtype"
+                android:id="@+id/tv_loosepacktyp"
+                android:layout_weight="0.5" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+</LinearLayout>

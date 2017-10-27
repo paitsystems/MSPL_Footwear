@@ -2,6 +2,7 @@ package com.lnbinfotech.msplfootwear.parse;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.View;
 
 import com.lnbinfotech.msplfootwear.FirstActivity;
 import com.lnbinfotech.msplfootwear.R;
@@ -13,6 +14,7 @@ import com.lnbinfotech.msplfootwear.model.BankMasterClass;
 import com.lnbinfotech.msplfootwear.model.CityMasterClass;
 import com.lnbinfotech.msplfootwear.model.CompanyMasterClass;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
+import com.lnbinfotech.msplfootwear.model.DetailOrderClass;
 import com.lnbinfotech.msplfootwear.model.DocumentMasterClass;
 import com.lnbinfotech.msplfootwear.model.EmployeeMasterClass;
 import com.lnbinfotech.msplfootwear.model.HOMasterClass;
@@ -24,6 +26,7 @@ import com.lnbinfotech.msplfootwear.model.UserClass;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 // Created by lnb on 8/11/2016.
@@ -430,7 +433,7 @@ public class ParseJSON {
         return ret;
     }
 
-    public List<TrackOrderClass> parseloadTrackOrederDetail(){
+    public List<TrackOrderClass> parseloadTrackOreder(){
 
         List<TrackOrderClass> list = new ArrayList<>();
         try{
@@ -458,6 +461,34 @@ public class ParseJSON {
             writeLog("_" + e.getMessage());
         }
         return list;
+    }
+
+    public HashMap<Integer,List<DetailOrderClass>> parseloadDetailOrder(){
+
+        HashMap<Integer,List<DetailOrderClass>> map = new HashMap<>();
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    DetailOrderClass orderClass = new DetailOrderClass();
+                    orderClass.setAuto(jsonArray.getJSONObject(i).getString("auto"));
+                    orderClass.setProductid(jsonArray.getJSONObject(i).getString("productid"));
+                    orderClass.setFinal_prod(jsonArray.getJSONObject(i).getString("Final_prod"));
+                    orderClass.setSize_group(jsonArray.getJSONObject(i).getString("SizeGroup"));
+                    orderClass.setColor(jsonArray.getJSONObject(i).getString("Color"));
+                    orderClass.setMrp(jsonArray.getJSONObject(i).getString("MRP"));
+                    orderClass.setActLooseQty(jsonArray.getJSONObject(i).getString("ActLooseQty"));
+                    orderClass.setLoosePackTyp(jsonArray.getJSONObject(i).getString("LoosePackTyp"));
+
+
+                }
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("_" + e.getMessage());
+        }
+        return map;
     }
 
     private void writeLog(String _data){

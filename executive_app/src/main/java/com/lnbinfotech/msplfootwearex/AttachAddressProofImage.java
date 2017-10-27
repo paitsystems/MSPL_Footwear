@@ -287,7 +287,7 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
 
         if(cursor.moveToFirst()){
             do{
-               OptionsActivity.new_cus.setId_addressproof(cursor.getString(cursor.getColumnIndex("Id")));
+               OptionsActivity.new_cus.setId_addressproof(cursor.getString(cursor.getColumnIndex(DBHandler.Document_Id)));
             }while (cursor.moveToNext());
         }
         cursor.close();

@@ -284,7 +284,7 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
 
         if(cursor.moveToFirst()){
             do{
-                OptionsActivity.new_cus.setId_idproof(cursor.getString(cursor.getColumnIndex("Id")));
+                OptionsActivity.new_cus.setId_idproof(cursor.getString(cursor.getColumnIndex(DBHandler.Document_Id)));
             }while (cursor.moveToNext());
         }
         cursor.close();

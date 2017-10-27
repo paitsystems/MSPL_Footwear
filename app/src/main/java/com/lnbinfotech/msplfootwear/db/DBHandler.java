@@ -596,8 +596,9 @@ public class DBHandler extends SQLiteOpenHelper {
         res.close();
     }
 
-    public Cursor getUpdateData(){
-        String str = "select "+UM_Name+","+UM_MobileNo+","+UM_Email+","+UM_PANNo+","+UM_GSTNo+" from "+Table_Usermaster;
+    public Cursor getUpdateData(int custid){
+       // String str = "select "+UM_Name+","+UM_MobileNo+","+UM_Email+","+UM_PANNo+","+UM_GSTNo+" from "+Table_Usermaster+" where "+UM_RetailCustID+" = '"+custid+"'";
+        String str = "select * from "+Table_Usermaster+" where "+UM_RetailCustID+" = '"+custid+"'";
         return getWritableDatabase().rawQuery(str,null);
     }
 

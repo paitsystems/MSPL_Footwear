@@ -18,6 +18,7 @@ import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
+import com.lnbinfotech.msplfootwear.model.DetailOrderClass;
 import com.lnbinfotech.msplfootwear.model.StockInfoMasterClass;
 import com.lnbinfotech.msplfootwear.model.TrackOrderClass;
 import com.lnbinfotech.msplfootwear.model.UserClass;
@@ -645,7 +646,7 @@ public class VolleyRequests {
 
     }
 
-    public void loadTrackOrederDetail(String url, final ServerCallbackList callback){
+    public void loadTrackOrder(String url, final ServerCallbackList callback){
         StringRequest request = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -653,7 +654,7 @@ public class VolleyRequests {
                 response = response.replace("\\", "");
                 response = response.replace("''", "");
                 response = response.substring(1,response.length() - 1);
-                List<TrackOrderClass> list  = new ParseJSON(response,context).parseloadTrackOrederDetail();
+                List<TrackOrderClass> list  = new ParseJSON(response,context).parseloadTrackOreder();
                 if(list.size() != 0) {
                     callback.onSuccess(list);
                 }else {
@@ -666,7 +667,34 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("Error");
                         Constant.showLog(error.getMessage());
-                        writeLog("loadTrackOrederDetail_" + error.getMessage());
+                        writeLog("loadTrackOreder_" + error.getMessage());
+                    }
+                });
+        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
+    }
+
+    public void loadDetailOrder(String url, final ServerCallbackList callback){
+        StringRequest request = new StringRequest(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Constant.showLog(response);
+                response = response.replace("\\", "");
+                response = response.replace("''", "");
+                response = response.substring(1,response.length() - 1);
+                List<DetailOrderClass> list  = new ParseJSON(response,context).parseloadDetailOrder();
+                if(list.size() != 0) {
+                    callback.onSuccess(list);
+                }else {
+                    callback.onFailure("Error");
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("Error");
+                        Constant.showLog(error.getMessage());
+                        writeLog("loadTrackOreder_" + error.getMessage());
                     }
                 });
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");

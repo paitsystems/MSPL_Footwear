@@ -51,7 +51,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
                 startActivity(i);
                 break;
             case R.id.bt_save:
-                getvalue();
+               // getvalue();
                 break;
         }
     }
@@ -85,15 +85,15 @@ public class UpdateProfileActivity extends AppCompatActivity implements View.OnC
     }
 
     private void getUpdatedValue() {
-        Cursor cursor = db.getUpdateData();
+        Cursor cursor = db.getUpdateData(FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0));
         // UserClass  userClass = new UserClass();
         if (cursor.moveToFirst()) {
             do {
-                ed_cusname.setText(cursor.getString(cursor.getColumnIndex("Name")));
-                ed_emailid.setText(cursor.getString(cursor.getColumnIndex("Email")));
-                ed_mobno.setText(cursor.getString(cursor.getColumnIndex("MobileNo")));
-                ed_cgst.setText(cursor.getString(cursor.getColumnIndex("GSTNo")));
-                ed_panno.setText(cursor.getString(cursor.getColumnIndex("PANNo")));
+                ed_cusname.setText(cursor.getString(cursor.getColumnIndex(DBHandler.UM_Name)));
+                ed_emailid.setText(cursor.getString(cursor.getColumnIndex(DBHandler.UM_Email)));
+                ed_mobno.setText(cursor.getString(cursor.getColumnIndex(DBHandler.UM_MobileNo)));
+                ed_cgst.setText(cursor.getString(cursor.getColumnIndex(DBHandler.UM_GSTNo)));
+                ed_panno.setText(cursor.getString(cursor.getColumnIndex(DBHandler.UM_PANNo)));
                 // cursor.getString(cursor.getColumnIndex("cc")) ;
             } while (cursor.moveToNext());
         }

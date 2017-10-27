@@ -204,7 +204,7 @@ public class SelectAutoItemActivity extends AppCompatActivity implements View.On
             Cursor cur  = db.getCustomerName(value);
             if(cur.moveToFirst()){
                 do{
-                    cus_list.add(cur.getString(cur.getColumnIndex("Name")));
+                    cus_list.add(cur.getString(cur.getColumnIndex(DBHandler.CM_Name)));
                     Constant.showLog("cuslist:"+cus_list.size());
                 }while (cur.moveToNext());
             }
@@ -221,7 +221,7 @@ public class SelectAutoItemActivity extends AppCompatActivity implements View.On
         Cursor cursor = db.getBankName();
         if(cursor.moveToFirst()){
             do{
-               bank_list.add(cursor.getString(cursor.getColumnIndex("Name")));
+               bank_list.add(cursor.getString(cursor.getColumnIndex(DBHandler.Bank_Name)));
             }while (cursor.moveToNext());
         }
         cursor.close();
@@ -235,7 +235,7 @@ public class SelectAutoItemActivity extends AppCompatActivity implements View.On
         Cursor cursor = db.getBranchName();
         if(cursor.moveToFirst()){
             do{
-                branch_list.add(cursor.getString(cursor.getColumnIndex("CBranch")));
+                branch_list.add(cursor.getString(cursor.getColumnIndex(DBHandler.Branch_CBranch)));
             }while (cursor.moveToNext());
         }
         cursor.close();

@@ -76,6 +76,12 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        //lay_img1.setOnClickListener(this);
+        //lay_img2.setOnClickListener(this);
+        // lay_img3.setOnClickListener(this);
+        imgv_img1.setOnClickListener(this);
+        imgv_img2.setOnClickListener(this);
+        imgv_img3.setOnClickListener(this);
 
         bt_send.setOnClickListener(this);
         fedback_spinner.setOnItemSelectedListener(this);
@@ -99,6 +105,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.bt_send:
                 setValue();
+
                 break;
         }
     }
@@ -445,7 +452,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     dialogInterface.dismiss();
                 }
             });
-        }else if (id == 7) {
+        } else if (id == 7) {
             builder.setMessage("Feedback Saved Successfully");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
@@ -456,7 +463,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     new Constant(FeedbackActivity.this).doFinish();
                 }
             });
-        }else if (id == 8) {
+        } else if (id == 8) {
             builder.setMessage("Error While Saving Data");
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                 @Override
@@ -576,21 +583,22 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onSuccess(String result) {
                     constant.showPD();
-                    show_popup(6);
+                    show_popup(7);
                     Constant.showLog("Volly request success");
                     writeLog("saveFeedbackdetail():Volley_success");
                 }
+
                 @Override
                 public void onFailure(String result) {
                     constant.showPD();
-                    show_popup(7);
-                    writeLog("saveFeedbackdetail_"+result);
+                    show_popup(8);
+                    writeLog("saveFeedbackdetail_" + result);
                 }
             });
         } catch (Exception e) {
             show_popup(7);
             e.printStackTrace();
-            writeLog("saveFeedbackdetail_"+e.getMessage());
+            writeLog("saveFeedbackdetail_" + e.getMessage());
         }
     }
 

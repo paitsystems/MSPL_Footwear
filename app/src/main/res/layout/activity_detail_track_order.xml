@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.lnbinfotech.msplfootwear.DetailTrackOrderActivity">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/mobmargin2">
+
+        <TextView
+            style="@style/textViewMob"
+            android:textColor="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/tv_date"
+            android:gravity="left"
+            android:layout_gravity="left|center"
+            android:layout_weight="0.3" />
+
+        <TextView
+            style="@style/textViewMob"
+            android:textColor="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/tv_orderno"
+            android:layout_gravity="left|center"
+            android:gravity="left"
+            android:layout_weight="0.3" />
+
+        <TextView
+            style="@style/textViewMob"
+            android:textColor="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/tv_orderqty"
+            android:layout_gravity="right|center"
+            android:gravity="right"
+            android:layout_weight="0.3" />
+        <TextView
+            style="@style/textViewMob"
+            android:textColor="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/tv_orderamt"
+            android:layout_gravity="right|center"
+            android:gravity="right"
+            android:layout_weight="0.3" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/mobpadding5">
+
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/orderstatus"
+            android:layout_weight="0.7" />
+        <TextView
+            android:id="@+id/tv_orstatus"
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_weight="0.3" />
+    </LinearLayout>
+
+
+    <ExpandableListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/expandableListView" />
+</LinearLayout>
