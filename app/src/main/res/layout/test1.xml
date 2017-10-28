@@ -49,15 +49,15 @@
             <TextView
                 android:textSize="20dp"
                 style="@style/textViewMob"
-                android:textColor="@color/white"
-                android:gravity="center"
+                android:textColor="@color/red"
+                android:gravity="bottom|center"
                 android:id="@+id/tv_give_order"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/mobmargin5"
                 android:text="Give Order"
                 android:layout_weight="0.2"
-                android:layout_gravity="center"
-                android:background="@color/red" />
+                android:layout_gravity="center" />
 
 
         </LinearLayout>
@@ -78,8 +78,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:background="@color/yellogreen">
+            android:orientation="horizontal">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -99,7 +98,7 @@
             <TextView
                 android:textSize="20dp"
                 style="@style/textViewMob"
-                android:textColor="@color/white"
+                android:textColor="@color/yellogreen"
                 android:gravity="bottom|center"
                 android:id="@+id/tv_account"
                 android:layout_width="match_parent"
@@ -127,8 +126,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:background="@color/peachpink">
+            android:orientation="horizontal">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -148,7 +146,7 @@
             <TextView
                 android:textSize="20dp"
                 style="@style/textViewMob"
-                android:textColor="@color/white"
+                android:textColor="@color/peachpink"
                 android:gravity="bottom|center"
                 android:id="@+id/tv_trackorder"
                 android:layout_width="match_parent"
@@ -176,8 +174,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:background="@color/lightpurple">
+            android:orientation="horizontal">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -197,7 +194,7 @@
             <TextView
                 android:textSize="20dp"
                 style="@style/textViewMob"
-                android:textColor="@color/white"
+                android:textColor="@color/lightpurple"
                 android:gravity="bottom|center"
                 android:id="@+id/tv_profile"
                 android:layout_width="match_parent"
@@ -225,8 +222,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:background="@color/orange">
+            android:orientation="horizontal">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -246,7 +242,7 @@
             <TextView
                 android:textSize="20dp"
                 style="@style/textViewMob"
-                android:textColor="@color/white"
+                android:textColor="@color/orange"
                 android:gravity="bottom|center"
                 android:id="@+id/tv_scheme"
                 android:layout_width="match_parent"
@@ -274,8 +270,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:background="@color/lightgreen">
+            android:orientation="horizontal">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -295,7 +290,7 @@
             <TextView
                 android:textSize="20dp"
                 style="@style/textViewMob"
-                android:textColor="@color/white"
+                android:textColor="@color/lightgreen"
                 android:gravity="bottom|center"
                 android:id="@+id/tv_whatsnew"
                 android:layout_width="match_parent"
@@ -323,8 +318,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:background="@color/blue">
+            android:orientation="horizontal">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -344,7 +338,7 @@
             <TextView
                 android:textSize="20dp"
                 style="@style/textViewMob"
-                android:textColor="@color/white"
+                android:textColor="@color/blue"
                 android:gravity="bottom|center"
                 android:id="@+id/tv_feedback"
                 android:layout_width="match_parent"

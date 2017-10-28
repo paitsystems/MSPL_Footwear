@@ -76,30 +76,37 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ImagewiseSetwiseOrderActivity"
+            android:theme="@style/AppThemeGiveOrder"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".CutsizeSetwiseOrderActivity"
+            android:theme="@style/AppThemeGiveOrder"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".TrackOrderMasterActivity"
+            android:theme="@style/AppThemeTrackOrder"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".CustomerAccountActivity"
+            android:theme="@style/AppThemeAccount"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".FeedbackActivity"
+            android:theme="@style/AppThemeFeedback"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".Update_ProfileData_Activity"
+            android:theme="@style/AppThemeProfile"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".UpdateProfileActivity"
+            android:theme="@style/AppThemeProfile"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity

@@ -19,7 +19,11 @@
     <color name="blue">#0796DE</color>
     <color name="lightpurple">#9B68DE</color>
     <color name="lightpeach">#e893ac</color>
-
+    <color name="red_dark">#F2462C</color>
+    <color name="darkblue">#5D82D9</color>
+    <color name="light_orange">#FC8B49</color>
+    <color name="darkpurple">#CF2BC6</color>
+    <color name="peachpink">#e3337d</color>
     <color name="buttoncolor">#990000</color>
 
 </resources>

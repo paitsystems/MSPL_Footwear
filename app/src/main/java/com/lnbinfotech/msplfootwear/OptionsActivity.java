@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +15,7 @@ import com.lnbinfotech.msplfootwear.constant.Constant;
 
 public class OptionsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button btn_give_order, btn_account, btn_track_order, btn_profile, btn_scheme, btn_whats_new, btn_feedback;
+    CardView  card_give_order, card_account, card_track_order, card_profile, card_scheme,card_whats_new, card_feedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,39 +28,38 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        btn_give_order.setOnClickListener(this);
-        btn_account.setOnClickListener(this);
-        btn_track_order.setOnClickListener(this);
-        btn_profile.setOnClickListener(this);
-        btn_scheme.setOnClickListener(this);
-        btn_whats_new.setOnClickListener(this);
-        btn_feedback.setOnClickListener(this);
-
+        card_give_order.setOnClickListener(this);
+        card_account.setOnClickListener(this);
+        card_track_order.setOnClickListener(this);
+        card_profile.setOnClickListener(this);
+        card_scheme.setOnClickListener(this);
+        card_whats_new.setOnClickListener(this);
+        card_feedback.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_give_order:
+            case R.id.card_give_order:
                 showDia(1);
                 break;
-            case R.id.btn_account:
+            case R.id.card_account:
                 startActivity(new Intent(getApplicationContext(),CustomerAccountActivity.class));
                 overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
-            case R.id.btn_track_order:
+            case R.id.card_track_order:
                 startActivity(new Intent(getApplicationContext(),TrackOrderMasterActivity.class));
                 overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
-            case R.id.btn_profile:
+            case R.id.card_profile:
                 startActivity(new Intent(getApplicationContext(),UpdateProfileActivity.class));
                 overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
-            case R.id.btn_scheme:
+            case R.id.card_scheme:
                 break;
-            case R.id.btn_whats_new:
+            case R.id.card_whatsnew:
                 break;
-            case R.id.btn_feedback:
+            case R.id.card_feedback:
                 startActivity(new Intent(getApplicationContext(),FeedbackActivity.class));
                 overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
@@ -98,13 +98,13 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void init() {
-        btn_give_order = (Button) findViewById(R.id.btn_give_order);
-        btn_account = (Button) findViewById(R.id.btn_account);
-        btn_track_order = (Button) findViewById(R.id.btn_track_order);
-        btn_profile = (Button) findViewById(R.id.btn_profile);
-        btn_scheme = (Button) findViewById(R.id.btn_scheme);
-        btn_whats_new = (Button) findViewById(R.id.btn_whats_new);
-        btn_feedback = (Button) findViewById(R.id.btn_feedback);
+        card_give_order = (CardView) findViewById(R.id.card_give_order);
+        card_account = (CardView) findViewById(R.id.card_account);
+        card_track_order = (CardView) findViewById(R.id.card_track_order);
+        card_profile = (CardView) findViewById(R.id.card_profile);
+        card_scheme = (CardView) findViewById(R.id.card_scheme);
+       card_whats_new = (CardView) findViewById(R.id.card_whatsnew);
+        card_feedback = (CardView) findViewById(R.id.card_feedback);
     }
 
     private void showDia(int a) {

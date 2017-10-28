@@ -272,4 +272,42 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!--- SNEHA 28/10/2017 -->
+    <style name="AppThemeGiveOrder" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryDark">@color/red</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+    <style name="AppThemeAccount" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/yellogreen</item>
+        <item name="colorPrimaryDark">@color/yellogreen</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+    <style name="AppThemeTrackOrder" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/peachpink</item>
+        <item name="colorPrimaryDark">@color/peachpink</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+    <style name="AppThemeProfile" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/lightpurple</item>
+        <item name="colorPrimaryDark">@color/lightpurple</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+    <style name="AppThemeScheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimaryDark">@color/orange</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+    <style name="AppThemeWhatsnew" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/lightgreen</item>
+        <item name="colorPrimaryDark">@color/lightgreen</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+    <style name="AppThemeFeedback" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryDark">@color/blue</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+
+
 </resources>
