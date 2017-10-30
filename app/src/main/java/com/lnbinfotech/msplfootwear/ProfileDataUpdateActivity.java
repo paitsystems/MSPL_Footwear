@@ -2,29 +2,23 @@ package com.lnbinfotech.msplfootwear;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.PorterDuff;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.lnbinfotech.msplfootwear.db.DBHandler;
-
-public class Update_ProfileData_Activity extends AppCompatActivity {
+public class ProfileDataUpdateActivity extends AppCompatActivity {
     EditText ed_mobno,ed_emailid,ed_cc,ed_cusname,ed_cgst,ed_panno;
     AppCompatButton bt_update;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update__profile_data_);
+        setContentView(R.layout.activity_profile_data_update);
         init();
     }
 
@@ -110,7 +104,7 @@ public class Update_ProfileData_Activity extends AppCompatActivity {
                     String mobile_no = ed_mobno.getText().toString();
                     String email = ed_emailid.getText().toString();
                     String cc = ed_cc.getText().toString();
-                    Intent intent = new Intent(Update_ProfileData_Activity.this, UpdateProfileActivity.class);
+                    Intent intent = new Intent(ProfileDataUpdateActivity.this, ProfileViewActivity.class);
                     intent.putExtra("mobileno", mobile_no);
                     intent.putExtra("emailid", email);
                     intent.putExtra("cc", cc);

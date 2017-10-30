@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".UpdateProfileActivity">
+    tools:context=".ProfileViewActivity">
 
     <ScrollView
 
@@ -336,7 +336,7 @@
             app:backgroundTint="@color/red"
             android:drawableLeft="@drawable/btn_img_background"
             style="@style/textViewMob"
-            android:layout_width="112dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/save"
             android:textColor="@color/white"

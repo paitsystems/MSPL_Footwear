@@ -14,11 +14,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.view.Gravity;
 
-import com.lnbinfotech.msplfootwear.adapters.TrackOrderAdapter;
+import com.lnbinfotech.msplfootwear.adapters.TrackOrderMasterAdapter;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
-import com.lnbinfotech.msplfootwear.model.TrackOrderClass;
+import com.lnbinfotech.msplfootwear.model.TrackOrderMasterClass;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
 
 import java.text.SimpleDateFormat;
@@ -27,45 +27,47 @@ import java.util.Locale;
 
 public class TrackOrderMasterActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private SimpleDateFormat sdf;
     private Toast toast;
     private ListView listView;
     private Constant constant;
-    //public static List<String> order_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_order_master);
+
         init();
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         loadOrderDetails();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(listView.getWindowToken(), 0);
-                TrackOrderClass trackOrderClass = (TrackOrderClass) listView.getItemAtPosition(i);
-                Intent intent = new Intent(TrackOrderMasterActivity.this,DetailTrackOrderActivity.class);
+                TrackOrderMasterClass trackOrderClass = (TrackOrderMasterClass) listView.getItemAtPosition(i);
+                Intent intent = new Intent(TrackOrderMasterActivity.this,TrackOrderDetailActivity.class);
                 intent.putExtra("trackorderclass", trackOrderClass);
                 startActivity(intent);
-                overridePendingTransition(R.anim.left_to_right,R.anim.right_to_left);
+                overridePendingTransition(R.anim.enter,R.anim.exit);
             }
         });
     }
 
     private void init() {
-        //order_list = new ArrayList<>();
         constant = new Constant(TrackOrderMasterActivity.this);
-        sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         listView = (ListView) findViewById(R.id.listView);
-
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        //showDia(0);
+        new Constant(TrackOrderMasterActivity.this).doFinish();
     }
 
     @Override
@@ -75,6 +77,12 @@ public class TrackOrderMasterActivity extends AppCompatActivity implements View.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //showDia(0);
+                new Constant(TrackOrderMasterActivity.this).doFinish();
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -90,20 +98,17 @@ public class TrackOrderMasterActivity extends AppCompatActivity implements View.
         constant.showPD();
         VolleyRequests requests = new VolleyRequests(TrackOrderMasterActivity.this);
         requests.loadTrackOrder(url, new ServerCallbackList() {
-
             @Override
             public void onSuccess(Object result) {
                 constant.showPD();
-                List<TrackOrderClass> list = (List<TrackOrderClass>) result;
+                List<TrackOrderMasterClass> list = (List<TrackOrderMasterClass>) result;
                 if (list.size() != 0) {
-                    TrackOrderAdapter adapter = new TrackOrderAdapter(list, getApplicationContext());
+                    TrackOrderMasterAdapter adapter = new TrackOrderMasterAdapter(list, getApplicationContext());
                     listView.setAdapter(adapter);
                 } else {
                     showPopup(1);
                 }
-
             }
-
             @Override
             public void onFailure(Object result) {
                 constant.showPD();

@@ -2,7 +2,6 @@ package com.lnbinfotech.msplfootwear.parse;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.view.View;
 
 import com.lnbinfotech.msplfootwear.FirstActivity;
 import com.lnbinfotech.msplfootwear.R;
@@ -14,13 +13,13 @@ import com.lnbinfotech.msplfootwear.model.BankMasterClass;
 import com.lnbinfotech.msplfootwear.model.CityMasterClass;
 import com.lnbinfotech.msplfootwear.model.CompanyMasterClass;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
-import com.lnbinfotech.msplfootwear.model.DetailOrderClass;
+import com.lnbinfotech.msplfootwear.model.TrackOrderDetailClass;
 import com.lnbinfotech.msplfootwear.model.DocumentMasterClass;
 import com.lnbinfotech.msplfootwear.model.EmployeeMasterClass;
 import com.lnbinfotech.msplfootwear.model.HOMasterClass;
 import com.lnbinfotech.msplfootwear.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwear.model.StockInfoMasterClass;
-import com.lnbinfotech.msplfootwear.model.TrackOrderClass;
+import com.lnbinfotech.msplfootwear.model.TrackOrderMasterClass;
 import com.lnbinfotech.msplfootwear.model.UserClass;
 
 import org.json.JSONArray;
@@ -433,14 +432,14 @@ public class ParseJSON {
         return ret;
     }
 
-    public List<TrackOrderClass> parseloadTrackOreder(){
+    public List<TrackOrderMasterClass> parseloadTrackOreder(){
 
-        List<TrackOrderClass> list = new ArrayList<>();
+        List<TrackOrderMasterClass> list = new ArrayList<>();
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    TrackOrderClass trackOrderClass = new TrackOrderClass();
+                    TrackOrderMasterClass trackOrderClass = new TrackOrderMasterClass();
                     trackOrderClass.setAuto(jsonArray.getJSONObject(i).getString("auto"));
                     trackOrderClass.setBranchid(jsonArray.getJSONObject(i).getString("branchid"));
                     trackOrderClass.setId(jsonArray.getJSONObject(i).getString("id"));
@@ -452,9 +451,7 @@ public class ParseJSON {
                     trackOrderClass.setNetAmt(jsonArray.getJSONObject(i).getString("NetAmt"));
                     trackOrderClass.setApprove(jsonArray.getJSONObject(i).getString("Approve"));
                     list.add(trackOrderClass);
-
                 }
-
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -463,30 +460,41 @@ public class ParseJSON {
         return list;
     }
 
-    public HashMap<Integer,List<DetailOrderClass>> parseloadDetailOrder(){
-
-        HashMap<Integer,List<DetailOrderClass>> map = new HashMap<>();
+    public HashMap<Integer,List<TrackOrderDetailClass>> parseloadDetailOrder(){
+        HashMap<Integer,List<TrackOrderDetailClass>> map = new HashMap<>();
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    DetailOrderClass orderClass = new DetailOrderClass();
-                    orderClass.setAuto(jsonArray.getJSONObject(i).getString("auto"));
-                    orderClass.setProductid(jsonArray.getJSONObject(i).getString("productid"));
-                    orderClass.setFinal_prod(jsonArray.getJSONObject(i).getString("Final_prod"));
+                    List<TrackOrderDetailClass> list;
+                    TrackOrderDetailClass orderClass = new TrackOrderDetailClass();
+                    orderClass.setAuto(jsonArray.getJSONObject(i).getInt("auto"));
+                    int prodid = jsonArray.getJSONObject(i).getInt("productid");
+                    orderClass.setProductid(prodid);
+                    //orderClass.setFinal_prod(jsonArray.getJSONObject(i).getString("Final_prod"));
                     orderClass.setSize_group(jsonArray.getJSONObject(i).getString("SizeGroup"));
                     orderClass.setColor(jsonArray.getJSONObject(i).getString("Color"));
                     orderClass.setMrp(jsonArray.getJSONObject(i).getString("MRP"));
                     orderClass.setActLooseQty(jsonArray.getJSONObject(i).getString("ActLooseQty"));
                     orderClass.setLoosePackTyp(jsonArray.getJSONObject(i).getString("LoosePackTyp"));
-
-
+                    if(map.isEmpty()) {
+                        list = new ArrayList<>();
+                        list.add(orderClass);
+                        map.put(prodid,list);
+                    }else if(map.containsKey(prodid)){
+                        list = map.get(prodid);
+                        list.add(orderClass);
+                        map.put(prodid,list);
+                    }else{
+                        list = new ArrayList<>();
+                        list.add(orderClass);
+                        map.put(prodid,list);
+                    }
                 }
-
             }
         }catch (Exception e){
             e.printStackTrace();
-            writeLog("_" + e.getMessage());
+            writeLog("parseloadDetailOrder_" + e.getMessage());
         }
         return map;
     }

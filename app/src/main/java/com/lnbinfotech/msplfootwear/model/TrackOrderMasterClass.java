@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 // Created by SNEHA on 10/26/2017.
 
-public class TrackOrderClass implements Serializable{
+public class TrackOrderMasterClass implements Serializable{
     public String auto,branchid,id,PODate,pono,custid,salesExe,looseQty,netAmt,approve;
 
     public String getAuto() {

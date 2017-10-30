@@ -15,9 +15,8 @@ import org.w3c.dom.Text;
 
 import java.util.List;
 
-/**
- * Created by SNEHA on 10/26/2017.
- */
+//Created by SNEHA on 10/26/2017.
+
 public class TrackOrderAdapter extends BaseAdapter {
     private List<TrackOrderClass> orderList;
     private Context context;
@@ -59,7 +58,7 @@ public class TrackOrderAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertview.getTag();
         }
-        TrackOrderClass trackOrderClass = new TrackOrderClass();
+        TrackOrderClass trackOrderClass = (TrackOrderClass) getItem(position);
         holder.tv_date.setText(trackOrderClass.getPODate());
         holder.tv_orderno.setText(trackOrderClass.getPono());
         holder.tv_orderqty.setText(trackOrderClass.getLooseQty());

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.lnbinfotech.msplfootwear.Update_ProfileData_Activity">
+    tools:context=".ProfileDataUpdateActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -175,8 +175,4 @@
     </LinearLayout>
 
 
-    <TextView
-        style="@style/footerstyleMob"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 </LinearLayout>

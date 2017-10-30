@@ -534,12 +534,6 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                     overridePendingTransition(R.anim.left_to_right,R.anim.right_to_left);
                 }
             });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
         }else if(a==2) {
             builder.setMessage("Error While Saving Data");
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {

@@ -1,24 +1,24 @@
 package com.lnbinfotech.msplfootwear.model;
 
-/**
- * Created by SNEHA on 10/27/2017.
- */
-public class DetailOrderClass {
-    public String auto,productid,final_prod,size_group,color,mrp,actLooseQty,loosePackTyp;
+//Created by SNEHA on 10/27/2017.
 
-    public String getAuto() {
+public class TrackOrderDetailClass {
+    private String final_prod,size_group,color,mrp,actLooseQty,loosePackTyp;
+    private int auto,productid;
+
+    public int getAuto() {
         return auto;
     }
 
-    public void setAuto(String auto) {
+    public void setAuto(int auto) {
         this.auto = auto;
     }
 
-    public String getProductid() {
+    public int getProductid() {
         return productid;
     }
 
-    public void setProductid(String productid) {
+    public void setProductid(int productid) {
         this.productid = productid;
     }
 

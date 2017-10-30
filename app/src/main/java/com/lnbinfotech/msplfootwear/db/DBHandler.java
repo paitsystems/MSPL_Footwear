@@ -172,7 +172,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String Document_ForWhom = "ForWhom";
     public static final String Document_Compulsary = "Compulsary";
 
-    public static final String Table_Usermaster = "User";
+    public static final String Table_Usermaster = "UserMaster";
     public static final String UM_RetailCustID = "CustID";
     public static final String UM_Name = "Name";
     public static final String UM_Address = "Address";
@@ -596,9 +596,9 @@ public class DBHandler extends SQLiteOpenHelper {
         res.close();
     }
 
-    public Cursor getUpdateData(int custid){
+    public Cursor getProfileData(int custid){
        // String str = "select "+UM_Name+","+UM_MobileNo+","+UM_Email+","+UM_PANNo+","+UM_GSTNo+" from "+Table_Usermaster+" where "+UM_RetailCustID+" = '"+custid+"'";
-        String str = "select * from "+Table_Usermaster+" where "+UM_RetailCustID+" = '"+custid+"'";
+        String str = "select * from "+Table_Usermaster+" where "+UM_RetailCustID+" ="+custid+"";
         return getWritableDatabase().rawQuery(str,null);
     }
 
@@ -611,6 +611,10 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str,null);
     }
 
+    public Cursor getProdName(String prodids){
+        String str = "select "+PM_ProductID+","+PM_Finalprod+" from "+Table_ProductMaster+" where "+PM_ProductID+" in ("+prodids+")";
+        return getWritableDatabase().rawQuery(str,null);
+    }
 }
 
 

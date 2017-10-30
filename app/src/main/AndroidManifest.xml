@@ -100,12 +100,12 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".Update_ProfileData_Activity"
+            android:name=".ProfileViewActivity"
             android:theme="@style/AppThemeProfile"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".UpdateProfileActivity"
+            android:name=".ProfileDataUpdateActivity"
             android:theme="@style/AppThemeProfile"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
@@ -113,7 +113,10 @@
             android:name=".DataRefreshActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".DetailTrackOrderActivity"></activity>
+        <activity
+            android:name=".TrackOrderDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>

@@ -191,8 +191,8 @@
     <string name="ledgerstatement">Ledger Statement</string>
     <string name="allbills">All Bills</string>
     <string name="orderno">Order No</string>
-    <string name="orderamt">Order Amount</string>
-    <string name="orderqty">Order Qty</string>
+    <string name="orderamt">Amnt</string>
+    <string name="orderqty">Qty</string>
     <string name="date">Date</string>
     <string name="orderstatus">Order Status:</string>
 

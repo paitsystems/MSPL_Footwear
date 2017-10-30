@@ -20,12 +20,12 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_options);
+        setContentView(R.layout.test1);
 
         init();
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
 
         card_give_order.setOnClickListener(this);
@@ -52,7 +52,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
             case R.id.card_profile:
-                startActivity(new Intent(getApplicationContext(),UpdateProfileActivity.class));
+                startActivity(new Intent(getApplicationContext(),ProfileViewActivity.class));
                 overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
             case R.id.card_scheme:
@@ -87,8 +87,6 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.refresh:
                 startActivity(new Intent(getApplicationContext(), DataRefreshActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
-                break;
-            case R.id.logout:
                 break;
             case R.id.report_error:
                 showDia(6);

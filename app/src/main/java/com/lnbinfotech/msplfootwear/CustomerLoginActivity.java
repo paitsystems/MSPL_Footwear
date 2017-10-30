@@ -27,7 +27,7 @@ import java.util.List;
 public class CustomerLoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView tv_custname, tv_custaddress, tv_custmobile, tv_custemail;
-    private EditText ed1,ed2,ed3,ed4,ed5,ed6,ed7,ed8,ed9,ed10,ed11,ed12;
+    private EditText ed1, ed2, ed3, ed4, ed5, ed6, ed7, ed8, ed9, ed10, ed11, ed12;
     private Button btn_save;
     private Toast toast;
     private CustomerDetailClass custClass;
@@ -63,7 +63,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(ed1.getText().toString().length()==1){
+                if (ed1.getText().toString().length() == 1) {
                     ed2.requestFocus();
                 }
             }
@@ -80,7 +80,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(ed2.getText().toString().length()==1){
+                if (ed2.getText().toString().length() == 1) {
                     ed3.requestFocus();
                 }
             }
@@ -97,7 +97,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(ed3.getText().toString().length()==1){
+                if (ed3.getText().toString().length() == 1) {
                     ed4.requestFocus();
                 }
             }
@@ -114,7 +114,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(ed4.getText().toString().length()==1){
+                if (ed4.getText().toString().length() == 1) {
                     ed5.requestFocus();
                 }
             }
@@ -131,7 +131,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(ed5.getText().toString().length()==1){
+                if (ed5.getText().toString().length() == 1) {
                     ed6.requestFocus();
                 }
             }
@@ -148,7 +148,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(ed6.getText().toString().length()==1){
+                if (ed6.getText().toString().length() == 1) {
                     ed7.requestFocus();
                 }
             }
@@ -165,7 +165,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(ed7.getText().toString().length()==1){
+                if (ed7.getText().toString().length() == 1) {
                     ed8.requestFocus();
                 }
             }
@@ -182,8 +182,8 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(ed8.getText().toString().length()==1){
-                    ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(ed6.getWindowToken(),0);
+                if (ed8.getText().toString().length() == 1) {
+                    ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(ed6.getWindowToken(), 0);
                 }
             }
         });
@@ -199,7 +199,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(ed9.getText().toString().length()==1){
+                if (ed9.getText().toString().length() == 1) {
                     ed10.requestFocus();
                 }
             }
@@ -216,7 +216,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(ed10.getText().toString().length()==1){
+                if (ed10.getText().toString().length() == 1) {
                     ed11.requestFocus();
                 }
             }
@@ -233,7 +233,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(ed11.getText().toString().length()==1){
+                if (ed11.getText().toString().length() == 1) {
                     ed12.requestFocus();
                 }
             }
@@ -250,8 +250,8 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(ed12.getText().toString().length()==1){
-                    ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(ed6.getWindowToken(),0);
+                if (ed12.getText().toString().length() == 1) {
+                    ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(ed6.getWindowToken(), 0);
                 }
             }
         });
@@ -262,9 +262,9 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_save:
-                if(setEnterPINFlag == 0){
+                if (setEnterPINFlag == 0) {
                     setNewPIN();
-                }else if(setEnterPINFlag == 1){
+                } else if (setEnterPINFlag == 1) {
                     verifyPin();
                 }
                 break;
@@ -288,7 +288,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         return super.onOptionsItemSelected(item);
     }
 
-    private void setData(){
+    private void setData() {
         tv_custname.setText(custClass.getName());
         tv_custaddress.setText(custClass.getAddress());
         tv_custmobile.setText(custClass.getMobile());
@@ -297,12 +297,12 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         String custid = String.valueOf(custClass.getCustID());
         PIN = db.getCustPIN(custid);
 
-        if(PIN.equals("-1")) {
+        if (PIN.equals("-1")) {
             setEnterPINFlag = 0;
             btn_save.setText("SAVE");
             lay_setpin.setVisibility(View.VISIBLE);
             lay_enterpin.setVisibility(View.GONE);
-        }else {
+        } else {
             setEnterPINFlag = 1;
             btn_save.setText("LOGIN");
             lay_setpin.setVisibility(View.GONE);
@@ -310,17 +310,13 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private void verifyPin(){
+    private void verifyPin() {
         if (ed9.getText().toString().length() == 1 && ed10.getText().toString().length() == 1 &&
                 ed11.getText().toString().length() == 1 && ed12.getText().toString().length() == 1) {
             String pin1 = ed9.getText().toString() + ed10.getText().toString() +
                     ed11.getText().toString() + ed12.getText().toString();
             Constant.showLog(pin1);
-            if(pin1.equals(PIN)){
-                String pin = custClass.getCustID()+"-"+PIN;
-                SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                editor.putString(getString(R.string.pref_savedpin),pin);
-                editor.apply();
+            if (pin1.equals(PIN)) {
                 showDia(2);
                 /*List<String> _list = db.checkPINUnsetID();
                 if(_list.size()!=0){
@@ -328,13 +324,13 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                 }else{
                     showDia(2);
                 }*/
-            }else{
+            } else {
                 showDia(4);
             }
         }
     }
 
-    private void setNewPIN(){
+    private void setNewPIN() {
         if (ed1.getText().toString().length() == 1 && ed2.getText().toString().length() == 1 &&
                 ed3.getText().toString().length() == 1 && ed4.getText().toString().length() == 1) {
             String pin1 = ed1.getText().toString() + ed2.getText().toString() +
@@ -360,28 +356,43 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private void savePin(String _pin){
-        db.updatePIN(String.valueOf(custClass.getCustID()),_pin);
+    private void savePin(String _pin) {
+        db.updatePIN(String.valueOf(custClass.getCustID()), _pin);
         showDia(3);
     }
 
-    private void clearFields(int a){
-        if(a==1){
-            ed9.setText(null);ed10.setText(null);ed11.setText(null);ed12.setText(null);
+    private void clearFields(int a) {
+        if (a == 1) {
+            ed9.setText(null);
+            ed10.setText(null);
+            ed11.setText(null);
+            ed12.setText(null);
             ed9.requestFocus();
-        }else if(a==2){
-            ed1.setText(null);ed2.setText(null);ed3.setText(null);ed4.setText(null);
-            ed5.setText(null);ed6.setText(null);ed7.setText(null);ed8.setText(null);
+        } else if (a == 2) {
+            ed1.setText(null);
+            ed2.setText(null);
+            ed3.setText(null);
+            ed4.setText(null);
+            ed5.setText(null);
+            ed6.setText(null);
+            ed7.setText(null);
+            ed8.setText(null);
             ed1.requestFocus();
         }
     }
 
-    private void startNewActivity(){
+    private void startNewActivity() {
+        String pin = custClass.getCustID() + "-" + PIN;
+        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+        editor.putString(getString(R.string.pref_savedpin), pin);
+        editor.putInt(getString(R.string.pref_retailCustId), custClass.getCustID());
+        editor.apply();
+
         finish();
-        Intent intent = new Intent(getApplicationContext(),OptionsActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        overridePendingTransition(R.anim.enter,R.anim.exit);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
     private void init() {
@@ -409,8 +420,9 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         toast.setGravity(Gravity.CENTER, 0, 0);
     }
 
-    void showDia(int a) {
+    private void showDia(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(CustomerLoginActivity.this);
+        builder.setCancelable(false);
         if (a == 0) {
             builder.setMessage("Do You Want To Exit App?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -426,7 +438,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                     dialog.dismiss();
                 }
             });
-        }else if (a == 1) {
+        } else if (a == 1) {
             builder.setMessage("Do You Want Set PIN To Other Details?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -442,7 +454,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                     dialog.dismiss();
                 }
             });
-        }else if (a == 2) {
+        } else if (a == 2) {
             builder.setMessage("Login Successfull");
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
@@ -451,21 +463,21 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                     dialog.dismiss();
                 }
             });
-        }else if (a == 3) {
+        } else if (a == 3) {
             builder.setMessage("PIN Set Successfully");
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     List<String> _list = db.checkPINUnsetID();
-                    if(_list.size()!=0){
+                    if (_list.size() != 0) {
                         showDia(1);
-                    }else{
+                    } else {
                         showDia(6);
                     }
                 }
             });
-        }else if (a == 4) {
+        } else if (a == 4) {
             builder.setMessage("Invalid PIN");
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
@@ -474,7 +486,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                     dialog.dismiss();
                 }
             });
-        }else if (a == 5) {
+        } else if (a == 5) {
             builder.setMessage("PIN Not Matched");
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
@@ -483,7 +495,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                     dialog.dismiss();
                 }
             });
-        }else if (a == 6) {
+        } else if (a == 6) {
             builder.setMessage("Do you want to continue with this login?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override

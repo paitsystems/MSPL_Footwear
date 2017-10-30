@@ -7,25 +7,22 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.lnbinfotech.msplfootwear.model.TrackOrderClass;
-import com.lnbinfotech.msplfootwearex.R;
-import com.lnbinfotech.msplfootwearex.model.TrackOrderClass;
+import com.lnbinfotech.msplfootwear.model.TrackOrderMasterClass;
+import com.lnbinfotech.msplfootwear.R;
 
 import java.util.List;
 
-/**
- * Created by SNEHA on 10/26/2017.
- */
-public class TrackOrderAdapter extends BaseAdapter {
-    private List<TrackOrderClass> orderList;
+//Created by SNEHA on 10/26/2017.
+
+public class TrackOrderMasterAdapter extends BaseAdapter {
+    private List<TrackOrderMasterClass> orderList;
     private Context context;
     private LayoutInflater inflater;
 
-    public TrackOrderAdapter(List<TrackOrderClass> _orderList, Context _context) {
+    public TrackOrderMasterAdapter(List<TrackOrderMasterClass> _orderList, Context _context) {
         this.orderList = _orderList;
         this.context = _context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
     }
 
     @Override
@@ -48,7 +45,7 @@ public class TrackOrderAdapter extends BaseAdapter {
         final ViewHolder holder;
         if (convertview == null) {
             holder = new ViewHolder();
-            convertview = inflater.inflate(R.layout.order_list_item, viewGroup, false);
+            convertview = inflater.inflate(R.layout.list_item_track_order_master, viewGroup, false);
             holder.tv_date = (TextView) convertview.findViewById(R.id.tv_date);
             holder.tv_orderno = (TextView) convertview.findViewById(R.id.tv_orderno);
             holder.tv_orderqty = (TextView) convertview.findViewById(R.id.tv_orderqty);
@@ -57,7 +54,7 @@ public class TrackOrderAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertview.getTag();
         }
-        TrackOrderClass trackOrderClass = new TrackOrderClass();
+        TrackOrderMasterClass trackOrderClass = (TrackOrderMasterClass) getItem(position);
         holder.tv_date.setText(trackOrderClass.getPODate());
         holder.tv_orderno.setText(trackOrderClass.getPono());
         holder.tv_orderqty.setText(trackOrderClass.getLooseQty());
@@ -67,6 +64,5 @@ public class TrackOrderAdapter extends BaseAdapter {
 
     private class ViewHolder {
         public TextView tv_date, tv_orderno, tv_orderqty, tv_orderamt;
-
     }
 }

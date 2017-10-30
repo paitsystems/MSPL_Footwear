@@ -411,8 +411,9 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         toast.setGravity(Gravity.CENTER, 0, 0);
     }
 
-    void showDia(int a) {
+    private void showDia(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(CustomerLoginActivity.this);
+        builder.setCancelable(false);
         if (a == 0) {
             builder.setMessage("Do You Want To Exit App?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {

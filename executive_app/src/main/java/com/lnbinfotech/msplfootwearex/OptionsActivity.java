@@ -39,7 +39,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         init();
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
 
         btn_take_order.setOnClickListener(this);
@@ -61,6 +61,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.btn_reports:
                 break;
             case R.id.btn_new_cust_entry:
+                finish();
                 startActivity(new Intent(getApplicationContext(), NewCustomerEntryActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
@@ -88,8 +89,8 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(new Intent(getApplicationContext(), DataRefreshActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
-            case R.id.logout:
-                break;
+            /*case R.id.logout:
+                break;*/
             case R.id.report_error:
                 showDia(6);
                 break;
@@ -146,6 +147,21 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 }
             });
             builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 2) {
+            builder.setMessage("Do You Want To Logout From App?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new Constant(OptionsActivity.this).doFinish();
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
