@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +17,7 @@ public class CustomerAccountActivity extends AppCompatActivity implements View.O
 
     private Constant constant, constant1;
     private Toast toast;
-    private Button btn_bills,btn_gst_report, btn_ledger_statement;
+    private CardView card_bills,card_gst_report, card_ledger_statement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +62,9 @@ public class CustomerAccountActivity extends AppCompatActivity implements View.O
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
-        btn_bills = (Button) findViewById(R.id.btn_bills);
-        btn_gst_report= (Button) findViewById(R.id.btn_gst_report);
-        btn_ledger_statement = (Button) findViewById(R.id.btn_ledger_statement);
+        card_bills = (CardView) findViewById(R.id.card_bills);
+        card_gst_report= (CardView) findViewById(R.id.btn_gst_report);
+        card_ledger_statement = (CardView) findViewById(R.id.card_ledger_statement);
     }
 
     private void showDia(int a) {

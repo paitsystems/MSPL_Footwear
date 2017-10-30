@@ -30,6 +30,7 @@ import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
+import com.lnbinfotech.msplfootwearex.model.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
 import java.io.File;
@@ -50,6 +51,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
     private ImageView imageView_edit, imageView_cus_edit, imageView_address_edit, imageView_id_edit, imageView_gstpan_edit, imageView_cus_image, imageView_addproof, imageView_idproof, imageView_pan_img, imageView_gst_img;
     private Constant constant;
     private DBHandler db;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,8 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
     }
 
     private void init() {
+        toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
         db = new DBHandler(NewCustomerEntryDetailFormActivity.this);
         ed_cus_name = (EditText) findViewById(R.id.ed_cus_name);
         ed_mobile_no = (EditText) findViewById(R.id.ed_mobile_no);
@@ -415,24 +419,25 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
     }
 
     private void saveData() {
-        try {
-            String url = "";
-            constant = new Constant(NewCustomerEntryDetailFormActivity.this);
-            constant.showPD();
-            String _cust_name = URLEncoder.encode(OptionsActivity.new_cus.getCust_name(), "UTF-8");
-            String _mob_no = URLEncoder.encode(OptionsActivity.new_cus.getMobile_no(), "UTF-8");
-            String _email_id = URLEncoder.encode(OptionsActivity.new_cus.getEmail_id(), "UTF-8");
-            String _address = URLEncoder.encode(OptionsActivity.new_cus.getAddress(), "UTF-8");
-            String _cust_img = URLEncoder.encode(OptionsActivity.new_cus.getCus_image(), "UTF-8");
-            String _address_proof = URLEncoder.encode(OptionsActivity.new_cus.getAddress_proof(), "UTF-8");
-            String _address_proof_img = URLEncoder.encode(OptionsActivity.new_cus.getAddress_proof_image(), "UTF-8");
-            String _id_proof = URLEncoder.encode(OptionsActivity.new_cus.getId_proof(), "UTF-8");
-            String _id_proof_img = URLEncoder.encode(OptionsActivity.new_cus.getId_proof_image(), "UTF-8");
-            String _gst_no = URLEncoder.encode(OptionsActivity.new_cus.getGst_no(), "UTF-8");
-            String _gstno_img = URLEncoder.encode(OptionsActivity.new_cus.getGst_no_image(), "UTF-8");
-            String _pan_no = URLEncoder.encode(OptionsActivity.new_cus.getPan_no(), "UTF-8");
-            String _panno_img = URLEncoder.encode(OptionsActivity.new_cus.getPan_no_image(), "UTF-8");
-            String custId = "1", BranchId = "1", District = "Pune", Taluka = "Pune", CityId = "1", AreaId = "1", HOCode = "1";
+        if(ConnectivityTest.getNetStat(NewCustomerEntryDetailFormActivity.this)) {
+            try {
+                String url = "";
+                constant = new Constant(NewCustomerEntryDetailFormActivity.this);
+                constant.showPD();
+                String _cust_name = URLEncoder.encode(OptionsActivity.new_cus.getCust_name(), "UTF-8");
+                String _mob_no = URLEncoder.encode(OptionsActivity.new_cus.getMobile_no(), "UTF-8");
+                String _email_id = URLEncoder.encode(OptionsActivity.new_cus.getEmail_id(), "UTF-8");
+                String _address = URLEncoder.encode(OptionsActivity.new_cus.getAddress(), "UTF-8");
+                String _cust_img = URLEncoder.encode(OptionsActivity.new_cus.getCus_image(), "UTF-8");
+                String _address_proof = URLEncoder.encode(OptionsActivity.new_cus.getAddress_proof(), "UTF-8");
+                String _address_proof_img = URLEncoder.encode(OptionsActivity.new_cus.getAddress_proof_image(), "UTF-8");
+                String _id_proof = URLEncoder.encode(OptionsActivity.new_cus.getId_proof(), "UTF-8");
+                String _id_proof_img = URLEncoder.encode(OptionsActivity.new_cus.getId_proof_image(), "UTF-8");
+                String _gst_no = URLEncoder.encode(OptionsActivity.new_cus.getGst_no(), "UTF-8");
+                String _gstno_img = URLEncoder.encode(OptionsActivity.new_cus.getGst_no_image(), "UTF-8");
+                String _pan_no = URLEncoder.encode(OptionsActivity.new_cus.getPan_no(), "UTF-8");
+                String _panno_img = URLEncoder.encode(OptionsActivity.new_cus.getPan_no_image(), "UTF-8");
+                String custId = "1", BranchId = "1", District = "Pune", Taluka = "Pune", CityId = "1", AreaId = "1", HOCode = "1";
             /*Cursor cursor = db.getUserDetails();
             if (cursor.moveToFirst()) {
                 do {
@@ -446,14 +451,14 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                 } while (cursor.moveToNext());
             }
             cursor.close();*/
-            String _custId = URLEncoder.encode(custId, "UTF-8");
-            String _BranchId = URLEncoder.encode(BranchId, "UTF-8");
-            String _District = URLEncoder.encode(District, "UTF-8");
-            String _Taluka = URLEncoder.encode(Taluka, "UTF-8");
-            String _CityId = URLEncoder.encode(CityId, "UTF-8");
-            String _AreaId = URLEncoder.encode(AreaId, "UTF-8");
-            String _HOCode = URLEncoder.encode(HOCode, "UTF-8");
-            String data = OptionsActivity.new_cus.getId_addressproof()+"-"+OptionsActivity.new_cus.getAddress_proof_image()+","+ OptionsActivity.new_cus.getId_idproof()+"-"+OptionsActivity.new_cus.getId_proof_image()+","+OptionsActivity.new_cus.getId_gstpan_proof()+"-"+OptionsActivity.new_cus.getGstpan_img();
+                String _custId = URLEncoder.encode(custId, "UTF-8");
+                String _BranchId = URLEncoder.encode(BranchId, "UTF-8");
+                String _District = URLEncoder.encode(District, "UTF-8");
+                String _Taluka = URLEncoder.encode(Taluka, "UTF-8");
+                String _CityId = URLEncoder.encode(CityId, "UTF-8");
+                String _AreaId = URLEncoder.encode(AreaId, "UTF-8");
+                String _HOCode = URLEncoder.encode(HOCode, "UTF-8");
+                String data = OptionsActivity.new_cus.getId_addressproof() + "-" + OptionsActivity.new_cus.getAddress_proof_image() + "," + OptionsActivity.new_cus.getId_idproof() + "-" + OptionsActivity.new_cus.getId_proof_image() + "," + OptionsActivity.new_cus.getId_gstpan_proof() + "-" + OptionsActivity.new_cus.getGstpan_img();
 
             /*if(AttachGSTnoPANnoImageActivity.radio_flag == 1) {
                 url = Constant.ipaddress + "/SaveCustomerDetail?custname="+_cust_name+"&mobno="+_mob_no+"&email="+_email_id+"&address="+_address+"&custimg="+_cust_img+"&addressproof="+_address_proof+"&addressproofimg="+_address_proof_img+"&idproof="+_id_proof+"&idproofimg="+_id_proof_img+"&GSTINNo="+_gst_no+"&GSTINimg="+_gstno_img;
@@ -465,30 +470,35 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                 writeLog("saveData():url called" + url);
             }*/
 
-            url = Constant.ipaddress + "/SaveCustomerDetail?custname=" + _cust_name + "&mobno=" + _mob_no + "&email=" + _email_id + "&address=" + _address + "&custimg="
-                    + _cust_img + "&addressproof=" + _address_proof + "&addressproofimg=" + _address_proof_img + "&idproof=" + _id_proof + "&idproofimg=" + _id_proof_img + "&GSTINNo=" + _gst_no + "&GSTINimg=" + _gstno_img + "&PANNo=" + _pan_no + "&PANimg=" + _panno_img
-                    + "&custid=" + _custId + "&Branchid=" + _BranchId + "&district=" + _District + "&taluka=" + _Taluka + "&cityid=" + _CityId + "&areaid=" + _AreaId + "&HOCode=" + _HOCode + "&data="+data;
-            Constant.showLog(url);
-            writeLog("saveData_url_called" + url);
+                url = Constant.ipaddress + "/SaveCustomerDetail?custname=" + _cust_name + "&mobno=" + _mob_no + "&email=" + _email_id + "&address=" + _address + "&custimg="
+                        + _cust_img + "&addressproof=" + _address_proof + "&addressproofimg=" + _address_proof_img + "&idproof=" + _id_proof + "&idproofimg=" + _id_proof_img + "&GSTINNo=" + _gst_no + "&GSTINimg=" + _gstno_img + "&PANNo=" + _pan_no + "&PANimg=" + _panno_img
+                        + "&custid=" + _custId + "&Branchid=" + _BranchId + "&district=" + _District + "&taluka=" + _Taluka + "&cityid=" + _CityId + "&areaid=" + _AreaId + "&HOCode=" + _HOCode + "&data=" + data;
+                Constant.showLog(url);
+                writeLog("saveData_url_called" + url);
 
-            VolleyRequests requests = new VolleyRequests(NewCustomerEntryDetailFormActivity.this);
-            requests.saveCustomerDetail(url, new ServerCallback() {
-                @Override
-                public void onSuccess(String result) {
-                    showPopup(1);
-                }
-                @Override
-                public void onFailure(String result) {
-                    constant.showPD();
-                    showPopup(2);
-                    writeLog("saveData_"+result);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            constant.showPD();
-            showPopup(2);
-            writeLog("saveData_"+e.getMessage());
+                VolleyRequests requests = new VolleyRequests(NewCustomerEntryDetailFormActivity.this);
+                requests.saveCustomerDetail(url, new ServerCallback() {
+                    @Override
+                    public void onSuccess(String result) {
+                        showPopup(1);
+                    }
+
+                    @Override
+                    public void onFailure(String result) {
+                        constant.showPD();
+                        showPopup(2);
+                        writeLog("saveData_" + result);
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                constant.showPD();
+                showPopup(2);
+                writeLog("saveData_" + e.getMessage());
+            }
+        }else {
+            toast.setText("Sorry,No Internet Connection.");
+            toast.show();
         }
     }
 
@@ -501,6 +511,14 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     saveData();
+                    /*if(ConnectivityTest.getNetStat(NewCustomerEntryDetailFormActivity.this)) {
+                        dialogInterface.dismiss();
+                        saveData();
+                    }else {
+                        toast.setText("Sorry,No Internet Connection.");
+                        toast.show();
+                       //showPopup(4);
+                    }*/
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -557,6 +575,22 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                     OptionsActivity.new_cus = null;
                     startActivity(in);
                     new Constant(NewCustomerEntryDetailFormActivity.this).doFinish();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+        }else if (a==4){
+            builder.setTitle("InternetVerification");
+            builder.setMessage("Sorry,No Internet Connection.");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                   dialogInterface.dismiss();
+                    finish();
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {

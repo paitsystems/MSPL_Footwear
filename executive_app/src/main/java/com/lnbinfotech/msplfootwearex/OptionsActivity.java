@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class OptionsActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static NewCustomerEntryGetterSetter new_cus;
-    private Button btn_take_order, btn_visit, btn_report, btn_new_cust_entry;
+    private CardView card_take_order, card_visit, card_report, card_new_cust_entry;
     private Toast toast;
 
     @Override
@@ -42,25 +43,25 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
 
-        btn_take_order.setOnClickListener(this);
-        btn_visit.setOnClickListener(this);
-        btn_report.setOnClickListener(this);
-        btn_new_cust_entry.setOnClickListener(this);
+        card_take_order.setOnClickListener(this);
+        card_visit.setOnClickListener(this);
+        card_report.setOnClickListener(this);
+        card_new_cust_entry.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_take_order:
+            case R.id.card_take_order:
                 showDia(1);
                 break;
-            case R.id.btn_visit:
+            case R.id.card_visit:
                 startActivity(new Intent(getApplicationContext(), AreawiseCustomerSelectionActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
-            case R.id.btn_reports:
+            case R.id.card_reports:
                 break;
-            case R.id.btn_new_cust_entry:
+            case R.id.card_new_cust_entry:
                 finish();
                 startActivity(new Intent(getApplicationContext(), NewCustomerEntryActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
@@ -103,10 +104,10 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         toast.setGravity(Gravity.CENTER, 0, 0);
 
         new_cus = new NewCustomerEntryGetterSetter();
-        btn_take_order = (Button) findViewById(R.id.btn_take_order);
-        btn_visit = (Button) findViewById(R.id.btn_visit);
-        btn_report = (Button) findViewById(R.id.btn_reports);
-        btn_new_cust_entry = (Button) findViewById(R.id.btn_new_cust_entry);
+        card_take_order = (CardView) findViewById(R.id.card_take_order);
+        card_visit = (CardView) findViewById(R.id.card_visit);
+        card_report = (CardView) findViewById(R.id.card_reports);
+        card_new_cust_entry = (CardView) findViewById(R.id.card_new_cust_entry);
     }
 
     private void showDia(int a) {

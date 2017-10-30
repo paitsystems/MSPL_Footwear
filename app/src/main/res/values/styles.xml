@@ -300,5 +300,22 @@
         <item name="colorPrimaryDark">@color/blue</item>
         <item name="colorAccent">@color/black</item>
     </style>
+    <style name="AppThemeLedgerStatement" parent="Theme.AppCompat.Light.DarkActionBar">
+    <item name="colorPrimary">@color/orange</item>
+    <item name="colorPrimaryDark">@color/orange</item>s.
+    <item name="colorAccent">@color/black</item>
+    </style>
+
+    <style name="AppThemeGstReport" parent="Theme.AppCompat.Light.DarkActionBar">
+    <item name="colorPrimary">@color/peachpink</item>
+    <item name="colorPrimaryDark">@color/peachpink</item>
+    <item name="colorAccent">@color/black</item>
+    </style>
+
+    <style name="AppThemeBillls" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryDark">@color/red</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
 
 </resources>
