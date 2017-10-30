@@ -29,6 +29,7 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.visitoption);
         }
 
         card_take_order.setOnClickListener(this);

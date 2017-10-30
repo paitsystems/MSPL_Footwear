@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,10 +24,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
+import com.lnbinfotech.msplfootwearex.model.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.model.FeedbackClass;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
@@ -58,6 +61,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     private int flag;
     private FeedbackClass feedbackClass;
     private Constant constant;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -298,6 +302,8 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void init() {
+        toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
         feedbackClass = new FeedbackClass();
         fedback_spinner = (Spinner) findViewById(R.id.fedback_spinner);
         ed_description = (EditText) findViewById(R.id.ed_description);
@@ -533,65 +539,70 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void saveFeedbackdetail() {
-        try {
-            String url = "";
-            constant = new Constant(FeedbackActivity.this);
-            constant.showPD();
-            String feedtype = feedbackClass.getFeedbk_type();
-            String articleno = feedbackClass.getArticle_no();
-            String invoiceno = feedbackClass.getInvoice_no();
-            String qty = feedbackClass.getQty();
-            String salesmanid = feedbackClass.getSalesman_id();
-            String officetype = feedbackClass.getFront_office();
-            String description = feedbackClass.getFront_office();
-            String img1 = feedbackClass.getFeed_img1();
-            String img2 = feedbackClass.getFeed_img2();
-            String img3 = feedbackClass.getFeed_img3();
-            String crby = feedbackClass.getCrby();
-            //String crdate = feedbackClass.getCrdate();
-            //String crtime = feedbackClass.getCrtime();
-            String usertype = feedbackClass.getUser_type();
+        if(ConnectivityTest.getNetStat(FeedbackActivity.this)) {
+            try {
+                String url = "";
+                constant = new Constant(FeedbackActivity.this);
+                constant.showPD();
+                String feedtype = feedbackClass.getFeedbk_type();
+                String articleno = feedbackClass.getArticle_no();
+                String invoiceno = feedbackClass.getInvoice_no();
+                String qty = feedbackClass.getQty();
+                String salesmanid = feedbackClass.getSalesman_id();
+                String officetype = feedbackClass.getFront_office();
+                String description = feedbackClass.getFront_office();
+                String img1 = feedbackClass.getFeed_img1();
+                String img2 = feedbackClass.getFeed_img2();
+                String img3 = feedbackClass.getFeed_img3();
+                String crby = feedbackClass.getCrby();
+                //String crdate = feedbackClass.getCrdate();
+                //String crtime = feedbackClass.getCrtime();
+                String usertype = feedbackClass.getUser_type();
 
-            String _feedtype = URLEncoder.encode(feedtype, "UTF-8");
-            String _articleno = URLEncoder.encode(articleno, "UTF-8");
-            String _invoiceno = URLEncoder.encode(invoiceno, "UTF-8");
-            String _qty = URLEncoder.encode(qty, "UTF-8");
-            String _salesmanid = URLEncoder.encode(salesmanid, "UTF-8");
-            String _officetype = URLEncoder.encode(officetype, "UTF-8");
-            String _description = URLEncoder.encode(description, "UTF-8");
-            String _img1 = URLEncoder.encode(img1, "UTF-8");
-            String _img2 = URLEncoder.encode(img2, "UTF-8");
-            String _img3 = URLEncoder.encode(img3, "UTF-8");
-            String _crby = URLEncoder.encode(crby, "UTF-8");
-            //String _crdate = URLEncoder.encode(crdate, "UTF-8");
-            //String _crtime = URLEncoder.encode(crtime, "UTF-8");
-            String _usertype = URLEncoder.encode(usertype, "UTF-8");
+                String _feedtype = URLEncoder.encode(feedtype, "UTF-8");
+                String _articleno = URLEncoder.encode(articleno, "UTF-8");
+                String _invoiceno = URLEncoder.encode(invoiceno, "UTF-8");
+                String _qty = URLEncoder.encode(qty, "UTF-8");
+                String _salesmanid = URLEncoder.encode(salesmanid, "UTF-8");
+                String _officetype = URLEncoder.encode(officetype, "UTF-8");
+                String _description = URLEncoder.encode(description, "UTF-8");
+                String _img1 = URLEncoder.encode(img1, "UTF-8");
+                String _img2 = URLEncoder.encode(img2, "UTF-8");
+                String _img3 = URLEncoder.encode(img3, "UTF-8");
+                String _crby = URLEncoder.encode(crby, "UTF-8");
+                //String _crdate = URLEncoder.encode(crdate, "UTF-8");
+                //String _crtime = URLEncoder.encode(crtime, "UTF-8");
+                String _usertype = URLEncoder.encode(usertype, "UTF-8");
 
-            url = "/SaveFeedbackDetail?feedbk_type=" + _feedtype + "&article_no=" + _articleno + "&invoice_no" + _invoiceno + "&qty=" + _qty + "&salesman_id=" + _salesmanid + "&office_type=" + _officetype + "&description=" + _description + "&img1=" + _img1 + "&img2=" + _img2 + "&img3=" + _img3 + "&crby=" + _crby + "&user_type=" + _usertype;
-            Constant.showLog(url);
-            writeLog("savefeedback():url called:" + url);
+                url = "/SaveFeedbackDetail?feedbk_type=" + _feedtype + "&article_no=" + _articleno + "&invoice_no" + _invoiceno + "&qty=" + _qty + "&salesman_id=" + _salesmanid + "&office_type=" + _officetype + "&description=" + _description + "&img1=" + _img1 + "&img2=" + _img2 + "&img3=" + _img3 + "&crby=" + _crby + "&user_type=" + _usertype;
+                Constant.showLog(url);
+                writeLog("savefeedback():url called:" + url);
 
-            VolleyRequests requests = new VolleyRequests(FeedbackActivity.this);
-            requests.saveFeedbackDetail(url, new ServerCallback() {
-                @Override
-                public void onSuccess(String result) {
-                    constant.showPD();
-                    show_popup(7);
-                    Constant.showLog("Volly request success");
-                    writeLog("saveFeedbackdetail():Volley_success");
-                }
+                VolleyRequests requests = new VolleyRequests(FeedbackActivity.this);
+                requests.saveFeedbackDetail(url, new ServerCallback() {
+                    @Override
+                    public void onSuccess(String result) {
+                        constant.showPD();
+                        show_popup(7);
+                        Constant.showLog("Volly request success");
+                        writeLog("saveFeedbackdetail():Volley_success");
+                    }
 
-                @Override
-                public void onFailure(String result) {
-                    constant.showPD();
-                    show_popup(8);
-                    writeLog("saveFeedbackdetail_" + result);
-                }
-            });
-        } catch (Exception e) {
-            show_popup(7);
-            e.printStackTrace();
-            writeLog("saveFeedbackdetail_" + e.getMessage());
+                    @Override
+                    public void onFailure(String result) {
+                        constant.showPD();
+                        show_popup(8);
+                        writeLog("saveFeedbackdetail_" + result);
+                    }
+                });
+            } catch (Exception e) {
+                show_popup(7);
+                e.printStackTrace();
+                writeLog("saveFeedbackdetail_" + e.getMessage());
+            }
+        }else {
+            toast.setText("Sorry,No Internet Connection.");
+            toast.show();
         }
     }
 

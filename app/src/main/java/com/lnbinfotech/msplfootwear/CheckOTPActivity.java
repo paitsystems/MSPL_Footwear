@@ -61,6 +61,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setTitle(R.string.email_id);
         }
 
         //autoOTP();

@@ -66,7 +66,7 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_cheque_details);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.chequedetail);
+            getSupportActionBar().setTitle(R.string.payment);
         }
         init();
     }

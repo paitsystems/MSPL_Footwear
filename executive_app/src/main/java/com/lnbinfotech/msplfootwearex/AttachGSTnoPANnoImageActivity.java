@@ -63,7 +63,7 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
         setContentView(R.layout.activity_attach_gst_pan_image);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.gstpanproof);
+            getSupportActionBar().setTitle(R.string.newcustomerentry);
         }
         init();
     }

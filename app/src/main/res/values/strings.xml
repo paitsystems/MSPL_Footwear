@@ -195,5 +195,6 @@
     <string name="orderqty">Qty</string>
     <string name="date">Date</string>
     <string name="orderstatus">Order Status:</string>
+    <string name="checkopt">Order Status:</string>
 
 </resources>

@@ -66,7 +66,7 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
         setContentView(R.layout.activity_attach_id_proof_image);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.idproof);
+            getSupportActionBar().setTitle(R.string.newcustomerentry);
         }
         init();
     }

@@ -42,6 +42,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.visit);
         }
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

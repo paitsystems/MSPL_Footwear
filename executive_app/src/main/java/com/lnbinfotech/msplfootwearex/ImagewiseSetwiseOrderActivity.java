@@ -25,6 +25,7 @@ public class ImagewiseSetwiseOrderActivity extends AppCompatActivity implements 
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.takeorder);
         }
 
     }

@@ -54,7 +54,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         setContentView(R.layout.activity_visit_payment_form);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.visitpayment);
+            getSupportActionBar().setTitle(R.string.payment);
         }
         init();
     }

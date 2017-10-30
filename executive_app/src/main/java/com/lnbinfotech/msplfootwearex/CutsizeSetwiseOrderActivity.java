@@ -35,6 +35,7 @@ public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements Vi
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.takeorder);
         }
 
         setViewPager();

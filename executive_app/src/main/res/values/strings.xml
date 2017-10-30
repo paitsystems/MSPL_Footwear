@@ -246,6 +246,7 @@
     <string name="description">Description</string>
     <string name="entertexthere">Enter text here</string>
     <string name="feedbacktype">Feedback Type</string>
+
     <!---sneha changes26oct17- - - - - - - - - - -  -->
     <string name="bills">Bills</string>
     <string name="gstreport">GST Report</string>
@@ -255,5 +256,11 @@
     <string name="orderno">Order No</string>
     <string name="orderamt">Order Amount</string>
     <string name="orderqty">Order Qty</string>
+
+    <!---sneha changes30oct17- - - - - - - - - - -  -->
+    <string name="takeorder">Take Order</string>
+    <string name="visit">Visit</string>
+    <string name="payment">Payment</string>
+    <string name="visitoption">Visit Option</string>
 
 </resources>

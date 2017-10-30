@@ -63,7 +63,7 @@ public class CustomerAccountActivity extends AppCompatActivity implements View.O
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         card_bills = (CardView) findViewById(R.id.card_bills);
-        card_gst_report= (CardView) findViewById(R.id.btn_gst_report);
+        card_gst_report= (CardView) findViewById(R.id.card_gst_report);
         card_ledger_statement = (CardView) findViewById(R.id.card_ledger_statement);
     }
 

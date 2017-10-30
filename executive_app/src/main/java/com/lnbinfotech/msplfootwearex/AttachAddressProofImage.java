@@ -68,7 +68,7 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_attach_address_proof_image);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.addressproof);
+            getSupportActionBar().setTitle(R.string.newcustomerentry);
         }
         init();
     }

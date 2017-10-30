@@ -40,7 +40,7 @@ public class SelectAutoItemActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_select_auto_item);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.selectitem);
+            getSupportActionBar().setTitle(R.string.payment);
         }
         init();
     }
