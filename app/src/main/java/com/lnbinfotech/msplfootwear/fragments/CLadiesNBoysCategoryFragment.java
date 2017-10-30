@@ -1,4 +1,4 @@
-package com.lnbinfotech.msplfootwearex.fragments;
+package com.lnbinfotech.msplfootwear.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -9,17 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.lnbinfotech.msplfootwearex.R;
-import com.lnbinfotech.msplfootwearex.adapters.GentsCategoryListAdapter;
-import com.lnbinfotech.msplfootwearex.db.DBHandler;
-import com.lnbinfotech.msplfootwearex.model.GentsCategoryClass;
+import com.lnbinfotech.msplfootwear.R;
+import com.lnbinfotech.msplfootwear.adapters.GentsCategoryListAdapter;
+import com.lnbinfotech.msplfootwear.db.DBHandler;
+import com.lnbinfotech.msplfootwear.model.GentsCategoryClass;
 
 import java.util.ArrayList;
 import java.util.List;
 
 //Created by lnb on 9/26/2017.
 
-public class SchoolShoesCategoryFragment extends Fragment {
+public class CLadiesNBoysCategoryFragment extends Fragment {
 
     private ListView listView;
     private GentsCategoryListAdapter adapter;
@@ -28,7 +28,7 @@ public class SchoolShoesCategoryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_schoolshoe_category,container,false);
+        View view = inflater.inflate(R.layout.fragment_ladiesnboys_category_c,container,false);
         listView = (ListView) view.findViewById(R.id.listView);
         db = new DBHandler(getContext());
         setData();
@@ -37,7 +37,7 @@ public class SchoolShoesCategoryFragment extends Fragment {
 
     private void setData(){
         List<GentsCategoryClass> list = new ArrayList<>();
-        Cursor res = db.getSubCategory("SchoolShoes");
+        Cursor res = db.getSubCategory("Ladies&Boys");
         if(res.moveToFirst()){
             do {
                 GentsCategoryClass gentsClass = new GentsCategoryClass();

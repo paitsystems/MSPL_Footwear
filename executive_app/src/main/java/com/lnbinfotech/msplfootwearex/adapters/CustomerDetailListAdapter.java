@@ -11,15 +11,16 @@ import android.widget.TextView;
 
 import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
+import com.lnbinfotech.msplfootwearex.model.UserClass;
 
 import java.util.ArrayList;
 
 public class CustomerDetailListAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<CustomerDetailClass> list;
+    private ArrayList<UserClass> list;
 
-    public CustomerDetailListAdapter(Context _context, ArrayList<CustomerDetailClass> _list) {
+    public CustomerDetailListAdapter(Context _context, ArrayList<UserClass> _list) {
         this.context = _context;
         this.list = _list;
     }
@@ -54,11 +55,11 @@ public class CustomerDetailListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        CustomerDetailClass custClass = (CustomerDetailClass) getItem(i);
-        holder.tv_custname.setText(custClass.getName());
-        holder.tv_custaddress.setText(custClass.getAddress());
-        holder.tv_custmobile.setText(custClass.getMobile());
-        holder.tv_custemail.setText(custClass.getEmail());
+        UserClass userClass = (UserClass) getItem(i);
+        holder.tv_custname.setText(userClass.getName());
+        holder.tv_custaddress.setText(userClass.getAddress());
+        holder.tv_custmobile.setText(userClass.getMobile());
+        holder.tv_custemail.setText(userClass.getEmail());
         return view;
     }
 

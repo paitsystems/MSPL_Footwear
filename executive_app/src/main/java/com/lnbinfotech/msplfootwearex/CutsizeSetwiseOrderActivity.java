@@ -13,10 +13,10 @@ import android.view.Gravity;
 
 import com.lnbinfotech.msplfootwearex.adapters.CutsizewiseViewPagerAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
-import com.lnbinfotech.msplfootwearex.fragments.GentsCategoryFragment;
-import com.lnbinfotech.msplfootwearex.fragments.HawaiNEvaCategoryFragment;
-import com.lnbinfotech.msplfootwearex.fragments.LadiesNBoysCategoryFragment;
-import com.lnbinfotech.msplfootwearex.fragments.SchoolShoesCategoryFragment;
+import com.lnbinfotech.msplfootwearex.fragments.CGentsCategoryFragment;
+import com.lnbinfotech.msplfootwearex.fragments.CHawaiNEvaCategoryFragment;
+import com.lnbinfotech.msplfootwearex.fragments.CLadiesNBoysCategoryFragment;
+import com.lnbinfotech.msplfootwearex.fragments.CSchoolShoesCategoryFragment;
 
 public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -69,10 +69,10 @@ public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements Vi
 
     private void setViewPager(){
         adapter = new CutsizewiseViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new GentsCategoryFragment(),"GENTS");
-        adapter.addFragment(new LadiesNBoysCategoryFragment(),"LADIES & BOYS");
-        adapter.addFragment(new HawaiNEvaCategoryFragment(),"HAWAI & EVA");
-        adapter.addFragment(new SchoolShoesCategoryFragment(),"SCHOOL SHOES");
+        adapter.addFragment(new CGentsCategoryFragment(),"GENTS");
+        adapter.addFragment(new CLadiesNBoysCategoryFragment(),"LADIES & BOYS");
+        adapter.addFragment(new CHawaiNEvaCategoryFragment(),"HAWAI & EVA");
+        adapter.addFragment(new CSchoolShoesCategoryFragment(),"SCHOOL SHOES");
         pager.setAdapter(adapter);
     }
 

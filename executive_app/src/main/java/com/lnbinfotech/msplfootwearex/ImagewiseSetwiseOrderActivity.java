@@ -2,6 +2,8 @@ package com.lnbinfotech.msplfootwearex;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -9,12 +11,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.lnbinfotech.msplfootwearex.adapters.ViewPagerAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.fragments.IGentsCategoryFragment;
+import com.lnbinfotech.msplfootwearex.fragments.IHawaiNEvaCategoryFragment;
+import com.lnbinfotech.msplfootwearex.fragments.ILadiesNBoysCategoryFragment;
+import com.lnbinfotech.msplfootwearex.fragments.ISchoolShoesCategoryFragment;
 
 public class ImagewiseSetwiseOrderActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Constant constant;
     private Toast toast;
+    private ViewPagerAdapter adapter;
+    private TabLayout tabLayout;
+    private ViewPager pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +37,9 @@ public class ImagewiseSetwiseOrderActivity extends AppCompatActivity implements 
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.takeorder);
         }
+
+        setViewPager();
+        tabLayout.setupWithViewPager(pager);
 
     }
 
@@ -55,10 +68,20 @@ public class ImagewiseSetwiseOrderActivity extends AppCompatActivity implements 
         return super.onOptionsItemSelected(item);
     }
 
+    private void setViewPager(){
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new IGentsCategoryFragment(),"GENTS");
+        adapter.addFragment(new ILadiesNBoysCategoryFragment(),"LADIES & BOYS");
+        adapter.addFragment(new IHawaiNEvaCategoryFragment(),"HAWAI & EVA");
+        adapter.addFragment(new ISchoolShoesCategoryFragment(),"SCHOOL SHOES");
+        pager.setAdapter(adapter);
+    }
+
     private void init() {
         toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER,0,0);
-
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        pager = (ViewPager) findViewById(R.id.pager);
     }
 
     private void showDia(int a) {

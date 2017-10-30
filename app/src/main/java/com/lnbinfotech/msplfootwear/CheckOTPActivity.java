@@ -48,7 +48,6 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     private String mobNo,imeiNo;
     private  String response_value;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

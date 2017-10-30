@@ -1,7 +1,5 @@
 package com.lnbinfotech.msplfootwear.fragments;
 
-//Created by lnb on 9/26/2017.
-
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,7 +17,9 @@ import com.lnbinfotech.msplfootwear.model.GentsCategoryClass;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HawaiNEvaCategoryFragment extends Fragment{
+//Created by lnb on 9/26/2017.
+
+public class CSchoolShoesCategoryFragment extends Fragment {
 
     private ListView listView;
     private GentsCategoryListAdapter adapter;
@@ -28,7 +28,7 @@ public class HawaiNEvaCategoryFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_hawaineva_category,container,false);
+        View view = inflater.inflate(R.layout.fragment_schoolshoe_category_c,container,false);
         listView = (ListView) view.findViewById(R.id.listView);
         db = new DBHandler(getContext());
         setData();
@@ -37,7 +37,7 @@ public class HawaiNEvaCategoryFragment extends Fragment{
 
     private void setData(){
         List<GentsCategoryClass> list = new ArrayList<>();
-        Cursor res = db.getSubCategory("Hawai&Eva");
+        Cursor res = db.getSubCategory("SchoolShoes");
         if(res.moveToFirst()){
             do {
                 GentsCategoryClass gentsClass = new GentsCategoryClass();

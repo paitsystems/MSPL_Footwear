@@ -32,7 +32,6 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-
 public class VisitPaymentFormActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText ed_amount, ed_cus_name;
@@ -46,7 +45,6 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
     public static VisitPaymentFormGetterSetter visit;
     private int total_amt = 0;
     private Toast toast;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,9 +265,6 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent in = new Intent(VisitPaymentFormActivity.this, OptionsActivity.class);
-                    OptionsActivity.new_cus = null;
-                    startActivity(in);
                     new Constant(VisitPaymentFormActivity.this).doFinish();
                     // finish();
                 }
@@ -289,6 +284,5 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "VisitPaymentFormActivity_" + _data);
     }
-
 
 }

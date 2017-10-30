@@ -329,16 +329,12 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
 
     private void showPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
+        builder.setCancelable(false);
         builder.setMessage("Do you want to clear cheque details");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent in = new Intent(ChequeDetailsActivity.this, VisitPaymentFormActivity.class);
-                ChequeDetailsActivity.chequeDetails = null;
-                startActivity(in);
                 new Constant(ChequeDetailsActivity.this).doFinish();
-                // finish();
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {

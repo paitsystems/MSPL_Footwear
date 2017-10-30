@@ -1,4 +1,4 @@
-package com.lnbinfotech.msplfootwearex.fragments;
+package com.lnbinfotech.msplfootwear.fragments;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,19 +11,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.lnbinfotech.msplfootwearex.AddToCartActivity;
-import com.lnbinfotech.msplfootwearex.R;
-import com.lnbinfotech.msplfootwearex.adapters.GentsCategoryListAdapter;
-import com.lnbinfotech.msplfootwearex.constant.Constant;
-import com.lnbinfotech.msplfootwearex.db.DBHandler;
-import com.lnbinfotech.msplfootwearex.model.GentsCategoryClass;
+import com.lnbinfotech.msplfootwear.AddToCartActivity;
+import com.lnbinfotech.msplfootwear.R;
+import com.lnbinfotech.msplfootwear.adapters.GentsCategoryListAdapter;
+import com.lnbinfotech.msplfootwear.constant.Constant;
+import com.lnbinfotech.msplfootwear.db.DBHandler;
+import com.lnbinfotech.msplfootwear.model.GentsCategoryClass;
 
 import java.util.ArrayList;
 import java.util.List;
 
 //Created by lnb on 9/26/2017.
 
-public class GentsCategoryFragment extends Fragment {
+public class CGentsCategoryFragment extends Fragment {
 
     private ListView listView;
     private GentsCategoryListAdapter adapter;
@@ -31,11 +31,10 @@ public class GentsCategoryFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_gents_category,container,false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_gents_category_c,container,false);
         listView = (ListView) view.findViewById(R.id.listView);
         db = new DBHandler(getContext());
-
         setData();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

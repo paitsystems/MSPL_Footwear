@@ -28,6 +28,7 @@ import java.util.List;
 public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
+    //TODO: Change Version
     public static final int Database_Version = 1;
 
     public static final String Table_Customermaster = "CustomerMaster";
@@ -444,8 +445,6 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().insert(Table_DocumentMaster,null,cv);
     }
 
-    //name,Address,Mobile,Email,Panno,ImagePath,GSTNo,AadharNo
-    //TODO ALL FIELDS OF USER TO BE ADDED
     public void addUserDetail(UserClass user) {
         ContentValues cv = new ContentValues();
         cv.put(UM_RetailCustID, user.getCustID());
@@ -456,6 +455,15 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(UM_PANNo, user.getPANno());
         cv.put(UM_GSTNo, user.getGSTNo());
         cv.put(UM_ImagePath, user.getImagePath());
+        cv.put(UM_Status,user.getStatus());
+        cv.put(UM_District,user.getDistrict());
+        cv.put(UM_Taluka,user.getTaluka());
+        cv.put(UM_CityId,user.getCityId());
+        cv.put(UM_AreaId,user.getAreaId());
+        cv.put(UM_HOCode,user.getHOCode());
+        cv.put(UM_IMEINo,user.getIMEINo());
+        cv.put(UM_isRegistered,user.getIsRegistered());
+        cv.put(UM_AadhaarNo,user.getAadharNo());
         cv.put(UM_PIN, "-1");
         getWritableDatabase().insert(Table_Usermaster, null, cv);
     }
@@ -477,6 +485,37 @@ public class DBHandler extends SQLiteOpenHelper {
                 custClass.setImagePath(res.getString(res.getColumnIndex(UM_ImagePath)));
                 list.add(custClass);
             } while (res.moveToNext());
+        }
+        res.close();
+        return list;
+    }
+
+    public ArrayList<UserClass> getUserDetail(){
+        ArrayList<UserClass> list = new ArrayList<>();
+        String str = "select * from "+Table_Usermaster;
+        Cursor res = getWritableDatabase().rawQuery(str,null);
+        if(res.moveToFirst()){
+            do{
+                UserClass userClass = new UserClass();
+                userClass.setCustID(res.getInt(res.getColumnIndex(UM_RetailCustID)));
+                userClass.setName(res.getString(res.getColumnIndex(UM_Name)));
+                userClass.setAddress(res.getString(res.getColumnIndex(UM_Address)));
+                userClass.setMobile(res.getString(res.getColumnIndex(UM_MobileNo)));
+                userClass.setEmail(res.getString(res.getColumnIndex(UM_Email)));
+                userClass.setPANno(res.getString(res.getColumnIndex(UM_PANNo)));
+                userClass.setGSTNo(res.getString(res.getColumnIndex(UM_GSTNo)));
+                userClass.setImagePath(res.getString(res.getColumnIndex(UM_ImagePath)));
+                userClass.setStatus(res.getString(res.getColumnIndex(UM_Status)));
+                userClass.setDistrict(res.getString(res.getColumnIndex(UM_District)));
+                userClass.setTaluka(res.getString(res.getColumnIndex(UM_Taluka)));
+                userClass.setCityId(res.getInt(res.getColumnIndex(UM_CityId)));
+                userClass.setAreaId(res.getInt(res.getColumnIndex(UM_AreaId)));
+                userClass.setHOCode(res.getInt(res.getColumnIndex(UM_HOCode)));
+                userClass.setIMEINo(res.getString(res.getColumnIndex(UM_IMEINo)));
+                userClass.setIsRegistered(res.getString(res.getColumnIndex(UM_isRegistered)));
+                userClass.setAadharNo(res.getString(res.getColumnIndex(UM_AadhaarNo)));
+                list.add(userClass);
+            }while (res.moveToNext());
         }
         res.close();
         return list;
@@ -514,10 +553,10 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().update(Table_Usermaster, cv, UM_RetailCustID + "=?", new String[]{custid});
     }
 
-    // public Cursor getAreaName(String cityid){
-    public Cursor getAreaName() {
-        // String str = "select "+Area_Area+" from "+Table_AreaMaster+" where "+Area_Cityid+" = "+cityid;
-        String str = "select " + Area_Area + " from " + Table_AreaMaster + " where " + Area_Cityid + " = 1";
+    public Cursor getAreaName(int cityid){
+    //TODO: Change AreaID
+        String str = "select "+Area_Area+" from "+Table_AreaMaster+" where "+Area_Cityid+" = "+cityid +" order by "+Area_Area;
+        //String str = "select " + Area_Area + " from " + Table_AreaMaster + " where " + Area_Cityid + " = 1 order by "+Area_Area;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
     }
@@ -553,18 +592,21 @@ public class DBHandler extends SQLiteOpenHelper {
         Constant.showLog(str);
         getWritableDatabase().execSQL(str);
     }
+
     public void createCompanyMaster() {
         String str = "create table if not exists " + Table_CompanyMaster + "(" + Company_Id + " int," + Company_Name + " text,"
                 + Company_Initial + " text," + Company_Pan + " text," + Company_DisplayCmp + " text," + Company_GSTNo + " text" + Company_HOCode + "text)";
         Constant.showLog(str);
         getWritableDatabase().execSQL(str);
     }
+
     public void createBankBranchMaster() {
         String str = "create table if not exists " + Table_BankBranchMaster + "(" + Branch_AutoId + " int," + Branch_Id + " int,"
                 + Branch_Branch + " text," + Branch_CustId + " int," + Branch_AccountNo + " text," + Branch_CBankId + " int," + Branch_CBranch + " text)";
         Constant.showLog(str);
         getWritableDatabase().execSQL(str);
     }
+
     public void createDocumentMaster() {
         String str = "create table if not exists " + Table_DocumentMaster + "(" + Document_Id + " int,"
                 + Document_DocName + " text," + Document_ForWhom + " text," + Document_Compulsary + " text)";

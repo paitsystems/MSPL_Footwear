@@ -132,7 +132,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
     }
 
     private  void areaName(){
-        Cursor cursor =  db.getAreaName();
+        Cursor cursor =  db.getAreaName(FirstActivity.pref.getInt(getString(R.string.pref_cityid),0));
         if(cursor.moveToFirst()){
             do{
                 AreawiseCustomerSelectionClass  areaclass = new AreawiseCustomerSelectionClass();

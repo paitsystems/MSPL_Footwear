@@ -63,10 +63,20 @@ public class ParseJSON {
                     userClass.setPANno(jsonArray.getJSONObject(i).getString("Panno"));
                     userClass.setGSTNo(jsonArray.getJSONObject(i).getString("GSTNo"));
                     userClass.setImagePath(jsonArray.getJSONObject(i).getString("ImagePath"));
+                    userClass.setStatus(jsonArray.getJSONObject(i).getString("Status"));
+                    userClass.setDistrict(jsonArray.getJSONObject(i).getString("District"));
+                    userClass.setTaluka(jsonArray.getJSONObject(i).getString("Taluka"));
+                    userClass.setCityId(jsonArray.getJSONObject(i).getInt("CityId"));
+                    userClass.setAreaId(jsonArray.getJSONObject(i).getInt("AreaId"));
+                    userClass.setHOCode(jsonArray.getJSONObject(i).getInt("HoCode"));
+                    userClass.setIMEINo(jsonArray.getJSONObject(i).getString("IMEINo"));
+                    userClass.setIsRegistered(jsonArray.getJSONObject(i).getString("isRegistered"));
+                    userClass.setAadharNo(jsonArray.getJSONObject(i).getString("AadharNo"));
 
                     SharedPreferences.Editor editor = FirstActivity.pref.edit();
                     editor.putInt(context.getString(R.string.pref_branchid),userClass.getBranchId());
                     editor.putInt(context.getString(R.string.pref_retailCustId),userClass.getCustID());
+                    editor.putInt(context.getString(R.string.pref_cityid),userClass.getCityId());
                     editor.apply();
 
                     db.addUserDetail(userClass);

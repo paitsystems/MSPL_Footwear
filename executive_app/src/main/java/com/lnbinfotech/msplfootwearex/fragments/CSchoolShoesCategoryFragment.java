@@ -19,7 +19,7 @@ import java.util.List;
 
 //Created by lnb on 9/26/2017.
 
-public class LadiesNBoysCategoryFragment extends Fragment {
+public class CSchoolShoesCategoryFragment extends Fragment {
 
     private ListView listView;
     private GentsCategoryListAdapter adapter;
@@ -28,7 +28,7 @@ public class LadiesNBoysCategoryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ladiesnboys_category,container,false);
+        View view = inflater.inflate(R.layout.fragment_schoolshoe_category_c,container,false);
         listView = (ListView) view.findViewById(R.id.listView);
         db = new DBHandler(getContext());
         setData();
@@ -37,7 +37,7 @@ public class LadiesNBoysCategoryFragment extends Fragment {
 
     private void setData(){
         List<GentsCategoryClass> list = new ArrayList<>();
-        Cursor res = db.getSubCategory("Ladies&Boys");
+        Cursor res = db.getSubCategory("SchoolShoes");
         if(res.moveToFirst()){
             do {
                 GentsCategoryClass gentsClass = new GentsCategoryClass();

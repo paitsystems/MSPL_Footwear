@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -43,6 +44,20 @@ public class SelectAutoItemActivity extends AppCompatActivity implements View.On
             getSupportActionBar().setTitle(R.string.payment);
         }
         init();
+    }
+
+    @Override
+    public void onClick(View view) {
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                new Constant(SelectAutoItemActivity.this).doFinish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void init() {
@@ -184,11 +199,7 @@ public class SelectAutoItemActivity extends AppCompatActivity implements View.On
 
     }
 
-    @Override
-    public void onClick(View view) {
-    }
-
-     private void getCustomerList(){
+    private void getCustomerList(){
      // Cursor cursor = db.getCustomerName();
 
     }

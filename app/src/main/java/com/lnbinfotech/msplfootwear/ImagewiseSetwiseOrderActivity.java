@@ -13,10 +13,10 @@ import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwear.adapters.ViewPagerAdapter;
 import com.lnbinfotech.msplfootwear.constant.Constant;
-import com.lnbinfotech.msplfootwear.fragments.GentsCategoryFragment;
-import com.lnbinfotech.msplfootwear.fragments.HawaiNEvaCategoryFragment;
-import com.lnbinfotech.msplfootwear.fragments.LadiesNBoysCategoryFragment;
-import com.lnbinfotech.msplfootwear.fragments.SchoolShoesCategoryFragment;
+import com.lnbinfotech.msplfootwear.fragments.IGentsCategoryFragment;
+import com.lnbinfotech.msplfootwear.fragments.IHawaiNEvaCategoryFragment;
+import com.lnbinfotech.msplfootwear.fragments.ILadiesNBoysCategoryFragment;
+import com.lnbinfotech.msplfootwear.fragments.ISchoolShoesCategoryFragment;
 
 public class ImagewiseSetwiseOrderActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -69,10 +69,10 @@ public class ImagewiseSetwiseOrderActivity extends AppCompatActivity implements 
 
     private void setViewPager(){
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new GentsCategoryFragment(),"GENTS");
-        adapter.addFragment(new LadiesNBoysCategoryFragment(),"LADIES & BOYS");
-        adapter.addFragment(new HawaiNEvaCategoryFragment(),"HAWAI & EVA");
-        adapter.addFragment(new SchoolShoesCategoryFragment(),"SCHOOL SHOES");
+        adapter.addFragment(new IGentsCategoryFragment(),"GENTS");
+        adapter.addFragment(new ILadiesNBoysCategoryFragment(),"LADIES & BOYS");
+        adapter.addFragment(new IHawaiNEvaCategoryFragment(),"HAWAI & EVA");
+        adapter.addFragment(new ISchoolShoesCategoryFragment(),"SCHOOL SHOES");
         pager.setAdapter(adapter);
     }
 

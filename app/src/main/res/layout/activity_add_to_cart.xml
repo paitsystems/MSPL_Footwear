@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/ed_prod_search"
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableRight="@drawable/search"
+            android:focusable="false"
+            android:hint="Search Product Here..." />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pack-N-Set"
+                android:id="@+id/rdo_pack"
+                android:layout_weight="0.5"
+                android:checked="true"
+                style="@style/textViewMob"/>
+
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Loose Order"
+                android:id="@+id/rdo_unpack"
+                android:layout_weight="0.5"
+                style="@style/textViewMob"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

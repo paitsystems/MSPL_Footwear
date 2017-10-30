@@ -7,178 +7,135 @@
     android:orientation="vertical"
     tools:context="com.lnbinfotech.msplfootwearex.NewCustomerEntryActivity">
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_margin="@dimen/mobmargin5"
+        android:layout_weight="1">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/mobmargin5">
+            android:layout_marginBottom="@dimen/mobmargin5"
+            android:layout_marginTop="@dimen/mobmargin5"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/mobmargin5"
-                android:layout_marginTop="@dimen/mobmargin5"
-                android:orientation="vertical">
+                android:layout_gravity="center"
+                android:layout_margin="5sp">
 
-                <TextView
+                <EditText
+                    android:id="@+id/ed_cus_name"
                     style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:hint="@string/selectcustomername" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5sp">
+
+                <EditText
+                    android:id="@+id/ed_mobile_no"
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:hint="@string/mobile_no" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5sp">
+
+                <EditText
+                    android:id="@+id/ed_emailid"
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:hint="@string/email_id" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5sp">
+
+                <EditText
+                    android:id="@+id/ed_address"
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:gravity="top"
+                    android:hint="@string/address"
+                    android:lines="2" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/save_lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/mobmargin5"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_next"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/enternewcustomername" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/mobmargin5"
-                    android:layout_marginTop="@dimen/mobmargin5"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
-
-                    <EditText
-                        android:id="@+id/ed_cus_name"
-                        style="@style/textViewMob"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textPersonName"
-                        android:visibility="visible"/>
-                </LinearLayout>
-
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mobile_no" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/mobmargin5"
-                    android:layout_marginTop="@dimen/mobmargin5"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
-
-                    <EditText
-                        android:id="@+id/ed_mobile_no"
-                        style="@style/textViewMob"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="number"
-                        android:maxLength="10"/>
-                </LinearLayout>
-
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/email_id"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
-
-                    <EditText
-                        android:id="@+id/ed_emailid"
-                        style="@style/textViewMob"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/mobmargin5"
-                        android:layout_marginTop="@dimen/mobmargin5"
-                        android:ems="10"
-                        android:inputType="textEmailAddress"/>
-                </LinearLayout>
-
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/address" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/mobmargin5"
-                    android:layout_marginTop="@dimen/mobmargin5"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
-
-                    <EditText
-                        android:id="@+id/ed_address"
-                        style="@style/textViewMob"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:gravity="top"
-                        android:hint="@string/enteraddresshere"
-                        android:lines="2" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/save_lay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/mobmargin5"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
-                    <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/btn_next"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:drawableLeft="@drawable/next"
-                        android:text="@string/next"
-                        android:textColor="@color/white"
-                        app:backgroundTint="@color/buttoncolor" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/update_lay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/mobmargin5"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/btn_update"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/mobmargin5"
-                        android:layout_weight="0.2"
-                        android:drawableLeft="@drawable/update"
-                        android:text="@string/update"
-                        android:textColor="@color/white"
-                        app:backgroundTint="@color/buttoncolor" />
-
-                    <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/btn_cancel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/mobmargin5"
-                        android:layout_weight="0.2"
-                        android:drawableLeft="@drawable/cancel"
-                        android:text="@string/cancel"
-                        android:textColor="@color/white"
-                        app:backgroundTint="@color/buttoncolor" />
-                </LinearLayout>
+                    android:layout_gravity="center"
+                    android:drawableRight="@drawable/next16"
+                    android:text="@string/next"
+                    android:textColor="@color/white"
+                    app:backgroundTint="@color/buttoncolor" />
             </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/update_lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/mobmargin5"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.2"
+                    android:drawableLeft="@drawable/update"
+                    android:text="@string/update"
+                    android:textColor="@color/white"
+                    app:backgroundTint="@color/buttoncolor" />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.2"
+                    android:drawableLeft="@drawable/cancel"
+                    android:text="@string/cancel"
+                    android:textColor="@color/white"
+                    app:backgroundTint="@color/buttoncolor" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

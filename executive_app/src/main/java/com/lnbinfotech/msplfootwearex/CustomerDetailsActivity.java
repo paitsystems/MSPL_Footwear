@@ -16,6 +16,7 @@ import com.lnbinfotech.msplfootwearex.adapters.CustomerDetailListAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
+import com.lnbinfotech.msplfootwearex.model.UserClass;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,7 @@ public class CustomerDetailsActivity extends AppCompatActivity implements View.O
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                CustomerDetailClass custClass = (CustomerDetailClass) listView.getAdapter().getItem(i);
+                UserClass custClass = (UserClass) listView.getAdapter().getItem(i);
                 Intent intent = new Intent(getApplicationContext(),CustomerLoginActivity.class);
                 intent.putExtra("cust",custClass);
                 startActivity(intent);
@@ -76,7 +77,7 @@ public class CustomerDetailsActivity extends AppCompatActivity implements View.O
     }
 
     private void loadData(){
-        ArrayList<CustomerDetailClass> list = db.getCustomerDetail();
+        ArrayList<UserClass> list = db.getUserDetail();
         adapter = new CustomerDetailListAdapter(CustomerDetailsActivity.this,list);
         listView.setAdapter(adapter);
     }

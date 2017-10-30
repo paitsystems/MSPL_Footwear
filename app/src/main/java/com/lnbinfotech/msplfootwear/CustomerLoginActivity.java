@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
+import com.lnbinfotech.msplfootwear.model.UserClass;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     private EditText ed1, ed2, ed3, ed4, ed5, ed6, ed7, ed8, ed9, ed10, ed11, ed12;
     private Button btn_save;
     private Toast toast;
-    private CustomerDetailClass custClass;
+    private UserClass userClass;
     private CardView lay_setpin, lay_enterpin;
     private int setEnterPINFlag = -1;
     private String PIN = null;
@@ -47,7 +48,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        custClass = (CustomerDetailClass) getIntent().getExtras().get("cust");
+        userClass = (UserClass) getIntent().getExtras().get("cust");
         setData();
 
         btn_save.setOnClickListener(this);
@@ -289,12 +290,12 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     }
 
     private void setData() {
-        tv_custname.setText(custClass.getName());
-        tv_custaddress.setText(custClass.getAddress());
-        tv_custmobile.setText(custClass.getMobile());
-        tv_custemail.setText(custClass.getEmail());
+        tv_custname.setText(userClass.getName());
+        tv_custaddress.setText(userClass.getAddress());
+        tv_custmobile.setText(userClass.getMobile());
+        tv_custemail.setText(userClass.getEmail());
 
-        String custid = String.valueOf(custClass.getCustID());
+        String custid = String.valueOf(userClass.getCustID());
         PIN = db.getCustPIN(custid);
 
         if (PIN.equals("-1")) {
@@ -357,7 +358,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     }
 
     private void savePin(String _pin) {
-        db.updatePIN(String.valueOf(custClass.getCustID()), _pin);
+        db.updatePIN(String.valueOf(userClass.getCustID()), _pin);
         showDia(3);
     }
 
@@ -382,12 +383,13 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     }
 
     private void startNewActivity() {
-        String pin = custClass.getCustID() + "-" + PIN;
+        String pin = userClass.getCustID() + "-" + PIN;
         SharedPreferences.Editor editor = FirstActivity.pref.edit();
         editor.putString(getString(R.string.pref_savedpin), pin);
-        editor.putInt(getString(R.string.pref_retailCustId), custClass.getCustID());
+        editor.putInt(getString(R.string.pref_retailCustId), userClass.getCustID());
+        editor.putInt(getString(R.string.pref_branchid),userClass.getBranchId());
+        editor.putInt(getString(R.string.pref_cityid),userClass.getCityId());
         editor.apply();
-
         finish();
         Intent intent = new Intent(getApplicationContext(), OptionsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

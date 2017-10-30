@@ -28,7 +28,8 @@ import java.util.List;
 public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
-    public static final int Database_Version = 2;
+    //TODO: Change Version
+    public static final int Database_Version = 1;
 
     //retailCustID,name,address,mobile,status,branchId,email,District,Taluka,cityId,areaId,
     // Panno,ImagePath,HoCode,GSTNo,IMEINo,isRegistered,AadharNo,PIN
@@ -456,6 +457,15 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(UM_PANNo, user.getPANno());
         cv.put(UM_GSTNo, user.getGSTNo());
         cv.put(UM_ImagePath, user.getImagePath());
+        cv.put(UM_Status,user.getStatus());
+        cv.put(UM_District,user.getDistrict());
+        cv.put(UM_Taluka,user.getTaluka());
+        cv.put(UM_CityId,user.getCityId());
+        cv.put(UM_AreaId,user.getAreaId());
+        cv.put(UM_HOCode,user.getHOCode());
+        cv.put(UM_IMEINo,user.getIMEINo());
+        cv.put(UM_isRegistered,user.getIsRegistered());
+        cv.put(UM_AadhaarNo,user.getAadharNo());
         cv.put(UM_PIN, "-1");
         getWritableDatabase().insert(Table_Usermaster, null, cv);
     }
@@ -476,6 +486,37 @@ public class DBHandler extends SQLiteOpenHelper {
                 custClass.setGSTNo(res.getString(res.getColumnIndex(UM_GSTNo)));
                 custClass.setImagePath(res.getString(res.getColumnIndex(UM_ImagePath)));
                 list.add(custClass);
+            }while (res.moveToNext());
+        }
+        res.close();
+        return list;
+    }
+
+    public ArrayList<UserClass> getUserDetail(){
+        ArrayList<UserClass> list = new ArrayList<>();
+        String str = "select * from "+Table_Usermaster;
+        Cursor res = getWritableDatabase().rawQuery(str,null);
+        if(res.moveToFirst()){
+            do{
+                UserClass userClass = new UserClass();
+                userClass.setCustID(res.getInt(res.getColumnIndex(UM_RetailCustID)));
+                userClass.setName(res.getString(res.getColumnIndex(UM_Name)));
+                userClass.setAddress(res.getString(res.getColumnIndex(UM_Address)));
+                userClass.setMobile(res.getString(res.getColumnIndex(UM_MobileNo)));
+                userClass.setEmail(res.getString(res.getColumnIndex(UM_Email)));
+                userClass.setPANno(res.getString(res.getColumnIndex(UM_PANNo)));
+                userClass.setGSTNo(res.getString(res.getColumnIndex(UM_GSTNo)));
+                userClass.setImagePath(res.getString(res.getColumnIndex(UM_ImagePath)));
+                userClass.setStatus(res.getString(res.getColumnIndex(UM_Status)));
+                userClass.setDistrict(res.getString(res.getColumnIndex(UM_District)));
+                userClass.setTaluka(res.getString(res.getColumnIndex(UM_Taluka)));
+                userClass.setCityId(res.getInt(res.getColumnIndex(UM_CityId)));
+                userClass.setAreaId(res.getInt(res.getColumnIndex(UM_AreaId)));
+                userClass.setHOCode(res.getInt(res.getColumnIndex(UM_HOCode)));
+                userClass.setIMEINo(res.getString(res.getColumnIndex(UM_IMEINo)));
+                userClass.setIsRegistered(res.getString(res.getColumnIndex(UM_isRegistered)));
+                userClass.setAadharNo(res.getString(res.getColumnIndex(UM_AadhaarNo)));
+                list.add(userClass);
             }while (res.moveToNext());
         }
         res.close();

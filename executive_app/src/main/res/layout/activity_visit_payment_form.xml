@@ -229,7 +229,6 @@
 
             </LinearLayout>
 
-
             <ListView
                 android:id="@+id/lv_show_chq_detail"
                 android:layout_width="match_parent"

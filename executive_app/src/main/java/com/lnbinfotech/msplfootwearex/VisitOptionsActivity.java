@@ -23,7 +23,9 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_visit_option);
+        //setContentView(R.layout.activity_visit_option);
+        setContentView(R.layout.visit_option_test);
+        //setContentView(R.layout.visit_option_test1);
 
         init();
 

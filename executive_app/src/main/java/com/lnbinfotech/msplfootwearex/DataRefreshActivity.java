@@ -358,14 +358,17 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         toast.setGravity(Gravity.CENTER, 0, 0);
         listView = (ListView) findViewById(R.id.listView);
         refreshList = new ArrayList<>();
-        refreshList.add("Area  Master");refreshList.add("City Master");
-        refreshList.add("Customer Master");refreshList.add("Employee Master");
-        refreshList.add("HOMaster Master");refreshList.add("Product Master");
-        refreshList.add("Stock Master");
-        refreshList.add("Company Master");
+        refreshList.add("Area Master");
         refreshList.add("Bank Master");
-        refreshList.add("Bank_Branch Master");
+        refreshList.add("Bank's Branch Master");
+        refreshList.add("Company Master");
+        refreshList.add("City Master");
+        refreshList.add("Customer Master");
         refreshList.add("Document Master");
+        refreshList.add("Employee Master");
+        refreshList.add("HOMaster Master");
+        refreshList.add("Product Master");
+        refreshList.add("Stock Master");
         listView.setAdapter(new ArrayAdapter<>(getApplicationContext(),R.layout.list_item_data_refresh,refreshList));
     }
 

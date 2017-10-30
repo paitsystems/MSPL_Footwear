@@ -2,9 +2,8 @@ package com.lnbinfotech.msplfootwearex.model;
 
 import java.io.Serializable;
 
-/**
- * Created by SNEHA on 10/16/2017.
- */
+//Created by SNEHA on 10/16/2017.
+
 public class UserClass implements Serializable {
     public String name,address,mobile,PANno,GSTNo,ImagePath, email,status,district,taluka,
             IMEINo,isRegistered,AadharNo,PIN;

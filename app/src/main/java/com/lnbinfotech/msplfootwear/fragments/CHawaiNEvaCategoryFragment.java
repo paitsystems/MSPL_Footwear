@@ -1,4 +1,4 @@
-package com.lnbinfotech.msplfootwearex.fragments;
+package com.lnbinfotech.msplfootwear.fragments;
 
 //Created by lnb on 9/26/2017.
 
@@ -11,15 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.lnbinfotech.msplfootwearex.R;
-import com.lnbinfotech.msplfootwearex.adapters.GentsCategoryListAdapter;
-import com.lnbinfotech.msplfootwearex.db.DBHandler;
-import com.lnbinfotech.msplfootwearex.model.GentsCategoryClass;
+import com.lnbinfotech.msplfootwear.R;
+import com.lnbinfotech.msplfootwear.adapters.GentsCategoryListAdapter;
+import com.lnbinfotech.msplfootwear.db.DBHandler;
+import com.lnbinfotech.msplfootwear.model.GentsCategoryClass;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HawaiNEvaCategoryFragment extends Fragment{
+public class CHawaiNEvaCategoryFragment extends Fragment{
 
     private ListView listView;
     private GentsCategoryListAdapter adapter;
@@ -28,7 +28,7 @@ public class HawaiNEvaCategoryFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_hawaineva_category,container,false);
+        View view = inflater.inflate(R.layout.fragment_hawaineva_category_c,container,false);
         listView = (ListView) view.findViewById(R.id.listView);
         db = new DBHandler(getContext());
         setData();
