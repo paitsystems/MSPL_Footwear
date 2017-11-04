@@ -48,7 +48,6 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     private String mobNo,imeiNo;
     private  String response_value;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +108,6 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void afterTextChanged(Editable editable) {
                 if(ed1.getText().toString().length()==1){
-                    ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(ed1.getWindowToken(),0);
                     ed2.requestFocus();
                 }
             }

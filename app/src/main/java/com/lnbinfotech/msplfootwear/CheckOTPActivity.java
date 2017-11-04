@@ -109,7 +109,6 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void afterTextChanged(Editable editable) {
                 if(ed1.getText().toString().length()==1){
-                    ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(ed1.getWindowToken(),0);
                     ed2.requestFocus();
                 }
             }

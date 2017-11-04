@@ -7,8 +7,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwear.adapters.ViewPagerAdapter;
@@ -39,6 +41,7 @@ public class ImagewiseSetwiseOrderActivity extends AppCompatActivity implements 
 
         setViewPager();
         tabLayout.setupWithViewPager(pager);
+        createTabIcons();
 
     }
 
@@ -65,6 +68,28 @@ public class ImagewiseSetwiseOrderActivity extends AppCompatActivity implements 
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void createTabIcons(){
+        TextView tab1 = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        tab1.setText("GENTS");
+        tab1.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.user32, 0, 0);
+        tabLayout.getTabAt(0).setCustomView(tab1);
+
+        TextView tab2 = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        tab2.setText("LADIES-N-BOYS");
+        tab2.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ladies32, 0, 0);
+        tabLayout.getTabAt(1).setCustomView(tab2);
+
+        TextView tab3 = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        tab3.setText("HAWAI-N-EVA");
+        tab3.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.hawaib32, 0, 0);
+        tabLayout.getTabAt(2).setCustomView(tab3);
+
+        TextView tab4 = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        tab4.setText("SCHOOL SHOES");
+        tab4.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.schoolb32, 0, 0);
+        tabLayout.getTabAt(3).setCustomView(tab4);
     }
 
     private void setViewPager(){

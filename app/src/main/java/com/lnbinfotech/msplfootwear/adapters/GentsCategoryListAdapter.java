@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.lnbinfotech.msplfootwear.model.GentsCategoryClass;
 import com.lnbinfotech.msplfootwear.R;
+import com.lnbinfotech.msplfootwear.model.GentsCategoryClass;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class GentsCategoryListAdapter extends BaseAdapter {
         final ViewHolder holder;
         if(view==null) {
             holder = new ViewHolder();
-            view = inflater.inflate(R.layout.list_item_sub_category, viewGroup, false);
+            view = inflater.inflate(R.layout.list_item_sub_category_male, viewGroup, false);
             holder.tv_catname = (TextView) view.findViewById(R.id.TextView);
             view.setTag(holder);
         } else {

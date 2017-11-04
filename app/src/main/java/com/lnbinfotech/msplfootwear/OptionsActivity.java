@@ -15,12 +15,12 @@ import com.lnbinfotech.msplfootwear.constant.Constant;
 
 public class OptionsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    CardView  card_give_order, card_account, card_track_order, card_profile, card_scheme,card_whats_new, card_feedback;
+    CardView card_give_order, card_account, card_track_order, card_profile, card_scheme, card_whats_new, card_feedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.test1);
+        setContentView(R.layout.test);
 
         init();
 
@@ -44,24 +44,24 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 showDia(1);
                 break;
             case R.id.card_account:
-                startActivity(new Intent(getApplicationContext(),CustomerAccountActivity.class));
-                overridePendingTransition(R.anim.enter,R.anim.exit);
+                startActivity(new Intent(getApplicationContext(), CustomerAccountActivity.class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_track_order:
-                startActivity(new Intent(getApplicationContext(),TrackOrderMasterActivity.class));
-                overridePendingTransition(R.anim.enter,R.anim.exit);
+                startActivity(new Intent(getApplicationContext(), TrackOrderMasterActivity.class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_profile:
-                startActivity(new Intent(getApplicationContext(),ProfileViewActivity.class));
-                overridePendingTransition(R.anim.enter,R.anim.exit);
+                startActivity(new Intent(getApplicationContext(), ProfileViewActivity.class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_scheme:
                 break;
             case R.id.card_whatsnew:
                 break;
             case R.id.card_feedback:
-                startActivity(new Intent(getApplicationContext(),FeedbackActivity.class));
-                overridePendingTransition(R.anim.enter,R.anim.exit);
+                startActivity(new Intent(getApplicationContext(), FeedbackActivity.class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
         }
     }
@@ -101,7 +101,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         card_track_order = (CardView) findViewById(R.id.card_track_order);
         card_profile = (CardView) findViewById(R.id.card_profile);
         card_scheme = (CardView) findViewById(R.id.card_scheme);
-       card_whats_new = (CardView) findViewById(R.id.card_whatsnew);
+        card_whats_new = (CardView) findViewById(R.id.card_whatsnew);
         card_feedback = (CardView) findViewById(R.id.card_feedback);
     }
 
@@ -123,22 +123,23 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                     dialog.dismiss();
                 }
             });
-        }if (a == 1) {
+        }
+        if (a == 1) {
             builder.setTitle("Take Order");
             builder.setMessage("How do you want to take order?");
             builder.setPositiveButton("Imagewise", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(getApplicationContext(),ImagewiseSetwiseOrderActivity.class));
-                    overridePendingTransition(R.anim.enter,R.anim.exit);
+                    startActivity(new Intent(getApplicationContext(), ImagewiseSetwiseOrderActivity.class));
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
                     dialog.dismiss();
                 }
             });
             builder.setNegativeButton("Cutsize", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(getApplicationContext(),CutsizeSetwiseOrderActivity.class));
-                    overridePendingTransition(R.anim.enter,R.anim.exit);
+                    startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
                     dialog.dismiss();
                 }
             });

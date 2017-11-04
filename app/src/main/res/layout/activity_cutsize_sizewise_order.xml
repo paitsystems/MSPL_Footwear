@@ -13,10 +13,10 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             app:tabMode="scrollable"
             app:tabGravity="center"
-            app:tabIndicatorColor="@color/maroon"
+            app:tabIndicatorColor="@color/red"
             app:tabTextAppearance="@android:style/TextAppearance.Medium"
             app:tabTextColor="@color/black">
 

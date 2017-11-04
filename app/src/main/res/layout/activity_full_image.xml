@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:padding="@dimen/mobpadding5"
     tools:context="com.lnbinfotech.msplfootwear.FullImageActivity">
 
     <LinearLayout
@@ -12,15 +13,75 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical"
-        android:padding="5dp">
+        android:orientation="vertical">
 
         <com.lnbinfotech.msplfootwear.TouchImageView
             android:id="@+id/touch_imageview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_catname"
+        style="@style/textViewTab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Small Text" />
+
+    <TextView
+        android:id="@+id/tv_prodname"
+        style="@style/textViewMob"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Small Text" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="MRP" />
+
+        <TextView
+            android:id="@+id/tv_mrp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Small Text"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:textColor="@color/darkgreen"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Margin" />
+
+        <TextView
+            android:id="@+id/tv_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Small Text"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:textColor="@color/red"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 </LinearLayout>

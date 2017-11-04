@@ -39,6 +39,9 @@ public class FirstActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
+
+        overridePendingTransition(R.anim.enter,R.anim.exit);
+
         pref = getSharedPreferences(PREF_NAME,MODE_PRIVATE);
         permission = new GetPermission();
         context = getApplicationContext();

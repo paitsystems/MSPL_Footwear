@@ -1,5 +1,6 @@
 package com.lnbinfotech.msplfootwear.fragments;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,10 +8,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.lnbinfotech.msplfootwear.AddToCartActivity;
 import com.lnbinfotech.msplfootwear.R;
-import com.lnbinfotech.msplfootwear.adapters.GentsCategoryListAdapter;
+import com.lnbinfotech.msplfootwear.adapters.LadiesNBoysCategoryListAdapter;
+import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.model.GentsCategoryClass;
 
@@ -22,7 +26,7 @@ import java.util.List;
 public class CLadiesNBoysCategoryFragment extends Fragment {
 
     private ListView listView;
-    private GentsCategoryListAdapter adapter;
+    private LadiesNBoysCategoryListAdapter adapter;
     private DBHandler db;
 
     @Nullable
@@ -32,6 +36,21 @@ public class CLadiesNBoysCategoryFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.listView);
         db = new DBHandler(getContext());
         setData();
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                GentsCategoryClass getClass = (GentsCategoryClass) adapter.getItem(i);
+                Constant.showLog(getClass.getCategoryName());
+                Intent intent = new Intent(getContext(), AddToCartActivity.class);
+                intent.putExtra("cat9","Ladies&Boys");
+                intent.putExtra("cat2",getClass.getCategoryName());
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.enter,R.anim.exit);
+            }
+        });
+
         return view;
     }
 
@@ -45,7 +64,7 @@ public class CLadiesNBoysCategoryFragment extends Fragment {
                 list.add(gentsClass);
             }while (res.moveToNext());
         }
-        adapter = new GentsCategoryListAdapter(getContext(),list);
+        adapter = new LadiesNBoysCategoryListAdapter(getContext(),list);
         listView.setAdapter(adapter);
     }
 }

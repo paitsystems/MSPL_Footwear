@@ -1,225 +1,247 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:textColor="@color/yellogreen">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:padding="10dp">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/card_take_order"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:divider="@android:color/black"
-                android:elevation="10dp"
-                android:visibility="visible"
-                app:cardBackgroundColor="@color/white"
-                app:cardElevation="10dp">
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-                <LinearLayout
+                <android.support.v7.widget.CardView
+                    android:id="@+id/card_take_order"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_margin="5dp"
+                    android:layout_weight="0.5"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:divider="@android:color/black"
+                    android:visibility="visible"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardElevation="5dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.8"
-                        android:background="@color/red"
-                        android:orientation="vertical"
-                        android:padding="5dp">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/imgv_takeorder"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:layout_gravity="center"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/order_64" />
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/mobmargin5"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/visit_take_order_circle_draw"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:scaleType="centerInside"
+                                    android:src="@drawable/order_32" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView
+                            style="@style/textViewTab"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/mobmargin5"
+                            android:gravity="center"
+                            android:text="TAKE ORDER"
+                            android:textColor="@color/red" />
                     </LinearLayout>
+                </android.support.v7.widget.CardView>
 
-
-                    <TextView
-                        android:id="@+id/tv_take_order"
-                        style="@style/textViewMob"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_weight="0.2"
-                        android:background="@color/red"
-                        android:gravity="center"
-                        android:text="Take Order"
-                        android:textColor="@color/white"
-                        android:textSize="20dp" />
-
-
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-            <android.support.v7.widget.CardView
-                android:id="@+id/card_visit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:divider="@android:color/black"
-                android:elevation="10dp"
-                android:visibility="visible"
-                app:cardBackgroundColor="@color/white"
-                app:cardElevation="10dp">
-
-                <LinearLayout
+                <android.support.v7.widget.CardView
+                    android:id="@+id/card_visit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_margin="5dp"
+                    android:layout_weight="0.5"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:divider="@android:color/black"
+                    android:visibility="visible"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardElevation="5dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.8"
-                        android:background="@color/yellogreen"
-                        android:orientation="vertical"
-                        android:padding="5dp">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/imgv_visit"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:layout_gravity="center"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/visit_64" />
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/mobmargin5"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/option_visit_circle_draw"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:scaleType="centerInside"
+                                    android:src="@drawable/visit_32" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView
+                            style="@style/textViewTab"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/mobmargin5"
+                            android:gravity="center"
+                            android:text="VISIT"
+                            android:textColor="@color/yellogreen" />
                     </LinearLayout>
+                </android.support.v7.widget.CardView>
 
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tv_visit"
-                        style="@style/textViewMob"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_weight="0.2"
-                        android:background="@color/yellogreen"
-                        android:gravity="center"
-                        android:text="Visit"
-                        android:textColor="@color/white"
-                        android:textSize="20dp" />
-
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-            <android.support.v7.widget.CardView
-                android:id="@+id/card_reports"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:divider="@android:color/black"
-                android:elevation="10dp"
-                android:visibility="visible"
-                app:cardBackgroundColor="@color/white"
-                app:cardElevation="10dp">
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-                <LinearLayout
+                <android.support.v7.widget.CardView
+                    android:id="@+id/card_reports"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_margin="5dp"
+                    android:layout_weight="0.5"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:divider="@android:color/black"
+                    android:visibility="visible"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardElevation="5dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.8"
-                        android:background="@color/peachpink"
-                        android:orientation="vertical"
-                        android:padding="5dp">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/imgv_reports"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:layout_gravity="center"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/report_64" />
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/mobmargin5"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/option_report_circle_draw"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:scaleType="centerInside"
+                                    android:src="@drawable/report_32" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView
+                            style="@style/textViewTab"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/mobmargin5"
+                            android:gravity="center"
+                            android:text="REPORT"
+                            android:textColor="@color/peachpink" />
                     </LinearLayout>
+                </android.support.v7.widget.CardView>
 
-
-                    <TextView
-                        android:id="@+id/tv_reports"
-                        style="@style/textViewMob"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_weight="0.2"
-                        android:background="@color/peachpink"
-                        android:gravity="center"
-                        android:text="Reports"
-                        android:textColor="@color/white"
-                        android:textSize="20dp" />
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-            <android.support.v7.widget.CardView
-                android:id="@+id/card_new_cust_entry"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:divider="@android:color/black"
-                android:elevation="10dp"
-                android:visibility="visible"
-                app:cardBackgroundColor="@color/white"
-                app:cardElevation="10dp">
-
-                <LinearLayout
+                <android.support.v7.widget.CardView
+                    android:id="@+id/card_new_cust_entry"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_margin="5dp"
+                    android:layout_weight="0.5"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:divider="@android:color/black"
+                    android:visibility="visible"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardElevation="5dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.8"
-                        android:background="@color/lightgreen"
-                        android:orientation="vertical"
-                        android:padding="5dp">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/imgv_new_cust_entry"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:layout_gravity="center"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/new_cust64" />
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/mobmargin5"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/option_new_cust_entry_circle_draw"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:scaleType="centerInside"
+                                    android:src="@drawable/new_cust_32" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView
+                            style="@style/textViewTab"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/mobmargin5"
+                            android:gravity="center"
+                            android:text="ADD CUST"
+                            android:textColor="@color/lightgreen" />
                     </LinearLayout>
+                </android.support.v7.widget.CardView>
 
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tv_new_cust_entry"
-                        style="@style/textViewMob"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_weight="0.2"
-                        android:background="@color/lightgreen"
-                        android:gravity="center"
-                        android:text="New Customer Entry"
-                        android:textColor="@color/white"
-                        android:textSize="20dp" />
-
-
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
