@@ -1,7 +1,6 @@
 <resources>
 
-    <style name="AppBaseTheme" parent="android:Theme.Light">
-    </style>
+    <style name="AppBaseTheme" parent="android:Theme.Light"></style>
 
     <style name="NewAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -270,52 +269,71 @@
         <item name="colorPrimaryDark">@color/red</item>
         <item name="colorAccent">@color/black</item>
     </style>
+
     <style name="AppThemeAccount" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/yellogreen</item>
         <item name="colorPrimaryDark">@color/yellogreen</item>
         <item name="colorAccent">@color/black</item>
     </style>
+
     <style name="AppThemeTrackOrder" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/peachpink</item>
         <item name="colorPrimaryDark">@color/peachpink</item>
         <item name="colorAccent">@color/black</item>
     </style>
+
     <style name="AppThemeProfile" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/lightpurple</item>
         <item name="colorPrimaryDark">@color/lightpurple</item>
         <item name="colorAccent">@color/black</item>
     </style>
+
     <style name="AppThemeScheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/orange</item>
         <item name="colorPrimaryDark">@color/orange</item>
         <item name="colorAccent">@color/black</item>
     </style>
+
     <style name="AppThemeWhatsnew" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/lightgreen</item>
         <item name="colorPrimaryDark">@color/lightgreen</item>
         <item name="colorAccent">@color/black</item>
     </style>
+
     <style name="AppThemeFeedback" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryDark">@color/blue</item>
         <item name="colorAccent">@color/black</item>
     </style>
+
     <style name="AppThemeLedgerStatement" parent="Theme.AppCompat.Light.DarkActionBar">
-    <item name="colorPrimary">@color/orange</item>
-    <item name="colorPrimaryDark">@color/orange</item>s.
-    <item name="colorAccent">@color/black</item>
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimaryDark">@color/orange</item>s.
+        <item name="colorAccent">@color/black</item>
     </style>
 
     <style name="AppThemeGstReport" parent="Theme.AppCompat.Light.DarkActionBar">
-    <item name="colorPrimary">@color/peachpink</item>
-    <item name="colorPrimaryDark">@color/peachpink</item>
-    <item name="colorAccent">@color/black</item>
+        <item name="colorPrimary">@color/peachpink</item>
+        <item name="colorPrimaryDark">@color/peachpink</item>
+        <item name="colorAccent">@color/black</item>
     </style>
 
     <style name="AppThemeBillls" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/red</item>
         <item name="colorPrimaryDark">@color/red</item>
         <item name="colorAccent">@color/black</item>
+    </style>
+
+    <style name="AppThemeAddToCard" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryDark">@color/red</item>
+        <item name="colorAccent">@color/red</item>
+    </style>
+
+    <style name="textViewMobAddToCard" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

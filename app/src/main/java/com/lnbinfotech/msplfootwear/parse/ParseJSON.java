@@ -106,9 +106,10 @@ public class ParseJSON {
                     custClass.setPANno(jsonArray.getJSONObject(i).getString("Panno"));
                     custClass.setGSTNo(jsonArray.getJSONObject(i).getString("GSTNo"));
                     custClass.setImagePath(jsonArray.getJSONObject(i).getString("ImagePath"));
-                    db.addCustomerDetail(custClass);
+                    //db.addCustomerDetail(custClass);
                     list.add(custClass);
                 }
+                db.addCustomerDetail(list);
                 db.close();
             }
         }catch (Exception e){
@@ -257,6 +258,7 @@ public class ParseJSON {
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
+                List<ProductMasterClass> prodList = new ArrayList<>();
                 db.deleteTable(DBHandler.Table_ProductMaster);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ProductMasterClass prodClass = new ProductMasterClass();
@@ -284,8 +286,14 @@ public class ParseJSON {
                     prodClass.setGSTGroup(jsonArray.getJSONObject(i).getString("GSTGroup"));
                     prodClass.setHSNCode(jsonArray.getJSONObject(i).getString("HSNCode"));
                     prodClass.setCat9(jsonArray.getJSONObject(i).getString("Cat9"));
-                    db.addProductMaster(prodClass);
+                    prodClass.setCat10(jsonArray.getJSONObject(i).getString("Cat10"));
+                    prodClass.setHKHO(jsonArray.getJSONObject(i).getInt("HKHO"));
+                    prodClass.setHKRD(jsonArray.getJSONObject(i).getInt("HKRD"));
+                    prodClass.setHANR(jsonArray.getJSONObject(i).getInt("HANR"));
+                    //db.addProductMaster(prodClass);
+                    prodList.add(prodClass);
                 }
+                db.addProductMaster(prodList);
                 db.close();
                 ret = 1;
             }
@@ -393,6 +401,7 @@ public class ParseJSON {
 
     public int parseBankBranchMaster(){
         int ret = 0;
+        List<BankBranchMasterClass> bankBranchList = new ArrayList<>();
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
@@ -406,8 +415,10 @@ public class ParseJSON {
                     branchClass.setAccountNo(jsonArray.getJSONObject(i).getString("AccountNo"));
                     branchClass.setcBankid(jsonArray.getJSONObject(i).getString("Custid"));
                     branchClass.setcBranch(jsonArray.getJSONObject(i).getString("CBranch"));
-                    db.addBankBranchMaster(branchClass);
+                    //db.addBankBranchMaster(branchClass);
+                    bankBranchList.add(branchClass);
                 }
+                db.addBankBranchMaster(bankBranchList);
                 db.close();
                 ret = 1;
             }

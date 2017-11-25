@@ -8,8 +8,10 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.lnbinfotech.msplfootwear.constant.AppSingleton;
 import com.lnbinfotech.msplfootwear.constant.Constant;
@@ -26,6 +28,8 @@ import com.lnbinfotech.msplfootwear.parse.ParseJSON;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.map.util.JSONPObject;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -61,11 +65,11 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("Error");
                         Constant.showLog(error.getMessage());
-                        writeLog("getOTPCode_"+error.getMessage());
+                        writeLog("getOTPCode_" + error.getMessage());
                     }
                 }
         );
-       AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
+        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
     public void getUserDetail(String url, final ServerCallback callback) {
@@ -78,7 +82,7 @@ public class VolleyRequests {
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
                         ArrayList<UserClass> list = new ParseJSON(response, context).parseUserDetail();
-                        Constant.showLog(list.size()+"");
+                        Constant.showLog(list.size() + "");
                         callback.onSuccess(response);
                     }
                 },
@@ -87,7 +91,7 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("Error");
                         Constant.showLog(error.getMessage());
-                        writeLog("getCustomerDetail_"+error.getMessage());
+                        writeLog("getCustomerDetail_" + error.getMessage());
                     }
                 }
         );
@@ -104,7 +108,7 @@ public class VolleyRequests {
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
                         ArrayList<CustomerDetailClass> list = new ParseJSON(response, context).parseCustDetail();
-                        Constant.showLog(list.size()+"");
+                        Constant.showLog(list.size() + "");
                         callback.onSuccess(response);
                     }
                 },
@@ -113,23 +117,23 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("Error");
                         Constant.showLog(error.getMessage());
-                        writeLog("getCustomerDetail_"+error.getMessage());
+                        writeLog("getCustomerDetail_" + error.getMessage());
                     }
                 }
         );
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
-    public void saveCustomerDetail(String url, final ServerCallback callback){
+    public void saveCustomerDetail(String url, final ServerCallback callback) {
         StringRequest request = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Constant.showLog(response);
-                response = response.replace("\\","");
-                response = response.replace("\"","");
-                if(response.equals("1")) {
+                response = response.replace("\\", "");
+                response = response.replace("\"", "");
+                if (response.equals("1")) {
                     callback.onSuccess(response);
-                }else{
+                } else {
                     callback.onFailure("Error");
                 }
             }
@@ -140,7 +144,7 @@ public class VolleyRequests {
                 Constant.showLog(error.getMessage());
             }
         });
-        AppSingleton.getInstance(context).addToRequestQueue(request,"");
+        AppSingleton.getInstance(context).addToRequestQueue(request, "");
 
     }
 
@@ -154,9 +158,9 @@ public class VolleyRequests {
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
                         int ret = new ParseJSON(response, context).parseAreaMaster();
-                        if(ret == 1) {
+                        if (ret == 1) {
                             callback.onSuccess(response);
-                        }else{
+                        } else {
                             callback.onFailure("Error");
                         }
                     }
@@ -166,7 +170,7 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("Error");
                         Constant.showLog(error.getMessage());
-                        writeLog("refreshAreaMaster_"+error.getMessage());
+                        writeLog("refreshAreaMaster_" + error.getMessage());
                     }
                 }
         );
@@ -183,9 +187,9 @@ public class VolleyRequests {
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
                         int ret = new ParseJSON(response, context).parseCityMaster();
-                        if(ret == 1) {
+                        if (ret == 1) {
                             callback.onSuccess(response);
-                        }else{
+                        } else {
                             callback.onFailure("Error");
                         }
                     }
@@ -195,7 +199,7 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("Error");
                         Constant.showLog(error.getMessage());
-                        writeLog("refreshCityMaster_"+error.getMessage());
+                        writeLog("refreshCityMaster_" + error.getMessage());
                     }
                 }
         );
@@ -212,9 +216,9 @@ public class VolleyRequests {
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
                         int ret = new ParseJSON(response, context).parseHOMaster();
-                        if(ret == 1) {
+                        if (ret == 1) {
                             callback.onSuccess(response);
-                        }else{
+                        } else {
                             callback.onFailure("Error");
                         }
                     }
@@ -224,7 +228,7 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("Error");
                         Constant.showLog(error.getMessage());
-                        writeLog("refreshHOMaster_"+error.getMessage());
+                        writeLog("refreshHOMaster_" + error.getMessage());
                     }
                 }
         );
@@ -241,9 +245,9 @@ public class VolleyRequests {
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
                         int ret = new ParseJSON(response, context).parseEmployeeMaster();
-                        if(ret == 1) {
+                        if (ret == 1) {
                             callback.onSuccess(response);
-                        }else{
+                        } else {
                             callback.onFailure("Error");
                         }
                     }
@@ -253,7 +257,7 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("Error");
                         Constant.showLog(error.getMessage());
-                        writeLog("refreshEmployeeMaster_"+error.getMessage());
+                        writeLog("refreshEmployeeMaster_" + error.getMessage());
                     }
                 }
         );
@@ -280,7 +284,8 @@ public class VolleyRequests {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("Error");
-                        Constant.showLog(error.getMessage());writeLog("refreshStockInfo_"+error.getMessage());
+                        Constant.showLog(error.getMessage());
+                        writeLog("refreshStockInfo_" + error.getMessage());
 
                     }
                 }
@@ -288,11 +293,49 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "CITY");
     }
 
-    private class readJSON extends AsyncTask<Void,Void,String> {
+    public void refreshSizeNDesignMaster(String url, final ServerCallback callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        response = response.substring(1, response.length() - 1);
+                        callback.onSuccess(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("Error");
+                        Constant.showLog(error.getMessage());
+                        writeLog("refreshSizeNDesignMaster_" + error.getMessage());
+                    }
+                }
+        );
+        AppSingleton.getInstance(context).addToRequestQueue(request, "CITY");
+    }
+
+    public void refreshSizeNDesignMaster1(String url, final ServerCallback callback) {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Constant.showLog(response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        AppSingleton.getInstance(context).addToRequestQueue(request, "CITY");
+    }
+
+    private class readJSON extends AsyncTask<Void, Void, String> {
         private final AtomicInteger workCounter1;
         String result;
 
-        readJSON(AtomicInteger _workCounter,String _result){
+        readJSON(AtomicInteger _workCounter, String _result) {
             workCounter1 = _workCounter;
             result = _result;
         }
@@ -303,12 +346,12 @@ public class VolleyRequests {
             File sdFile = Constant.checkFolder(Constant.folder_name);
             FileWriter writer;
             try {
-                String search = "\\\\",replace = "";
-                File writeFile = new File(sdFile,writeFilename);
+                String search = "\\\\", replace = "";
+                File writeFile = new File(sdFile, writeFilename);
                 writer = new FileWriter(writeFile);
                 int size = result.length();
-                if(size>2) {
-                    Log.d("Log","Replacing");
+                if (size > 2) {
+                    Log.d("Log", "Replacing");
                     int b = 50000;
                     for (int i = 0; i < size; i++) {
                         if (b >= size) {
@@ -327,13 +370,13 @@ public class VolleyRequests {
                 writer.flush();
                 writer.close();
                 return retValue;
-            }catch (IOException | OutOfMemoryError e){
+            } catch (IOException | OutOfMemoryError e) {
                 try {
                     writer = new FileWriter(new File(sdFile, "Log.txt"));
                     writer.append(e.getMessage());
                     writer.flush();
                     writer.close();
-                }catch (Exception e1){
+                } catch (Exception e1) {
                     e.printStackTrace();
                 }
                 e.printStackTrace();
@@ -345,16 +388,16 @@ public class VolleyRequests {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             int tasksLeft = this.workCounter1.decrementAndGet();
-            if(tasksLeft==0 && s.equals("")){
+            if (tasksLeft == 0 && s.equals("")) {
                 AtomicInteger workInteger = new AtomicInteger(1);
                 new writeDB(workInteger).execute();
-            }else if(tasksLeft==0){
+            } else if (tasksLeft == 0) {
                 //showDia(2);
             }
         }
     }
 
-    private class writeDB extends AsyncTask<Void,Void,String> {
+    private class writeDB extends AsyncTask<Void, Void, String> {
         private final AtomicInteger workCounter2;
         File writeFile;
 
@@ -377,52 +420,52 @@ public class VolleyRequests {
                     StockInfoMasterClass stockInfo = new StockInfoMasterClass();
                     while (jp.nextToken() != org.codehaus.jackson.JsonToken.END_OBJECT) {
                         String token = jp.getCurrentName();
-                        if("Company".equals(token)){
+                        if ("Company".equals(token)) {
                             jp.nextToken();
                             stockInfo.setCompany(jp.getText());
-                        }else if("ProductId".equals(token)){
+                        } else if ("ProductId".equals(token)) {
                             jp.nextToken();
                             stockInfo.setProductId(jp.getText());
-                        }else if("Color".equals(token)){
+                        } else if ("Color".equals(token)) {
                             jp.nextToken();
                             stockInfo.setColor(jp.getText());
-                        }else if("Size".equals(token)) {
+                        } else if ("Size".equals(token)) {
                             jp.nextToken();
                             stockInfo.setSize(jp.getText());
-                        }else if("Rate".equals(token)) {
+                        } else if ("Rate".equals(token)) {
                             jp.nextToken();
                             stockInfo.setRate(jp.getText());
-                        }else if("LQty".equals(token)) {
+                        } else if ("LQty".equals(token)) {
                             jp.nextToken();
                             stockInfo.setLQty(Integer.parseInt(jp.getText()));
-                        }else if("PQty".equals(token)) {
+                        } else if ("PQty".equals(token)) {
                             jp.nextToken();
                             stockInfo.setPQty(Integer.parseInt(jp.getText()));
-                        }else if("PackUnpack".equals(token)) {
+                        } else if ("PackUnpack".equals(token)) {
                             jp.nextToken();
                             stockInfo.setPackUnpack(jp.getText());
-                        }else if("PerPackQty".equals(token)) {
+                        } else if ("PerPackQty".equals(token)) {
                             jp.nextToken();
                             stockInfo.setPerPackQty(Integer.parseInt(jp.getText()));
-                        }else if("SaleRate".equals(token)) {
+                        } else if ("SaleRate".equals(token)) {
                             jp.nextToken();
                             stockInfo.setSaleRate(jp.getText());
-                        }else if("Product_id".equals(token)) {
+                        } else if ("Product_id".equals(token)) {
                             jp.nextToken();
                             stockInfo.setProduct_id(Integer.parseInt(jp.getText()));
                         }
                     }
                     db.addStockInfo(stockInfo);
                 }
-                Log.d("Log",""+count);
+                Log.d("Log", "" + count);
                 return "";
-            }catch (Exception e){
+            } catch (Exception e) {
                 try {
                     FileWriter writer = new FileWriter(new File(sdFile, "Log.txt"));
                     writer.append(e.getMessage());
                     writer.flush();
                     writer.close();
-                }catch (Exception e1){
+                } catch (Exception e1) {
                     e.printStackTrace();
                     return null;
                 }
@@ -435,14 +478,14 @@ public class VolleyRequests {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             int tasksLeft = this.workCounter2.decrementAndGet();
-            if(tasksLeft==0 && s.equals("")) {
-                if(writeFile.delete()){
-                    Log.d("Log","Write Delete");
+            if (tasksLeft == 0 && s.equals("")) {
+                if (writeFile.delete()) {
+                    Log.d("Log", "Write Delete");
                 }
                 //showDia(3);
-            }else if(tasksLeft==0) {
-                if(writeFile.delete()){
-                    Log.d("Log","Write Delete");
+            } else if (tasksLeft == 0) {
+                if (writeFile.delete()) {
+                    Log.d("Log", "Write Delete");
                 }
                 //showDia(4);
             }
@@ -459,9 +502,9 @@ public class VolleyRequests {
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
                         int ret = new ParseJSON(response, context).parseProductMaster();
-                        if(ret == 1) {
+                        if (ret == 1) {
                             callback.onSuccess(response);
-                        }else{
+                        } else {
                             callback.onFailure("Error");
                         }
                     }
@@ -471,7 +514,7 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("Error");
                         Constant.showLog(error.getMessage());
-                        writeLog("refreshProductMaster_"+error.getMessage());
+                        writeLog("refreshProductMaster_" + error.getMessage());
                     }
                 }
         );
@@ -488,9 +531,9 @@ public class VolleyRequests {
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
                         int ret = new ParseJSON(response, context).parseCustomerMaster();
-                        if(ret == 1) {
+                        if (ret == 1) {
                             callback.onSuccess(response);
-                        }else{
+                        } else {
                             callback.onFailure("Error");
                         }
                     }
@@ -500,7 +543,7 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("Error");
                         Constant.showLog(error.getMessage());
-                        writeLog("refreshCustomerMaster_"+error.getMessage());
+                        writeLog("refreshCustomerMaster_" + error.getMessage());
                     }
                 }
         );
@@ -517,9 +560,9 @@ public class VolleyRequests {
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
                         int ret = new ParseJSON(response, context).parseCompanyMaster();
-                        if(ret == 1) {
+                        if (ret == 1) {
                             callback.onSuccess(response);
-                        }else{
+                        } else {
                             callback.onFailure("Error");
                         }
                     }
@@ -529,7 +572,7 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("Error");
                         Constant.showLog(error.getMessage());
-                        writeLog("refreshCompanyMaster_"+error.getMessage());
+                        writeLog("refreshCompanyMaster_" + error.getMessage());
                     }
                 }
         );
@@ -546,9 +589,9 @@ public class VolleyRequests {
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
                         int ret = new ParseJSON(response, context).parseBankMaster();
-                        if(ret == 1) {
+                        if (ret == 1) {
                             callback.onSuccess(response);
-                        }else{
+                        } else {
                             callback.onFailure("Error");
                         }
                     }
@@ -558,14 +601,14 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("Error");
                         Constant.showLog(error.getMessage());
-                        writeLog("refreshBankMaster_"+error.getMessage());
+                        writeLog("refreshBankMaster_" + error.getMessage());
                     }
                 }
         );
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
-    public void refreshBankBranchMaster(String url, final ServerCallback callback){
+    public void refreshBankBranchMaster(String url, final ServerCallback callback) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -593,7 +636,7 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
-    public void refreshDocumentMaster(String url, final ServerCallback callback){
+    public void refreshDocumentMaster(String url, final ServerCallback callback) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -621,7 +664,7 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
-    public void saveFeedbackDetail(String url, final ServerCallback callback){
+    public void saveFeedbackDetail(String url, final ServerCallback callback) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -643,11 +686,11 @@ public class VolleyRequests {
                         Constant.showLog(error.getMessage());
                     }
                 });
-        AppSingleton.getInstance(context).addToRequestQueue(request,"");
+        AppSingleton.getInstance(context).addToRequestQueue(request, "");
 
     }
 
-    public void loadTrackOrder(String url, final ServerCallbackList callback){
+    public void loadTrackOrder(String url, final ServerCallbackList callback) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -675,7 +718,7 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
-    public void loadDetailOrder(String url, final ServerCallbackList callback){
+    public void loadDetailOrder(String url, final ServerCallbackList callback) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -703,8 +746,8 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
-    private void writeLog(String _data){
-        new WriteLog().writeLog(context,"VolleyRequest_"+_data);
+    private void writeLog(String _data) {
+        new WriteLog().writeLog(context, "VolleyRequest_" + _data);
     }
 
 }

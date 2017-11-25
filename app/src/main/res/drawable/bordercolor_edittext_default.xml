@@ -23,7 +23,7 @@
     <item android:bottom="5.0dp">
         <shape>
             <solid android:color="@color/white" />
-        </shape>s
+        </shape>
     </item>
 
 </layer-list>

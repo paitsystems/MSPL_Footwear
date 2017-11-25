@@ -50,13 +50,10 @@ public class Post {
             }
             final HttpEntity entity = response.getEntity();
             responseBody = new BasicResponseHandler().handleResponse(response);
-        }catch(IOException e){
+        }catch(Exception e){
             httpget.abort();
             e.printStackTrace();
         }
         return  responseBody;
     }
-
-
-
 }

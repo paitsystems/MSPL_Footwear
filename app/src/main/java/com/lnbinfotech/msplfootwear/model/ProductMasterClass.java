@@ -4,8 +4,8 @@ package com.lnbinfotech.msplfootwear.model;
 
 public class ProductMasterClass {
 
-    public String Cat1,Cat2,Cat3,Cat4,Cat5,Cat6,Final_prod,Uom,Srate,Prate,Status,MRPRate,ProductId,Cat7,Cat8,MinStkQty,MaxStkQty,GSTGroup,HSNCode,Cat9;
-    public int Product_id,Branchid,NoOfPices,Company_Id;
+    private String Cat1,Cat2,Cat3,Cat4,Cat5,Cat6,Final_prod,Uom,Srate,Prate,Status,MRPRate,ProductId,Cat7,Cat8,MinStkQty,MaxStkQty,GSTGroup,HSNCode,Cat9,Cat10;
+    private int Product_id,Branchid,NoOfPices,Company_Id, HKHO,HKRD,HANR;
 
     public String getCat1() {
         return Cat1;
@@ -197,5 +197,37 @@ public class ProductMasterClass {
 
     public void setCompany_Id(int company_Id) {
         Company_Id = company_Id;
+    }
+
+    public String getCat10() {
+        return Cat10;
+    }
+
+    public void setCat10(String cat10) {
+        Cat10 = cat10;
+    }
+
+    public int getHKHO() {
+        return HKHO;
+    }
+
+    public void setHKHO(int HKHO) {
+        this.HKHO = HKHO;
+    }
+
+    public int getHKRD() {
+        return HKRD;
+    }
+
+    public void setHKRD(int HKRD) {
+        this.HKRD = HKRD;
+    }
+
+    public int getHANR() {
+        return HANR;
+    }
+
+    public void setHANR(int HANR) {
+        this.HANR = HANR;
     }
 }

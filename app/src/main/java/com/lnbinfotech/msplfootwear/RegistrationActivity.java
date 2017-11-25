@@ -143,6 +143,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             otp.setMobileno(mobNo);
             otp.setImeino(imeino);
             finish();
+            toast.setText(arr[1]);
+            toast.show();
             Intent intent = new Intent(getApplicationContext(), CheckOTPActivity.class);
             intent.putExtra("otp", otp);
             startActivity(intent);

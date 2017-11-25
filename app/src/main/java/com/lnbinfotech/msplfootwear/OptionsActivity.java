@@ -15,7 +15,7 @@ import com.lnbinfotech.msplfootwear.constant.Constant;
 
 public class OptionsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    CardView card_give_order, card_account, card_track_order, card_profile, card_scheme, card_whats_new, card_feedback;
+    private CardView card_give_order, card_account, card_track_order, card_profile, card_scheme, card_whats_new, card_feedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

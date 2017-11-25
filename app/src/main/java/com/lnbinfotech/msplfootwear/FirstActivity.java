@@ -101,15 +101,16 @@ public class FirstActivity extends AppCompatActivity {
             editor.putString(getString(R.string.pref_FTPPass),"support$456");
             editor.putString(getString(R.string.pref_FTPImgFolder),"Test");
             editor.apply();
-            // editor.commit();
         }
+        DBHandler db = new DBHandler(getApplicationContext());
+        db.close();
         overridePendingTransition(R.anim.enter,R.anim.exit);
         doFinish();
     }
 
     private void CopyDb() throws IOException {
         if(!checkDB()){
-            constant.showPD();
+            //constant.showPD();
             InputStream is = getApplicationContext().getAssets().open(DBHandler.Database_Name);
             File file = new File(dbpath);
             if(!file.exists()){
@@ -124,7 +125,9 @@ public class FirstActivity extends AppCompatActivity {
             os.flush();
             os.close();
             is.close();
-            constant.showPD();
+            DBHandler db = new DBHandler(getApplicationContext());
+            db.deleteTable(DBHandler.Table_Usermaster);
+            //constant.showPD();
         }
     }
 

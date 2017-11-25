@@ -26,10 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".FullImageActivity"
-            android:theme="@style/AppThemeGiveOrder"
-            android:screenOrientation="portrait" />
 
         <service android:name=".services.DownloadImageService" />
         <service android:name=".services.CheckNewTicketService" />
@@ -43,7 +39,8 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".services.ImageUplaodBroadcastReceiver">
+        <receiver
+            android:name=".services.ImageUplaodBroadcastReceiver">
             <intent-filter>
                 <action android:name="test" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -120,6 +117,7 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".AddToCartActivity"
+            android:theme="@style/AppThemeProfile"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
         <activity
