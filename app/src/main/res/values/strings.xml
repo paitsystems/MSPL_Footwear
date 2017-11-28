@@ -189,7 +189,7 @@
     <string name="cgst">GST</string>
     <string name="panno">PAN number</string>
 
-    <!---sneha changes26oct17- - - - - - - - - - -  -->
+    <!---sneha changes 26oct17- - - - - - - - - - -  -->
     <string name="bills">Bills</string>
     <string name="gstreport">GST Report</string>
     <string name="ledgerstatement">Ledger Statement</string>
@@ -200,5 +200,23 @@
     <string name="date">Date</string>
     <string name="orderstatus">Order Status:</string>
     <string name="checkopt">Order Status:</string>
+
+    <!---sneha changes 27nov17- - - - - - - - - - - -->
+    <string name="prod">Prod   Id</string>
+    <string name="sizeg">Size Group</string>
+    <string name="color">Color</string>
+    <string name="looseq">Loose Qty</string>
+    <string name="wsp">WSP</string>
+    <string name="mr">MR</string>
+    <string name="amt">Amount</string>
+    <string name="gst">GST     %</string>
+    <string name="totalno">Total No</string>
+    <string name="totalqty">Total Qty</string>
+    <string name="netamt">Net Amt</string>
+    <string name="grossamt">Gross Amt</string>
+    <string name="discper">Disc Per</string>
+    <string name="discamt">Disc Amt</string>
+    <string name="gstamt">GST Amt</string>
+
 
 </resources>

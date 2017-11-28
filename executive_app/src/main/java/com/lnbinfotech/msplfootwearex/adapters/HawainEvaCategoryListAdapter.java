@@ -1,5 +1,4 @@
 package com.lnbinfotech.msplfootwearex.adapters;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,3 +61,4 @@ public class HawaiNEvaCategoryListAdapter extends BaseAdapter{
     }
 
 }
+

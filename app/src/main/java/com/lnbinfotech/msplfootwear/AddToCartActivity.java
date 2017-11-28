@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.lnbinfotech.msplfootwear.adapters.CustomerOrderUnpackGridAdpater;
 import com.lnbinfotech.msplfootwear.adapters.SizeGroupWiseColourAdapter;
 import com.lnbinfotech.msplfootwear.adapters.SizeGroupWiseQtyAdapter;
+import com.lnbinfotech.msplfootwear.adapters.ViewCustomerOrderAdapter;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.interfaces.RecyclerViewToActivityInterface;
@@ -168,6 +169,9 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             case R.id.tv_checkout:
                 break;
             case R.id.tv_vieworder:
+                Intent i = new Intent(this, ViewCustomerOrderActiviy.class);
+                startActivity(i);
+                overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
         }
     }

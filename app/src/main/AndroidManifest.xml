@@ -123,6 +123,10 @@
             android:name=".ProductSearchActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".ViewCustomerOrderActiviy"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>

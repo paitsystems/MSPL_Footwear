@@ -995,6 +995,11 @@ public class DBHandler extends SQLiteOpenHelper {
         db.endTransaction();
         db.close();
     }
+    public Cursor getViewOrderData(){
+        String str = "select * from "+Table_CustomerOrder +" order by "+CO_Productid+","+CO_SizeGroup;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str,null);
+    }
 }
 
 
