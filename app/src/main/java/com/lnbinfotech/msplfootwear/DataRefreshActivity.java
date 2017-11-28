@@ -66,7 +66,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 if(ConnectivityTest.getNetStat(DataRefreshActivity.this)) {
                     //0-AreaMaster,1-BankMaster,2-BankBranchMaster,3-CityMaster
                     //4-CompanyMaster,5-CustomerMaster,6-DocumentMaster,7-EmployeeMaster,8-HOMaster
-                    //9-ProductMaster,10-StockMaster
+                    //9-ProductMaster,10-LoadAllSizeNDesign,11-StockMaster,12-GSTMaster
                     if (i == 0) {
                         refreshDataDia(0);
                     } else if (i == 1) {
@@ -91,6 +91,8 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                         refreshDataDia(10);
                     }else if(i == 11){
                         refreshDataDia(11);
+                    }else if(i == 12){
+                        refreshDataDia(12);
                     }
                 }else{
                     toast.setText("You Are Offline");
@@ -380,6 +382,26 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
+    private void loadGSTMaster(){
+        String url = Constant.ipaddress+"/GetGSTMaster?Id=0";
+        Constant.showLog(url);
+        writeLog("loadGSTMaster_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
+        requests.refreshGSTMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                showDia(1);
+            }
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                showDia(2);
+            }
+        });
+    }
+
     private void init() {
         db = new DBHandler(DataRefreshActivity.this);
         constant = new Constant(DataRefreshActivity.this);
@@ -400,6 +422,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         refreshList.add("Product Master");
         refreshList.add("SizeAndDesign Master");
         refreshList.add("Stock Master");
+        refreshList.add("GST Master");
         listView.setAdapter(new ArrayAdapter<>(getApplicationContext(),R.layout.list_item_data_refresh,refreshList));
     }
 
@@ -457,6 +480,9 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                //0-AreaMaster,1-BankMaster,2-BankBranchMaster,3-CityMaster
+                //4-CompanyMaster,5-CustomerMaster,6-DocumentMaster,7-EmployeeMaster,8-HOMaster
+                //9-ProductMaster,10-LoadAllSizeNDesign,11-StockMaster,12-GSTMaster
                 if (a == 0) {
                     loadAreaMaster();
                 }else if (a == 1) {
@@ -482,6 +508,8 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     loadSizeNDesignMaster(0,100);
                 }else if(a == 11){
                     loadStockInfo();
+                }else if(a == 12){
+                    loadGSTMaster();
                 }
             }
         });

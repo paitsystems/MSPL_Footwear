@@ -44,7 +44,7 @@ public class SizeGroupWiseColourAdapter extends RecyclerView.Adapter<SizeGroupWi
     @Override
     public void onBindViewHolder(SizeGroupWiseColourViewHolder holder, int position) {
         String _colourHashCode = colourList.get(position);
-        String[] colourHashCode = _colourHashCode.split("-");
+        String[] colourHashCode = _colourHashCode.split("\\-");
         holder.textView.setText(colourHashCode[0]);
         holder.textView.setTag(position);
         String hashCode = colourHashCode[1];

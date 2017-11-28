@@ -13,6 +13,7 @@ import com.lnbinfotech.msplfootwear.model.BankMasterClass;
 import com.lnbinfotech.msplfootwear.model.CityMasterClass;
 import com.lnbinfotech.msplfootwear.model.CompanyMasterClass;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
+import com.lnbinfotech.msplfootwear.model.GSTMasterClass;
 import com.lnbinfotech.msplfootwear.model.TrackOrderDetailClass;
 import com.lnbinfotech.msplfootwear.model.DocumentMasterClass;
 import com.lnbinfotech.msplfootwear.model.EmployeeMasterClass;
@@ -518,6 +519,37 @@ public class ParseJSON {
             writeLog("parseloadDetailOrder_" + e.getMessage());
         }
         return map;
+    }
+
+    public int parseGSTMaster(){
+        int ret = 0;
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                db.deleteTable(DBHandler.Table_GSTMASTER);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    GSTMasterClass gstClass = new GSTMasterClass();
+                    gstClass.setAuto(jsonArray.getJSONObject(i).getInt("Auto"));
+                    gstClass.setGroupName(jsonArray.getJSONObject(i).getString("GroupNm"));
+                    gstClass.setStatus(jsonArray.getJSONObject(i).getString("Status"));
+
+                    gstClass.setGstPer(jsonArray.getJSONObject(i).getDouble("GSTPer"));
+                    gstClass.setCgstPer(jsonArray.getJSONObject(i).getDouble("CGSTPer"));
+                    gstClass.setSgstPer(jsonArray.getJSONObject(i).getDouble("SGSTPer"));
+                    gstClass.setCessPer(jsonArray.getJSONObject(i).getDouble("CESSPer"));
+                    gstClass.setCgstShare(jsonArray.getJSONObject(i).getDouble("CGSTSHARE"));
+                    gstClass.setSgstShare(jsonArray.getJSONObject(i).getDouble("SGSTSHARE"));
+
+                    db.addGSTMaster(gstClass);
+                }
+                db.close();
+                ret = 1;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseGSTMaster_"+e.getMessage());
+        }
+        return ret;
     }
 
     private void writeLog(String _data){

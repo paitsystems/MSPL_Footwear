@@ -63,7 +63,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("getOTPCode_VolleyError_"+error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("getOTPCode_" + error.getMessage());
                     }
@@ -745,6 +745,36 @@ public class VolleyRequests {
                 });
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
+
+    public void refreshGSTMaster(String url, final ServerCallback callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\", "");
+                        response = response.replace("''", "");
+                        response = response.substring(1, response.length() - 1);
+                        int ret = new ParseJSON(response, context).parseGSTMaster();
+                        if (ret == 1) {
+                            callback.onSuccess(response);
+                        } else {
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("refreshGSTMaster_VolleyError_"+error.getMessage());
+                        Constant.showLog(error.getMessage());
+                        writeLog("refreshBankMaster_" + error.getMessage());
+                    }
+                }
+        );
+        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
+    }
+
 
     private void writeLog(String _data) {
         new WriteLog().writeLog(context, "VolleyRequest_" + _data);

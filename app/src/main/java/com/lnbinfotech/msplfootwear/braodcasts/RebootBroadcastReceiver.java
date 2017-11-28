@@ -15,7 +15,7 @@ public class RebootBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(intent!=null) {
             if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-                new Constant(context).setRecurringAlarm();
+                //new Constant(context).setRecurringAlarm();
             }
         }else{
             Log.d("Log", "Intent Null");
