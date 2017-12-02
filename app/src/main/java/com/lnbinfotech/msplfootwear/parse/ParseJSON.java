@@ -3,6 +3,7 @@ package com.lnbinfotech.msplfootwear.parse;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.lnbinfotech.msplfootwear.CheckoutCustOrderActivity;
 import com.lnbinfotech.msplfootwear.FirstActivity;
 import com.lnbinfotech.msplfootwear.R;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
@@ -10,6 +11,7 @@ import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.AreaMasterClass;
 import com.lnbinfotech.msplfootwear.model.BankBranchMasterClass;
 import com.lnbinfotech.msplfootwear.model.BankMasterClass;
+import com.lnbinfotech.msplfootwear.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwear.model.CityMasterClass;
 import com.lnbinfotech.msplfootwear.model.CompanyMasterClass;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
@@ -550,6 +552,28 @@ public class ParseJSON {
             writeLog("parseGSTMaster_"+e.getMessage());
         }
         return ret;
+    }
+
+    public List<CheckoutCustOrderClass> parseloadCheckoutOrder(){
+
+        List<CheckoutCustOrderClass> list = new ArrayList<>();
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    CheckoutCustOrderClass checkout = new CheckoutCustOrderClass();
+                    checkout.setProductId(jsonArray.getJSONObject(i).getString("ProductId"));
+                    checkout.setSizeG(jsonArray.getJSONObject(i).getString("Size"));
+                    checkout.setColor(jsonArray.getJSONObject(i).getString("Color"));
+                    checkout.setAvailQty(jsonArray.getJSONObject(i).getString("LQty"));
+                    list.add(checkout);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseloadCheckoutOrder_" + e.getMessage());
+        }
+        return list;
     }
 
     private void writeLog(String _data){

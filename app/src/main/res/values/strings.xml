@@ -208,12 +208,15 @@
     <string name="looseq">Loose Qty</string>
     <string name="wsp">WSP</string>
     <string name="mr">MR</string>
+    <string name="availableqty">Available Qty</string>
     <string name="amt">Amount</string>
     <string name="gst">GST     %</string>
     <string name="totalno">Total No</string>
     <string name="totalqty">Total Qty</string>
     <string name="netamt">Net Amt</string>
     <string name="grossamt">Gross Amt</string>
+    <string name="totlqty">Total Loose Qty</string>
+    <string name="totaqty">Tot Avail Qty</string>
     <string name="discper">Disc Per</string>
     <string name="discamt">Disc Amt</string>
     <string name="gstamt">GST Amt</string>

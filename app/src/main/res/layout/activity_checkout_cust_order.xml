@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/horizontalScrollView" >
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:background="@color/red"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1">
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/prod"
+                    android:textColor="@color/white"
+                    android:visibility="visible"
+                    android:background="@drawable/line_left_top_right_bottom_draw"
+                    android:gravity="center_horizontal" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/sizeg"
+                    android:textColor="@color/white"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/color"
+                    android:textColor="@color/white"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/looseq"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:visibility="visible" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/wsp"
+                    android:textColor="@color/white"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center"
+                    android:visibility="gone" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/availableqty"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:layout_weight="0.13" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/amt"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:visibility="gone" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/gst"
+                    android:textColor="@color/white"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/lv_check"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:background="@color/red"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:visibility="visible">
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/totalno"
+                    android:textColor="@color/white"
+                    android:visibility="invisible"
+                    android:background="@drawable/line_left_top_right_bottom_draw"
+                    android:gravity="center" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/totalqty"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:visibility="invisible" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/totlqty"
+                    android:textColor="@color/white"
+                    android:background="@drawable/line_left_top_right_bottom_draw"
+                    android:gravity="center" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/totaqty"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:background="@drawable/line_top_right_bottom_draw" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/discamt"
+                    android:textColor="@color/white"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center"
+                    android:visibility="invisible" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/gstamt"
+                    android:textColor="@color/white"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center"
+                    android:visibility="invisible" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/netamt"
+                    android:textColor="@color/white"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center"
+                    android:visibility="invisible" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:visibility="visible">
+
+                <TextView
+
+                    style="@style/textViewMob"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black"
+                    android:visibility="visible"
+
+                    android:id="@+id/tv_tot_no" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black"
+                    android:gravity="center_horizontal"
+
+                    android:id="@+id/tv_tot_qty"
+                    android:visibility="invisible" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black"
+                    android:gravity="center_horizontal"
+                    android:background="@drawable/line_left_right_bottom_draw"
+                    android:id="@+id/tv_gross_amt" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black"
+                    android:gravity="center_horizontal"
+                    android:background="@drawable/line_right_bottom_draw"
+                    android:id="@+id/tv_disc_per" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black"
+                    android:gravity="center_horizontal"
+
+                    android:id="@+id/tv_disc_amt" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black"
+                    android:gravity="center_horizontal"
+
+                    android:id="@+id/tv_net_am" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black"
+                    android:gravity="center_horizontal"
+
+                    android:id="@+id/tv_amt" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</LinearLayout>
