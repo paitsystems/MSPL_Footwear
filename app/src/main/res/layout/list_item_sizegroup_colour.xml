@@ -9,7 +9,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/mobpadding2"
+        android:padding="@dimen/mobpadding5"
         android:layout_gravity="center"
         android:id="@+id/lay">
 
@@ -23,7 +23,7 @@
                 android:id="@+id/textView"
                 style="@style/textViewMob"
                 android:layout_width="80dp"
-                android:layout_height="30dp"
+                android:layout_height="20dp"
                 android:padding="@dimen/mobpadding2"
                 android:text="BrownBlu"
                 android:gravity="center" />

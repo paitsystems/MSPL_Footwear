@@ -5,9 +5,10 @@ package com.lnbinfotech.msplfootwear.model;
 public class CustomerOrderClass {
 
     private int auto, branchId, productid, perPackQty, qty, looseQty, actLooseQty;
-    private double rate, mrp, amount, totalamt, gstper,cgstamt,sgstamt,igstamt, cgstper, sgstper, cessper, cessamt;
-    private String sizeGroup, requiredSize, color, hashCode, loosePackTyp;
-
+    private String sizeGroup, requiredSize, color, hashCode, loosePackTyp,
+                    rate, mrp, amount, totalamt, gstper,cgstamt,sgstamt,igstamt,
+                    cgstper, sgstper, cessper, cessamt, discamnt, discPer,
+                    netamnt, gstAmt, amtAfterDisc, orderType;
 
     public int getAuto() {
         return auto;
@@ -89,6 +90,14 @@ public class CustomerOrderClass {
         this.color = color;
     }
 
+    public String getHashCode() {
+        return hashCode;
+    }
+
+    public void setHashCode(String hashCode) {
+        this.hashCode = hashCode;
+    }
+
     public String getLoosePackTyp() {
         return loosePackTyp;
     }
@@ -97,107 +106,147 @@ public class CustomerOrderClass {
         this.loosePackTyp = loosePackTyp;
     }
 
-    public double getRate() {
+    public String getRate() {
         return rate;
     }
 
-    public void setRate(double rate) {
+    public void setRate(String rate) {
         this.rate = rate;
     }
 
-    public double getMrp() {
+    public String getMrp() {
         return mrp;
     }
 
-    public void setMrp(double mrp) {
+    public void setMrp(String mrp) {
         this.mrp = mrp;
     }
 
-    public double getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 
-    public double getTotalamt() {
+    public String getTotalamt() {
         return totalamt;
     }
 
-    public void setTotalamt(double totalamt) {
+    public void setTotalamt(String totalamt) {
         this.totalamt = totalamt;
     }
 
-    public double getGstper() {
+    public String getGstper() {
         return gstper;
     }
 
-    public void setGstper(double gstper) {
+    public void setGstper(String gstper) {
         this.gstper = gstper;
     }
 
-    public double getCgstamt() {
+    public String getCgstamt() {
         return cgstamt;
     }
 
-    public void setCgstamt(double cgstamt) {
+    public void setCgstamt(String cgstamt) {
         this.cgstamt = cgstamt;
     }
 
-    public double getSgstamt() {
+    public String getSgstamt() {
         return sgstamt;
     }
 
-    public void setSgstamt(double sgstamt) {
+    public void setSgstamt(String sgstamt) {
         this.sgstamt = sgstamt;
     }
 
-    public double getIgstamt() {
+    public String getIgstamt() {
         return igstamt;
     }
 
-    public void setIgstamt(double igstamt) {
+    public void setIgstamt(String igstamt) {
         this.igstamt = igstamt;
     }
 
-    public double getCgstper() {
+    public String getCgstper() {
         return cgstper;
     }
 
-    public void setCgstper(double cgstper) {
+    public void setCgstper(String cgstper) {
         this.cgstper = cgstper;
     }
 
-    public double getSgstper() {
+    public String getSgstper() {
         return sgstper;
     }
 
-    public void setSgstper(double sgstper) {
+    public void setSgstper(String sgstper) {
         this.sgstper = sgstper;
     }
 
-    public double getCessper() {
+    public String getCessper() {
         return cessper;
     }
 
-    public void setCessper(double cessper) {
+    public void setCessper(String cessper) {
         this.cessper = cessper;
     }
 
-    public double getCessamt() {
+    public String getCessamt() {
         return cessamt;
     }
 
-    public void setCessamt(double cessamt) {
+    public void setCessamt(String cessamt) {
         this.cessamt = cessamt;
     }
 
-    public String getHashCode() {
-        return hashCode;
+    public String getDiscamnt() {
+        return discamnt;
     }
 
-    public void setHashCode(String hashCode) {
-        this.hashCode = hashCode;
+    public void setDiscamnt(String discamnt) {
+        this.discamnt = discamnt;
+    }
+
+    public String getDiscPer() {
+        return discPer;
+    }
+
+    public void setDiscPer(String discPer) {
+        this.discPer = discPer;
+    }
+
+    public String getNetamnt() {
+        return netamnt;
+    }
+
+    public void setNetamnt(String netamnt) {
+        this.netamnt = netamnt;
+    }
+
+    public String getGstAmt() {
+        return gstAmt;
+    }
+
+    public void setGstAmt(String gstAmt) {
+        this.gstAmt = gstAmt;
+    }
+
+    public String getAmtAfterDisc() {
+        return amtAfterDisc;
+    }
+
+    public void setAmtAfterDisc(String amtAfterDisc) {
+        this.amtAfterDisc = amtAfterDisc;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
     }
 }

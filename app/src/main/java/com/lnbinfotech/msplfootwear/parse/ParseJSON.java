@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.lnbinfotech.msplfootwear.CheckoutCustOrderActivity;
 import com.lnbinfotech.msplfootwear.FirstActivity;
 import com.lnbinfotech.msplfootwear.R;
+import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.AreaMasterClass;
@@ -109,9 +110,11 @@ public class ParseJSON {
                     custClass.setPANno(jsonArray.getJSONObject(i).getString("Panno"));
                     custClass.setGSTNo(jsonArray.getJSONObject(i).getString("GSTNo"));
                     custClass.setImagePath(jsonArray.getJSONObject(i).getString("ImagePath"));
+                    custClass.setDiscount(Float.parseFloat(jsonArray.getJSONObject(i).getString("Discount")));
                     //db.addCustomerDetail(custClass);
                     list.add(custClass);
                 }
+                Constant.showLog(""+list.size());
                 db.addCustomerDetail(list);
                 db.close();
             }
@@ -535,12 +538,12 @@ public class ParseJSON {
                     gstClass.setGroupName(jsonArray.getJSONObject(i).getString("GroupNm"));
                     gstClass.setStatus(jsonArray.getJSONObject(i).getString("Status"));
 
-                    gstClass.setGstPer(jsonArray.getJSONObject(i).getDouble("GSTPer"));
-                    gstClass.setCgstPer(jsonArray.getJSONObject(i).getDouble("CGSTPer"));
-                    gstClass.setSgstPer(jsonArray.getJSONObject(i).getDouble("SGSTPer"));
-                    gstClass.setCessPer(jsonArray.getJSONObject(i).getDouble("CESSPer"));
-                    gstClass.setCgstShare(jsonArray.getJSONObject(i).getDouble("CGSTSHARE"));
-                    gstClass.setSgstShare(jsonArray.getJSONObject(i).getDouble("SGSTSHARE"));
+                    gstClass.setGstPer(jsonArray.getJSONObject(i).getString("GSTPer"));
+                    gstClass.setCgstPer(jsonArray.getJSONObject(i).getString("CGSTPer"));
+                    gstClass.setSgstPer(jsonArray.getJSONObject(i).getString("SGSTPer"));
+                    gstClass.setCessPer(jsonArray.getJSONObject(i).getString("CESSPer"));
+                    gstClass.setCgstShare(jsonArray.getJSONObject(i).getString("CGSTSHARE"));
+                    gstClass.setSgstShare(jsonArray.getJSONObject(i).getString("SGSTSHARE"));
 
                     db.addGSTMaster(gstClass);
                 }

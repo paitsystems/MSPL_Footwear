@@ -117,7 +117,7 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".AddToCartActivity"
-            android:theme="@style/AppThemeProfile"
+            android:theme="@style/AppThemeAddToCard"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ProductSearchActivity"
@@ -126,6 +126,7 @@
         <activity
             android:name=".ViewCustomerOrderActiviy"
             android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAddToCard"
             android:windowSoftInputMode="stateHidden"/>
     </application>
 

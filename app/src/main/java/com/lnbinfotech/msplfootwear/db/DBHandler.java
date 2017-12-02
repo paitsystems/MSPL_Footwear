@@ -33,7 +33,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
     //TODO: Change Version
-    public static final int Database_Version = 12;
+    public static final int Database_Version = 19;
 
     //retailCustID,name,address,mobile,status,branchId,email,District,Taluka,cityId,areaId,
     // Panno,ImagePath,HoCode,GSTNo,IMEINo,isRegistered,AadharNo,PIN
@@ -57,6 +57,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String CM_isRegistered = "isRegistered";
     public static final String CM_AadhaarNo = "AadhaarNo";
     public static final String CM_PIN = "PIN";
+    public static final String CM_Discount = "Discount";
 
     //Product_id,Cat1,Cat2,Cat3,Cat4,Cat5,Cat6,Final_prod,Uom,Srate,Prate,Branchid,Status,NoOfPices,
     // Company_Id,MRPRate,ProductId,Cat7,Cat8,MinStkQty,MaxStkQty,GSTGroup,HSNCode,Cat9
@@ -242,7 +243,10 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String CO_Amount = "Amount";
     public static final String CO_LoosePackTyp = "LoosePackTyp";
     public static final String CO_TotalAmt = "TotalAmt";
+    public static final String CO_NetAmt = "NetAmt";
+    public static final String CO_AmtAfterDisc = "AmtAfterDisc";
     public static final String CO_GSTPer = "GSTPer";
+    public static final String CO_GSTAmt = "GSTAmnt";
     public static final String CO_CGSTAmt = "CGSTAmt";
     public static final String CO_SGSTAmt = "SGSTAmt";
     public static final String CO_IGSTAmt = "IGSTAmt";
@@ -250,6 +254,9 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String CO_SGSTPer = "SGSTPer";
     public static final String CO_CESSPer = "CESSPer";
     public static final String CO_CESSAmt = "CESSAmt";
+    public static final String CO_DiscPer = "DiscPer";
+    public static final String CO_DiscAmt = "DiscAmt";
+    public static final String CO_OrderType = "OrderType";
 
     public static final String Table_GSTMASTER = "GSTMASTER";
     public static final String GST_Auto = "Auto";
@@ -272,7 +279,7 @@ public class DBHandler extends SQLiteOpenHelper {
             CM_RetailCustID + " int," + CM_Name + " text," + CM_Address + " text," + CM_MobileNo + " text," + CM_Status + " text," +
             CM_BranchId + " int," + CM_Email + " text," + CM_District + " text," + CM_Taluka + " text," + CM_CityId + " int," +
             CM_AreaId + " int," + CM_PANNo + " text," + CM_ImagePath + " text," + CM_HOCode + " int," + CM_GSTNo + " text," + CM_IMEINo + " text," +
-            CM_isRegistered + " text," + CM_AadhaarNo + " text," + CM_PIN + " int)";
+            CM_isRegistered + " text," + CM_AadhaarNo + " text," + CM_PIN + " int,"+CM_Discount+" float)";
 
     String create_prod_master = "create table if not exists " + Table_ProductMaster + "(" +
             PM_ProductID + " int," + PM_Cat1 + " text," + PM_Cat2 + " text," + PM_Cat3 + " text," + PM_Cat4 + " text," + PM_Cat5 + " text," + PM_Cat6 + " text," +
@@ -325,14 +332,15 @@ public class DBHandler extends SQLiteOpenHelper {
 
     String create_custorder_table = "create table if not exists "+Table_CustomerOrder+"("+CO_Auto+" int,"+
             CO_BranchId+" int,"+CO_Productid+" int,"+CO_SizeGroup+" text,"+CO_RequiredSize+" text,"+
-            CO_PerPackQty+" int,"+CO_Color+" text,"+CO_HashCode+" text,"+CO_Rate+" double,"+CO_MRP+" double,"+CO_Qty+" int,"+
-            CO_LooseQty+" int,"+CO_ActLooseQty+" int,"+CO_Amount+" double,"+CO_LoosePackTyp+" text,"+CO_TotalAmt+" double,"+
-            CO_GSTPer+" double,"+CO_CGSTAmt+" double,"+CO_SGSTAmt+" double,"+CO_IGSTAmt+" double,"+CO_CGSTPer+" double,"+
-            CO_SGSTPer+" double,"+CO_CESSPer+" double,"+CO_CESSAmt+" double)";
+            CO_PerPackQty+" int,"+CO_Color+" text,"+CO_HashCode+" text,"+CO_Rate+" text,"+CO_MRP+" text,"+CO_Qty+" int,"+
+            CO_LooseQty+" int,"+CO_ActLooseQty+" int,"+CO_Amount+" text,"+CO_LoosePackTyp+" text,"+CO_TotalAmt+" text,"+
+            CO_NetAmt+" text,"+CO_AmtAfterDisc+" text,"+CO_GSTPer+" text,"+CO_GSTAmt+" text,"+CO_CGSTAmt+" text,"+
+            CO_SGSTAmt+" text,"+CO_IGSTAmt+" text,"+CO_CGSTPer+" text,"+
+            CO_SGSTPer+" text,"+CO_CESSPer+" text,"+CO_CESSAmt+" text,"+CO_DiscPer+" text,"+CO_DiscAmt+" text,"+CO_OrderType+" text)";
 
     String create_gstmaster_table = "create table if not exists "+Table_GSTMASTER+"("+GST_Auto+" int,"+
-            GST_GroupNm+" text,"+GST_Status+" text,"+GST_GSTPer+" float,"+GST_CGSTPer+" float,"+
-            GST_SGSTPer+" float,"+GST_CESSPer+" float,"+GST_CGSTSHARE+" float,"+GST_SGSTSHARE+" float)";
+            GST_GroupNm+" text,"+GST_Status+" text,"+GST_GSTPer+" text,"+GST_CGSTPer+" text,"+
+            GST_SGSTPer+" text,"+GST_CESSPer+" text,"+GST_CGSTSHARE+" text,"+GST_SGSTSHARE+" text)";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -372,7 +380,6 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if(oldVersion<newVersion){
             db.execSQL("drop table "+Table_CustomerOrder);
-            Constant.showLog(create_custorder_table);
             db.execSQL(create_custorder_table);
         }
     }
@@ -381,6 +388,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         ContentValues cv = new ContentValues();
+        int count=1;
         for(CustomerDetailClass cust : custList) {
             cv.put(CM_RetailCustID, cust.getCustID());
             cv.put(CM_Name, cust.getName());
@@ -391,7 +399,9 @@ public class DBHandler extends SQLiteOpenHelper {
             cv.put(CM_GSTNo, cust.getGSTNo());
             cv.put(CM_ImagePath, cust.getImagePath());
             cv.put(CM_PIN, "-1");
+            cv.put(CM_Discount,cust.getDiscount());
             db.insert(Table_Customermaster, null, cv);
+            Constant.showLog(""+count++);
         }
         db.setTransactionSuccessful();
         db.endTransaction();
@@ -847,7 +857,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public Cursor getProductDetails(String packUnpackType){
-        String str = "select "+PM_ProductID+","+PM_SRate+","+PM_MRPRate+","+PM_HSNCode+","+PM_GSTGroup +
+        String str = "select "+PM_ProductID+","+PM_SRate+","+PM_MRPRate+","+PM_HSNCode+","+PM_GSTGroup+","+PM_Finalprod +
                     " from "+Table_ProductMaster+" where "+PM_ProductID+"="+AddToCartActivity.selProdId;
         Constant.showLog("getProductDetails :- "+str);
         return getWritableDatabase().rawQuery(str,null);
@@ -894,7 +904,6 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public int getCustMax(){
-        //TODO: Check Max Code
         int a = 0;
         String str = "select max("+CM_RetailCustID+") from "+Table_Customermaster;
         Cursor res = getWritableDatabase().rawQuery(str,null);
@@ -990,16 +999,58 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(CO_SGSTPer,custOrder.getSgstper());
         cv.put(CO_CESSPer,custOrder.getCessper());
         cv.put(CO_CESSAmt,custOrder.getCessamt());
+        cv.put(CO_DiscPer,custOrder.getDiscPer());
+        cv.put(CO_DiscAmt,custOrder.getDiscamnt());
+        cv.put(CO_GSTAmt,custOrder.getGstAmt());
+        cv.put(CO_NetAmt,custOrder.getNetamnt());
+        cv.put(CO_AmtAfterDisc,custOrder.getAmtAfterDisc());
+        cv.put(CO_OrderType,custOrder.getOrderType());
         db.insert(Table_CustomerOrder,null,cv);
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();
     }
+
     public Cursor getViewOrderData(){
         String str = "select * from "+Table_CustomerOrder +" order by "+CO_Productid+","+CO_SizeGroup;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str,null);
     }
+
+    public float getCustDiscount(int custid){
+        float a = 0;
+        String str = "select "+CM_Discount+" from "+Table_Customermaster +" where "+CM_RetailCustID+"="+custid;
+        Cursor res = getWritableDatabase().rawQuery(str,null);
+        if(res.moveToFirst()){
+            do{
+                a = res.getInt(0);
+            }while (res.moveToNext());
+        }
+        res.close();
+        return a;
+    }
+
+    public Cursor getCustOrderTotals(){
+        String str = "select count("+CO_Auto+") as "+CO_Auto+",sum("+CO_LooseQty+") as "+CO_LooseQty+", sum("+CO_Amount+
+                ") as "+CO_Amount+", sum("+CO_NetAmt+") as "+CO_NetAmt+", sum("+CO_AmtAfterDisc+") as "+CO_AmtAfterDisc+","+
+                "SUM("+CO_GSTAmt+") as "+CO_GSTAmt+", sum("+CO_DiscAmt+") as "+CO_DiscAmt+" from "+Table_CustomerOrder;
+        Constant.showLog("getCustOrderTotals :- "+str);
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
+    public void deleteOrderTable(int auto) {
+        getWritableDatabase().execSQL("delete from " + Table_CustomerOrder+" where "+CO_Auto+"="+auto);
+    }
+
+    public void deleteOrderTableUnpack() {
+        getWritableDatabase().execSQL("delete from " + Table_CustomerOrder+" where "+CO_OrderType+"='U' and "+CO_Productid+"="+AddToCartActivity.selProdId);
+    }
+
+    public Cursor getSavedUnpackOrder(){
+        String str = "select "+CO_SizeGroup+","+CO_Qty+","+CO_Color+","+CO_HashCode+" from "+Table_CustomerOrder+" where "+CO_OrderType+"='U' and "+CO_Productid+"="+AddToCartActivity.selProdId;
+        return getWritableDatabase().rawQuery(str,null);
+    }
 }
+
 
 

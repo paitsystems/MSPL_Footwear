@@ -50,30 +50,16 @@ public class SizeGroupWiseColourAdapter extends RecyclerView.Adapter<SizeGroupWi
         String hashCode = colourHashCode[1];
         if (hashCode.equalsIgnoreCase("#FFFFFF")) {
             holder.textView.setTextColor(Color.parseColor("#000000"));
-            holder.textView.setBackgroundResource(R.drawable.black_border_draw);
+            holder.textView.setBackgroundResource(R.drawable.green_boarder_draw);
         } else {
             holder.textView.setTextColor(Color.parseColor("#FFFFFF"));
             holder.textView.setBackgroundColor(Color.parseColor(hashCode));
         }
-        /*if(!selColorList.isEmpty()){
-            if(selColorList.contains(position)) {
-                int a = selColorList.get(position);
-                if(a!=-1) {
-                    holder.lay.setBackgroundResource(R.drawable.black_border_draw);
-                }else{
-                    holder.lay.setBackgroundResource(0);
-                }
-            }else {
-                holder.lay.setBackgroundResource(0);
-            }
-        }else{
-            holder.lay.setBackgroundResource(0);
-        }*/
         if(!AddToCartActivity.map.isEmpty()){
             if(AddToCartActivity.map.containsKey(position)){
                 int a = AddToCartActivity.map.get(position);
                 if(a==1){
-                    holder.lay.setBackgroundResource(R.drawable.black_border_draw);
+                    holder.lay.setBackgroundResource(R.drawable.green_boarder_draw);
                 }else{
                     holder.lay.setBackgroundResource(0);
                 }
@@ -88,16 +74,6 @@ public class SizeGroupWiseColourAdapter extends RecyclerView.Adapter<SizeGroupWi
             @Override
             public void onClick(View view) {
                 int pos = (int) view.getTag();
-                /*if(selColorList.isEmpty()){
-                    selColorList.add(pos);
-                }else{
-                    if(!selColorList.contains(pos)){
-                        selColorList.add(pos,pos);
-                    }else{
-                        selColorList.remove(pos);
-                        selColorList.add(pos,-1);
-                    }
-                }*/
                 if(AddToCartActivity.map.isEmpty()){
                     AddToCartActivity.map.put(pos,1);
                 }else{
