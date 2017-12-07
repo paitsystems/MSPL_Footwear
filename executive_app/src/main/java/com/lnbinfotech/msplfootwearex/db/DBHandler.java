@@ -29,7 +29,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
     //TODO: Change Version
-    public static final int Database_Version = 1;
+    public static final int Database_Version = 8;
 
     public static final String Table_Customermaster = "CustomerMaster";
     public static final String CM_RetailCustID = "CustID";
@@ -643,6 +643,35 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str,null);
     }
 
+    public Cursor getCustName() {
+        String str = "select " + CM_Name + " from " + Table_Customermaster + " order by " + CM_Name;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public int getCustNameId(String name) {
+        int id=0;
+        String str = "select " + CM_RetailCustID + " from " + Table_Customermaster + " where " + CM_Name +" = '"+name+"'";
+        Constant.showLog(str);
+        Cursor res =  getWritableDatabase().rawQuery(str, null);
+        if(res.moveToFirst()){
+           id =  res.getInt(0);
+        }
+        return id;
+    }
+
+    public int getCartCount(){
+        int a = 0;
+        //TODO
+       // String str = "select count("+CO_Auto+") from "+Table_CustomerOrder;
+        String str = "";
+        Constant.showLog(str);
+        Cursor res =  getWritableDatabase().rawQuery(str,null);
+        if (res.moveToFirst()) {
+            a = res.getInt(0);
+        }
+        return a;
+    }
 }
 
 

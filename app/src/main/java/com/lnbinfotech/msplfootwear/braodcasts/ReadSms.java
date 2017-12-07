@@ -23,22 +23,31 @@ public class ReadSms extends BroadcastReceiver {
             final Object[] pdusobj = (Object[]) bundle.get("pdus");
             for (int i = 0; i <= pdusobj.length-1; i++){
                 SmsMessage current_msg = SmsMessage.createFromPdu((byte[]) pdusobj[i]);
-                String mob_no = current_msg.getDisplayOriginatingAddress();
-                String sender_no = mob_no;
-                String message = current_msg.getDisplayMessageBody();
-                text = message.replaceAll("[^0-9]","");
-                Constant.showLog("text:"+text.substring(0,6));
-                Constant.showLog("text:"+text.substring(0,1));
-                Constant.showLog("text:"+text.substring(1,2));
-                if (!b){
-                    smsListener.onReceivedMessage(text);
-                }
-                Constant.showLog("ReadSMS_onReceive_Called");
+
+                String cmp_name = current_msg.getDisplayOriginatingAddress();
+                Constant.showLog("mob_no"+cmp_name);
+
+                String service_center = current_msg.getServiceCenterAddress();
+                Constant.showLog("service_cebter"+service_center);
+
+                String sender_no = cmp_name;
+               // if(cmp_name.equals("MD-LNBTCH") && service_center.equals("+919868191090")) {
+
+                    String message = current_msg.getDisplayMessageBody();
+                    text = message.replaceAll("[^0-9]", "");
+                    Constant.showLog("text:" + text.substring(0, 6));
+                    Constant.showLog("text:" + text.substring(0, 1));
+                    Constant.showLog("text:" + text.substring(1, 2));
+                    if (!b) {
+                        smsListener.onReceivedMessage(text);
+                    }
+                    Constant.showLog("ReadSMS_onReceive_Called");
+              //  }
             }
         }
     }
 
-    public static void bindListener(SmsListener listener) {
+    public  void bindListener(SmsListener listener) {
         smsListener = listener;
         Constant.showLog("ReadSMS_bindListener_Called");
     }

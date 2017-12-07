@@ -1,7 +1,7 @@
 package com.lnbinfotech.msplfootwearex.model;// Created by anup on 9/26/2017.
 
 public class NewCustomerEntryGetterSetter {
-    private String id_addressproof,id_idproof,id_gstpan_proof,gstpan_img,Cust_name,mobile_no,email_id,address,cus_image,address_proof,address_proof_image, id_proof,id_proof_image, gst_no,gst_no_image, pan_no,pan_no_image;
+    private String id_addressproof,id_idproof,id_gstpan_proof,gstpan_img,Cust_name,mobile_no,email_id,address,cus_image,address_proof,address_proof_image, id_proof,id_proof_image, gst_no,gst_no_image, pan_no,pan_no_image,status;
 
     public String getId_addressproof() {
         return id_addressproof;
@@ -137,5 +137,13 @@ public class NewCustomerEntryGetterSetter {
 
     public void setPan_no_image(String pan_no_image) {
         this.pan_no_image = pan_no_image;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

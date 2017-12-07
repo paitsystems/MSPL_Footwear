@@ -47,6 +47,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     private CountDownTimer countDown;
     private String mobNo,imeiNo;
     private  String response_value;
+    private ReadSms receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +59,15 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         mobNo = otpClass.getMobileno();
         imeiNo = otpClass.getImeino();
 
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setTitle(R.string.email_id);
         }
 
         //autoOTP();
-        ReadSms.bindListener(new SmsListener() {
+        receiver = new ReadSms();
+        receiver.bindListener(new SmsListener() {
             @Override
             public void onReceivedMessage(String message) {
                 Constant.showLog("message:"+message);
@@ -223,6 +226,12 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onBackPressed() {
         showDia(0);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
     }
 
     @Override
@@ -428,6 +437,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    unregisterReceiver(receiver);
                     new Constant(CheckOTPActivity.this).doFinish();
                     toast.cancel();
                     dialog.dismiss();
@@ -473,4 +483,6 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     private void writeLog(String _data){
         new WriteLog().writeLog(getApplicationContext(),"RegistrationActivity_"+_data);
     }
+
+
 }

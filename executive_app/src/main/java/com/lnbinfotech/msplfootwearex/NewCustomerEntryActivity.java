@@ -30,7 +30,7 @@ public class NewCustomerEntryActivity extends AppCompatActivity implements View.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_customer_entry);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setTitle(R.string.newcustomerentry);
         }
         init();
@@ -141,7 +141,7 @@ public class NewCustomerEntryActivity extends AppCompatActivity implements View.
 
     private void validation() {
         if (ed_cus_name.getText().toString().equals("") & ed_mobile_no.getText().toString().equals("")
-                & ed_email_id.getText().toString().equals("") & ed_address.getText().toString().equals("")) {
+                & ed_address.getText().toString().equals("")) {
             toast.setText("Please,fill all the fields");
             toast.show();
         } else if (ed_cus_name.getText().toString().equals("")) {
@@ -150,10 +150,7 @@ public class NewCustomerEntryActivity extends AppCompatActivity implements View.
         } else if (ed_mobile_no.getText().toString().equals("")) {
             toast.setText("Please,enter mobile number");
             toast.show();
-        } else if (ed_email_id.getText().toString().equals("")) {
-            toast.setText("Please,enter email id");
-            toast.show();
-        } else if (ed_address.getText().toString().equals("")) {
+        }  else if (ed_address.getText().toString().equals("")) {
             toast.setText("Please,enter address");
             toast.show();
         } else {

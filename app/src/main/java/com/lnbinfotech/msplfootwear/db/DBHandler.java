@@ -1000,6 +1000,17 @@ public class DBHandler extends SQLiteOpenHelper {
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str,null);
     }
+
+    public int getCartCount(){
+        int a = 0;
+        String str = "select count("+CO_Auto+") from "+Table_CustomerOrder;
+        Constant.showLog(str);
+        Cursor res =  getWritableDatabase().rawQuery(str,null);
+        if (res.moveToFirst()) {
+            a = res.getInt(0);
+        }
+        return a;
+    }
 }
 
 

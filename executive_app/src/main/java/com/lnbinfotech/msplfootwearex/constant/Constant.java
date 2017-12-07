@@ -42,7 +42,7 @@ public class Constant {
     //public static final String ipaddress = "http://172.30.1.38/MSPL/service.svc";
     public static final String ipaddress = "http://license.lnbinfotech.com/MSPL/service.svc";
 
-    //TODO: Check liveTestFlag 1-Live, 0-Test
+    //TODO: Check liveTestFlag 1-Live, 0-TestInterface
     public static int liveTestFlag = 0;
 
     Activity activity;

@@ -7,6 +7,13 @@
         android:title="@string/logout"
         app:showAsAction="never"/>-->
 
+    <item
+        android:title="@string/cart"
+        android:id="@+id/cart"
+        app:actionLayout="@layout/actionbaar_badge_layout"
+        android:icon="@drawable/cart_32"
+        app:showAsAction="always"/>
+
     <item android:id="@+id/refresh"
         android:title="@string/refresh"
         android:icon="@drawable/refresh"

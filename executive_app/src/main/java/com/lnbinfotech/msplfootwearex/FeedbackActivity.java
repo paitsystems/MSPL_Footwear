@@ -172,7 +172,10 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     Log.d("Log", "imgename:" + mbitmap);
                     //imgv_img2.setVisibility(View.VISIBLE);
                     lay_img2.setVisibility(View.VISIBLE);
-                    feedbackClass.setFeed_img1(String.valueOf(mbitmap));
+                    feedbackClass.setFeed_img1(file_name);
+                    Constant.showLog("file_name"+file_name);
+                    Constant.showLog(""+mbitmap);
+                    // feedbackClass.setFeed_img1(String.valueOf(mbitmap));
                 }
                 break;
             case 2:
@@ -186,7 +189,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     // imgv_img3.setVisibility(View.VISIBLE);
                     imgv_img2.setImageBitmap(mbitmap);
                     lay_img3.setVisibility(View.VISIBLE);
-                    feedbackClass.setFeed_img2(String.valueOf(mbitmap));
+                    feedbackClass.setFeed_img2(file_name);
+                    Constant.showLog("file_name"+file_name);
+                    //feedbackClass.setFeed_img2(String.valueOf(mbitmap));
                     Log.d("Log", "imgename:" + mbitmap);
                 }
                 break;
@@ -201,7 +206,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     Bitmap mbitmap = get_Image_from_sd_card(file_name);
                     imgv_img3.setImageBitmap(mbitmap);
                     Log.d("Log", "imgename:" + mbitmap);
-                    feedbackClass.setFeed_img3(String.valueOf(mbitmap));
+                    feedbackClass.setFeed_img3(file_name);
+                    Constant.showLog("file_name"+file_name);
+                    //feedbackClass.setFeed_img3(String.valueOf(mbitmap));
                 }
                 break;
 
@@ -236,7 +243,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                         File destFile = new File((Environment.getExternalStorageDirectory() + File.separator + Constant.image_folder + File.separator + file_name));
                         copyFile(new File(getPath(data.getData())), destFile);
                     } catch (Exception e) {
-
+                        e.printStackTrace();
                     }
                 }
 
@@ -305,6 +312,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         feedbackClass = new FeedbackClass();
+        feedbackClass.setFeed_img1("NA");
+        feedbackClass.setFeed_img2("NA");
+        feedbackClass.setFeed_img3("NA");
         fedback_spinner = (Spinner) findViewById(R.id.fedback_spinner);
         ed_description = (EditText) findViewById(R.id.ed_description);
         ed_article_no = (EditText) findViewById(R.id.ed_article_no);
@@ -339,6 +349,16 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         feedbackClass.setSalesman_id(salesman);
         feedbackClass.setFront_office(front_office);
         feedbackClass.setDescription(description);
+        if(feedbackClass.getFeed_img1().equals("")){
+            feedbackClass.setFeed_img1("NA");
+        }
+
+        if(feedbackClass.getFeed_img2().equals("")){
+            feedbackClass.setFeed_img2("NA");
+        }
+        if(feedbackClass.getFeed_img3().equals("")){
+            feedbackClass.setFeed_img3("NA");
+        }
         saveFeedbackdetail();
 
     }
@@ -351,7 +371,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    show_popup(3);
+                    //show_popup(3);
+                    Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent1, 1);
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -365,7 +387,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    show_popup(4);
+                    // show_popup(4);
+                    Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent2, 2);
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -379,7 +403,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    show_popup(5);
+                    //show_popup(5);
+                    Intent intent3 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent3, 3);
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -480,6 +506,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         builder.create().show();
     }
 
+
     private String getPath(Uri uri) {
         String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = managedQuery(uri, projection, null, null, null);
@@ -539,70 +566,103 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void saveFeedbackdetail() {
-        if(ConnectivityTest.getNetStat(FeedbackActivity.this)) {
-            try {
-                String url = "";
-                constant = new Constant(FeedbackActivity.this);
-                constant.showPD();
-                String feedtype = feedbackClass.getFeedbk_type();
-                String articleno = feedbackClass.getArticle_no();
-                String invoiceno = feedbackClass.getInvoice_no();
-                String qty = feedbackClass.getQty();
-                String salesmanid = feedbackClass.getSalesman_id();
-                String officetype = feedbackClass.getFront_office();
-                String description = feedbackClass.getFront_office();
-                String img1 = feedbackClass.getFeed_img1();
-                String img2 = feedbackClass.getFeed_img2();
-                String img3 = feedbackClass.getFeed_img3();
-                String crby = feedbackClass.getCrby();
-                //String crdate = feedbackClass.getCrdate();
-                //String crtime = feedbackClass.getCrtime();
-                String usertype = feedbackClass.getUser_type();
+        try {
+            constant = new Constant(FeedbackActivity.this);
+            String url = "";
+            constant.showPD();
+            String feedtype = feedbackClass.getFeedbk_type();
+            String articleno = feedbackClass.getArticle_no();
+            String invoiceno = feedbackClass.getInvoice_no();
+            String qty = feedbackClass.getQty();
+            String salesmanid = feedbackClass.getSalesman_id();
+            String officetype = feedbackClass.getFront_office();
+            String description = feedbackClass.getDescription();
+            String img1 = feedbackClass.getFeed_img1();
 
-                String _feedtype = URLEncoder.encode(feedtype, "UTF-8");
-                String _articleno = URLEncoder.encode(articleno, "UTF-8");
-                String _invoiceno = URLEncoder.encode(invoiceno, "UTF-8");
-                String _qty = URLEncoder.encode(qty, "UTF-8");
-                String _salesmanid = URLEncoder.encode(salesmanid, "UTF-8");
-                String _officetype = URLEncoder.encode(officetype, "UTF-8");
-                String _description = URLEncoder.encode(description, "UTF-8");
-                String _img1 = URLEncoder.encode(img1, "UTF-8");
-                String _img2 = URLEncoder.encode(img2, "UTF-8");
-                String _img3 = URLEncoder.encode(img3, "UTF-8");
-                String _crby = URLEncoder.encode(crby, "UTF-8");
-                //String _crdate = URLEncoder.encode(crdate, "UTF-8");
-                //String _crtime = URLEncoder.encode(crtime, "UTF-8");
-                String _usertype = URLEncoder.encode(usertype, "UTF-8");
 
-                url = "/SaveFeedbackDetail?feedbk_type=" + _feedtype + "&article_no=" + _articleno + "&invoice_no" + _invoiceno + "&qty=" + _qty + "&salesman_id=" + _salesmanid + "&office_type=" + _officetype + "&description=" + _description + "&img1=" + _img1 + "&img2=" + _img2 + "&img3=" + _img3 + "&crby=" + _crby + "&user_type=" + _usertype;
-                Constant.showLog(url);
-                writeLog("savefeedback():url called:" + url);
+          /*  if( feedbackClass.getFeed_img1().equals("null")){
+                feedbackClass.setFeed_img1("NA");
 
-                VolleyRequests requests = new VolleyRequests(FeedbackActivity.this);
-                requests.saveFeedbackDetail(url, new ServerCallback() {
-                    @Override
-                    public void onSuccess(String result) {
-                        constant.showPD();
-                        show_popup(7);
-                        Constant.showLog("Volly request success");
-                        writeLog("saveFeedbackdetail():Volley_success");
-                    }
+            }*/
+            String img2 = feedbackClass.getFeed_img2();
 
-                    @Override
-                    public void onFailure(String result) {
-                        constant.showPD();
-                        show_popup(8);
-                        writeLog("saveFeedbackdetail_" + result);
-                    }
-                });
-            } catch (Exception e) {
-                show_popup(7);
-                e.printStackTrace();
-                writeLog("saveFeedbackdetail_" + e.getMessage());
+          /*  if(img2.equals("null")){
+                img2 = "NA";
+            }*/
+            String img3 = feedbackClass.getFeed_img3();
+
+           /* if( img3.equals("null")){
+                img3 = "NA";
+            }*/
+            String crby = String.valueOf(FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0));
+            Constant.showLog("crby"+crby);
+            //String crdate = feedbackClass.getCrdate();
+            //String crtime = feedbackClass.getCrtime();
+            // String usertype = feedbackClass.getUser_type();
+
+           /* if(img1.equals("null") || img2.equals("null") || img3.equals("null")){
+                img1 = "NA";
+                img2 = "NA";
+                img3 = "NA";
+            }*/
+
+            if(feedtype.equals("Damage Goods")){
+                salesmanid = "0";
+                officetype = "NA";
+            }else if(feedtype.equals("Service") || feedtype.equals("Team")){
+                articleno = "0";
+                qty = "0";
+                invoiceno = "0";
+            }else{
+                salesmanid = "0";
+                officetype = "NA";
+                articleno = "0";
+                qty = "0";
+                invoiceno = "0";
             }
-        }else {
-            toast.setText("Sorry,No Internet Connection.");
-            toast.show();
+
+
+            String _feedtype = URLEncoder.encode(feedtype, "UTF-8");
+            String _articleno = URLEncoder.encode(articleno, "UTF-8");
+            String _invoiceno = URLEncoder.encode(invoiceno, "UTF-8");
+            String _qty = URLEncoder.encode(qty, "UTF-8");
+            String _salesmanid = URLEncoder.encode(salesmanid, "UTF-8");
+            String _officetype = URLEncoder.encode(officetype, "UTF-8");
+            String _description = URLEncoder.encode(description, "UTF-8");
+            String _img1 = URLEncoder.encode(img1, "UTF-8");
+            String _img2 = URLEncoder.encode(img2, "UTF-8");
+            String _img3 = URLEncoder.encode(img3, "UTF-8");
+            String _crby = URLEncoder.encode(crby, "UTF-8");
+            //String _crdate = URLEncoder.encode(crdate, "UTF-8");
+            //String _crtime = URLEncoder.encode(crtime, "UTF-8");
+            //String _usertype = URLEncoder.encode(usertype, "UTF-8");
+
+
+            url = Constant.ipaddress +"/SaveFeedbackDetail?feedbk_type=" + _feedtype + "&article_no=" + _articleno + "&invoice_no=" + _invoiceno + "&qty=" + _qty + "&salesman_id=" + _salesmanid + "&office_type=" + _officetype + "&description=" + _description + "&img1=" + _img1 + "&img2=" + _img2 + "&img3=" + _img3 + "&crby="+_crby+"&user_type=E"; //+ _usertype;
+            Constant.showLog(url);
+            writeLog("savefeedback():url called:" + url);
+
+            VolleyRequests requests = new VolleyRequests(FeedbackActivity.this);
+            requests.saveFeedbackDetail(url, new ServerCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    //constant.showPD();
+                    show_popup(7);
+                    Constant.showLog("Volly request success");
+                    writeLog("saveFeedbackdetail():Volley_success");
+                }
+
+                @Override
+                public void onFailure(String result) {
+                    //constant.showPD();
+                    show_popup(8);
+                    writeLog("saveFeedbackdetail_" + result);
+                }
+            });
+        } catch (Exception e) {
+            show_popup(7);
+            e.printStackTrace();
+            writeLog("saveFeedbackdetail_" + e.getMessage());
         }
     }
 

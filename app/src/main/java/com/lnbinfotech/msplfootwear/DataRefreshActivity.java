@@ -25,6 +25,8 @@ import com.lnbinfotech.msplfootwear.model.StockInfoMasterClass;
 import com.lnbinfotech.msplfootwear.post.Post;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
 
+import junit.framework.Test;
+
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
@@ -32,12 +34,10 @@ import org.codehaus.jackson.JsonToken;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class DataRefreshActivity extends AppCompatActivity implements View.OnClickListener {
+public class DataRefreshActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Constant constant, constant1;
     private Toast toast;
@@ -47,6 +47,9 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private DBHandler db;
     private ProgressDialog pd1;
     private int maxProdId = 0;
+    private ProgressDialog pd;
+    private Test test;
+
 
 
     @Override
@@ -220,7 +223,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         requests.refreshStockInfo(url, new ServerCallback() {
             @Override
             public void onSuccess(String result) {
-                new readJSON(result,"StockInfo");
+                new readJSON(result,"StockInfo",0);
             }
 
             @Override
@@ -235,8 +238,8 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         String url = Constant.ipaddress+"/GetAllRequiredSizesdesigns?Id="+from+"&ToId="+to;
         Constant.showLog(url);
         writeLog("loadSizeNDesignMaster_"+url);
-        constant.showPD();
-        new getSizeNDesignMaster().execute(url);
+       // constant.showPD();
+        new getSizeNDesignMaster(to).execute(url);
         /*VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
         requests.refreshSizeNDesignMaster1(url, new ServerCallback() {
             @Override
@@ -403,6 +406,8 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void init() {
+        pd = new ProgressDialog(DataRefreshActivity.this);
+        pd.setCancelable(false);
         db = new DBHandler(DataRefreshActivity.this);
         constant = new Constant(DataRefreshActivity.this);
         constant1 = new Constant(getApplicationContext());
@@ -505,6 +510,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     loadProductMaster();
                 }else if(a == 10){
                     maxProdId = db.getMaxProdId();
+                    db.deleteTable(DBHandler.Table_AllRequiredSizesDesigns);
                     loadSizeNDesignMaster(0,100);
                 }else if(a == 11){
                     loadStockInfo();
@@ -522,7 +528,19 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         builder.create().show();
     }
 
+
     private class getSizeNDesignMaster extends AsyncTask<String, Void, String>{
+        int to;
+
+
+       public getSizeNDesignMaster(int _to){
+            this.to = _to;
+           //constant.showPD();
+
+           pd.setMessage("Please Wait..");
+           pd.show();
+
+       }
 
         @Override
         protected String doInBackground(String... strings) {
@@ -533,27 +551,30 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
             response = response.substring(1, response.length() - 1);
-            constant.showPD();
-            new readJSON(response,"SizeNDesign").execute();
+           // constant.showPD();
+            new readJSON(response,"SizeNDesign",to).execute();
         }
     }
 
     private class readJSON extends AsyncTask<Void,Void,String> {
+        int to;
         private String result, parseType;
-        private ProgressDialog pd;
+       // private ProgressDialog pd;
 
-        readJSON(String _result,String _parseType){
+        readJSON(String _result,String _parseType,int _to){
             this.result = _result;
             this.parseType = _parseType;
+            this.to = _to;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pd = new ProgressDialog(DataRefreshActivity.this);
+           // constant.showPD();
+            /*pd = new ProgressDialog(DataRefreshActivity.this);
             pd.setCancelable(false);
-            pd.setMessage("Preparing To Download");
-            pd.show();
+            pd.setMessage("Please Wait");
+            pd.show();*/
         }
 
         @Override
@@ -603,9 +624,9 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            pd.dismiss();
+          //  pd.dismiss();
             if(s.equals("A")){
-                new writeDB(parseType).execute();
+                new writeDB(parseType,to).execute();
             }else {
                 showDia(2);
             }
@@ -613,17 +634,26 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     }
 
     private class writeDB extends AsyncTask<Void,String,String> {
+       // private ProgressDialog pd;
         private File writeFile;
         private String parseType;
+        private int to ;
 
-        public writeDB(String _parseType) {
+        public writeDB(String _parseType,int _to) {
             this.parseType = _parseType;
+            this.to = _to;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pd1 = new ProgressDialog(DataRefreshActivity.this);
+          /*  pd = new ProgressDialog(DataRefreshActivity.this);
+            pd.setCancelable(false);
+            pd.setMessage("Please Wait");
+            pd.show();*/
+
+
+           /* pd1 = new ProgressDialog(DataRefreshActivity.this);
             pd1.setCancelable(false);
             pd1.setProgressNumberFormat(null);
             pd1.setProgressPercentFormat(null);
@@ -634,7 +664,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             pd1.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             pd1.setTitle("Please Wait");
             pd1.setMessage("It will take app. 10-15 min");
-            pd1.show();
+            pd1.show();*/
         }
 
         @Override
@@ -645,14 +675,15 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 writeFile = new File(sdFile, writeFilename);
                 JsonParser jp = f.createJsonParser(writeFile);
                 if (parseType.equals("SizeNDesign")) {
-                    parseSizeNDesign(jp,pd1);
+                    parseSizeNDesign(jp,to);
                 } else if (parseType.equals("StockInfo")) {
                     db.deleteTable(DBHandler.Table_StockInfo);
                     parseStockInfo(jp);
                 }
                 return "";
             }catch (Exception e){
-                pd1.dismiss();
+                pd.dismiss();
+              //  constant.showPD();
                 try {
                     FileWriter writer = new FileWriter(new File(sdFile, "Log.txt"));
                     writer.append(e.getMessage());
@@ -670,19 +701,57 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            pd1.dismiss();
-            if(s.equals("")) {
-                if(writeFile.delete()){
-                    Constant.showLog("Write Delete");
-                    showDia(1);
-                }
-            }else{
-                showDia(2);
+          //  pd.dismiss();
+           // if(to <= 100) {
+
+                if (s.equals("")) {
+                    Constant.showLog("s is blank:");
+                    if (writeFile.delete()) {
+                        Constant.showLog("Write Delete");
+                       // showDia(1);
+                        /*if(list.size()!=0){
+                            if(to <= 100) {
+                                db.deleteTable(DBHandler.Table_AllRequiredSizesDesigns);
+                            }
+                        }*/
+                       // db.addSizeNDesignMaster(list);
+
+                        int from = 0;
+                         if(to == 1000){
+                            int val = maxProdId - to;
+                            from = to + 1;
+                            to = to + val;
+                            Constant.showLog("from-"+from+"-to-"+to);
+                            // constant.showPD();
+                        }else {
+                             from = to + 1;
+                             to = to + 100;
+                             Constant.showLog("from-"+from+"-to-"+to);
+                         }
+
+                        if(to <= maxProdId){
+                            Constant.showLog("maxProdId-"+maxProdId);
+                            loadSizeNDesignMaster(from,to);
+                            Constant.showLog("tovalue:"+to);
+                            if(to == maxProdId){
+                                //constant.showPD();
+                                pd.dismiss();
+                                showDia(1);
+                            }
+                        }
+
+                       // listener.refresh_data(to);
+                       // Constant.showLog(""+count);
+                    }
+                } else {
+                    showDia(2);
+              //  }
             }
         }
     }
 
-    private void parseSizeNDesign(JsonParser jp,ProgressDialog pd){
+    private void parseSizeNDesign(JsonParser jp,int to){
+
         try {
             int count = 0;
             List<SizeNDesignClass> list = new ArrayList<>();
@@ -758,16 +827,28 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 }
                 list.add(sizeNDesignClass);
                 //db.addSizeNDesignMaster(sizeNDesignClass);
-                pd.setProgress((count*100)/62412);
-            }
-            if(list.size()!=0){
-                db.deleteTable(DBHandler.Table_AllRequiredSizesDesigns);
+               // pd.setProgress((count*100)/62412);
             }
             db.addSizeNDesignMaster(list);
-            Constant.showLog(""+count);
+            /*if(list.size()!=0){
+                if(to <= 100) {
+                    db.deleteTable(DBHandler.Table_AllRequiredSizesDesigns);
+                }
+            }
+            db.addSizeNDesignMaster(list);
+
+            int from = to  + 1;
+            to = to + 100;
+            if(to <= maxProdId){
+                loadSizeNDesignMaster(from,to);
+                Constant.showLog("tovalue:"+to);
+            }
+
+            Constant.showLog(""+count);*/
         } catch (Exception e) {
             e.printStackTrace();
-            constant.showPD();
+           // constant.showPD();
+            pd.dismiss();
             showDia(2);
         }
     }
@@ -825,10 +906,13 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             }
         } catch (Exception e) {
             e.printStackTrace();
-            constant.showPD();
+            pd.dismiss();
+           // constant.showPD();
             showDia(2);
         }
     }
+
+
 
     private void writeLog(String _data){
         new WriteLog().writeLog(getApplicationContext(),"DataRefreshActivity_"+_data);

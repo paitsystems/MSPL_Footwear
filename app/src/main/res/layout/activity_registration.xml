@@ -13,9 +13,39 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/mobpadding5"
+            android:layout_weight="0.5">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/mobpadding5"
+            android:id="@+id/imgv_img1"
+            android:src="@drawable/madhur160" />
+
+            <ImageView
+                android:padding="@dimen/mobpadding5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imgv_img2"
+                android:src="@drawable/paragonlogo160" />
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="0.5">
+
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -45,6 +75,9 @@
                 android:textStyle="bold"
                 app:backgroundTint="@color/maroon" />
 
+
+
+        </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

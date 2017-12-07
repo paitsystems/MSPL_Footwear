@@ -74,6 +74,7 @@
     <string name="search_item">Search Item</string>
     <string name="search">Search</string>
     <string name="refresh">Refresh</string>
+
     <string name="table_no">Table No</string>
     <string name="tablename">TableName</string>
     <string name="waiter">Waiter</string>
@@ -220,6 +221,6 @@
     <string name="discper">Disc Per</string>
     <string name="discamt">Disc Amt</string>
     <string name="gstamt">GST Amt</string>
-
+    <string name="cart">Cart</string>
 
 </resources>

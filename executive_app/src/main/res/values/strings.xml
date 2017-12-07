@@ -263,5 +263,6 @@
     <string name="visit">Visit</string>
     <string name="payment">Payment</string>
     <string name="visitoption">Visit Option</string>
+    <string name="cart">Cart</string>
 
 </resources>

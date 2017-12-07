@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -12,10 +13,12 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.CopyLog;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.mail.GMailSender;
@@ -29,6 +32,8 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     public static NewCustomerEntryGetterSetter new_cus;
     private CardView card_take_order, card_visit, card_report, card_new_cust_entry;
     private Toast toast;
+    private TextView actionbar_noti_tv;
+    private DBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +82,26 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
+        menu.clear();
+
+        getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
+
+        final MenuItem item = menu.findItem(R.id.cart);
+        MenuItemCompat.setActionView(item, R.layout.actionbaar_badge_layout);
+        View view = MenuItemCompat.getActionView(item);
+        actionbar_noti_tv = (TextView)view.findViewById(R.id.actionbar_noti_tv);
+        actionbar_noti_tv.setText("12");
+
+       /* int count = db.getCartCount();
+        Constant.showLog("cart_count:"+count);
+        actionbar_noti_tv.setText(String.valueOf(count));*/
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onOptionsItemSelected(item);
+            }
+        });
         return true;
     }
 
@@ -95,6 +120,10 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.report_error:
                 showDia(6);
                 break;
+            case R.id.cart:
+               /* startActivity(new Intent(getApplicationContext(), .class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);*/
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -102,7 +131,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     private void init() {
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
-
+        db = new DBHandler(this);
         new_cus = new NewCustomerEntryGetterSetter();
         card_take_order = (CardView) findViewById(R.id.card_take_order);
         card_visit = (CardView) findViewById(R.id.card_visit);
@@ -142,7 +171,8 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             builder.setNegativeButton("Cutsize", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
+                    //startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
+                    startActivity(new Intent(getApplicationContext(), DisplayCustListActivity.class));
                     overridePendingTransition(R.anim.enter, R.anim.exit);
                     dialog.dismiss();
                 }

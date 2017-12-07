@@ -96,7 +96,7 @@ public class FirstActivity extends AppCompatActivity {
             editor.putString(getString(R.string.pref_FTPLocation),"ftp.lnbinfotech.com");
             editor.putString(getString(R.string.pref_FTPUser),"supportftp@lnbinfotech.com");
             editor.putString(getString(R.string.pref_FTPPass),"support$456");
-            editor.putString(getString(R.string.pref_FTPImgFolder),"Test");
+            editor.putString(getString(R.string.pref_FTPImgFolder),"TestInterface");
             editor.apply();
            // editor.commit();
         }

@@ -47,6 +47,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     private CountDownTimer countDown;
     private String mobNo,imeiNo;
     private  String response_value;
+    private ReadSms receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,8 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         init();
         otpClass = (CheckOtpClass) getIntent().getSerializableExtra("otp");
         response_value = otpClass.getOtp();
+        toast.setText(""+response_value);
+        toast.show();
         mobNo = otpClass.getMobileno();
         imeiNo = otpClass.getImeino();
 
@@ -63,7 +66,8 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         }
 
         //autoOTP();
-        ReadSms.bindListener(new SmsListener() {
+        receiver = new ReadSms();
+        receiver.bindListener(new SmsListener() {
             @Override
             public void onReceivedMessage(String message) {
                 Constant.showLog("message:"+message);
@@ -222,6 +226,12 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onBackPressed() {
         showDia(0);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
     }
 
     @Override
@@ -452,6 +462,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    unregisterReceiver(receiver);
                     new Constant(CheckOTPActivity.this).doFinish();
                     toast.cancel();
                     dialog.dismiss();
