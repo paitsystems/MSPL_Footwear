@@ -19,13 +19,13 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public class CheckoutCustOrderAdapter extends BaseAdapter {
-    private List<CheckoutCustOrderClass> checkList;
+
+    private List<CustomerOrderClass> checkList;
     private Context context;
     private LayoutInflater inflater;
     private DecimalFormat flt_price;
 
-
-    public CheckoutCustOrderAdapter(List<CheckoutCustOrderClass> _checkList, Context _context) {
+    public CheckoutCustOrderAdapter(List<CustomerOrderClass> _checkList, Context _context) {
         this.checkList = _checkList;
         this.context = _context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -66,9 +66,9 @@ public class CheckoutCustOrderAdapter extends BaseAdapter {
             holder = (ViewHolder) convertview.getTag();
         }
 
-        CheckoutCustOrderClass order  = (CheckoutCustOrderClass) getItem(position);
-        holder.tv_prod_id.setText(String.valueOf(order.getProductId()));
-        holder.tv_size_group.setText(order.getSizeG());
+        CustomerOrderClass order  = (CustomerOrderClass) getItem(position);
+        holder.tv_prod_id.setText(String.valueOf(order.getProductid()));
+        holder.tv_size_group.setText(order.getSizeGroup());
         holder.tv_color.setText(order.getColor());
         String hashCode = order.getHashCode();
         if (hashCode.equalsIgnoreCase("#FFFFFF")) {
@@ -78,9 +78,8 @@ public class CheckoutCustOrderAdapter extends BaseAdapter {
             holder.tv_color.setTextColor(Color.parseColor("#FFFFFF"));
             holder.tv_color.setBackgroundColor(Color.parseColor(hashCode));
         }
-        holder.tv_loose_qty.setText(String.valueOf(order.getLooseqty()));
-        holder.tv_aqty.setText(flt_price.format(order.getAvailQty()));
-
+        holder.tv_loose_qty.setText(String.valueOf(order.getLooseQty()));
+        holder.tv_aqty.setText(String.valueOf(order.getAvailQty()));
         return convertview;
     }
 

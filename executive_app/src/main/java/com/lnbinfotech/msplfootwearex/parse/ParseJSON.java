@@ -324,6 +324,7 @@ public class ParseJSON {
                     custClass.setIsRegistered(jsonArray.getJSONObject(i).getString("isRegistered"));
                     custClass.setAadharNo(jsonArray.getJSONObject(i).getString("AadharNo"));
                     custClass.setPIN(jsonArray.getJSONObject(i).getString("PIN"));
+
                     db.addCustomerMaster(custClass);
                 }
                 db.close();

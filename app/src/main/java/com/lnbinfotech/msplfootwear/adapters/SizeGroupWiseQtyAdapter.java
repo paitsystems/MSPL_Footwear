@@ -38,14 +38,12 @@ public class SizeGroupWiseQtyAdapter extends RecyclerView.Adapter<SizeGroupWiseQ
         if(listType.equals("U")){
             var = selPos;
         }
-        Constant.showLog("onCreateViewHolder listType-"+listType+"-selPosition-"+var);
         return new SizeGroupWiseQtyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(SizeGroupWiseQtyViewHolder holder, int position) {
         holder.textView.setText(sizeList.get(position));
-        Constant.showLog("onBindViewHolder Position-"+position+"-selPosition-"+var);
         if(position==sizeList.size()-1){
             if(var!=-1) {
                 if(var==position) {

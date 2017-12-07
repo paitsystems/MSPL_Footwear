@@ -118,7 +118,8 @@
         <activity
             android:name=".AddToCartActivity"
             android:theme="@style/AppThemeAddToCard"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".ProductSearchActivity"
             android:screenOrientation="portrait"
@@ -126,6 +127,11 @@
         <activity
             android:name=".ViewCustomerOrderActiviy"
             android:theme="@style/AppThemeGiveOrder"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAddToCard"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".CheckoutCustOrderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeAddToCard"
             android:windowSoftInputMode="stateHidden"/>

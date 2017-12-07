@@ -40,6 +40,7 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppThemeAddToCard);
         setContentView(R.layout.activity_product_search);
 
         cat9 = getIntent().getExtras().getString("cat9");

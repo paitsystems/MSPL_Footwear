@@ -29,7 +29,6 @@ import android.widget.Toast;
 import com.lnbinfotech.msplfootwear.adapters.CustomerOrderUnpackGridAdpater;
 import com.lnbinfotech.msplfootwear.adapters.SizeGroupWiseColourAdapter;
 import com.lnbinfotech.msplfootwear.adapters.SizeGroupWiseQtyAdapter;
-import com.lnbinfotech.msplfootwear.adapters.ViewCustomerOrderAdapter;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.interfaces.RecyclerViewToActivityInterface;
@@ -37,7 +36,6 @@ import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.CustomerOrderClass;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -98,6 +96,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        selProdId = 0;
+        selQty = -1;
         activityToFrom = 0;
 
         sp_sizeGroup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -106,9 +106,9 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 selSizeGroup = (String) adapterView.getItemAtPosition(i);
                 Constant.showLog(selSizeGroup);
                 lay_comp_pack.setVisibility(View.GONE);
-                if(activityToFrom!=2) {
+                if (activityToFrom != 2) {
                     setSizeData(selSizeGroup);
-                }else{
+                } else {
                     setUpdateSizeData(selSizeGroup);
                 }
             }
@@ -136,7 +136,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     protected void onResume() {
         super.onResume();
         totalCalculations();
-        if(activityToFrom==0) {
+        if (activityToFrom == 0) {
             rdo_pack.setClickable(true);
             rdo_unpack.setClickable(true);
             tv_remove_item.setVisibility(View.GONE);
@@ -156,7 +156,9 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             sp_sizeGroup.setAdapter(null);
             rv_color.setAdapter(null);
             rv_size.setAdapter(null);
-        }else if(activityToFrom==1) {
+            gridView.setAdapter(null);
+            selProdId = 0;
+        } else if (activityToFrom == 1) {
             rdo_pack.setClickable(true);
             rdo_unpack.setClickable(true);
             tv_remove_item.setVisibility(View.GONE);
@@ -171,7 +173,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                     setUnpackData();
                 }
             }
-        }else if(activityToFrom == 2){
+        } else if (activityToFrom == 2) {
             rdo_pack.setClickable(false);
             rdo_unpack.setClickable(false);
             tv_remove_item.setVisibility(View.VISIBLE);
@@ -186,7 +188,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ed_prod_search:
-                if(activityToFrom!=2) {
+                if (activityToFrom != 2) {
                     Intent intent = new Intent(getApplicationContext(), ProductSearchActivity.class);
                     intent.putExtra("cat9", cat9);
                     intent.putExtra("cat2", cat2);
@@ -215,11 +217,13 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 gridView.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_add_to_card:
-                if(activityToFrom!=0) {
-                    if(activityToFrom==1) {
+                if (activityToFrom != 0) {
+                    if (activityToFrom == 1) {
                         if (getPackUnPack().equals("M")) {
                             if (validateOrder()) {
                                 if (selQtyLocal != compPackQty) {
+                                    InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    mgr.hideSoftInputFromWindow(tv_add_to_card.getWindowToken(), 0);
                                     addToCard();
                                 } else {
                                     String str = auto_set.getText().toString();
@@ -227,20 +231,17 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                         selQtyLocal = Integer.parseInt(auto_set.getText().toString());
                                         if (selQtyLocal != 0) {
                                             InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                            mgr.hideSoftInputFromWindow(auto_set.getWindowToken(), 0);
+                                            mgr.hideSoftInputFromWindow(tv_add_to_card.getWindowToken(), 0);
                                             addToCardCompPack();
                                         } else {
-                                            toast.setText("Please Enter Non Zero Value");
-                                            toast.show();
+                                            showToast("Please Enter Non Zero Value");
                                         }
                                     } else {
-                                        toast.setText("Please Enter Proper Value");
-                                        toast.show();
+                                        showToast("Please Enter Proper Value");
                                     }
                                 }
                             } else {
-                                toast.setText("Please Select Product");
-                                toast.show();
+                                showToast("Please Select Product");
                             }
                         } else {
                             String str1 = "";
@@ -248,13 +249,17 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                 str1 = str1 + str + "-";
                             }
                             Constant.showLog(str1);
+                            InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            mgr.hideSoftInputFromWindow(tv_add_to_card.getWindowToken(), 0);
                             addToCardUnpack();
                         }
-                    }else if(activityToFrom==2){
-                        if(updateCustOrder!=null){
+                    } else if (activityToFrom == 2) {
+                        if (updateCustOrder != null) {
                             if (updateCustOrder.getOrderType().equals("P") || updateCustOrder.getOrderType().equals("C")) {
                                 if (validateOrder()) {
                                     if (updateCustOrder.getOrderType().equals("P")) {
+                                        InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                        mgr.hideSoftInputFromWindow(tv_add_to_card.getWindowToken(), 0);
                                         addToCardUpdate();
                                     } else if (updateCustOrder.getOrderType().equals("C")) {
                                         String str = auto_set.getText().toString();
@@ -266,30 +271,27 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                                 if (lay_comp_pack.getVisibility() == View.VISIBLE) {
                                                     addToCardCompPackUpdate();
                                                 } else {
-                                                    toast.setText("Can Not Update");
-                                                    toast.show();
+                                                    showToast("Can Not Update");
                                                 }
                                             } else {
-                                                toast.setText("Please Enter Non Zero Value");
-                                                toast.show();
+                                                showToast("Please Enter Non Zero Value");
                                             }
                                         } else {
-                                            toast.setText("Please Enter Proper Value");
-                                            toast.show();
+                                            showToast("Please Enter Proper Value");
                                         }
                                     }
                                 } else {
-                                    toast.setText("Please Select Product");
-                                    toast.show();
+                                    showToast("Please Select Product");
                                 }
-                            }else if (updateCustOrder.getOrderType().equals("U")) {
+                            } else if (updateCustOrder.getOrderType().equals("U")) {
+                                InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                mgr.hideSoftInputFromWindow(tv_add_to_card.getWindowToken(), 0);
                                 addToCardUnpackUpdate();
                             }
                         }
                     }
-                }else {
-                    toast.setText("Please Select Product");
-                    toast.show();
+                } else {
+                    showToast("Please Select Product");
                 }
                 break;
             case R.id.tv_remove_item:
@@ -304,11 +306,13 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             case R.id.tv_add_to_card_final:
                 break;
             case R.id.tv_checkout:
+                startActivity(new Intent(this, ViewCustomerOrderActiviy.class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.tv_vieworder:
                 Intent i = new Intent(this, ViewCustomerOrderActiviy.class);
                 startActivity(i);
-                overridePendingTransition(R.anim.enter,R.anim.exit);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
         }
     }
@@ -386,12 +390,11 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         }
         res1.close();
         if (size_list.size() != 0) {
-            SizeGroupWiseQtyAdapter adapter = new SizeGroupWiseQtyAdapter(size_list, getApplicationContext(),"A",0);
+            SizeGroupWiseQtyAdapter adapter = new SizeGroupWiseQtyAdapter(size_list, getApplicationContext(), "A", 0);
             adapter.setOnClickListener1(this);
             rv_size.setAdapter(adapter);
         } else {
-            toast.setText("No Qty Avalilable");
-            toast.show();
+            showToast("No Qty Avalilable");
         }
     }
 
@@ -529,23 +532,14 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                     getColour++;
                     String colour = colour_list.get(getColour);
                     String qty = unpackSizeList.get(counter);
-                    if (isDataInserted == 0) {
-                        if (!qty.equals("0")) {
-                            isDataInserted = 1;
-                        }
+                    if (qty.equals("")) {
+                        qty = "0";
                     }
                     list.add(qty + "^" + colour);
                 }
                 counter++;
             }
             i = counter;
-        }
-
-        if (isDataInserted == 0) {
-            toast.setText("Please Enter Value");
-            toast.show();
-        } else {
-            Constant.showLog(output.size() + "");
         }
 
         if (!output.isEmpty()) {
@@ -596,38 +590,40 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             String colour = colourhashCode[0];
                             String hashCode = colourhashCode[1];
                             if (looseQty != 0) {
-
-                                amount = 0;
+                                if (isDataInserted == 0) {
+                                    isDataInserted = 1;
+                                }
+                                /*amount = 0;
                                 gstAmt = 0;
                                 totalAmt = 0;
                                 cgstAmt = 0;
                                 sgstAmt = 0;
-                                cessAmt = 0;
+                                cessAmt = 0;*/
 
                                 amount = floatRate * looseQty;
 
-                                if(OptionsActivity.custDisc!=0) {
-                                    _discAmnt = (amount * OptionsActivity.custDisc)/100;
-                                    _discAmnt = round(_discAmnt,2);
+                                if (OptionsActivity.custDisc != 0) {
+                                    _discAmnt = (amount * OptionsActivity.custDisc) / 100;
+                                    _discAmnt = round(_discAmnt, 2);
                                     amountAfterDisc = amount - _discAmnt;
-                                }else{
+                                } else {
                                     amountAfterDisc = amount;
                                 }
 
-                                amount = round(amount,2);
-                                amountAfterDisc = round(amountAfterDisc,2);
+                                amount = round(amount, 2);
+                                amountAfterDisc = round(amountAfterDisc, 2);
 
                                 gstAmt = (amountAfterDisc * gstPer) / 100;
-                                gstAmt = round(gstAmt,2);
+                                gstAmt = round(gstAmt, 2);
                                 totalAmt = amountAfterDisc + gstAmt;
-                                totalAmt = round(totalAmt,2);
+                                totalAmt = round(totalAmt, 2);
 
                                 cgstAmt = (amountAfterDisc * cgstPer) / 100;
-                                cgstAmt = round(cgstAmt,2);
+                                cgstAmt = round(cgstAmt, 2);
                                 sgstAmt = (amountAfterDisc * sgstPer) / 100;
-                                sgstAmt = round(sgstAmt,2);
+                                sgstAmt = round(sgstAmt, 2);
                                 cessAmt = (amountAfterDisc * cessPer) / 100;
-                                cessAmt = round(cessAmt,2);
+                                cessAmt = round(cessAmt, 2);
 
                                 CustomerOrderClass custOrder = new CustomerOrderClass();
                                 int auto = db.getCustOrderMax();
@@ -646,6 +642,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                 custOrder.setActLooseQty(looseQty);
                                 custOrder.setAmount(String.valueOf(amount));
                                 custOrder.setLoosePackTyp("Unpack");
+                                custOrder.setPendingLooseQty(looseQty);
                                 custOrder.setTotalamt(String.valueOf(totalAmt));
                                 custOrder.setNetamnt(String.valueOf(totalAmt));
                                 custOrder.setAmtAfterDisc(String.valueOf(amountAfterDisc));
@@ -661,6 +658,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                 custOrder.setDiscamnt(String.valueOf(_discAmnt));
                                 custOrder.setDiscPer(String.valueOf(OptionsActivity.custDisc));
                                 custOrder.setOrderType("U");
+                                custOrder.setAvailQty(0);
                                 db.addCustomerOrder(custOrder);
 
                                 Constant.showLog("HOCODE-" + hocode + "-ProdCol-" + prodCol + "-Auto-" + auto + "-BranchId-" + branchId +
@@ -668,12 +666,21 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                         "-RequiredSize-" + sizeGroup + "-PerPackQty-1" +
                                         "-SelQty-" + looseQty + "-MRP-" + mrp + "-Amount-" + amount + "-TotalAmt-" + totalAmt + "-GSTPer-" + gstPer +
                                         "-CGSTAMt-" + cgstAmt + "-SGSTAMt-" + sgstAmt + "-IGSTAMt-" + igstAmt + "-CGSTPer-" + cgstPer + "-SGSTPer-" + sgstPer +
-                                        "-CESSPer-" + cessPer + "-CESSAmt-" + cessAmt+"-DiscPer-"+OptionsActivity.custDisc+"-DiscAmnt-"+_discAmnt);
+                                        "-CESSPer-" + cessPer + "-CESSAmt-" + cessAmt + "-DiscPer-" + OptionsActivity.custDisc + "-DiscAmnt-" + _discAmnt);
                             }
                         }
                     }
 
                 }
+                if (isDataInserted == 1) {
+                    showToast("Added-To-Card");
+                    clearFiledsUnPack();
+                } else {
+                    showToast("Please Enter Qty");
+                }
+
+            } else {
+                showToast("Please Refresh GSTMaster");
             }
         }
         totalCalculations();
@@ -705,28 +712,28 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
 
             amount = floatRate * looseQty;
 
-            if(OptionsActivity.custDisc!=0) {
-                _discAmnt = (amount * OptionsActivity.custDisc)/100;
-                _discAmnt = round(_discAmnt,2);
+            if (OptionsActivity.custDisc != 0) {
+                _discAmnt = (amount * OptionsActivity.custDisc) / 100;
+                _discAmnt = round(_discAmnt, 2);
                 amountAfterDisc = amount - _discAmnt;
-            }else{
+            } else {
                 amountAfterDisc = amount;
             }
 
-            amount = round(amount,2);
-            amountAfterDisc = round(amountAfterDisc,2);
+            amount = round(amount, 2);
+            amountAfterDisc = round(amountAfterDisc, 2);
 
             gstAmt = (amountAfterDisc * gstPer) / 100;
-            gstAmt = round(gstAmt,2);
+            gstAmt = round(gstAmt, 2);
             totalAmt = amountAfterDisc + gstAmt;
-            totalAmt = round(totalAmt,2);
+            totalAmt = round(totalAmt, 2);
 
             cgstAmt = (amountAfterDisc * cgstPer) / 100;
-            cgstAmt = round(cgstAmt,2);
+            cgstAmt = round(cgstAmt, 2);
             sgstAmt = (amountAfterDisc * sgstPer) / 100;
-            sgstAmt = round(sgstAmt,2);
+            sgstAmt = round(sgstAmt, 2);
             cessAmt = (amountAfterDisc * cessPer) / 100;
-            cessAmt = round(cessAmt,2);
+            cessAmt = round(cessAmt, 2);
 
             int hocode = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
             String prodCol = "";
@@ -771,6 +778,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             custOrder.setActLooseQty(selQtyLocal);
                             custOrder.setAmount(String.valueOf(amount));
                             custOrder.setLoosePackTyp("Unpack");
+                            custOrder.setPendingLooseQty(selQtyLocal);
                             custOrder.setTotalamt(String.valueOf(totalAmt));
                             custOrder.setNetamnt(String.valueOf(totalAmt));
                             custOrder.setAmtAfterDisc(String.valueOf(amountAfterDisc));
@@ -786,25 +794,24 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             custOrder.setDiscamnt(String.valueOf(_discAmnt));
                             custOrder.setDiscPer(String.valueOf(OptionsActivity.custDisc));
                             custOrder.setOrderType("P");
+                            custOrder.setAvailQty(0);
                             db.addCustomerOrder(custOrder);
                             Constant.showLog("HOCODE-" + hocode + "-ProdCol-" + prodCol + "-Auto-" + auto + "-BranchId-" + branchId +
                                     "-SelProdId-" + selProdId + "-SizeGroup-" + sizeGroup + "-SelColor-" + colour[0] +
                                     "-RequiredSize-" + requiredSize + "-PerPackQty-" + total +
                                     "-SelQty-" + selQtyLocal + "-MRP-" + mrp + "-Amount-" + amount + "-TotalAmt-" + totalAmt + "-GSTPer-" + gstPer +
                                     "-CGSTAMt-" + cgstAmt + "-SGSTAMt-" + sgstAmt + "-IGSTAMt-" + igstAmt + "-CGSTPer-" + cgstPer + "-SGSTPer-" + sgstPer +
-                                    "-CESSPer-" + cessPer + "-CESSAmt-" + cessAmt+"-DiscPer-"+OptionsActivity.custDisc+"-DiscAmnt-"+_discAmnt);
+                                    "-CESSPer-" + cessPer + "-CESSAmt-" + cessAmt + "-DiscPer-" + OptionsActivity.custDisc + "-DiscAmnt-" + _discAmnt);
                         } else {
-                            toast.setText("Something Went Wrong");
-                            toast.show();
+                            showToast("Something Went Wrong");
                         }
                     }
                 }
             }
-            toast.setText("Added To Card");
-            toast.show();
+            showToast("Added-To-Card");
+            clearFiledsPack();
         } else {
-            toast.setText("GST Status Cancelled");
-            toast.show();
+            showToast("Please Refresh GSTMaster");
         }
         totalCalculations();
     }
@@ -831,34 +838,34 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         res.close();
 
         if (gstStatus.equalsIgnoreCase("A")) {
-            int looseQty = selQtyLocal*compPackQty;
+            int looseQty = selQtyLocal * compPackQty;
             amount = floatRate * looseQty;
 
-            if(OptionsActivity.custDisc!=0) {
-                _discAmnt = (amount * OptionsActivity.custDisc)/100;
-                _discAmnt = round(_discAmnt,2);
+            if (OptionsActivity.custDisc != 0) {
+                _discAmnt = (amount * OptionsActivity.custDisc) / 100;
+                _discAmnt = round(_discAmnt, 2);
                 amountAfterDisc = amount - _discAmnt;
-            }else{
+            } else {
                 amountAfterDisc = amount;
             }
 
-            amount = round(amount,2);
-            amountAfterDisc = round(amountAfterDisc,2);
+            amount = round(amount, 2);
+            amountAfterDisc = round(amountAfterDisc, 2);
 
             gstAmt = (amountAfterDisc * gstPer) / 100;
-            gstAmt = round(gstAmt,2);
+            gstAmt = round(gstAmt, 2);
 
             totalAmt = amountAfterDisc + gstAmt;
-            totalAmt = round(totalAmt,2);
+            totalAmt = round(totalAmt, 2);
 
             cgstAmt = (amountAfterDisc * cgstPer) / 100;
-            cgstAmt = round(cgstAmt,2);
+            cgstAmt = round(cgstAmt, 2);
 
             sgstAmt = (amountAfterDisc * sgstPer) / 100;
-            sgstAmt = round(sgstAmt,2);
+            sgstAmt = round(sgstAmt, 2);
 
             cessAmt = (amountAfterDisc * cessPer) / 100;
-            cessAmt = round(cessAmt,2);
+            cessAmt = round(cessAmt, 2);
 
             int hocode = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
             String prodCol = "";
@@ -903,6 +910,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             custOrder.setActLooseQty(looseQty);
                             custOrder.setAmount(String.valueOf(amount));
                             custOrder.setLoosePackTyp("Unpack");
+                            custOrder.setPendingLooseQty(looseQty);
                             custOrder.setTotalamt(String.valueOf(totalAmt));
                             custOrder.setNetamnt(String.valueOf(totalAmt));
                             custOrder.setAmtAfterDisc(String.valueOf(amountAfterDisc));
@@ -918,6 +926,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             custOrder.setDiscamnt(String.valueOf(_discAmnt));
                             custOrder.setDiscPer(String.valueOf(OptionsActivity.custDisc));
                             custOrder.setOrderType("C");
+                            custOrder.setAvailQty(0);
                             db.addCustomerOrder(custOrder);
 
                             Constant.showLog("HOCODE-" + hocode + "-ProdCol-" + prodCol + "-Auto-" + auto + "-BranchId-" + branchId +
@@ -925,41 +934,53 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                     "-RequiredSize-" + requiredSize + "-PerPackQty-" + total +
                                     "-SelQty-" + selQtyLocal + "-MRP-" + mrp + "-Amount-" + amount + "-TotalAmt-" + totalAmt + "-GSTPer-" + gstPer +
                                     "-CGSTAMt-" + cgstAmt + "-SGSTAMt-" + sgstAmt + "-IGSTAMt-" + igstAmt + "-CGSTPer-" + cgstPer + "-SGSTPer-" + sgstPer +
-                                    "-CESSPer-" + cessPer + "-CESSAmt-" + cessAmt+"-DiscPer-"+OptionsActivity.custDisc+"-DiscAmnt-"+_discAmnt);
+                                    "-CESSPer-" + cessPer + "-CESSAmt-" + cessAmt + "-DiscPer-" + OptionsActivity.custDisc + "-DiscAmnt-" + _discAmnt);
                         } else {
-                            toast.setText("Something Went Wrong");
-                            toast.show();
+                            showToast("Something Went Wrong");
                         }
                     }
                 }
             }
-            toast.setText("Added To Card");
-            toast.show();
+            lay_comp_pack.setVisibility(View.GONE);
+            clearFiledsPack();
+            showToast("Added-To-Card");
         } else {
-            toast.setText("GST Status Cancelled");
-            toast.show();
+            showToast("Please Update GST Master");
         }
         totalCalculations();
     }
 
-    private static float round(float d, int decimalPlace) {
+    private float round(float d, int decimalPlace) {
         BigDecimal bd = new BigDecimal(Float.toString(d));
         bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
         return bd.floatValue();
     }
 
-    private void totalCalculations(){
+    private void totalCalculations() {
 
-        String totalSet = "0", totalQty = "0",totalAmnt = "0", totalNetAmnt = "0";
+        String totalSet = "0", totalQty = "0", totalAmnt = "0", totalNetAmnt = "0";
 
         Cursor res = db.getCustOrderTotals();
-        if(res.moveToFirst()){
+        if (res.moveToFirst()) {
             totalQty = res.getString(res.getColumnIndex(DBHandler.CO_LooseQty));
             totalSet = res.getString(res.getColumnIndex(DBHandler.CO_Auto));
             totalAmnt = res.getString(res.getColumnIndex(DBHandler.CO_Amount));
             totalNetAmnt = res.getString(res.getColumnIndex(DBHandler.CO_NetAmt));
         }
         res.close();
+
+        if (totalQty == null) {
+            totalQty = "0";
+        }
+        if (totalSet == null) {
+            totalSet = "0";
+        }
+        if (totalAmnt == null) {
+            totalAmnt = "0";
+        }
+        if (totalNetAmnt == null) {
+            totalNetAmnt = "0";
+        }
 
         tv_totqty.setText(totalQty);
         tv_totset.setText(totalSet);
@@ -968,25 +989,25 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    private void setAdapter(){
+    private void setAdapter() {
         auto_set.setAdapter(null);
         String[] arr = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.custom_spinner, arr);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.custom_spinner, arr);
         auto_set.setAdapter(adapter);
         auto_set.setSingleLine();
         auto_set.setText(arr[0]);
         auto_set.setSelection(auto_set.getText().length());
     }
 
-    private void updateOrder(){
+    private void updateOrder() {
         String orderType = updateCustOrder.getOrderType();
-        if(orderType.equals("P") || orderType.equals("C")){
+        if (orderType.equals("P") || orderType.equals("C")) {
             rdo_pack.setChecked(true);
             rdo_unpack.setChecked(false);
             lay_pack.setVisibility(View.VISIBLE);
             lay_comp_pack.setVisibility(View.GONE);
             gridView.setVisibility(View.GONE);
-        }else if(orderType.equals("U")){
+        } else if (orderType.equals("U")) {
             rdo_pack.setChecked(false);
             rdo_unpack.setChecked(true);
             lay_pack.setVisibility(View.GONE);
@@ -1012,9 +1033,9 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         ed_prod_search.setClickable(false);
         ed_prod_search.setFocusable(false);
 
-        if(orderType.equals("P") || orderType.equals("C")) {
+        if (orderType.equals("P") || orderType.equals("C")) {
             setUpdateSizeGroupData();
-        }else{
+        } else {
             setUpdateUnpackData();
         }
 
@@ -1038,8 +1059,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         sp_sizeGroup.setFocusable(false);
         sp_sizeGroup.setEnabled(false);
 
-        for(int i=0;i<sizeGroup_list.size();i++){
-            if(sizeGroup_list.get(i).equals(updateCustOrder.getSizeGroup())){
+        for (int i = 0; i < sizeGroup_list.size(); i++) {
+            if (sizeGroup_list.get(i).equals(updateCustOrder.getSizeGroup())) {
                 sp_sizeGroup.setSelection(i);
                 break;
             }
@@ -1063,26 +1084,32 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         res1.close();
 
         int selectedPos = 0;
-        for(int i=0;i<size_list.size();i++){
-            if(size_list.get(i).equals(String.valueOf(updateCustOrder.getPerPackQty()))){
+        for (int i = 0; i < size_list.size(); i++) {
+            if (size_list.get(i).equals(String.valueOf(updateCustOrder.getPerPackQty()))) {
                 lay_comp_pack.setVisibility(View.VISIBLE);
                 setUpdateAdapter();
-            }else{
+            } else {
                 lay_comp_pack.setVisibility(View.GONE);
             }
-            if(size_list.get(i).equals(String.valueOf(updateCustOrder.getLooseQty()))){
-                selectedPos = i;
-                break;
+            if(updateCustOrder.getOrderType().equals("P")) {
+                if (size_list.get(i).equals(String.valueOf(updateCustOrder.getLooseQty()))) {
+                    selectedPos = i;
+                    break;
+                }
+            }else{
+                if (size_list.get(i).equals(String.valueOf(updateCustOrder.getPerPackQty()))) {
+                    selectedPos = i;
+                    break;
+                }
             }
         }
 
         if (size_list.size() != 0) {
-            SizeGroupWiseQtyAdapter adapter = new SizeGroupWiseQtyAdapter(size_list, getApplicationContext(),"U",selectedPos);
+            SizeGroupWiseQtyAdapter adapter = new SizeGroupWiseQtyAdapter(size_list, getApplicationContext(), "U", selectedPos);
             adapter.setOnClickListener1(this);
             rv_size.setAdapter(adapter);
         } else {
-            toast.setText("No Qty Avalilable");
-            toast.show();
+            showToast("No Qty Avalilable");
         }
 
         setUpdateColour(selSizeGroup);
@@ -1093,15 +1120,15 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         colour_list.clear();
         rv_color.setAdapter(null);
 
-        int i=0;
+        int i = 0;
         Cursor res1 = db.getDistinctColour(size);
         if (res1.moveToFirst()) {
             do {
                 String col = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour));
-                if(col.equals(updateCustOrder.getColor())){
-                    map.put(i,1);
+                if (col.equals(updateCustOrder.getColor())) {
+                    map.put(i, 1);
                 }
-                String colourHashcode = col +"-"+res1.getString(res1.getColumnIndex(DBHandler.ARSD_HashCode));
+                String colourHashcode = col + "-" + res1.getString(res1.getColumnIndex(DBHandler.ARSD_HashCode));
                 colour_list.add(colourHashcode);
                 i++;
             } while (res1.moveToNext());
@@ -1118,15 +1145,15 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    private void setUpdateAdapter(){
+    private void setUpdateAdapter() {
         auto_set.setAdapter(null);
         String[] arr = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.custom_spinner, arr);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.custom_spinner, arr);
         auto_set.setAdapter(adapter);
         auto_set.setSingleLine();
         auto_set.setText(arr[0]);
-        for(int i=0;i<arr.length;i++){
-            if(arr[i].equals(String.valueOf(updateCustOrder.getQty()))){
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i].equals(String.valueOf(updateCustOrder.getQty()))) {
                 auto_set.setText(arr[i]);
                 break;
             }
@@ -1147,7 +1174,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         List<String> savedQty = new ArrayList<>();
 
 
-        HashMap<String,String> sizeColorQtyMap = new HashMap<>();
+        HashMap<String, String> sizeColorQtyMap = new HashMap<>();
 
         int unClickCount = -1;
 
@@ -1155,19 +1182,19 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         if (res3.moveToFirst()) {
             do {
                 String colourHashcode = res3.getString(res3.getColumnIndex(DBHandler.CO_Color)) +
-                                            "-" +
-                                        res3.getString(res3.getColumnIndex(DBHandler.CO_HashCode));
+                        "-" +
+                        res3.getString(res3.getColumnIndex(DBHandler.CO_HashCode));
                 savedSizeListForColor.add(colourHashcode);
 
                 String sizeGrp = res3.getString(res3.getColumnIndex(DBHandler.CO_SizeGroup));
                 savedSizeList.add(sizeGrp);
 
-                sizeGrp = sizeGrp+colourHashcode;
+                sizeGrp = sizeGrp + colourHashcode;
 
                 String qty = res3.getString(res3.getColumnIndex(DBHandler.CO_Qty));
                 savedQty.add(res3.getString(res3.getColumnIndex(DBHandler.CO_Qty)));
 
-                sizeColorQtyMap.put(sizeGrp,qty);
+                sizeColorQtyMap.put(sizeGrp, qty);
 
 
             } while (res3.moveToNext());
@@ -1225,12 +1252,12 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 String sizeGrp = sizeGroup_list.get(i);
                 String colourHashCode = colour_list.get(j);
 
-                String key = sizeGrp+colourHashCode;
+                String key = sizeGrp + colourHashCode;
 
-                if(sizeColorQtyMap.containsKey(key)){
+                if (sizeColorQtyMap.containsKey(key)) {
                     String qty = sizeColorQtyMap.get(key);
                     unpackSizeList.add(qty);
-                }else {
+                } else {
                     unpackSizeList.add("0");
                 }
             }
@@ -1240,9 +1267,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void addToCardUnpackUpdate() {
-
         db.deleteOrderTableUnpack();
-
         int counter = 0, isDataInserted = 0;
         HashMap<String, List<String>> output = new HashMap<>();
         for (int i = 0; i < unpackSizeList.size(); i++) {
@@ -1255,23 +1280,14 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                     getColour++;
                     String colour = colour_list.get(getColour);
                     String qty = unpackSizeList.get(counter);
-                    if (isDataInserted == 0) {
-                        if (!qty.equals("0")) {
-                            isDataInserted = 1;
-                        }
+                    if (qty.equals("")) {
+                        qty = "0";
                     }
                     list.add(qty + "^" + colour);
                 }
                 counter++;
             }
             i = counter;
-        }
-
-        if (isDataInserted == 0) {
-            toast.setText("Please Enter Value");
-            toast.show();
-        } else {
-            Constant.showLog(output.size() + "");
         }
 
         if (!output.isEmpty()) {
@@ -1326,37 +1342,41 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             String hashCode = colourhashCode[1];
                             if (looseQty != 0) {
 
-                                amount = 0;
+                                if (isDataInserted == 0) {
+                                    isDataInserted = 1;
+                                }
+
+                                /*amount = 0;
                                 gstAmt = 0;
                                 totalAmt = 0;
                                 cgstAmt = 0;
                                 sgstAmt = 0;
-                                cessAmt = 0;
+                                cessAmt = 0;*/
 
                                 amount = floatRate * looseQty;
 
-                                if(OptionsActivity.custDisc!=0) {
-                                    _discAmnt = (amount * OptionsActivity.custDisc)/100;
-                                    _discAmnt = round(_discAmnt,2);
+                                if (OptionsActivity.custDisc != 0) {
+                                    _discAmnt = (amount * OptionsActivity.custDisc) / 100;
+                                    _discAmnt = round(_discAmnt, 2);
                                     amountAfterDisc = amount - _discAmnt;
-                                }else{
+                                } else {
                                     amountAfterDisc = amount;
                                 }
 
-                                amount = round(amount,2);
-                                amountAfterDisc = round(amountAfterDisc,2);
+                                amount = round(amount, 2);
+                                amountAfterDisc = round(amountAfterDisc, 2);
 
                                 gstAmt = (amountAfterDisc * gstPer) / 100;
-                                gstAmt = round(gstAmt,2);
+                                gstAmt = round(gstAmt, 2);
                                 totalAmt = amountAfterDisc + gstAmt;
-                                totalAmt = round(totalAmt,2);
+                                totalAmt = round(totalAmt, 2);
 
                                 cgstAmt = (amountAfterDisc * cgstPer) / 100;
-                                cgstAmt = round(cgstAmt,2);
+                                cgstAmt = round(cgstAmt, 2);
                                 sgstAmt = (amountAfterDisc * sgstPer) / 100;
-                                sgstAmt = round(sgstAmt,2);
+                                sgstAmt = round(sgstAmt, 2);
                                 cessAmt = (amountAfterDisc * cessPer) / 100;
-                                cessAmt = round(cessAmt,2);
+                                cessAmt = round(cessAmt, 2);
 
                                 CustomerOrderClass custOrder = new CustomerOrderClass();
                                 int auto = db.getCustOrderMax();
@@ -1375,6 +1395,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                 custOrder.setActLooseQty(looseQty);
                                 custOrder.setAmount(String.valueOf(amount));
                                 custOrder.setLoosePackTyp("Unpack");
+                                custOrder.setPendingLooseQty(looseQty);
                                 custOrder.setTotalamt(String.valueOf(totalAmt));
                                 custOrder.setNetamnt(String.valueOf(totalAmt));
                                 custOrder.setAmtAfterDisc(String.valueOf(amountAfterDisc));
@@ -1390,6 +1411,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                 custOrder.setDiscamnt(String.valueOf(_discAmnt));
                                 custOrder.setDiscPer(String.valueOf(OptionsActivity.custDisc));
                                 custOrder.setOrderType("U");
+                                custOrder.setAvailQty(updateCustOrder.getAvailQty());
                                 db.addCustomerOrder(custOrder);
 
                                 Constant.showLog("HOCODE-" + hocode + "-ProdCol-" + prodCol + "-Auto-" + auto + "-BranchId-" + branchId +
@@ -1397,16 +1419,22 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                         "-RequiredSize-" + sizeGroup + "-PerPackQty-1" +
                                         "-SelQty-" + looseQty + "-MRP-" + mrp + "-Amount-" + amount + "-TotalAmt-" + totalAmt + "-GSTPer-" + gstPer +
                                         "-CGSTAMt-" + cgstAmt + "-SGSTAMt-" + sgstAmt + "-IGSTAMt-" + igstAmt + "-CGSTPer-" + cgstPer + "-SGSTPer-" + sgstPer +
-                                        "-CESSPer-" + cessPer + "-CESSAmt-" + cessAmt+"-DiscPer-"+OptionsActivity.custDisc+"-DiscAmnt-"+_discAmnt);
+                                        "-CESSPer-" + cessPer + "-CESSAmt-" + cessAmt + "-DiscPer-" + OptionsActivity.custDisc + "-DiscAmnt-" + _discAmnt);
                             }
                         }
                     }
-
                 }
+                if (isDataInserted == 1) {
+                    //showToast("Added-To-Card");
+                    showDia(22);
+                } else {
+                    showToast("Please Enter Qty");
+                }
+            } else {
+                showToast("Please Refresh GSTMaster");
             }
         }
         totalCalculations();
-        showDia(22);
     }
 
     private void addToCardUpdate() {
@@ -1504,6 +1532,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             custOrder.setActLooseQty(selQtyLocal);
                             custOrder.setAmount(String.valueOf(amount));
                             custOrder.setLoosePackTyp("Unpack");
+                            custOrder.setPendingLooseQty(selQtyLocal);
                             custOrder.setTotalamt(String.valueOf(totalAmt));
                             custOrder.setNetamnt(String.valueOf(totalAmt));
                             custOrder.setAmtAfterDisc(String.valueOf(amountAfterDisc));
@@ -1519,6 +1548,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             custOrder.setDiscamnt(String.valueOf(_discAmnt));
                             custOrder.setDiscPer(String.valueOf(OptionsActivity.custDisc));
                             custOrder.setOrderType("P");
+                            custOrder.setAvailQty(updateCustOrder.getAvailQty());
                             db.addCustomerOrder(custOrder);
                             Constant.showLog("HOCODE-" + hocode + "-ProdCol-" + prodCol + "-Auto-" + auto + "-BranchId-" + branchId +
                                     "-SelProdId-" + selProdId + "-SizeGroup-" + sizeGroup + "-SelColor-" + colour[0] +
@@ -1527,17 +1557,14 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                     "-CGSTAMt-" + cgstAmt + "-SGSTAMt-" + sgstAmt + "-IGSTAMt-" + igstAmt + "-CGSTPer-" + cgstPer + "-SGSTPer-" + sgstPer +
                                     "-CESSPer-" + cessPer + "-CESSAmt-" + cessAmt+"-DiscPer-"+OptionsActivity.custDisc+"-DiscAmnt-"+_discAmnt);
                         } else {
-                            toast.setText("Something Went Wrong");
-                            toast.show();
+                            showToast("Something Went Wrong");
                         }
                     }
                 }
             }
-            toast.setText("Added To Card");
-            toast.show();
+            showToast("Added To Card");
         } else {
-            toast.setText("GST Status Cancelled");
-            toast.show();
+            showToast("GST Status Cancelled");
         }
         totalCalculations();
         showDia(22);
@@ -1640,6 +1667,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             custOrder.setActLooseQty(looseQty);
                             custOrder.setAmount(String.valueOf(amount));
                             custOrder.setLoosePackTyp("Unpack");
+                            custOrder.setPendingLooseQty(looseQty);
                             custOrder.setTotalamt(String.valueOf(totalAmt));
                             custOrder.setNetamnt(String.valueOf(totalAmt));
                             custOrder.setAmtAfterDisc(String.valueOf(amountAfterDisc));
@@ -1655,6 +1683,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             custOrder.setDiscamnt(String.valueOf(_discAmnt));
                             custOrder.setDiscPer(String.valueOf(OptionsActivity.custDisc));
                             custOrder.setOrderType("C");
+                            custOrder.setAvailQty(updateCustOrder.getAvailQty());
                             db.addCustomerOrder(custOrder);
 
                             Constant.showLog("HOCODE-" + hocode + "-ProdCol-" + prodCol + "-Auto-" + auto + "-BranchId-" + branchId +
@@ -1664,20 +1693,38 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                     "-CGSTAMt-" + cgstAmt + "-SGSTAMt-" + sgstAmt + "-IGSTAMt-" + igstAmt + "-CGSTPer-" + cgstPer + "-SGSTPer-" + sgstPer +
                                     "-CESSPer-" + cessPer + "-CESSAmt-" + cessAmt+"-DiscPer-"+OptionsActivity.custDisc+"-DiscAmnt-"+_discAmnt);
                         } else {
-                            toast.setText("Something Went Wrong");
-                            toast.show();
+                            showToast("Something Went Wrong");
                         }
                     }
                 }
             }
-            toast.setText("Added To Card");
-            toast.show();
+            clearFiledsPack();
+            showToast("Added To Card");
         } else {
-            toast.setText("GST Status Cancelled");
-            toast.show();
+            showToast("GST Status Cancelled");
         }
         totalCalculations();
         showDia(22);
+    }
+
+    private void clearFiledsPack(){
+        lay_comp_pack.setVisibility(View.GONE);
+        rv_size.setAdapter(null);
+        rv_color.setAdapter(null);
+        setSizeData(selSizeGroup);
+    }
+
+    private void clearFiledsUnPack(){
+        setUnpackData();
+    }
+
+    private void setProductWiseOrderList(){
+        listView.setAdapter(null);
+    }
+
+    private void showToast(String msg){
+        toast.setText(msg);
+        toast.show();
     }
 
     private void init() {
@@ -1761,6 +1808,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     activityToFrom = 0;
+                    selProdId = 0;
                     onResume();
                     dialog.dismiss();
                 }
@@ -1777,6 +1825,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     activityToFrom = 0;
+                    selProdId = 0;
                     dialog.dismiss();
                     startActivity(new Intent(getApplicationContext(),ViewCustomerOrderActiviy.class));
                     overridePendingTransition(R.anim.enter,R.anim.exit);
@@ -1788,6 +1837,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     activityToFrom = 0;
+                    selProdId = 0;
                     dialog.dismiss();
                     startActivity(new Intent(getApplicationContext(),ViewCustomerOrderActiviy.class));
                     overridePendingTransition(R.anim.enter,R.anim.exit);
@@ -1846,12 +1896,10 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                         mgr.hideSoftInputFromWindow(auto_set.getWindowToken(), 0);
                         addToCardCompPack();
                     }else {
-                        toast.setText("Please Enter Non Zero Value");
-                        toast.show();
+                        showToast("Please Enter Non Zero Value");
                     }
                 }else{
-                    toast.setText("Please Enter Proper Value");
-                    toast.show();
+                    showToast("Please Enter Proper Value");
                 }
             }
         });
@@ -1905,8 +1953,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 }
             }
         } else {
-            toast.setText("No Colour Available");
-            toast.show();
+            showToast("No Colour Available");
         }
     }
 }

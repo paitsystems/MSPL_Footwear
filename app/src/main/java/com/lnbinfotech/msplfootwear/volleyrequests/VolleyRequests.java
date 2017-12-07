@@ -783,9 +783,9 @@ public class VolleyRequests {
                     @Override
                     public void onResponse(String response) {
                         Constant.showLog(response);
-                        response = response.replace("\\", "");
-                        response = response.replace("''", "");
-                        response = response.substring(1, response.length() - 1);
+                        //response = response.replace("\\", "");
+                        //response = response.replace("\"", "");
+                        //response = response.substring(1, response.length() - 1);
                         List<CheckoutCustOrderClass> list = new ParseJSON(response, context). parseloadCheckoutOrder();
                         if (list.size() != 0) {
                             callback.onSuccess(list);

@@ -2,6 +2,7 @@ package com.lnbinfotech.msplfootwear;
 
 import android.content.ContentUris;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -35,8 +36,6 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
 
     private DBHandler db;
     private List<CustomerOrderClass> list;
-    private String totalSet = "0", totalQty = "0",totalAmnt = "0", totalNetAmnt = "0",
-            totalGrossAmnt = "0",totalDiscAmnt = "0", totalGSTAmnt = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +48,8 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         }
 
         init();
+
+        btn_proceed.setOnClickListener(this);
 
         setData();
 
@@ -66,39 +67,12 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case 0:
+            case R.id.btn_proceed:
+                finish();
+                startActivity(new Intent(this, CheckoutCustOrderActivity.class));
+                overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
         }
-    }
-
-    private void setData(){
-        Cursor cursor = db.getViewOrderData();
-
-        if(cursor.moveToFirst()){
-            do{
-                CustomerOrderClass order = new CustomerOrderClass();
-                order.setAuto(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_Auto)));
-                order.setProductid(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_Productid)));
-                order.setSizeGroup(cursor.getString(cursor.getColumnIndex(DBHandler.CO_SizeGroup)));
-                order.setColor(cursor.getString(cursor.getColumnIndex(DBHandler.CO_Color)));
-                order.setHashCode(cursor.getString(cursor.getColumnIndex(DBHandler.CO_HashCode)));
-                order.setLooseQty(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_LooseQty)));
-                order.setMrp(cursor.getString(cursor.getColumnIndex(DBHandler.CO_MRP)));
-                order.setAmount(cursor.getString(cursor.getColumnIndex(DBHandler.CO_Amount)));
-                order.setGstper(cursor.getString(cursor.getColumnIndex(DBHandler.CO_GSTPer)));
-                order.setRate(cursor.getString(cursor.getColumnIndex(DBHandler.CO_Rate)));
-                order.setQty(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_Qty)));
-                order.setActLooseQty(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_ActLooseQty)));
-                order.setLoosePackTyp(cursor.getString(cursor.getColumnIndex(DBHandler.CO_LoosePackTyp)));
-                order.setPerPackQty(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_PerPackQty)));
-                order.setOrderType(cursor.getString(cursor.getColumnIndex(DBHandler.CO_OrderType)));
-                list.add(order);
-            }while (cursor.moveToNext());
-        }
-        cursor.close();
-        ViewCustomerOrderAdapter adapter = new ViewCustomerOrderAdapter(list,getApplicationContext());
-        lv_vOrder.setAdapter(adapter);
-        totalCalculations();
     }
 
     @Override
@@ -118,14 +92,40 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         return super.onOptionsItemSelected(item);
     }
 
+    private void setData(){
+        list.clear();
+        Cursor cursor = db.getViewOrderData();
+        if(cursor.moveToFirst()){
+            do{
+                CustomerOrderClass order = new CustomerOrderClass();
+                order.setAuto(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_Auto)));
+                order.setProductid(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_Productid)));
+                order.setSizeGroup(cursor.getString(cursor.getColumnIndex(DBHandler.CO_SizeGroup)));
+                order.setColor(cursor.getString(cursor.getColumnIndex(DBHandler.CO_Color)));
+                order.setHashCode(cursor.getString(cursor.getColumnIndex(DBHandler.CO_HashCode)));
+                order.setLooseQty(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_LooseQty)));
+                order.setMrp(cursor.getString(cursor.getColumnIndex(DBHandler.CO_MRP)));
+                order.setAmount(cursor.getString(cursor.getColumnIndex(DBHandler.CO_Amount)));
+                order.setGstper(cursor.getString(cursor.getColumnIndex(DBHandler.CO_GSTPer)));
+                order.setRate(cursor.getString(cursor.getColumnIndex(DBHandler.CO_Rate)));
+                order.setQty(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_Qty)));
+                order.setActLooseQty(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_ActLooseQty)));
+                order.setLoosePackTyp(cursor.getString(cursor.getColumnIndex(DBHandler.CO_LoosePackTyp)));
+                order.setPerPackQty(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_PerPackQty)));
+                order.setOrderType(cursor.getString(cursor.getColumnIndex(DBHandler.CO_OrderType)));
+                order.setAvailQty(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_AvailQty)));
+                list.add(order);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        ViewCustomerOrderAdapter adapter = new ViewCustomerOrderAdapter(list,getApplicationContext());
+        lv_vOrder.setAdapter(adapter);
+        totalCalculations();
+    }
+
     private void totalCalculations(){
-        totalSet = "0";
-        totalQty = "0";
-        totalAmnt = "0";
-        totalNetAmnt = "0";
-        totalGrossAmnt = "0";
-        totalDiscAmnt = "0";
-        totalGSTAmnt = "0";
+        String totalSet = "0", totalQty = "0",totalAmnt = "0", totalNetAmnt = "0",
+                totalGrossAmnt = "0",totalDiscAmnt = "0", totalGSTAmnt = "0";
 
         Cursor res = db.getCustOrderTotals();
         if(res.moveToFirst()){
@@ -138,6 +138,22 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
             totalDiscAmnt = res.getString(res.getColumnIndex(DBHandler.CO_DiscAmt));
         }
         res.close();
+
+        if(totalQty==null){
+            totalQty = "0";
+        }if(totalSet==null){
+            totalSet = "0";
+        }if(totalAmnt==null){
+            totalAmnt = "0";
+        }if(totalNetAmnt==null) {
+            totalNetAmnt = "0";
+        }if(totalGrossAmnt==null) {
+            totalGrossAmnt = "0";
+        }if(totalGSTAmnt==null) {
+            totalGSTAmnt = "0";
+        }if(totalDiscAmnt==null) {
+            totalDiscAmnt = "0";
+        }
 
         tv_totqty.setText(totalQty);
         tv_totset.setText(totalSet);

@@ -27,6 +27,7 @@ import com.lnbinfotech.msplfootwear.model.TrackOrderMasterClass;
 import com.lnbinfotech.msplfootwear.model.UserClass;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -558,19 +559,23 @@ public class ParseJSON {
     }
 
     public List<CheckoutCustOrderClass> parseloadCheckoutOrder(){
-
         List<CheckoutCustOrderClass> list = new ArrayList<>();
         try{
-            JSONArray jsonArray = new JSONArray(json);
+            JSONArray jsonArray = new JSONArray(new JSONObject(json).get("CheckStockResult").toString());
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     CheckoutCustOrderClass checkout = new CheckoutCustOrderClass();
-                    checkout.setProductId(jsonArray.getJSONObject(i).getString("ProductId"));
-                    checkout.setSizeG(jsonArray.getJSONObject(i).getString("Size"));
+                    checkout.setBranchId(jsonArray.getJSONObject(i).getString("Branch_id"));
+                    checkout.setProductId(jsonArray.getJSONObject(i).getString("Product_id"));
                     checkout.setColor(jsonArray.getJSONObject(i).getString("Color"));
-                    checkout.setAvailQty(jsonArray.getJSONObject(i).getString("LQty"));
+                    checkout.setSizeGroup(jsonArray.getJSONObject(i).getString("SizeGroup"));
+                    checkout.setAvailableQty(jsonArray.getJSONObject(i).getString("AvailQty"));
+                    checkout.setRate(jsonArray.getJSONObject(i).getString("Rate"));
+                    checkout.setHashCode(jsonArray.getJSONObject(i).getString("HashCode"));
+                    checkout.setEnterQty(jsonArray.getJSONObject(i).getString("EnterQty"));
                     list.add(checkout);
                 }
+                db.updateAvailQty(list);
             }
         }catch (Exception e){
             e.printStackTrace();

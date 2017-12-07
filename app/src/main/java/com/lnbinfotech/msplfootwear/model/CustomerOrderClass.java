@@ -4,7 +4,7 @@ package com.lnbinfotech.msplfootwear.model;
 
 public class CustomerOrderClass {
 
-    private int auto, branchId, productid, perPackQty, qty, looseQty, actLooseQty;
+    private int auto, branchId, productid, perPackQty, qty, looseQty, actLooseQty, pendingLooseQty, availQty;
     private String sizeGroup, requiredSize, color, hashCode, loosePackTyp,
                     rate, mrp, amount, totalamt, gstper,cgstamt,sgstamt,igstamt,
                     cgstper, sgstper, cessper, cessamt, discamnt, discPer,
@@ -248,5 +248,21 @@ public class CustomerOrderClass {
 
     public void setOrderType(String orderType) {
         this.orderType = orderType;
+    }
+
+    public int getAvailQty() {
+        return availQty;
+    }
+
+    public void setAvailQty(int availQty) {
+        this.availQty = availQty;
+    }
+
+    public int getPendingLooseQty() {
+        return pendingLooseQty;
+    }
+
+    public void setPendingLooseQty(int pendingLooseQty) {
+        this.pendingLooseQty = pendingLooseQty;
     }
 }
