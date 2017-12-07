@@ -11,6 +11,7 @@ import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.model.AreaMasterClass;
 import com.lnbinfotech.msplfootwear.model.BankBranchMasterClass;
 import com.lnbinfotech.msplfootwear.model.BankMasterClass;
+import com.lnbinfotech.msplfootwear.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwear.model.CityMasterClass;
 import com.lnbinfotech.msplfootwear.model.CompanyMasterClass;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
@@ -33,7 +34,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
     //TODO: Change Version
-    public static final int Database_Version = 19;
+    public static final int Database_Version = 21;
 
     //retailCustID,name,address,mobile,status,branchId,email,District,Taluka,cityId,areaId,
     // Panno,ImagePath,HoCode,GSTNo,IMEINo,isRegistered,AadharNo,PIN
@@ -243,6 +244,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String CO_Amount = "Amount";
     public static final String CO_LoosePackTyp = "LoosePackTyp";
     public static final String CO_TotalAmt = "TotalAmt";
+    public static final String CO_PendingLooseQty = "PendingLooseQty";
     public static final String CO_NetAmt = "NetAmt";
     public static final String CO_AmtAfterDisc = "AmtAfterDisc";
     public static final String CO_GSTPer = "GSTPer";
@@ -257,6 +259,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String CO_DiscPer = "DiscPer";
     public static final String CO_DiscAmt = "DiscAmt";
     public static final String CO_OrderType = "OrderType";
+    public static final String CO_AvailQty = "AvailQty";
 
     public static final String Table_GSTMASTER = "GSTMASTER";
     public static final String GST_Auto = "Auto";
@@ -333,10 +336,10 @@ public class DBHandler extends SQLiteOpenHelper {
     String create_custorder_table = "create table if not exists "+Table_CustomerOrder+"("+CO_Auto+" int,"+
             CO_BranchId+" int,"+CO_Productid+" int,"+CO_SizeGroup+" text,"+CO_RequiredSize+" text,"+
             CO_PerPackQty+" int,"+CO_Color+" text,"+CO_HashCode+" text,"+CO_Rate+" text,"+CO_MRP+" text,"+CO_Qty+" int,"+
-            CO_LooseQty+" int,"+CO_ActLooseQty+" int,"+CO_Amount+" text,"+CO_LoosePackTyp+" text,"+CO_TotalAmt+" text,"+
+            CO_LooseQty+" int,"+CO_ActLooseQty+" int,"+CO_Amount+" text,"+CO_LoosePackTyp+" text,"+CO_PendingLooseQty+" int,"+CO_TotalAmt+" text,"+
             CO_NetAmt+" text,"+CO_AmtAfterDisc+" text,"+CO_GSTPer+" text,"+CO_GSTAmt+" text,"+CO_CGSTAmt+" text,"+
             CO_SGSTAmt+" text,"+CO_IGSTAmt+" text,"+CO_CGSTPer+" text,"+
-            CO_SGSTPer+" text,"+CO_CESSPer+" text,"+CO_CESSAmt+" text,"+CO_DiscPer+" text,"+CO_DiscAmt+" text,"+CO_OrderType+" text)";
+            CO_SGSTPer+" text,"+CO_CESSPer+" text,"+CO_CESSAmt+" text,"+CO_DiscPer+" text,"+CO_DiscAmt+" text,"+CO_OrderType+" text,"+CO_AvailQty+" int)";
 
     String create_gstmaster_table = "create table if not exists "+Table_GSTMASTER+"("+GST_Auto+" int,"+
             GST_GroupNm+" text,"+GST_Status+" text,"+GST_GSTPer+" text,"+GST_CGSTPer+" text,"+
@@ -990,6 +993,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(CO_ActLooseQty,custOrder.getActLooseQty());
         cv.put(CO_Amount,custOrder.getAmount());
         cv.put(CO_LoosePackTyp,custOrder.getLoosePackTyp());
+        cv.put(CO_PendingLooseQty,custOrder.getPendingLooseQty());
         cv.put(CO_TotalAmt,custOrder.getTotalamt());
         cv.put(CO_GSTPer,custOrder.getGstper());
         cv.put(CO_CGSTAmt,custOrder.getCgstamt());
@@ -1042,12 +1046,54 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().execSQL("delete from " + Table_CustomerOrder+" where "+CO_Auto+"="+auto);
     }
 
+    public void deleteOrderTableAfterSave(int branchid) {
+        getWritableDatabase().execSQL("delete from " + Table_CustomerOrder+" where "+CO_BranchId+"="+branchid);
+    }
+
     public void deleteOrderTableUnpack() {
         getWritableDatabase().execSQL("delete from " + Table_CustomerOrder+" where "+CO_OrderType+"='U' and "+CO_Productid+"="+AddToCartActivity.selProdId);
     }
 
     public Cursor getSavedUnpackOrder(){
         String str = "select "+CO_SizeGroup+","+CO_Qty+","+CO_Color+","+CO_HashCode+" from "+Table_CustomerOrder+" where "+CO_OrderType+"='U' and "+CO_Productid+"="+AddToCartActivity.selProdId;
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
+    public Cursor getDataToCheck(){
+        String str = "select "+CO_BranchId+","+CO_Productid+","+CO_SizeGroup+","+CO_Color+","+CO_HashCode+","+CO_Rate+","+CO_LooseQty+" from "+Table_CustomerOrder +" order by "+CO_Productid+","+CO_SizeGroup;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
+    public void updateAvailQty(List<CheckoutCustOrderClass> custOrderList){
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        ContentValues cv = new ContentValues();
+        for(CheckoutCustOrderClass custOrder : custOrderList){
+            cv.put(CO_AvailQty,custOrder.getAvailableQty());
+            db.update(Table_CustomerOrder,cv,CO_BranchId+"=? and "+CO_Productid+"=? and "+CO_SizeGroup+"=? and "+CO_Color+"=? and "+CO_Rate+"=? and "+CO_LooseQty+"=?",
+                        new String[]{custOrder.getBranchId(),custOrder.getProductId(),custOrder.getSizeGroup(),custOrder.getColor(),custOrder.getRate(),custOrder.getEnterQty()});
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+    }
+
+    public Cursor getDistinctBrachIdFromCustOrder(){
+        String str = "select distinct "+CO_BranchId+" from "+Table_CustomerOrder;
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
+    public Cursor getCustOrderMaster(int branchid){
+        String str = "select sum("+CO_Qty+") as "+CO_Qty+", Sum("+CO_LooseQty+") as "+CO_LooseQty+
+                     ",sum("+CO_Amount+") as "+CO_Amount+",sum("+CO_GSTAmt+") as "+CO_GSTAmt+",Sum("+
+                     CO_TotalAmt+") as "+CO_TotalAmt+",sum("+CO_NetAmt+")as "+CO_NetAmt+",sum("+CO_AmtAfterDisc+
+                     ") as "+CO_AmtAfterDisc+" from "+Table_CustomerOrder+" where "+CO_BranchId+"="+branchid;
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
+    public Cursor getCustOrderDetail(int branchid){
+        String str = "select * from "+Table_CustomerOrder+" where "+CO_BranchId+"="+branchid;
         return getWritableDatabase().rawQuery(str,null);
     }
 }

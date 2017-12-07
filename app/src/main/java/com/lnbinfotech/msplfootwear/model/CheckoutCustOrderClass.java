@@ -4,7 +4,15 @@ package com.lnbinfotech.msplfootwear.model;
  // Created by SNEHA on 12/1/2017.
 
 public class CheckoutCustOrderClass {
-    public String productId,sizeG,color,looseqty,availQty,hashCode;
+    private String branchId,productId,color,sizeGroup,availableQty,rate,hashCode,enterQty;
+
+    public String getBranchId() {
+        return branchId;
+    }
+
+    public void setBranchId(String branchId) {
+        this.branchId = branchId;
+    }
 
     public String getProductId() {
         return productId;
@@ -12,14 +20,6 @@ public class CheckoutCustOrderClass {
 
     public void setProductId(String productId) {
         this.productId = productId;
-    }
-
-    public String getSizeG() {
-        return sizeG;
-    }
-
-    public void setSizeG(String sizeG) {
-        this.sizeG = sizeG;
     }
 
     public String getColor() {
@@ -30,20 +30,20 @@ public class CheckoutCustOrderClass {
         this.color = color;
     }
 
-    public String getLooseqty() {
-        return looseqty;
+    public String getSizeGroup() {
+        return sizeGroup;
     }
 
-    public void setLooseqty(String looseqty) {
-        this.looseqty = looseqty;
+    public void setSizeGroup(String sizeGroup) {
+        this.sizeGroup = sizeGroup;
     }
 
-    public String getAvailQty() {
-        return availQty;
+    public String getRate() {
+        return rate;
     }
 
-    public void setAvailQty(String availQty) {
-        this.availQty = availQty;
+    public void setRate(String rate) {
+        this.rate = rate;
     }
 
     public String getHashCode() {
@@ -52,5 +52,21 @@ public class CheckoutCustOrderClass {
 
     public void setHashCode(String hashCode) {
         this.hashCode = hashCode;
+    }
+
+    public String getEnterQty() {
+        return enterQty;
+    }
+
+    public void setEnterQty(String enterQty) {
+        this.enterQty = enterQty;
+    }
+
+    public String getAvailableQty() {
+        return availableQty;
+    }
+
+    public void setAvailableQty(String availableQty) {
+        this.availableQty = availableQty;
     }
 }

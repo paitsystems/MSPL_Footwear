@@ -209,7 +209,7 @@ public class AttachCustomerImage extends AppCompatActivity implements View.OnCli
         try {
             FileOutputStream fos = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 15, fos);
-            fos.flush();
+            fos.flush(
             fos.close();
         } catch (Exception f) {
             f.printStackTrace();

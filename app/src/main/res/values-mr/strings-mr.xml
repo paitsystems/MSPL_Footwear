@@ -1,0 +1,21 @@
+<resources>
+    <!-- Menu -->
+    <string name="action_devinfo">डेवेलपर</string>
+    <string name="action_logout">लॉग आउट</string>
+    <string name="action_search">खोज</string>
+    <string name="action_settings">सेटिंग</string>
+    <string name="share_app">एप शेयर कीजिए</string>
+    <string name="language_setting">भाषा बदलें</string>
+    <string name="action_change_pass">पासवर्ड बदलें</string>
+    <string name="action_pass">पासवर्डें</string>
+    <string name="user_name">वापरकर्ता</string>
+    <string name="save">जतन करा</string>
+    <string name="enterurregistrationno">आपला नोंदणीकृत मोबाइल नंबर प्रविष्ट करा</string>
+    <string name="getotp">OTP मिळवा</string>
+
+    <!-- Language select dialog -->
+    <string-array name="lang_select">
+        <item>English</item>
+        <item>Hindi</item>
+    </string-array>
+</resources>

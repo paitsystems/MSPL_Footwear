@@ -3,6 +3,7 @@ package com.lnbinfotech.msplfootwear;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,8 @@ import android.widget.Button;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 
+import java.util.Locale;
+
 public class OptionsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private CardView card_give_order, card_account, card_track_order, card_profile, card_scheme, card_whats_new, card_feedback;
@@ -26,6 +29,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.test);
 
         init();
+        //test_t();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -155,6 +159,16 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             });
         }
         builder.create().show();
+    }
+
+    private void test_t(){
+        Configuration configuration = getBaseContext().getResources().getConfiguration();
+        String lang = "mr";
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        configuration.locale = locale;
+        Constant.showLog("locale:"+locale);
+
     }
 
 }

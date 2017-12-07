@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/horizontalScrollView" >
+        android:layout_height="0dp"
+        android:id="@+id/horizontalScrollView"
+        android:layout_weight="1">
 
 
         <LinearLayout
@@ -17,23 +19,23 @@
             <LinearLayout
                 android:background="@color/red"
                 android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
                 android:weightSum="1">
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="40dp"
+                    android:layout_width="60dp"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/prod"
                     android:textColor="@color/white"
                     android:visibility="visible"
                     android:background="@drawable/line_left_top_right_bottom_draw"
-                    android:gravity="center_horizontal" />
+                    android:gravity="center" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/sizeg"
@@ -42,7 +44,7 @@
                     android:gravity="center" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/color"
@@ -52,7 +54,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/looseq"
@@ -62,7 +64,7 @@
                     android:visibility="visible" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/wsp"
@@ -72,17 +74,16 @@
                     android:visibility="gone" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/availableqty"
                     android:textColor="@color/white"
                     android:gravity="center"
-                    android:background="@drawable/line_top_right_bottom_draw"
-                    android:layout_weight="0.13" />
+                    android:background="@drawable/line_top_right_bottom_draw" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/amt"
@@ -92,7 +93,7 @@
                     android:visibility="gone" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="40dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/gst"
@@ -117,7 +118,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="70dp"
+                    android:layout_width="60dp"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/totalno"
@@ -127,14 +128,22 @@
                     android:gravity="center" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="70dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/totalqty"
                     android:textColor="@color/white"
                     android:gravity="center"
-                    android:background="@drawable/line_top_right_bottom_draw"
-                    android:visibility="invisible" />
+                    android:visibility="visible" />
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/total"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:background="@drawable/line_top_right_bottom_draw" />
+
                 <TextView
                     style="@style/textViewMob"
                     android:layout_width="80dp"
@@ -142,31 +151,24 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/totlqty"
                     android:textColor="@color/white"
-                    android:background="@drawable/line_left_top_right_bottom_draw"
-                    android:gravity="center" />
-
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="70dp"
-                    android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/totlqty"
-                    android:textColor="@color/white"
                     android:gravity="center"
+                    android:id="@+id/tv_tot_looseQty"
                     android:background="@drawable/line_top_right_bottom_draw" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="70dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/discamt"
+                    android:text="TotActQty"
                     android:textColor="@color/white"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
-                    android:visibility="invisible" />
+                    android:visibility="visible"
+                    android:id="@+id/tv_tot_availQty"
+                    android:autoText="false" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="70dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/gstamt"
@@ -176,7 +178,7 @@
                     android:visibility="invisible" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="70dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/netamt"
@@ -191,7 +193,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
 
@@ -264,5 +266,16 @@
 
         </LinearLayout>
     </HorizontalScrollView>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/mobmargin2"
+        android:text="Save"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:backgroundTint="@color/maroon" />
 
 </LinearLayout>

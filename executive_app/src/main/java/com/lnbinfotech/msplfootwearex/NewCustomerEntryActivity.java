@@ -129,6 +129,7 @@ public class NewCustomerEntryActivity extends AppCompatActivity implements View.
         OptionsActivity.new_cus.setEmail_id(email);
         String address = ed_address.getText().toString();
         OptionsActivity.new_cus.setAddress(address);
+        OptionsActivity.new_cus.setStatus("N");
     }
 
     private void set_value_newCusEntry() {
