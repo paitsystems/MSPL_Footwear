@@ -218,5 +218,5 @@
     <string name="gstamt">GST Amt</string>
     <string name="availableqty">AvailQty</string>
     <string name="totlqty">TotQty</string>
-
+    <string name="cart">Cart</string>
 </resources>

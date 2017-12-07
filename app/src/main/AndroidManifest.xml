@@ -126,7 +126,6 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".ViewCustomerOrderActiviy"
-            android:theme="@style/AppThemeGiveOrder"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeAddToCard"
             android:windowSoftInputMode="stateHidden"/>

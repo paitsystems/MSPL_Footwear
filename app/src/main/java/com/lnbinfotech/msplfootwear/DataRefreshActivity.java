@@ -35,10 +35,11 @@ import org.codehaus.jackson.JsonToken;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataRefreshActivity extends AppCompatActivity implements View.OnClickListener{
+public class DataRefreshActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Constant constant, constant1;
     private Toast toast;
@@ -50,7 +51,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private int maxProdId = 0;
     private ProgressDialog pd;
     private Test test;
-
 
 
     @Override
@@ -67,7 +67,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(ConnectivityTest.getNetStat(DataRefreshActivity.this)) {
+                if (ConnectivityTest.getNetStat(DataRefreshActivity.this)) {
                     //0-AreaMaster,1-BankMaster,2-BankBranchMaster,3-CityMaster
                     //4-CompanyMaster,5-CustomerMaster,6-DocumentMaster,7-EmployeeMaster,8-HOMaster
                     //9-ProductMaster,10-LoadAllSizeNDesign,11-StockMaster,12-GSTMaster
@@ -85,20 +85,20 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                         refreshDataDia(5);
                     } else if (i == 6) {
                         refreshDataDia(6);
-                    }else if (i == 7) {
+                    } else if (i == 7) {
                         refreshDataDia(7);
-                    }else if (i == 8) {
+                    } else if (i == 8) {
                         refreshDataDia(8);
-                    }else if(i == 9){
+                    } else if (i == 9) {
                         refreshDataDia(9);
-                    }else if(i == 10){
+                    } else if (i == 10) {
                         refreshDataDia(10);
-                    }else if(i == 11){
+                    } else if (i == 11) {
                         refreshDataDia(11);
-                    }else if(i == 12){
+                    } else if (i == 12) {
                         refreshDataDia(12);
                     }
-                }else{
+                } else {
                     toast.setText("You Are Offline");
                     toast.show();
                 }
@@ -131,10 +131,10 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadAreaMaster(){
-        String url = Constant.ipaddress+"/GetAreaMaster?Id=0";
+    private void loadAreaMaster() {
+        String url = Constant.ipaddress + "/GetAreaMaster?Id=0";
         Constant.showLog(url);
-        writeLog("loadAreaMaster_"+url);
+        writeLog("loadAreaMaster_" + url);
         constant.showPD();
         VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
         requests.refreshAreaMaster(url, new ServerCallback() {
@@ -152,10 +152,10 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-    private void loadCityMaster(){
-        String url = Constant.ipaddress+"/GetCityMaster?Id=0";
+    private void loadCityMaster() {
+        String url = Constant.ipaddress + "/GetCityMaster?Id=0";
         Constant.showLog(url);
-        writeLog("loadCityMaster_"+url);
+        writeLog("loadCityMaster_" + url);
         constant.showPD();
         VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
         requests.refreshCityMaster(url, new ServerCallback() {
@@ -173,10 +173,10 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-    private void loadHOMaster(){
-        String url = Constant.ipaddress+"/GetHOMaster?Id=0";
+    private void loadHOMaster() {
+        String url = Constant.ipaddress + "/GetHOMaster?Id=0";
         Constant.showLog(url);
-        writeLog("loadHOMaster_"+url);
+        writeLog("loadHOMaster_" + url);
         constant.showPD();
         VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
         requests.refreshHOMaster(url, new ServerCallback() {
@@ -194,10 +194,10 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-    private void loadEmployeeMaster(){
-        String url = Constant.ipaddress+"/GetEmployeeMaster?Id=0";
+    private void loadEmployeeMaster() {
+        String url = Constant.ipaddress + "/GetEmployeeMaster?Id=0";
         Constant.showLog(url);
-        writeLog("loadEmployeeMaster_"+url);
+        writeLog("loadEmployeeMaster_" + url);
         constant.showPD();
         VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
         requests.refreshEmployeeMaster(url, new ServerCallback() {
@@ -215,16 +215,16 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-    private void loadStockInfo(){
-        String url = Constant.ipaddress+"/GetStockInfo?Id=0";
+    private void loadStockInfo() {
+        String url = Constant.ipaddress + "/GetStockInfo?Id=0";
         Constant.showLog(url);
-        writeLog("loadStockInfo_"+url);
+        writeLog("loadStockInfo_" + url);
         constant.showPD();
         VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
         requests.refreshStockInfo(url, new ServerCallback() {
             @Override
             public void onSuccess(String result) {
-                new readJSON(result,"StockInfo",0);
+                new readJSON(result, "StockInfo", 0);
             }
 
             @Override
@@ -235,11 +235,11 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-    private void loadSizeNDesignMaster(int from, int to){
-        String url = Constant.ipaddress+"/GetAllRequiredSizesdesigns?Id="+from+"&ToId="+to;
+    private void loadSizeNDesignMaster(int from, int to) {
+        String url = Constant.ipaddress + "/GetAllRequiredSizesdesigns?Id=" + from + "&ToId=" + to;
         Constant.showLog(url);
-        writeLog("loadSizeNDesignMaster_"+url);
-       // constant.showPD();
+        writeLog("loadSizeNDesignMaster_" + url);
+        // constant.showPD();
         new getSizeNDesignMaster(to).execute(url);
         /*VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
         requests.refreshSizeNDesignMaster1(url, new ServerCallback() {
@@ -257,10 +257,10 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         });*/
     }
 
-    private void loadProductMaster(){
-        String url = Constant.ipaddress+"/GetProductMaster?Id=0";
+    private void loadProductMaster() {
+        String url = Constant.ipaddress + "/GetProductMaster?Id=0";
         Constant.showLog(url);
-        writeLog("loadProductMaster_"+url);
+        writeLog("loadProductMaster_" + url);
         constant.showPD();
         VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
         requests.refreshProductMaster(url, new ServerCallback() {
@@ -278,9 +278,9 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-    private void loadCustomerMaster(){
+    private void loadCustomerMaster() {
         //int a = db.getCustMax();
-        String url = Constant.ipaddress+"/GetCustomerMaster?Id=0";
+        String url = Constant.ipaddress + "/GetCustomerMaster?Id=0";
         Constant.showLog(url);
         writeLog("loadCustomerMaster_" + url);
         constant.showPD();
@@ -301,9 +301,9 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    private void loadCompanyMaster(){
+    private void loadCompanyMaster() {
         db.createCompanyMaster();
-        String url = Constant.ipaddress+"/GetCompanyMaster?Id=0";
+        String url = Constant.ipaddress + "/GetCompanyMaster?Id=0";
         Constant.showLog(url);
         writeLog("loadCompanyMaster_" + url);
         constant.showPD();
@@ -314,6 +314,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 constant.showPD();
                 showDia(1);
             }
+
             @Override
             public void onFailure(String result) {
                 constant.showPD();
@@ -322,9 +323,9 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-    private void loadBankMaster(){
+    private void loadBankMaster() {
         db.createBankMaster();
-        String url = Constant.ipaddress+"/GetBankMaster?Id=0";
+        String url = Constant.ipaddress + "/GetBankMaster?Id=0";
         Constant.showLog(url);
         writeLog("loadBankMaster_" + url);
         constant.showPD();
@@ -335,6 +336,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 constant.showPD();
                 showDia(1);
             }
+
             @Override
             public void onFailure(String result) {
                 constant.showPD();
@@ -343,9 +345,9 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-    private void loadBankBranchMaster(){
+    private void loadBankBranchMaster() {
         db.createBankBranchMaster();
-        String url = Constant.ipaddress+"/GetBankBranchMaster?Id=0";
+        String url = Constant.ipaddress + "/GetBankBranchMaster?Id=0";
         Constant.showLog(url);
         writeLog("loadBankBranchMaster_" + url);
         constant.showPD();
@@ -359,16 +361,16 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             public void onFailure(String result) {
-               constant.showPD();
+                constant.showPD();
                 showDia(2);
             }
         });
 
     }
 
-    private void loadDocumentMaster(){
+    private void loadDocumentMaster() {
         db.createDocumentMaster();
-        String url = Constant.ipaddress+"/GetDocumentMaster?Id=0";
+        String url = Constant.ipaddress + "/GetDocumentMaster?Id=0";
         Constant.showLog(url);
         writeLog("loadDocumentMaster_" + url);
         constant.showPD();
@@ -388,8 +390,8 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-    private void loadGSTMaster(){
-        String url = Constant.ipaddress+"/GetGSTMaster?Id=0";
+    private void loadGSTMaster() {
+        String url = Constant.ipaddress + "/GetGSTMaster?Id=0";
         Constant.showLog(url);
         writeLog("loadGSTMaster_" + url);
         constant.showPD();
@@ -400,6 +402,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 constant.showPD();
                 showDia(1);
             }
+
             @Override
             public void onFailure(String result) {
                 constant.showPD();
@@ -429,7 +432,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         refreshList.add("SizeAndDesign Master");
         refreshList.add("Stock Master");
         refreshList.add("GST Master");
-        listView.setAdapter(new ArrayAdapter<>(getApplicationContext(),R.layout.list_item_data_refresh,refreshList));
+        listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.list_item_data_refresh, refreshList));
     }
 
     private void showDia(int a) {
@@ -444,7 +447,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     dialog.dismiss();
                 }
             });
-        }else if (a == 0) {
+        } else if (a == 0) {
             builder.setMessage("Do You Want To Exit App?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -459,7 +462,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     dialog.dismiss();
                 }
             });
-        }else if (a == 1) {
+        } else if (a == 1) {
             builder.setMessage("Data Refreshed Successfully");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
@@ -467,7 +470,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     dialog.dismiss();
                 }
             });
-        }else if (a == 2) {
+        } else if (a == 2) {
             builder.setMessage("Error While Loading Data");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
@@ -491,30 +494,30 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 //9-ProductMaster,10-LoadAllSizeNDesign,11-StockMaster,12-GSTMaster
                 if (a == 0) {
                     loadAreaMaster();
-                }else if (a == 1) {
+                } else if (a == 1) {
                     loadBankMaster();
-                }else if (a == 2) {
+                } else if (a == 2) {
                     loadBankBranchMaster();
-                }else if (a == 3) {
+                } else if (a == 3) {
                     loadCityMaster();
-                }else if (a == 4) {
+                } else if (a == 4) {
                     loadCompanyMaster();
-                }else if (a == 5) {
+                } else if (a == 5) {
                     loadCustomerMaster();
-                }else if (a == 6) {
+                } else if (a == 6) {
                     loadDocumentMaster();
-                }else if(a == 7){
+                } else if (a == 7) {
                     loadEmployeeMaster();
-                }else if(a == 8){
+                } else if (a == 8) {
                     loadHOMaster();
-                }else if(a == 9){
+                } else if (a == 9) {
                     loadProductMaster();
-                }else if(a == 10){
+                } else if (a == 10) {
                     maxProdId = db.getMaxProdId();
-                    loadSizeNDesignMaster(0,100);
-                }else if(a == 11){
+                    loadSizeNDesignMaster(0, 100);
+                } else if (a == 11) {
                     loadStockInfo();
-                }else if(a == 12){
+                } else if (a == 12) {
                     loadGSTMaster();
                 }
             }
@@ -529,18 +532,18 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     }
 
 
-    private class getSizeNDesignMaster extends AsyncTask<String, Void, String>{
+    private class getSizeNDesignMaster extends AsyncTask<String, Void, String> {
         int to;
 
 
-       public getSizeNDesignMaster(int _to){
+        public getSizeNDesignMaster(int _to) {
             this.to = _to;
-           //constant.showPD();
+            //constant.showPD();
 
-           pd.setMessage("Please Wait..");
-           pd.show();
+            pd.setMessage("Please Wait..");
+            pd.show();
 
-       }
+        }
 
         @Override
         protected String doInBackground(String... strings) {
@@ -551,17 +554,17 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
             response = response.substring(1, response.length() - 1);
-           // constant.showPD();
-            new readJSON(response,"SizeNDesign",to).execute();
+            // constant.showPD();
+            new readJSON(response, "SizeNDesign", to).execute();
         }
     }
 
-    private class readJSON extends AsyncTask<Void,Void,String> {
+    private class readJSON extends AsyncTask<Void, Void, String> {
         int to;
         private String result, parseType;
-       // private ProgressDialog pd;
+        // private ProgressDialog pd;
 
-        readJSON(String _result,String _parseType,int _to){
+        readJSON(String _result, String _parseType, int _to) {
             this.result = _result;
             this.parseType = _parseType;
             this.to = _to;
@@ -570,7 +573,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-           // constant.showPD();
+            // constant.showPD();
             /*pd = new ProgressDialog(DataRefreshActivity.this);
             pd.setCancelable(false);
             pd.setMessage("Please Wait");
@@ -583,12 +586,12 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             File sdFile = Constant.checkFolder(Constant.folder_name);
             FileWriter writer;
             try {
-                String search = "\\\\",replace = "";
-                File writeFile = new File(sdFile,writeFilename);
+                String search = "\\\\", replace = "";
+                File writeFile = new File(sdFile, writeFilename);
                 writer = new FileWriter(writeFile);
                 int size = result.length();
-                if(size>2) {
-                    Log.d("Log","Replacing");
+                if (size > 2) {
+                    Log.d("Log", "Replacing");
                     int b = 50000;
                     for (int i = 0; i < size; i++) {
                         if (b >= size) {
@@ -606,14 +609,14 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 writer.flush();
                 writer.close();
                 return retValue;
-            }catch (IOException | OutOfMemoryError e){
+            } catch (IOException | OutOfMemoryError e) {
                 pd.dismiss();
                 try {
                     writer = new FileWriter(new File(sdFile, "Log.txt"));
                     writer.append(e.getMessage());
                     writer.flush();
                     writer.close();
-                }catch (Exception e1){
+                } catch (Exception e1) {
                     e.printStackTrace();
                 }
                 e.printStackTrace();
@@ -624,22 +627,22 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-          //  pd.dismiss();
-            if(s.equals("A")){
-                new writeDB(parseType,to).execute();
-            }else {
+            //  pd.dismiss();
+            if (s.equals("A")) {
+                new writeDB(parseType, to).execute();
+            } else {
                 showDia(2);
             }
         }
     }
 
-    private class writeDB extends AsyncTask<Void,String,String> {
-       // private ProgressDialog pd;
+    private class writeDB extends AsyncTask<Void, String, String> {
+        // private ProgressDialog pd;
         private File writeFile;
         private String parseType;
-        private int to ;
+        private int to;
 
-        public writeDB(String _parseType,int _to) {
+        public writeDB(String _parseType, int _to) {
             this.parseType = _parseType;
             this.to = _to;
         }
@@ -675,21 +678,21 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 writeFile = new File(sdFile, writeFilename);
                 JsonParser jp = f.createJsonParser(writeFile);
                 if (parseType.equals("SizeNDesign")) {
-                    parseSizeNDesign(jp,to);
+                    parseSizeNDesign(jp, to);
                 } else if (parseType.equals("StockInfo")) {
                     db.deleteTable(DBHandler.Table_StockInfo);
                     parseStockInfo(jp);
                 }
                 return "";
-            }catch (Exception e){
+            } catch (Exception e) {
                 pd.dismiss();
-              //  constant.showPD();
+                //  constant.showPD();
                 try {
                     FileWriter writer = new FileWriter(new File(sdFile, "Log.txt"));
                     writer.append(e.getMessage());
                     writer.flush();
                     writer.close();
-                }catch (Exception e1){
+                } catch (Exception e1) {
                     e.printStackTrace();
                     return null;
                 }
@@ -701,58 +704,60 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-          //  pd.dismiss();
-           // if(to <= 100) {
+            //  pd.dismiss();
+            // if(to <= 100) {
 
-                if (s.equals("")) {
-                    Constant.showLog("s is blank:");
-                    if (writeFile.delete()) {
-                        Constant.showLog("Write Delete");
-                       // showDia(1);
+            if (s.equals("")) {
+                Constant.showLog("s is blank:");
+                if (writeFile.delete()) {
+                    Constant.showLog("Write Delete");
+                    // showDia(1);
                         /*if(list.size()!=0){
                             if(to <= 100) {
                                 db.deleteTable(DBHandler.Table_AllRequiredSizesDesigns);
                             }
                         }*/
-                       // db.addSizeNDesignMaster(list);
+                    // db.addSizeNDesignMaster(list);
 
-                        int from = 0;
-                         if(to == 1000){
-                            int val = maxProdId - to;
-                            from = to + 1;
-                            to = to + val;
-                            Constant.showLog("from-"+from+"-to-"+to);
-                            // constant.showPD();
-                        }else {
-                             from = to + 1;
-                             to = to + 100;
-                             Constant.showLog("from-"+from+"-to-"+to);
-                         }
-
-                        if(to <= maxProdId){
-                            Constant.showLog("maxProdId-"+maxProdId);
-                            loadSizeNDesignMaster(from,to);
-                            Constant.showLog("tovalue:"+to);
-                            if(to == maxProdId){
-                                //constant.showPD();
-                                pd.dismiss();
-                                showDia(1);
-                            }
-                        }
-
-                       // listener.refresh_data(to);
-                       // Constant.showLog(""+count);
+                    int from = 0;
+                    if (to == 1000) {
+                        int val = maxProdId - to;
+                        from = to + 1;
+                        to = to + val;
+                        Constant.showLog("from-" + from + "-to-" + to);
+                        // constant.showPD();
+                    } else {
+                        from = to + 1;
+                        to = to + 100;
+                        Constant.showLog("from-" + from + "-to-" + to);
                     }
-                } else {
-                    showDia(2);
-              //  }
+
+                    if (to <= maxProdId) {
+                        Constant.showLog("maxProdId-" + maxProdId);
+                        loadSizeNDesignMaster(from, to);
+                        Constant.showLog("tovalue:" + to);
+                        if (to == maxProdId) {
+                            //constant.showPD();
+                            pd.dismiss();
+                            showDia(1);
+                        }
+                    }
+
+                    // listener.refresh_data(to);
+                    // Constant.showLog(""+count);
+                }
+            } else {
+                showDia(2);
+                //  }
             }
         }
     }
 
-    private void parseSizeNDesign(JsonParser jp,int to){
+    private void parseSizeNDesign(JsonParser jp, int to) {
 
-    private class getCustomerMaster extends AsyncTask<String, Void, String>{
+    }
+
+    private class getCustomerMaster extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... strings) {
@@ -764,15 +769,15 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             super.onPostExecute(response);
             response = response.substring(1, response.length() - 1);
             constant.showPD();
-            new readCustJSON(response,"CustMast").execute();
+            new readCustJSON(response, "CustMast").execute();
         }
     }
 
-    private class readCustJSON extends AsyncTask<Void,Void,String> {
+    private class readCustJSON extends AsyncTask<Void, Void, String> {
         private String result, parseType;
         private ProgressDialog pd;
 
-        readCustJSON(String _result,String _parseType){
+        readCustJSON(String _result, String _parseType) {
             this.result = _result;
             this.parseType = _parseType;
         }
@@ -792,12 +797,12 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             File sdFile = Constant.checkFolder(Constant.folder_name);
             FileWriter writer;
             try {
-                String search = "\\\\",replace = "";
-                File writeFile = new File(sdFile,writeFilename);
+                String search = "\\\\", replace = "";
+                File writeFile = new File(sdFile, writeFilename);
                 writer = new FileWriter(writeFile);
                 int size = result.length();
-                if(size>2) {
-                    Log.d("Log","Replacing");
+                if (size > 2) {
+                    Log.d("Log", "Replacing");
                     int b = 50000;
                     for (int i = 0; i < size; i++) {
                         if (b >= size) {
@@ -815,14 +820,14 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 writer.flush();
                 writer.close();
                 return retValue;
-            }catch (IOException | OutOfMemoryError e){
+            } catch (IOException | OutOfMemoryError e) {
                 pd.dismiss();
                 try {
                     writer = new FileWriter(new File(sdFile, "Log.txt"));
                     writer.append(e.getMessage());
                     writer.flush();
                     writer.close();
-                }catch (Exception e1){
+                } catch (Exception e1) {
                     e.printStackTrace();
                 }
                 e.printStackTrace();
@@ -834,15 +839,15 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             pd.dismiss();
-            if(s.equals("A")){
+            if (s.equals("A")) {
                 new writeCustDB(parseType).execute();
-            }else {
+            } else {
                 showDia(2);
             }
         }
     }
 
-    private class writeCustDB extends AsyncTask<Void,String,String> {
+    private class writeCustDB extends AsyncTask<Void, String, String> {
         private File writeFile;
         private String parseType;
 
@@ -877,14 +882,14 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 db.deleteTable(DBHandler.Table_Customermaster);
                 parseCustMaster(jp);
                 return "";
-            }catch (Exception e){
+            } catch (Exception e) {
                 pd1.dismiss();
                 try {
                     FileWriter writer = new FileWriter(new File(sdFile, "Log.txt"));
                     writer.append(e.getMessage());
                     writer.flush();
                     writer.close();
-                }catch (Exception e1){
+                } catch (Exception e1) {
                     e.printStackTrace();
                     return null;
                 }
@@ -897,23 +902,24 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             pd1.dismiss();
-            if(s.equals("")) {
-                if(writeFile.delete()){
+            if (s.equals("")) {
+                if (writeFile.delete()) {
                     Constant.showLog("Write Delete");
                     showDia(1);
                 }
-            }else{
+            } else {
                 showDia(2);
             }
         }
     }
 
-    private void parseSizeNDesign(JsonParser jp,ProgressDialog pd){
+
+    private void parseSizeNDesign(JsonParser jp, ProgressDialog pd) {
         try {
             int count = 0;
             List<SizeNDesignClass> list = new ArrayList<>();
             while (jp.nextToken() != JsonToken.END_ARRAY) {
-                count ++;
+                count++;
                 SizeNDesignClass sizeNDesignClass = new SizeNDesignClass();
                 while (jp.nextToken() != JsonToken.END_OBJECT) {
                     String token = jp.getCurrentName();
@@ -938,16 +944,16 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     } else if (DBHandler.ARSD_SizeTo.equals(token)) {
                         jp.nextToken();
                         sizeNDesignClass.setSizeTo(jp.getValueAsInt());
-                    }else if (DBHandler.ARSD_GSTGroup.equals(token)) {
+                    } else if (DBHandler.ARSD_GSTGroup.equals(token)) {
                         jp.nextToken();
                         sizeNDesignClass.setGSTGroup(jp.getText());
-                    }else if (DBHandler.ARSD_InOutType.equals(token)) {
+                    } else if (DBHandler.ARSD_InOutType.equals(token)) {
                         jp.nextToken();
                         sizeNDesignClass.setInOutType(jp.getText());
-                    }else if (DBHandler.ARSD_Total.equals(token)) {
+                    } else if (DBHandler.ARSD_Total.equals(token)) {
                         jp.nextToken();
                         sizeNDesignClass.setTotal(jp.getValueAsInt());
-                    }else if (DBHandler.ARSD_HashCode.equals(token)) {
+                    } else if (DBHandler.ARSD_HashCode.equals(token)) {
                         jp.nextToken();
                         sizeNDesignClass.setHashCode(jp.getText());
                     }/* else if (DBHandler.ARSD_Cat1.equals(token)) {
@@ -984,7 +990,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 }
                 list.add(sizeNDesignClass);
                 //db.addSizeNDesignMaster(sizeNDesignClass);
-               // pd.setProgress((count*100)/62412);
+                // pd.setProgress((count*100)/62412);
             }
             db.addSizeNDesignMaster(list);
             /*if(list.size()!=0){
@@ -1004,7 +1010,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             Constant.showLog(""+count);*/
         } catch (Exception e) {
             e.printStackTrace();
-           // constant.showPD();
+            // constant.showPD();
             pd.dismiss();
             showDia(2);
         }
@@ -1064,7 +1070,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         } catch (Exception e) {
             e.printStackTrace();
             pd.dismiss();
-           // constant.showPD();
+            // constant.showPD();
             showDia(2);
         }
     }
@@ -1116,8 +1122,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     }
 
 
-
-    private void writeLog(String _data){
-        new WriteLog().writeLog(getApplicationContext(),"DataRefreshActivity_"+_data);
+    private void writeLog(String _data) {
+        new WriteLog().writeLog(getApplicationContext(), "DataRefreshActivity_" + _data);
     }
 }
