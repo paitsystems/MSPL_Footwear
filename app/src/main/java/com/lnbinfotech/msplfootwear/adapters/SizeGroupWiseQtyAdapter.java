@@ -22,22 +22,30 @@ public class SizeGroupWiseQtyAdapter extends RecyclerView.Adapter<SizeGroupWiseQ
     private RecyclerViewToActivityInterface recyclerViewToActivityInterface;
     private List<String> sizeList;
     private Context context;
-    private int var = -1;
+    private int var = -1, selPos = 0;
+    private String listType;
 
-    public SizeGroupWiseQtyAdapter(List<String> _list,Context _context){
+    public SizeGroupWiseQtyAdapter(List<String> _list,Context _context,String listType, int selPos){
         this.sizeList = _list;
         this.context = _context;
+        this.listType = listType;
+        this.selPos = selPos;
     }
 
     @Override
     public SizeGroupWiseQtyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_sizegroup_qty,parent,false);
+        if(listType.equals("U")){
+            var = selPos;
+        }
+        Constant.showLog("onCreateViewHolder listType-"+listType+"-selPosition-"+var);
         return new SizeGroupWiseQtyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(SizeGroupWiseQtyViewHolder holder, int position) {
         holder.textView.setText(sizeList.get(position));
+        Constant.showLog("onBindViewHolder Position-"+position+"-selPosition-"+var);
         if(position==sizeList.size()-1){
             if(var!=-1) {
                 if(var==position) {
@@ -89,6 +97,7 @@ public class SizeGroupWiseQtyAdapter extends RecyclerView.Adapter<SizeGroupWiseQ
         public void onClick(View view) {
             //Constant.showLog(textView.getText().toString());
             var = getAdapterPosition();
+            listType = "A";
             AddToCartActivity.selQty = var;
             notifyDataSetChanged();
             recyclerViewToActivityInterface.onItemClick(textView.getText().toString());

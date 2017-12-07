@@ -5,8 +5,7 @@ package com.lnbinfotech.msplfootwear.model;
 public class GSTMasterClass {
 
     private int auto;
-    private String groupName, Status;
-    private double gstPer, cgstPer, sgstPer, cessPer, cgstShare, sgstShare;
+    private String groupName, Status,gstPer, cgstPer, sgstPer, cessPer, cgstShare, sgstShare;
 
     public int getAuto() {
         return auto;
@@ -32,51 +31,51 @@ public class GSTMasterClass {
         Status = status;
     }
 
-    public double getGstPer() {
+    public String getGstPer() {
         return gstPer;
     }
 
-    public void setGstPer(double gstPer) {
+    public void setGstPer(String gstPer) {
         this.gstPer = gstPer;
     }
 
-    public double getCgstPer() {
+    public String getCgstPer() {
         return cgstPer;
     }
 
-    public void setCgstPer(double cgstPer) {
+    public void setCgstPer(String cgstPer) {
         this.cgstPer = cgstPer;
     }
 
-    public double getSgstPer() {
+    public String getSgstPer() {
         return sgstPer;
     }
 
-    public void setSgstPer(double sgstPer) {
+    public void setSgstPer(String sgstPer) {
         this.sgstPer = sgstPer;
     }
 
-    public double getCessPer() {
+    public String getCessPer() {
         return cessPer;
     }
 
-    public void setCessPer(double cessPer) {
+    public void setCessPer(String cessPer) {
         this.cessPer = cessPer;
     }
 
-    public double getCgstShare() {
+    public String getCgstShare() {
         return cgstShare;
     }
 
-    public void setCgstShare(double cgstShare) {
+    public void setCgstShare(String cgstShare) {
         this.cgstShare = cgstShare;
     }
 
-    public double getSgstShare() {
+    public String getSgstShare() {
         return sgstShare;
     }
 
-    public void setSgstShare(double sgstShare) {
+    public void setSgstShare(String sgstShare) {
         this.sgstShare = sgstShare;
     }
 }

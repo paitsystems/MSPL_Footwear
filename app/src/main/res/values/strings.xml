@@ -74,7 +74,6 @@
     <string name="search_item">Search Item</string>
     <string name="search">Search</string>
     <string name="refresh">Refresh</string>
-
     <string name="table_no">Table No</string>
     <string name="tablename">TableName</string>
     <string name="waiter">Waiter</string>
@@ -203,24 +202,22 @@
     <string name="checkopt">Order Status:</string>
 
     <!---sneha changes 27nov17- - - - - - - - - - - -->
-    <string name="prod">Prod   Id</string>
+    <string name="prod">Prod Id</string>
     <string name="sizeg">Size Group</string>
     <string name="color">Color</string>
     <string name="looseq">Loose Qty</string>
     <string name="wsp">WSP</string>
-    <string name="mr">MR</string>
-    <string name="availableqty">Available Qty</string>
+    <string name="mr">MRP</string>
     <string name="amt">Amount</string>
-    <string name="gst">GST     %</string>
-    <string name="totalno">Total No</string>
-    <string name="totalqty">Total Qty</string>
-    <string name="netamt">Net Amt</string>
+    <string name="gst">GST %</string>
+    <string name="totalno">TSet</string>
+    <string name="totalqty">TQty</string>
+    <string name="netamt">NetAmt</string>
     <string name="grossamt">Gross Amt</string>
-    <string name="totlqty">Total Loose Qty</string>
-    <string name="totaqty">Tot Avail Qty</string>
-    <string name="discper">Disc Per</string>
+    <string name="discper">Disc%</string>
     <string name="discamt">Disc Amt</string>
     <string name="gstamt">GST Amt</string>
-    <string name="cart">Cart</string>
+    <string name="availableqty">AvailQty</string>
+    <string name="totlqty">TotQty</string>
 
 </resources>

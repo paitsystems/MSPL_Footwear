@@ -10,7 +10,6 @@
         android:layout_height="30dp">
 
         <TextView
-            style="@style/textViewMob"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
@@ -18,10 +17,9 @@
             android:textColor="@color/black"
             android:visibility="visible"
             android:background="@drawable/line_left_right_bottom_draw"
-            android:gravity="center_horizontal"
-            android:id="@+id/tv_prod_id" />
+            android:id="@+id/tv_prod_id"
+            android:gravity="center" />
         <TextView
-            style="@style/textViewMob"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
@@ -31,8 +29,7 @@
             android:gravity="center"
             android:id="@+id/tv_size_group" />
         <TextView
-            style="@style/textViewMob"
-            android:layout_width="60dp"
+            android:layout_width="80dp"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/color"
@@ -42,8 +39,7 @@
             android:id="@+id/tv_color" />
 
         <TextView
-            style="@style/textViewMob"
-            android:layout_width="60dp"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/looseq"
@@ -52,7 +48,6 @@
             android:gravity="center"
             android:id="@+id/tv_loose_qty" />
         <TextView
-            style="@style/textViewMob"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
@@ -62,7 +57,6 @@
             android:gravity="center"
             android:id="@+id/tv_wsp" />
         <TextView
-            style="@style/textViewMob"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
@@ -72,7 +66,6 @@
             android:gravity="center"
             android:id="@+id/tv_mr" />
         <TextView
-            style="@style/textViewMob"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
@@ -82,7 +75,6 @@
             android:gravity="center"
             android:id="@+id/tv_amt" />
         <TextView
-            style="@style/textViewMob"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"

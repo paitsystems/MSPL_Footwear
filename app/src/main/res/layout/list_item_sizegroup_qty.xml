@@ -8,8 +8,8 @@
     <TextView
         android:id="@+id/textView"
         style="@style/textViewMob"
-        android:layout_width="40dp"
-        android:layout_height="30dp"
+        android:layout_width="30dp"
+        android:layout_height="25dp"
         android:background="@drawable/black_border_draw"
         android:padding="@dimen/mobpadding2"
         android:text="00"

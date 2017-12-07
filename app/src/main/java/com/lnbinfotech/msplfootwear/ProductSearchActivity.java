@@ -78,6 +78,7 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
                 ProductMasterClass prodClass = (ProductMasterClass) listView.getItemAtPosition(i);
                 AddToCartActivity.selProd = prodClass.getFinal_prod();
                 AddToCartActivity.selProdId = prodClass.getProduct_id();
+                AddToCartActivity.activityToFrom = 1;
                 Constant.showLog(AddToCartActivity.selProd);
                 Constant.showLog(""+AddToCartActivity.selProdId);
                 new Constant(ProductSearchActivity.this).doFinish();

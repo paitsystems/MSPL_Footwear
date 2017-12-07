@@ -15,14 +15,14 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 
- // Created by SNEHA on 11/28/2017.
+// Created by SNEHA on 11/28/2017.
 
 public class ViewCustomerOrderAdapter extends BaseAdapter {
+
     private List<CustomerOrderClass> orderList;
     private Context context;
     private LayoutInflater inflater;
     private DecimalFormat flt_price;
-
 
     public ViewCustomerOrderAdapter(List<CustomerOrderClass> _orderList, Context _context) {
         this.orderList = _orderList;
@@ -30,7 +30,6 @@ public class ViewCustomerOrderAdapter extends BaseAdapter {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         flt_price = new DecimalFormat();
         flt_price.setMaximumFractionDigits(2);
-
     }
 
     @Override
@@ -63,15 +62,15 @@ public class ViewCustomerOrderAdapter extends BaseAdapter {
             holder.tv_mr = (TextView) convertview.findViewById(R.id.tv_mr);
             holder.tv_amt = (TextView) convertview.findViewById(R.id.tv_amt);
             holder.tv_gst_per = (TextView) convertview.findViewById(R.id.tv_gst_per);
-           convertview.setTag(holder);
+            convertview.setTag(holder);
         } else {
             holder = (ViewHolder) convertview.getTag();
         }
 
-         CustomerOrderClass order  = (CustomerOrderClass) getItem(position);
-         holder.tv_prod_id.setText(String.valueOf(order.getProductid()));
-         holder.tv_size_group.setText(order.getSizeGroup());
-         holder.tv_color.setText(order.getColor());
+        CustomerOrderClass order = (CustomerOrderClass) getItem(position);
+        holder.tv_prod_id.setText(String.valueOf(order.getProductid()));
+        holder.tv_size_group.setText(order.getSizeGroup());
+        holder.tv_color.setText(order.getColor());
         String hashCode = order.getHashCode();
         if (hashCode.equalsIgnoreCase("#FFFFFF")) {
             holder.tv_color.setTextColor(Color.parseColor("#000000"));
@@ -80,17 +79,17 @@ public class ViewCustomerOrderAdapter extends BaseAdapter {
             holder.tv_color.setTextColor(Color.parseColor("#FFFFFF"));
             holder.tv_color.setBackgroundColor(Color.parseColor(hashCode));
         }
-         holder.tv_loose_qty.setText(String.valueOf(order.getLooseQty()));
-         holder.tv_mr.setText(flt_price.format(order.getMrp()));
-         holder.tv_wsp.setText(flt_price.format(order.getRate()));
-        holder.tv_amt.setText(flt_price.format(order.getAmount()));
-        holder.tv_gst_per.setText(flt_price.format(order.getGstper()));
+        holder.tv_loose_qty.setText(String.valueOf(order.getLooseQty()));
+        holder.tv_mr.setText(order.getMrp());
+        holder.tv_wsp.setText(order.getRate());
+        holder.tv_amt.setText(order.getAmount());
+        holder.tv_gst_per.setText(order.getGstper());
 
         return convertview;
     }
 
     private class ViewHolder {
-        public TextView tv_prod_id,tv_size_group,tv_color,tv_loose_qty,tv_wsp,tv_mr,tv_amt,tv_gst_per;
+        public TextView tv_prod_id, tv_size_group, tv_color, tv_loose_qty, tv_wsp, tv_mr, tv_amt, tv_gst_per;
     }
 }
 

@@ -990,14 +990,55 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(CO_SGSTPer,custOrder.getSgstper());
         cv.put(CO_CESSPer,custOrder.getCessper());
         cv.put(CO_CESSAmt,custOrder.getCessamt());
+        cv.put(CO_DiscPer,custOrder.getDiscPer());
+        cv.put(CO_DiscAmt,custOrder.getDiscamnt());
+        cv.put(CO_GSTAmt,custOrder.getGstAmt());
+        cv.put(CO_NetAmt,custOrder.getNetamnt());
+        cv.put(CO_AmtAfterDisc,custOrder.getAmtAfterDisc());
+        cv.put(CO_OrderType,custOrder.getOrderType());
         db.insert(Table_CustomerOrder,null,cv);
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();
     }
+
     public Cursor getViewOrderData(){
         String str = "select * from "+Table_CustomerOrder +" order by "+CO_Productid+","+CO_SizeGroup;
         Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
+    public float getCustDiscount(int custid){
+        float a = 0;
+        String str = "select "+CM_Discount+" from "+Table_Customermaster +" where "+CM_RetailCustID+"="+custid;
+        Cursor res = getWritableDatabase().rawQuery(str,null);
+        if(res.moveToFirst()){
+            do{
+                a = res.getInt(0);
+            }while (res.moveToNext());
+        }
+        res.close();
+        return a;
+    }
+
+    public Cursor getCustOrderTotals(){
+        String str = "select count("+CO_Auto+") as "+CO_Auto+",sum("+CO_LooseQty+") as "+CO_LooseQty+", sum("+CO_Amount+
+                ") as "+CO_Amount+", sum("+CO_NetAmt+") as "+CO_NetAmt+", sum("+CO_AmtAfterDisc+") as "+CO_AmtAfterDisc+","+
+                "SUM("+CO_GSTAmt+") as "+CO_GSTAmt+", sum("+CO_DiscAmt+") as "+CO_DiscAmt+" from "+Table_CustomerOrder;
+        Constant.showLog("getCustOrderTotals :- "+str);
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
+    public void deleteOrderTable(int auto) {
+        getWritableDatabase().execSQL("delete from " + Table_CustomerOrder+" where "+CO_Auto+"="+auto);
+    }
+
+    public void deleteOrderTableUnpack() {
+        getWritableDatabase().execSQL("delete from " + Table_CustomerOrder+" where "+CO_OrderType+"='U' and "+CO_Productid+"="+AddToCartActivity.selProdId);
+    }
+
+    public Cursor getSavedUnpackOrder(){
+        String str = "select "+CO_SizeGroup+","+CO_Qty+","+CO_Color+","+CO_HashCode+" from "+Table_CustomerOrder+" where "+CO_OrderType+"='U' and "+CO_Productid+"="+AddToCartActivity.selProdId;
         return getWritableDatabase().rawQuery(str,null);
     }
 
@@ -1012,5 +1053,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return a;
     }
 }
+
 
 
