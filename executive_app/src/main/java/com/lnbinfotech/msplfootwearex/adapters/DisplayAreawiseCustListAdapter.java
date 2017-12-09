@@ -10,7 +10,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-
 import com.lnbinfotech.msplfootwearex.R;
 
 import java.util.ArrayList;
@@ -19,13 +18,13 @@ import java.util.List;
 /**
  * Created by SNEHA on 12/5/2017.
  */
-public class DisplayCustListAdapter extends BaseAdapter implements Filterable {
+public class DisplayAreawiseCustListAdapter extends BaseAdapter implements Filterable {
     Activity activity;
     List<String> item_list;
     List<String> filter_list;
     ValueFilter valueFilter;
 
-    public DisplayCustListAdapter(Activity _activity, List<String> _item_list) {
+    public DisplayAreawiseCustListAdapter(Activity _activity, List<String> _item_list) {
         this.activity = _activity;
         this.item_list = _item_list;
         this.filter_list = _item_list;

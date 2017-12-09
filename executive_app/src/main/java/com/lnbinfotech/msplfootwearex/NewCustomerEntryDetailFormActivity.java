@@ -52,6 +52,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
     private Constant constant;
     private DBHandler db;
     private Toast toast;
+    private  int cust_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -437,20 +438,36 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                 String _gstno_img = URLEncoder.encode(OptionsActivity.new_cus.getGst_no_image(), "UTF-8");
                 String _pan_no = URLEncoder.encode(OptionsActivity.new_cus.getPan_no(), "UTF-8");
                 String _panno_img = URLEncoder.encode(OptionsActivity.new_cus.getPan_no_image(), "UTF-8");
-                String custId = "1", BranchId = "1", District = "Pune", Taluka = "Pune", CityId = "1", AreaId = "1", HOCode = "1";
-            /*Cursor cursor = db.getUserDetails();
+             //   String custId = "1", BranchId = "1", District = "Pune", Taluka = "Pune", CityId = "1", AreaId = "1", HOCode = "1";
+                String custId = "", BranchId = "1", District = "", Taluka = "", CityId = "", AreaId = "", HOCode = "",IMEINo = "",isReg = "",pin="";
+            Cursor cursor = db.getUserDetails();
             if (cursor.moveToFirst()) {
                 do {
                     custId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_RetailCustID));
-                    BranchId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_BranchId));
+                  //  BranchId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_BranchId));
                     District = cursor.getString(cursor.getColumnIndex(DBHandler.UM_District));
                     Taluka = cursor.getString(cursor.getColumnIndex(DBHandler.UM_Taluka));
                     CityId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_CityId));
                     AreaId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_AreaId));
                     HOCode = cursor.getString(cursor.getColumnIndex(DBHandler.UM_HOCode));
+                    IMEINo = cursor.getString(cursor.getColumnIndex(DBHandler.UM_IMEINo));
+                    isReg = cursor.getString(cursor.getColumnIndex(DBHandler.UM_isRegistered));
+                    pin = cursor.getString(cursor.getColumnIndex(DBHandler.UM_PIN));
                 } while (cursor.moveToNext());
             }
-            cursor.close();*/
+            cursor.close();
+
+               // OptionsActivity.new_cus.setCust_id(custId);
+                OptionsActivity.new_cus.setBranchId(BranchId);
+                OptionsActivity.new_cus.setDistrict(District);
+                OptionsActivity.new_cus.setTaluka(Taluka);
+                OptionsActivity.new_cus.setCityId(CityId);
+                OptionsActivity.new_cus.setAreaId(AreaId);
+                OptionsActivity.new_cus.setHOCode(HOCode);
+                OptionsActivity.new_cus.setIMEINo(IMEINo);
+                OptionsActivity.new_cus.setIsReg(isReg);
+                OptionsActivity.new_cus.setPin(pin);
+
                 String _custId = URLEncoder.encode(custId, "UTF-8");
                 String _BranchId = URLEncoder.encode(BranchId, "UTF-8");
                 String _District = URLEncoder.encode(District, "UTF-8");
@@ -480,6 +497,9 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                 requests.saveCustomerDetail(url, new ServerCallback() {
                     @Override
                     public void onSuccess(String result) {
+                         cust_id = Integer.parseInt(result);
+                        OptionsActivity.new_cus.setCust_id(result);
+                        Constant.showLog("result of newcust:"+result);
                         showPopup(1);
                     }
 
@@ -545,6 +565,8 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                     constant.showPD();
                     Constant.showLog("Volly request success");
                     writeLog("saveData():Volley_success");
+
+                    db.addNewCustomer();
 
                     finish();
                     Intent in = new Intent(NewCustomerEntryDetailFormActivity.this, OptionsActivity.class);

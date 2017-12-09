@@ -125,7 +125,7 @@ public class VolleyRequests {
                 Constant.showLog(response);
                 response = response.replace("\\","");
                 response = response.replace("\"","");
-                if(response.equals("1")) {
+                if(!response.equals("0")) {
                     callback.onSuccess(response);
                 }else {
                     callback.onFailure("Error");

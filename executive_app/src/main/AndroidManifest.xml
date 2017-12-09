@@ -161,6 +161,10 @@
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
+            android:name=".DisplayCustListAreawiseActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity
             android:name=".DisplayCustListActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>

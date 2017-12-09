@@ -81,11 +81,9 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
+
         menu.clear();
-
         getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
-
         final MenuItem item = menu.findItem(R.id.cart);
         MenuItemCompat.setActionView(item, R.layout.actionbaar_badge_layout);
         View view = MenuItemCompat.getActionView(item);
@@ -171,7 +169,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             builder.setNegativeButton("Cutsize", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    //startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
+                   // startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
                     startActivity(new Intent(getApplicationContext(), DisplayCustListActivity.class));
                     overridePendingTransition(R.anim.enter, R.anim.exit);
                     dialog.dismiss();

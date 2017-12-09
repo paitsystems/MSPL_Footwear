@@ -134,6 +134,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeAddToCard"
             android:windowSoftInputMode="stateHidden"/>
+
     </application>
 
 </manifest>

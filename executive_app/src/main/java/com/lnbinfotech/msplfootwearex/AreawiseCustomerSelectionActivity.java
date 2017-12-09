@@ -2,6 +2,7 @@ package com.lnbinfotech.msplfootwearex;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -33,10 +34,12 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
     private AreawiseCustSelListAdapter adapter;
     private DBHandler db;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_areawise_customer_selection);
+       // FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
 
         init();
 
@@ -56,12 +59,15 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                     do{
                        // AreawiseCustomerSelectionClass areaClass_ = new AreawiseCustomerSelectionClass();
                         String id = cursor.getString(cursor.getColumnIndex(DBHandler.Area_Id));
+                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                        editor.putString("areaid",id);
+                        editor.apply();
                         Constant.showLog("id:"+id);
                         hashmap.put(area_name,id);
                     }while (cursor.moveToNext());
                 }
                 cursor.close();
-                startActivity(new Intent(getApplicationContext(),VisitOptionsActivity.class));
+                startActivity(new Intent(getApplicationContext(),VisitOptionsActivity.class).putExtra("area_name",area_name));
                 overridePendingTransition(R.anim.enter,R.anim.exit);
             }
         });

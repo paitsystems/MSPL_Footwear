@@ -16,8 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.view.Gravity;
 
-
-import com.lnbinfotech.msplfootwearex.adapters.DisplayCustListAdapter;
+import com.lnbinfotech.msplfootwearex.adapters.DisplayAreawiseCustListAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
@@ -25,26 +24,27 @@ import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DisplayCustListActivity extends AppCompatActivity implements View.OnClickListener {
+public class DisplayCustListAreawiseActivity extends AppCompatActivity implements View.OnClickListener {
+
     private Constant constant, constant1;
     private Toast toast;
     private ListView lv_cus;
     private List<String> cus_list;
     private DBHandler db;
     private EditText ed_cus_name;
-    private DisplayCustListAdapter adapter;
+    private DisplayAreawiseCustListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_cust_list);
+        setContentView(R.layout.activity_display_cust_list_areawise);
 
         init();
         setCusList();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("DisplayCustList");
+            getSupportActionBar().setTitle("DisplayCustomerList");
         }
 
         ed_cus_name.addTextChangedListener(new TextWatcher() {
@@ -70,7 +70,6 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
         lv_cus.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
-
                 // String select_item = cus_list.get(position);
                 String select_item = (String) parent.getItemAtPosition(position);
                 Constant.showLog("selctedCustomerName: " + select_item);
@@ -98,7 +97,7 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
     @Override
     public void onBackPressed() {
         //showDia(0);
-        new Constant(DisplayCustListActivity.this).doFinish();
+        new Constant(DisplayCustListAreawiseActivity.this).doFinish();
     }
 
     @Override
@@ -106,17 +105,17 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
         switch (item.getItemId()) {
             case android.R.id.home:
                 //showDia(0);
-                new Constant(DisplayCustListActivity.this).doFinish();
+                new Constant(DisplayCustListAreawiseActivity.this).doFinish();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void init() {
-        db = new DBHandler(DisplayCustListActivity.this);
+        db = new DBHandler(DisplayCustListAreawiseActivity.this);
         lv_cus = (ListView) findViewById(R.id.lv_cus);
         lv_cus.setTextFilterEnabled(true);
-        constant = new Constant(DisplayCustListActivity.this);
+        constant = new Constant(DisplayCustListAreawiseActivity.this);
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
@@ -126,7 +125,11 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
 
     public void setCusList() {
 
-        Cursor cur = db.getCustName();
+        int id = Integer.parseInt(FirstActivity.pref.getString("areaid",""));
+        Constant.showLog("arrrid:"+id);
+        //TODO PASS ID
+        //Cursor cur = db.getCustNameAreawise(id);
+        Cursor cur = db.getCustNameAreawise();
         if (cur.moveToFirst()) {
             do {
                 cus_list.add(cur.getString(cur.getColumnIndex(DBHandler.CM_Name)));
@@ -135,19 +138,19 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
         }
         cur.close();
 
-        adapter = new DisplayCustListAdapter(this, cus_list);
+         adapter = new DisplayAreawiseCustListAdapter(this, cus_list);
         lv_cus.setAdapter(adapter);
     }
 
     private void showDia(int a) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(DisplayCustListActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(DisplayCustListAreawiseActivity.this);
         builder.setCancelable(false);
         if (a == 0) {
             builder.setMessage("Do You Want To Exit App?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    new Constant(DisplayCustListActivity.this).doFinish();
+                    new Constant(DisplayCustListAreawiseActivity.this).doFinish();
                     dialog.dismiss();
                 }
             });

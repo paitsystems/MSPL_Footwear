@@ -231,7 +231,8 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(receiver);
+       // unregisterReceiver(receiver);
+
     }
 
     @Override
@@ -437,7 +438,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    unregisterReceiver(receiver);
+                   // unregisterReceiver(receiver);
                     new Constant(CheckOTPActivity.this).doFinish();
                     toast.cancel();
                     dialog.dismiss();

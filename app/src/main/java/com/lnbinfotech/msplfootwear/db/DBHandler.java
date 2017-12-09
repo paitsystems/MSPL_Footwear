@@ -411,22 +411,34 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addAreaMaster(AreaMasterClass areaClass) {
+    public void addAreaMaster(List<AreaMasterClass> areaClassList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
         ContentValues cv = new ContentValues();
-        cv.put(Area_Auto, areaClass.getAuto());
-        cv.put(Area_Id, areaClass.getId());
-        cv.put(Area_Area, areaClass.getArea());
-        cv.put(Area_Cityid, areaClass.getCityid());
-        getWritableDatabase().insert(Table_AreaMaster, null, cv);
+        for(AreaMasterClass areaClass : areaClassList) {
+            cv.put(Area_Auto, areaClass.getAuto());
+            cv.put(Area_Id, areaClass.getId());
+            cv.put(Area_Area, areaClass.getArea());
+            cv.put(Area_Cityid, areaClass.getCityid());
+            db.insert(Table_AreaMaster, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
-    public void addCityMaster(CityMasterClass cityClass) {
+    public void addCityMaster(List<CityMasterClass> cityClassList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
         ContentValues cv = new ContentValues();
-        cv.put(City_Auto, cityClass.getAuto());
-        cv.put(City_Id, cityClass.getId());
-        cv.put(City_City, cityClass.getCity());
-        cv.put(City_Stateid, cityClass.getStId());
-        getWritableDatabase().insert(Table_CityMaster, null, cv);
+        for(CityMasterClass cityClass : cityClassList) {
+            cv.put(City_Auto, cityClass.getAuto());
+            cv.put(City_Id, cityClass.getId());
+            cv.put(City_City, cityClass.getCity());
+            cv.put(City_Stateid, cityClass.getStId());
+            db.insert(Table_CityMaster, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
     public void addHOMaster(HOMasterClass hoClass) {
@@ -572,14 +584,19 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addCustomerMaster(CustomerDetailClass cust) {
+    public void addCustomerMaster(List<CustomerDetailClass> custList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
         ContentValues cv = new ContentValues();
-        cv.put(CM_RetailCustID, cust.getCustID());
-        cv.put(CM_Name, cust.getName());
-        cv.put(CM_Address, cust.getAddress());
-        cv.put(CM_MobileNo, cust.getMobile());
-
-        getWritableDatabase().insert(Table_Customermaster, null, cv);
+        for(CustomerDetailClass cust : custList) {
+            cv.put(CM_RetailCustID, cust.getCustID());
+            cv.put(CM_Name, cust.getName());
+            cv.put(CM_Address, cust.getAddress());
+            cv.put(CM_MobileNo, cust.getMobile());
+            db.insert(Table_Customermaster, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
     public void addCompanyMaster(CompanyMasterClass company) {
@@ -1095,6 +1112,34 @@ public class DBHandler extends SQLiteOpenHelper {
     public Cursor getCustOrderDetail(int branchid){
         String str = "select * from "+Table_CustomerOrder+" where "+CO_BranchId+"="+branchid;
         return getWritableDatabase().rawQuery(str,null);
+    }
+
+    public int getCartCount(){
+        int a = 0;
+        String str = "select count("+CO_Auto+") from "+Table_CustomerOrder;
+        Constant.showLog(str);
+        Cursor res =  getWritableDatabase().rawQuery(str,null);
+        if (res.moveToFirst()) {
+            a = res.getInt(0);
+        }
+        return a;
+    }
+
+    public Cursor getCustName() {
+        String str = "select " + CM_Name + " from " + Table_Customermaster + " order by " + CM_Name;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public int getCustNameId(String name) {
+        int id=0;
+        String str = "select " + CM_RetailCustID + " from " + Table_Customermaster + " where " + CM_Name +" = '"+name+"'";
+        Constant.showLog(str);
+        Cursor res =  getWritableDatabase().rawQuery(str, null);
+        if(res.moveToFirst()){
+            id =  res.getInt(0);
+        }
+        return id;
     }
 }
 

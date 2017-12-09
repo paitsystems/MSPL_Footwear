@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.lnbinfotech.msplfootwearex.OptionsActivity;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.model.AreaMasterClass;
 import com.lnbinfotech.msplfootwearex.model.BankBranchMasterClass;
@@ -398,6 +399,30 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().insert(Table_Customermaster, null, cv);
     }
 
+    public void addNewCustomer() {
+        ContentValues cv = new ContentValues();
+        cv.put(CM_RetailCustID, OptionsActivity.new_cus.getCust_id());
+        cv.put(CM_Name, OptionsActivity.new_cus.getCust_name());
+        cv.put(CM_Address, OptionsActivity.new_cus.getAddress());
+        cv.put(CM_MobileNo, OptionsActivity.new_cus.getMobile_no());
+        cv.put(CM_Status, OptionsActivity.new_cus.getStatus());
+        cv.put(CM_BranchId, OptionsActivity.new_cus.getBranchId());
+        cv.put(CM_Email, OptionsActivity.new_cus.getEmail_id());
+        cv.put(CM_District, OptionsActivity.new_cus.getDistrict());
+        cv.put(CM_Taluka, OptionsActivity.new_cus.getTaluka());
+        cv.put(CM_CityId, OptionsActivity.new_cus.getCityId());
+        cv.put(CM_AreaId, OptionsActivity.new_cus.getAreaId());
+       // cv.put(CM_PANNo, OptionsActivity.new_cus.getPANno());
+       // cv.put(CM_ImagePath, OptionsActivity.new_cus.getImagePath());
+        cv.put(CM_HOCode, OptionsActivity.new_cus.getHOCode());
+      //  cv.put(CM_GSTNo, OptionsActivity.new_cus.getGSTNo());
+        cv.put(CM_IMEINo, OptionsActivity.new_cus.getIMEINo());
+        cv.put(CM_isRegistered, OptionsActivity.new_cus.getIsReg());
+       // cv.put(CM_AadhaarNo, OptionsActivity.new_cus.getAadharNo());
+        cv.put(CM_PIN, OptionsActivity.new_cus.getPin());
+        getWritableDatabase().insert(Table_Customermaster, null, cv);
+    }
+
     public void addCompanyMaster(CompanyMasterClass company) {
         ContentValues cv = new ContentValues();
         cv.put(Company_Id, company.companyId);
@@ -553,7 +578,8 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().update(Table_Usermaster, cv, UM_RetailCustID + "=?", new String[]{custid});
     }
 
-    public Cursor getAreaName(int cityid){
+    public Cursor
+    getAreaName(int cityid){
     //TODO: Change AreaID
         String str = "select "+Area_Area+" from "+Table_AreaMaster+" where "+Area_Cityid+" = "+cityid +" order by "+Area_Area;
         //String str = "select " + Area_Area + " from " + Table_AreaMaster + " where " + Area_Cityid + " = 1 order by "+Area_Area;
@@ -643,8 +669,10 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str,null);
     }
 
-    public Cursor getCustName() {
-        String str = "select " + CM_Name + " from " + Table_Customermaster + " order by " + CM_Name;
+   // public Cursor getCustNameAreawise(int id) {
+    public Cursor getCustNameAreawise(){
+       // String str = "select " + CM_Name + " from " + Table_Customermaster + " where "+CM_AreaId+" = "+id+" order by " + CM_Name;
+        String str = "select " + CM_Name + " from " + Table_Customermaster + " where "+CM_AreaId+" = 1"+" order by " + CM_Name;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
     }
@@ -672,6 +700,19 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         return a;
     }
+
+    public Cursor getDetailOfCustomer(int id){
+       // String str = "select "+UM_BranchId+","+UM_District+","+UM_Taluka+","+UM_CityId+","+AreaId+","+AreaId+","+HOCode+","+IMEINo+","+isRegistered","+from UserMaster+" where "+CustId+" = "+UM_RetailCustID;
+        String str = "select * from "+Table_Usermaster+" where "+UM_RetailCustID+" = '"+id+"'";
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
+    public Cursor getCustName() {
+        String str = "select " + CM_Name + " from " + Table_Customermaster + " order by " + CM_Name;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
 }
 
 

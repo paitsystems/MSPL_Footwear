@@ -219,4 +219,5 @@
     <string name="availableqty">AvailQty</string>
     <string name="totlqty">TotQty</string>
     <string name="cart">Cart</string>
+    <string name="selectcustomername">Select Customer Name</string>
 </resources>

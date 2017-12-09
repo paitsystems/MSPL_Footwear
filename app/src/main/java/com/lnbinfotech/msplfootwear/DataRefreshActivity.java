@@ -20,6 +20,7 @@ import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
+import com.lnbinfotech.msplfootwear.model.BankBranchMasterClass;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwear.model.SizeNDesignClass;
 import com.lnbinfotech.msplfootwear.model.StockInfoMasterClass;
@@ -351,7 +352,8 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         Constant.showLog(url);
         writeLog("loadBankBranchMaster_" + url);
         constant.showPD();
-        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
+        new getBankBranchMaster().execute(url);
+        /*VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
         requests.refreshBankBranchMaster(url, new ServerCallback() {
             @Override
             public void onSuccess(String result) {
@@ -364,7 +366,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 constant.showPD();
                 showDia(2);
             }
-        });
+        });*/
 
     }
 
@@ -914,6 +916,164 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     }
 
 
+    private class getBankBranchMaster extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            return Post.POST(strings[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            super.onPostExecute(response);
+            response = response.substring(1, response.length() - 1);
+            constant.showPD();
+            new readBBJSON(response, "BankBranchMast").execute();
+        }
+    }
+
+    private class readBBJSON extends AsyncTask<Void, Void, String> {
+        private String result, parseType;
+        private ProgressDialog pd;
+
+        readBBJSON(String _result, String _parseType) {
+            this.result = _result;
+            this.parseType = _parseType;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(DataRefreshActivity.this);
+            pd.setCancelable(false);
+            pd.setMessage("Preparing To Download");
+            pd.show();
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String retValue = "A";
+            File sdFile = Constant.checkFolder(Constant.folder_name);
+            FileWriter writer;
+            try {
+                String search = "\\\\", replace = "";
+                File writeFile = new File(sdFile, writeFilename);
+                writer = new FileWriter(writeFile);
+                int size = result.length();
+                if (size > 2) {
+                    Log.d("Log", "Replacing");
+                    int b = 50000;
+                    for (int i = 0; i < size; i++) {
+                        if (b >= size) {
+                            b = size;
+                        }
+                        String q = result.substring(i, b);
+                        String g = q.replaceAll(search, replace);
+                        System.gc();
+                        writer.append(g);
+                        i = b - 1;
+                        b = b + 50000;
+                    }
+                    retValue = "A";
+                }
+                writer.flush();
+                writer.close();
+                return retValue;
+            } catch (IOException | OutOfMemoryError e) {
+                pd.dismiss();
+                try {
+                    writer = new FileWriter(new File(sdFile, "Log.txt"));
+                    writer.append(e.getMessage());
+                    writer.flush();
+                    writer.close();
+                } catch (Exception e1) {
+                    e.printStackTrace();
+                }
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            pd.dismiss();
+            if (s.equals("A")) {
+                new writeBBDB(parseType).execute();
+            } else {
+                showDia(2);
+            }
+        }
+    }
+
+    private class writeBBDB extends AsyncTask<Void, String, String> {
+        private File writeFile;
+        private String parseType;
+
+        public writeBBDB(String _parseType) {
+            this.parseType = _parseType;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd1 = new ProgressDialog(DataRefreshActivity.this);
+            pd1.setCancelable(false);
+            pd1.setProgressNumberFormat(null);
+            pd1.setProgressPercentFormat(null);
+            pd1.setProgressNumberFormat("%1d/%2d");
+            NumberFormat percentInstance = NumberFormat.getPercentInstance();
+            percentInstance.setMaximumFractionDigits(0);
+            pd1.setProgressPercentFormat(percentInstance);
+            pd1.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            pd1.setTitle("Please Wait");
+            pd1.setMessage("It will take app. 10-15 min");
+            pd1.show();
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            File sdFile = Constant.checkFolder(Constant.folder_name);
+            JsonFactory f = new JsonFactory();
+            try {
+                writeFile = new File(sdFile, writeFilename);
+                JsonParser jp = f.createJsonParser(writeFile);
+                db.deleteTable(DBHandler.Table_BankBranchMaster);
+                parseBankBranchMaster(jp);
+                return "";
+            } catch (Exception e) {
+                pd1.dismiss();
+                try {
+                    FileWriter writer = new FileWriter(new File(sdFile, "Log.txt"));
+                    writer.append(e.getMessage());
+                    writer.flush();
+                    writer.close();
+                } catch (Exception e1) {
+                    e.printStackTrace();
+                    return null;
+                }
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            pd1.dismiss();
+            if (s.equals("")) {
+                if (writeFile.delete()) {
+                    Constant.showLog("Write Delete");
+                    showDia(1);
+                }
+            } else {
+                showDia(2);
+            }
+        }
+    }
+
+
+
     private void parseSizeNDesign(JsonParser jp, ProgressDialog pd) {
         try {
             int count = 0;
@@ -1120,6 +1280,46 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             showDia(2);
         }
     }
+
+    private void parseBankBranchMaster(JsonParser jp){
+        try {
+            ArrayList<BankBranchMasterClass> list = new ArrayList<>();
+            while (jp.nextToken() != JsonToken.END_ARRAY) {
+                BankBranchMasterClass bbClass = new BankBranchMasterClass();
+                while (jp.nextToken() != JsonToken.END_OBJECT) {
+                    String token = jp.getCurrentName();
+                    if ("Autoid".equals(token)) {
+                        jp.nextToken();
+                        bbClass.setAutoid(jp.getText());
+                    } else if ("id".equals(token)) {
+                        jp.nextToken();
+                        bbClass.setId(jp.getText());
+                    } else if ("Branch".equals(token)) {
+                        jp.nextToken();
+                        bbClass.setBranch(jp.getText());
+                    } else if ("Custid".equals(token)) {
+                        jp.nextToken();
+                        bbClass.setCustid(jp.getText());
+                    } else if ("AccountNo".equals(token)) {
+                        jp.nextToken();
+                        bbClass.setAccountNo(jp.getText());
+                    } else if ("CBranch".equals(token)) {
+                        jp.nextToken();
+                        bbClass.setcBranch(jp.getText());
+                    } else if ("CBankid".equals(token)) {
+                        jp.nextToken();
+                        bbClass.setcBankid(jp.getText());
+                    }
+                }
+                list.add(bbClass);
+            }
+            db.addBankBranchMaster(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            constant.showPD();
+            showDia(2);
+        }
+}
 
 
     private void writeLog(String _data) {

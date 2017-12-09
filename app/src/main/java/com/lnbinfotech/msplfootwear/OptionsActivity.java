@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
@@ -22,6 +24,8 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
 
     private CardView card_give_order, card_account, card_track_order, card_profile, card_scheme, card_whats_new, card_feedback;
     public static float custDisc = 0;
+    private TextView actionbar_noti_tv;
+    private DBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +84,25 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+       // mMenu = menu;
         getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
+
+        final MenuItem item = menu.findItem(R.id.cart);
+        MenuItemCompat.setActionView(item, R.layout.actionbaar_badge_layout);
+        View view = MenuItemCompat.getActionView(item);
+        actionbar_noti_tv = (TextView)view.findViewById(R.id.actionbar_noti_tv);
+        //actionbar_noti_tv.setText("12");
+        int count = db.getCartCount();
+        Constant.showLog("cart_count:"+count);
+        actionbar_noti_tv.setText(String.valueOf(count));
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onOptionsItemSelected(item);
+            }
+        });
         return true;
     }
 
@@ -97,11 +119,16 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.report_error:
                 showDia(6);
                 break;
+            case R.id.cart:
+                startActivity(new Intent(getApplicationContext(), ViewCustomerOrderActiviy.class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void init() {
+        db = new DBHandler(this);
         card_give_order = (CardView) findViewById(R.id.card_give_order);
         card_account = (CardView) findViewById(R.id.card_account);
         card_track_order = (CardView) findViewById(R.id.card_track_order);

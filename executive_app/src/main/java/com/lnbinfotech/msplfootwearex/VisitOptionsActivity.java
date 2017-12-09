@@ -8,9 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+
+import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Gravity;
 
@@ -18,6 +19,7 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
 
     private Constant constant;
     private Toast toast;
+    private TextView tv_arealine_display;
     private CardView card_take_order, card_payment, card_ledger_report, card_feedback;
 
     @Override
@@ -33,7 +35,10 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.visitoption);
         }
-
+        String arealine = "Selected Arealine-"+getIntent().getExtras().getString("area_name");
+        Constant.showLog(arealine);
+        //tv_arealine.setText("Selected Arealine-" +arealine);
+        tv_arealine_display.setText(arealine);
         card_take_order.setOnClickListener(this);
         card_payment.setOnClickListener(this);
         card_ledger_report.setOnClickListener(this);
@@ -78,6 +83,7 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void init() {
+        tv_arealine_display = (TextView) findViewById(R.id.tv_arealine_display);
         card_take_order = (CardView) findViewById(R.id.card_take_order);
         card_payment = (CardView) findViewById(R.id.card_payment);
         card_ledger_report = (CardView) findViewById(R.id.card_ledger_report);
@@ -119,7 +125,8 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
             builder.setNegativeButton("Cutsize", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(getApplicationContext(),CutsizeSetwiseOrderActivity.class));
+                   // startActivity(new Intent(getApplicationContext(),CutsizeSetwiseOrderActivity.class));
+                    startActivity(new Intent(getApplicationContext(),DisplayCustListAreawiseActivity.class));
                     overridePendingTransition(R.anim.enter,R.anim.exit);
                     dialog.dismiss();
                 }

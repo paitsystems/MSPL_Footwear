@@ -128,6 +128,7 @@ public class ParseJSON {
 
     public int parseAreaMaster(){
         int ret = 0;
+        List<AreaMasterClass> areaList = new ArrayList<>();
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
@@ -138,8 +139,10 @@ public class ParseJSON {
                     areaClass.setId(jsonArray.getJSONObject(i).getInt("id"));
                     areaClass.setArea(jsonArray.getJSONObject(i).getString("area"));
                     areaClass.setCityid(jsonArray.getJSONObject(i).getInt("cityid"));
-                    db.addAreaMaster(areaClass);
+                    areaList.add(areaClass);
+
                 }
+                db.addAreaMaster(areaList);
                 db.close();
                 ret = 1;
             }
@@ -152,6 +155,7 @@ public class ParseJSON {
 
     public int parseCityMaster(){
         int ret = 0;
+        List<CityMasterClass> cityList = new ArrayList<>();
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
@@ -162,8 +166,9 @@ public class ParseJSON {
                     cityClass.setId(jsonArray.getJSONObject(i).getInt("id"));
                     cityClass.setCity(jsonArray.getJSONObject(i).getString("city"));
                     cityClass.setStId(jsonArray.getJSONObject(i).getInt("stId"));
-                    db.addCityMaster(cityClass);
+                    cityList.add(cityClass);
                 }
+                db.addCityMaster(cityList);
                 db.close();
                 ret = 1;
             }
@@ -313,6 +318,7 @@ public class ParseJSON {
 
     public int parseCustomerMaster(){
         int ret = 0;
+        List<CustomerDetailClass> CustomerDetailList = new ArrayList<>();
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
@@ -338,8 +344,9 @@ public class ParseJSON {
                     custClass.setIsRegistered(jsonArray.getJSONObject(i).getString("isRegistered"));
                     custClass.setAadharNo(jsonArray.getJSONObject(i).getString("AadharNo"));
                     custClass.setPIN(jsonArray.getJSONObject(i).getString("PIN"));
-                    db.addCustomerMaster(custClass);
+                    CustomerDetailList.add(custClass);
                 }
+                db.addCustomerMaster(CustomerDetailList);
                 db.close();
                 ret = 1;
             }

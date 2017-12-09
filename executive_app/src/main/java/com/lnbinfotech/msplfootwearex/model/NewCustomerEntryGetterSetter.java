@@ -1,7 +1,16 @@
 package com.lnbinfotech.msplfootwearex.model;// Created by anup on 9/26/2017.
 
 public class NewCustomerEntryGetterSetter {
-    private String id_addressproof,id_idproof,id_gstpan_proof,gstpan_img,Cust_name,mobile_no,email_id,address,cus_image,address_proof,address_proof_image, id_proof,id_proof_image, gst_no,gst_no_image, pan_no,pan_no_image,status;
+    private String cust_id,id_addressproof,id_idproof,id_gstpan_proof,gstpan_img,Cust_name,mobile_no,email_id,address,cus_image,address_proof,address_proof_image, id_proof,id_proof_image, gst_no,gst_no_image, pan_no,pan_no_image,status,
+    custId , BranchId , District, Taluka, CityId , AreaId , HOCode,IMEINo,isReg,pin;
+
+    public String getCust_id() {
+        return cust_id;
+    }
+
+    public void setCust_id(String cust_id) {
+        this.cust_id = cust_id;
+    }
 
     public String getId_addressproof() {
         return id_addressproof;
@@ -145,5 +154,85 @@ public class NewCustomerEntryGetterSetter {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getCustId() {
+        return custId;
+    }
+
+    public void setCustId(String custId) {
+        this.custId = custId;
+    }
+
+    public String getBranchId() {
+        return BranchId;
+    }
+
+    public void setBranchId(String branchId) {
+        BranchId = branchId;
+    }
+
+    public String getDistrict() {
+        return District;
+    }
+
+    public void setDistrict(String district) {
+        District = district;
+    }
+
+    public String getTaluka() {
+        return Taluka;
+    }
+
+    public void setTaluka(String taluka) {
+        Taluka = taluka;
+    }
+
+    public String getCityId() {
+        return CityId;
+    }
+
+    public void setCityId(String cityId) {
+        CityId = cityId;
+    }
+
+    public String getAreaId() {
+        return AreaId;
+    }
+
+    public void setAreaId(String areaId) {
+        AreaId = areaId;
+    }
+
+    public String getHOCode() {
+        return HOCode;
+    }
+
+    public void setHOCode(String HOCode) {
+        this.HOCode = HOCode;
+    }
+
+    public String getIMEINo() {
+        return IMEINo;
+    }
+
+    public void setIMEINo(String IMEINo) {
+        this.IMEINo = IMEINo;
+    }
+
+    public String getIsReg() {
+        return isReg;
+    }
+
+    public void setIsReg(String isReg) {
+        this.isReg = isReg;
+    }
+
+    public String getPin() {
+        return pin;
+    }
+
+    public void setPin(String pin) {
+        this.pin = pin;
     }
 }
