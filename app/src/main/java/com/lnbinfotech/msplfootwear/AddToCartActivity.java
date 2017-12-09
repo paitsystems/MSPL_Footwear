@@ -5,11 +5,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,6 +31,7 @@ import android.widget.Toast;
 import com.lnbinfotech.msplfootwear.adapters.CustomerOrderUnpackGridAdpater;
 import com.lnbinfotech.msplfootwear.adapters.SizeGroupWiseColourAdapter;
 import com.lnbinfotech.msplfootwear.adapters.SizeGroupWiseQtyAdapter;
+import com.lnbinfotech.msplfootwear.adapters.ViewAddedToCardItemAdapter;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.interfaces.RecyclerViewToActivityInterface;
@@ -70,6 +73,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     private int selQtyLocal = 0, compPackQty = 0;
     public static int selProdId = 0, selQty = -1, activityToFrom = 0;
     public static CustomerOrderClass updateCustOrder;
+    private Menu mMenu;
+    private TextView actionbar_noti_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +140,9 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onResume() {
         super.onResume();
+        if(mMenu!=null){
+            onCreateOptionsMenu(mMenu);
+        }
         totalCalculations();
         if (activityToFrom == 0) {
             rdo_pack.setClickable(true);
@@ -157,6 +165,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             rv_color.setAdapter(null);
             rv_size.setAdapter(null);
             gridView.setAdapter(null);
+            listView.setAdapter(null);
             selProdId = 0;
         } else if (activityToFrom == 1) {
             rdo_pack.setClickable(true);
@@ -260,7 +269,11 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                     if (updateCustOrder.getOrderType().equals("P")) {
                                         InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                         mgr.hideSoftInputFromWindow(tv_add_to_card.getWindowToken(), 0);
-                                        addToCardUpdate();
+                                        if (lay_comp_pack.getVisibility() == View.VISIBLE) {
+                                            showToast("Can Not Update");
+                                        } else {
+                                            addToCardUpdate();
+                                        }
                                     } else if (updateCustOrder.getOrderType().equals("C")) {
                                         String str = auto_set.getText().toString();
                                         if (!str.equals("")) {
@@ -306,13 +319,10 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             case R.id.tv_add_to_card_final:
                 break;
             case R.id.tv_checkout:
-                startActivity(new Intent(this, ViewCustomerOrderActiviy.class));
-                overridePendingTransition(R.anim.enter, R.anim.exit);
+                startViewCustOrderActivity();
                 break;
             case R.id.tv_vieworder:
-                Intent i = new Intent(this, ViewCustomerOrderActiviy.class);
-                startActivity(i);
-                overridePendingTransition(R.anim.enter, R.anim.exit);
+                startViewCustOrderActivity();
                 break;
         }
     }
@@ -325,12 +335,44 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        /*getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
+        return true;*/
+        mMenu = menu;
+        getMenuInflater().inflate(R.menu.addtocard_menu, menu);
+        menu.clear();
+
+        getMenuInflater().inflate(R.menu.addtocard_menu, menu);
+
+        final MenuItem item = menu.findItem(R.id.cart);
+        MenuItemCompat.setActionView(item, R.layout.actionbaar_badge_layout);
+        View view = MenuItemCompat.getActionView(item);
+        actionbar_noti_tv = (TextView)view.findViewById(R.id.actionbar_noti_tv);
+        actionbar_noti_tv.setText("12");
+
+        int count = new DBHandler(getApplicationContext()).getCartCount();
+        Constant.showLog("cart_count:"+count);
+        actionbar_noti_tv.setText(String.valueOf(count));
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onOptionsItemSelected(item);
+            }
+        });
+        return true;
+
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 //showDia(0);
-                selProd = null;
                 new Constant(AddToCartActivity.this).doFinish();
+                break;
+            case R.id.cart:
+                startViewCustOrderActivity();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -347,6 +389,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void setData() {
+        setProductWiseOrderList(selProdId);
         Cursor res = db.getProductDetails(getPackUnPack());
         if (res.moveToFirst()) {
             do {
@@ -423,6 +466,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void setUnpackData() {
+        setProductWiseOrderList(selProdId);
         unpackSizeList.clear();
         unClickablePositionsList.clear();
         allSizeChangeList.clear();
@@ -675,6 +719,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 if (isDataInserted == 1) {
                     showToast("Added-To-Card");
                     clearFiledsUnPack();
+                    setProductWiseOrderList(selProdId);
                 } else {
                     showToast("Please Enter Qty");
                 }
@@ -810,6 +855,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             }
             showToast("Added-To-Card");
             clearFiledsPack();
+            setProductWiseOrderList(selProdId);
         } else {
             showToast("Please Refresh GSTMaster");
         }
@@ -944,6 +990,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             lay_comp_pack.setVisibility(View.GONE);
             clearFiledsPack();
             showToast("Added-To-Card");
+            setProductWiseOrderList(selProdId);
         } else {
             showToast("Please Update GST Master");
         }
@@ -987,6 +1034,9 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         tv_totamnt.setText(totalAmnt);
         tv_totnetamt.setText(totalNetAmnt);
 
+        if(actionbar_noti_tv!=null) {
+            actionbar_noti_tv.setText(totalSet);
+        }
     }
 
     private void setAdapter() {
@@ -1015,6 +1065,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             gridView.setVisibility(View.VISIBLE);
         }
         selProdId = updateCustOrder.getProductid();
+        setProductWiseOrderList(selProdId);
         String prodName = "";
 
         Cursor res = db.getProductDetails(getPackUnPack());
@@ -1158,6 +1209,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 break;
             }
         }
+        selQtyLocal = Integer.parseInt(auto_set.getText().toString());
         auto_set.setSelection(auto_set.getText().length());
     }
 
@@ -1718,13 +1770,63 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         setUnpackData();
     }
 
-    private void setProductWiseOrderList(){
+    private void setProductWiseOrderList(int prodId){
         listView.setAdapter(null);
+        HashMap<String,List<String>> orderMap = new HashMap<>();
+        List<String> sizeGroupList = new ArrayList<>();
+        Cursor res = db.getProductWiseOrderList(prodId);
+        if(res.moveToFirst()){
+            do{
+                if(orderMap.isEmpty()){
+                    List<String> list = new ArrayList<>();
+                    String str =  res.getString(res.getColumnIndex(DBHandler.CO_SizeGroup))+"-"+
+                                res.getString(res.getColumnIndex(DBHandler.CO_Color))+"-"+
+                                res.getString(res.getColumnIndex(DBHandler.CO_HashCode))+"-"+
+                                res.getString(res.getColumnIndex(DBHandler.CO_Qty))+"-"+
+                            res.getString(res.getColumnIndex(DBHandler.CO_LooseQty))+"-"+
+                            res.getString(res.getColumnIndex(DBHandler.CO_OrderType));
+                    list.add(str);
+                    orderMap.put(res.getString(res.getColumnIndex(DBHandler.CO_SizeGroup)),list);
+                    sizeGroupList.add(res.getString(res.getColumnIndex(DBHandler.CO_SizeGroup)));
+                }else if(orderMap.containsKey(res.getString(res.getColumnIndex(DBHandler.CO_SizeGroup)))){
+                    List<String> list = orderMap.get(res.getString(res.getColumnIndex(DBHandler.CO_SizeGroup)));
+                    String str =  res.getString(res.getColumnIndex(DBHandler.CO_SizeGroup))+"-"+
+                            res.getString(res.getColumnIndex(DBHandler.CO_Color))+"-"+
+                            res.getString(res.getColumnIndex(DBHandler.CO_HashCode))+"-"+
+                            res.getString(res.getColumnIndex(DBHandler.CO_Qty))+"-"+
+                            res.getString(res.getColumnIndex(DBHandler.CO_LooseQty))+"-"+
+                            res.getString(res.getColumnIndex(DBHandler.CO_OrderType));
+                    list.add(str);
+                    orderMap.put(res.getString(res.getColumnIndex(DBHandler.CO_SizeGroup)),list);
+                }else{
+                    List<String> list = new ArrayList<>();
+                    String str = res.getString(res.getColumnIndex(DBHandler.CO_SizeGroup))+"-"+
+                            res.getString(res.getColumnIndex(DBHandler.CO_Color))+"-"+
+                            res.getString(res.getColumnIndex(DBHandler.CO_HashCode))+"-"+
+                            res.getString(res.getColumnIndex(DBHandler.CO_Qty))+"-"+
+                            res.getString(res.getColumnIndex(DBHandler.CO_LooseQty))+"-"+
+                            res.getString(res.getColumnIndex(DBHandler.CO_OrderType));
+                    list.add(str);
+                    orderMap.put(res.getString(res.getColumnIndex(DBHandler.CO_SizeGroup)),list);
+                    sizeGroupList.add(res.getString(res.getColumnIndex(DBHandler.CO_SizeGroup)));
+                }
+            }while (res.moveToNext());
+        }
+        res.close();
+        ViewAddedToCardItemAdapter adapter = new ViewAddedToCardItemAdapter(orderMap,getApplicationContext(),sizeGroupList);
+        listView.setAdapter(adapter);
     }
 
     private void showToast(String msg){
         toast.setText(msg);
         toast.show();
+    }
+
+    private void startViewCustOrderActivity(){
+        Intent intent = new Intent(getApplicationContext(), ViewCustomerOrderActiviy.class);
+        intent.putExtra("from","addtocard");
+        startActivity(intent);
+        overridePendingTransition(R.anim.enter,R.anim.exit);
     }
 
     private void init() {
@@ -1827,8 +1929,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                     activityToFrom = 0;
                     selProdId = 0;
                     dialog.dismiss();
-                    startActivity(new Intent(getApplicationContext(),ViewCustomerOrderActiviy.class));
-                    overridePendingTransition(R.anim.enter,R.anim.exit);
+                    startViewCustOrderActivity();
                 }
             });
         }else if(a==11){
@@ -1839,8 +1940,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                     activityToFrom = 0;
                     selProdId = 0;
                     dialog.dismiss();
-                    startActivity(new Intent(getApplicationContext(),ViewCustomerOrderActiviy.class));
-                    overridePendingTransition(R.anim.enter,R.anim.exit);
+                    startViewCustOrderActivity();
                 }
             });
         }

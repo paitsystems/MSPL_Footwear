@@ -6,7 +6,7 @@ public class SizeNDesignClass {
 
     private String Cat1,Cat2,Cat3,Cat4,Cat5,Cat6,Final_prod,
                     Uom,Vat,DesignNo,Colour,SizeGroup,typ,ActualInw,GSTGroup,
-                    InOutType, HashCode;
+                    InOutType, HashCode, ImageName;
     private int Productid,SizeFrom,SizeTo, total;
 
 
@@ -176,5 +176,13 @@ public class SizeNDesignClass {
 
     public void setHashCode(String hashCode) {
         HashCode = hashCode;
+    }
+
+    public String getImageName() {
+        return ImageName;
+    }
+
+    public void setImageName(String imageName) {
+        ImageName = imageName;
     }
 }

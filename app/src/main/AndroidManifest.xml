@@ -39,17 +39,14 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".services.ImageUplaodBroadcastReceiver">
+        <receiver android:name=".services.ImageUplaodBroadcastReceiver">
             <intent-filter>
                 <action android:name="test" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
         <receiver android:name=".braodcasts.ReadSms">
-            <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-            </intent-filter>
+
         </receiver>
 
         <activity
@@ -74,38 +71,38 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ImagewiseSetwiseOrderActivity"
-            android:theme="@style/AppThemeGiveOrder"
             android:screenOrientation="portrait"
+            android:theme="@style/AppThemeGiveOrder"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".CutsizeSetwiseOrderActivity"
-            android:theme="@style/AppThemeGiveOrder"
             android:screenOrientation="portrait"
+            android:theme="@style/AppThemeGiveOrder"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".TrackOrderMasterActivity"
-            android:theme="@style/AppThemeTrackOrder"
             android:screenOrientation="portrait"
+            android:theme="@style/AppThemeTrackOrder"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".CustomerAccountActivity"
-            android:theme="@style/AppThemeAccount"
             android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAccount"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".FeedbackActivity"
-            android:theme="@style/AppThemeFeedback"
             android:screenOrientation="portrait"
+            android:theme="@style/AppThemeFeedback"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ProfileViewActivity"
-            android:theme="@style/AppThemeProfile"
             android:screenOrientation="portrait"
+            android:theme="@style/AppThemeProfile"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ProfileDataUpdateActivity"
-            android:theme="@style/AppThemeProfile"
             android:screenOrientation="portrait"
+            android:theme="@style/AppThemeProfile"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".DataRefreshActivity"
@@ -114,27 +111,27 @@
         <activity
             android:name=".TrackOrderDetailActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:theme="@style/AppThemeTrackOrder"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".AddToCartActivity"
-            android:theme="@style/AppThemeAddToCard"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:theme="@style/AppThemeAddToCard"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ProductSearchActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ViewCustomerOrderActiviy"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeAddToCard"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".CheckoutCustOrderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeAddToCard"
-            android:windowSoftInputMode="stateHidden"/>
-
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>

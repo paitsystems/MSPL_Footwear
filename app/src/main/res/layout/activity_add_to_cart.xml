@@ -367,7 +367,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/listView"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
 
 
@@ -436,7 +436,8 @@
             android:layout_weight="0.5"
             android:background="@drawable/btn_draw_maroon_curve"
             android:gravity="center"
-            android:text="Checkout" />
+            android:text="Checkout"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_vieworder"
@@ -447,7 +448,8 @@
             android:layout_weight="0.5"
             android:background="@drawable/btn_draw_maroon_curve"
             android:gravity="center"
-            android:text="View Order" />
+            android:text="View Order"
+            android:visibility="gone" />
 
     </LinearLayout>
 

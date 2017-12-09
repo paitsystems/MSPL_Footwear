@@ -37,14 +37,13 @@ public class CHawaiNEvaCategoryFragment extends Fragment{
         db = new DBHandler(getContext());
         setData();
 
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 GentsCategoryClass getClass = (GentsCategoryClass) adapter.getItem(i);
                 Constant.showLog(getClass.getCategoryName());
                 Intent intent = new Intent(getContext(), AddToCartActivity.class);
-                intent.putExtra("cat9","Hawai&Eva");
+                intent.putExtra("cat9","Hawai & Eva");
                 intent.putExtra("cat2",getClass.getCategoryName());
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.enter,R.anim.exit);
@@ -56,7 +55,7 @@ public class CHawaiNEvaCategoryFragment extends Fragment{
 
     private void setData(){
         List<GentsCategoryClass> list = new ArrayList<>();
-        Cursor res = db.getSubCategory("Hawai&Eva");
+        Cursor res = db.getSubCategory("Hawai & Eva");
         if(res.moveToFirst()){
             do {
                 GentsCategoryClass gentsClass = new GentsCategoryClass();

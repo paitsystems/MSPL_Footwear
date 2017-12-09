@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwear.adapters.CutsizewiseViewPagerAdapter;
 import com.lnbinfotech.msplfootwear.constant.Constant;
+import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.fragments.CGentsCategoryFragment;
 import com.lnbinfotech.msplfootwear.fragments.CHawaiNEvaCategoryFragment;
 import com.lnbinfotech.msplfootwear.fragments.CLadiesNBoysCategoryFragment;
@@ -42,6 +43,11 @@ public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements Vi
         setViewPager();
         tabLayout.setupWithViewPager(pager);
         createTabIcons();
+
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+        int custId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
+        OptionsActivity.custDisc = new DBHandler(getApplicationContext()).getCustDiscount(custId);
+
     }
 
     @Override

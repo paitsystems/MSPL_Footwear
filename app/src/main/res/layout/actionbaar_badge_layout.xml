@@ -18,8 +18,8 @@
     <TextView
         style="@style/textViewMob"
         android:id="@+id/actionbar_noti_tv"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_gravity="right|end|top"
         android:layout_marginEnd="-5dp"
         android:layout_marginRight="-5dp"
@@ -28,8 +28,7 @@
         android:gravity="center"
         android:padding="1dp"
         android:textColor="@android:color/white"
-        android:text="123"
-        android:textSize="10sp"/>
+        android:text="123" />
 
 </FrameLayout>
 

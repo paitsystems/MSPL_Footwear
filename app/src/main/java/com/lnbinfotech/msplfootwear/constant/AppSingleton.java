@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.LruCache;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
@@ -53,6 +54,8 @@ public class AppSingleton {
     }
 
     public <T> void addToRequestQueue(Request<T> request, String tag){
+        request.setShouldCache(false);
+        request.setRetryPolicy(new DefaultRetryPolicy(60000,0,0));
         request.setTag(tag);
         getRequestQueue().add(request);
     }

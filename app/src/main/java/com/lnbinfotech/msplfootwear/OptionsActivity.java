@@ -2,7 +2,6 @@ package com.lnbinfotech.msplfootwear;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -12,7 +11,6 @@ import android.support.v7.widget.CardView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.lnbinfotech.msplfootwear.constant.Constant;
@@ -24,6 +22,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
 
     private CardView card_give_order, card_account, card_track_order, card_profile, card_scheme, card_whats_new, card_feedback;
     public static float custDisc = 0;
+    private Menu mMenu;
     private TextView actionbar_noti_tv;
     private DBHandler db;
 
@@ -49,10 +48,22 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if(mMenu!=null){
+            onCreateOptionsMenu(mMenu);
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.card_give_order:
-                showDia(1);
+                //showDia(1);
+                //int custId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
+                //custDisc = new DBHandler(getApplicationContext()).getCustDiscount(custId);
+                startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_account:
                 startActivity(new Intent(getApplicationContext(), CustomerAccountActivity.class));
@@ -84,16 +95,23 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        /*getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
+        return true;*/
+        mMenu = menu;
         menu.clear();
        // mMenu = menu;
+        getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
+        menu.clear();
+
         getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
 
         final MenuItem item = menu.findItem(R.id.cart);
         MenuItemCompat.setActionView(item, R.layout.actionbaar_badge_layout);
         View view = MenuItemCompat.getActionView(item);
-        actionbar_noti_tv = (TextView)view.findViewById(R.id.actionbar_noti_tv);
-        //actionbar_noti_tv.setText("12");
-        int count = db.getCartCount();
+        TextView actionbar_noti_tv = (TextView)view.findViewById(R.id.actionbar_noti_tv);
+        actionbar_noti_tv.setText("12");
+
+        int count = new DBHandler(getApplicationContext()).getCartCount();
         Constant.showLog("cart_count:"+count);
         actionbar_noti_tv.setText(String.valueOf(count));
 
@@ -120,7 +138,9 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 showDia(6);
                 break;
             case R.id.cart:
-                startActivity(new Intent(getApplicationContext(), ViewCustomerOrderActiviy.class));
+                Intent intent = new Intent(getApplicationContext(), ViewCustomerOrderActiviy.class);
+                intent.putExtra("from","option");
+                startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
         }

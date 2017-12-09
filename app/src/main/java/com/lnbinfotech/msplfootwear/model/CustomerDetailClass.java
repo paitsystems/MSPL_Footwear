@@ -6,10 +6,10 @@ import java.io.Serializable;
 
 public class CustomerDetailClass implements Serializable{
 
-    public String name,address,mobile,PANno,GSTNo,ImagePath, email,status,district,taluka,
-            IMEINo,isRegistered,AadharNo,PIN;
-    public int custID,branchId,cityId,areaId, HOCode;
-    public float discount;
+    private  String name,address,mobile,PANno,GSTNo,ImagePath, email,status,district,taluka,
+            IMEINo,isRegistered,AadharNo,PIN, partyName;
+    private int custID,branchId,cityId,areaId, HOCode;
+    private float discount;
 
     public String getName() {
         return name;
@@ -170,5 +170,13 @@ public class CustomerDetailClass implements Serializable{
 
     public void setDiscount(float discount) {
         this.discount = discount;
+    }
+
+    public String getPartyName() {
+        return partyName;
+    }
+
+    public void setPartyName(String partyName) {
+        this.partyName = partyName;
     }
 }

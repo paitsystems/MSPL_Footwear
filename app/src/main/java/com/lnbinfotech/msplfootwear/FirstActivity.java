@@ -35,8 +35,6 @@ public class FirstActivity extends AppCompatActivity {
     private String dbpath;
     private Constant constant;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +79,6 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void doThis(){
-
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             dbpath = pInfo.applicationInfo.dataDir+"/databases";

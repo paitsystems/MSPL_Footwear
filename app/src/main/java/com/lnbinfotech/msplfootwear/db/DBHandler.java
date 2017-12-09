@@ -34,7 +34,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
     //TODO: Change Version
-    public static final int Database_Version = 21;
+    public static final int Database_Version = 1;
 
     //retailCustID,name,address,mobile,status,branchId,email,District,Taluka,cityId,areaId,
     // Panno,ImagePath,HoCode,GSTNo,IMEINo,isRegistered,AadharNo,PIN
@@ -51,6 +51,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String CM_CityId = "CityId";
     public static final String CM_AreaId = "AreaId";
     public static final String CM_PANNo = "PANNo";
+    public static final String CM_PartyName = "PartyName";
     public static final String CM_ImagePath = "ImagePath";
     public static final String CM_HOCode = "HOCode";
     public static final String CM_GSTNo = "GSTNo";
@@ -196,6 +197,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String UM_CityId = "CityId";
     public static final String UM_AreaId = "AreaId";
     public static final String UM_PANNo = "PANNo";
+    public static final String UM_PartyName = "PartyName";
     public static final String UM_ImagePath = "ImagePath";
     public static final String UM_HOCode = "HOCode";
     public static final String UM_GSTNo = "GSTNo";
@@ -226,6 +228,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String ARSD_InOutType = "InOutType";
     public static final String ARSD_Total = "Total";
     public static final String ARSD_HashCode = "HashCode";
+    public static final String ARSD_ImageName = "ImageName";
 
     public static final String Table_CustomerOrder = "CustomerOrder";
     public static final String CO_Auto = "Auto";
@@ -281,7 +284,7 @@ public class DBHandler extends SQLiteOpenHelper {
     String create_cust_master = "create table if not exists " + Table_Customermaster + "(" +
             CM_RetailCustID + " int," + CM_Name + " text," + CM_Address + " text," + CM_MobileNo + " text," + CM_Status + " text," +
             CM_BranchId + " int," + CM_Email + " text," + CM_District + " text," + CM_Taluka + " text," + CM_CityId + " int," +
-            CM_AreaId + " int," + CM_PANNo + " text," + CM_ImagePath + " text," + CM_HOCode + " int," + CM_GSTNo + " text," + CM_IMEINo + " text," +
+            CM_AreaId + " int," + CM_PANNo + " text," + CM_PartyName + " text," + CM_ImagePath + " text," + CM_HOCode + " int," + CM_GSTNo + " text," + CM_IMEINo + " text," +
             CM_isRegistered + " text," + CM_AadhaarNo + " text," + CM_PIN + " int,"+CM_Discount+" float)";
 
     String create_prod_master = "create table if not exists " + Table_ProductMaster + "(" +
@@ -323,7 +326,7 @@ public class DBHandler extends SQLiteOpenHelper {
     String create_user_master = "create table if not exists " + Table_Usermaster + "(" +
             UM_RetailCustID + " int," + UM_Name + " text," + UM_Address + " text," + UM_MobileNo + " text," + UM_Status + " text," +
             UM_BranchId + " int," + UM_Email + " text," + UM_District + " text," + UM_Taluka + " text," + UM_CityId + " int," +
-            UM_AreaId + " int," + UM_PANNo + " text," + UM_ImagePath + " text," + UM_HOCode + " int," + UM_GSTNo + " text," + UM_IMEINo + " text," +
+            UM_AreaId + " int," + UM_PANNo + " text," + UM_PartyName + " text,"+ UM_ImagePath + " text," + UM_HOCode + " int," + UM_GSTNo + " text," + UM_IMEINo + " text," +
             UM_isRegistered + " text," + UM_AadhaarNo + " text," + UM_PIN + " int)";
 
     String create_arsd_master = "create table if not exists " + Table_AllRequiredSizesDesigns + "(" +
@@ -331,7 +334,8 @@ public class DBHandler extends SQLiteOpenHelper {
             ARSD_Cat4 + " text," +ARSD_Cat5 + " text," +ARSD_Cat6 + " text," +ARSD_Final_prod + " text," +
             ARSD_Uom + " text," +ARSD_Vat + " text," +ARSD_DesignNo + " text," +ARSD_Colour + " text," +
             ARSD_SizeGroup + " text," +ARSD_typ + " text," +ARSD_SizeFrom + " int," +ARSD_SizeTo + " int," +
-            ARSD_ActualInw + " text," +ARSD_GSTGroup + " text,"+ARSD_InOutType+" text,"+ ARSD_Total+" int,"+ ARSD_HashCode+" text)";
+            ARSD_ActualInw + " text," +ARSD_GSTGroup + " text,"+ARSD_InOutType+" text,"+ ARSD_Total+" int,"+
+            ARSD_HashCode+" text,"+ARSD_ImageName+" text)";
 
     String create_custorder_table = "create table if not exists "+Table_CustomerOrder+"("+CO_Auto+" int,"+
             CO_BranchId+" int,"+CO_Productid+" int,"+CO_SizeGroup+" text,"+CO_RequiredSize+" text,"+
@@ -382,8 +386,8 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if(oldVersion<newVersion){
-            db.execSQL("drop table "+Table_CustomerOrder);
-            db.execSQL(create_custorder_table);
+            db.execSQL("drop table "+Table_AllRequiredSizesDesigns);
+            db.execSQL(create_arsd_master);
         }
     }
 
@@ -397,8 +401,10 @@ public class DBHandler extends SQLiteOpenHelper {
             cv.put(CM_Name, cust.getName());
             cv.put(CM_Address, cust.getAddress());
             cv.put(CM_MobileNo, cust.getMobile());
+            cv.put(CM_Status, cust.getStatus());
             cv.put(CM_Email, cust.getEmail());
             cv.put(CM_PANNo, cust.getPANno());
+            cv.put(CM_PartyName, cust.getPartyName());
             cv.put(CM_GSTNo, cust.getGSTNo());
             cv.put(CM_ImagePath, cust.getImagePath());
             cv.put(CM_PIN, "-1");
@@ -508,6 +514,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(ARSD_InOutType,sizeNDesignClass.getInOutType());
         cv.put(ARSD_Total,sizeNDesignClass.getTotal());
         cv.put(ARSD_HashCode,sizeNDesignClass.getHashCode());
+        cv.put(ARSD_ImageName,sizeNDesignClass.getImageName());
         getWritableDatabase().insert(Table_AllRequiredSizesDesigns, null, cv);
     }
 
@@ -537,6 +544,7 @@ public class DBHandler extends SQLiteOpenHelper {
             cv.put(ARSD_InOutType, sizeNDesignClass.getInOutType());
             cv.put(ARSD_Total, sizeNDesignClass.getTotal());
             cv.put(ARSD_HashCode,sizeNDesignClass.getHashCode());
+            cv.put(ARSD_ImageName,sizeNDesignClass.getImageName());
             db.insert(Table_AllRequiredSizesDesigns, null, cv);
         }
         db.setTransactionSuccessful();
@@ -660,6 +668,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(UM_MobileNo, user.getMobile());
         cv.put(UM_Email, user.getEmail());
         cv.put(UM_PANNo, user.getPANno());
+        cv.put(UM_PartyName, user.getPartyName());
         cv.put(UM_GSTNo, user.getGSTNo());
         cv.put(UM_ImagePath, user.getImagePath());
         cv.put(UM_Status,user.getStatus());
@@ -724,6 +733,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 userClass.setMobile(res.getString(res.getColumnIndex(UM_MobileNo)));
                 userClass.setEmail(res.getString(res.getColumnIndex(UM_Email)));
                 userClass.setPANno(res.getString(res.getColumnIndex(UM_PANNo)));
+                userClass.setPartyName(res.getString(res.getColumnIndex(UM_PartyName)));
                 userClass.setGSTNo(res.getString(res.getColumnIndex(UM_GSTNo)));
                 userClass.setImagePath(res.getString(res.getColumnIndex(UM_ImagePath)));
                 userClass.setStatus(res.getString(res.getColumnIndex(UM_Status)));
@@ -1077,7 +1087,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public Cursor getDataToCheck(){
-        String str = "select "+CO_BranchId+","+CO_Productid+","+CO_SizeGroup+","+CO_Color+","+CO_HashCode+","+CO_Rate+","+CO_LooseQty+" from "+Table_CustomerOrder +" order by "+CO_Productid+","+CO_SizeGroup;
+        String str = "select "+CO_BranchId+","+CO_Productid+","+CO_SizeGroup+","+CO_Color+","+CO_HashCode+","+CO_MRP+","+CO_LooseQty+" from "+Table_CustomerOrder +" order by "+CO_Productid+","+CO_SizeGroup;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str,null);
     }
@@ -1088,8 +1098,9 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         for(CheckoutCustOrderClass custOrder : custOrderList){
             cv.put(CO_AvailQty,custOrder.getAvailableQty());
-            db.update(Table_CustomerOrder,cv,CO_BranchId+"=? and "+CO_Productid+"=? and "+CO_SizeGroup+"=? and "+CO_Color+"=? and "+CO_Rate+"=? and "+CO_LooseQty+"=?",
-                        new String[]{custOrder.getBranchId(),custOrder.getProductId(),custOrder.getSizeGroup(),custOrder.getColor(),custOrder.getRate(),custOrder.getEnterQty()});
+            db.update(Table_CustomerOrder,cv,
+                    CO_BranchId+"=? and "+CO_Productid+"=? and "+CO_SizeGroup+"=? and "+CO_Color+"=? and "+CO_MRP+"=? and "+CO_LooseQty+"=?",
+                   new String[]{custOrder.getBranchId(),custOrder.getProductId(),custOrder.getSizeGroup(),custOrder.getColor(),custOrder.getRate(),custOrder.getEnterQty()});
         }
         db.setTransactionSuccessful();
         db.endTransaction();
@@ -1114,6 +1125,19 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str,null);
     }
 
+    public Cursor getProductWiseOrderList(int prodId){
+        /*String str = "select "+CO_Productid+","+CO_SizeGroup+","+CO_Color+","+CO_HashCode+","+CO_Qty
+                    +","+CO_LooseQty+","+CO_OrderType+" from "+Table_CustomerOrder+" where "
+                    +CO_Productid+"="+AddToCartActivity.selProdId+" order by "+CO_SizeGroup;*/
+
+        String str = "select "+CO_Productid+","+CO_SizeGroup+","+CO_Color+","+CO_HashCode+",sum("+CO_Qty
+                +")"+CO_Qty+",sum("+CO_LooseQty+")"+CO_LooseQty+","+CO_OrderType+" from "+Table_CustomerOrder+" where "
+                +CO_Productid+"="+prodId+" group by "+CO_SizeGroup+","+CO_Color+" order by "+CO_SizeGroup;
+
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
     public int getCartCount(){
         int a = 0;
         String str = "select count("+CO_Auto+") from "+Table_CustomerOrder;
@@ -1122,6 +1146,7 @@ public class DBHandler extends SQLiteOpenHelper {
         if (res.moveToFirst()) {
             a = res.getInt(0);
         }
+        res.close();
         return a;
     }
 

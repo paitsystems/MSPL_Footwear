@@ -73,7 +73,7 @@
     <string name="proceed">Proceed</string>
     <string name="search_item">Search Item</string>
     <string name="search">Search</string>
-    <string name="refresh">Refresh</string>
+    <string name="refresh">Refresh Data</string>
     <string name="table_no">Table No</string>
     <string name="tablename">TableName</string>
     <string name="waiter">Waiter</string>
@@ -151,7 +151,7 @@
     <string name="cgst_share">CGST Share</string>
     <string name="sgst_share">SGST Share</string>
     <string name="cess_per">Cess Per</string>
-    <string name="report_error">Report Error</string>
+    <string name="report_error">Report Issue</string>
     <string name="customer_name">Customer Name</string>
     <string name="mobile_no">Mobile Number</string>
     <string name="email_id">Email Id</string>

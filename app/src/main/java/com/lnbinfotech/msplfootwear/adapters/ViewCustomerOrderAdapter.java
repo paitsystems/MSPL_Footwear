@@ -53,7 +53,7 @@ public class ViewCustomerOrderAdapter extends BaseAdapter {
 
         if (convertview == null) {
             holder = new ViewHolder();
-            convertview = inflater.inflate(R.layout.view_order_list_item, viewGroup, false);
+            convertview = inflater.inflate(R.layout.list_item_view_order, viewGroup, false);
             holder.tv_prod_id = (TextView) convertview.findViewById(R.id.tv_prod_id);
             holder.tv_size_group = (TextView) convertview.findViewById(R.id.tv_size_group);
             holder.tv_color = (TextView) convertview.findViewById(R.id.tv_color);

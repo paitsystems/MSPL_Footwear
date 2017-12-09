@@ -66,6 +66,7 @@ public class ParseJSON {
                     userClass.setEmail(jsonArray.getJSONObject(i).getString("email"));
                     userClass.setBranchId(jsonArray.getJSONObject(i).getInt("branchId"));
                     userClass.setPANno(jsonArray.getJSONObject(i).getString("Panno"));
+                    userClass.setPartyName(jsonArray.getJSONObject(i).getString("PartyName"));
                     userClass.setGSTNo(jsonArray.getJSONObject(i).getString("GSTNo"));
                     userClass.setImagePath(jsonArray.getJSONObject(i).getString("ImagePath"));
                     userClass.setStatus(jsonArray.getJSONObject(i).getString("Status"));
@@ -109,6 +110,7 @@ public class ParseJSON {
                     custClass.setMobile(jsonArray.getJSONObject(i).getString("mobile"));
                     custClass.setEmail(jsonArray.getJSONObject(i).getString("email"));
                     custClass.setPANno(jsonArray.getJSONObject(i).getString("Panno"));
+                    custClass.setPartyName(jsonArray.getJSONObject(i).getString("PartyName"));
                     custClass.setGSTNo(jsonArray.getJSONObject(i).getString("GSTNo"));
                     custClass.setImagePath(jsonArray.getJSONObject(i).getString("ImagePath"));
                     custClass.setDiscount(Float.parseFloat(jsonArray.getJSONObject(i).getString("Discount")));

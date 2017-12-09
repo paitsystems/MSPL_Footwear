@@ -16,7 +16,7 @@ public class AutoUpdateBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if(ConnectivityTest.getNetStat(context)){
-            context.startService(new Intent(context, CheckNewTicketService.class));
+            //context.startService(new Intent(context, CheckNewTicketService.class));
             Constant.showLog("Broadcast Receiver");
             writeLog(context,"AutoUpdateBroadcastReceiver_onReceive_Broadcast_Received");
         }

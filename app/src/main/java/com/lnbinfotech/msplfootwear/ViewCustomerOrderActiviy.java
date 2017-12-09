@@ -5,8 +5,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,7 +35,7 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
     private TextView tv_totset, tv_totqty, tv_totamnt, tv_tot_gstamt, tv_tot_grossamt, tv_disc_per, tv_discamnt;
     private ListView lv_vOrder;
     private Button btn_proceed;
-
+    private String from;
     private DBHandler db;
     private List<CustomerOrderClass> list;
 
@@ -42,8 +44,13 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_customer_order);
 
+        from = getIntent().getExtras().getString("from");
+
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            assert from != null;
+            if(from.equals("addtocard")){
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
             getSupportActionBar().setTitle("Your Order");
         }
 
@@ -56,10 +63,12 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         lv_vOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                list.get(i);
-                Constant.showLog("selected pos:"+i);
-                AddToCartActivity.updateCustOrder = list.get(i);
-                showDia(1);
+                if(from.equals("addtocard")) {
+                    list.get(i);
+                    Constant.showLog("selected pos:" + i);
+                    AddToCartActivity.updateCustOrder = list.get(i);
+                    showDia(1);
+                }
             }
         });
     }
@@ -69,7 +78,9 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         switch (view.getId()) {
             case R.id.btn_proceed:
                 finish();
-                startActivity(new Intent(this, CheckoutCustOrderActivity.class));
+                Intent intent = new Intent(this, CheckoutCustOrderActivity.class);
+                intent.putExtra("from",from);
+                startActivity(intent);
                 overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
         }
@@ -82,11 +93,22 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(!from.equals("addtocard")) {
+            getMenuInflater().inflate(R.menu.vieworderactivity_menu, menu);
+        }
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 //showDia(0);
                 new Constant(ViewCustomerOrderActiviy.this).doFinish();
+                break;
+            case R.id.add:
+                showDia(2);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -201,12 +223,29 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
                 }
             });
         }else if (a == 1) {
-            builder.setMessage("Do You Want To Update Order");
+            builder.setMessage("Do You Want To Update Order?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     AddToCartActivity.activityToFrom = 2;
                     new Constant(ViewCustomerOrderActiviy.this).doFinish();
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 2) {
+            builder.setMessage("Do You Want To Add Order?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
+                    overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
                     dialog.dismiss();
                 }
             });

@@ -56,7 +56,7 @@ public class CustomerDetailListAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         UserClass userClass = (UserClass) getItem(i);
-        holder.tv_custname.setText(userClass.getName());
+        holder.tv_custname.setText(userClass.getPartyName());
         holder.tv_custaddress.setText(userClass.getAddress());
         holder.tv_custmobile.setText(userClass.getMobile());
         holder.tv_custemail.setText(userClass.getEmail());

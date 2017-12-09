@@ -50,6 +50,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
     private DBHandler db;
     private List<String> urlList;
     private int counter = 0;
+    private String from;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +59,12 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
 
         init();
 
+        from = getIntent().getExtras().getString("from");
+
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if(from.equals("addtocard")) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
         }
 
         checkStock();
@@ -69,10 +74,12 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
         lv_check.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                list.get(i);
-                Constant.showLog("selected pos:"+i);
-                AddToCartActivity.updateCustOrder = list.get(i);
-                showDia(1);
+                if(from.equals("addtocard")) {
+                    list.get(i);
+                    Constant.showLog("selected pos:" + i);
+                    AddToCartActivity.updateCustOrder = list.get(i);
+                    showDia(1);
+                }
             }
         });
 
@@ -133,7 +140,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                 String size = res.getString(res.getColumnIndex(DBHandler.CO_SizeGroup));
                 String color = res.getString(res.getColumnIndex(DBHandler.CO_Color));
                 String hashcode = res.getString(res.getColumnIndex(DBHandler.CO_HashCode));
-                String rate = res.getString(res.getColumnIndex(DBHandler.CO_Rate));
+                String rate = res.getString(res.getColumnIndex(DBHandler.CO_MRP));
                 String looseqty = res.getString(res.getColumnIndex(DBHandler.CO_LooseQty));
                 String str = branchId+"^"+prodId+"^"+size+"^"+color+"^"+hashcode+"^"+rate+"^"+looseqty+",";
                 data = data + str;
@@ -341,10 +348,14 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                     //urlList.add(url);
                     constant.showPD();
                     new saveOrderAsyncTask(branchId).execute(url);
-
+                }else{
+                    toast.setText("Something Went Wrong");
+                    toast.show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                toast.setText("Something Went Wrong");
+                toast.show();
             }
             //}
             //counter = 0;
@@ -408,7 +419,6 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                 }
                 //counter++;
                 //saveCustOrder();
-
             }catch (Exception e){
                 e.printStackTrace();
                 showDia(4);

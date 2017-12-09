@@ -290,7 +290,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     }
 
     private void setData() {
-        tv_custname.setText(userClass.getName());
+        tv_custname.setText(userClass.getPartyName());
         tv_custaddress.setText(userClass.getAddress());
         tv_custmobile.setText(userClass.getMobile());
         tv_custemail.setText(userClass.getEmail());
