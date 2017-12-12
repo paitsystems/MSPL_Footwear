@@ -18,9 +18,9 @@ import java.util.Locale;
 
 public class ProductSearchAdapter extends BaseAdapter {
 
-    List<ProductMasterClass> prodList;
-    List<ProductMasterClass> _prodList;
-    Context context;
+    private List<ProductMasterClass> prodList;
+    private List<ProductMasterClass> _prodList;
+    private Context context;
 
     public ProductSearchAdapter(List<ProductMasterClass> __prodList, Context _context) {
         this.prodList = __prodList;

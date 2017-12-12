@@ -92,7 +92,7 @@ public class ProfileViewActivity extends AppCompatActivity implements View.OnCli
         Cursor cursor = db.getProfileData(FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0));
         if (cursor.moveToFirst()) {
             do {
-                ed_cusname.setText(cursor.getString(cursor.getColumnIndex(DBHandler.UM_Name)));
+                ed_cusname.setText(cursor.getString(cursor.getColumnIndex(DBHandler.UM_PartyName)));
                 ed_emailid.setText(cursor.getString(cursor.getColumnIndex(DBHandler.UM_Email)));
                 ed_mobno.setText(cursor.getString(cursor.getColumnIndex(DBHandler.UM_MobileNo)));
                 ed_cgst.setText(cursor.getString(cursor.getColumnIndex(DBHandler.UM_GSTNo)));

@@ -33,6 +33,7 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
     private DBHandler db;
     private EditText ed_cus_name;
     private DisplayCustListAdapter adapter;
+    public static int custId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("DisplayCustList");
+            getSupportActionBar().setTitle("Take Order");
         }
 
         ed_cus_name.addTextChangedListener(new TextWatcher() {
@@ -70,21 +71,16 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
         lv_cus.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
-
-                // String select_item = cus_list.get(position);
                 String select_item = (String) parent.getItemAtPosition(position);
                 Constant.showLog("selctedCustomerName: " + select_item);
                 writeLog("setOnItemClickListener():list item selected:" + select_item);
-                //finish();
-                int cust_id = db.getCustNameId(select_item);
-                Constant.showLog("cust_id: " + cust_id);
+                custId = db.getCustNameId(select_item);
+                Constant.showLog("cust_id: " + custId);
                 startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 finish();
             }
         });
-
-
     }
 
     @Override
@@ -125,12 +121,10 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
     }
 
     public void setCusList() {
-
         Cursor cur = db.getCustName();
         if (cur.moveToFirst()) {
             do {
                 cus_list.add(cur.getString(cur.getColumnIndex(DBHandler.CM_Name)));
-                Constant.showLog("cuslist:" + cus_list.size());
             } while (cur.moveToNext());
         }
         cur.close();

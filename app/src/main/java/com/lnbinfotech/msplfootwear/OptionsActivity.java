@@ -95,21 +95,14 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        /*getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
-        return true;*/
         mMenu = menu;
         menu.clear();
-       // mMenu = menu;
         getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
-        menu.clear();
-
-        getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
-
         final MenuItem item = menu.findItem(R.id.cart);
         MenuItemCompat.setActionView(item, R.layout.actionbaar_badge_layout);
         View view = MenuItemCompat.getActionView(item);
         TextView actionbar_noti_tv = (TextView)view.findViewById(R.id.actionbar_noti_tv);
-        //actionbar_noti_tv.setText("12");
+        actionbar_noti_tv.setText("0");
 
         int count = new DBHandler(getApplicationContext()).getCartCount();
         Constant.showLog("cart_count:"+count);

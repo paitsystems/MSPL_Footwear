@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
+
     <!--TODO: Check App Name-->
+
     <string name="app_name">MSPL FootwearEx</string>
     <string name="title_activity_login">MSPL FootwearEx</string>
-
     <string name="error_invalid_password">This field is required</string>
     <string name="error_field_required">This field is required</string>
     <string name="footer">© Copyright 2017 LNB Infotech Pvt.Ltd. All Rights Reserved.</string>
@@ -18,10 +19,8 @@
     <string name="pref_expiryDate">expiryDate</string>
     <string name="pref_username">username</string>
     <string name="pref_password">password</string>
-    <string name="pref_clientID">clientID</string>
     <string name="pref_emptype">emptype</string>
     <string name="pref_ticketTotal">tickettotal</string>
-
     <string name="pref_auto">auto</string>
     <string name="pref_ClientName">ClientName</string>
     <string name="pref_mobno">mobno</string>
@@ -33,7 +32,6 @@
     <string name="pref_retailCustId">retailCustId</string>
     <string name="pref_branchid">branchid</string>
     <string name="pref_cityid">cityid</string>
-
     <string name="pref_IMEI">IMEI</string>
     <string name="pref_logged">logged</string>
     <string name="pref_isRegistered">isRegistered</string>
@@ -42,13 +40,10 @@
     <string name="company_details">Company Details</string>
     <string name="company_name">Company</string>
     <string name="address">Address</string>
-
     <string name="enterdate">Enter Date</string>
     <string name="enterno">Enter Cheque Number</string>
     <string name="enteramt">Enter Amount</string>
     <string name="enteragainstref">Enter Against Ref</string>
-
-
     <string name="contact_no">Contact No</string>
     <string name="expiry_date">Expiry Date</string>
     <string name="enter_your_credentials">Enter Your Credentials</string>
@@ -83,7 +78,7 @@
     <string name="proceed">Proceed</string>
     <string name="search_item">Search Item</string>
     <string name="search">Search</string>
-    <string name="refresh">Refresh</string>
+    <string name="refresh">Refresh Data</string>
     <string name="table_no">Table No</string>
     <string name="tablename">TableName</string>
     <string name="waiter">Waiter</string>
@@ -170,8 +165,6 @@
     <string name="pannoimage">Attach PAN No Image</string>
     <string name="_gstnoimage">GST No Image</string>
     <string name="_pannoimage">PAN No Image</string>
-
-
     <string name="date">Date</string>
     <string name="number">Number</string>
     <string name="amt">Amount</string>
@@ -199,9 +192,10 @@
     <string name="cgst_share">CGST Share</string>
     <string name="sgst_share">SGST Share</string>
     <string name="cess_per">Cess Per</string>
-    <string name="report_error">Report Error</string>
+    <string name="report_error">Report Issue</string>
     <string name="customer_name">Customer Name</string>
     <string name="mobile_no">Mobile Number</string>
+    <string name="areaid">areaid</string>
     <string name="email_id">Email Id</string>
     <string name="_cc">cc</string>
     <string name="_save">Save</string>
@@ -210,7 +204,6 @@
     <string name="article_no">Article No:</string>
     <string name="invoice_no">Invoice No:</string>
     <string name="_qty">Qty:</string>
-
     <string name="you_are_offline">You Are Offline</string>
     <string name="invalid_mob_no">Invalid Mobile Number</string>
     <string name="invalid_otp">Invalid OTP</string>
@@ -228,13 +221,12 @@
     <string name="pleasecontactyouradministrator">Please Contact Your Administrator</string>
     <string name="registrationdonesuccessfully">Registration Done Successfully</string>
     <string name="pref_savedpin">savedPIN</string>
-
     <string name="pleaseenterpin">Please Enter PIN</string>
     <string name="pleasereenterpin">Please ReEnter PIN</string>
     <string name="alreadyregistered">You Are Already Registered On Another Device</string>
     <string name="title_activity_main">MainActivity</string>
-
     <!--sneha string name-->
+
     <string name="newcustomerentry">New Customer Entry</string>
     <string name="custimage">Attach Customer Image</string>
     <string name="addressproof">Attach Address Proof</string>
@@ -247,8 +239,8 @@
     <string name="description">Description</string>
     <string name="entertexthere">Enter text here</string>
     <string name="feedbacktype">Feedback Type</string>
+    <!---sneha changes26oct17- - - - - - - - - - - -->
 
-    <!---sneha changes26oct17- - - - - - - - - - -  -->
     <string name="bills">Bills</string>
     <string name="gstreport">GST Report</string>
     <string name="ledgerstatement">Ledger Statement</string>
@@ -257,12 +249,31 @@
     <string name="orderno">Order No</string>
     <string name="orderamt">Order Amount</string>
     <string name="orderqty">Order Qty</string>
+    <!---sneha changes30oct17- - - - - - - - - - - -->
 
-    <!---sneha changes30oct17- - - - - - - - - - -  -->
     <string name="takeorder">Take Order</string>
     <string name="visit">Visit</string>
     <string name="payment">Payment</string>
     <string name="visitoption">Visit Option</string>
     <string name="cart">Cart</string>
 
+    <string name="prod">Prod Id</string>
+    <string name="sizeg">Size Group</string>
+    <string name="color">Color</string>
+    <string name="looseq">Loose Qty</string>
+    <string name="wsp">WSP</string>
+    <string name="mr">MRP</string>
+    <string name="gst">GST %</string>
+    <string name="cgst">GSTIN</string>
+    <string name="totalno">TSet</string>
+    <string name="totalqty">TQty</string>
+    <string name="netamt">NetAmt</string>
+    <string name="grossamt">Gross Amt</string>
+    <string name="discper">Disc%</string>
+    <string name="discamt">Disc Amt</string>
+    <string name="gstamt">GST Amt</string>
+    <string name="availableqty">AvailQty</string>
+    <string name="totlqty">TotQty</string>
+    <string name="orderstatus">Order Status:</string>
+    <string name="pref_hocode">hocode</string>
 </resources>

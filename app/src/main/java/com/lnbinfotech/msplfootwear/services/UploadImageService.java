@@ -65,9 +65,5 @@ public class UploadImageService extends IntentService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
-
-
 }

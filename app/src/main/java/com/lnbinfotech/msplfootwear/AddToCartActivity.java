@@ -314,7 +314,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 showDia(2);
                 break;
             case R.id.tv_check_stock:
-                db.deleteTable(DBHandler.Table_CustomerOrder);
+                //db.deleteTable(DBHandler.Table_CustomerOrder);
                 break;
             case R.id.tv_add_to_card_final:
                 break;

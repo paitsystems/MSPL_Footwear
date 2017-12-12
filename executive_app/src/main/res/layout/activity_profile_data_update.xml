@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_margin="5sp"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/imgv_mobno"
+                            android:layout_weight="0.90"
+                            android:src="@drawable/mob_p" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textView1"
+                            android:layout_gravity="center"
+                            android:text="@string/mobile_no"
+                            style="@style/textViewMob"
+                            android:layout_weight="0.10" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5sp"
+                        android:layout_gravity="center">
+
+                        <EditText
+
+                            style="@style/textViewMob"
+                            android:inputType="number"
+                            android:maxLength="10"
+                            android:singleLine="true"
+                            android:maxLines="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:id="@+id/ed_mobno" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/imgv_email"
+                            android:layout_weight="0.90"
+                            android:src="@drawable/mail_p"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textView2"
+                            android:layout_gravity="center"
+                            android:text="@string/email_id"
+                            style="@style/textViewMob"
+                            android:layout_weight="0.10" />
+                    </LinearLayout>
+
+
+                    <!--<android.support.v7.widget.AppCompatButton
+                        app:backgroundTint="@color/white"
+                        android:drawableLeft="@drawable/email_draw"
+                        style="@style/textViewMob"
+                        android:layout_width="117dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/email_id"
+                        android:textColor="@color/black"
+                        android:id="@+id/bt_email"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="0.02" />-->
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="5sp">
+
+                        <EditText
+
+                            style="@style/textViewMob"
+                            android:inputType="textEmailAddress"
+                            android:singleLine="true"
+                            android:maxLines="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:id="@+id/ed_emailid" />
+                    </LinearLayout>
+
+                    <TextView
+                        style="@style/textViewMob"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_cc"
+                        android:textColor="@color/black"
+                        android:padding="10sp"
+                        android:id="@+id/bt_cc"
+                        android:layout_weight="0.02" />
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:padding="5sp">
+
+                        <EditText
+
+                            style="@style/textViewMob"
+                            android:singleLine="true"
+                            android:maxLines="1"
+                            android:inputType="textEmailAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:id="@+id/ed_cc" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5sp"
+        android:gravity="center">
+
+        <android.support.v7.widget.AppCompatButton
+            android:gravity="center"
+            app:backgroundTint="@color/red"
+            style="@style/textViewMob"
+            android:layout_width="112dp"
+            android:layout_height="wrap_content"
+            android:text="@string/update"
+            android:textColor="@color/white"
+            android:id="@+id/bt_update" />
+    </LinearLayout>
+
+
+</LinearLayout>

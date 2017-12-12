@@ -481,6 +481,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    AddToCartActivity.activityToFrom = 0;
                     new Constant(CheckoutCustOrderActivity.this).doFinish();
                     dialog.dismiss();
                 }

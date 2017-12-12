@@ -86,8 +86,16 @@ public class VolleyRequests {
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
                         ArrayList<UserClass> list = new ParseJSON(response, context).parseUserDetail();
-                        Constant.showLog(list.size() + "");
-                        callback.onSuccess(response);
+                        if(list!=null){
+                            if(list.size()!=0){
+                                Constant.showLog(list.size() + "");
+                                callback.onSuccess(response);
+                            }else{
+                                callback.onFailure("Error");
+                            }
+                        }else{
+                            callback.onFailure("Error");
+                        }
                     }
                 },
                 new Response.ErrorListener() {

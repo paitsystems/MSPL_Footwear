@@ -36,9 +36,12 @@ public class TrackOrderActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_order);
+
         init();
+
         loadOrderDetails();
     }
+
     private void init(){
         //order_list = new ArrayList<>();
         constant = new Constant(TrackOrderActivity.this);
@@ -46,7 +49,6 @@ public class TrackOrderActivity extends AppCompatActivity implements View.OnClic
         toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER,0,0);
         listView = (ListView) findViewById(R.id.listView);
-
     }
 
     @Override
@@ -70,13 +72,13 @@ public class TrackOrderActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void loadOrderDetails(){
+/*
         String url = Constant.ipaddress+"/GetTrackOrderDetail?custId="+FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
         Constant.showLog(url);
         writeLog("loadOrderDetails_"+url);
         constant.showPD();
         VolleyRequests requests = new VolleyRequests(TrackOrderActivity.this);
         requests.loadTrackOrederDetail(url, new ServerCallbackList() {
-
             @Override
             public void onSuccess(Object result) {
                 constant.showPD();
@@ -96,6 +98,7 @@ public class TrackOrderActivity extends AppCompatActivity implements View.OnClic
                 showPopup(2);
             }
         });
+*/
     }
 
     private void showPopup(int id){

@@ -5,9 +5,10 @@ import java.io.Serializable;
 //Created by SNEHA on 10/16/2017.
 
 public class UserClass implements Serializable {
-    public String name,address,mobile,PANno,GSTNo,ImagePath, email,status,district,taluka,
-            IMEINo,isRegistered,AadharNo,PIN;
-    public int custID,branchId,cityId,areaId, HOCode;
+
+    private String name,address,mobile,PANno,GSTNo,ImagePath, email,status,district,taluka,
+            IMEINo,isRegistered,AadharNo,PIN, partyName;
+    private int custID,branchId,cityId,areaId, HOCode;
 
     public String getName() {
         return name;
@@ -159,5 +160,13 @@ public class UserClass implements Serializable {
 
     public void setHOCode(int HOCode) {
         this.HOCode = HOCode;
+    }
+
+    public String getPartyName() {
+        return partyName;
+    }
+
+    public void setPartyName(String partyName) {
+        this.partyName = partyName;
     }
 }

@@ -17,67 +17,69 @@
             android:layout_gravity="center"
             android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/mobpadding5"
-            android:layout_weight="0.5">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/mobpadding5"
-            android:id="@+id/imgv_img1"
-            android:src="@drawable/madhur160" />
-
-            <ImageView
-                android:padding="@dimen/mobpadding5"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/imgv_img2"
-                android:src="@drawable/paragonlogo160" />
+                android:layout_weight="0.5"
+                android:orientation="vertical"
+                android:padding="@dimen/mobpadding5">
+
+                <ImageView
+                    android:id="@+id/imgv_img1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/mobpadding5"
+                    android:src="@drawable/madhur160"
+                    android:adjustViewBounds="false"/>
+
+                <ImageView
+                    android:id="@+id/imgv_img2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/mobpadding5"
+                    android:src="@drawable/paragonlogo160"
+                    android:adjustViewBounds="false"/>
             </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_weight="0.5">
-
-
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:counterEnabled="true"
-                app:counterMaxLength="10">
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/ed_mobno"
+
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:hint="Enter Your Registered Mobile Number"
-                    android:inputType="number"
-                    android:maxLength="10" />
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="10">
 
-            </android.support.design.widget.TextInputLayout>
+                    <EditText
+                        android:id="@+id/ed_mobno"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:hint="Enter Your Registered Mobile Number"
+                        android:inputType="number"
+                        android:maxLength="10" />
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_otp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Get OTP"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                app:backgroundTint="@color/maroon" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_otp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Get OTP"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/maroon" />
 
 
-
-        </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -50,9 +50,6 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".braodcasts.ReadSms">
-            <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-            </intent-filter>
         </receiver>
 
         <activity
@@ -154,19 +151,31 @@
         <activity
             android:name=".AddToCartActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAddToCard"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ProductSearchActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-
+        <activity
+            android:name=".ViewCustomerOrderActiviy"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAddToCard"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".CheckoutCustOrderActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAddToCard"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".DisplayCustListAreawiseActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAddToCard"
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".DisplayCustListActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAddToCard"
             android:windowSoftInputMode="stateHidden" />
     </application>
 

@@ -50,7 +50,9 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.card_take_order:
-                showDia(1);
+                //showDia(1);
+                startActivity(new Intent(getApplicationContext(),DisplayCustListAreawiseActivity.class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_payment:
                 startActivity(new Intent(getApplicationContext(),VisitPaymentFormActivity.class));

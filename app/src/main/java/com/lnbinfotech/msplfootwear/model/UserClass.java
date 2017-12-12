@@ -5,6 +5,7 @@ import java.io.Serializable;
 //Created by SNEHA on 10/16/2017.
 
 public class UserClass implements Serializable {
+
     private String name,address,mobile,PANno,GSTNo,ImagePath, email,status,district,taluka,
             IMEINo,isRegistered,AadharNo,PIN, partyName;
     private int custID,branchId,cityId,areaId, HOCode;

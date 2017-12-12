@@ -18,6 +18,7 @@ import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
+import com.lnbinfotech.msplfootwearex.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
 import com.lnbinfotech.msplfootwearex.model.TrackOrderClass;
@@ -57,9 +58,9 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("getOTPCode_VolleyError_"+error.getMessage());
                         Constant.showLog(error.getMessage());
-                        writeLog("getOTPCode_"+error.getMessage());
+                        writeLog("getOTPCode_" + error.getMessage());
                     }
                 }
         );
@@ -76,8 +77,16 @@ public class VolleyRequests {
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
                         ArrayList<UserClass> list = new ParseJSON(response, context).parseUserDetail();
-                        Constant.showLog(list.size()+"");
-                        callback.onSuccess(response);
+                        if(list!=null){
+                            if(list.size()!=0){
+                                Constant.showLog(list.size() + "");
+                                callback.onSuccess(response);
+                            }else{
+                                callback.onFailure("Error");
+                            }
+                        }else{
+                            callback.onFailure("Error");
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -85,7 +94,7 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("Error");
                         Constant.showLog(error.getMessage());
-                        writeLog("getCustomerDetail_"+error.getMessage());
+                        writeLog("getCustomerDetail_" + error.getMessage());
                     }
                 }
         );
@@ -102,7 +111,7 @@ public class VolleyRequests {
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
                         ArrayList<CustomerDetailClass> list = new ParseJSON(response, context).parseCustDetail();
-                        Constant.showLog(list.size()+"");
+                        Constant.showLog(list.size() + "");
                         callback.onSuccess(response);
                     }
                 },
@@ -111,7 +120,7 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("Error");
                         Constant.showLog(error.getMessage());
-                        writeLog("getCustomerDetail_"+error.getMessage());
+                        writeLog("getCustomerDetail_" + error.getMessage());
                     }
                 }
         );
@@ -645,7 +654,36 @@ public class VolleyRequests {
 
     }
 
-    public void loadTrackOrederDetail(String url, final ServerCallbackList callback){
+    public void refreshGSTMaster(String url, final ServerCallback callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\", "");
+                        response = response.replace("''", "");
+                        response = response.substring(1, response.length() - 1);
+                        int ret = new ParseJSON(response, context).parseGSTMaster();
+                        if (ret == 1) {
+                            callback.onSuccess(response);
+                        } else {
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("refreshGSTMaster_VolleyError_"+error.getMessage());
+                        Constant.showLog(error.getMessage());
+                        writeLog("refreshBankMaster_" + error.getMessage());
+                    }
+                }
+        );
+        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
+    }
+
+    /*public void loadTrackOrederDetail(String url, final ServerCallbackList callback){
         StringRequest request = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -667,6 +705,34 @@ public class VolleyRequests {
                         callback.onFailure("Error");
                         Constant.showLog(error.getMessage());
                         writeLog("loadTrackOrederDetail_" + error.getMessage());
+                    }
+                });
+        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
+    }*/
+
+    public void loadCheckoutOrder(String url, final ServerCallbackList callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        //response = response.replace("\\", "");
+                        //response = response.replace("\"", "");
+                        //response = response.substring(1, response.length() - 1);
+                        List<CheckoutCustOrderClass> list = new ParseJSON(response, context). parseloadCheckoutOrder();
+                        if (list.size() != 0) {
+                            callback.onSuccess(list);
+                        } else {
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("Error");
+                        Constant.showLog(error.getMessage());
+                        writeLog("loadCheckoutOrder_" + error.getMessage());
                     }
                 });
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");

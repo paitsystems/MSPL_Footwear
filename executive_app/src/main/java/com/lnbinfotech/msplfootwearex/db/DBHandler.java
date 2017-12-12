@@ -6,20 +6,26 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.lnbinfotech.msplfootwearex.AddToCartActivity;
 import com.lnbinfotech.msplfootwearex.OptionsActivity;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.model.AreaMasterClass;
 import com.lnbinfotech.msplfootwearex.model.BankBranchMasterClass;
 import com.lnbinfotech.msplfootwearex.model.BankMasterClass;
+import com.lnbinfotech.msplfootwearex.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwearex.model.CityMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CompanyMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
+import com.lnbinfotech.msplfootwearex.model.CustomerOrderClass;
 import com.lnbinfotech.msplfootwearex.model.DocumentMasterClass;
 import com.lnbinfotech.msplfootwearex.model.EmployeeMasterClass;
+import com.lnbinfotech.msplfootwearex.model.GSTMasterClass;
 import com.lnbinfotech.msplfootwearex.model.HOMasterClass;
 import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
+import com.lnbinfotech.msplfootwearex.model.SizeNDesignClass;
 import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
 import com.lnbinfotech.msplfootwearex.model.UserClass;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +36,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
     //TODO: Change Version
-    public static final int Database_Version = 8;
+    public static final int Database_Version = 1;
 
     public static final String Table_Customermaster = "CustomerMaster";
     public static final String CM_RetailCustID = "CustID";
@@ -45,6 +51,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String CM_CityId = "CityId";
     public static final String CM_AreaId = "AreaId";
     public static final String CM_PANNo = "PANNo";
+    public static final String CM_PartyName = "PartyName";
     public static final String CM_ImagePath = "ImagePath";
     public static final String CM_HOCode = "HOCode";
     public static final String CM_GSTNo = "GSTNo";
@@ -52,6 +59,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String CM_isRegistered = "isRegistered";
     public static final String CM_AadhaarNo = "AadhaarNo";
     public static final String CM_PIN = "PIN";
+    public static final String CM_Discount = "Discount";
 
     public static final String Table_ProductMaster = "ProductMaster";
     public static final String PM_ProductID = "Product_id";
@@ -78,6 +86,10 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String PM_GSTGroup = "GSTGroup";
     public static final String PM_HSNCode = "HSNCode";
     public static final String PM_Cat9 = "Cat9";
+    public static final String PM_Cat10 = "Cat10";
+    public static final String PM_HKHO = "HKHO";
+    public static final String PM_HKRD = "HKRD";
+    public static final String PM_HANR = "HANR";
 
     public static final String Table_StockInfo = "StockInfo";
     public static final String SI_Company = "Company";
@@ -175,6 +187,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String UM_CityId = "CityId";
     public static final String UM_AreaId = "AreaId";
     public static final String UM_PANNo = "PANNo";
+    public static final String UM_PartyName = "PartyName";
     public static final String UM_ImagePath = "ImagePath";
     public static final String UM_HOCode = "HOCode";
     public static final String UM_GSTNo = "GSTNo";
@@ -183,6 +196,74 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String UM_AadhaarNo = "AadhaarNo";
     public static final String UM_PIN = "PIN";
 
+    public static final String Table_AllRequiredSizesDesigns = "AllRequiredSizesdesigns";
+    public static final String ARSD_Productid = "Productid";
+    public static final String ARSD_Cat1 = "Cat1";
+    public static final String ARSD_Cat2 = "Cat2";
+    public static final String ARSD_Cat3 = "Cat3";
+    public static final String ARSD_Cat4 = "Cat4";
+    public static final String ARSD_Cat5 = "Cat5";
+    public static final String ARSD_Cat6 = "Cat6";
+    public static final String ARSD_Final_prod = "Final_prod";
+    public static final String ARSD_Uom = "Uom";
+    public static final String ARSD_Vat = "Vat";
+    public static final String ARSD_DesignNo = "DesignNo";
+    public static final String ARSD_Colour = "Colour";
+    public static final String ARSD_SizeGroup = "SizeGroup";
+    public static final String ARSD_typ = "typ";
+    public static final String ARSD_SizeFrom = "SizeFrom";
+    public static final String ARSD_SizeTo = "SizeTo";
+    public static final String ARSD_ActualInw = "ActualInw";
+    public static final String ARSD_GSTGroup = "GSTGroup";
+    public static final String ARSD_InOutType = "InOutType";
+    public static final String ARSD_Total = "Total";
+    public static final String ARSD_HashCode = "HashCode";
+    public static final String ARSD_ImageName = "ImageName";
+
+    public static final String Table_CustomerOrder = "CustomerOrder";
+    public static final String CO_Auto = "Auto";
+    public static final String CO_BranchId = "BranchId";
+    public static final String CO_Productid = "Productid";
+    public static final String CO_SizeGroup = "SizeGroup";
+    public static final String CO_RequiredSize = "RequiredSize";
+    public static final String CO_PerPackQty = "PerPackQty";
+    public static final String CO_Color = "Color";
+    public static final String CO_HashCode = "HashCode";
+    public static final String CO_Rate = "Rate";
+    public static final String CO_MRP = "MRP";
+    public static final String CO_Qty = "Qty";
+    public static final String CO_LooseQty = "LooseQty";
+    public static final String CO_ActLooseQty = "ActLooseQty";
+    public static final String CO_Amount = "Amount";
+    public static final String CO_LoosePackTyp = "LoosePackTyp";
+    public static final String CO_TotalAmt = "TotalAmt";
+    public static final String CO_PendingLooseQty = "PendingLooseQty";
+    public static final String CO_NetAmt = "NetAmt";
+    public static final String CO_AmtAfterDisc = "AmtAfterDisc";
+    public static final String CO_GSTPer = "GSTPer";
+    public static final String CO_GSTAmt = "GSTAmnt";
+    public static final String CO_CGSTAmt = "CGSTAmt";
+    public static final String CO_SGSTAmt = "SGSTAmt";
+    public static final String CO_IGSTAmt = "IGSTAmt";
+    public static final String CO_CGSTPer = "CGSTPer";
+    public static final String CO_SGSTPer = "SGSTPer";
+    public static final String CO_CESSPer = "CESSPer";
+    public static final String CO_CESSAmt = "CESSAmt";
+    public static final String CO_DiscPer = "DiscPer";
+    public static final String CO_DiscAmt = "DiscAmt";
+    public static final String CO_OrderType = "OrderType";
+    public static final String CO_AvailQty = "AvailQty";
+
+    public static final String Table_GSTMASTER = "GSTMASTER";
+    public static final String GST_Auto = "Auto";
+    public static final String GST_GroupNm = "GroupNm";
+    public static final String GST_Status = "Status";
+    public static final String GST_GSTPer = "GSTPer";
+    public static final String GST_CGSTPer = "CGSTPer";
+    public static final String GST_SGSTPer = "SGSTPer";
+    public static final String GST_CESSPer = "CESSPer";
+    public static final String GST_CGSTSHARE = "CGSTSHARE";
+    public static final String GST_SGSTSHARE = "SGSTSHARE";
 
     public DBHandler(Context context) {
         super(context, Database_Name, null, Database_Version);
@@ -191,14 +272,14 @@ public class DBHandler extends SQLiteOpenHelper {
     String create_cust_master = "create table if not exists " + Table_Customermaster + "(" +
             CM_RetailCustID + " int," + CM_Name + " text," + CM_Address + " text," + CM_MobileNo + " text," + CM_Status + " text," +
             CM_BranchId + " int," + CM_Email + " text," + CM_District + " text," + CM_Taluka + " text," + CM_CityId + " int," +
-            CM_AreaId + " int," + CM_PANNo + " text," + CM_ImagePath + " text," + CM_HOCode + " int," + CM_GSTNo + " text," + CM_IMEINo + " text," +
-            CM_isRegistered + " text," + CM_AadhaarNo + " text," + CM_PIN + " int)";
+            CM_AreaId + " int," + CM_PANNo + " text," + CM_PartyName + " text," + CM_ImagePath + " text," + CM_HOCode + " int," + CM_GSTNo + " text," + CM_IMEINo + " text," +
+            CM_isRegistered + " text," + CM_AadhaarNo + " text," + CM_PIN + " int," + CM_Discount + " float)";
 
     String create_prod_master = "create table if not exists " + Table_ProductMaster + "(" +
             PM_ProductID + " int," + PM_Cat1 + " text," + PM_Cat2 + " text," + PM_Cat3 + " text," + PM_Cat4 + " text," + PM_Cat5 + " text," + PM_Cat6 + " text," +
             PM_Finalprod + " text," + PM_UOM + " text," + PM_SRate + " text," + PM_PRate + " text," + PM_BranchId + " int," + PM_Status + " text," + PM_NoOfPieces + " int," +
             PM_CompanyId + " int," + PM_MRPRate + " text," + PM_ProdId + " text," + PM_Cat7 + " text," + PM_Cat8 + " text," + PM_MinStkQty + " int," +
-            PM_MaxStkQty + " int," + PM_GSTGroup + " text," + PM_HSNCode + " text," + PM_Cat9 + " text)";
+            PM_MaxStkQty + " int," + PM_GSTGroup + " text," + PM_HSNCode + " text," + PM_Cat9 + " text," + PM_Cat10 + " text," + PM_HKHO + " int," + PM_HKRD + " int," + PM_HANR + " int)";
 
     String create_si_master = "create table if not exists " + Table_StockInfo + "(" +
             SI_Company + " text," + SI_ProdId + " text," + SI_Color + " text," + SI_Size + " text," + SI_Rate + " text," +
@@ -218,7 +299,7 @@ public class DBHandler extends SQLiteOpenHelper {
     String create_city_master = "create table if not exists " + Table_CityMaster + "(" +
             City_Auto + " int," + City_Id + " int," + City_City + " text," + City_Stateid + " int)";
 
-    String create_compamy_master = "create table if not exists " + Table_CompanyMaster + "(" + Company_Id + " int," + Company_Name + " text,"
+    String create_company_master = "create table if not exists " + Table_CompanyMaster + "(" + Company_Id + " int," + Company_Name + " text,"
             + Company_Initial + " text," + Company_Pan + " text," + Company_DisplayCmp + " text," + Company_GSTNo + " text," + Company_HOCode + " text)";
 
     String create_bank_master = "create table if not exists " + Table_BankMaster + "(" + Bank_Id + " int," + Bank_BranchId + " int," + Bank_Name + " text,"
@@ -233,9 +314,28 @@ public class DBHandler extends SQLiteOpenHelper {
     String create_user_master = "create table if not exists " + Table_Usermaster + "(" +
             UM_RetailCustID + " int," + UM_Name + " text," + UM_Address + " text," + UM_MobileNo + " text," + UM_Status + " text," +
             UM_BranchId + " int," + UM_Email + " text," + UM_District + " text," + UM_Taluka + " text," + UM_CityId + " int," +
-            UM_AreaId + " int," + UM_PANNo + " text," + UM_ImagePath + " text," + UM_HOCode + " int," + UM_GSTNo + " text," + UM_IMEINo + " text," +
+            UM_AreaId + " int," + UM_PANNo + " text," + UM_PartyName + " text," + UM_ImagePath + " text," + UM_HOCode + " int," + UM_GSTNo + " text," + UM_IMEINo + " text," +
             UM_isRegistered + " text," + UM_AadhaarNo + " text," + UM_PIN + " int)";
 
+    String create_arsd_master = "create table if not exists " + Table_AllRequiredSizesDesigns + "(" +
+            ARSD_Productid + " int," + ARSD_Cat1 + " text," + ARSD_Cat2 + " text," + ARSD_Cat3 + " text," +
+            ARSD_Cat4 + " text," + ARSD_Cat5 + " text," + ARSD_Cat6 + " text," + ARSD_Final_prod + " text," +
+            ARSD_Uom + " text," + ARSD_Vat + " text," + ARSD_DesignNo + " text," + ARSD_Colour + " text," +
+            ARSD_SizeGroup + " text," + ARSD_typ + " text," + ARSD_SizeFrom + " int," + ARSD_SizeTo + " int," +
+            ARSD_ActualInw + " text," + ARSD_GSTGroup + " text," + ARSD_InOutType + " text," + ARSD_Total + " int," +
+            ARSD_HashCode + " text," + ARSD_ImageName + " text)";
+
+    String create_custorder_table = "create table if not exists " + Table_CustomerOrder + "(" + CO_Auto + " int," +
+            CO_BranchId + " int," + CO_Productid + " int," + CO_SizeGroup + " text," + CO_RequiredSize + " text," +
+            CO_PerPackQty + " int," + CO_Color + " text," + CO_HashCode + " text," + CO_Rate + " text," + CO_MRP + " text," + CO_Qty + " int," +
+            CO_LooseQty + " int," + CO_ActLooseQty + " int," + CO_Amount + " text," + CO_LoosePackTyp + " text," + CO_PendingLooseQty + " int," + CO_TotalAmt + " text," +
+            CO_NetAmt + " text," + CO_AmtAfterDisc + " text," + CO_GSTPer + " text," + CO_GSTAmt + " text," + CO_CGSTAmt + " text," +
+            CO_SGSTAmt + " text," + CO_IGSTAmt + " text," + CO_CGSTPer + " text," +
+            CO_SGSTPer + " text," + CO_CESSPer + " text," + CO_CESSAmt + " text," + CO_DiscPer + " text," + CO_DiscAmt + " text," + CO_OrderType + " text," + CO_AvailQty + " int)";
+
+    String create_gstmaster_table = "create table if not exists " + Table_GSTMASTER + "(" + GST_Auto + " int," +
+            GST_GroupNm + " text," + GST_Status + " text," + GST_GSTPer + " text," + GST_CGSTPer + " text," +
+            GST_SGSTPer + " text," + GST_CESSPer + " text," + GST_CGSTSHARE + " text," + GST_SGSTSHARE + " text)";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -253,8 +353,8 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(create_area_master);
         Constant.showLog(create_city_master);
         db.execSQL(create_city_master);
-        Constant.showLog(create_compamy_master);
-        db.execSQL(create_compamy_master);
+        Constant.showLog(create_company_master);
+        db.execSQL(create_company_master);
         Constant.showLog(create_bank_master);
         db.execSQL(create_bank_master);
         Constant.showLog(create_bank_branch_master);
@@ -263,43 +363,83 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(create_document_master);
         Constant.showLog(create_user_master);
         db.execSQL(create_user_master);
+        Constant.showLog(create_arsd_master);
+        db.execSQL(create_arsd_master);
+        Constant.showLog(create_custorder_table);
+        db.execSQL(create_custorder_table);
+        Constant.showLog(create_gstmaster_table);
+        db.execSQL(create_gstmaster_table);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < newVersion) {
+            db.execSQL("drop table " + Table_AllRequiredSizesDesigns);
+            db.execSQL(create_arsd_master);
+        }
     }
 
-    public void addCustomerDetail(CustomerDetailClass cust) {
+    public void addCustomerDetail(ArrayList<CustomerDetailClass> custList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
         ContentValues cv = new ContentValues();
-        cv.put(CM_RetailCustID, cust.getCustID());
-        cv.put(CM_Name, cust.getName());
-        cv.put(CM_Address, cust.getAddress());
-        cv.put(CM_MobileNo, cust.getMobile());
-        cv.put(CM_Email, cust.getEmail());
-        cv.put(CM_BranchId,cust.getBranchId());
-        cv.put(CM_PANNo, cust.getPANno());
-        cv.put(CM_GSTNo, cust.getGSTNo());
-        cv.put(CM_ImagePath, cust.getImagePath());
-        cv.put(CM_PIN, "-1");
-        getWritableDatabase().insert(Table_Customermaster, null, cv);
+        int count = 1;
+        for (CustomerDetailClass cust : custList) {
+            cv.put(CM_RetailCustID, cust.getCustID());
+            cv.put(CM_Name, cust.getName());
+            cv.put(CM_Address, cust.getAddress());
+            cv.put(CM_MobileNo, cust.getMobile());
+            cv.put(CM_Status, cust.getStatus());
+            cv.put(CM_Email, cust.getEmail());
+            cv.put(CM_PANNo, cust.getPANno());
+            cv.put(CM_PartyName, cust.getPartyName());
+            cv.put(CM_GSTNo, cust.getGSTNo());
+            cv.put(CM_ImagePath, cust.getImagePath());
+            cv.put(CM_PIN, "-1");
+            cv.put(CM_Discount, cust.getDiscount());
+            cv.put(CM_BranchId,cust.getBranchId());
+            cv.put(CM_District,cust.getDistrict());
+            cv.put(CM_Taluka,cust.getTaluka());
+            cv.put(CM_CityId,cust.getCityId());
+            cv.put(CM_AreaId,cust.getAreaId());
+            cv.put(CM_HOCode,cust.getHOCode());
+            cv.put(CM_AadhaarNo,cust.getAadharNo());
+            db.insert(Table_Customermaster, null, cv);
+            Constant.showLog("" + count++);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
     }
 
-    public void addAreaMaster(AreaMasterClass areaClass) {
+    public void addAreaMaster(List<AreaMasterClass> areaClassList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
         ContentValues cv = new ContentValues();
-        cv.put(Area_Auto, areaClass.getAuto());
-        cv.put(Area_Id, areaClass.getId());
-        cv.put(Area_Area, areaClass.getArea());
-        cv.put(Area_Cityid, areaClass.getCityid());
-        getWritableDatabase().insert(Table_AreaMaster, null, cv);
+        for (AreaMasterClass areaClass : areaClassList) {
+            cv.put(Area_Auto, areaClass.getAuto());
+            cv.put(Area_Id, areaClass.getId());
+            cv.put(Area_Area, areaClass.getArea());
+            cv.put(Area_Cityid, areaClass.getCityid());
+            db.insert(Table_AreaMaster, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
-    public void addCityMaster(CityMasterClass cityClass) {
+    public void addCityMaster(List<CityMasterClass> cityClassList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
         ContentValues cv = new ContentValues();
-        cv.put(City_Auto, cityClass.getAuto());
-        cv.put(City_Id, cityClass.getId());
-        cv.put(City_City, cityClass.getCity());
-        cv.put(City_Stateid, cityClass.getStId());
-        getWritableDatabase().insert(Table_CityMaster, null, cv);
+        for (CityMasterClass cityClass : cityClassList) {
+            cv.put(City_Auto, cityClass.getAuto());
+            cv.put(City_Id, cityClass.getId());
+            cv.put(City_City, cityClass.getCity());
+            cv.put(City_Stateid, cityClass.getStId());
+            db.insert(Table_CityMaster, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
     public void addHOMaster(HOMasterClass hoClass) {
@@ -346,81 +486,120 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().insert(Table_StockInfo, null, cv);
     }
 
-    public void addProductMaster(ProductMasterClass prodClass) {
+    public void addSizeNDesignMaster(SizeNDesignClass sizeNDesignClass) {
         ContentValues cv = new ContentValues();
-        cv.put(PM_ProductID, prodClass.getProduct_id());
-        cv.put(PM_Cat1, prodClass.getCat1());
-        cv.put(PM_Cat2, prodClass.getCat2());
-        cv.put(PM_Cat3, prodClass.getCat3());
-        cv.put(PM_Cat4, prodClass.getCat4());
-        cv.put(PM_Cat5, prodClass.getCat5());
-        cv.put(PM_Cat6, prodClass.getCat6());
-        cv.put(PM_Finalprod, prodClass.getFinal_prod());
-        cv.put(PM_UOM, prodClass.getUom());
-        cv.put(PM_SRate, prodClass.getSrate());
-        cv.put(PM_PRate, prodClass.getPrate());
-        cv.put(PM_BranchId, prodClass.getBranchid());
-        cv.put(PM_Status, prodClass.getStatus());
-        cv.put(PM_NoOfPieces, prodClass.getNoOfPices());
-        cv.put(PM_CompanyId, prodClass.getCompany_Id());
-        cv.put(PM_MRPRate, prodClass.getMRPRate());
-        cv.put(PM_ProdId, prodClass.getProductId());
-        cv.put(PM_Cat7, prodClass.getCat7());
-        cv.put(PM_Cat8, prodClass.getCat8());
-        cv.put(PM_MinStkQty, prodClass.getMinStkQty());
-        cv.put(PM_MaxStkQty, prodClass.getMaxStkQty());
-        cv.put(PM_GSTGroup, prodClass.getGSTGroup());
-        cv.put(PM_HSNCode, prodClass.getHSNCode());
-        cv.put(PM_Cat9, prodClass.getCat9());
-        getWritableDatabase().insert(Table_ProductMaster, null, cv);
+        cv.put(ARSD_Productid, sizeNDesignClass.getProductid());
+        cv.put(ARSD_Cat1, sizeNDesignClass.getCat1());
+        cv.put(ARSD_Cat2, sizeNDesignClass.getCat2());
+        cv.put(ARSD_Cat3, sizeNDesignClass.getCat3());
+        cv.put(ARSD_Cat4, sizeNDesignClass.getCat4());
+        cv.put(ARSD_Cat5, sizeNDesignClass.getCat5());
+        cv.put(ARSD_Cat6, sizeNDesignClass.getCat6());
+        cv.put(ARSD_Final_prod, sizeNDesignClass.getFinal_prod());
+        cv.put(ARSD_Uom, sizeNDesignClass.getUom());
+        cv.put(ARSD_Vat, sizeNDesignClass.getVat());
+        cv.put(ARSD_DesignNo, sizeNDesignClass.getDesignNo());
+        cv.put(ARSD_Colour, sizeNDesignClass.getColour());
+        cv.put(ARSD_SizeGroup, sizeNDesignClass.getSizeGroup());
+        cv.put(ARSD_typ, sizeNDesignClass.getTyp());
+        cv.put(ARSD_SizeFrom, sizeNDesignClass.getSizeFrom());
+        cv.put(ARSD_SizeTo, sizeNDesignClass.getSizeTo());
+        cv.put(ARSD_ActualInw, sizeNDesignClass.getActualInw());
+        cv.put(ARSD_GSTGroup, sizeNDesignClass.getGSTGroup());
+        cv.put(ARSD_InOutType, sizeNDesignClass.getInOutType());
+        cv.put(ARSD_Total, sizeNDesignClass.getTotal());
+        cv.put(ARSD_HashCode, sizeNDesignClass.getHashCode());
+        cv.put(ARSD_ImageName, sizeNDesignClass.getImageName());
+        getWritableDatabase().insert(Table_AllRequiredSizesDesigns, null, cv);
     }
 
-    public void addCustomerMaster(CustomerDetailClass cust) {
+    public void addSizeNDesignMaster(List<SizeNDesignClass> sizeNDesignList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
         ContentValues cv = new ContentValues();
-        cv.put(CM_RetailCustID, cust.getCustID());
-        cv.put(CM_Name, cust.getName());
-        cv.put(CM_Address, cust.getAddress());
-        cv.put(CM_MobileNo, cust.getMobile());
-        cv.put(CM_Status, cust.getStatus());
-        cv.put(CM_BranchId, cust.getBranchId());
-        cv.put(CM_Email, cust.getEmail());
-        cv.put(CM_District, cust.getDistrict());
-        cv.put(CM_Taluka, cust.getTaluka());
-        cv.put(CM_CityId, cust.getCityId());
-        cv.put(CM_AreaId, cust.getAreaId());
-        cv.put(CM_PANNo, cust.getPANno());
-        cv.put(CM_ImagePath, cust.getImagePath());
-        cv.put(CM_HOCode, cust.getHOCode());
-        cv.put(CM_GSTNo, cust.getGSTNo());
-        cv.put(CM_IMEINo, cust.getIMEINo());
-        cv.put(CM_isRegistered, cust.getIsRegistered());
-        cv.put(CM_AadhaarNo, cust.getAadharNo());
-        cv.put(CM_PIN, cust.getPIN());
-        getWritableDatabase().insert(Table_Customermaster, null, cv);
+        for (SizeNDesignClass sizeNDesignClass : sizeNDesignList) {
+            cv.put(ARSD_Productid, sizeNDesignClass.getProductid());
+            cv.put(ARSD_Cat1, sizeNDesignClass.getCat1());
+            cv.put(ARSD_Cat2, sizeNDesignClass.getCat2());
+            cv.put(ARSD_Cat3, sizeNDesignClass.getCat3());
+            cv.put(ARSD_Cat4, sizeNDesignClass.getCat4());
+            cv.put(ARSD_Cat5, sizeNDesignClass.getCat5());
+            cv.put(ARSD_Cat6, sizeNDesignClass.getCat6());
+            cv.put(ARSD_Final_prod, sizeNDesignClass.getFinal_prod());
+            cv.put(ARSD_Uom, sizeNDesignClass.getUom());
+            cv.put(ARSD_Vat, sizeNDesignClass.getVat());
+            cv.put(ARSD_DesignNo, sizeNDesignClass.getDesignNo());
+            cv.put(ARSD_Colour, sizeNDesignClass.getColour());
+            cv.put(ARSD_SizeGroup, sizeNDesignClass.getSizeGroup());
+            cv.put(ARSD_typ, sizeNDesignClass.getTyp());
+            cv.put(ARSD_SizeFrom, sizeNDesignClass.getSizeFrom());
+            cv.put(ARSD_SizeTo, sizeNDesignClass.getSizeTo());
+            cv.put(ARSD_ActualInw, sizeNDesignClass.getActualInw());
+            cv.put(ARSD_GSTGroup, sizeNDesignClass.getGSTGroup());
+            cv.put(ARSD_InOutType, sizeNDesignClass.getInOutType());
+            cv.put(ARSD_Total, sizeNDesignClass.getTotal());
+            cv.put(ARSD_HashCode, sizeNDesignClass.getHashCode());
+            cv.put(ARSD_ImageName, sizeNDesignClass.getImageName());
+            db.insert(Table_AllRequiredSizesDesigns, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
     }
 
-    public void addNewCustomer() {
+    public void addProductMaster(List<ProductMasterClass> prodList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
         ContentValues cv = new ContentValues();
-        cv.put(CM_RetailCustID, OptionsActivity.new_cus.getCust_id());
-        cv.put(CM_Name, OptionsActivity.new_cus.getCust_name());
-        cv.put(CM_Address, OptionsActivity.new_cus.getAddress());
-        cv.put(CM_MobileNo, OptionsActivity.new_cus.getMobile_no());
-        cv.put(CM_Status, OptionsActivity.new_cus.getStatus());
-        cv.put(CM_BranchId, OptionsActivity.new_cus.getBranchId());
-        cv.put(CM_Email, OptionsActivity.new_cus.getEmail_id());
-        cv.put(CM_District, OptionsActivity.new_cus.getDistrict());
-        cv.put(CM_Taluka, OptionsActivity.new_cus.getTaluka());
-        cv.put(CM_CityId, OptionsActivity.new_cus.getCityId());
-        cv.put(CM_AreaId, OptionsActivity.new_cus.getAreaId());
-       // cv.put(CM_PANNo, OptionsActivity.new_cus.getPANno());
-       // cv.put(CM_ImagePath, OptionsActivity.new_cus.getImagePath());
-        cv.put(CM_HOCode, OptionsActivity.new_cus.getHOCode());
-      //  cv.put(CM_GSTNo, OptionsActivity.new_cus.getGSTNo());
-        cv.put(CM_IMEINo, OptionsActivity.new_cus.getIMEINo());
-        cv.put(CM_isRegistered, OptionsActivity.new_cus.getIsReg());
-       // cv.put(CM_AadhaarNo, OptionsActivity.new_cus.getAadharNo());
-        cv.put(CM_PIN, OptionsActivity.new_cus.getPin());
-        getWritableDatabase().insert(Table_Customermaster, null, cv);
+        for (ProductMasterClass prodClass : prodList) {
+            cv.put(PM_ProductID, prodClass.getProduct_id());
+            cv.put(PM_Cat1, prodClass.getCat1());
+            cv.put(PM_Cat2, prodClass.getCat2());
+            cv.put(PM_Cat3, prodClass.getCat3());
+            cv.put(PM_Cat4, prodClass.getCat4());
+            cv.put(PM_Cat5, prodClass.getCat5());
+            cv.put(PM_Cat6, prodClass.getCat6());
+            cv.put(PM_Finalprod, prodClass.getFinal_prod());
+            cv.put(PM_UOM, prodClass.getUom());
+            cv.put(PM_SRate, prodClass.getSrate());
+            cv.put(PM_PRate, prodClass.getPrate());
+            cv.put(PM_BranchId, prodClass.getBranchid());
+            cv.put(PM_Status, prodClass.getStatus());
+            cv.put(PM_NoOfPieces, prodClass.getNoOfPices());
+            cv.put(PM_CompanyId, prodClass.getCompany_Id());
+            cv.put(PM_MRPRate, prodClass.getMRPRate());
+            cv.put(PM_ProdId, prodClass.getProductId());
+            cv.put(PM_Cat7, prodClass.getCat7());
+            cv.put(PM_Cat8, prodClass.getCat8());
+            cv.put(PM_MinStkQty, prodClass.getMinStkQty());
+            cv.put(PM_MaxStkQty, prodClass.getMaxStkQty());
+            cv.put(PM_GSTGroup, prodClass.getGSTGroup());
+            cv.put(PM_HSNCode, prodClass.getHSNCode());
+            cv.put(PM_Cat9, prodClass.getCat9());
+            cv.put(PM_Cat10, prodClass.getCat10());
+            cv.put(PM_HKHO, prodClass.getHKHO());
+            cv.put(PM_HKRD, prodClass.getHKRD());
+            cv.put(PM_HANR, prodClass.getHANR());
+            db.insert(Table_ProductMaster, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+    }
+
+    public void addCustomerMaster(List<CustomerDetailClass> custList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        ContentValues cv = new ContentValues();
+        for (CustomerDetailClass cust : custList) {
+            cv.put(CM_RetailCustID, cust.getCustID());
+            cv.put(CM_Name, cust.getName());
+            cv.put(CM_Address, cust.getAddress());
+            cv.put(CM_MobileNo, cust.getMobile());
+            db.insert(Table_Customermaster, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
     public void addCompanyMaster(CompanyMasterClass company) {
@@ -449,25 +628,55 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().insert(Table_BankMaster, null, cv);
     }
 
-    public void addBankBranchMaster(BankBranchMasterClass branchClass) {
+    public void addBankBranchMaster(List<BankBranchMasterClass> bankbranchList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
         ContentValues cv = new ContentValues();
-        cv.put(Branch_AutoId,branchClass.getAutoid());
-        cv.put(Branch_Id,branchClass.getId());
-        cv.put(Branch_Branch,branchClass.getBranch());
-        cv.put(Branch_CustId,branchClass.getCustid());
-        cv.put(Branch_AccountNo,branchClass.getAccountNo());
-        cv.put(Branch_CBankId,branchClass.getcBankid());
-        cv.put(Branch_CBranch,branchClass.getcBranch());
-        getWritableDatabase().insert(Table_BankBranchMaster,null,cv);
+        for (BankBranchMasterClass branchClass : bankbranchList) {
+            cv.put(Branch_AutoId, branchClass.getAutoid());
+            cv.put(Branch_Id, branchClass.getId());
+            cv.put(Branch_Branch, branchClass.getBranch());
+            cv.put(Branch_CustId, branchClass.getCustid());
+            cv.put(Branch_AccountNo, branchClass.getAccountNo());
+            cv.put(Branch_CBankId, branchClass.getcBankid());
+            cv.put(Branch_CBranch, branchClass.getcBranch());
+            db.insert(Table_BankBranchMaster, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+    }
+
+    public void addNewCustomer() {
+        ContentValues cv = new ContentValues();
+        cv.put(CM_RetailCustID, OptionsActivity.new_cus.getCust_id());
+        cv.put(CM_Name, OptionsActivity.new_cus.getCust_name());
+        cv.put(CM_Address, OptionsActivity.new_cus.getAddress());
+        cv.put(CM_MobileNo, OptionsActivity.new_cus.getMobile_no());
+        cv.put(CM_Status, OptionsActivity.new_cus.getStatus());
+        cv.put(CM_BranchId, OptionsActivity.new_cus.getBranchId());
+        cv.put(CM_Email, OptionsActivity.new_cus.getEmail_id());
+        cv.put(CM_District, OptionsActivity.new_cus.getDistrict());
+        cv.put(CM_Taluka, OptionsActivity.new_cus.getTaluka());
+        cv.put(CM_CityId, OptionsActivity.new_cus.getCityId());
+        cv.put(CM_AreaId, OptionsActivity.new_cus.getAreaId());
+        // cv.put(CM_PANNo, OptionsActivity.new_cus.getPANno());
+        // cv.put(CM_ImagePath, OptionsActivity.new_cus.getImagePath());
+        cv.put(CM_HOCode, OptionsActivity.new_cus.getHOCode());
+        //  cv.put(CM_GSTNo, OptionsActivity.new_cus.getGSTNo());
+        cv.put(CM_IMEINo, OptionsActivity.new_cus.getIMEINo());
+        cv.put(CM_isRegistered, OptionsActivity.new_cus.getIsReg());
+        // cv.put(CM_AadhaarNo, OptionsActivity.new_cus.getAadharNo());
+        cv.put(CM_PIN, OptionsActivity.new_cus.getPin());
+        getWritableDatabase().insert(Table_Customermaster, null, cv);
     }
 
     public void addDocumentMaster(DocumentMasterClass documentClass) {
         ContentValues cv = new ContentValues();
-        cv.put(Document_Id,documentClass.getId());
-        cv.put(Document_DocName,documentClass.getDocName());
-        cv.put(Document_ForWhom,documentClass.getForWhom());
-        cv.put(Document_Compulsary,documentClass.getCompulsary());
-        getWritableDatabase().insert(Table_DocumentMaster,null,cv);
+        cv.put(Document_Id, documentClass.getId());
+        cv.put(Document_DocName, documentClass.getDocName());
+        cv.put(Document_ForWhom, documentClass.getForWhom());
+        cv.put(Document_Compulsary, documentClass.getCompulsary());
+        getWritableDatabase().insert(Table_DocumentMaster, null, cv);
     }
 
     public void addUserDetail(UserClass user) {
@@ -478,19 +687,34 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(UM_MobileNo, user.getMobile());
         cv.put(UM_Email, user.getEmail());
         cv.put(UM_PANNo, user.getPANno());
+        cv.put(UM_PartyName, user.getPartyName());
         cv.put(UM_GSTNo, user.getGSTNo());
         cv.put(UM_ImagePath, user.getImagePath());
-        cv.put(UM_Status,user.getStatus());
-        cv.put(UM_District,user.getDistrict());
-        cv.put(UM_Taluka,user.getTaluka());
-        cv.put(UM_CityId,user.getCityId());
-        cv.put(UM_AreaId,user.getAreaId());
-        cv.put(UM_HOCode,user.getHOCode());
-        cv.put(UM_IMEINo,user.getIMEINo());
-        cv.put(UM_isRegistered,user.getIsRegistered());
-        cv.put(UM_AadhaarNo,user.getAadharNo());
+        cv.put(UM_Status, user.getStatus());
+        cv.put(UM_District, user.getDistrict());
+        cv.put(UM_Taluka, user.getTaluka());
+        cv.put(UM_CityId, user.getCityId());
+        cv.put(UM_AreaId, user.getAreaId());
+        cv.put(UM_HOCode, user.getHOCode());
+        cv.put(UM_IMEINo, user.getIMEINo());
+        cv.put(UM_isRegistered, user.getIsRegistered());
+        cv.put(UM_AadhaarNo, user.getAadharNo());
         cv.put(UM_PIN, "-1");
         getWritableDatabase().insert(Table_Usermaster, null, cv);
+    }
+
+    public void addGSTMaster(GSTMasterClass gst) {
+        ContentValues cv = new ContentValues();
+        cv.put(GST_Auto, gst.getAuto());
+        cv.put(GST_GroupNm, gst.getGroupName());
+        cv.put(GST_Status, gst.getStatus());
+        cv.put(GST_GSTPer, gst.getGstPer());
+        cv.put(GST_CGSTPer, gst.getCgstPer());
+        cv.put(GST_SGSTPer, gst.getSgstPer());
+        cv.put(GST_CESSPer, gst.getCessPer());
+        cv.put(GST_CGSTSHARE, gst.getCgstShare());
+        cv.put(GST_SGSTSHARE, gst.getSgstShare());
+        getWritableDatabase().insert(Table_GSTMASTER, null, cv);
     }
 
     public ArrayList<CustomerDetailClass> getCustomerDetail() {
@@ -515,12 +739,12 @@ public class DBHandler extends SQLiteOpenHelper {
         return list;
     }
 
-    public ArrayList<UserClass> getUserDetail(){
+    public ArrayList<UserClass> getUserDetail() {
         ArrayList<UserClass> list = new ArrayList<>();
-        String str = "select * from "+Table_Usermaster;
-        Cursor res = getWritableDatabase().rawQuery(str,null);
-        if(res.moveToFirst()){
-            do{
+        String str = "select * from " + Table_Usermaster;
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if (res.moveToFirst()) {
+            do {
                 UserClass userClass = new UserClass();
                 userClass.setCustID(res.getInt(res.getColumnIndex(UM_RetailCustID)));
                 userClass.setName(res.getString(res.getColumnIndex(UM_Name)));
@@ -528,6 +752,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 userClass.setMobile(res.getString(res.getColumnIndex(UM_MobileNo)));
                 userClass.setEmail(res.getString(res.getColumnIndex(UM_Email)));
                 userClass.setPANno(res.getString(res.getColumnIndex(UM_PANNo)));
+                userClass.setPartyName(res.getString(res.getColumnIndex(UM_PartyName)));
                 userClass.setGSTNo(res.getString(res.getColumnIndex(UM_GSTNo)));
                 userClass.setImagePath(res.getString(res.getColumnIndex(UM_ImagePath)));
                 userClass.setStatus(res.getString(res.getColumnIndex(UM_Status)));
@@ -540,7 +765,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 userClass.setIsRegistered(res.getString(res.getColumnIndex(UM_isRegistered)));
                 userClass.setAadharNo(res.getString(res.getColumnIndex(UM_AadhaarNo)));
                 list.add(userClass);
-            }while (res.moveToNext());
+            } while (res.moveToNext());
         }
         res.close();
         return list;
@@ -579,9 +804,9 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public Cursor
-    getAreaName(int cityid){
-    //TODO: Change AreaID
-        String str = "select "+Area_Area+" from "+Table_AreaMaster+" where "+Area_Cityid+" = "+cityid +" order by "+Area_Area;
+    getAreaName(int cityid) {
+        //TODO: Change AreaID
+        String str = "select " + Area_Area + " from " + Table_AreaMaster + " where " + Area_Cityid + " = " + cityid + " order by " + Area_Area;
         //String str = "select " + Area_Area + " from " + Table_AreaMaster + " where " + Area_Cityid + " = 1 order by "+Area_Area;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
@@ -605,11 +830,11 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
-    public Cursor getBranchName(){
-       // String str = "select "+Branch_CBranch+" from "+Table_BankBranchMaster+" where "+Branch_CBranch+"  <> ''";
-        String str = "select "+Branch_CBranch+" from "+Table_BankBranchMaster;
+    public Cursor getBranchName() {
+        // String str = "select "+Branch_CBranch+" from "+Table_BankBranchMaster+" where "+Branch_CBranch+"  <> ''";
+        String str = "select " + Branch_CBranch + " from " + Table_BankBranchMaster;
         Constant.showLog(str);
-        return getWritableDatabase().rawQuery(str,null);
+        return getWritableDatabase().rawQuery(str, null);
     }
 
     public void createBankMaster() {
@@ -640,78 +865,329 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().execSQL(str);
     }
 
-    public Cursor getSubCategory(String catName){
-        String str = "select distinct "+PM_Cat2+" from "+Table_ProductMaster+" where "+PM_Cat9+"='"+catName+"' order by "+PM_Cat2;
-        return getWritableDatabase().rawQuery(str,null);
+    public Cursor getSubCategory(String catName) {
+        String str = "select distinct " + PM_Cat2 + " from " + Table_ProductMaster + " where " + PM_Cat9 + "='" + catName + "' order by " + PM_Cat2;
+        return getWritableDatabase().rawQuery(str, null);
     }
 
-    public Cursor getIdOfDocType(String docName){
-        String str = "select "+Document_Id+" from "+Table_DocumentMaster+" where "+Document_DocName+" = '"+docName+"'";
-        return getWritableDatabase().rawQuery(str,null);
+    public Cursor getIdOfDocType(String docName) {
+        String str = "select " + Document_Id + " from " + Table_DocumentMaster + " where " + Document_DocName + " = '" + docName + "'";
+        return getWritableDatabase().rawQuery(str, null);
     }
 
-    public Cursor getUserDetails(){
-        String str = "select * from "+Table_Usermaster;
-        return getWritableDatabase().rawQuery(str,null);
+    public Cursor getUserDetails() {
+        String str = "select * from " + Table_Usermaster;
+        return getWritableDatabase().rawQuery(str, null);
     }
 
-    public Cursor getDocName(){
-        String str = "select "+Document_DocName+" from "+Table_DocumentMaster;
-        return getWritableDatabase().rawQuery(str,null);
+    public Cursor getDocName() {
+        String str = "select " + Document_DocName + " from " + Table_DocumentMaster;
+        return getWritableDatabase().rawQuery(str, null);
     }
 
     public void deleteTable(String tableName) {
         getWritableDatabase().execSQL("delete from " + tableName);
     }
 
-    public Cursor getFinalProduct(String cat2,String cat9) {
-        String str = "select distinct "+PM_Finalprod +" from "+ Table_ProductMaster+" where "+PM_Cat2+"='"+cat2+"' and "+PM_Cat9+"='"+cat9+"'";
-        return getWritableDatabase().rawQuery(str,null);
+    public Cursor getFinalProduct(String cat2, String cat9) {
+        String str = "select distinct " + PM_Finalprod + "," + PM_ProductID + " from " + Table_ProductMaster + " where " + PM_Cat2 + "='" + cat2 + "' and " + PM_Cat9 + "='" + cat9 + "'";
+        return getWritableDatabase().rawQuery(str, null);
     }
 
-   // public Cursor getCustNameAreawise(int id) {
-    public Cursor getCustNameAreawise(){
-       // String str = "select " + CM_Name + " from " + Table_Customermaster + " where "+CM_AreaId+" = "+id+" order by " + CM_Name;
-        String str = "select " + CM_Name + " from " + Table_Customermaster + " where "+CM_AreaId+" = 1"+" order by " + CM_Name;
+    public Cursor getCustNameAreawise(int id) {
+        String str = "select " + CM_Name + " from " + Table_Customermaster + " where "+CM_AreaId+" = "+id+" order by " + CM_Name;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
     }
 
     public int getCustNameId(String name) {
-        int id=0;
-        String str = "select " + CM_RetailCustID + " from " + Table_Customermaster + " where " + CM_Name +" = '"+name+"'";
+        int id = 0;
+        String str = "select " + CM_RetailCustID + " from " + Table_Customermaster + " where " + CM_Name + " = '" + name + "'";
         Constant.showLog(str);
-        Cursor res =  getWritableDatabase().rawQuery(str, null);
-        if(res.moveToFirst()){
-           id =  res.getInt(0);
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if (res.moveToFirst()) {
+            id = res.getInt(0);
         }
         return id;
     }
 
-    public int getCartCount(){
+    public int getCartCount() {
         int a = 0;
-        //TODO
-       // String str = "select count("+CO_Auto+") from "+Table_CustomerOrder;
-        String str = "";
+        String str = "select count(" + CO_Auto + ") from " + Table_CustomerOrder;
         Constant.showLog(str);
-        Cursor res =  getWritableDatabase().rawQuery(str,null);
+        Cursor res = getWritableDatabase().rawQuery(str, null);
         if (res.moveToFirst()) {
             a = res.getInt(0);
         }
+        res.close();
         return a;
     }
 
-    public Cursor getDetailOfCustomer(int id){
-       // String str = "select "+UM_BranchId+","+UM_District+","+UM_Taluka+","+UM_CityId+","+AreaId+","+AreaId+","+HOCode+","+IMEINo+","+isRegistered","+from UserMaster+" where "+CustId+" = "+UM_RetailCustID;
-        String str = "select * from "+Table_Usermaster+" where "+UM_RetailCustID+" = '"+id+"'";
-        return getWritableDatabase().rawQuery(str,null);
+    public Cursor getDetailOfCustomer(int id) {
+        // String str = "select "+UM_BranchId+","+UM_District+","+UM_Taluka+","+UM_CityId+","+AreaId+","+AreaId+","+HOCode+","+IMEINo+","+isRegistered","+from UserMaster+" where "+CustId+" = "+UM_RetailCustID;
+        String str = "select * from " + Table_Usermaster + " where " + UM_RetailCustID + " = '" + id + "'";
+        return getWritableDatabase().rawQuery(str, null);
     }
 
     public Cursor getCustName() {
-        String str = "select " + CM_Name + " from " + Table_Customermaster + " order by " + CM_Name;
+        String str = "select " + CM_Name + " from " + Table_Customermaster + " where "+CM_Status +"='A' order by " + CM_Name;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
     }
+
+    public Cursor getProductDetails(String packUnpackType) {
+        String str = "select " + PM_ProductID + "," + PM_SRate + "," + PM_MRPRate + "," + PM_HSNCode + "," + PM_GSTGroup + "," + PM_Finalprod +
+                " from " + Table_ProductMaster + " where " + PM_ProductID + "=" + AddToCartActivity.selProdId;
+        Constant.showLog("getProductDetails :- " + str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getDistinctSizeGroup(String packUnpackType) {
+        String str = "select distinct " + ARSD_SizeGroup + " from " + Table_AllRequiredSizesDesigns +
+                " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_typ + "='" + packUnpackType + "' and "
+                + ARSD_InOutType + "='I' order by " + ARSD_SizeGroup;
+        Constant.showLog("getDistinctSizeGroup :- " + str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    /*public Cursor getDistinctSizes(String packUnpackType, String sizegroup){
+        String str = "select Distinct "+ARSD_Total+",(select "+ARSD_Total+" from "+Table_AllRequiredSizesDesigns
+                +" where "+ARSD_Productid+"="+AddToCartActivity.selProdId
+                +" and "+ARSD_typ+"='"+packUnpackType+"' and InOutType='I') as CompanyPack from "
+                + Table_AllRequiredSizesDesigns +" where "+ ARSD_Productid+"="+AddToCartActivity.selProdId
+                +" and "+ARSD_typ+"='"+packUnpackType+"' and InOutType='O' and "+ARSD_SizeGroup+" like '"+sizegroup
+                +"' order by "+ARSD_Total;
+        Constant.showLog("getDistinctSizes :- "+str);
+        return getWritableDatabase().rawQuery(str,null);
+    }*/
+
+    public Cursor getDistinctSizes(String packUnpackType, String sizegroup) {
+        String str = "select Distinct " + ARSD_Total + " from " + Table_AllRequiredSizesDesigns
+                + " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId
+                + " and " + ARSD_typ + "='" + packUnpackType + "' and InOutType='O' and " + ARSD_SizeGroup + " like '" + sizegroup + "'"
+                + " union all "
+                + " select Distinct " + ARSD_Total + " from " + Table_AllRequiredSizesDesigns
+                + " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId
+                + " and " + ARSD_typ + "='" + packUnpackType + "' and InOutType='I' and " + ARSD_SizeGroup + " like '" + sizegroup + "'"
+                + " order by " + ARSD_Total;
+        ;
+        Constant.showLog("getDistinctSizes :- " + str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getDistinctColour(String sizegroup) {
+        String str = "select Distinct " + ARSD_Colour + "," + ARSD_HashCode + " from " + Table_AllRequiredSizesDesigns +
+                " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_InOutType + "='I' and " +
+                ARSD_SizeGroup + " like '" + sizegroup + "' order by " + ARSD_Colour;
+        Constant.showLog("getDistinctColour :- " + str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public int getCustMax() {
+        int a = 0;
+        String str = "select max(" + CM_RetailCustID + ") from " + Table_Customermaster;
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if (res.moveToFirst()) {
+            do {
+                a = res.getInt(0);
+            } while (res.moveToNext());
+        }
+        res.close();
+        return a;
+    }
+
+    public int getMaxProdId() {
+        int a = 0;
+        String str = "select max(" + PM_ProductID + ") from " + Table_ProductMaster;
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if (res.moveToFirst()) {
+            a = res.getInt(0);
+        }
+        res.close();
+        return a;
+    }
+
+    public int getDispatchCenter(String colName) {
+        String str = "select " + colName + " from " + Table_ProductMaster + " where " + PM_ProductID + "=" + AddToCartActivity.selProdId;
+        Constant.showLog("Dispatch Center :- " + str);
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        int a = 0;
+        if (res.moveToFirst()) {
+            a = res.getInt(0);
+        }
+        res.close();
+        return a;
+    }
+
+    public String getRequiredSize(String sizegroup, String color) {
+        String str = "select " + ARSD_DesignNo + "," + ARSD_Total + " from " + Table_AllRequiredSizesDesigns +
+                " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_SizeGroup +
+                " like '" + sizegroup + "' and " + ARSD_InOutType + "='I' and " + ARSD_Colour + "='" + color + "'";
+        Constant.showLog("RequiredSizeNTotal :- " + str);
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        String output = "";
+        if (res.moveToFirst()) {
+            output = res.getString(0) + "^" + res.getString(1);
+        }
+        res.close();
+        return output;
+    }
+
+    public Cursor getGSTDetails(String gstGroupName) {
+        String str = "select * from " + Table_GSTMASTER + " where " + GST_GroupNm + "='" + gstGroupName + "' and " + GST_Status + "='A'";
+        Constant.showLog("getGSTDetails :- " + str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public int getCustOrderMax() {
+        int a = 0;
+        String str = "select max(" + CO_Auto + ") from " + Table_CustomerOrder;
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if (res.moveToFirst()) {
+            a = res.getInt(0);
+        }
+        res.close();
+        a++;
+        return a;
+    }
+
+    public void addCustomerOrder(CustomerOrderClass custOrder) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        ContentValues cv = new ContentValues();
+        cv.put(CO_Auto, custOrder.getAuto());
+        cv.put(CO_BranchId, custOrder.getBranchId());
+        cv.put(CO_Productid, custOrder.getProductid());
+        cv.put(CO_SizeGroup, custOrder.getSizeGroup());
+        cv.put(CO_RequiredSize, custOrder.getRequiredSize());
+        cv.put(CO_PerPackQty, custOrder.getPerPackQty());
+        cv.put(CO_Color, custOrder.getColor());
+        cv.put(CO_HashCode, custOrder.getHashCode());
+        cv.put(CO_Rate, custOrder.getRate());
+        cv.put(CO_MRP, custOrder.getMrp());
+        cv.put(CO_Qty, custOrder.getQty());
+        cv.put(CO_LooseQty, custOrder.getLooseQty());
+        cv.put(CO_ActLooseQty, custOrder.getActLooseQty());
+        cv.put(CO_Amount, custOrder.getAmount());
+        cv.put(CO_LoosePackTyp, custOrder.getLoosePackTyp());
+        cv.put(CO_PendingLooseQty, custOrder.getPendingLooseQty());
+        cv.put(CO_TotalAmt, custOrder.getTotalamt());
+        cv.put(CO_GSTPer, custOrder.getGstper());
+        cv.put(CO_CGSTAmt, custOrder.getCgstamt());
+        cv.put(CO_SGSTAmt, custOrder.getSgstamt());
+        cv.put(CO_IGSTAmt, custOrder.getIgstamt());
+        cv.put(CO_CGSTPer, custOrder.getCgstper());
+        cv.put(CO_SGSTPer, custOrder.getSgstper());
+        cv.put(CO_CESSPer, custOrder.getCessper());
+        cv.put(CO_CESSAmt, custOrder.getCessamt());
+        cv.put(CO_DiscPer, custOrder.getDiscPer());
+        cv.put(CO_DiscAmt, custOrder.getDiscamnt());
+        cv.put(CO_GSTAmt, custOrder.getGstAmt());
+        cv.put(CO_NetAmt, custOrder.getNetamnt());
+        cv.put(CO_AmtAfterDisc, custOrder.getAmtAfterDisc());
+        cv.put(CO_OrderType, custOrder.getOrderType());
+        db.insert(Table_CustomerOrder, null, cv);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+    }
+
+    public Cursor getViewOrderData() {
+        String str = "select * from " + Table_CustomerOrder + " order by " + CO_Productid + "," + CO_SizeGroup;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public float getCustDiscount(int custid) {
+        float a = 0;
+        String str = "select " + CM_Discount + " from " + Table_Customermaster + " where " + CM_RetailCustID + "=" + custid;
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if (res.moveToFirst()) {
+            do {
+                a = res.getInt(0);
+            } while (res.moveToNext());
+        }
+        res.close();
+        return a;
+    }
+
+    public Cursor getCustOrderTotals() {
+        String str = "select count(" + CO_Auto + ") as " + CO_Auto + ",sum(" + CO_LooseQty + ") as " + CO_LooseQty + ", sum(" + CO_Amount +
+                ") as " + CO_Amount + ", sum(" + CO_NetAmt + ") as " + CO_NetAmt + ", sum(" + CO_AmtAfterDisc + ") as " + CO_AmtAfterDisc + "," +
+                "SUM(" + CO_GSTAmt + ") as " + CO_GSTAmt + ", sum(" + CO_DiscAmt + ") as " + CO_DiscAmt + " from " + Table_CustomerOrder;
+        Constant.showLog("getCustOrderTotals :- " + str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public void deleteOrderTable(int auto) {
+        getWritableDatabase().execSQL("delete from " + Table_CustomerOrder + " where " + CO_Auto + "=" + auto);
+    }
+
+    public void deleteOrderTableAfterSave(int branchid) {
+        getWritableDatabase().execSQL("delete from " + Table_CustomerOrder + " where " + CO_BranchId + "=" + branchid);
+    }
+
+    public void deleteOrderTableUnpack() {
+        getWritableDatabase().execSQL("delete from " + Table_CustomerOrder + " where " + CO_OrderType + "='U' and " + CO_Productid + "=" + AddToCartActivity.selProdId);
+    }
+
+    public Cursor getSavedUnpackOrder() {
+        String str = "select " + CO_SizeGroup + "," + CO_Qty + "," + CO_Color + "," + CO_HashCode + " from " + Table_CustomerOrder + " where " + CO_OrderType + "='U' and " + CO_Productid + "=" + AddToCartActivity.selProdId;
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getDataToCheck() {
+        String str = "select " + CO_BranchId + "," + CO_Productid + "," + CO_SizeGroup + "," + CO_Color + "," + CO_HashCode + "," + CO_MRP + "," + CO_LooseQty + " from " + Table_CustomerOrder + " order by " + CO_Productid + "," + CO_SizeGroup;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public void updateAvailQty(List<CheckoutCustOrderClass> custOrderList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        ContentValues cv = new ContentValues();
+        for (CheckoutCustOrderClass custOrder : custOrderList) {
+            cv.put(CO_AvailQty, custOrder.getAvailableQty());
+            db.update(Table_CustomerOrder, cv,
+                    CO_BranchId + "=? and " + CO_Productid + "=? and " + CO_SizeGroup + "=? and " + CO_Color + "=? and " + CO_MRP + "=? and " + CO_LooseQty + "=?",
+                    new String[]{custOrder.getBranchId(), custOrder.getProductId(), custOrder.getSizeGroup(), custOrder.getColor(), custOrder.getRate(), custOrder.getEnterQty()});
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+    }
+
+    public Cursor getDistinctBrachIdFromCustOrder() {
+        String str = "select distinct " + CO_BranchId + " from " + Table_CustomerOrder;
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getCustOrderMaster(int branchid) {
+        String str = "select sum(" + CO_Qty + ") as " + CO_Qty + ", Sum(" + CO_LooseQty + ") as " + CO_LooseQty +
+                ",sum(" + CO_Amount + ") as " + CO_Amount + ",sum(" + CO_GSTAmt + ") as " + CO_GSTAmt + ",Sum(" +
+                CO_TotalAmt + ") as " + CO_TotalAmt + ",sum(" + CO_NetAmt + ")as " + CO_NetAmt + ",sum(" + CO_AmtAfterDisc +
+                ") as " + CO_AmtAfterDisc + " from " + Table_CustomerOrder + " where " + CO_BranchId + "=" + branchid;
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getCustOrderDetail(int branchid) {
+        String str = "select * from " + Table_CustomerOrder + " where " + CO_BranchId + "=" + branchid;
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getProductWiseOrderList(int prodId) {
+        /*String str = "select "+CO_Productid+","+CO_SizeGroup+","+CO_Color+","+CO_HashCode+","+CO_Qty
+                    +","+CO_LooseQty+","+CO_OrderType+" from "+Table_CustomerOrder+" where "
+                    +CO_Productid+"="+AddToCartActivity.selProdId+" order by "+CO_SizeGroup;*/
+
+        String str = "select " + CO_Productid + "," + CO_SizeGroup + "," + CO_Color + "," + CO_HashCode + ",sum(" + CO_Qty
+                + ")" + CO_Qty + ",sum(" + CO_LooseQty + ")" + CO_LooseQty + "," + CO_OrderType + " from " + Table_CustomerOrder + " where "
+                + CO_Productid + "=" + prodId + " group by " + CO_SizeGroup + "," + CO_Color + " order by " + CO_SizeGroup;
+
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
 
 }
 

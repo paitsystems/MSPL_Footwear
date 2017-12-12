@@ -33,4 +33,7 @@
     <dimen name="optionbtnmargintop">5dp</dimen>
     <dimen name="layout_height">50dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="addtocardtvheight">30dp</dimen>
+
 </resources>

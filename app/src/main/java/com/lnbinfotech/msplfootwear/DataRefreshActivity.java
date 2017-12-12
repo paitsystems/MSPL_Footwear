@@ -1292,6 +1292,27 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     } else if ("Discount".equals(token)) {
                         jp.nextToken();
                         custClass.setDiscount(jp.getFloatValue());
+                    }else if ("branchId".equals(token)) {
+                        jp.nextToken();
+                        custClass.setBranchId(jp.getIntValue());
+                    }else if ("District".equals(token)) {
+                        jp.nextToken();
+                        custClass.setDistrict(jp.getText());
+                    }else if ("Taluka".equals(token)) {
+                        jp.nextToken();
+                        custClass.setTaluka(jp.getText());
+                    }else if ("cityId".equals(token)) {
+                        jp.nextToken();
+                        custClass.setCityId(jp.getIntValue());
+                    }else if ("areaId".equals(token)) {
+                        jp.nextToken();
+                        custClass.setAreaId(jp.getIntValue());
+                    }else if ("HoCode".equals(token)) {
+                        jp.nextToken();
+                        custClass.setHOCode(jp.getIntValue());
+                    }else if ("AadharNo".equals(token)) {
+                        jp.nextToken();
+                        custClass.setAadharNo(jp.getText());
                     }
                 }
                 list.add(custClass);

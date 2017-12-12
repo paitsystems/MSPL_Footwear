@@ -6,16 +6,19 @@ import android.content.SharedPreferences;
 import com.lnbinfotech.msplfootwearex.FirstActivity;
 import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.TrackOrderActivity;
+import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.AreaMasterClass;
 import com.lnbinfotech.msplfootwearex.model.BankBranchMasterClass;
 import com.lnbinfotech.msplfootwearex.model.BankMasterClass;
+import com.lnbinfotech.msplfootwearex.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwearex.model.CityMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CompanyMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwearex.model.DocumentMasterClass;
 import com.lnbinfotech.msplfootwearex.model.EmployeeMasterClass;
+import com.lnbinfotech.msplfootwearex.model.GSTMasterClass;
 import com.lnbinfotech.msplfootwearex.model.HOMasterClass;
 import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
@@ -23,6 +26,7 @@ import com.lnbinfotech.msplfootwearex.model.TrackOrderClass;
 import com.lnbinfotech.msplfootwearex.model.UserClass;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +64,7 @@ public class ParseJSON {
                     userClass.setEmail(jsonArray.getJSONObject(i).getString("email"));
                     userClass.setBranchId(jsonArray.getJSONObject(i).getInt("branchId"));
                     userClass.setPANno(jsonArray.getJSONObject(i).getString("Panno"));
+                    userClass.setPartyName(jsonArray.getJSONObject(i).getString("PartyName"));
                     userClass.setGSTNo(jsonArray.getJSONObject(i).getString("GSTNo"));
                     userClass.setImagePath(jsonArray.getJSONObject(i).getString("ImagePath"));
 
@@ -72,6 +77,12 @@ public class ParseJSON {
                     userClass.setIMEINo(jsonArray.getJSONObject(i).getString("IMEINo"));
                     userClass.setIsRegistered(jsonArray.getJSONObject(i).getString("isRegistered"));
                     userClass.setAadharNo(jsonArray.getJSONObject(i).getString("AadharNo"));
+
+                    SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                    editor.putInt(context.getString(R.string.pref_branchid),userClass.getBranchId());
+                    editor.putInt(context.getString(R.string.pref_retailCustId),userClass.getCustID());
+                    editor.putInt(context.getString(R.string.pref_cityid),userClass.getCityId());
+                    editor.apply();
 
                     db.addUserDetail(userClass);
                     list.add(userClass);
@@ -99,17 +110,15 @@ public class ParseJSON {
                     custClass.setEmail(jsonArray.getJSONObject(i).getString("email"));
                     custClass.setBranchId(jsonArray.getJSONObject(i).getInt("branchId"));
                     custClass.setPANno(jsonArray.getJSONObject(i).getString("Panno"));
+                    custClass.setPartyName(jsonArray.getJSONObject(i).getString("PartyName"));
                     custClass.setGSTNo(jsonArray.getJSONObject(i).getString("GSTNo"));
                     custClass.setImagePath(jsonArray.getJSONObject(i).getString("ImagePath"));
-
-                    SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                    editor.putInt(context.getString(R.string.pref_branchid),custClass.getBranchId());
-                    editor.putInt(context.getString(R.string.pref_retailCustId),custClass.getCustID());
-                    editor.apply();
-
-                    db.addCustomerDetail(custClass);
+                    custClass.setDiscount(Float.parseFloat(jsonArray.getJSONObject(i).getString("Discount")));
+                    //db.addCustomerDetail(custClass);
                     list.add(custClass);
                 }
+                Constant.showLog(""+list.size());
+                db.addCustomerDetail(list);
                 db.close();
             }
         }catch (Exception e){
@@ -121,6 +130,7 @@ public class ParseJSON {
 
     public int parseAreaMaster(){
         int ret = 0;
+        List<AreaMasterClass> areaList = new ArrayList<>();
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
@@ -131,8 +141,10 @@ public class ParseJSON {
                     areaClass.setId(jsonArray.getJSONObject(i).getInt("id"));
                     areaClass.setArea(jsonArray.getJSONObject(i).getString("area"));
                     areaClass.setCityid(jsonArray.getJSONObject(i).getInt("cityid"));
-                    db.addAreaMaster(areaClass);
+                    areaList.add(areaClass);
+
                 }
+                db.addAreaMaster(areaList);
                 db.close();
                 ret = 1;
             }
@@ -145,6 +157,7 @@ public class ParseJSON {
 
     public int parseCityMaster(){
         int ret = 0;
+        List<CityMasterClass> cityList = new ArrayList<>();
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
@@ -155,8 +168,9 @@ public class ParseJSON {
                     cityClass.setId(jsonArray.getJSONObject(i).getInt("id"));
                     cityClass.setCity(jsonArray.getJSONObject(i).getString("city"));
                     cityClass.setStId(jsonArray.getJSONObject(i).getInt("stId"));
-                    db.addCityMaster(cityClass);
+                    cityList.add(cityClass);
                 }
+                db.addCityMaster(cityList);
                 db.close();
                 ret = 1;
             }
@@ -258,6 +272,7 @@ public class ParseJSON {
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
+                List<ProductMasterClass> prodList = new ArrayList<>();
                 db.deleteTable(DBHandler.Table_ProductMaster);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ProductMasterClass prodClass = new ProductMasterClass();
@@ -285,8 +300,14 @@ public class ParseJSON {
                     prodClass.setGSTGroup(jsonArray.getJSONObject(i).getString("GSTGroup"));
                     prodClass.setHSNCode(jsonArray.getJSONObject(i).getString("HSNCode"));
                     prodClass.setCat9(jsonArray.getJSONObject(i).getString("Cat9"));
-                    db.addProductMaster(prodClass);
+                    prodClass.setCat10(jsonArray.getJSONObject(i).getString("Cat10"));
+                    prodClass.setHKHO(jsonArray.getJSONObject(i).getInt("HKHO"));
+                    prodClass.setHKRD(jsonArray.getJSONObject(i).getInt("HKRD"));
+                    prodClass.setHANR(jsonArray.getJSONObject(i).getInt("HANR"));
+                    //db.addProductMaster(prodClass);
+                    prodList.add(prodClass);
                 }
+                db.addProductMaster(prodList);
                 db.close();
                 ret = 1;
             }
@@ -299,6 +320,7 @@ public class ParseJSON {
 
     public int parseCustomerMaster(){
         int ret = 0;
+        List<CustomerDetailClass> CustomerDetailList = new ArrayList<>();
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
@@ -324,9 +346,9 @@ public class ParseJSON {
                     custClass.setIsRegistered(jsonArray.getJSONObject(i).getString("isRegistered"));
                     custClass.setAadharNo(jsonArray.getJSONObject(i).getString("AadharNo"));
                     custClass.setPIN(jsonArray.getJSONObject(i).getString("PIN"));
-
-                    db.addCustomerMaster(custClass);
+                    CustomerDetailList.add(custClass);
                 }
+                db.addCustomerMaster(CustomerDetailList);
                 db.close();
                 ret = 1;
             }
@@ -395,6 +417,7 @@ public class ParseJSON {
 
     public int parseBankBranchMaster(){
         int ret = 0;
+        List<BankBranchMasterClass> bankBranchList = new ArrayList<>();
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
@@ -408,8 +431,10 @@ public class ParseJSON {
                     branchClass.setAccountNo(jsonArray.getJSONObject(i).getString("AccountNo"));
                     branchClass.setcBankid(jsonArray.getJSONObject(i).getString("Custid"));
                     branchClass.setcBranch(jsonArray.getJSONObject(i).getString("CBranch"));
-                    db.addBankBranchMaster(branchClass);
+                    //db.addBankBranchMaster(branchClass);
+                    bankBranchList.add(branchClass);
                 }
+                db.addBankBranchMaster(bankBranchList);
                 db.close();
                 ret = 1;
             }
@@ -444,14 +469,15 @@ public class ParseJSON {
         return ret;
     }
 
-    public List<TrackOrderClass> parseloadTrackOrederDetail(){
+/*
+    public List<TrackOrderMasterClass> parseloadTrackOreder(){
 
-        List<TrackOrderClass> list = new ArrayList<>();
+        List<TrackOrderMasterClass> list = new ArrayList<>();
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    TrackOrderClass trackOrderClass = new TrackOrderClass();
+                    TrackOrderMasterClass trackOrderClass = new TrackOrderMasterClass();
                     trackOrderClass.setAuto(jsonArray.getJSONObject(i).getString("auto"));
                     trackOrderClass.setBranchid(jsonArray.getJSONObject(i).getString("branchid"));
                     trackOrderClass.setId(jsonArray.getJSONObject(i).getString("id"));
@@ -463,13 +489,108 @@ public class ParseJSON {
                     trackOrderClass.setNetAmt(jsonArray.getJSONObject(i).getString("NetAmt"));
                     trackOrderClass.setApprove(jsonArray.getJSONObject(i).getString("Approve"));
                     list.add(trackOrderClass);
-
                 }
-
             }
         }catch (Exception e){
             e.printStackTrace();
             writeLog("_" + e.getMessage());
+        }
+        return list;
+    }
+
+    public HashMap<Integer,List<TrackOrderDetailClass>> parseloadDetailOrder(){
+        HashMap<Integer,List<TrackOrderDetailClass>> map = new HashMap<>();
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    List<TrackOrderDetailClass> list;
+                    TrackOrderDetailClass orderClass = new TrackOrderDetailClass();
+                    orderClass.setAuto(jsonArray.getJSONObject(i).getInt("auto"));
+                    int prodid = jsonArray.getJSONObject(i).getInt("productid");
+                    orderClass.setProductid(prodid);
+                    //orderClass.setFinal_prod(jsonArray.getJSONObject(i).getString("Final_prod"));
+                    orderClass.setSize_group(jsonArray.getJSONObject(i).getString("SizeGroup"));
+                    orderClass.setColor(jsonArray.getJSONObject(i).getString("Color"));
+                    orderClass.setMrp(jsonArray.getJSONObject(i).getString("MRP"));
+                    orderClass.setActLooseQty(jsonArray.getJSONObject(i).getString("ActLooseQty"));
+                    orderClass.setLoosePackTyp(jsonArray.getJSONObject(i).getString("LoosePackTyp"));
+                    if(map.isEmpty()) {
+                        list = new ArrayList<>();
+                        list.add(orderClass);
+                        map.put(prodid,list);
+                    }else if(map.containsKey(prodid)){
+                        list = map.get(prodid);
+                        list.add(orderClass);
+                        map.put(prodid,list);
+                    }else{
+                        list = new ArrayList<>();
+                        list.add(orderClass);
+                        map.put(prodid,list);
+                    }
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseloadDetailOrder_" + e.getMessage());
+        }
+        return map;
+    }
+*/
+
+    public int parseGSTMaster(){
+        int ret = 0;
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                db.deleteTable(DBHandler.Table_GSTMASTER);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    GSTMasterClass gstClass = new GSTMasterClass();
+                    gstClass.setAuto(jsonArray.getJSONObject(i).getInt("Auto"));
+                    gstClass.setGroupName(jsonArray.getJSONObject(i).getString("GroupNm"));
+                    gstClass.setStatus(jsonArray.getJSONObject(i).getString("Status"));
+
+                    gstClass.setGstPer(jsonArray.getJSONObject(i).getString("GSTPer"));
+                    gstClass.setCgstPer(jsonArray.getJSONObject(i).getString("CGSTPer"));
+                    gstClass.setSgstPer(jsonArray.getJSONObject(i).getString("SGSTPer"));
+                    gstClass.setCessPer(jsonArray.getJSONObject(i).getString("CESSPer"));
+                    gstClass.setCgstShare(jsonArray.getJSONObject(i).getString("CGSTSHARE"));
+                    gstClass.setSgstShare(jsonArray.getJSONObject(i).getString("SGSTSHARE"));
+
+                    db.addGSTMaster(gstClass);
+                }
+                db.close();
+                ret = 1;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseGSTMaster_"+e.getMessage());
+        }
+        return ret;
+    }
+
+    public List<CheckoutCustOrderClass> parseloadCheckoutOrder(){
+        List<CheckoutCustOrderClass> list = new ArrayList<>();
+        try{
+            JSONArray jsonArray = new JSONArray(new JSONObject(json).get("CheckStockResult").toString());
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    CheckoutCustOrderClass checkout = new CheckoutCustOrderClass();
+                    checkout.setBranchId(jsonArray.getJSONObject(i).getString("Branch_id"));
+                    checkout.setProductId(jsonArray.getJSONObject(i).getString("Product_id"));
+                    checkout.setColor(jsonArray.getJSONObject(i).getString("Color"));
+                    checkout.setSizeGroup(jsonArray.getJSONObject(i).getString("SizeGroup"));
+                    checkout.setAvailableQty(jsonArray.getJSONObject(i).getString("AvailQty"));
+                    checkout.setRate(jsonArray.getJSONObject(i).getString("Rate"));
+                    checkout.setHashCode(jsonArray.getJSONObject(i).getString("HashCode"));
+                    checkout.setEnterQty(jsonArray.getJSONObject(i).getString("EnterQty"));
+                    list.add(checkout);
+                }
+                db.updateAvailQty(list);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseloadCheckoutOrder_" + e.getMessage());
         }
         return list;
     }

@@ -40,11 +40,12 @@ public class DisplayCustListAreawiseActivity extends AppCompatActivity implement
         setContentView(R.layout.activity_display_cust_list_areawise);
 
         init();
+
         setCusList();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("DisplayCustomerList");
+            getSupportActionBar().setTitle("Take Order");
         }
 
         ed_cus_name.addTextChangedListener(new TextWatcher() {
@@ -77,9 +78,10 @@ public class DisplayCustListAreawiseActivity extends AppCompatActivity implement
                 //finish();
                 int cust_id = db.getCustNameId(select_item);
                 Constant.showLog("cust_id: " + cust_id);
+                finish();
                 startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
-                finish();
+
             }
         });
 
@@ -124,12 +126,9 @@ public class DisplayCustListAreawiseActivity extends AppCompatActivity implement
     }
 
     public void setCusList() {
-
-        int id = Integer.parseInt(FirstActivity.pref.getString("areaid",""));
-        Constant.showLog("arrrid:"+id);
-        //TODO PASS ID
-        //Cursor cur = db.getCustNameAreawise(id);
-        Cursor cur = db.getCustNameAreawise();
+        int id = Integer.parseInt(FirstActivity.pref.getString(getString(R.string.areaid), ""));
+        Constant.showLog("arrrid:" + id);
+        Cursor cur = db.getCustNameAreawise(id);
         if (cur.moveToFirst()) {
             do {
                 cus_list.add(cur.getString(cur.getColumnIndex(DBHandler.CM_Name)));
@@ -137,8 +136,7 @@ public class DisplayCustListAreawiseActivity extends AppCompatActivity implement
             } while (cur.moveToNext());
         }
         cur.close();
-
-         adapter = new DisplayAreawiseCustListAdapter(this, cus_list);
+        adapter = new DisplayAreawiseCustListAdapter(this, cus_list);
         lv_cus.setAdapter(adapter);
     }
 

@@ -1,7 +1,10 @@
 package com.lnbinfotech.msplfootwearex;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -10,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.telephony.SmsMessage;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -48,6 +52,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     private String mobNo,imeiNo;
     private  String response_value;
     private ReadSms receiver;
+    private MySMSReceiver myReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +71,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         }
 
         //autoOTP();
-        receiver = new ReadSms();
+        /*receiver = new ReadSms();
         receiver.bindListener(new SmsListener() {
             @Override
             public void onReceivedMessage(String message) {
@@ -84,6 +89,35 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 ed6.setText(message.substring(5,6));
                 Constant.showLog("message:"+message.substring(5,6));
                // timer.cancel();
+                countDown.cancel();
+                tv_text1.setText("OTP get successfully");
+                Constant.showLog("CheckOTPActivity_onReceivedMessage_Called");
+            }
+        });*/
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(getPackageName() + "android.provider.Telephony.SMS_RECEIVED");
+
+        myReceiver = new MySMSReceiver();
+        registerReceiver(myReceiver, filter);
+
+        myReceiver.bindListener(new SmsListener() {
+            @Override
+            public void onReceivedMessage(String message) {
+                Constant.showLog("message:"+message);
+                ed1.setText(message.substring(0,1));
+                Constant.showLog("message:"+message.substring(0,1));
+                ed2.setText(message.substring(1,2));
+                Constant.showLog("message:"+message.substring(1,2));
+                ed3.setText(message.substring(2,3));
+                Constant.showLog("message:"+message.substring(2,3));
+                ed4.setText(message.substring(3,4));
+                Constant.showLog("message:"+message.substring(3,4));
+                ed5.setText(message.substring(4,5));
+                Constant.showLog("message:"+message.substring(4,5));
+                ed6.setText(message.substring(5,6));
+                Constant.showLog("message:"+message.substring(5,6));
+                timer.cancel();
                 countDown.cancel();
                 tv_text1.setText("OTP get successfully");
                 Constant.showLog("CheckOTPActivity_onReceivedMessage_Called");
@@ -508,4 +542,48 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     private void writeLog(String _data){
         new WriteLog().writeLog(getApplicationContext(),"RegistrationActivity_"+_data);
     }
+
+    private class MySMSReceiver extends BroadcastReceiver {
+        private boolean b ;
+        private String text;
+        private SmsListener smsListener;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final Bundle bundle = intent.getExtras();
+            if(bundle != null){
+                final Object[] pdusobj = (Object[]) bundle.get("pdus");
+                assert pdusobj != null;
+                for (int i = 0; i <= pdusobj.length-1; i++){
+                    SmsMessage current_msg = SmsMessage.createFromPdu((byte[]) pdusobj[i]);
+
+                    String cmp_name = current_msg.getDisplayOriginatingAddress();
+                    Constant.showLog("mob_no"+cmp_name);
+
+                    String service_center = current_msg.getServiceCenterAddress();
+                    Constant.showLog("service_cebter"+service_center);
+
+                    //String sender_no = cmp_name;
+                    // if(cmp_name.equals("MD-LNBTCH") && service_center.equals("+919868191090")) {
+
+                    String message = current_msg.getDisplayMessageBody();
+                    text = message.replaceAll("[^0-9]", "");
+                    Constant.showLog("text:" + text.substring(0, 6));
+                    Constant.showLog("text:" + text.substring(0, 1));
+                    Constant.showLog("text:" + text.substring(1, 2));
+                    if (!b) {
+                        smsListener.onReceivedMessage(text);
+                    }
+                    Constant.showLog("ReadSMS_onReceive_Called");
+                }
+            }
+        }
+
+        public void bindListener(SmsListener listener) {
+            smsListener = listener;
+            Constant.showLog("ReadSMS_bindListener_Called");
+        }
+    }
+
+
 }

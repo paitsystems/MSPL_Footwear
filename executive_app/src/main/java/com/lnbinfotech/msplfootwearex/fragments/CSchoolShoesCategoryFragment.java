@@ -36,8 +36,8 @@ public class CSchoolShoesCategoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_schoolshoe_category_c,container,false);
         listView = (ListView) view.findViewById(R.id.listView);
         db = new DBHandler(getContext());
-        setData();
 
+        setData();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -45,7 +45,7 @@ public class CSchoolShoesCategoryFragment extends Fragment {
                 GentsCategoryClass getClass = (GentsCategoryClass) adapter.getItem(i);
                 Constant.showLog(getClass.getCategoryName());
                 Intent intent = new Intent(getContext(), AddToCartActivity.class);
-                intent.putExtra("cat9","SchoolShoes");
+                intent.putExtra("cat9","School Shoes");
                 intent.putExtra("cat2",getClass.getCategoryName());
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.enter,R.anim.exit);
@@ -57,7 +57,7 @@ public class CSchoolShoesCategoryFragment extends Fragment {
 
     private void setData(){
         List<GentsCategoryClass> list = new ArrayList<>();
-        Cursor res = db.getSubCategory("SchoolShoes");
+        Cursor res = db.getSubCategory("School Shoes");
         if(res.moveToFirst()){
             do {
                 GentsCategoryClass gentsClass = new GentsCategoryClass();

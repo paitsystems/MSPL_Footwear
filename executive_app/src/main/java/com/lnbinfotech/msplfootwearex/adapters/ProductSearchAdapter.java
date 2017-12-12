@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.lnbinfotech.msplfootwearex.R;
+import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,25 +18,25 @@ import java.util.Locale;
 
 public class ProductSearchAdapter extends BaseAdapter {
 
-    List<String> branchList;
-    List<String> _branchList;
-    Context context;
+    private List<ProductMasterClass> prodList;
+    private List<ProductMasterClass> _prodList;
+    private Context context;
 
-    public ProductSearchAdapter(List<String> __branchList, Context _context) {
-        this.branchList = __branchList;
-        this._branchList = new ArrayList<>();
-        this._branchList.addAll(this.branchList);
+    public ProductSearchAdapter(List<ProductMasterClass> __prodList, Context _context) {
+        this.prodList = __prodList;
+        this._prodList = new ArrayList<>();
+        this._prodList.addAll(this.prodList);
         this.context = _context;
     }
 
     @Override
     public int getCount() {
-        return branchList.size();
+        return prodList.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return branchList.get(i);
+        return prodList.get(i);
     }
 
     @Override
@@ -55,8 +56,8 @@ public class ProductSearchAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        String branch = (String) getItem(i);
-        holder.tv_branch.setText(branch);
+        ProductMasterClass prodClass = (ProductMasterClass) getItem(i);
+        holder.tv_branch.setText(prodClass.getFinal_prod());
         return view;
     }
 
@@ -65,21 +66,20 @@ public class ProductSearchAdapter extends BaseAdapter {
     }
 
     public void filter(String searchText){
-        if(_branchList.size()!=0 && branchList.size()!=0) {
+        if(_prodList.size()!=0 && prodList.size()!=0) {
             searchText = searchText.toLowerCase().toLowerCase(Locale.getDefault());
-            branchList.clear();
+            prodList.clear();
             if (searchText.length() == 0) {
-                branchList.addAll(_branchList);
+                prodList.addAll(_prodList);
             } else {
-                for (String str : _branchList) {
-                    if (str.toLowerCase(Locale.getDefault()).contains(searchText)) {
-                        branchList.add(str);
+                for (ProductMasterClass prodClass : _prodList) {
+                    if (prodClass.getFinal_prod().toLowerCase(Locale.getDefault()).contains(searchText)) {
+                        prodList.add(prodClass);
                     }
                 }
             }
             notifyDataSetChanged();
-        }else if(_branchList.size()!=0 && branchList.size()==0) {
-            branchList.addAll(_branchList);
+        }else if(_prodList.size()!=0 && prodList.size()==0) {
+            prodList.addAll(_prodList);
         }
-    }
-}
+    }}

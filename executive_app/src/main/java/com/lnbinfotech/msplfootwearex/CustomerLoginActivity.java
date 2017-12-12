@@ -380,6 +380,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         editor.putInt(getString(R.string.pref_retailCustId),userClass.getCustID());
         editor.putInt(getString(R.string.pref_branchid),userClass.getBranchId());
         editor.putInt(getString(R.string.pref_cityid),userClass.getCityId());
+        editor.putInt(getString(R.string.pref_hocode),userClass.getHOCode());
         editor.apply();
 
         finish();

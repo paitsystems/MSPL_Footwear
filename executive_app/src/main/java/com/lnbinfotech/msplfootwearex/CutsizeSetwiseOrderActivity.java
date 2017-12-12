@@ -15,6 +15,7 @@ import android.view.Gravity;
 
 import com.lnbinfotech.msplfootwearex.adapters.CutsizewiseViewPagerAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.fragments.CGentsCategoryFragment;
 import com.lnbinfotech.msplfootwearex.fragments.CHawaiNEvaCategoryFragment;
 import com.lnbinfotech.msplfootwearex.fragments.CLadiesNBoysCategoryFragment;
@@ -43,6 +44,9 @@ public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements Vi
         setViewPager();
         tabLayout.setupWithViewPager(pager);
         createTabIcons();
+
+        OptionsActivity.custDisc = new DBHandler(getApplicationContext()).getCustDiscount(DisplayCustListActivity.custId);
+
     }
 
     @Override

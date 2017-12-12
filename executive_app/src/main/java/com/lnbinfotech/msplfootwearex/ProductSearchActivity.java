@@ -20,6 +20,7 @@ import com.lnbinfotech.msplfootwearex.adapters.ProductSearchAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
+import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +33,14 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
     private EditText ed_search;
     private ListView listView;
     private DBHandler db;
-    private List<String> prodList;
+    private List<ProductMasterClass> prodList;
     private ProductSearchAdapter adapter;
     private String cat2, cat9;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppThemeAddToCard);
         setContentView(R.layout.activity_product_search);
 
         cat9 = getIntent().getExtras().getString("cat9");
@@ -74,7 +76,12 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(listView.getWindowToken(),0);
-                AddToCartActivity.selProd = (String) listView.getItemAtPosition(i);
+                ProductMasterClass prodClass = (ProductMasterClass) listView.getItemAtPosition(i);
+                AddToCartActivity.selProd = prodClass.getFinal_prod();
+                AddToCartActivity.selProdId = prodClass.getProduct_id();
+                AddToCartActivity.activityToFrom = 1;
+                Constant.showLog(AddToCartActivity.selProd);
+                Constant.showLog(""+AddToCartActivity.selProdId);
                 new Constant(ProductSearchActivity.this).doFinish();
             }
         });
@@ -117,11 +124,17 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
         Cursor res = db.getFinalProduct(cat2,cat9);
         if(res.moveToFirst()){
             do{
-                prodList.add(res.getString(res.getColumnIndex(DBHandler.PM_Finalprod)));
+                ProductMasterClass prodClass = new ProductMasterClass();
+                prodClass.setProduct_id(res.getInt(res.getColumnIndex(DBHandler.PM_ProductID)));
+                prodClass.setFinal_prod(res.getString(res.getColumnIndex(DBHandler.PM_Finalprod)));
+                prodList.add(prodClass);
             }while(res.moveToNext());
         }
         if(prodList.size()==0) {
-            prodList.add("NA");
+            ProductMasterClass prodClass = new ProductMasterClass();
+            prodClass.setProduct_id(0);
+            prodClass.setFinal_prod("NA");
+            prodList.add(prodClass);
         }
         adapter = new ProductSearchAdapter(prodList, getApplicationContext());
         listView.setAdapter(adapter);

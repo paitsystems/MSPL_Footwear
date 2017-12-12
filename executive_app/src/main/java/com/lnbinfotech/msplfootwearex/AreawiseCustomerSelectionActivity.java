@@ -34,7 +34,6 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
     private AreawiseCustSelListAdapter adapter;
     private DBHandler db;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +59,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                        // AreawiseCustomerSelectionClass areaClass_ = new AreawiseCustomerSelectionClass();
                         String id = cursor.getString(cursor.getColumnIndex(DBHandler.Area_Id));
                         SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                        editor.putString("areaid",id);
+                        editor.putString(getString(R.string.areaid),id);
                         editor.apply();
                         Constant.showLog("id:"+id);
                         hashmap.put(area_name,id);
