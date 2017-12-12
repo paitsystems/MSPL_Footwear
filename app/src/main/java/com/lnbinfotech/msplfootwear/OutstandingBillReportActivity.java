@@ -1,0 +1,184 @@
+package com.lnbinfotech.msplfootwear;
+
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.Toast;
+import android.view.Gravity;
+
+import com.lnbinfotech.msplfootwear.adapters.LedgerReportAdapter;
+import com.lnbinfotech.msplfootwear.adapters.OuststandingReportAdapter;
+import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
+import com.lnbinfotech.msplfootwear.constant.Constant;
+import com.lnbinfotech.msplfootwear.interfaces.ServerCallbackList;
+import com.lnbinfotech.msplfootwear.log.WriteLog;
+import com.lnbinfotech.msplfootwear.model.LedgerReportClass;
+import com.lnbinfotech.msplfootwear.model.OuststandingReportClass;
+import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
+
+import java.net.URLEncoder;
+import java.util.List;
+
+public class OutstandingBillReportActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private Constant constant, constant1;
+    private Toast toast;
+    private ListView lv_out;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_outstanding_bill_report);
+
+        init();
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case 0:
+                break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //showDia(0);
+        new Constant(OutstandingBillReportActivity.this).doFinish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //showDia(0);
+                new Constant(OutstandingBillReportActivity.this).doFinish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    private void showOutstandingReport() {
+        if (ConnectivityTest.getNetStat(OutstandingBillReportActivity.this)) {
+            try {
+                String _branch = URLEncoder.encode("JAYNAGAR", "UTF-8");
+                String url = Constant.ipaddress + "/GetSuperfastSellingReport?fromdate=01/Sep/2017&todate=11/Nov/2017&percent=80";
+                Constant.showLog(url);
+                writeLog("superfastSellingDetails" + url);
+                constant.showPD();
+                VolleyRequests requests = new VolleyRequests(OutstandingBillReportActivity.this);
+                requests.loadOuststndReport(url, new ServerCallbackList() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        constant.showPD();
+                        List<OuststandingReportClass> list = (List<OuststandingReportClass>) result;
+                        if (list.size() != 0) {
+                            lv_out.setAdapter(null);
+                            //setMonths();
+                            OuststandingReportAdapter adapter = new OuststandingReportAdapter(list, getApplicationContext());
+                            lv_out.setAdapter(adapter);
+                            //setTotal(list);
+                        } else {
+                            showPopup(1);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Object result) {
+                        constant.showPD();
+                        showPopup(2);
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                constant.showPD();
+                showPopup(2);
+                writeLog("superfastSellingDetails_" + e.getMessage());
+            }
+        } else {
+            toast.setText("You Are Offline");
+            toast.show();
+        }
+    }
+
+    private void init() {
+        lv_out = (ListView) findViewById(R.id.lv_out);
+        constant = new Constant(OutstandingBillReportActivity.this);
+        constant1 = new Constant(getApplicationContext());
+        toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+    }
+
+    private void showPopup(int id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (id == 0) {
+            builder.setMessage("Do you want to exit?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+        } else if (id == 1) {
+            builder.setMessage("Data Loaded Successfully");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (id == 2) {
+            builder.setMessage("Error While Loading Data?");
+            builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                   showOutstandingReport();
+
+                }
+            });
+        } else if (id == 3) {
+            builder.setMessage("");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (id == 4) {
+            builder.setMessage("select month type:");
+            builder.setPositiveButton("3 Month", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            builder.setNegativeButton("6 Month", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+        }
+
+        builder.create().show();
+    }
+    private void writeLog(String _data) {
+        new WriteLog().writeLog(getApplicationContext(), "OutstandingBillReportActivity_" + _data);
+    }
+}

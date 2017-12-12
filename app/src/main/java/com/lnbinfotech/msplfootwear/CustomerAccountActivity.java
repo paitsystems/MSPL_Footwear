@@ -1,6 +1,7 @@
 package com.lnbinfotech.msplfootwear;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +18,7 @@ public class CustomerAccountActivity extends AppCompatActivity implements View.O
 
     private Constant constant, constant1;
     private Toast toast;
-    private CardView card_bills,card_gst_report, card_ledger_statement;
+    private CardView card_bills,card_gst, card_ledger,card_out;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +26,8 @@ public class CustomerAccountActivity extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_customer_account);
 
         init();
-
+        card_ledger.setOnClickListener(this);
+        card_out.setOnClickListener(this);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -35,7 +37,16 @@ public class CustomerAccountActivity extends AppCompatActivity implements View.O
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case 0:
+            case  R.id.card_ledger:
+                startActivity(new Intent(getApplicationContext(), LedgerReportActivity.class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                break;
+            case  R.id.card_out:
+                startActivity(new Intent(getApplicationContext(), OutstandingBillReportActivity.class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                break;
+            case  R.id.card_gst:
+
                 break;
         }
     }
@@ -63,8 +74,9 @@ public class CustomerAccountActivity extends AppCompatActivity implements View.O
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         card_bills = (CardView) findViewById(R.id.card_bills);
-        card_gst_report= (CardView) findViewById(R.id.card_gst_report);
-        card_ledger_statement = (CardView) findViewById(R.id.card_ledger_statement);
+        card_gst= (CardView) findViewById(R.id.card_gst);
+        card_ledger = (CardView) findViewById(R.id.card_ledger);
+        card_out = (CardView) findViewById(R.id.card_out);
     }
 
     private void showDia(int a) {

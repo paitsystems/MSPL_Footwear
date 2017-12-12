@@ -5,6 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:padding="@dimen/mobpadding5"
+        android:gravity="center">
+    <TextView
+        style="@style/textViewMob"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/greend"
+        android:text="Credit Limit.."
+        android:id="@+id/tv_arealine"
+        android:layout_weight="0.1" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imgv_i"
+            android:src="@drawable/infog_32"
+            android:layout_weight="0.9" />
+
+    </LinearLayout>
+
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"

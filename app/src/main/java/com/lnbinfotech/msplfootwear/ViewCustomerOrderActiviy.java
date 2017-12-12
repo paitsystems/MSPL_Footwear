@@ -3,6 +3,7 @@ package com.lnbinfotech.msplfootwear;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +40,7 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
     private String from;
     private DBHandler db;
     private List<CustomerOrderClass> list;
+    private ImageView imgv_i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         }
 
         init();
+        imgv_i.setOnClickListener(this);
 
         btn_proceed.setOnClickListener(this);
 
@@ -81,6 +85,12 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
                 Intent intent = new Intent(this, CheckoutCustOrderActivity.class);
                 intent.putExtra("from",from);
                 startActivity(intent);
+                overridePendingTransition(R.anim.enter,R.anim.exit);
+                break;
+            case R.id.imgv_i:
+                //finish();
+                Intent in = new Intent(this, DisplayCustOutstandingActivity.class);
+                startActivity(in);
                 overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
         }
@@ -184,9 +194,14 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         tv_tot_grossamt.setText(totalAmnt);
         tv_disc_per.setText(String.valueOf(OptionsActivity.custDisc));
         tv_discamnt.setText(totalDiscAmnt);
+
+        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+        editor.putString("totalNetAmnt",totalNetAmnt);
+        editor.apply();
     }
 
     private void init() {
+        imgv_i = (ImageView) findViewById(R.id.imgv_i);
         constant = new Constant(ViewCustomerOrderActiviy.this);
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);

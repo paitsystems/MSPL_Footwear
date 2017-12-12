@@ -132,6 +132,21 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeAddToCard"
             android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".DisplayCustOutstandingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAddToCard"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".LedgerReportActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAddToCard"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".OutstandingBillReportActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAddToCard"
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>

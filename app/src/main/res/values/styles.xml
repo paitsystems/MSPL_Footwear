@@ -336,4 +336,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="textViewMobTotal" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/tot_textsize</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

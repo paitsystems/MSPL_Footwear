@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.lnbinfotech.msplfootwear.CheckoutCustOrderActivity;
+import com.lnbinfotech.msplfootwear.DisplayCustOutstandingActivity;
 import com.lnbinfotech.msplfootwear.FirstActivity;
 import com.lnbinfotech.msplfootwear.R;
 import com.lnbinfotech.msplfootwear.constant.Constant;
@@ -17,6 +18,8 @@ import com.lnbinfotech.msplfootwear.model.CityMasterClass;
 import com.lnbinfotech.msplfootwear.model.CompanyMasterClass;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwear.model.GSTMasterClass;
+import com.lnbinfotech.msplfootwear.model.LedgerReportClass;
+import com.lnbinfotech.msplfootwear.model.OuststandingReportClass;
 import com.lnbinfotech.msplfootwear.model.TrackOrderDetailClass;
 import com.lnbinfotech.msplfootwear.model.DocumentMasterClass;
 import com.lnbinfotech.msplfootwear.model.EmployeeMasterClass;
@@ -40,6 +43,7 @@ public class ParseJSON {
     private String json;
     private Context context;
     private DBHandler db;
+
 
     public ParseJSON(String _json){
         this.json = _json;
@@ -589,6 +593,86 @@ public class ParseJSON {
         }catch (Exception e){
             e.printStackTrace();
             writeLog("parseloadCheckoutOrder_" + e.getMessage());
+        }
+        return list;
+    }
+
+    public int parseCustOutstanding(){
+        int ret = 0;
+        try{
+            //retailCustId, name,ledgerBal,Creditlimit,Creditdays,PartName,PostDatedCheque,BalForPayment,OverDueAmnt,OverDueDays,OverLimit
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    DisplayCustOutstandingActivity.outClass.setRetailCustId(jsonArray.getJSONObject(i).getString("retailCustID"));
+                    DisplayCustOutstandingActivity.outClass.setName(jsonArray.getJSONObject(i).getString("name"));
+                    DisplayCustOutstandingActivity.outClass.setLedgerBal(jsonArray.getJSONObject(i).getString("ledgerBal"));
+                    DisplayCustOutstandingActivity.outClass.setCreditlimit(jsonArray.getJSONObject(i).getString("Creditlimit"));
+                    DisplayCustOutstandingActivity.outClass.setCreditdays(jsonArray.getJSONObject(i).getString("Creditdays"));
+                    DisplayCustOutstandingActivity.outClass.setPartName(jsonArray.getJSONObject(i).getString("PartyName"));
+                    DisplayCustOutstandingActivity.outClass.setCurrOutstnd(jsonArray.getJSONObject(i).getString("CurrentOutstnd"));
+                    DisplayCustOutstandingActivity.outClass.setPostDatedCheque(jsonArray.getJSONObject(i).getString("PostDatedCheque"));
+                    DisplayCustOutstandingActivity.outClass.setBalForPayment(jsonArray.getJSONObject(i).getString("BalForPayment"));
+                    DisplayCustOutstandingActivity.outClass.setOverDueAmnt(jsonArray.getJSONObject(i).getString("OverDueAmnt"));
+                    DisplayCustOutstandingActivity.outClass.setOverDueDays(jsonArray.getJSONObject(i).getString("OverDueDays"));
+                    DisplayCustOutstandingActivity.outClass.setOverLimit(jsonArray.getJSONObject(i).getString("OverLimit"));
+
+                }
+
+                ret = 1;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseCustOutstanding"+e.getMessage());
+        }
+        return ret;
+    }
+
+    public List<LedgerReportClass> parseLedgerReport(){
+
+        List<LedgerReportClass> list = new ArrayList<>();
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    LedgerReportClass ledgerClass = new LedgerReportClass();
+                    ledgerClass.setDate(jsonArray.getJSONObject(i).getString("Date"));
+                    ledgerClass.setAgainst(jsonArray.getJSONObject(i).getString("Against"));
+                    ledgerClass.setOpnbal(jsonArray.getJSONObject(i).getDouble("opning Bal"));
+                    ledgerClass.setDebit(jsonArray.getJSONObject(i).getDouble("Debit"));
+                    ledgerClass.setCredit(jsonArray.getJSONObject(i).getDouble("Credit"));
+                    ledgerClass.setClsbal(jsonArray.getJSONObject(i).getDouble("closing Bal"));
+                    ledgerClass.setTransno(jsonArray.getJSONObject(i).getString("Trans no"));
+                    list.add(ledgerClass);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseLedgerReport_" + e.getMessage());
+        }
+        return list;
+    }
+
+    public List<OuststandingReportClass> parseOutStndReport(){
+
+        List<OuststandingReportClass> list = new ArrayList<>();
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    OuststandingReportClass outClass = new OuststandingReportClass();
+                    outClass.setDate(jsonArray.getJSONObject(i).getString("Date"));
+                    outClass.setType(jsonArray.getJSONObject(i).getString("Type"));
+                    outClass.setDcno(jsonArray.getJSONObject(i).getString("DcNo"));
+                    outClass.setTotal(jsonArray.getJSONObject(i).getDouble("Total"));
+
+                    list.add(outClass);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseOutStndReport_" + e.getMessage());
         }
         return list;
     }
