@@ -639,11 +639,11 @@ public class ParseJSON {
                     LedgerReportClass ledgerClass = new LedgerReportClass();
                     ledgerClass.setDate(jsonArray.getJSONObject(i).getString("Date"));
                     ledgerClass.setAgainst(jsonArray.getJSONObject(i).getString("Against"));
-                    ledgerClass.setOpnbal(jsonArray.getJSONObject(i).getDouble("opning Bal"));
+                    ledgerClass.setOpnbal(jsonArray.getJSONObject(i).getDouble("OP"));
                     ledgerClass.setDebit(jsonArray.getJSONObject(i).getDouble("Debit"));
                     ledgerClass.setCredit(jsonArray.getJSONObject(i).getDouble("Credit"));
-                    ledgerClass.setClsbal(jsonArray.getJSONObject(i).getDouble("closing Bal"));
-                    ledgerClass.setTransno(jsonArray.getJSONObject(i).getString("Trans no"));
+                    ledgerClass.setClsbal(jsonArray.getJSONObject(i).getDouble("ClosingBal"));
+                    ledgerClass.setTransno(jsonArray.getJSONObject(i).getString("TransNo"));
                     list.add(ledgerClass);
                 }
             }
@@ -664,7 +664,7 @@ public class ParseJSON {
                     OuststandingReportClass outClass = new OuststandingReportClass();
                     outClass.setDate(jsonArray.getJSONObject(i).getString("Date"));
                     outClass.setType(jsonArray.getJSONObject(i).getString("Type"));
-                    outClass.setDcno(jsonArray.getJSONObject(i).getString("DcNo"));
+                    outClass.setDcno(jsonArray.getJSONObject(i).getString("dcNo"));
                     outClass.setTotal(jsonArray.getJSONObject(i).getDouble("Total"));
 
                     list.add(outClass);

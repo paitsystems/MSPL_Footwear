@@ -59,6 +59,8 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
                 overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
             case R.id.card_ledger_report:
+                startActivity(new Intent(getApplicationContext(),LedgerReportActivity.class));
+                overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
             case R.id.card_feedback:
                 startActivity(new Intent(getApplicationContext(),FeedbackActivity.class));

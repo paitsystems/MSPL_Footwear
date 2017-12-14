@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Gravity;
 
@@ -21,6 +22,7 @@ import com.lnbinfotech.msplfootwear.model.OuststandingReportClass;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
 
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class OutstandingBillReportActivity extends AppCompatActivity implements View.OnClickListener {
@@ -28,6 +30,9 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
     private Constant constant, constant1;
     private Toast toast;
     private ListView lv_out;
+    private TextView tot_Total;
+    private double total = 0;
+    private DecimalFormat dc_format;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,7 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
         setContentView(R.layout.activity_outstanding_bill_report);
 
         init();
+        showOutstandingReport();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -71,10 +77,12 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
     private void showOutstandingReport() {
         if (ConnectivityTest.getNetStat(OutstandingBillReportActivity.this)) {
             try {
-                String _branch = URLEncoder.encode("JAYNAGAR", "UTF-8");
-                String url = Constant.ipaddress + "/GetSuperfastSellingReport?fromdate=01/Sep/2017&todate=11/Nov/2017&percent=80";
+
+                int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
+               // String url = Constant.ipaddress + "/GetOutstandingRpt?custid=1689";
+                String url = Constant.ipaddress + "/GetOutstandingRpt?custid="+id;
                 Constant.showLog(url);
-                writeLog("superfastSellingDetails" + url);
+                writeLog("showOutstandingReport" + url);
                 constant.showPD();
                 VolleyRequests requests = new VolleyRequests(OutstandingBillReportActivity.this);
                 requests.loadOuststndReport(url, new ServerCallbackList() {
@@ -84,10 +92,9 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
                         List<OuststandingReportClass> list = (List<OuststandingReportClass>) result;
                         if (list.size() != 0) {
                             lv_out.setAdapter(null);
-                            //setMonths();
                             OuststandingReportAdapter adapter = new OuststandingReportAdapter(list, getApplicationContext());
                             lv_out.setAdapter(adapter);
-                            //setTotal(list);
+                            setTotal(list);
                         } else {
                             showPopup(1);
                         }
@@ -103,7 +110,7 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
                 e.printStackTrace();
                 constant.showPD();
                 showPopup(2);
-                writeLog("superfastSellingDetails_" + e.getMessage());
+                writeLog("showOutstandingReport" + e.getMessage());
             }
         } else {
             toast.setText("You Are Offline");
@@ -111,12 +118,28 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
         }
     }
 
+
+    private void setTotal(List<OuststandingReportClass> list){
+        total = 0;
+
+        for (OuststandingReportClass oclass : list){
+            total = total + oclass.getTotal();
+        }
+
+        tot_Total.setText(dc_format.format(total));
+
+    }
+
     private void init() {
         lv_out = (ListView) findViewById(R.id.lv_out);
+        tot_Total = (TextView) findViewById(R.id.tot_Total);
         constant = new Constant(OutstandingBillReportActivity.this);
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
+
+        dc_format = new DecimalFormat();
+        dc_format.setMaximumFractionDigits(2);
     }
 
     private void showPopup(int id) {

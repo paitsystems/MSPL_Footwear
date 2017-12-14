@@ -20,6 +20,8 @@ import com.lnbinfotech.msplfootwearex.model.DocumentMasterClass;
 import com.lnbinfotech.msplfootwearex.model.EmployeeMasterClass;
 import com.lnbinfotech.msplfootwearex.model.GSTMasterClass;
 import com.lnbinfotech.msplfootwearex.model.HOMasterClass;
+import com.lnbinfotech.msplfootwearex.model.LedgerReportClass;
+import com.lnbinfotech.msplfootwearex.model.OuststandingReportClass;
 import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
 import com.lnbinfotech.msplfootwearex.model.TrackOrderClass;
@@ -591,6 +593,54 @@ public class ParseJSON {
         }catch (Exception e){
             e.printStackTrace();
             writeLog("parseloadCheckoutOrder_" + e.getMessage());
+        }
+        return list;
+    }
+
+    public List<LedgerReportClass> parseLedgerReport(){
+
+        List<LedgerReportClass> list = new ArrayList<>();
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    LedgerReportClass ledgerClass = new LedgerReportClass();
+                    ledgerClass.setDate(jsonArray.getJSONObject(i).getString("Date"));
+                    ledgerClass.setAgainst(jsonArray.getJSONObject(i).getString("Against"));
+                    ledgerClass.setOpnbal(jsonArray.getJSONObject(i).getDouble("OP"));
+                    ledgerClass.setDebit(jsonArray.getJSONObject(i).getDouble("Debit"));
+                    ledgerClass.setCredit(jsonArray.getJSONObject(i).getDouble("Credit"));
+                    ledgerClass.setClsbal(jsonArray.getJSONObject(i).getDouble("ClosingBal"));
+                    ledgerClass.setTransno(jsonArray.getJSONObject(i).getString("TransNo"));
+                    list.add(ledgerClass);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseLedgerReport_" + e.getMessage());
+        }
+        return list;
+    }
+
+    public List<OuststandingReportClass> parseOutStndReport(){
+
+        List<OuststandingReportClass> list = new ArrayList<>();
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    OuststandingReportClass outClass = new OuststandingReportClass();
+                    outClass.setDate(jsonArray.getJSONObject(i).getString("Date"));
+                    outClass.setType(jsonArray.getJSONObject(i).getString("Type"));
+                    outClass.setDcno(jsonArray.getJSONObject(i).getString("dcNo"));
+                    outClass.setTotal(jsonArray.getJSONObject(i).getDouble("Total"));
+
+                    list.add(outClass);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseOutStndReport_" + e.getMessage());
         }
         return list;
     }

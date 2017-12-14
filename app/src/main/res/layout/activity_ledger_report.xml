@@ -3,70 +3,134 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_margin="5dp"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="0.6">
-        <TextView
-            android:padding="5dp"
-            android:background="@color/i_orange"
-            android:textColor="@color/white"
-            style="@style/textViewMobTotal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="From Date"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.6"
+            android:orientation="horizontal">
 
             <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Small Text"
-            android:id="@+id/tv_fdate"
-            android:layout_weight="0.5" />
-            </LinearLayout>
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="From Date"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_weight="0.3"
+                android:gravity="center" />
+
+            <TextView
+                style="@style/textViewMob"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="To Date"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_weight="0.3" />
+            <TextView
+                style="@style/textViewMob"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="All"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_weight="0.4" />
+
+        </LinearLayout>
+    </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="0.4">
-        <TextView
-            android:padding="5dp"
-            android:background="@color/i_orange"
-            android:textColor="@color/white"
-            style="@style/textViewMobTotal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="To Date"
-            android:layout_weight="0.4" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Small Text"
-            android:id="@+id/tv_tdate"
-            android:layout_weight="0.3" />
+            android:orientation="horizontal">
 
-            <CheckBox
+            <TextView
+                android:id="@+id/tv_fdate"
+                style="@style/textViewMob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="All"
+                android:background="@drawable/textview_back"
+                android:padding="5dp"
+                android:text="12/12/2017"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_weight="0.3"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/tv_tdate"
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:background="@drawable/textview_back"
+                android:padding="5dp"
+                android:text="12-Dec-2017"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:gravity="center" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_weight="0.4">
+            <CheckBox
                 android:id="@+id/cb_all"
-                android:layout_weight="0.4" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:orientation="horizontal"
+            android:gravity="center">
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableLeft="@drawable/show_16"
+            android:text="Show"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/i_orange"
+            />
+            </LinearLayout>
+
+       <TextView
+
+            android:id="@+id/tv_outstanding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Outstanding Bills"
+            android:textColor="@color/orange"
+            android:gravity="right"
+            android:layout_gravity="center"
+            android:layout_weight="0.6" />
+
+
+        </LinearLayout>
 
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -88,7 +152,7 @@
 
                 <LinearLayout
 
-                    android:layout_width="120dp"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center"
                     android:gravity="center"
@@ -96,8 +160,8 @@
                     android:visibility="visible">
 
                     <TextView
-                        style="@style/textViewMobTotal"
-                        android:layout_width="120dp"
+                        style="@style/textViewMob"
+                        android:layout_width="90dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center"
                         android:gravity="left"
@@ -106,17 +170,10 @@
                         android:textColor="@color/white"
                         android:visibility="visible" />
 
-                    <ImageView
-                        android:id="@+id/img_supp_asc"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/asc_24"
-
-                        android:visibility="gone" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="130dp"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -124,28 +181,21 @@
                     android:visibility="visible">
 
                     <TextView
-                        style="@style/textViewMobTotal"
-                        android:layout_width="200dp"
+                        style="@style/textViewMob"
+                        android:layout_width="180dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right|center"
-                        android:gravity="center_horizontal"
+                        android:layout_gravity="left|center"
+                        android:gravity="left"
                         android:text="Against"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/white"
                         android:visibility="visible" />
 
-                    <ImageView
-                        android:id="@+id/img_dep_asc"
-                        android:layout_width="20dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.15"
-                        android:src="@drawable/asc_24"
-                        android:visibility="gone" />
                 </LinearLayout>
 
                 <LinearLayout
 
-                    android:layout_width="120dp"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -153,27 +203,20 @@
                     android:visibility="visible">
 
                     <TextView
-                        style="@style/textViewMobTotal"
-                        android:layout_width="120dp"
+                        style="@style/textViewMob"
+                        android:layout_width="90dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|center"
-                        android:gravity="center_horizontal"
+                        android:gravity="right"
                         android:text="OpnBal"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/white"
                         android:visibility="visible" />
 
-                    <ImageView
-                        android:id="@+id/img_sec_asc"
-                        android:layout_width="20dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.15"
-                        android:src="@drawable/asc_24"
-                        android:visibility="gone" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="120dp"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -181,27 +224,20 @@
                     android:visibility="visible">
 
                     <TextView
-                        style="@style/textViewMobTotal"
-                        android:layout_width="120dp"
+                        style="@style/textViewMob"
+                        android:layout_width="90dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|center"
-                        android:gravity="center_horizontal"
+                        android:gravity="right"
                         android:text="Debit"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/white"
                         android:visibility="visible" />
 
-                    <ImageView
-                        android:id="@+id/img_item_asc"
-                        android:layout_width="20dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.15"
-                        android:src="@drawable/asc_24"
-                        android:visibility="gone" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="120dp"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -209,27 +245,20 @@
                     android:visibility="visible">
 
                     <TextView
-                        style="@style/textViewMobTotal"
-                        android:layout_width="120dp"
+                        style="@style/textViewMob"
+                        android:layout_width="90dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center_horizontal"
+                        android:layout_gravity="right|center"
+                        android:gravity="right"
                         android:text="Credit"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/white"
                         android:visibility="visible" />
 
-                    <ImageView
-                        android:id="@+id/img_sub_asc"
-                        android:layout_width="20dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.15"
-                        android:src="@drawable/asc_24"
-                        android:visibility="gone" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="120dp"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -238,27 +267,20 @@
 
 
                     <TextView
-                        style="@style/textViewMobTotal"
-                        android:layout_width="120dp"
+                        style="@style/textViewMob"
+                        android:layout_width="90dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right|center"
+                         android:layout_gravity="right|center"
                         android:gravity="right"
                         android:text="ClBal"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/white"
                         android:visibility="visible" />
 
-                    <ImageView
-                        android:id="@+id/img_ostk_asc"
-                        android:layout_width="20dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.15"
-                        android:src="@drawable/asc_24"
-                        android:visibility="gone" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="200dp"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -266,23 +288,16 @@
                     android:visibility="visible">
 
                     <TextView
-                        style="@style/textViewMobTotal"
-                        android:layout_width="200dp"
+                        style="@style/textViewMob"
+                        android:layout_width="180dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right|center"
-                        android:gravity="right"
+                        android:layout_gravity="left|center"
+                        android:gravity="left"
                         android:text="TransNo"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/white"
                         android:visibility="visible" />
 
-                    <ImageView
-                        android:id="@+id/img_np_asc"
-                        android:layout_width="20dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.15"
-                        android:src="@drawable/asc_24"
-                        android:visibility="gone" />
                 </LinearLayout>
 
 
@@ -292,7 +307,8 @@
                 android:id="@+id/lv_ledger"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:visibility="visible" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -303,20 +319,20 @@
                 android:weightSum="1">
 
                 <TextView
-                    style="@style/textViewMobTotal"
-                    android:layout_width="120dp"
+                    android:id="@+id/lay_total"
+                    style="@style/textViewMob"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center"
                     android:gravity="left"
                     android:text="Total"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/white"
-                    android:id="@+id/lay_total"
                     android:visibility="visible" />
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="200dp"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center"
                     android:gravity="right"
@@ -325,45 +341,9 @@
                     android:visibility="visible" />
 
                 <TextView
-                    style="@style/textViewMobTotal"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center"
-                    android:gravity="right"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white"
                     android:id="@+id/tot_ob"
-                    android:visibility="visible"
-                    android:text="0" />
-
-                <TextView
-                    style="@style/textViewMobTotal"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center"
-                    android:gravity="right"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white"
-                    android:id="@+id/tot_debit"
-                    android:visibility="visible"
-                    android:text="0" />
-
-                <TextView
-                    style="@style/textViewMobTotal"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center"
-                    android:gravity="right"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white"
-                    android:id="@+id/tot_credit"
-                    android:visibility="visible"
-                    android:text="0" />
-
-                <TextView
-                    android:id="@+id/tot_clb"
-                    style="@style/textViewMobTotal"
-                    android:layout_width="120dp"
+                    style="@style/textViewMob"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center"
                     android:gravity="right"
@@ -373,12 +353,36 @@
                     android:visibility="visible" />
 
                 <TextView
-                    android:id="@+id/tot_netpurchase"
-                    style="@style/textViewMobTotal"
-                    android:layout_width="200dp"
+                    android:id="@+id/tot_debit"
+                    style="@style/textViewMob"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center"
                     android:gravity="right"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tot_credit"
+                    style="@style/textViewMob"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tot_clb"
+                    style="@style/textViewMob"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center"
+                    android:gravity="left"
                     android:text="0"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/white"

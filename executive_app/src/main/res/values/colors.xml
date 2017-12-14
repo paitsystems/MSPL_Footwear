@@ -15,15 +15,20 @@
     <color name="red">#FF0000</color>
     <color name="purpule">#660394</color>
     <color name="yellogreen">#19A89F</color>
-    <color name="lightpeach">#C50656</color>
     <color name="whiteblue">#1293DE</color>
     <color name="blue">#0796DE</color>
     <color name="lightpurple">#9B68DE</color>
+    <color name="lightpeach">#C50656</color>
     <color name="red_dark">#F2462C</color>
     <color name="darkblue">#5D82D9</color>
     <color name="light_orange">#FC8B49</color>
     <color name="darkpurple">#CF2BC6</color>
     <color name="peachpink">#e3337d</color>
+
+
+    <!--<Sneha colors 27/nov/2017>-->
+
+
 
 
     <!--<Sneha colors 27/nov/2017>-->
@@ -48,4 +53,6 @@
     <color name="greend">#4CAF50</color>
     <color name="i_orange">#EF6C00</color>
     <color name="buttoncolor">#990000</color>
+
+
 </resources>

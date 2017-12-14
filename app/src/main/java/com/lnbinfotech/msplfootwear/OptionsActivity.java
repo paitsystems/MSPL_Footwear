@@ -32,7 +32,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.test);
 
         init();
-        //test_t();
+
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);

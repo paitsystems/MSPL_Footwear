@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center">
 
 
 
@@ -14,7 +15,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <android.support.v7.widget.CardView
@@ -96,7 +97,7 @@
 
             <android.support.v7.widget.CardView
                 android:id="@+id/card_ledger"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="0.5"
@@ -104,7 +105,8 @@
                 android:clipToPadding="false"
                 android:divider="@android:color/black"
                 android:visibility="visible"
-                app:cardElevation="5dp">
+                app:cardElevation="5dp"
+                android:layout_gravity="center">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -130,7 +132,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/ledger_statement_64" />
+                                android:src="@drawable/show_32"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -141,13 +143,13 @@
                         android:layout_margin="@dimen/mobmargin5"
                         android:gravity="center"
                         android:text="Ledger Statement"
-                        android:textColor="@color/yellogreen" />
+                        android:textColor="@color/red_dark" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/card_out"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="0.5"
@@ -155,7 +157,8 @@
                 android:clipToPadding="false"
                 android:divider="@android:color/black"
                 android:visibility="visible"
-                app:cardElevation="5dp">
+                app:cardElevation="5dp"
+                android:layout_gravity="center">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -172,7 +175,7 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/account_item_back"
+                            android:background="@drawable/out_back"
                             android:gravity="center"
                             android:orientation="vertical">
 
@@ -181,7 +184,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/order_64" />
+                                android:src="@drawable/order_32" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -192,13 +195,13 @@
                         android:layout_margin="@dimen/mobmargin5"
                         android:gravity="center"
                         android:text="Outstanding Bill Report"
-                        android:textColor="@color/yellogreen" />
+                        android:textColor="@color/greend" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/card_gst"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="0.5"
@@ -206,7 +209,8 @@
                 android:clipToPadding="false"
                 android:divider="@android:color/black"
                 android:visibility="visible"
-                app:cardElevation="5dp">
+                app:cardElevation="5dp"
+                android:layout_gravity="center">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -223,7 +227,7 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/account_item_back"
+                            android:background="@drawable/gst_back"
                             android:gravity="center"
                             android:orientation="vertical">
 
@@ -232,7 +236,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/gst_report_64" />
+                                android:src="@drawable/gst_report_32" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -243,7 +247,7 @@
                         android:layout_margin="@dimen/mobmargin5"
                         android:gravity="center"
                         android:text="GST Report"
-                        android:textColor="@color/yellogreen" />
+                        android:textColor="@color/purpled" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
             <android.support.v7.widget.CardView

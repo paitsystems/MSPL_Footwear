@@ -15,6 +15,7 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.lnbinfotech.msplfootwearex.adapters.AreawiseCustSelExpandableListAdapter;
 import com.lnbinfotech.msplfootwearex.adapters.AreawiseCustSelListAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
@@ -29,10 +30,18 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
     private Constant constant, constant1;
     private Toast toast;
     private ListView listView;
+    private ExpandableListView exp_listView;
     private List<AreawiseCustomerSelectionClass> areaList;
     public static HashMap<String ,String> hashmap;
     private AreawiseCustSelListAdapter adapter;
+    private AreawiseCustSelExpandableListAdapter adapter1;
     private DBHandler db;
+    private HashMap<Integer,List<String>> area_map;
+    private List<Integer> areaid_list;
+    private HashMap<Integer,List<Integer>> areaid_partyId_map;
+    private HashMap<Integer,List<String>> party_map;
+    private List<Integer> partyid_list;
+    private HashMap<Integer,Integer> area_party_map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +115,15 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER,0,0);
         listView = (ListView) findViewById(R.id.listView);
+        exp_listView = (ExpandableListView) findViewById(R.id.exp_listView);
         areaList = new ArrayList<>();
+
+        area_map = new HashMap<>();
+        party_map = new HashMap<>();
+        area_party_map = new HashMap<>();
+        areaid_list = new ArrayList<>();
+        partyid_list = new ArrayList<>();
+        areaid_partyId_map = new HashMap<>();
 
 
         areaName();
@@ -132,11 +149,16 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         AreawiseCustomerSelectionClass areaClass6 = new AreawiseCustomerSelectionClass();
         areaClass5.setAreaname("Area Line");
         areaList.add(areaClass6);*/
-        adapter = new AreawiseCustSelListAdapter(getApplicationContext(),areaList);
-        listView.setAdapter(adapter);
+
+
+       /* adapter = new AreawiseCustSelListAdapter(getApplicationContext(),areaList);
+        listView.setAdapter(adapter);*/
+        adapter1 = new AreawiseCustSelExpandableListAdapter(getApplicationContext(),area_map, areaid_list, party_map, partyid_list, area_party_map, areaid_partyId_map);
+        exp_listView.setAdapter(adapter1);
+
     }
 
-    private  void areaName(){
+    /*private  void areaName(){
         Cursor cursor =  db.getAreaName(FirstActivity.pref.getInt(getString(R.string.pref_cityid),0));
         if(cursor.moveToFirst()){
             do{
@@ -147,7 +169,111 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
             }while (cursor.moveToNext());
         }
         cursor.close();
+    }*/
+
+    private  void areaName(){
+        Cursor cursor =  db.getExpListData();
+        if(cursor.moveToFirst()){
+            do{
+                int areaId = 0,custId = 0;
+                String area_name = "",cust_name = "";
+               // AreawiseCustomerSelectionClass  areaclass = new AreawiseCustomerSelectionClass();
+
+                areaId =  cursor.getInt(cursor.getColumnIndex(DBHandler.Area_Id));
+                area_name = cursor.getString(cursor.getColumnIndex(DBHandler.Area_Area));
+                custId =  cursor.getInt(cursor.getColumnIndex(DBHandler.CM_RetailCustID));
+                cust_name = cursor.getString(cursor.getColumnIndex(DBHandler.CM_Name));
+
+                if(!areaid_list.contains(areaId)) {
+                    areaid_list.add(areaId);
+                }
+                Constant.showLog("areaid_list:"+areaid_list.size());
+
+                if(!partyid_list.contains(custId)) {
+                    partyid_list.add(custId);
+                }
+                Constant.showLog("partyid_list:"+partyid_list.size());
+
+
+                if(area_map.isEmpty()) {
+                    List<String> ar_NameLs = new ArrayList<>();
+                    ar_NameLs.add(area_name);
+                    area_map.put(areaId,ar_NameLs);
+                }else {
+                    if(area_map.containsKey(areaId)){
+                        List<String> ar_NameLs1  = area_map.get(areaId);
+
+                            ar_NameLs1.add(area_name);
+
+                        area_map.put(areaId,ar_NameLs1);
+                    }else{
+                        List<String> ar_NameLs = new ArrayList<>();
+                        ar_NameLs.add(area_name);
+                        area_map.put(areaId,ar_NameLs);
+                    }
+                }
+                Constant.showLog("area_map:"+area_map.size());
+
+                if(party_map.isEmpty()) {
+                    List<String> cus_NameLs = new ArrayList<>();
+                    cus_NameLs.add(cust_name);
+                    party_map.put(custId,cus_NameLs);
+                }else {
+                    if(party_map.containsKey(custId)){
+                        List<String> cus_NameLs1 = party_map.get(custId);
+                        cus_NameLs1.add(cust_name);
+                        party_map.put(custId,cus_NameLs1);
+                    }else{
+                        List<String> cus_NameLs = new ArrayList<>();
+                        cus_NameLs.add(cust_name);
+                        party_map.put(custId,cus_NameLs);
+                    }
+                }
+                Constant.showLog("party_map:"+party_map.size());
+
+
+                area_party_map.put(areaId,custId);
+                Constant.showLog("area_party_map:"+area_party_map.size());
+
+               /* if(area_party_map.isEmpty()) {
+                    area_party_map.put(areaId,custId);
+                }else {
+                    if(party_map.containsKey(areaId)){
+                        area_party_map.put(areaId,custId);
+                    }else{
+                        area_party_map.put(areaId,custId);
+                    }
+                }*/
+
+               // areaid_partyId_map.put(areaId,)
+                if(areaid_partyId_map.isEmpty()) {
+                    List<Integer> cus_IdLs = new ArrayList<>();
+                    cus_IdLs.add(custId);
+                    areaid_partyId_map.put(areaId,cus_IdLs);
+                }else {
+                    if(areaid_partyId_map.containsKey(areaId)){
+                        List<Integer> cus_IdLs1 = areaid_partyId_map.get(areaId);
+                        cus_IdLs1.add(custId);
+                        areaid_partyId_map.put(areaId,cus_IdLs1);
+                    }else{
+                        List<Integer> cus_IdLs = new ArrayList<>();
+                        cus_IdLs.add(custId);
+                        areaid_partyId_map.put(areaId,cus_IdLs);
+                    }
+                }
+                Constant.showLog("areaid_partyId_map:"+areaid_partyId_map.size());
+
+
+
+
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+
     }
+
+
+
 
     private void showDia(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(AreawiseCustomerSelectionActivity.this);

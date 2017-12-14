@@ -128,7 +128,7 @@ public class DisplayCustListAreawiseActivity extends AppCompatActivity implement
     public void setCusList() {
         int id = Integer.parseInt(FirstActivity.pref.getString(getString(R.string.areaid), ""));
         Constant.showLog("arrrid:" + id);
-        Cursor cur = db.getCustNameAreawise(id);
+        Cursor cur = db.getCustNameAreawise();
         if (cur.moveToFirst()) {
             do {
                 cus_list.add(cur.getString(cur.getColumnIndex(DBHandler.CM_Name)));
