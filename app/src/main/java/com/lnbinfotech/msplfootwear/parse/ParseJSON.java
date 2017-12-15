@@ -16,6 +16,7 @@ import com.lnbinfotech.msplfootwear.model.BankMasterClass;
 import com.lnbinfotech.msplfootwear.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwear.model.CityMasterClass;
 import com.lnbinfotech.msplfootwear.model.CompanyMasterClass;
+import com.lnbinfotech.msplfootwear.model.CustOutstandingClass;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwear.model.GSTMasterClass;
 import com.lnbinfotech.msplfootwear.model.LedgerReportClass;
@@ -308,6 +309,8 @@ public class ParseJSON {
                     prodClass.setHKHO(jsonArray.getJSONObject(i).getInt("HKHO"));
                     prodClass.setHKRD(jsonArray.getJSONObject(i).getInt("HKRD"));
                     prodClass.setHANR(jsonArray.getJSONObject(i).getInt("HANR"));
+                    prodClass.setMarkUp(jsonArray.getJSONObject(i).getString("Sales_MarkUp"));
+                    prodClass.setMarkDown(jsonArray.getJSONObject(i).getString("Sales_MarkDown"));
                     //db.addProductMaster(prodClass);
                     prodList.add(prodClass);
                 }
@@ -603,8 +606,8 @@ public class ParseJSON {
             //retailCustId, name,ledgerBal,Creditlimit,Creditdays,PartName,PostDatedCheque,BalForPayment,OverDueAmnt,OverDueDays,OverLimit
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
-
                 for (int i = 0; i < jsonArray.length(); i++) {
+                    DisplayCustOutstandingActivity.outClass = new CustOutstandingClass();
                     DisplayCustOutstandingActivity.outClass.setRetailCustId(jsonArray.getJSONObject(i).getString("retailCustID"));
                     DisplayCustOutstandingActivity.outClass.setName(jsonArray.getJSONObject(i).getString("name"));
                     DisplayCustOutstandingActivity.outClass.setLedgerBal(jsonArray.getJSONObject(i).getString("ledgerBal"));

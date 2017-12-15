@@ -10,7 +10,7 @@
         android:layout_height="30dp">
 
         <TextView
-            android:layout_width="40dp"
+            android:layout_width="60dp"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/prod"

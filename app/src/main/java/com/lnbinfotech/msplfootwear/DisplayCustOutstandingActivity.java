@@ -30,11 +30,15 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_display_cust_outstanding);
 
         init();
-        loadOustandingdetail();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
+        if(DisplayCustOutstandingActivity.outClass==null) {
+            loadOustandingdetail();
+        }else{
+            setData();
         }
 
     }
@@ -95,15 +99,7 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
             public void onSuccess(Object result) {
                 constant.showPD();
               //  outClass = (CustOutstandingClass) result;
-                String currOrder =  FirstActivity.pref.getString("totalNetAmnt","");
-                tv_cl.setText(outClass.getCreditlimit());
-                tv_days.setText(outClass.getCreditdays());
-                tv_co.setText(outClass.getCurrOutstnd());
-                tv_corder.setText(currOrder);
-                tv_pdc.setText(outClass.getPostDatedCheque());
-                tv_bfp.setText(outClass.getBalForPayment());
-                tv_oda.setText(outClass.getOverDueAmnt());
-                tv_ol.setText(outClass.getOverLimit());
+                setData();
             }
             @Override
             public void onFailure(Object result) {
@@ -111,6 +107,18 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
                 showPopup(2);
             }
         });
+    }
+
+    private void setData(){
+        String currOrder =  FirstActivity.pref.getString("totalNetAmnt","");
+        tv_cl.setText(outClass.getCreditlimit());
+        tv_days.setText(outClass.getCreditdays());
+        tv_co.setText(outClass.getCurrOutstnd());
+        tv_corder.setText(currOrder);
+        tv_pdc.setText(outClass.getPostDatedCheque());
+        tv_bfp.setText(outClass.getBalForPayment());
+        tv_oda.setText(outClass.getOverDueAmnt());
+        tv_ol.setText(outClass.getOverLimit());
     }
 
     private void showPopup(int id) {

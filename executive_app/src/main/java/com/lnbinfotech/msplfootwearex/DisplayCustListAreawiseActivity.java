@@ -84,8 +84,6 @@ public class DisplayCustListAreawiseActivity extends AppCompatActivity implement
 
             }
         });
-
-
     }
 
     @Override
@@ -128,10 +126,10 @@ public class DisplayCustListAreawiseActivity extends AppCompatActivity implement
     public void setCusList() {
         int id = Integer.parseInt(FirstActivity.pref.getString(getString(R.string.areaid), ""));
         Constant.showLog("arrrid:" + id);
-        Cursor cur = db.getCustNameAreawise();
+        Cursor cur = db.getCustNameAreawise(id);
         if (cur.moveToFirst()) {
             do {
-                cus_list.add(cur.getString(cur.getColumnIndex(DBHandler.CM_Name)));
+                cus_list.add(cur.getString(cur.getColumnIndex(DBHandler.CM_PartyName)));
                 Constant.showLog("cuslist:" + cus_list.size());
             } while (cur.moveToNext());
         }

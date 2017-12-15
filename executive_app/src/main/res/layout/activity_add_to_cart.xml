@@ -16,14 +16,44 @@
         android:orientation="vertical"
         android:layout_weight="1">
 
-        <EditText
+        <!--<EditText
             android:id="@+id/ed_prod_search"
             style="@style/textViewMob"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableRight="@drawable/search"
             android:focusable="false"
-            android:hint="Search Product Here..." />
+            android:hint="Search Product Here..." />-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/mobmargin2"
+            android:background="@drawable/black_border_draw"
+            android:baselineAligned="false"
+            android:elevation="5dp"
+            android:orientation="horizontal"
+            android:padding="@dimen/mobpadding5">
+
+            <EditText
+                android:id="@+id/ed_prod_search"
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="0.1"
+                android:background="@null"
+                android:hint="Search Product here..."
+                android:focusable="false"
+                android:singleLine="false" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.9"
+                android:src="@drawable/search24" />
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -299,7 +329,8 @@
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
                 android:gravity="center"
-                android:text="Add-To-Card" />
+                android:text="Add-To-Card"
+                android:singleLine="true" />
 
             <TextView
                 android:id="@+id/tv_remove_item"
@@ -311,6 +342,7 @@
                 android:background="@drawable/btn_draw_maroon_curve"
                 android:gravity="center"
                 android:text="Remove"
+                android:singleLine="true"
                 android:visibility="gone" />
 
             <TextView
@@ -323,6 +355,7 @@
                 android:background="@drawable/btn_draw_maroon_curve"
                 android:gravity="center"
                 android:text="Cancel"
+                android:singleLine="true"
                 android:visibility="gone" />
 
             <TextView
@@ -334,7 +367,21 @@
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
                 android:gravity="center"
-                android:text="Check Stock" />
+                android:text="Check Stock"
+                android:autoText="false"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/tv_new_item"
+                style="@style/textViewMobW"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/addtocardtvheight"
+                android:layout_margin="@dimen/mobpadding2"
+                android:layout_weight="0.5"
+                android:background="@drawable/btn_draw_maroon_curve"
+                android:gravity="center"
+                android:text="New Item"
+                android:singleLine="true" />
 
             <!--<android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_add_to_card"

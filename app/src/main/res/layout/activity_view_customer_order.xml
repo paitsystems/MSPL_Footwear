@@ -1,280 +1,323 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:padding="@dimen/mobpadding5"
-        android:gravity="center">
-    <TextView
-        style="@style/textViewMob"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/greend"
-        android:text="Credit Limit.."
-        android:id="@+id/tv_arealine"
-        android:layout_weight="0.1" />
+        android:padding="@dimen/mobpadding5">
 
-        <ImageView
+        <TextView
+            android:id="@+id/tv_creaditlimit"
+            style="@style/textViewMob"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="Credit Limit.."
+            android:textColor="@color/greend" />
+
+        <ImageView
             android:id="@+id/imgv_i"
-            android:src="@drawable/infog_32"
-            android:layout_weight="0.9" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:src="@drawable/infog_32" />
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.9"
+            android:text="Qty"
+            android:visibility="gone" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_dispatchcenter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:divider="@null"
+            android:layoutDirection="rtl"
+            android:orientation="horizontal"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:reverseLayout="true" />
+    </LinearLayout>
+
     <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/horizontalScrollView"
         android:layout_weight="1">
 
-    <LinearLayout
-            android:orientation="vertical"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:background="@color/red"
-                android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@color/red"
+                android:orientation="horizontal">
 
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/prod"
-                    android:textColor="@color/white"
-                    android:visibility="visible"
-                    android:background="@drawable/line_left_top_right_bottom_draw"
-                    android:gravity="center_horizontal" />
                 <TextView
                     style="@style/textViewMob"
                     android:layout_width="60dp"
                     android:layout_height="match_parent"
+                    android:background="@drawable/line_left_top_right_bottom_draw"
+                    android:text="@string/prod"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/sizeg"
                     android:textColor="@color/white"
-                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:visibility="visible"
                     android:gravity="center" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center"
+                    android:text="@string/sizeg"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white" />
+
                 <TextView
                     style="@style/textViewMob"
                     android:layout_width="80dp"
                     android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/color"
-                    android:textColor="@color/white"
                     android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:text="@string/color"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white" />
 
                 <TextView
                     style="@style/textViewMob"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/looseq"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    android:background="@drawable/line_top_right_bottom_draw"/>
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/wsp"
-                    android:textColor="@color/white"
                     android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:text="@string/looseq"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white" />
+
                 <TextView
                     style="@style/textViewMob"
                     android:layout_width="60dp"
                     android:layout_height="match_parent"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center"
+                    android:text="@string/wsp"
                     android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center"
                     android:text="@string/mr"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    android:background="@drawable/line_top_right_bottom_draw"/>
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white" />
+
                 <TextView
                     style="@style/textViewMob"
                     android:layout_width="60dp"
                     android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/amt"
-                    android:textColor="@color/white"
+                    android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
-                    android:background="@drawable/line_top_right_bottom_draw"/>
+                    android:text="@string/amt"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white" />
+
                 <TextView
                     style="@style/textViewMob"
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/gst"
-                    android:textColor="@color/white"
                     android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:text="@string/gst"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
             <ListView
+                android:id="@+id/lv_vOrder"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:id="@+id/lv_vOrder"
                 android:layout_weight="1" />
 
             <LinearLayout
-                android:background="@color/red"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="30dp">
+                android:layout_height="30dp"
+                android:background="@color/red"
+                android:orientation="horizontal">
 
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/totalno"
-                    android:textColor="@color/white"
-                    android:visibility="visible"
-                    android:background="@drawable/line_left_top_right_bottom_draw"
-                    android:gravity="center" />
                 <TextView
                     style="@style/textViewMob"
                     android:layout_width="60dp"
                     android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/totalqty"
-                    android:textColor="@color/white"
+                    android:background="@drawable/line_left_top_right_bottom_draw"
                     android:gravity="center"
-                    android:background="@drawable/line_top_right_bottom_draw" />
+                    android:text="@string/totalno"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center"
+                    android:text="@string/totalqty"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white" />
+
                 <TextView
                     style="@style/textViewMob"
                     android:layout_width="80dp"
                     android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/grossamt"
-                    android:textColor="@color/white"
                     android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:text="@string/grossamt"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white" />
 
                 <TextView
                     style="@style/textViewMob"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/discper"
-                    android:textColor="@color/white"
+                    android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
-                    android:background="@drawable/line_top_right_bottom_draw" />
+                    android:text="@string/discper"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white" />
+
                 <TextView
                     style="@style/textViewMob"
                     android:layout_width="70dp"
                     android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center"
                     android:text="@string/discamt"
-                    android:textColor="@color/white"
-                    android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center" />
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white" />
+
                 <TextView
                     style="@style/textViewMob"
                     android:layout_width="70dp"
                     android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/gstamt"
-                    android:textColor="@color/white"
                     android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:text="@string/gstamt"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white" />
+
                 <TextView
                     style="@style/textViewMob"
                     android:layout_width="80dp"
                     android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/netamt"
-                    android:textColor="@color/white"
                     android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:text="@string/netamt"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="30dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal">
 
-            <TextView
+                <TextView
 
-                style="@style/textViewMob"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/black"
-                android:visibility="visible"
-                android:background="@drawable/line_left_right_bottom_draw"
-                android:id="@+id/tv_tot_set"
-                android:gravity="center" />
-            <TextView
-                style="@style/textViewMob"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/black"
-                android:background="@drawable/line_right_bottom_draw"
-                android:id="@+id/tv_tot_qty"
-                android:gravity="center" />
-            <TextView
-                style="@style/textViewMob"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/black"
-                android:background="@drawable/line_right_bottom_draw"
-                android:id="@+id/tv_gross_amt"
-                android:gravity="center" />
+                    android:id="@+id/tv_tot_set"
+                    style="@style/textViewMob"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/line_left_right_bottom_draw"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black"
+                    android:visibility="visible" />
 
-            <TextView
-                style="@style/textViewMob"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/black"
-                android:background="@drawable/line_right_bottom_draw"
-                android:id="@+id/tv_disc_per"
-                android:gravity="center" />
-            <TextView
-                style="@style/textViewMob"
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/black"
-                android:background="@drawable/line_right_bottom_draw"
-                android:id="@+id/tv_disc_amt"
-                android:gravity="center" />
-            <TextView
-                style="@style/textViewMob"
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/black"
-                android:background="@drawable/line_right_bottom_draw"
-                android:id="@+id/tv_gst_amt"
-                android:gravity="center" />
-            <TextView
-                style="@style/textViewMob"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/black"
-                android:background="@drawable/line_right_bottom_draw"
-                android:id="@+id/tv_amt"
-                android:gravity="center" />
+                <TextView
+                    android:id="@+id/tv_tot_qty"
+                    style="@style/textViewMob"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/line_right_bottom_draw"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_gross_amt"
+                    style="@style/textViewMob"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/line_right_bottom_draw"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tv_disc_per"
+                    style="@style/textViewMob"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/line_right_bottom_draw"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tv_disc_amt"
+                    style="@style/textViewMob"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/line_right_bottom_draw"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tv_gst_amt"
+                    style="@style/textViewMob"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/line_right_bottom_draw"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tv_amt"
+                    style="@style/textViewMob"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/line_right_bottom_draw"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
 
         </LinearLayout>
     </HorizontalScrollView>

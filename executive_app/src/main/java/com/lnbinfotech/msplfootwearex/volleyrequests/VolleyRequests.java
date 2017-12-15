@@ -685,6 +685,36 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
+    public void loadCustOutstanding(String url, final ServerCallbackList callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\", "");
+                        response = response.replace("''", "");
+                        response = response.substring(1, response.length() - 1);
+                        int ret = new ParseJSON(response, context).parseCustOutstanding();
+                        if (ret == 1) {
+                            callback.onSuccess(response);
+                        } else {
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("loadCustOutstanding"+error.getMessage());
+                        Constant.showLog(error.getMessage());
+                        writeLog("loadCustOutstanding" + error.getMessage());
+                    }
+                }
+        );
+        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
+    }
+
+
     /*public void loadTrackOrederDetail(String url, final ServerCallbackList callback){
         StringRequest request = new StringRequest(url, new Response.Listener<String>() {
             @Override

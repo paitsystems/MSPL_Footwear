@@ -251,7 +251,7 @@
     <string name="orderqty">Order Qty</string>
     <!---sneha changes30oct17- - - - - - - - - - - -->
 
-    <string name="takeorder">Take Order</string>
+    <string name="takeorder">Place Order</string>
     <string name="visit">Visit</string>
     <string name="payment">Payment</string>
     <string name="visitoption">Visit Option</string>

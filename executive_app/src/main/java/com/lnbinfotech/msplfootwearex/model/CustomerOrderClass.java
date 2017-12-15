@@ -8,7 +8,7 @@ public class CustomerOrderClass {
     private String sizeGroup, requiredSize, color, hashCode, loosePackTyp,
                     rate, mrp, amount, totalamt, gstper,cgstamt,sgstamt,igstamt,
                     cgstper, sgstper, cessper, cessamt, discamnt, discPer,
-                    netamnt, gstAmt, amtAfterDisc, orderType;
+                    netamnt, gstAmt, amtAfterDisc, orderType, prodId;
 
     public int getAuto() {
         return auto;
@@ -264,5 +264,13 @@ public class CustomerOrderClass {
 
     public void setPendingLooseQty(int pendingLooseQty) {
         this.pendingLooseQty = pendingLooseQty;
+    }
+
+    public String getProdId() {
+        return prodId;
+    }
+
+    public void setProdId(String prodId) {
+        this.prodId = prodId;
     }
 }

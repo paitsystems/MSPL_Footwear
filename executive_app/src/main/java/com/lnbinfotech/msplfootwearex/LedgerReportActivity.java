@@ -58,9 +58,6 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
         init();
         // visibility();
 
-
-
-
         todate = sdf1.format(cal.getTime());
         // todate = "1-Nov-2017";
         Constant.showLog("todate_dafault-"+todate);
@@ -111,6 +108,12 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                 // tv_tdate.setEnabled(false);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        constant = new Constant(LedgerReportActivity.this);
     }
 
     @Override
@@ -173,7 +176,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                 //  todate =  URLEncoder.encode(sdf1.format(sdf.parse(tv_tdate.getText().toString())),"UTF-8");
                 //String tdate = sdf1.format(sdf.parse(tv_tdate.getText().toString()));
                 // Constant.showLog("tdate-"+tdate);
-
+                lv_ledger.setAdapter(null);
                 String _fromdate = URLEncoder.encode(fromdate, "UTF-8");
                 String _todate = URLEncoder.encode(todate, "UTF-8");
 
@@ -195,7 +198,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                         constant.showPD();
                         List<LedgerReportClass> list = (List<LedgerReportClass>) result;
                         if (list.size() != 0) {
-                            lv_ledger.setAdapter(null);
+
                             LedgerReportAdapter adapter = new LedgerReportAdapter(list, getApplicationContext());
                             lv_ledger.setAdapter(adapter);
                             //showPopup(1);
@@ -225,7 +228,6 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
             toast.show();
         }
     }
-
 
     private void setTotal(List<LedgerReportClass> list) {
 
@@ -381,6 +383,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
             tv_tdate.setEnabled(true);
         }
     }
+
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "LedgerReportActivity_" + _data);
     }

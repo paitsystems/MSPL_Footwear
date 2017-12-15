@@ -124,7 +124,7 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
         Cursor cur = db.getCustName();
         if (cur.moveToFirst()) {
             do {
-                cus_list.add(cur.getString(cur.getColumnIndex(DBHandler.CM_Name)));
+                cus_list.add(cur.getString(cur.getColumnIndex(DBHandler.CM_PartyName)));
             } while (cur.moveToNext());
         }
         cur.close();

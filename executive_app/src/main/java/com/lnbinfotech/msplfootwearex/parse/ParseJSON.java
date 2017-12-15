@@ -3,6 +3,7 @@ package com.lnbinfotech.msplfootwearex.parse;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.lnbinfotech.msplfootwearex.DisplayCustOutstandingActivity;
 import com.lnbinfotech.msplfootwearex.FirstActivity;
 import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.TrackOrderActivity;
@@ -15,6 +16,7 @@ import com.lnbinfotech.msplfootwearex.model.BankMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwearex.model.CityMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CompanyMasterClass;
+import com.lnbinfotech.msplfootwearex.model.CustOutstandingClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwearex.model.DocumentMasterClass;
 import com.lnbinfotech.msplfootwearex.model.EmployeeMasterClass;
@@ -306,6 +308,8 @@ public class ParseJSON {
                     prodClass.setHKHO(jsonArray.getJSONObject(i).getInt("HKHO"));
                     prodClass.setHKRD(jsonArray.getJSONObject(i).getInt("HKRD"));
                     prodClass.setHANR(jsonArray.getJSONObject(i).getInt("HANR"));
+                    prodClass.setMarkUp(jsonArray.getJSONObject(i).getString("Sales_MarkUp"));
+                    prodClass.setMarkDown(jsonArray.getJSONObject(i).getString("Sales_MarkDown"));
                     //db.addProductMaster(prodClass);
                     prodList.add(prodClass);
                 }
@@ -644,6 +648,37 @@ public class ParseJSON {
         }
         return list;
     }
+
+    public int parseCustOutstanding(){
+        int ret = 0;
+        try{
+            //retailCustId, name,ledgerBal,Creditlimit,Creditdays,PartName,PostDatedCheque,BalForPayment,OverDueAmnt,OverDueDays,OverLimit
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    DisplayCustOutstandingActivity.outClass = new CustOutstandingClass();
+                    DisplayCustOutstandingActivity.outClass.setRetailCustId(jsonArray.getJSONObject(i).getString("retailCustID"));
+                    DisplayCustOutstandingActivity.outClass.setName(jsonArray.getJSONObject(i).getString("name"));
+                    DisplayCustOutstandingActivity.outClass.setLedgerBal(jsonArray.getJSONObject(i).getString("ledgerBal"));
+                    DisplayCustOutstandingActivity.outClass.setCreditlimit(jsonArray.getJSONObject(i).getString("Creditlimit"));
+                    DisplayCustOutstandingActivity.outClass.setCreditdays(jsonArray.getJSONObject(i).getString("Creditdays"));
+                    DisplayCustOutstandingActivity.outClass.setPartName(jsonArray.getJSONObject(i).getString("PartyName"));
+                    DisplayCustOutstandingActivity.outClass.setCurrOutstnd(jsonArray.getJSONObject(i).getString("CurrentOutstnd"));
+                    DisplayCustOutstandingActivity.outClass.setPostDatedCheque(jsonArray.getJSONObject(i).getString("PostDatedCheque"));
+                    DisplayCustOutstandingActivity.outClass.setBalForPayment(jsonArray.getJSONObject(i).getString("BalForPayment"));
+                    DisplayCustOutstandingActivity.outClass.setOverDueAmnt(jsonArray.getJSONObject(i).getString("OverDueAmnt"));
+                    DisplayCustOutstandingActivity.outClass.setOverDueDays(jsonArray.getJSONObject(i).getString("OverDueDays"));
+                    DisplayCustOutstandingActivity.outClass.setOverLimit(jsonArray.getJSONObject(i).getString("OverLimit"));
+                }
+                ret = 1;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseCustOutstanding"+e.getMessage());
+        }
+        return ret;
+    }
+
 
     private void writeLog(String _data){
         new WriteLog().writeLog(context,"ParseJSON_"+_data);

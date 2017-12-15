@@ -534,7 +534,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             sndpd.setProgressPercentFormat(percentInstance);
             sndpd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             sndpd.setTitle("Please Wait");
-            sndpd.setMessage("It will take app. 10-15 min");
+            sndpd.setMessage("It will take app. 4-5 min");
             sndpd.show();
         }
 
@@ -821,7 +821,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             pd1.setProgressPercentFormat(percentInstance);
             pd1.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             pd1.setTitle("Please Wait");
-            pd1.setMessage("It will take app. 10-15 min");
+            pd1.setMessage("It will take app. 4-5 min");
             pd1.show();
         }
 
@@ -1064,7 +1064,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             pd1.setProgressPercentFormat(percentInstance);
             pd1.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             pd1.setTitle("Please Wait");
-            pd1.setMessage("It will take app. 10-15 min");
+            pd1.setMessage("It will take app. 4-5 min");
             pd1.show();
         }
 

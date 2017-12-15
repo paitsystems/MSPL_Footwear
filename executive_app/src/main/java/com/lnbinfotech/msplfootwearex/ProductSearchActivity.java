@@ -1,6 +1,7 @@
 package com.lnbinfotech.msplfootwearex;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -35,7 +36,7 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
     private DBHandler db;
     private List<ProductMasterClass> prodList;
     private ProductSearchAdapter adapter;
-    private String cat2, cat9;
+    private String cat2, cat9, from;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
 
         cat9 = getIntent().getExtras().getString("cat9");
         cat2 = getIntent().getExtras().getString("cat2");
+        from = getIntent().getExtras().getString("from");
 
         init();
 
@@ -82,7 +84,17 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
                 AddToCartActivity.activityToFrom = 1;
                 Constant.showLog(AddToCartActivity.selProd);
                 Constant.showLog(""+AddToCartActivity.selProdId);
-                new Constant(ProductSearchActivity.this).doFinish();
+                if(from.equals("cutsize")) {
+                    Intent intent = new Intent(getApplicationContext(), AddToCartActivity.class);
+                    intent.putExtra("cat9",prodClass.getCat9());
+                    intent.putExtra("cat2",prodClass.getCat2());
+                    intent.putExtra("from", "prodsearch");
+                    finish();
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.left_to_right,R.anim.right_to_left);
+                }else{
+                    new Constant(ProductSearchActivity.this).doFinish();
+                }
             }
         });
     }
@@ -127,13 +139,18 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
                 ProductMasterClass prodClass = new ProductMasterClass();
                 prodClass.setProduct_id(res.getInt(res.getColumnIndex(DBHandler.PM_ProductID)));
                 prodClass.setFinal_prod(res.getString(res.getColumnIndex(DBHandler.PM_Finalprod)));
+                prodClass.setCat2(res.getString(res.getColumnIndex(DBHandler.PM_Cat2)));
+                prodClass.setCat9(res.getString(res.getColumnIndex(DBHandler.PM_Cat9)));
                 prodList.add(prodClass);
             }while(res.moveToNext());
         }
+        res.close();
         if(prodList.size()==0) {
             ProductMasterClass prodClass = new ProductMasterClass();
             prodClass.setProduct_id(0);
             prodClass.setFinal_prod("NA");
+            prodClass.setCat2("1");
+            prodClass.setCat9("1");
             prodList.add(prodClass);
         }
         adapter = new ProductSearchAdapter(prodList, getApplicationContext());

@@ -22,7 +22,6 @@ public class LedgerReportAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private DecimalFormat flt_price;
 
-
     public LedgerReportAdapter(List<LedgerReportClass> _super_sellList, Context _context) {
         this.ledger_List = _super_sellList;
         this.context = _context;

@@ -16,7 +16,6 @@
                 android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center"
-                android:gravity="left"
                 android:text="02/Aug/2017"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/black"
@@ -29,8 +28,7 @@
             <TextView
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center"
-                android:gravity="center_horizontal"
+                android:layout_gravity="left|center"
                 android:text="Against"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/black"
@@ -43,20 +41,20 @@
             <TextView
                 android:layout_width="90dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center"
-                android:gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:text="OpnBal"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/black"
                 android:visibility="visible"
-                android:id="@+id/tv_ob" />
+                android:id="@+id/tv_ob"
+                android:gravity="right" />
 
 
             <TextView
                 android:layout_width="90dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center"
-                android:gravity="center_horizontal"
+                android:layout_gravity="center"
+                android:gravity="right"
                 android:text="Debit"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/black"
@@ -69,19 +67,19 @@
                 android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center_horizontal"
                 android:text="Credit"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/black"
                 android:visibility="visible"
-                android:id="@+id/tv_cd" />
+                android:id="@+id/tv_cd"
+                android:gravity="right" />
 
 
 
             <TextView
                 android:layout_width="90dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center"
+                android:layout_gravity="center"
                 android:gravity="right"
                 android:text="ClBal"
                 android:textAppearance="?android:attr/textAppearanceSmall"
@@ -93,7 +91,7 @@
             <TextView
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center"
+                android:layout_gravity="center"
                 android:gravity="right"
                 android:text="TransNo"
                 android:textAppearance="?android:attr/textAppearanceSmall"

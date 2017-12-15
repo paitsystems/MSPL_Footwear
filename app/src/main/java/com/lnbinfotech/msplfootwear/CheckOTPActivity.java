@@ -49,7 +49,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     private CountDownTimer countDown;
     private String mobNo,imeiNo;
     private  String response_value;
-    private ReadSms receiver;
+    //private ReadSms receiver;
     private MySMSReceiver myReceiver;
 
     @Override
@@ -262,12 +262,6 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(myReceiver);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -420,6 +414,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         editor.putBoolean(getString(R.string.pref_isRegistered),true);
         editor.apply();
         finish();
+        unregisterReceiver(myReceiver);
         Intent intent = new Intent(getApplicationContext(), CustomerDetailsActivity.class);
         intent.putExtra("otp",otpClass);
         startActivity(intent);
@@ -461,7 +456,10 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    unregisterReceiver(receiver);
+                    unregisterReceiver(myReceiver);
+                    if(countDown!=null) {
+                        countDown.cancel();
+                    }
                     new Constant(CheckOTPActivity.this).doFinish();
                     toast.cancel();
                     dialog.dismiss();

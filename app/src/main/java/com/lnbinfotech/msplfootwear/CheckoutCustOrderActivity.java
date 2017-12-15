@@ -1,12 +1,13 @@
 package com.lnbinfotech.msplfootwear;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,16 +15,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.Gravity;
 
 import com.lnbinfotech.msplfootwear.adapters.CheckoutCustOrderAdapter;
-import com.lnbinfotech.msplfootwear.adapters.ViewCustomerOrderAdapter;
 import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
-import com.lnbinfotech.msplfootwear.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwear.model.CustomerOrderClass;
 import com.lnbinfotech.msplfootwear.post.Post;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
@@ -31,11 +29,8 @@ import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class CheckoutCustOrderActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -195,7 +190,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
     private void setData(){
         int totLooseQty = 0, totAvailQty = 0;
         list.clear();
-        Cursor cursor = new DBHandler(getApplicationContext()).getViewOrderData();
+        Cursor cursor = new DBHandler(getApplicationContext()).getViewOrderData(1,"");
         if(cursor.moveToFirst()){
             do{
                 CustomerOrderClass order = new CustomerOrderClass();
@@ -204,6 +199,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                 order.setSizeGroup(cursor.getString(cursor.getColumnIndex(DBHandler.CO_SizeGroup)));
                 order.setColor(cursor.getString(cursor.getColumnIndex(DBHandler.CO_Color)));
                 order.setHashCode(cursor.getString(cursor.getColumnIndex(DBHandler.CO_HashCode)));
+                order.setProdId(cursor.getString(cursor.getColumnIndex(DBHandler.CO_Prodid)));
 
                 int _totLooseQty = cursor.getInt(cursor.getColumnIndex(DBHandler.CO_LooseQty));
                 totLooseQty = totLooseQty + _totLooseQty;
@@ -481,9 +477,8 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    AddToCartActivity.activityToFrom = 0;
-                    new Constant(CheckoutCustOrderActivity.this).doFinish();
                     dialog.dismiss();
+                    checkLimit();
                 }
             });
         }else if (a == 4) {
@@ -502,8 +497,37 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                     dialog.dismiss();
                 }
             });
+        }else if (a == 5) {
+            builder.setTitle("Payment");
+            builder.setMessage("Please Make Payment To Process Order Successful");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    doFinish();
+                }
+            });
         }
         builder.create().show();
+    }
+
+    private void checkLimit(){
+        String currOrder =  FirstActivity.pref.getString("totalNetAmnt","0");
+        float netAmt = Float.parseFloat(currOrder);
+        float creditLimit = Float.parseFloat(DisplayCustOutstandingActivity.outClass.getCreditlimit());
+        if(netAmt>creditLimit){
+            showDia(5);
+        }else{
+            doFinish();
+        }
+    }
+
+    private void doFinish(){
+        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+        editor.putString("totalNetAmnt","0");
+        editor.apply();
+        AddToCartActivity.activityToFrom = 0;
+        new Constant(CheckoutCustOrderActivity.this).doFinish();
     }
 
     private void writeLog(String _data) {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -23,114 +23,116 @@
                 style="@style/textViewMob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:gravity="center"
                 android:padding="2dp"
                 android:text="From Date"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_weight="0.3"
-                android:gravity="center" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
                 style="@style/textViewMob"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:gravity="center"
                 android:padding="2dp"
                 android:text="To Date"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_weight="0.3" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
             <TextView
                 style="@style/textViewMob"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:gravity="center"
                 android:padding="2dp"
                 android:text="All"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_weight="0.4" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
         </LinearLayout>
     </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_fdate"
-                style="@style/textViewMob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/textview_back"
-                android:padding="5dp"
-                android:text="12/12/2017"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_weight="0.3"
-                android:gravity="center" />
-
-            <TextView
-                android:id="@+id/tv_tdate"
-                style="@style/textViewMob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:background="@drawable/textview_back"
-                android:padding="5dp"
-                android:text="12-Dec-2017"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:gravity="center" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_weight="0.4">
-            <CheckBox
-                android:id="@+id/cb_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center" />
-            </LinearLayout>
-        </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_fdate"
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:background="@drawable/textview_back"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="12/12/2017"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/tv_tdate"
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:background="@drawable/textview_back"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="12-Dec-2017"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
-            android:orientation="horizontal"
-            android:gravity="center">
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_show"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:drawableLeft="@drawable/show_16"
-            android:text="Show"
-            android:textColor="@color/white"
-            app:backgroundTint="@color/i_orange"
-            />
-            </LinearLayout>
+            android:gravity="center"
+            android:orientation="horizontal">
 
-       <TextView
+            <CheckBox
+                android:id="@+id/cb_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/show_16"
+                android:text="Show"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/i_orange" />
+        </LinearLayout>
+
+        <TextView
 
             android:id="@+id/tv_outstanding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="View Outstanding Bills"
-            android:textColor="@color/orange"
-            android:gravity="right"
             android:layout_gravity="center"
-            android:layout_weight="0.6" />
+            android:layout_weight="0.6"
+            android:gravity="right"
+            android:text="View Outstanding Bills"
+            android:textColor="@color/orange" />
 
 
-        </LinearLayout>
+    </LinearLayout>
 
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -164,7 +166,6 @@
                         android:layout_width="90dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center"
-                        android:gravity="left"
                         android:text="Date"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/white"
@@ -185,7 +186,6 @@
                         android:layout_width="180dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center"
-                        android:gravity="left"
                         android:text="Against"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/white"
@@ -270,7 +270,7 @@
                         style="@style/textViewMob"
                         android:layout_width="90dp"
                         android:layout_height="wrap_content"
-                         android:layout_gravity="right|center"
+                        android:layout_gravity="right|center"
                         android:gravity="right"
                         android:text="ClBal"
                         android:textAppearance="?android:attr/textAppearanceSmall"
@@ -292,7 +292,7 @@
                         android:layout_width="180dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center"
-                        android:gravity="left"
+                        android:gravity="right"
                         android:text="TransNo"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/white"
@@ -379,15 +379,25 @@
                 <TextView
                     android:id="@+id/tot_clb"
                     style="@style/textViewMob"
-                    android:layout_width="180dp"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center"
-                    android:gravity="left"
                     android:text="0"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/white"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    android:gravity="right" />
 
+                    <TextView
+                        style="@style/textViewMob"
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center"
+                        android:gravity="right"
+                        android:text="TransNo"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/white"
+                        android:visibility="invisible" />
 
             </LinearLayout>
         </LinearLayout>

@@ -100,7 +100,7 @@ public class TrackOrderDetailActivity extends AppCompatActivity implements View.
         tv_orderqty.setText(orderClass.getLooseQty());
         tv_orderamt.setText(orderClass.getNetAmt());
         String stat = orderClass.getApprove();
-        if (stat.equalsIgnoreCase(stat)) {
+        if (stat.equalsIgnoreCase("Y")) {
             tv_orstatus.setText("Approved");
             tv_orstatus.setTextColor(getResources().getColor(R.color.darkgreen));
         } else {

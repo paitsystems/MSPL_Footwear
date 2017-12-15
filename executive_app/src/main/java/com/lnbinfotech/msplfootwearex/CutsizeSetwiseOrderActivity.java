@@ -1,14 +1,17 @@
 package com.lnbinfotech.msplfootwearex;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Gravity;
@@ -64,12 +67,27 @@ public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements Vi
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.cutsize_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 //showDia(0);
                 new Constant(CutsizeSetwiseOrderActivity.this).doFinish();
                 break;
+            case R.id.prod_search:
+                Intent intent = new Intent(getApplicationContext(), ProductSearchActivity.class);
+                intent.putExtra("cat9", "0");
+                intent.putExtra("cat2", "0");
+                intent.putExtra("from", "cutsize");
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }

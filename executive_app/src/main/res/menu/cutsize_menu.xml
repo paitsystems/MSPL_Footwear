@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="Product Search"
+        android:id="@+id/prod_search"
+        android:icon="@drawable/searchw24"
+        app:showAsAction="always"/>
+
+</menu>

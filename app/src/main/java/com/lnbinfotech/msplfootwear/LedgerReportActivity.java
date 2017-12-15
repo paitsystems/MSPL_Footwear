@@ -38,15 +38,15 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
     private Constant constant, constant1;
     private Toast toast;
     private ListView lv_ledger;
-    private TextView tv_fdate,tv_tdate,tot_clb,tot_ob,tot_credit,tot_debit,tv_outstanding;
+    private TextView tv_fdate, tv_tdate, tot_clb, tot_ob, tot_credit, tot_debit, tv_outstanding;
     private CheckBox cb_all;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
     private SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
     private int day, month, year;
     private Calendar cal = Calendar.getInstance();
-    private static final int fdt = 1,tdt = 2;
-    private String fromdate="",todate="", all = "";
-    private double total_op = 0, total_cl = 0,total_debit = 0,total_credit = 0;
+    private static final int fdt = 1, tdt = 2;
+    private String fromdate = "", todate = "", all = "";
+    private double total_op = 0, total_cl = 0, total_debit = 0, total_credit = 0;
     private DecimalFormat flt_price;
     private Button btn_show;
 
@@ -55,15 +55,13 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ledger_report);
 
-         init();
+        init();
         // visibility();
 
 
-
-
         todate = sdf1.format(cal.getTime());
-       // todate = "1-Nov-2017";
-        Constant.showLog("todate_dafault-"+todate);
+        // todate = "1-Nov-2017";
+        Constant.showLog("todate_dafault-" + todate);
         tv_tdate.setText(todate);
 
         int day = 1;
@@ -72,9 +70,9 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
         int numOfDaysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         Constant.showLog("First Day of month: " + cal.getTime());
         fromdate = sdf1.format(cal.getTime());
-        Constant.showLog("fromdate_dafault-"+fromdate);
+        Constant.showLog("fromdate_dafault-" + fromdate);
 
-       // fromdate = "1-Aug-2017";
+        // fromdate = "1-Aug-2017";
         tv_fdate.setText(fromdate);
 
         //showLedgerReport();
@@ -107,32 +105,38 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onClick(View view) {
                 visibility();
-               // tv_fdate.setEnabled(false);
-               // tv_tdate.setEnabled(false);
+                // tv_fdate.setEnabled(false);
+                // tv_tdate.setEnabled(false);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        constant = new Constant(LedgerReportActivity.this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_show:
-                if(cb_all.isChecked()){
-                        all = "Y";
-                        fromdate = "NA";
-                        todate = "NA";
-                    }else {
-                        all = "N";
-                        fromdate = tv_fdate.getText().toString();
-                        Constant.showLog("fromdate-"+fromdate);
-                        todate =  tv_tdate.getText().toString();
-                        Constant.showLog("todate-"+todate);
-                    }
+                if (cb_all.isChecked()) {
+                    all = "Y";
+                    fromdate = "NA";
+                    todate = "NA";
+                } else {
+                    all = "N";
+                    fromdate = tv_fdate.getText().toString();
+                    Constant.showLog("fromdate-" + fromdate);
+                    todate = tv_tdate.getText().toString();
+                    Constant.showLog("todate-" + todate);
+                }
                 showLedgerReport();
                 break;
             case R.id.tv_outstanding:
-                startActivity(new Intent(this,OutstandingBillReportActivity.class));
-                overridePendingTransition(R.anim.enter,R.anim.exit);
+                startActivity(new Intent(this, OutstandingBillReportActivity.class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
 
         }
@@ -155,7 +159,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
         return super.onOptionsItemSelected(item);
     }
 
-     private void showLedgerReport() {
+    private void showLedgerReport() {
         if (ConnectivityTest.getNetStat(LedgerReportActivity.this)) {
             try {
                 visibility();
@@ -168,23 +172,23 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
 
 
                 // fromdate =  URLEncoder.encode(sdf1.format(sdf.parse(tv_fdate.getText().toString())),"UTF-8");
-               // fromdate = sdf1.format(sdf.parse(tv_fdate.getText().toString()));
+                // fromdate = sdf1.format(sdf.parse(tv_fdate.getText().toString()));
                 //Constant.showLog("fdate-"+fdate);
-               //  todate =  URLEncoder.encode(sdf1.format(sdf.parse(tv_tdate.getText().toString())),"UTF-8");
+                //  todate =  URLEncoder.encode(sdf1.format(sdf.parse(tv_tdate.getText().toString())),"UTF-8");
                 //String tdate = sdf1.format(sdf.parse(tv_tdate.getText().toString()));
-               // Constant.showLog("tdate-"+tdate);
-
+                // Constant.showLog("tdate-"+tdate);
+                lv_ledger.setAdapter(null);
                 String _fromdate = URLEncoder.encode(fromdate, "UTF-8");
                 String _todate = URLEncoder.encode(todate, "UTF-8");
 
-                String _all =  URLEncoder.encode(all, "UTF-8");
-                Constant.showLog("all"+all);
+                String _all = URLEncoder.encode(all, "UTF-8");
+                Constant.showLog("all" + all);
 
-                int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
-                Constant.showLog("id"+id);
+                int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
+                Constant.showLog("id" + id);
 
-                String url = Constant.ipaddress + "/GetLedgerReport?custid="+id+"&fdate="+_fromdate+"&tdate="+_todate+"&all="+_all;
-              //  String url = Constant.ipaddress + "/GetLedgerReport?custid=100&fdate=1-Aug-2017&tdate=1-Dec-2017&all=N";
+                String url = Constant.ipaddress + "/GetLedgerReport?custid=" + id + "&fdate=" + _fromdate + "&tdate=" + _todate + "&all=" + _all;
+                //  String url = Constant.ipaddress + "/GetLedgerReport?custid=100&fdate=1-Aug-2017&tdate=1-Dec-2017&all=N";
                 Constant.showLog(url);
                 writeLog("superfastSellingDetails" + url);
                 constant.showPD();
@@ -195,7 +199,6 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                         constant.showPD();
                         List<LedgerReportClass> list = (List<LedgerReportClass>) result;
                         if (list.size() != 0) {
-                            lv_ledger.setAdapter(null);
                             LedgerReportAdapter adapter = new LedgerReportAdapter(list, getApplicationContext());
                             lv_ledger.setAdapter(adapter);
                             //showPopup(1);
@@ -209,14 +212,13 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                     public void onFailure(Object result) {
                         constant.showPD();
                         showPopup(4);
-                       // showPopup(2);
-
+                        // showPopup(2);
                     }
                 });
             } catch (Exception e) {
                 e.printStackTrace();
                 constant.showPD();
-              //  showPopup(2);
+                //  showPopup(2);
                 showPopup(4);
                 writeLog("superfastSellingDetails_" + e.getMessage());
             }
@@ -225,7 +227,6 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
             toast.show();
         }
     }
-
 
     private void setTotal(List<LedgerReportClass> list) {
 
@@ -242,10 +243,10 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
 
         }
 
-         tot_clb.setText(flt_price.format(total_cl));
-         tot_debit.setText(flt_price.format(total_debit));
-         tot_credit.setText(flt_price.format(total_credit));
-         tot_ob.setText(flt_price.format(total_op));
+        tot_clb.setText(flt_price.format(total_cl));
+        tot_debit.setText(flt_price.format(total_debit));
+        tot_credit.setText(flt_price.format(total_credit));
+        tot_ob.setText(flt_price.format(total_op));
 
     }
 
@@ -253,13 +254,13 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case fdt:
-               return new DatePickerDialog(this, fdate, year,month,day);
+                return new DatePickerDialog(this, fdate, year, month, day);
 
             case tdt:
-               return new DatePickerDialog(this, tdate,year,month,day);
+                return new DatePickerDialog(this, tdate, year, month, day);
 
         }
-        return  null;
+        return null;
     }
 
     DatePickerDialog.OnDateSetListener fdate = new DatePickerDialog.OnDateSetListener() {
@@ -268,8 +269,8 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
             try {
                 Date date = sdf.parse(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                 tv_fdate.setText(sdf1.format(date));
-                Constant.showLog("tv_fdate:"+sdf1.format(date));
-            }catch (Exception e){
+                Constant.showLog("tv_fdate:" + sdf1.format(date));
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -281,7 +282,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
             try {
                 Date date = sdf.parse(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                 tv_tdate.setText(sdf1.format(date));
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -289,7 +290,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
 
     private void init() {
         btn_show = (Button) findViewById(R.id.btn_show);
-        tv_outstanding= (TextView) findViewById(R.id.tv_outstanding);
+        tv_outstanding = (TextView) findViewById(R.id.tv_outstanding);
         tv_fdate = (TextView) findViewById(R.id.tv_fdate);
         tv_tdate = (TextView) findViewById(R.id.tv_tdate);
         lv_ledger = (ListView) findViewById(R.id.lv_ledger);
@@ -312,7 +313,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
         year = cal.get(Calendar.YEAR);
         cb_all.setChecked(false);
 
-       // tv_fdate.setEnabled(true);
+        // tv_fdate.setEnabled(true);
         //tv_tdate.setEnabled(true);
     }
 
@@ -371,16 +372,17 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
         builder.create().show();
     }
 
-    private void visibility(){
-        if(cb_all.isChecked()){
+    private void visibility() {
+        if (cb_all.isChecked()) {
             tv_fdate.setEnabled(false);
             tv_tdate.setEnabled(false);
 
-        }else{
+        } else {
             tv_fdate.setEnabled(true);
             tv_tdate.setEnabled(true);
         }
     }
+
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "LedgerReportActivity_" + _data);
     }

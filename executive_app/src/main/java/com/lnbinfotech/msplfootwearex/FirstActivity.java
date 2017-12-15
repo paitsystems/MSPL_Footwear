@@ -77,7 +77,6 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void doThis(){
-        //new DBHandler(getApplicationContext());
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             dbpath = pInfo.applicationInfo.dataDir+"/databases";

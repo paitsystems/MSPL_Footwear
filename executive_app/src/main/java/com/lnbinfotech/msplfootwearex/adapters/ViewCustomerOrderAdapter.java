@@ -68,7 +68,7 @@ public class ViewCustomerOrderAdapter extends BaseAdapter {
         }
 
         CustomerOrderClass order = (CustomerOrderClass) getItem(position);
-        holder.tv_prod_id.setText(String.valueOf(order.getProductid()));
+        holder.tv_prod_id.setText(order.getProdId());
         holder.tv_size_group.setText(order.getSizeGroup());
         holder.tv_color.setText(order.getColor());
         String hashCode = order.getHashCode();

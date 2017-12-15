@@ -3,6 +3,7 @@ package com.lnbinfotech.msplfootwear;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -53,14 +54,15 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     private RadioButton rdo_pack, rdo_unpack;
     private Spinner sp_sizeGroup;
     private TextView tv_wsp, tv_mrp, tv_hsncode, tv_gstper, tv_add_to_card, tv_checkstock, tv_remove_item, tv_cancel_item,
-            tv_add_to_card_final, tv_checkout, tv_vieworder, tv_totqty, tv_totamnt, tv_totset, tv_totnetamt;
+            tv_add_to_card_final, tv_checkout, tv_vieworder, tv_totqty, tv_totamnt, tv_totset, tv_totnetamt, actionbar_noti_tv,
+            tv_new_item;
     private RecyclerView rv_size, rv_color;
     private GridView gridView;
     private LinearLayout lay_pack, lay_comp_pack;
     private AutoCompleteTextView auto_set;
     private ListView listView;
 
-    private String cat2, cat9;
+    private String cat2, cat9, from;
     private DBHandler db;
     private List<String> size_list;
     public static List<String> sizeGroup_list;
@@ -68,13 +70,12 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     private List<String> unpackSizeList;
     public static List<Integer> unClickablePositionsList, allSizeChangeList;
     public static HashMap<Integer, Integer> map;
-    private String selSizeGroup = "";
+    private String selSizeGroup = "", prodIdStr = "";
     public static String selProd = null;
     private int selQtyLocal = 0, compPackQty = 0;
     public static int selProdId = 0, selQty = -1, activityToFrom = 0;
     public static CustomerOrderClass updateCustOrder;
     private Menu mMenu;
-    private TextView actionbar_noti_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
 
         cat9 = getIntent().getExtras().getString("cat9");
         cat2 = getIntent().getExtras().getString("cat2");
+        from = getIntent().getExtras().getString("from");
 
         ed_prod_search.setOnClickListener(this);
         rdo_pack.setOnClickListener(this);
@@ -96,14 +98,19 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         tv_add_to_card_final.setOnClickListener(this);
         tv_checkout.setOnClickListener(this);
         tv_vieworder.setOnClickListener(this);
+        tv_new_item.setOnClickListener(this);
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            String str = cat9+" -> "+cat2;
+            getSupportActionBar().setTitle(str);
         }
 
-        selProdId = 0;
-        selQty = -1;
-        activityToFrom = 0;
+        if(!from.equals("prodsearch")) {
+            selProdId = 0;
+            selQty = -1;
+            activityToFrom = 0;
+        }
 
         sp_sizeGroup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -201,6 +208,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                     Intent intent = new Intent(getApplicationContext(), ProductSearchActivity.class);
                     intent.putExtra("cat9", cat9);
                     intent.putExtra("cat2", cat2);
+                    intent.putExtra("from", "prodsearch");
                     startActivity(intent);
                     overridePendingTransition(R.anim.enter, R.anim.exit);
                 }
@@ -324,6 +332,9 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             case R.id.tv_vieworder:
                 startViewCustOrderActivity();
                 break;
+            case R.id.tv_new_item:
+                new Constant(AddToCartActivity.this).doFinish();
+                break;
         }
     }
 
@@ -348,7 +359,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         MenuItemCompat.setActionView(item, R.layout.actionbaar_badge_layout);
         View view = MenuItemCompat.getActionView(item);
         actionbar_noti_tv = (TextView)view.findViewById(R.id.actionbar_noti_tv);
-        actionbar_noti_tv.setText("12");
+        actionbar_noti_tv.setText("0");
 
         int count = new DBHandler(getApplicationContext()).getCartCount();
         Constant.showLog("cart_count:"+count);
@@ -393,6 +404,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         Cursor res = db.getProductDetails(getPackUnPack());
         if (res.moveToFirst()) {
             do {
+                prodIdStr = res.getString(res.getColumnIndex(DBHandler.PM_ProdId));
                 tv_wsp.setText(res.getString(res.getColumnIndex(DBHandler.PM_SRate)));
                 tv_mrp.setText(res.getString(res.getColumnIndex(DBHandler.PM_MRPRate)));
                 tv_hsncode.setText(res.getString(res.getColumnIndex(DBHandler.PM_HSNCode)));
@@ -479,6 +491,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         Cursor res = db.getProductDetails(getPackUnPack());
         if (res.moveToFirst()) {
             do {
+                prodIdStr = res.getString(res.getColumnIndex(DBHandler.PM_ProdId));
                 tv_wsp.setText(res.getString(res.getColumnIndex(DBHandler.PM_SRate)));
                 tv_mrp.setText(res.getString(res.getColumnIndex(DBHandler.PM_MRPRate)));
                 tv_hsncode.setText(res.getString(res.getColumnIndex(DBHandler.PM_HSNCode)));
@@ -703,6 +716,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                 custOrder.setDiscPer(String.valueOf(OptionsActivity.custDisc));
                                 custOrder.setOrderType("U");
                                 custOrder.setAvailQty(0);
+                                custOrder.setProdId(prodIdStr);
                                 db.addCustomerOrder(custOrder);
 
                                 Constant.showLog("HOCODE-" + hocode + "-ProdCol-" + prodCol + "-Auto-" + auto + "-BranchId-" + branchId +
@@ -840,6 +854,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             custOrder.setDiscPer(String.valueOf(OptionsActivity.custDisc));
                             custOrder.setOrderType("P");
                             custOrder.setAvailQty(0);
+                            custOrder.setProdId(prodIdStr);
                             db.addCustomerOrder(custOrder);
                             Constant.showLog("HOCODE-" + hocode + "-ProdCol-" + prodCol + "-Auto-" + auto + "-BranchId-" + branchId +
                                     "-SelProdId-" + selProdId + "-SizeGroup-" + sizeGroup + "-SelColor-" + colour[0] +
@@ -973,6 +988,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             custOrder.setDiscPer(String.valueOf(OptionsActivity.custDisc));
                             custOrder.setOrderType("C");
                             custOrder.setAvailQty(0);
+                            custOrder.setProdId(prodIdStr);
                             db.addCustomerOrder(custOrder);
 
                             Constant.showLog("HOCODE-" + hocode + "-ProdCol-" + prodCol + "-Auto-" + auto + "-BranchId-" + branchId +
@@ -1071,6 +1087,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         Cursor res = db.getProductDetails(getPackUnPack());
         if (res.moveToFirst()) {
             do {
+                prodIdStr = res.getString(res.getColumnIndex(DBHandler.PM_ProdId));
                 prodName = res.getString(res.getColumnIndex(DBHandler.PM_Finalprod));
                 tv_wsp.setText(res.getString(res.getColumnIndex(DBHandler.PM_SRate)));
                 tv_mrp.setText(res.getString(res.getColumnIndex(DBHandler.PM_MRPRate)));
@@ -1464,6 +1481,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                 custOrder.setDiscPer(String.valueOf(OptionsActivity.custDisc));
                                 custOrder.setOrderType("U");
                                 custOrder.setAvailQty(updateCustOrder.getAvailQty());
+                                custOrder.setProdId(prodIdStr);
                                 db.addCustomerOrder(custOrder);
 
                                 Constant.showLog("HOCODE-" + hocode + "-ProdCol-" + prodCol + "-Auto-" + auto + "-BranchId-" + branchId +
@@ -1601,6 +1619,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             custOrder.setDiscPer(String.valueOf(OptionsActivity.custDisc));
                             custOrder.setOrderType("P");
                             custOrder.setAvailQty(updateCustOrder.getAvailQty());
+                            custOrder.setProdId(prodIdStr);
                             db.addCustomerOrder(custOrder);
                             Constant.showLog("HOCODE-" + hocode + "-ProdCol-" + prodCol + "-Auto-" + auto + "-BranchId-" + branchId +
                                     "-SelProdId-" + selProdId + "-SizeGroup-" + sizeGroup + "-SelColor-" + colour[0] +
@@ -1736,6 +1755,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             custOrder.setDiscPer(String.valueOf(OptionsActivity.custDisc));
                             custOrder.setOrderType("C");
                             custOrder.setAvailQty(updateCustOrder.getAvailQty());
+                            custOrder.setProdId(prodIdStr);
                             db.addCustomerOrder(custOrder);
 
                             Constant.showLog("HOCODE-" + hocode + "-ProdCol-" + prodCol + "-Auto-" + auto + "-BranchId-" + branchId +
@@ -1823,6 +1843,11 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void startViewCustOrderActivity(){
+
+        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+        editor.putString("totalNetAmnt",tv_totnetamt.getText().toString());
+        editor.apply();
+
         Intent intent = new Intent(getApplicationContext(), ViewCustomerOrderActiviy.class);
         intent.putExtra("from","addtocard");
         startActivity(intent);
@@ -1849,6 +1874,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         tv_add_to_card_final = (TextView) findViewById(R.id.tv_add_to_card_final);
         tv_checkout = (TextView) findViewById(R.id.tv_checkout);
         tv_vieworder = (TextView) findViewById(R.id.tv_vieworder);
+        tv_new_item = (TextView) findViewById(R.id.tv_new_item);
         tv_totqty = (TextView) findViewById(R.id.tv_tqty);
         tv_totamnt = (TextView) findViewById(R.id.tv_tamnt);
         tv_totset = (TextView) findViewById(R.id.tv_tset);

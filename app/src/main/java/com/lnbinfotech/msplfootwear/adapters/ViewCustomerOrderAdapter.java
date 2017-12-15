@@ -14,7 +14,6 @@ import com.lnbinfotech.msplfootwear.model.CustomerOrderClass;
 import java.text.DecimalFormat;
 import java.util.List;
 
-
 // Created by SNEHA on 11/28/2017.
 
 public class ViewCustomerOrderAdapter extends BaseAdapter {
@@ -68,7 +67,7 @@ public class ViewCustomerOrderAdapter extends BaseAdapter {
         }
 
         CustomerOrderClass order = (CustomerOrderClass) getItem(position);
-        holder.tv_prod_id.setText(String.valueOf(order.getProductid()));
+        holder.tv_prod_id.setText(order.getProdId());
         holder.tv_size_group.setText(order.getSizeGroup());
         holder.tv_color.setText(order.getColor());
         String hashCode = order.getHashCode();
@@ -84,7 +83,6 @@ public class ViewCustomerOrderAdapter extends BaseAdapter {
         holder.tv_wsp.setText(order.getRate());
         holder.tv_amt.setText(order.getAmount());
         holder.tv_gst_per.setText(order.getGstper());
-
         return convertview;
     }
 

@@ -74,7 +74,7 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
     private void showOutstandingReport() {
         if (ConnectivityTest.getNetStat(OutstandingBillReportActivity.this)) {
             try {
-
+                lv_out.setAdapter(null);
                 int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
                 // String url = Constant.ipaddress + "/GetOutstandingRpt?custid=1689";
                 String url = Constant.ipaddress + "/GetOutstandingRpt?custid="+id;
@@ -88,12 +88,12 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
                         constant.showPD();
                         List<OuststandingReportClass> list = (List<OuststandingReportClass>) result;
                         if (list.size() != 0) {
-                            lv_out.setAdapter(null);
                             OuststandingReportAdapter adapter = new OuststandingReportAdapter(list, getApplicationContext());
                             lv_out.setAdapter(adapter);
                             setTotal(list);
                         } else {
-                            showPopup(1);
+                            toast.setText("No Record Available");
+                            toast.show();
                         }
                     }
 
@@ -164,15 +164,15 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
                 }
             });
         } else if (id == 2) {
-            builder.setMessage("Error While Loading Data?");
-            builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+            builder.setMessage("No Record Available");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    showOutstandingReport();
-
+                    dialog.dismiss();
+                    //showOutstandingReport();
                 }
             });
-        } else if (id == 3) {
+        }  else if (id == 3) {
             builder.setMessage("");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override

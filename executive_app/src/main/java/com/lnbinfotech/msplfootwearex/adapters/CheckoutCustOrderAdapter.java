@@ -67,7 +67,7 @@ public class CheckoutCustOrderAdapter extends BaseAdapter {
         }
 
         CustomerOrderClass order  = (CustomerOrderClass) getItem(position);
-        holder.tv_prod_id.setText(String.valueOf(order.getProductid()));
+        holder.tv_prod_id.setText(order.getProdId());
         holder.tv_size_group.setText(order.getSizeGroup());
         holder.tv_color.setText(order.getColor());
         String hashCode = order.getHashCode();
@@ -79,7 +79,15 @@ public class CheckoutCustOrderAdapter extends BaseAdapter {
             holder.tv_color.setBackgroundColor(Color.parseColor(hashCode));
         }
         holder.tv_loose_qty.setText(String.valueOf(order.getLooseQty()));
-        holder.tv_aqty.setText(String.valueOf(order.getAvailQty()));
+        int a = order.getAvailQty();
+        if(a!=0) {
+            holder.tv_aqty.setText("Y");
+            holder.tv_aqty.setBackgroundColor(Color.parseColor("#025F1E"));
+        }else{
+            holder.tv_aqty.setText("N");
+            holder.tv_aqty.setBackgroundColor(Color.parseColor("#FF0000"));
+        }
+        holder.tv_aqty.setTextColor(Color.parseColor("#FFFFFF"));
         return convertview;
     }
 

@@ -163,7 +163,7 @@
                     android:textColor="@color/white"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     android:id="@+id/tv_tot_availQty"
                     android:autoText="false" />
                 <TextView

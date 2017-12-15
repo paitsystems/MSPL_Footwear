@@ -46,6 +46,7 @@ public class CSchoolShoesCategoryFragment extends Fragment {
                 Intent intent = new Intent(getContext(), AddToCartActivity.class);
                 intent.putExtra("cat9","School Shoes");
                 intent.putExtra("cat2",getClass.getCategoryName());
+                intent.putExtra("from", "cutsize");
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.enter,R.anim.exit);
             }

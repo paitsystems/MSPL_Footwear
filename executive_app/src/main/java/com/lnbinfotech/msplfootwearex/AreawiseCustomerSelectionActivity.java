@@ -194,7 +194,6 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                 }
                 Constant.showLog("partyid_list:"+partyid_list.size());
 
-
                 if(area_map.isEmpty()) {
                     List<String> ar_NameLs = new ArrayList<>();
                     ar_NameLs.add(area_name);
