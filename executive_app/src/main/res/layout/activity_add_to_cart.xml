@@ -410,13 +410,6 @@
 
         </LinearLayout>
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/listView"
-            android:visibility="visible" />
-
-
 
     </LinearLayout>
     <!--</ScrollView>-->
@@ -605,6 +598,10 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+        <TextView
+            style="@style/footerstyleMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 

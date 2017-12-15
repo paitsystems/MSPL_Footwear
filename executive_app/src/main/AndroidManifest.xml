@@ -29,7 +29,7 @@
         <activity
             android:name=".FullImageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeTakeOrder" />
+            android:theme="@style/AppTheme" />
 
         <service android:name=".services.DownloadImageService" />
         <service android:name=".services.CheckNewTicketService" />
@@ -71,7 +71,7 @@
         <activity
             android:name=".NewCustomerEntryActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNewCustEntry" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".Test"
             android:screenOrientation="portrait" />
@@ -82,62 +82,62 @@
         <activity
             android:name=".VisitPaymentFormActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemePayment"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".SelectAutoItemActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemePayment"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ChequeDetailsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemePayment"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".VisitOptionsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeVisit"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ImagewiseSetwiseOrderActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeTakeOrder"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".CutsizeSetwiseOrderActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeTakeOrder"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".AreawiseCustomerSelectionActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeVisit"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".AttachCustomerImage"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNewCustEntry"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".AttachAddressProofImage"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNewCustEntry"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".AttachIdProofImageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNewCustEntry"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".AttachGSTnoPANnoImageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNewCustEntry"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".NewCustomerEntryDetailFormActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNewCustEntry"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".DataRefreshActivity"
@@ -146,12 +146,12 @@
         <activity
             android:name=".FeedbackActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeFeedback"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".AddToCartActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeAddToCard"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ProductSearchActivity"
@@ -160,27 +160,27 @@
         <activity
             android:name=".ViewCustomerOrderActiviy"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeAddToCard"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".CheckoutCustOrderActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeAddToCard"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".DisplayCustListAreawiseActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeAddToCard"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".DisplayCustListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeAddToCard"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".DisplayCustOutstandingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeAddToCard"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
 
         <activity

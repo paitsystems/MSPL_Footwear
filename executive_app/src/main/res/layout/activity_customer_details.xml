@@ -28,7 +28,13 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:id="@+id/listView"
-        android:divider="@null" />
+        android:divider="@null"
+        android:layout_weight="1" />
+
+    <TextView
+        style="@style/footerstyleMob"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

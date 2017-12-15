@@ -211,6 +211,10 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                             //showPopup(1);
                             setTotal(list);
                         } else {
+                            tot_clb.setText("0");
+                            tot_debit.setText("0");
+                            tot_credit.setText("0");
+                            tot_ob.setText("0");
                             showPopup(4);
                         }
                     }
@@ -218,6 +222,10 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                     @Override
                     public void onFailure(Object result) {
                         constant.showPD();
+                        tot_clb.setText("0");
+                        tot_debit.setText("0");
+                        tot_credit.setText("0");
+                        tot_ob.setText("0");
                         showPopup(4);
                         // showPopup(2);
 
@@ -227,6 +235,10 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                 e.printStackTrace();
                 constant.showPD();
                 //  showPopup(2);
+                tot_clb.setText("0");
+                tot_debit.setText("0");
+                tot_credit.setText("0");
+                tot_ob.setText("0");
                 showPopup(4);
                 writeLog("superfastSellingDetails_" + e.getMessage());
             }
@@ -245,17 +257,26 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
         total_credit = 0;
 
         for (LedgerReportClass ledger : list) {
+
             total_op = total_op + ledger.getOpnbal();
             total_cl = total_cl + ledger.getClsbal();
             total_debit = total_debit + ledger.getDebit();
             total_credit = total_credit + ledger.getCredit();
 
-        }
 
-        tot_clb.setText(flt_price.format(total_cl));
-        tot_debit.setText(flt_price.format(total_debit));
-        tot_credit.setText(flt_price.format(total_credit));
-        tot_ob.setText(flt_price.format(total_op));
+        }
+       // if(list.size() != 0) {
+            tot_clb.setText(flt_price.format(total_cl));
+            tot_debit.setText(flt_price.format(total_debit));
+            tot_credit.setText(flt_price.format(total_credit));
+            tot_ob.setText(flt_price.format(total_op));
+       /* }else {
+            tot_clb.setText("0");
+            tot_debit.setText("0");
+            tot_credit.setText("0");
+            tot_ob.setText("0");
+        }*/
+
 
     }
 

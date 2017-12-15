@@ -45,6 +45,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
     public static VisitPaymentFormGetterSetter visit;
     private int total_amt = 0;
     private Toast toast;
+    private String custName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,12 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.payment);
         }
+
+        custName = getIntent().getExtras().getString("child_selected");
+
         init();
+        ed_cus_name.setText(custName);
+        ed_cus_name.setEnabled(false);
     }
 
     private void init() {
@@ -90,11 +96,11 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         switch (view.getId()) {
             case R.id.btn_save:
                 //cheque_amount_missmatch();
-                if (ed_cus_name.getText().toString().equals("")) {
+                /*if (ed_cus_name.getText().toString().equals("")) {
                     Toast toast = Toast.makeText(getApplicationContext(), "Please enter customer name", Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
-                }
+                }*/
                 if (rdo_cheque.isChecked()) {
                     validation();
                 }
@@ -177,7 +183,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         //VisitPaymentFormGetterSetter getterSetter = new VisitPaymentFormGetterSetter();
         // get_cust = getIntent().getStringExtra("Customer_name");
         Constant.showLog("cus: " + visit.getCustomer_name());
-        ed_cus_name.setText(visit.getCustomer_name());
+       // ed_cus_name.setText(visit.getCustomer_name());
     }
 
     private void setAmount() {

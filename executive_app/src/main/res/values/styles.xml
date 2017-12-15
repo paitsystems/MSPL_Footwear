@@ -11,8 +11,8 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/blue</item>
-        <item name="colorPrimaryDark">@color/blue</item>
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryDark">@color/red</item>
         <item name="colorAccent">@color/black</item>
     </style>
 
@@ -136,7 +136,7 @@
         <item name="android:text">@string/footer</item>
         <item name="android:textSize">@dimen/footersizeMob</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@color/orange</item>
+        <item name="android:background">@color/red</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
@@ -230,7 +230,7 @@
         <item name="android:text">@string/footer</item>
         <item name="android:textSize">@dimen/footersizeTab</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@color/orange</item>
+        <item name="android:background">@color/red</item>
         <item name="android:textColor">@color/white</item>
     </style>
 

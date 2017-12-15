@@ -121,6 +121,7 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
                 auto_type = "bank";
                 k.putExtra("Auto_type", auto_type);
                 startActivity(k);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 writeLog("goes to SelectAutoItemActivity");
                 break;
             case R.id.ed_branch:
@@ -128,6 +129,7 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
                 auto_type = "branch";
                 i.putExtra("Auto_type", auto_type);
                 startActivity(i);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 writeLog("goes to SelectAutoItemActivity");
                 break;
         }

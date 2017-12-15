@@ -30,7 +30,10 @@
             android:layout_weight="1">
 
         </android.support.v4.view.ViewPager>
-
+        <TextView
+            style="@style/footerstyleMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </LinearLayout>

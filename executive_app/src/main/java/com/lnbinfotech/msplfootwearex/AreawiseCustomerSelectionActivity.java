@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
     private HashMap<Integer,List<String>> childls;
     private int areaId = 0,custId = 0;
     private String area_name = "";
+    private ImageView img_parent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +88,13 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
        /* exp_listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int group_postion, long l) {
-                area_name = String.valueOf(area_map.get(areaid_list.get(group_postion)));
-                Constant.showLog("area_name:"+area_name);
+                img_parent.setImageDrawable(getResources().getDrawable(R.drawable.expand_16));
+               *//* area_name = String.valueOf(area_map.get(areaid_list.get(group_postion)));
+                Constant.showLog("area_name:"+area_name);*//*
                 return true;
             }
-        });*/
-
+        });
+*/
         exp_listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int group_postion, int child_position, long l) {
@@ -164,6 +167,8 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         partyid_list = new ArrayList<>();
         areaid_partyId_map = new HashMap<>();
         childls = new HashMap<>();
+
+        img_parent = (ImageView) findViewById(R.id.img_parent);
 
 
         areaName();

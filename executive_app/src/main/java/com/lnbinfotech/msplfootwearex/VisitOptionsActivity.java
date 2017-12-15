@@ -22,6 +22,7 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
     private TextView tv_arealine_display,tv_custname_display;
     private CardView card_take_order, card_payment, card_ledger_report, card_feedback;
     private int custId = 0;
+    private String custName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +39,13 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
         }
         String arealine = "Selected Arealine-"+getIntent().getExtras().getString("area_name");
         Constant.showLog(arealine);
-        String cusname = "CustomerName-"+getIntent().getExtras().getString("child_selected");
+        custName = getIntent().getExtras().getString("child_selected");
         custId = Integer.parseInt(getIntent().getExtras().getString("cust_id"));
         DisplayCustListActivity.custId = custId;
-        Constant.showLog(cusname);
+        Constant.showLog(custName);
         //tv_arealine.setText("Selected Arealine-" +arealine);
         tv_arealine_display.setText(arealine);
-        tv_custname_display.setText(cusname);
+        tv_custname_display.setText("CustomerName-"+custName);
         card_take_order.setOnClickListener(this);
         card_payment.setOnClickListener(this);
         card_ledger_report.setOnClickListener(this);
@@ -63,7 +64,10 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_payment:
-                startActivity(new Intent(getApplicationContext(),VisitPaymentFormActivity.class));
+                Intent intent =  new Intent(getApplicationContext(),VisitPaymentFormActivity.class);
+                intent.putExtra("cust_id",String.valueOf(custId));
+                intent.putExtra("child_selected",custName);
+                startActivity(intent);
                 overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
             case R.id.card_ledger_report:

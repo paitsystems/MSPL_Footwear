@@ -329,7 +329,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5sp"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="gone">
 
         <android.support.v7.widget.AppCompatButton
             android:gravity="center"
@@ -345,6 +346,9 @@
     </LinearLayout>
 
 
-
+    <TextView
+        style="@style/footerstyleMob"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
