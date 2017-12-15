@@ -192,6 +192,7 @@
             android:name=".OutstandingBillReportActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
+
     </application>
 
 </manifest>

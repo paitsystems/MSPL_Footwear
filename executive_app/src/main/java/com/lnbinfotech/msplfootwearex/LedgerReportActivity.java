@@ -49,6 +49,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
     private double total_op = 0, total_cl = 0,total_debit = 0,total_credit = 0;
     private DecimalFormat flt_price;
     private Button btn_show;
+    private int custId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,9 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
 
         init();
         // visibility();
+
+        custId = Integer.parseInt(getIntent().getExtras().getString("cust_id"));
+
 
         todate = sdf1.format(cal.getTime());
         // todate = "1-Nov-2017";
@@ -134,7 +138,9 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                 showLedgerReport();
                 break;
             case R.id.tv_outstanding:
-                startActivity(new Intent(this,OutstandingBillReportActivity.class));
+                Intent in =  new Intent(getApplicationContext(),OutstandingBillReportActivity.class);
+                in.putExtra("cust_id",String.valueOf(custId));
+                startActivity(in);
                 overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
 
@@ -183,10 +189,11 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                 String _all =  URLEncoder.encode(all, "UTF-8");
                 Constant.showLog("all"+all);
 
-                int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
-                Constant.showLog("id"+id);
+                /*int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
+                Constant.showLog("id"+id);*/
 
-                String url = Constant.ipaddress + "/GetLedgerReport?custid=100&fdate="+_fromdate+"&tdate="+_todate+"&all="+_all;
+
+                String url = Constant.ipaddress + "/GetLedgerReport?custid="+custId+"&fdate="+_fromdate+"&tdate="+_todate+"&all="+_all;
                  // String url = Constant.ipaddress + "/GetLedgerReport?custid=100&fdate=1-Aug-2017&tdate=1-Dec-2017&all=N";
                 Constant.showLog(url);
                 writeLog("superfastSellingDetails" + url);
@@ -228,6 +235,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
             toast.show();
         }
     }
+
 
     private void setTotal(List<LedgerReportClass> list) {
 

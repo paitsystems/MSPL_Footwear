@@ -39,9 +39,12 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
     private HashMap<Integer,List<String>> area_map;
     private List<Integer> areaid_list;
     private HashMap<Integer,List<Integer>> areaid_partyId_map;
-    private HashMap<Integer,List<String>> party_map;
+    private HashMap<Integer,String> party_map;
     private List<Integer> partyid_list;
     private HashMap<Integer,Integer> area_party_map;
+    private HashMap<Integer,List<String>> childls;
+    private int areaId = 0,custId = 0;
+    private String area_name = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
             getSupportActionBar().setTitle(R.string.visit);
         }
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+       /* listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 AreawiseCustomerSelectionClass areaClass = (AreawiseCustomerSelectionClass) listView.getItemAtPosition(i);
@@ -78,9 +81,45 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                 startActivity(new Intent(getApplicationContext(),VisitOptionsActivity.class).putExtra("area_name",area_name));
                 overridePendingTransition(R.anim.enter,R.anim.exit);
             }
+        });*/
+
+       /* exp_listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView expandableListView, View view, int group_postion, long l) {
+                area_name = String.valueOf(area_map.get(areaid_list.get(group_postion)));
+                Constant.showLog("area_name:"+area_name);
+                return true;
+            }
+        });*/
+
+        exp_listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int group_postion, int child_position, long l) {
+                //String sel_child = (String) adapter1.getChild(group_postion,child_position);
+                String a = String.valueOf(area_map.get(areaid_list.get(group_postion)));
+                area_name = a.toString().replace("[","").replace("]","");
+                Constant.showLog("area_name:"+area_name);
+
+                String child_sel =  party_map.get(areaid_partyId_map.get(areaid_list.get(group_postion)).get(child_position));
+                Constant.showLog("child_selected:"+child_sel);
+
+                int cust_id =  db.getCustid(child_sel);
+                Constant.showLog("cust_id:"+cust_id);
+
+                Intent in = new Intent(getApplicationContext(),VisitOptionsActivity.class);
+                in.putExtra("area_name",area_name);
+                in.putExtra("child_selected",child_sel);
+                in.putExtra("cust_id",String.valueOf(cust_id));
+                startActivity(in);
+                overridePendingTransition(R.anim.enter,R.anim.exit);
+                return true;
+
+            }
         });
 
     }
+
+
 
     @Override
     public void onClick(View view) {
@@ -124,6 +163,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         areaid_list = new ArrayList<>();
         partyid_list = new ArrayList<>();
         areaid_partyId_map = new HashMap<>();
+        childls = new HashMap<>();
 
 
         areaName();
@@ -153,7 +193,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
 
        /* adapter = new AreawiseCustSelListAdapter(getApplicationContext(),areaList);
         listView.setAdapter(adapter);*/
-        adapter1 = new AreawiseCustSelExpandableListAdapter(getApplicationContext(),area_map, areaid_list, party_map, partyid_list, area_party_map, areaid_partyId_map);
+        adapter1 = new AreawiseCustSelExpandableListAdapter(getApplicationContext(),area_map, areaid_list, party_map, partyid_list, area_party_map, areaid_partyId_map,childls);
         exp_listView.setAdapter(adapter1);
 
     }
@@ -175,7 +215,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         Cursor cursor =  db.getExpListData();
         if(cursor.moveToFirst()){
             do{
-                int areaId = 0,custId = 0;
+
                 String area_name = "",cust_name = "";
                // AreawiseCustomerSelectionClass  areaclass = new AreawiseCustomerSelectionClass();
 
@@ -200,9 +240,11 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                     area_map.put(areaId,ar_NameLs);
                 }else {
                     if(area_map.containsKey(areaId)){
-                        List<String> ar_NameLs1  = area_map.get(areaId);
-
-                            ar_NameLs1.add(area_name);
+                       List<String> ar_NameLs1  = area_map.get(areaId);
+                        //List<String> ar_NameLs1  = new ArrayList<>();
+                            if(!ar_NameLs1.contains(area_name)) {
+                                ar_NameLs1.add(area_name);
+                            }
 
                         area_map.put(areaId,ar_NameLs1);
                     }else{
@@ -213,7 +255,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                 }
                 Constant.showLog("area_map:"+area_map.size());
 
-                if(party_map.isEmpty()) {
+                /*if(party_map.isEmpty()) {
                     List<String> cus_NameLs = new ArrayList<>();
                     cus_NameLs.add(cust_name);
                     party_map.put(custId,cus_NameLs);
@@ -228,7 +270,21 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                         party_map.put(custId,cus_NameLs);
                     }
                 }
-                Constant.showLog("party_map:"+party_map.size());
+                Constant.showLog("party_map:"+party_map.size());*/
+
+                if(party_map.isEmpty()){
+                    party_map.put(custId,cust_name);
+                }else {
+                    if(party_map.containsKey(custId)){
+                       String s = party_map.get(custId);
+                        if(!s.equals(cust_name)){
+                            s = cust_name;
+                        }
+                        party_map.put(custId,s);
+                    }else{
+                        party_map.put(custId,cust_name);
+                    }
+                }
 
 
                 area_party_map.put(areaId,custId);
@@ -262,7 +318,26 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                 }
                 Constant.showLog("areaid_partyId_map:"+areaid_partyId_map.size());
 
+                if(childls.isEmpty()) {
+                    List<String> child_NameLs = new ArrayList<>();
+                    child_NameLs.add(cust_name);
+                    childls.put(areaId,child_NameLs);
+                }else {
+                    if(childls.containsKey(areaId)){
+                        List<String> child_NameLs1  = childls.get(areaId);
+                        //List<String> ar_NameLs1  = new ArrayList<>();
+                        if(!child_NameLs1.contains(cust_name)) {
+                            child_NameLs1.add(cust_name);
+                        }
 
+                        childls.put(areaId,child_NameLs1);
+                    }else{
+                        List<String> child_NameLs = new ArrayList<>();
+                        child_NameLs.add(cust_name);
+                        childls.put(areaId,child_NameLs);
+                    }
+                }
+                Constant.showLog("childls:"+childls.size());
 
 
             }while (cursor.moveToNext());

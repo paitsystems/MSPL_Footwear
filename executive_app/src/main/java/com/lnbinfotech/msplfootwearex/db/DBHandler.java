@@ -376,10 +376,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < newVersion) {
-            db.execSQL("drop table " + Table_AllRequiredSizesDesigns);
-            db.execSQL(create_arsd_master);
-        }
     }
 
     public void addCustomerDetail(ArrayList<CustomerDetailClass> custList) {
@@ -945,11 +941,10 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
-    public Cursor getProductDetails(String packUnpackType) {
-        String str = "select " + PM_ProductID + "," + PM_SRate + "," + PM_MRPRate + ","
-                + PM_HSNCode + "," + PM_GSTGroup + "," + PM_Finalprod +"," + PM_ProdId +
-                " from " + Table_ProductMaster + " where " + PM_ProductID + "=" + AddToCartActivity.selProdId;
-        Constant.showLog("getProductDetails :- " + str);
+    public Cursor getExpListData() {
+        String str = "select " + Table_AreaMaster + "." + Area_Id + "," + Table_AreaMaster + "." + Area_Area + "," + Table_Customermaster + "." + CM_RetailCustID + "," + Table_Customermaster + "." + CM_Name + "," + Table_Customermaster + "." + CM_AreaId +
+                " from " + Table_AreaMaster + "," + Table_Customermaster + " where " + Table_AreaMaster + "." + Area_Id + "=" + Table_Customermaster + "." + CM_AreaId + " group by " + Table_AreaMaster + "." + Area_Id + "," + Table_Customermaster + "." + CM_Name + " order by " + Table_AreaMaster + "." + Area_Area;
+        Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
     }
 
@@ -1173,20 +1168,59 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().execSQL("delete from " + Table_CustomerOrder + " where " + CO_BranchId + "=" + branchid);
     }
 
-    public void deleteOrderTableUnpack() {
-        getWritableDatabase().execSQL("delete from " + Table_CustomerOrder + " where " + CO_OrderType + "='U' and " + CO_Productid + "=" + AddToCartActivity.selProdId);
+    public Cursor getProdName(String prodids) {
+        String str = "select " + PM_ProductID + "," + PM_Finalprod + " from " + Table_ProductMaster + " where " + PM_ProductID + " in (" + prodids + ")";
+        return getWritableDatabase().rawQuery(str, null);
     }
+
+    public Cursor getProductDetails(String packUnpackType) {
+        String str = "select " + PM_ProductID + "," + PM_SRate + "," + PM_MRPRate + "," + PM_HSNCode + "," + PM_GSTGroup + "," + PM_Finalprod + "," + PM_ProdId+
+                " from " + Table_ProductMaster + " where " + PM_ProductID + "=" + AddToCartActivity.selProdId;
+        Constant.showLog("getProductDetails :- " + str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+
+    /*public Cursor getDistinctSizes(String packUnpackType, String sizegroup){
+        String str = "select Distinct "+ARSD_Total+",(select "+ARSD_Total+" from "+Table_AllRequiredSizesDesigns
+                +" where "+ARSD_Productid+"="+AddToCartActivity.selProdId
+                +" and "+ARSD_typ+"='"+packUnpackType+"' and InOutType='I') as CompanyPack from "
+                + Table_AllRequiredSizesDesigns +" where "+ ARSD_Productid+"="+AddToCartActivity.selProdId
+                +" and "+ARSD_typ+"='"+packUnpackType+"' and InOutType='O' and "+ARSD_SizeGroup+" like '"+sizegroup
+                +"' order by "+ARSD_Total;
+        Constant.showLog("getDistinctSizes :- "+str);
+        return getWritableDatabase().rawQuery(str,null);
+    }*/
+
 
     public Cursor getSavedUnpackOrder() {
         String str = "select " + CO_SizeGroup + "," + CO_Qty + "," + CO_Color + "," + CO_HashCode + " from " + Table_CustomerOrder + " where " + CO_OrderType + "='U' and " + CO_Productid + "=" + AddToCartActivity.selProdId;
         return getWritableDatabase().rawQuery(str, null);
     }
 
+    public void deleteOrderTableUnpack() {
+        getWritableDatabase().execSQL("delete from " + Table_CustomerOrder + " where " + CO_OrderType + "='U' and " + CO_Productid + "=" + AddToCartActivity.selProdId);
+    }
+
+
+
     public Cursor getDataToCheck() {
         String str = "select " + CO_BranchId + "," + CO_Productid + "," + CO_SizeGroup + "," + CO_Color + "," + CO_HashCode + "," + CO_MRP + "," + CO_LooseQty + " from " + Table_CustomerOrder + " order by " + CO_Productid + "," + CO_SizeGroup;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
     }
+
+    public Cursor getDistinctBrachIdFromCustOrder() {
+        String str = "select distinct " + CO_BranchId + " from " + Table_CustomerOrder;
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getCustOrderDetail(int branchid) {
+        String str = "select * from " + Table_CustomerOrder + " where " + CO_BranchId + "=" + branchid;
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+
 
     public void updateAvailQty(List<CheckoutCustOrderClass> custOrderList) {
         SQLiteDatabase db = getWritableDatabase();
@@ -1203,10 +1237,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Cursor getDistinctBrachIdFromCustOrder() {
-        String str = "select distinct " + CO_BranchId + " from " + Table_CustomerOrder;
-        return getWritableDatabase().rawQuery(str, null);
-    }
 
     public Cursor getCustOrderMaster(int branchid) {
         String str = "select sum(" + CO_Qty + ") as " + CO_Qty + ", Sum(" + CO_LooseQty + ") as " + CO_LooseQty +
@@ -1216,10 +1246,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
-    public Cursor getCustOrderDetail(int branchid) {
-        String str = "select * from " + Table_CustomerOrder + " where " + CO_BranchId + "=" + branchid;
-        return getWritableDatabase().rawQuery(str, null);
-    }
 
     public Cursor getProductWiseOrderList(int prodId) {
         /*String str = "select "+CO_Productid+","+CO_SizeGroup+","+CO_Color+","+CO_HashCode+","+CO_Qty
@@ -1234,11 +1260,18 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
-    public Cursor getExpListData() {
-        String str = "select " + Table_AreaMaster + "." + Area_Id + "," + Table_AreaMaster + "." + Area_Area + "," + Table_Customermaster + "." + CM_RetailCustID + "," + Table_Customermaster + "." + CM_Name + "," + Table_Customermaster + "." + CM_AreaId +
-                " from " + Table_AreaMaster + "," + Table_Customermaster + " where " + Table_AreaMaster + "." + Area_Id + "=" + Table_Customermaster + "." + CM_AreaId + " group by " + Table_AreaMaster + "." + Area_Id + "," + Table_Customermaster + "." + CM_Name + " order by " + Table_AreaMaster + "." + Area_Area;
+
+
+    public int getCustid(String name){
+        int a = 0;
+        String str = "select "+CM_RetailCustID+" From "+Table_Customermaster+" where "+CM_Name+" = '"+name+"'";
+        Cursor res = getWritableDatabase().rawQuery(str,null);
         Constant.showLog(str);
-        return getWritableDatabase().rawQuery(str, null);
+        if(res.moveToFirst()){
+            a = res.getInt(0);
+        }
+        res.close();
+        return a;
     }
 }
 

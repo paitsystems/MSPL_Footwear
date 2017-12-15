@@ -611,7 +611,7 @@ public class ParseJSON {
                     LedgerReportClass ledgerClass = new LedgerReportClass();
                     ledgerClass.setDate(jsonArray.getJSONObject(i).getString("Date"));
                     ledgerClass.setAgainst(jsonArray.getJSONObject(i).getString("Against"));
-                    ledgerClass.setOpnbal(jsonArray.getJSONObject(i).getDouble("OP"));
+                    ledgerClass.setOpnbal(jsonArray.getJSONObject(i).getDouble("openingBalance"));
                     ledgerClass.setDebit(jsonArray.getJSONObject(i).getDouble("Debit"));
                     ledgerClass.setCredit(jsonArray.getJSONObject(i).getDouble("Credit"));
                     ledgerClass.setClsbal(jsonArray.getJSONObject(i).getDouble("ClosingBal"));

@@ -105,7 +105,9 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         actionbar_noti_tv = (TextView)view.findViewById(R.id.actionbar_noti_tv);
         actionbar_noti_tv.setText("0");
 
-        int count = db.getCartCount();
+        //TODO CHANGE COUNT VALUE.
+       // int count = db.getCartCount();
+        int count =12;
         Constant.showLog("cart_count:"+count);
         actionbar_noti_tv.setText(String.valueOf(count));
 

@@ -19,8 +19,9 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
 
     private Constant constant;
     private Toast toast;
-    private TextView tv_arealine_display;
+    private TextView tv_arealine_display,tv_custname_display;
     private CardView card_take_order, card_payment, card_ledger_report, card_feedback;
+    private int custId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +38,13 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
         }
         String arealine = "Selected Arealine-"+getIntent().getExtras().getString("area_name");
         Constant.showLog(arealine);
+        String cusname = "CustomerName-"+getIntent().getExtras().getString("child_selected");
+        custId = Integer.parseInt(getIntent().getExtras().getString("cust_id"));
+        DisplayCustListActivity.custId = custId;
+        Constant.showLog(cusname);
         //tv_arealine.setText("Selected Arealine-" +arealine);
         tv_arealine_display.setText(arealine);
+        tv_custname_display.setText(cusname);
         card_take_order.setOnClickListener(this);
         card_payment.setOnClickListener(this);
         card_ledger_report.setOnClickListener(this);
@@ -51,7 +57,9 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
         switch (view.getId()) {
             case R.id.card_take_order:
                 //showDia(1);
-                startActivity(new Intent(getApplicationContext(),DisplayCustListAreawiseActivity.class));
+                //startActivity(new Intent(getApplicationContext(),DisplayCustListAreawiseActivity.class));
+
+                startActivity(new Intent(getApplicationContext(),CutsizeSetwiseOrderActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_payment:
@@ -59,7 +67,9 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
                 overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
             case R.id.card_ledger_report:
-                startActivity(new Intent(getApplicationContext(),LedgerReportActivity.class));
+                Intent in =  new Intent(getApplicationContext(),LedgerReportActivity.class);
+                in.putExtra("cust_id",String.valueOf(custId));
+                startActivity(in);
                 overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
             case R.id.card_feedback:
@@ -87,6 +97,7 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void init() {
+        tv_custname_display = (TextView) findViewById(R.id.tv_custname_display);
         tv_arealine_display = (TextView) findViewById(R.id.tv_arealine_display);
         card_take_order = (CardView) findViewById(R.id.card_take_order);
         card_payment = (CardView) findViewById(R.id.card_payment);

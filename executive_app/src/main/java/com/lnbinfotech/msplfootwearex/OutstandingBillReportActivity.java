@@ -30,6 +30,7 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
     private TextView tot_Total;
     private double total = 0;
     private DecimalFormat dc_format;
+    private int custId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,8 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
         setContentView(R.layout.activity_outstanding_bill_report);
 
         init();
+
+        custId = Integer.parseInt(getIntent().getExtras().getString("cust_id"));
         showOutstandingReport();
 
         if (getSupportActionBar() != null) {
@@ -76,8 +79,9 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
             try {
                 lv_out.setAdapter(null);
                 int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
+
                 // String url = Constant.ipaddress + "/GetOutstandingRpt?custid=1689";
-                String url = Constant.ipaddress + "/GetOutstandingRpt?custid="+id;
+                String url = Constant.ipaddress + "/GetOutstandingRpt?custid="+custId;
                 Constant.showLog(url);
                 writeLog("showOutstandingReport" + url);
                 constant.showPD();
