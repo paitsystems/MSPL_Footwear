@@ -775,6 +775,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 return retValue;
             } catch (IOException | OutOfMemoryError e) {
                 pd.dismiss();
+                writeLog("readCustJSON_" + e.getMessage());
                 try {
                     writer = new FileWriter(new File(sdFile, "Log.txt"));
                     writer.append(e.getMessage());
@@ -837,6 +838,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 return "";
             } catch (Exception e) {
                 pd1.dismiss();
+                writeLog("writeCustDB_" + e.getMessage());
                 try {
                     FileWriter writer = new FileWriter(new File(sdFile, "Log.txt"));
                     writer.append(e.getMessage());
@@ -948,6 +950,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             db.addSizeNDesignMaster(list);
             Constant.showLog("" + count);
         } catch (Exception e) {
+            writeLog("parseSizeNDesign_" + e.getMessage());
             e.printStackTrace();
             showDia(2);
         }
@@ -1018,6 +1021,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 return retValue;
             } catch (IOException | OutOfMemoryError e) {
                 pd.dismiss();
+                writeLog("readBBJSON_" + e.getMessage());
                 try {
                     writer = new FileWriter(new File(sdFile, "Log.txt"));
                     writer.append(e.getMessage());
@@ -1080,6 +1084,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 return "";
             } catch (Exception e) {
                 pd1.dismiss();
+                writeLog("writeBBDB_" + e.getMessage());
                 try {
                     FileWriter writer = new FileWriter(new File(sdFile, "Log.txt"));
                     writer.append(e.getMessage());
@@ -1322,6 +1327,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             }
             db.addCustomerDetail(list);
         } catch (Exception e) {
+            writeLog("parseCustMaster_" + e.getMessage());
             e.printStackTrace();
             constant.showPD();
             showDia(2);
@@ -1362,6 +1368,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             }
             db.addBankBranchMaster(list);
         } catch (Exception e) {
+            writeLog("parseBankBranchMaster_" + e.getMessage());
             e.printStackTrace();
             constant.showPD();
             showDia(2);

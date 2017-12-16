@@ -4,24 +4,21 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.Gravity;
 
-import com.lnbinfotech.msplfootwear.adapters.LedgerReportAdapter;
 import com.lnbinfotech.msplfootwear.adapters.OuststandingReportAdapter;
 import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
-import com.lnbinfotech.msplfootwear.model.LedgerReportClass;
 import com.lnbinfotech.msplfootwear.model.OuststandingReportClass;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
 
-import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -79,9 +76,9 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
         if (ConnectivityTest.getNetStat(OutstandingBillReportActivity.this)) {
             try {
                 lv_out.setAdapter(null);
-                int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
-               // String url = Constant.ipaddress + "/GetOutstandingRpt?custid=1689";
-                String url = Constant.ipaddress + "/GetOutstandingRpt?custid="+id;
+                int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
+                // String url = Constant.ipaddress + "/GetOutstandingRpt?custid=1689";
+                String url = Constant.ipaddress + "/GetOutstandingRpt?custid=" + id;
                 Constant.showLog(url);
                 writeLog("showOutstandingReport" + url);
                 constant.showPD();
@@ -111,7 +108,7 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
                 e.printStackTrace();
                 constant.showPD();
                 showPopup(2);
-                writeLog("showOutstandingReport" + e.getMessage());
+                writeLog("showOutstandingReport_" + e.getMessage());
             }
         } else {
             toast.setText("You Are Offline");
@@ -120,10 +117,10 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
     }
 
 
-    private void setTotal(List<OuststandingReportClass> list){
+    private void setTotal(List<OuststandingReportClass> list) {
         total = 0;
 
-        for (OuststandingReportClass oclass : list){
+        for (OuststandingReportClass oclass : list) {
             total = total + oclass.getTotal();
         }
 
@@ -173,7 +170,7 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                   //showOutstandingReport();
+                    //showOutstandingReport();
                 }
             });
         } else if (id == 3) {
@@ -202,6 +199,7 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
 
         builder.create().show();
     }
+
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "OutstandingBillReportActivity_" + _data);
     }

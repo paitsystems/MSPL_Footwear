@@ -446,6 +446,7 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
             @Override
             public void onFailure(Object result) {
                 constant.showPD();
+                writeLog("loadOustandingdetail_onFailure_"+result);
                 showDia(3);
             }
         });

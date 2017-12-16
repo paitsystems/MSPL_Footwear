@@ -65,6 +65,7 @@ public class CLadiesNBoysCategoryFragment extends Fragment {
                 list.add(gentsClass);
             }while (res.moveToNext());
         }
+        res.close();
         adapter = new LadiesNBoysCategoryListAdapter(getContext(),list);
         listView.setAdapter(adapter);
     }

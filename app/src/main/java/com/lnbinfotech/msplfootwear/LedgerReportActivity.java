@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +16,6 @@ import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.Gravity;
 
 import com.lnbinfotech.msplfootwear.adapters.LedgerReportAdapter;
 import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
@@ -190,7 +190,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                 String url = Constant.ipaddress + "/GetLedgerReport?custid=" + id + "&fdate=" + _fromdate + "&tdate=" + _todate + "&all=" + _all;
                 //  String url = Constant.ipaddress + "/GetLedgerReport?custid=100&fdate=1-Aug-2017&tdate=1-Dec-2017&all=N";
                 Constant.showLog(url);
-                writeLog("superfastSellingDetails" + url);
+                writeLog("showLedgerReport_" + url);
                 constant.showPD();
                 VolleyRequests requests = new VolleyRequests(LedgerReportActivity.this);
                 requests.loadLedgerReport(url, new ServerCallbackList() {
@@ -220,7 +220,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                 constant.showPD();
                 //  showPopup(2);
                 showPopup(4);
-                writeLog("superfastSellingDetails_" + e.getMessage());
+                writeLog("showLedgerReport_" + e.getMessage());
             }
         } else {
             toast.setText("You Are Offline");

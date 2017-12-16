@@ -64,6 +64,7 @@ public class CHawaiNEvaCategoryFragment extends Fragment{
                 list.add(gentsClass);
             }while (res.moveToNext());
         }
+        res.close();
         adapter = new HawaiNEvaCategoryListAdapter(getContext(),list);
         listView.setAdapter(adapter);
     }

@@ -86,6 +86,7 @@ public class FirstActivity extends AppCompatActivity {
             CopyDb();
         } catch (Exception e) {
             e.printStackTrace();
+            writeLog("doThis_"+e.getMessage());
         }
 
         if (pref.contains(getString(R.string.pref_isRegistered))) {
@@ -113,9 +114,11 @@ public class FirstActivity extends AppCompatActivity {
             //constant.showPD();
             InputStream is = getApplicationContext().getAssets().open(DBHandler.Database_Name);
             File file = new File(dbpath);
-            if(!file.exists()){
-                if(file.mkdir())
+            if(!file.exists()) {
+                if (file.mkdir()) {
                     Constant.showLog("Database Created");
+                    writeLog("CopyDb_Database_Created");
+                }
             }
             OutputStream os = new FileOutputStream(dbpath+"/"+DBHandler.Database_Name);
             byte[] buffer = new byte[2014];
@@ -126,6 +129,7 @@ public class FirstActivity extends AppCompatActivity {
             os.close();
             is.close();
             DBHandler db = new DBHandler(getApplicationContext());
+            db.deleteTable(DBHandler.Table_CustomerOrder);
             db.deleteTable(DBHandler.Table_Usermaster);
             //constant.showPD();
         }

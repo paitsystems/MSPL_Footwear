@@ -59,16 +59,17 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
             case R.id.card_take_order:
                 //showDia(1);
                 //startActivity(new Intent(getApplicationContext(),DisplayCustListAreawiseActivity.class));
-
                 startActivity(new Intent(getApplicationContext(),CutsizeSetwiseOrderActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_payment:
-                Intent intent =  new Intent(getApplicationContext(),VisitPaymentFormActivity.class);
+                toast.setText("Under Development");
+                toast.show();
+                /*Intent intent =  new Intent(getApplicationContext(),VisitPaymentFormActivity.class);
                 intent.putExtra("cust_id",String.valueOf(custId));
                 intent.putExtra("child_selected",custName);
                 startActivity(intent);
-                overridePendingTransition(R.anim.enter,R.anim.exit);
+                overridePendingTransition(R.anim.enter,R.anim.exit);*/
                 break;
             case R.id.card_ledger_report:
                 Intent in =  new Intent(getApplicationContext(),LedgerReportActivity.class);

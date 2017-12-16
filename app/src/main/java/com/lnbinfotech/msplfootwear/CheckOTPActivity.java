@@ -45,7 +45,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     private Constant constant;
     private final Timer timer = new Timer();
     private int time = 0;
-    private TextView tv_timecount,tv_text1;
+    private TextView tv_timecount,tv_text1, tv_otp;
     private CountDownTimer countDown;
     private String mobNo,imeiNo;
     private  String response_value;
@@ -60,13 +60,14 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
 
         otpClass = (CheckOtpClass) getIntent().getSerializableExtra("otp");
         response_value = otpClass.getOtp();
+        tv_otp.setText(response_value);
         mobNo = otpClass.getMobileno();
         imeiNo = otpClass.getImeino();
 
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            getSupportActionBar().setTitle(R.string.email_id);
+            getSupportActionBar().setTitle(R.string.title_activity_login);
         }
 
         //autoOTP();
@@ -280,14 +281,18 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                     ed5.getText().toString()+ed6.getText().toString();
             Constant.showLog(otp);
             Constant.showLog("response_value:"+response_value);
+            writeLog("response_value:"+response_value);
             if(otp.equals(response_value)) {
                 Constant.showLog("response_value:"+response_value);
+                writeLog("OTP_Matched");
                 showDia(1);
             }else{
+                writeLog("Invalid_OTP");
                 toast.setText(R.string.invalid_otp);
                 toast.show();
             }
         }else{
+            writeLog("Enter_OTP");
             toast.setText(R.string.pleaseenterotp);
             toast.show();
         }
@@ -350,6 +355,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                     if (!response.equals("0") && !response.equals("-1") && !response.equals("-2")) {
                         //On Success
                         doThis(response,mobNo,imeiNo);
+                        writeLog("requestOTP_Success_" + response);
                     } else if (!response.equals("0") && response.equals("-1") && !response.equals("-2")) {
                         //Already Registered
                         showDia(3);
@@ -370,6 +376,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
 
         }catch (Exception e){
             e.printStackTrace();
+            writeLog("requestOTP_catch_"+e.getMessage());
         }
     }
 
@@ -389,7 +396,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     private void getUserInfo(){
         String url = Constant.ipaddress+"/GetUserDetail?mobileno="+otpClass.getMobileno()+"&IMEINo="+otpClass.getImeino()+"&type=C";
         Constant.showLog(url);
-        writeLog("requestOTP_" + url);
+        writeLog("getUserInfo_" + url);
         constant.showPD();
         VolleyRequests requests = new VolleyRequests(CheckOTPActivity.this);
         requests.getUserDetail(url, new ServerCallback() {
@@ -401,6 +408,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onFailure(String result) {
                 constant.showPD();
+                writeLog("getUserInfo_onFailure_"+result);
                 showDia(-1);
             }
         });
@@ -413,8 +421,8 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         SharedPreferences.Editor editor = FirstActivity.pref.edit();
         editor.putBoolean(getString(R.string.pref_isRegistered),true);
         editor.apply();
-        finish();
         unregisterReceiver(myReceiver);
+        finish();
         Intent intent = new Intent(getApplicationContext(), CustomerDetailsActivity.class);
         intent.putExtra("otp",otpClass);
         startActivity(intent);
@@ -430,6 +438,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         ed6 = (EditText) findViewById(R.id.ed6);
 
         tv_text1 = (TextView) findViewById(R.id.tv_text1);
+        tv_otp = (TextView) findViewById(R.id.tv_otp);
         tv_timecount = (TextView) findViewById(R.id.tv_timecount);
 
         btn_verifyotp = (AppCompatButton) findViewById(R.id.btn_verifyotp);
@@ -503,7 +512,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void writeLog(String _data){
-        new WriteLog().writeLog(getApplicationContext(),"RegistrationActivity_"+_data);
+        new WriteLog().writeLog(getApplicationContext(),"CheckOTPActivity_"+_data);
     }
 
     private class MySMSReceiver extends BroadcastReceiver{
@@ -538,6 +547,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                         smsListener.onReceivedMessage(text);
                     }
                     Constant.showLog("ReadSMS_onReceive_Called");
+                    writeLog("ReadSMS_onReceive_Called");
                 }
             }
         }

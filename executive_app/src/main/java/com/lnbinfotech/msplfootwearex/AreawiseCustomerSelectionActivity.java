@@ -85,9 +85,16 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
             }
         });*/
 
-
-
-
+       /* exp_listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView expandableListView, View view, int group_postion, long l) {
+                img_parent.setImageDrawable(getResources().getDrawable(R.drawable.expand_16));
+               *//* area_name = String.valueOf(area_map.get(areaid_list.get(group_postion)));
+                Constant.showLog("area_name:"+area_name);*//*
+                return true;
+            }
+        });
+*/
         exp_listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int group_postion, int child_position, long l) {
@@ -114,8 +121,6 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         });
 
     }
-
-
 
     @Override
     public void onClick(View view) {
@@ -219,18 +224,18 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
 
                 areaId =  cursor.getInt(cursor.getColumnIndex(DBHandler.Area_Id));
                 area_name = cursor.getString(cursor.getColumnIndex(DBHandler.Area_Area));
-                custId =  cursor.getInt(cursor.getColumnIndex(DBHandler.CM_RetailCustID));
+                custId = cursor.getInt(cursor.getColumnIndex(DBHandler.CM_RetailCustID));
                 cust_name = cursor.getString(cursor.getColumnIndex(DBHandler.CM_PartyName));
 
                 if(!areaid_list.contains(areaId)) {
                     areaid_list.add(areaId);
                 }
-               // Constant.showLog("areaid_list:"+areaid_list.size());
+                Constant.showLog("areaid_list:"+areaid_list.size());
 
                 if(!partyid_list.contains(custId)) {
                     partyid_list.add(custId);
                 }
-              //  Constant.showLog("partyid_list:"+partyid_list.size());
+                Constant.showLog("partyid_list:"+partyid_list.size());
 
                 if(area_map.isEmpty()) {
                     List<String> ar_NameLs = new ArrayList<>();
@@ -251,7 +256,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                         area_map.put(areaId,ar_NameLs);
                     }
                 }
-              //  Constant.showLog("area_map:"+area_map.size());
+                Constant.showLog("area_map:"+area_map.size());
 
                 /*if(party_map.isEmpty()) {
                     List<String> cus_NameLs = new ArrayList<>();
@@ -286,7 +291,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
 
 
                 area_party_map.put(areaId,custId);
-              //  Constant.showLog("area_party_map:"+area_party_map.size());
+                Constant.showLog("area_party_map:"+area_party_map.size());
 
                /* if(area_party_map.isEmpty()) {
                     area_party_map.put(areaId,custId);
@@ -314,7 +319,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                         areaid_partyId_map.put(areaId,cus_IdLs);
                     }
                 }
-              //  Constant.showLog("areaid_partyId_map:"+areaid_partyId_map.size());
+                Constant.showLog("areaid_partyId_map:"+areaid_partyId_map.size());
 
                 if(childls.isEmpty()) {
                     List<String> child_NameLs = new ArrayList<>();
@@ -335,7 +340,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                         childls.put(areaId,child_NameLs);
                     }
                 }
-              //  Constant.showLog("childls:"+childls.size());
+                Constant.showLog("childls:"+childls.size());
 
 
             }while (cursor.moveToNext());

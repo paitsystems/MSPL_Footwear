@@ -156,7 +156,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                 Constant.showLog(data);
                 String url = Constant.ipaddress + "/CheckStock?data=" + data;
                 Constant.showLog(url);
-                writeLog("showCheckoutOrderDetails" + url);
+                writeLog("showCheckoutOrderDetails_" + url);
                 constant.showPD();
                 VolleyRequests requests = new VolleyRequests(CheckoutCustOrderActivity.this);
                 requests.loadCheckoutOrder(url, new ServerCallbackList() {
@@ -181,6 +181,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                 });
             }catch (Exception e){
                 e.printStackTrace();
+                writeLog("showCheckoutOrderDetails_"+e.getMessage());
             }
         } else {
             toast.setText("You Are Offline");
@@ -333,8 +334,6 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                     remark = URLEncoder.encode(remark, "UTF-8");
                     groupNm = URLEncoder.encode(groupNm, "UTF-8");
                     data = URLEncoder.encode(data, "UTF-8");
-
-                    //TODO : Change createBy At SaleExecutive Module, Change SalesExe,transporter,ItemVat value
 
                     String url = Constant.ipaddress + "/SaveCustOrderMast?branchid=" + hoCode + "&CustId=" + custId + "&SalesExe=" + saleExe + "&TotalQty=" + totQty
                             + "&LooseQty=" + totLooseQty + "&Amount=" + totAmt + "&Vat=" + totGSTAmt + "&Total=" + totTotalAmt + "&OtherAddLess=0&NetAmt=" + totNetAmt

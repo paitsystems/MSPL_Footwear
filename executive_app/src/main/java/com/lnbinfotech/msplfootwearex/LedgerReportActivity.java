@@ -196,7 +196,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                 String url = Constant.ipaddress + "/GetLedgerReport?custid="+custId+"&fdate="+_fromdate+"&tdate="+_todate+"&all="+_all;
                  // String url = Constant.ipaddress + "/GetLedgerReport?custid=100&fdate=1-Aug-2017&tdate=1-Dec-2017&all=N";
                 Constant.showLog(url);
-                writeLog("superfastSellingDetails" + url);
+                writeLog("showLedgerReport_" + url);
                 constant.showPD();
                 VolleyRequests requests = new VolleyRequests(LedgerReportActivity.this);
                 requests.loadLedgerReport(url, new ServerCallbackList() {
@@ -240,7 +240,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                 tot_credit.setText("0");
                 tot_ob.setText("0");
                 showPopup(4);
-                writeLog("superfastSellingDetails_" + e.getMessage());
+                writeLog("showLedgerReport_" + e.getMessage());
             }
         } else {
             toast.setText("You Are Offline");

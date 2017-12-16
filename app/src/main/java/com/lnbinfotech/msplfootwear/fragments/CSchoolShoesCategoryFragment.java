@@ -65,6 +65,7 @@ public class CSchoolShoesCategoryFragment extends Fragment {
                 list.add(gentsClass);
             }while (res.moveToNext());
         }
+        res.close();
         adapter = new SchoolShoeCategoryListAdapter(getContext(),list);
         listView.setAdapter(adapter);
     }

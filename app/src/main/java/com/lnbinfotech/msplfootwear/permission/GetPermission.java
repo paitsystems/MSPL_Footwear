@@ -19,7 +19,7 @@ public class GetPermission {
 
     public void requestCameraPermission(Context context, Activity activity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA)) {
-            Toast.makeText(context, "ACCESS CAMERA PERMISSION REQUIRED", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, 1);
         } else {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, 1);
         }
@@ -31,7 +31,7 @@ public class GetPermission {
 
     public void requestReadExternalPermission(Context context, Activity activity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            Toast.makeText(context, "ACCESS READ STORAGE PERMISSION REQUIRED", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
         } else {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
         }
@@ -43,7 +43,7 @@ public class GetPermission {
 
     public void requestWriteExternalPermission(Context context, Activity activity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            Toast.makeText(context, "ACCESS WRITE STORAGE PERMISSION REQUIRED", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         } else {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
         }
@@ -56,7 +56,7 @@ public class GetPermission {
 
     public void requestReadPhoneStatPermission(Context context, Activity activity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_PHONE_STATE)) {
-            Toast.makeText(context, "ACCESS READ PHONE STATE PERMISSION REQUIRED", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_PHONE_STATE}, 4);
         } else {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_PHONE_STATE}, 4);
         }
@@ -68,7 +68,7 @@ public class GetPermission {
 
     public void requestFineLocationPermission(Context context, Activity activity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            Toast.makeText(context, "ACCESS FINE LOCATION PERMISSION REQUIRED", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
         } else {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
         }
@@ -80,7 +80,7 @@ public class GetPermission {
 
     public void requestCoarseLocationPermission(Context context, Activity activity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-            Toast.makeText(context, "ACCESS COARSE LOCATION PERMISSION REQUIRED", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 6);
         } else {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 6);
         }
@@ -92,7 +92,7 @@ public class GetPermission {
 
     public void requestRebootPermission(Context context, Activity activity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.RECEIVE_BOOT_COMPLETED)) {
-            Toast.makeText(context, "ACCESS REBOOT PERMISSION REQUIRED", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.RECEIVE_BOOT_COMPLETED}, 7);
         } else {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.RECEIVE_BOOT_COMPLETED}, 7);
         }
@@ -104,7 +104,7 @@ public class GetPermission {
 
     public void requestWakeUpPermission(Context context, Activity activity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WAKE_LOCK)) {
-            Toast.makeText(context, "ACCESS WAKE LOCK PERMISSION REQUIRED", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WAKE_LOCK}, 8);
         } else {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WAKE_LOCK}, 8);
         }
@@ -116,7 +116,7 @@ public class GetPermission {
 
     public void requestReceiveSMSPermission(Context context, Activity activity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.RECEIVE_SMS)) {
-            Toast.makeText(context, "READ SMS PERMISSION REQUIRED", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.RECEIVE_SMS}, 9);
         } else {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.RECEIVE_SMS}, 9);
         }
@@ -128,7 +128,7 @@ public class GetPermission {
 
     public void requestReadSMSPermission(Context context, Activity activity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_SMS)) {
-            Toast.makeText(context, "READ SMS PERMISSION REQUIRED", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_SMS}, 10);
         } else {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_SMS}, 10);
         }
@@ -140,7 +140,7 @@ public class GetPermission {
 
     public void requestSendSMSPermission(Context context, Activity activity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.SEND_SMS)) {
-            Toast.makeText(context, "SEND SMS PERMISSION REQUIRED", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.SEND_SMS}, 11);
         } else {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.SEND_SMS}, 11);
         }

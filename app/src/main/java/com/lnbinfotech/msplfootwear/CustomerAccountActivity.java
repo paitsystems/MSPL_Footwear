@@ -46,7 +46,8 @@ public class CustomerAccountActivity extends AppCompatActivity implements View.O
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case  R.id.card_gst:
-
+                toast.setText("Under Development");
+                toast.show();
                 break;
         }
     }

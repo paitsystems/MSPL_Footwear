@@ -443,6 +443,7 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
             @Override
             public void onFailure(Object result) {
                 constant.showPD();
+                writeLog("loadOustandingdetail_onFailure_"+result);
                 showDia(3);
             }
         });
@@ -452,7 +453,8 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         String currOrder =  FirstActivity.pref.getString("totalNetAmnt","0");
         if(!currOrder.equals("0")) {
             float netAmt = Float.parseFloat(currOrder);
-            float creditLimit = Float.parseFloat(DisplayCustOutstandingActivity.outClass.getCreditlimit());
+            float creditLimit = 0;
+            creditLimit = Float.parseFloat(DisplayCustOutstandingActivity.outClass.getCreditlimit());
             if (netAmt > creditLimit) {
                 showDia(4);
             } else {

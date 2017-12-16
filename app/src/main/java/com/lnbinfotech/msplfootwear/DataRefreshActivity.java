@@ -772,6 +772,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 return retValue;
             } catch (IOException | OutOfMemoryError e) {
                 pd.dismiss();
+                writeLog("readCustJSON_" + e.getMessage());
                 try {
                     writer = new FileWriter(new File(sdFile, "Log.txt"));
                     writer.append(e.getMessage());
@@ -834,6 +835,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 return "";
             } catch (Exception e) {
                 pd1.dismiss();
+                writeLog("writeCustDB_" + e.getMessage());
                 try {
                     FileWriter writer = new FileWriter(new File(sdFile, "Log.txt"));
                     writer.append(e.getMessage());
@@ -945,6 +947,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             db.addSizeNDesignMaster(list);
             Constant.showLog("" + count);
         } catch (Exception e) {
+            writeLog("parseSizeNDesign_" + e.getMessage());
             e.printStackTrace();
             showDia(2);
         }
@@ -1015,6 +1018,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 return retValue;
             } catch (IOException | OutOfMemoryError e) {
                 pd.dismiss();
+                writeLog("readBBJSON_" + e.getMessage());
                 try {
                     writer = new FileWriter(new File(sdFile, "Log.txt"));
                     writer.append(e.getMessage());
@@ -1077,6 +1081,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 return "";
             } catch (Exception e) {
                 pd1.dismiss();
+                writeLog("writeBBDB_" + e.getMessage());
                 try {
                     FileWriter writer = new FileWriter(new File(sdFile, "Log.txt"));
                     writer.append(e.getMessage());
@@ -1148,7 +1153,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     } else if (DBHandler.ARSD_HashCode.equals(token)) {
                         jp.nextToken();
                         sizeNDesignClass.setHashCode(jp.getText());
-                    }else if (DBHandler.ARSD_ImageName.equals(token)) {
+                    } else if (DBHandler.ARSD_ImageName.equals(token)) {
                         jp.nextToken();
                         sizeNDesignClass.setImageName(jp.getText());
                     } /* else if (DBHandler.ARSD_Cat1.equals(token)) {
@@ -1186,7 +1191,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 list.add(sizeNDesignClass);
             }
             db.addSizeNDesignMaster(list);
-            Constant.showLog(""+count);
+            Constant.showLog("" + count);
         } catch (Exception e) {
             e.printStackTrace();
             showDia(2);
@@ -1286,31 +1291,31 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     } else if ("status".equals(token)) {
                         jp.nextToken();
                         custClass.setStatus(jp.getText());
-                    }else if ("ImagePath".equals(token)) {
+                    } else if ("ImagePath".equals(token)) {
                         jp.nextToken();
                         custClass.setImagePath(jp.getText());
                     } else if ("Discount".equals(token)) {
                         jp.nextToken();
                         custClass.setDiscount(jp.getFloatValue());
-                    }else if ("branchId".equals(token)) {
+                    } else if ("branchId".equals(token)) {
                         jp.nextToken();
                         custClass.setBranchId(jp.getIntValue());
-                    }else if ("District".equals(token)) {
+                    } else if ("District".equals(token)) {
                         jp.nextToken();
                         custClass.setDistrict(jp.getText());
-                    }else if ("Taluka".equals(token)) {
+                    } else if ("Taluka".equals(token)) {
                         jp.nextToken();
                         custClass.setTaluka(jp.getText());
-                    }else if ("cityId".equals(token)) {
+                    } else if ("cityId".equals(token)) {
                         jp.nextToken();
                         custClass.setCityId(jp.getIntValue());
-                    }else if ("areaId".equals(token)) {
+                    } else if ("areaId".equals(token)) {
                         jp.nextToken();
                         custClass.setAreaId(jp.getIntValue());
-                    }else if ("HoCode".equals(token)) {
+                    } else if ("HoCode".equals(token)) {
                         jp.nextToken();
                         custClass.setHOCode(jp.getIntValue());
-                    }else if ("AadharNo".equals(token)) {
+                    } else if ("AadharNo".equals(token)) {
                         jp.nextToken();
                         custClass.setAadharNo(jp.getText());
                     }
@@ -1319,13 +1324,14 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             }
             db.addCustomerDetail(list);
         } catch (Exception e) {
+            writeLog("parseCustMaster_" + e.getMessage());
             e.printStackTrace();
             constant.showPD();
             showDia(2);
         }
     }
 
-    private void parseBankBranchMaster(JsonParser jp){
+    private void parseBankBranchMaster(JsonParser jp) {
         try {
             ArrayList<BankBranchMasterClass> list = new ArrayList<>();
             while (jp.nextToken() != JsonToken.END_ARRAY) {
@@ -1359,11 +1365,12 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             }
             db.addBankBranchMaster(list);
         } catch (Exception e) {
+            writeLog("parseBankBranchMaster_" + e.getMessage());
             e.printStackTrace();
             constant.showPD();
             showDia(2);
         }
-}
+    }
 
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "DataRefreshActivity_" + _data);

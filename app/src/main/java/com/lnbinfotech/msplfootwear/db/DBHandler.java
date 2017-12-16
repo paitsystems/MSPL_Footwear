@@ -33,7 +33,7 @@ import java.util.List;
 public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
-    //TODO: Change Version
+    //TODO: Check DB Version
     public static final int Database_Version = 1;
 
     //retailCustID,name,address,mobile,status,branchId,email,District,Taluka,cityId,areaId,
@@ -279,7 +279,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String GST_SGSTSHARE = "SGSTSHARE";
 
     public DBHandler(Context context) {
-        //TODO: Check DB
+
         //super(context, "/mnt/sdcard/"+Constant.folder_name+"/"+Database_Name, null, Database_Version);
         super(context, Database_Name, null, Database_Version);
     }

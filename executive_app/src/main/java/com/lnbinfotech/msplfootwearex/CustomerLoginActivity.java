@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
+import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwearex.model.UserClass;
 
@@ -317,8 +318,9 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             String pin1 = ed9.getText().toString() + ed10.getText().toString() +
                     ed11.getText().toString() + ed12.getText().toString();
             Constant.showLog(pin1);
-            if(pin1.equals(PIN)){
-                showDia(2);
+            if (pin1.equals(PIN)) {
+                //showDia(2);
+                startNewActivity();
                 /*List<String> _list = db.checkPINUnsetID();
                 if(_list.size()!=0){
                     showDia(1);
@@ -357,8 +359,9 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private void savePin(String _pin){
-        db.updatePIN(String.valueOf(userClass.getCustID()),_pin);
+    private void savePin(String _pin) {
+        writeLog("savePin_"+_pin);
+        db.updatePIN(String.valueOf(userClass.getCustID()), _pin);
         showDia(3);
     }
 
@@ -381,8 +384,8 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         editor.putInt(getString(R.string.pref_branchid),userClass.getBranchId());
         editor.putInt(getString(R.string.pref_cityid),userClass.getCityId());
         editor.putInt(getString(R.string.pref_hocode),userClass.getHOCode());
+        editor.putString(getString(R.string.pref_mobno),userClass.getMobile());
         editor.apply();
-
         finish();
         Intent intent = new Intent(getApplicationContext(),OptionsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -510,4 +513,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         builder.create().show();
     }
 
+    private void writeLog(String _data){
+        new WriteLog().writeLog(getApplicationContext(),"CustomerLoginActivity_"+_data);
+    }
 }

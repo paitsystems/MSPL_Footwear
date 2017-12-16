@@ -84,6 +84,7 @@ public class FirstActivity extends AppCompatActivity {
             CopyDb();
         } catch (Exception e) {
             e.printStackTrace();
+            writeLog("doThis_"+e.getMessage());
         }
         if (pref.contains(getString(R.string.pref_isRegistered))) {
             startActivity(new Intent(getApplicationContext(), CustomerDetailsActivity.class));
@@ -95,22 +96,26 @@ public class FirstActivity extends AppCompatActivity {
             editor.putString(getString(R.string.pref_FTPLocation),"ftp.lnbinfotech.com");
             editor.putString(getString(R.string.pref_FTPUser),"supportftp@lnbinfotech.com");
             editor.putString(getString(R.string.pref_FTPPass),"support$456");
-            editor.putString(getString(R.string.pref_FTPImgFolder),"TestInterface");
+            editor.putString(getString(R.string.pref_FTPImgFolder),"Test");
             editor.apply();
            // editor.commit();
         }
+        DBHandler db = new DBHandler(getApplicationContext());
+        db.close();
         overridePendingTransition(R.anim.enter,R.anim.exit);
         doFinish();
     }
 
     private void CopyDb() throws IOException {
         if(!checkDB()){
-            constant.showPD();
+            //constant.showPD();
             InputStream is = getApplicationContext().getAssets().open(DBHandler.Database_Name);
             File file = new File(dbpath);
-            if(!file.exists()){
-                if(file.mkdir())
+            if(!file.exists()) {
+                if (file.mkdir()) {
                     Constant.showLog("Database Created");
+                    writeLog("CopyDb_Database_Created");
+                }
             }
             OutputStream os = new FileOutputStream(dbpath+"/"+DBHandler.Database_Name);
             byte[] buffer = new byte[2014];
@@ -120,7 +125,10 @@ public class FirstActivity extends AppCompatActivity {
             os.flush();
             os.close();
             is.close();
-            constant.showPD();
+            DBHandler db = new DBHandler(getApplicationContext());
+            db.deleteTable(DBHandler.Table_CustomerOrder);
+            db.deleteTable(DBHandler.Table_Usermaster);
+            //constant.showPD();
         }
     }
 

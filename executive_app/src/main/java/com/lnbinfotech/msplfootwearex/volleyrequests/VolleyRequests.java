@@ -145,7 +145,7 @@ public class VolleyRequests {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                callback.onFailure("Error");
+                callback.onFailure("saveCustomerDetail_Error_"+error.getMessage());
                 Constant.showLog(error.getMessage());
             }
         });
@@ -173,7 +173,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshAreaMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshAreaMaster_"+error.getMessage());
                     }
@@ -202,7 +202,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshCityMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshCityMaster_"+error.getMessage());
                     }
@@ -231,7 +231,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshHOMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshHOMaster_"+error.getMessage());
                     }
@@ -260,7 +260,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshEmployeeMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshEmployeeMaster_"+error.getMessage());
                     }
@@ -288,8 +288,9 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
-                        Constant.showLog(error.getMessage());writeLog("refreshStockInfo_"+error.getMessage());
+                        callback.onFailure("refreshStockInfo_" + error.getMessage());
+                        Constant.showLog(error.getMessage());
+                        writeLog("refreshStockInfo_" + error.getMessage());
 
                     }
                 }
@@ -478,7 +479,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshProductMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshProductMaster_"+error.getMessage());
                     }
@@ -507,7 +508,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshCustomerMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshCustomerMaster_"+error.getMessage());
                     }
@@ -536,7 +537,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshCompanyMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshCompanyMaster_"+error.getMessage());
                     }
@@ -565,7 +566,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshBankMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshBankMaster_"+error.getMessage());
                     }

@@ -49,9 +49,6 @@ public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements Vi
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         int custId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
         OptionsActivity.custDisc = new DBHandler(getApplicationContext()).getCustDiscount(custId);
-
-
-
     }
 
     @Override

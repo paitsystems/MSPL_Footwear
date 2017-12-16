@@ -73,7 +73,6 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
-        outClass = new CustOutstandingClass();
 
         tv_cl = (TextView) findViewById(R.id.tv_cl);
         tv_days = (TextView) findViewById(R.id.tv_days);
@@ -104,6 +103,7 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
             @Override
             public void onFailure(Object result) {
                 constant.showPD();
+                writeLog("loadOustandingdetail_onFailure_"+result);
                 showPopup(2);
             }
         });

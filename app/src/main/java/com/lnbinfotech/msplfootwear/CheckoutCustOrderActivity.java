@@ -175,11 +175,13 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                     @Override
                     public void onFailure(Object result) {
                         constant.showPD();
+                        writeLog("showCheckoutOrderDetails_onFailure_"+result);
                         showDia(2);
                     }
                 });
             }catch (Exception e){
                 e.printStackTrace();
+                writeLog("showCheckoutOrderDetails_"+e.getMessage());
             }
         } else {
             toast.setText("You Are Offline");
@@ -333,8 +335,6 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                     groupNm = URLEncoder.encode(groupNm, "UTF-8");
                     data = URLEncoder.encode(data, "UTF-8");
 
-                    //TODO : Change createBy At SaleExecutive Module, Change SalesExe,transporter,ItemVat value
-
                     String url = Constant.ipaddress + "/SaveCustOrderMast?branchid=" + hoCode + "&CustId=" + custId + "&SalesExe=" + saleExe + "&TotalQty=" + totQty
                             + "&LooseQty=" + totLooseQty + "&Amount=" + totAmt + "&Vat=" + totGSTAmt + "&Total=" + totTotalAmt + "&OtherAddLess=0&NetAmt=" + totNetAmt
                             + "&createby=" + custId + "&Remark=" + remark + "&Transporter=1&ItemVat=0&GroupNm=" + groupNm + "&discPer=" + custDiscPer
@@ -350,6 +350,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                writeLog("getSaveOrderData_"+e.getMessage());
                 toast.setText("Something Went Wrong");
                 toast.show();
             }
@@ -418,6 +419,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
             }catch (Exception e){
                 e.printStackTrace();
                 showDia(4);
+                writeLog("saveOrderAsyncTask_"+e.getMessage());
                 constant.showPD();
             }
         }

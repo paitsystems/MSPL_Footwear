@@ -110,6 +110,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                     if (!response.equals("0") && !response.equals("-1") && !response.equals("-2")) {
                         //On Success
                         doThis(response,mobNo,imeino);
+                        writeLog("requestOTP_Success_" + response);
                     } else if (!response.equals("0") && response.equals("-1") && !response.equals("-2")) {
                         //Already Registered
                         showDia(3);
@@ -123,7 +124,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 @Override
                 public void onFailure(String result) {
                     constant.showPD();
-                    writeLog("requestOTP_VolleyError_");
+                    showDia(4);
+                    writeLog("requestOTP_VolleyError_"+result);
                 }
             });
         }catch (Exception e){
@@ -143,15 +145,15 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             otp.setMobileno(mobNo);
             otp.setImeino(imeino);
             finish();
-            toast.setText(arr[1]);
-            toast.show();
+            //toast.setText(arr[1]);
+            //toast.show();
             Intent intent = new Intent(getApplicationContext(), CheckOTPActivity.class);
             intent.putExtra("otp", otp);
             startActivity(intent);
             overridePendingTransition(R.anim.enter, R.anim.exit);
         } else {
             showDia(-1);
-            writeLog("requestOTP_" + response);
+            writeLog("doThis_" + response);
         }
     }
 
@@ -206,7 +208,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                     dialog.dismiss();
                 }
             });
-            builder.setNegativeButton(R.string.edit, new DialogInterface.OnClickListener() {
+            builder.setNeutralButton(R.string.edit, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -227,6 +229,20 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 4) {
+            builder.setTitle(R.string.somethingwentwrong);
+            builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(ConnectivityTest.getNetStat(getApplicationContext())) {
+                        requestOTP();
+                    }else{
+                        toast.setText(getString(R.string.you_are_offline));
+                        toast.show();
+                    }
                     dialog.dismiss();
                 }
             });

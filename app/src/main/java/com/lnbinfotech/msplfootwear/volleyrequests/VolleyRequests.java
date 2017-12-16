@@ -4,16 +4,13 @@ package com.lnbinfotech.msplfootwear.volleyrequests;
 
 import android.content.Context;
 import android.os.AsyncTask;
-
 import android.util.Log;
-
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.lnbinfotech.msplfootwear.CheckoutCustOrderActivity;
 import com.lnbinfotech.msplfootwear.constant.AppSingleton;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
@@ -24,22 +21,20 @@ import com.lnbinfotech.msplfootwear.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwear.model.LedgerReportClass;
 import com.lnbinfotech.msplfootwear.model.OuststandingReportClass;
-import com.lnbinfotech.msplfootwear.model.TrackOrderDetailClass;
 import com.lnbinfotech.msplfootwear.model.StockInfoMasterClass;
+import com.lnbinfotech.msplfootwear.model.TrackOrderDetailClass;
 import com.lnbinfotech.msplfootwear.model.TrackOrderMasterClass;
 import com.lnbinfotech.msplfootwear.model.UserClass;
 import com.lnbinfotech.msplfootwear.parse.ParseJSON;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.map.util.JSONPObject;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -152,7 +147,7 @@ public class VolleyRequests {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                callback.onFailure("Error");
+                callback.onFailure("saveCustomerDetail_Error_"+error.getMessage());
                 Constant.showLog(error.getMessage());
             }
         });
@@ -180,7 +175,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshAreaMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshAreaMaster_" + error.getMessage());
                     }
@@ -209,7 +204,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshCityMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshCityMaster_" + error.getMessage());
                     }
@@ -238,7 +233,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshHOMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshHOMaster_" + error.getMessage());
                     }
@@ -267,7 +262,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshEmployeeMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshEmployeeMaster_" + error.getMessage());
                     }
@@ -295,7 +290,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshStockInfo_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshStockInfo_" + error.getMessage());
 
@@ -317,7 +312,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshSizeNDesignMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshSizeNDesignMaster_" + error.getMessage());
                     }
@@ -402,7 +397,7 @@ public class VolleyRequests {
             int tasksLeft = this.workCounter1.decrementAndGet();
             if (tasksLeft == 0 && s.equals("")) {
                 AtomicInteger workInteger = new AtomicInteger(1);
-                new writeDB(workInteger).execute();
+                //new writeDB(workInteger).execute();
             } else if (tasksLeft == 0) {
                 //showDia(2);
             }
@@ -524,7 +519,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshProductMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshProductMaster_" + error.getMessage());
                     }
@@ -553,7 +548,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshCustomerMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshCustomerMaster_" + error.getMessage());
                     }
@@ -582,7 +577,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshCompanyMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshCompanyMaster_" + error.getMessage());
                     }
@@ -611,7 +606,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("Error");
+                        callback.onFailure("refreshBankMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshBankMaster_" + error.getMessage());
                     }
@@ -900,6 +895,7 @@ public class VolleyRequests {
                 });
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
+
     private void writeLog(String _data) {
         new WriteLog().writeLog(context, "VolleyRequest_" + _data);
     }

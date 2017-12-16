@@ -1,22 +1,32 @@
 package com.lnbinfotech.msplfootwear;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
+import com.lnbinfotech.msplfootwear.log.CopyLog;
+import com.lnbinfotech.msplfootwear.log.WriteLog;
+import com.lnbinfotech.msplfootwear.mail.GMailSender;
 
+import java.io.File;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class OptionsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -25,6 +35,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     private Menu mMenu;
     private TextView actionbar_noti_tv;
     private DBHandler db;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +43,6 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.test);
 
         init();
-
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -78,8 +88,12 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_scheme:
+                toast.setText("Under Development");
+                toast.show();
                 break;
             case R.id.card_whatsnew:
+                toast.setText("Under Development");
+                toast.show();
                 break;
             case R.id.card_feedback:
                 startActivity(new Intent(getApplicationContext(), FeedbackActivity.class));
@@ -141,6 +155,8 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void init() {
+        toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
         db = new DBHandler(this);
         card_give_order = (CardView) findViewById(R.id.card_give_order);
         card_account = (CardView) findViewById(R.id.card_account);
@@ -197,6 +213,41 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                     dialog.dismiss();
                 }
             });
+        }else if (a == 2) {
+            builder.setMessage("Do You Want To Logout From App?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new Constant(OptionsActivity.this).doFinish();
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 6) {
+            builder.setMessage("Do You Want To Report An Issue?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (ConnectivityTest.getNetStat(getApplicationContext())) {
+                        exportfile();
+                    } else {
+                        toast.setText("You Are Offline");
+                        toast.show();
+                    }
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
         }
         builder.create().show();
     }
@@ -208,7 +259,106 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         Locale.setDefault(locale);
         configuration.locale = locale;
         Constant.showLog("locale:"+locale);
+    }
 
+    private void exportfile() {
+        if (new CopyLog().copyLog(getApplicationContext())) {
+            writeLog("MainActivity_exportfile_Log_File_Exported");
+            sendMail1();
+        } else {
+            writeLog("MainActivity_exportfile_Error_While_Log_File_Exporting");
+        }
+    }
+
+    private void sendMail1() {
+        try {
+            File sdFile = Constant.checkFolder(Constant.folder_name);
+            File writeFile = new File(sdFile, Constant.log_file_name);
+            GMailSender sender = new GMailSender(Constant.automailID, Constant.autoamilPass);
+            Constant.showLog("Attached Log File :- " + writeFile.getAbsolutePath());
+            sender.addAttachment(sdFile.getAbsolutePath() + File.separator + Constant.log_file_name, Constant.log_file_name, Constant.mail_body);
+            String resp[] = {Constant.mailReceipient};
+            AtomicInteger workCounter = new AtomicInteger(resp.length);
+            for (String aResp : resp) {
+                if (!aResp.equals("")) {
+                    Constant.showLog("send Mail Recp :- " + aResp);
+                    new sendMail(workCounter, aResp, sender).execute("");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private class sendMail extends AsyncTask<String, Void, String> {
+        private final AtomicInteger workCounter;
+
+        ProgressDialog pd;
+        String respMailId;
+        GMailSender sender;
+
+        sendMail(AtomicInteger workCounter, String _respMailId, GMailSender _sender) {
+            respMailId = _respMailId;
+            sender = _sender;
+            this.workCounter = workCounter;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(OptionsActivity.this);
+            pd.setCancelable(false);
+            pd.setMessage("Please Wait...");
+            pd.show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                String res = respMailId;
+                String mob = FirstActivity.pref.getString(getString(R.string.pref_mobno),"0");
+                String subject = Constant.mail_subject+"_"+mob;
+                sender.sendMail(subject, Constant.mail_body, Constant.automailID, res);
+                return "1";
+            } catch (Exception e) {
+                writeLog("MainActivity_sendMailClass_" + e.getMessage());
+                e.printStackTrace();
+                return "0";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            try {
+                int tasksLeft = this.workCounter.decrementAndGet();
+                Constant.showLog("sendMail Work Counter " + tasksLeft);
+                if (result.equals("1")) {
+                    if (tasksLeft == 0) {
+                        writeLog("MainActivity_sendMailClass_Mail_Send_Successfully");
+                        Constant.showLog("sendMail END MULTI THREAD");
+                        Constant.showLog("sendMail Work Counter END " + tasksLeft);
+                        toast.setText("File Exported Successfully");
+                    } else {
+                        writeLog("MainActivity_sendMailClass_Mail_Send_UnSuccessfull1");
+                        toast.setText("Error While Sending Mail");
+                    }
+                } else {
+                    toast.setText("Error While Exporting Log File");
+                    writeLog("MainActivity_sendMailClass_Mail_Send_UnSuccessfull");
+                }
+                toast.show();
+                pd.dismiss();
+            } catch (Exception e) {
+                writeLog("MainActivity_sendMailClass_" + e.getMessage());
+                e.printStackTrace();
+                pd.dismiss();
+            }
+        }
+    }
+
+    private void writeLog(String _data) {
+        new WriteLog().writeLog(getApplicationContext(), _data);
     }
 
 }

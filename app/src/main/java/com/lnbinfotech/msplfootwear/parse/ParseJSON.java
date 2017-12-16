@@ -3,7 +3,6 @@ package com.lnbinfotech.msplfootwear.parse;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.lnbinfotech.msplfootwear.CheckoutCustOrderActivity;
 import com.lnbinfotech.msplfootwear.DisplayCustOutstandingActivity;
 import com.lnbinfotech.msplfootwear.FirstActivity;
 import com.lnbinfotech.msplfootwear.R;
@@ -18,15 +17,15 @@ import com.lnbinfotech.msplfootwear.model.CityMasterClass;
 import com.lnbinfotech.msplfootwear.model.CompanyMasterClass;
 import com.lnbinfotech.msplfootwear.model.CustOutstandingClass;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
-import com.lnbinfotech.msplfootwear.model.GSTMasterClass;
-import com.lnbinfotech.msplfootwear.model.LedgerReportClass;
-import com.lnbinfotech.msplfootwear.model.OuststandingReportClass;
-import com.lnbinfotech.msplfootwear.model.TrackOrderDetailClass;
 import com.lnbinfotech.msplfootwear.model.DocumentMasterClass;
 import com.lnbinfotech.msplfootwear.model.EmployeeMasterClass;
+import com.lnbinfotech.msplfootwear.model.GSTMasterClass;
 import com.lnbinfotech.msplfootwear.model.HOMasterClass;
+import com.lnbinfotech.msplfootwear.model.LedgerReportClass;
+import com.lnbinfotech.msplfootwear.model.OuststandingReportClass;
 import com.lnbinfotech.msplfootwear.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwear.model.StockInfoMasterClass;
+import com.lnbinfotech.msplfootwear.model.TrackOrderDetailClass;
 import com.lnbinfotech.msplfootwear.model.TrackOrderMasterClass;
 import com.lnbinfotech.msplfootwear.model.UserClass;
 
@@ -499,7 +498,7 @@ public class ParseJSON {
             }
         }catch (Exception e){
             e.printStackTrace();
-            writeLog("_" + e.getMessage());
+            writeLog("parseloadTrackOreder_" + e.getMessage());
         }
         return list;
     }
@@ -620,9 +619,7 @@ public class ParseJSON {
                     DisplayCustOutstandingActivity.outClass.setOverDueAmnt(jsonArray.getJSONObject(i).getString("OverDueAmnt"));
                     DisplayCustOutstandingActivity.outClass.setOverDueDays(jsonArray.getJSONObject(i).getString("OverDueDays"));
                     DisplayCustOutstandingActivity.outClass.setOverLimit(jsonArray.getJSONObject(i).getString("OverLimit"));
-
                 }
-
                 ret = 1;
             }
         }catch (Exception e){

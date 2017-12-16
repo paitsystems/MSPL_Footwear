@@ -64,6 +64,7 @@ public class CGentsCategoryFragment extends Fragment {
                 list.add(gentsClass);
             }while (res.moveToNext());
         }
+        res.close();
         adapter = new GentsCategoryListAdapter(getContext(),list);
         listView.setAdapter(adapter);
     }

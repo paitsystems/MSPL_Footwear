@@ -80,6 +80,8 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_reports:
+                toast.setText("Under Development");
+                toast.show();
                 break;
             case R.id.card_new_cust_entry:
                 finish();
@@ -102,12 +104,10 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         final MenuItem item = menu.findItem(R.id.cart);
         MenuItemCompat.setActionView(item, R.layout.actionbaar_badge_layout);
         View view = MenuItemCompat.getActionView(item);
-        actionbar_noti_tv = (TextView)view.findViewById(R.id.actionbar_noti_tv);
+        TextView actionbar_noti_tv = (TextView)view.findViewById(R.id.actionbar_noti_tv);
         actionbar_noti_tv.setText("0");
 
-        //TODO CHANGE COUNT VALUE.
-       // int count = db.getCartCount();
-        int count =12;
+        int count = new DBHandler(getApplicationContext()).getCartCount();
         Constant.showLog("cart_count:"+count);
         actionbar_noti_tv.setText(String.valueOf(count));
 
@@ -216,7 +216,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 }
             });
         } else if (a == 6) {
-            builder.setMessage("Do You Want To Report Error?");
+            builder.setMessage("Do You Want To Report An Issue?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -298,7 +298,9 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         protected String doInBackground(String... strings) {
             try {
                 String res = respMailId;
-                sender.sendMail(Constant.mail_subject, Constant.mail_body, Constant.automailID, res);
+                String mob = FirstActivity.pref.getString(getString(R.string.pref_mobno),"0");
+                String subject = Constant.mail_subject+"_"+mob;
+                sender.sendMail(subject, Constant.mail_body, Constant.automailID, res);
                 return "1";
             } catch (Exception e) {
                 writeLog("MainActivity_sendMailClass_" + e.getMessage());
