@@ -322,6 +322,7 @@
         </LinearLayout>
     </HorizontalScrollView>
 
+
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_proceed"
         android:layout_width="match_parent"
@@ -332,5 +333,9 @@
         android:textColor="@color/white"
         android:textStyle="bold"
         app:backgroundTint="@color/maroon" />
+    <TextView
+        style="@style/footerstyleMob"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

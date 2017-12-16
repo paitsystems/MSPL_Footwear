@@ -320,6 +320,8 @@
             android:orientation="horizontal"
             android:visibility="visible">
 
+
+
             <TextView
                 android:id="@+id/tv_add_to_card"
                 style="@style/textViewMobW"
@@ -409,6 +411,11 @@
 
 
         </LinearLayout>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/listView"
+            android:visibility="visible" />
 
 
     </LinearLayout>
@@ -598,6 +605,7 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+
         <TextView
             style="@style/footerstyleMob"
             android:layout_width="match_parent"

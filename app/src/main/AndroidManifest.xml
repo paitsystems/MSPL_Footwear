@@ -72,37 +72,37 @@
         <activity
             android:name=".ImagewiseSetwiseOrderActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeGiveOrder"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".CutsizeSetwiseOrderActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeGiveOrder"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".TrackOrderMasterActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeTrackOrder"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".CustomerAccountActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeAccount"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".FeedbackActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeFeedback"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ProfileViewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeProfile"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ProfileDataUpdateActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeProfile"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".DataRefreshActivity"
@@ -111,12 +111,12 @@
         <activity
             android:name=".TrackOrderDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeTrackOrder"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".AddToCartActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeAddToCard"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ProductSearchActivity"
@@ -125,27 +125,27 @@
         <activity
             android:name=".ViewCustomerOrderActiviy"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeAddToCard"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".CheckoutCustOrderActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeAddToCard"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".DisplayCustOutstandingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeAddToCard"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".LedgerReportActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeLeger"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".OutstandingBillReportActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeOut"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
     </application>
 

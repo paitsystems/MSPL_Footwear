@@ -942,7 +942,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public Cursor getExpListData() {
-        String str = "select " + Table_AreaMaster + "." + Area_Id + "," + Table_AreaMaster + "." + Area_Area + "," + Table_Customermaster + "." + CM_RetailCustID + "," + Table_Customermaster + "." + CM_Name + "," + Table_Customermaster + "." + CM_AreaId +
+        String str = "select " + Table_AreaMaster + "." + Area_Id + "," + Table_AreaMaster + "." + Area_Area + "," + Table_Customermaster + "." + CM_RetailCustID + "," + Table_Customermaster + "." + CM_PartyName + "," + Table_Customermaster + "." + CM_AreaId +
                 " from " + Table_AreaMaster + "," + Table_Customermaster + " where " + Table_AreaMaster + "." + Area_Id + "=" + Table_Customermaster + "." + CM_AreaId + " group by " + Table_AreaMaster + "." + Area_Id + "," + Table_Customermaster + "." + CM_Name + " order by " + Table_AreaMaster + "." + Area_Area;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
@@ -1264,7 +1264,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public int getCustid(String name){
         int a = 0;
-        String str = "select "+CM_RetailCustID+" From "+Table_Customermaster+" where "+CM_Name+" = '"+name+"'";
+        String str = "select "+CM_RetailCustID+" From "+Table_Customermaster+" where "+CM_PartyName+" = '"+name+"'";
         Cursor res = getWritableDatabase().rawQuery(str,null);
         Constant.showLog(str);
         if(res.moveToFirst()){

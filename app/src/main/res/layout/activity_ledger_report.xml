@@ -136,8 +136,9 @@
 
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="false">
+        android:layout_height="0dp"
+        android:fillViewport="false"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -402,4 +403,8 @@
             </LinearLayout>
         </LinearLayout>
     </HorizontalScrollView>
+    <TextView
+        style="@style/footerstyleMob"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
