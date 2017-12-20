@@ -452,25 +452,30 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         });
     }
 
-    private void checkLimit(){
-        String currOrder =  FirstActivity.pref.getString("totalNetAmnt","0");
-        if(!currOrder.equals("0")) {
+    private void checkLimit() {
+        String currOrder = FirstActivity.pref.getString("totalNetAmnt", "0");
+        if (!currOrder.equals("0")) {
             float netAmt = Float.parseFloat(currOrder);
             float creditLimit = 0;
-            creditLimit = Float.parseFloat(DisplayCustOutstandingActivity.outClass.getCreditlimit());
-            if (netAmt > creditLimit) {
-                showDia(4);
+            String str = DisplayCustOutstandingActivity.outClass.getCreditlimit();
+            if (str != null && !str.equals("")) {
+                creditLimit = Float.parseFloat(str);
+                if (netAmt > creditLimit) {
+                    showDia(4);
+                } else {
+                    finish();
+                    Intent intent = new Intent(this, CheckoutCustOrderActivity.class);
+                    intent.putExtra("from", from);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                }
             } else {
-                finish();
-                Intent intent = new Intent(this, CheckoutCustOrderActivity.class);
-                intent.putExtra("from", from);
-                startActivity(intent);
-                overridePendingTransition(R.anim.enter, R.anim.exit);
+                toast.setText("Something Went Wrong");
+                toast.show();
             }
-        }else{
+        } else {
             toast.setText("Please Place Order");
             toast.show();
         }
     }
-
 }
