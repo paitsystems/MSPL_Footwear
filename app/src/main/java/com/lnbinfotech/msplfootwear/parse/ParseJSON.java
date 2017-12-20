@@ -22,6 +22,7 @@ import com.lnbinfotech.msplfootwear.model.EmployeeMasterClass;
 import com.lnbinfotech.msplfootwear.model.GSTMasterClass;
 import com.lnbinfotech.msplfootwear.model.HOMasterClass;
 import com.lnbinfotech.msplfootwear.model.LedgerReportClass;
+import com.lnbinfotech.msplfootwear.model.OurBankDetailsClass;
 import com.lnbinfotech.msplfootwear.model.OuststandingReportClass;
 import com.lnbinfotech.msplfootwear.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwear.model.StockInfoMasterClass;
@@ -673,6 +674,31 @@ public class ParseJSON {
         }catch (Exception e){
             e.printStackTrace();
             writeLog("parseOutStndReport_" + e.getMessage());
+        }
+        return list;
+    }
+
+    public List<OurBankDetailsClass> parseBankDetails(){
+
+        List<OurBankDetailsClass> list = new ArrayList<>();
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    OurBankDetailsClass bankClass = new OurBankDetailsClass();
+                    bankClass.setBankName(jsonArray.getJSONObject(i).getString("BankName"));
+                    bankClass.setAccNo(jsonArray.getJSONObject(i).getString("AccountNo"));
+                    bankClass.setBankId(jsonArray.getJSONObject(i).getInt("BankId"));
+                    bankClass.setBranchId(jsonArray.getJSONObject(i).getInt("BranchId"));
+                    bankClass.setIFSC(jsonArray.getJSONObject(i).getString("IFSC"));
+                    bankClass.setMICR(jsonArray.getJSONObject(i).getString("MICR"));
+                    bankClass.setHOCode(jsonArray.getJSONObject(i).getInt("HoCode"));
+                    list.add(bankClass);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseBankDetails" + e.getMessage());
         }
         return list;
     }

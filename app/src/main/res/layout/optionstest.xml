@@ -46,21 +46,22 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/mobmargin5"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:background="@color/fffgray">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/visit_take_order_circle_draw"
+                                android:background="@drawable/whiteback"
                                 android:gravity="center"
                                 android:orientation="vertical">
 
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/order_32" />
+                                    android:src="@drawable/place322dg"
+                                    android:layout_gravity="center" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -97,12 +98,13 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/mobmargin5"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:background="@color/fffgray">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/option_account_circle_draw"
+                                android:background="@drawable/whiteback"
                                 android:gravity="center"
                                 android:orientation="vertical">
 
@@ -111,7 +113,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/account" />
+                                    android:src="@drawable/acc32dg" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -122,7 +124,7 @@
                             android:layout_margin="@dimen/mobmargin5"
                             android:gravity="center"
                             android:text="ACCOUNT"
-                            android:textColor="@color/yellogreen" />
+                            android:textColor="@color/red" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -135,6 +137,7 @@
                 android:padding="5dp">
 
                 <android.support.v7.widget.CardView
+
                     android:id="@+id/card_track_order"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -156,7 +159,8 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/mobmargin5"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:background="@color/fffgray">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -170,7 +174,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/trackorder" />
+                                    android:src="@drawable/track32dg" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -181,7 +185,7 @@
                             android:layout_margin="@dimen/mobmargin5"
                             android:gravity="center"
                             android:text="TRACK ORDER"
-                            android:textColor="@color/peachpink" />
+                            android:textColor="@color/red" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -204,6 +208,7 @@
                         android:orientation="vertical">
 
                         <LinearLayout
+                            android:background="@color/fffgray"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/mobmargin5"
@@ -213,7 +218,7 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/option_profile_draw"
+                                android:background="@drawable/whiteback"
                                 android:gravity="center"
                                 android:orientation="vertical">
 
@@ -222,7 +227,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/profile" />
+                                    android:src="@drawable/user32dg" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -233,7 +238,7 @@
                             android:layout_margin="@dimen/mobmargin5"
                             android:gravity="center"
                             android:text="PROFILE"
-                            android:textColor="@color/lightpurple" />
+                            android:textColor="@color/red" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -241,6 +246,7 @@
 
 
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
@@ -265,6 +271,7 @@
                         android:orientation="vertical">
 
                         <LinearLayout
+                            android:background="@color/fffgray"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/mobmargin5"
@@ -274,7 +281,7 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/option_scheme_draw"
+                                android:background="@drawable/whiteback"
                                 android:gravity="center"
                                 android:orientation="vertical">
 
@@ -283,7 +290,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/_scheme" />
+                                    android:src="@drawable/scheme32dg" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -294,7 +301,7 @@
                             android:layout_margin="@dimen/mobmargin5"
                             android:gravity="center"
                             android:text="SCHEME"
-                            android:textColor="@color/orange" />
+                            android:textColor="@color/red" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -317,6 +324,7 @@
                         android:orientation="vertical">
 
                         <LinearLayout
+                         android:background="@color/fffgray"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/mobmargin5"
@@ -326,7 +334,7 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/option_whats_new_draw"
+                                android:background="@drawable/whiteback"
                                 android:gravity="center"
                                 android:orientation="vertical">
 
@@ -335,7 +343,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/whatsnew_32" />
+                                    android:src="@drawable/new32dg" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -346,7 +354,7 @@
                             android:layout_margin="@dimen/mobmargin5"
                             android:gravity="center"
                             android:text="WHATS NEW"
-                            android:textColor="@color/lightgreen" />
+                            android:textColor="@color/red" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -359,7 +367,7 @@
                 android:padding="5dp">
 
                 <android.support.v7.widget.CardView
-                    android:id="@+id/card_bank_details"
+                    android:id="@+id/card_feedback"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
@@ -377,6 +385,7 @@
                         android:orientation="vertical">
 
                         <LinearLayout
+                            android:background="@color/fffgray"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/mobmargin5"
@@ -386,7 +395,7 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/option_feedback_draw"
+                                android:background="@drawable/whiteback"
                                 android:gravity="center"
                                 android:orientation="vertical">
 
@@ -395,7 +404,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/feedback_32" />
+                                    android:src="@drawable/feed32dg" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -406,7 +415,7 @@
                             android:layout_margin="@dimen/mobmargin5"
                             android:gravity="center"
                             android:text="FEEDBACK"
-                            android:textColor="@color/blue" />
+                            android:textColor="@color/red" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -421,7 +430,8 @@
                     android:divider="@android:color/black"
                     android:visibility="visible"
                     app:cardBackgroundColor="@color/white"
-                    app:cardElevation="5dp">
+                    app:cardElevation="5dp"
+                    android:id="@+id/card_bank_details">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -429,16 +439,18 @@
                         android:orientation="vertical">
 
                         <LinearLayout
+
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/mobmargin5"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:background="@color/fffgray">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/option_track_order_circle_draw"
+                                android:background="@drawable/whiteback"
                                 android:gravity="center"
                                 android:orientation="vertical">
 
@@ -447,7 +459,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/feedback_32" />
+                                    android:src="@drawable/bank32dg" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -458,7 +470,7 @@
                             android:layout_margin="@dimen/mobmargin5"
                             android:gravity="center"
                             android:text="OUR BANK DETAILS"
-                            android:textColor="@color/peachpink" />
+                            android:textColor="@color/red" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 

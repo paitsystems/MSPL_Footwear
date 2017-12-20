@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class OptionsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private CardView card_give_order, card_account, card_track_order, card_profile, card_scheme, card_whats_new, card_feedback;
+    private CardView card_bank_details,card_give_order, card_account, card_track_order, card_profile, card_scheme, card_whats_new, card_feedback;
     public static float custDisc = 0;
     private Menu mMenu;
     private TextView actionbar_noti_tv;
@@ -40,7 +40,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.test);
+        setContentView(R.layout.optionstest);
 
         init();
 
@@ -55,6 +55,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         card_scheme.setOnClickListener(this);
         card_whats_new.setOnClickListener(this);
         card_feedback.setOnClickListener(this);
+        card_bank_details.setOnClickListener(this);
     }
 
     @Override
@@ -97,6 +98,10 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.card_feedback:
                 startActivity(new Intent(getApplicationContext(), FeedbackActivity.class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                break;
+            case R.id.card_bank_details:
+                startActivity(new Intent(getApplicationContext(), OurBankDetailsActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
         }
@@ -165,6 +170,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         card_scheme = (CardView) findViewById(R.id.card_scheme);
         card_whats_new = (CardView) findViewById(R.id.card_whatsnew);
         card_feedback = (CardView) findViewById(R.id.card_feedback);
+        card_bank_details = (CardView) findViewById(R.id.card_bank_details);
     }
 
     private void showDia(int a) {

@@ -221,4 +221,8 @@
     <string name="totlqty">TotQty</string>
     <string name="cart">Cart</string>
     <string name="selectcustomername">Select Customer Name</string>
+    <string name="bankname">Bank Name:</string>
+    <string name="accno">Acc Number:</string>
+    <string name="ifsc">IFSC:</string>
+    <string name="micr">MICR:</string>
 </resources>

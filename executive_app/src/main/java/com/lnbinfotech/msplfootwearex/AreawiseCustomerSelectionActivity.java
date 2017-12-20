@@ -166,7 +166,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         areaid_partyId_map = new HashMap<>();
         childls = new HashMap<>();
 
-        img_parent = (ImageView) findViewById(R.id.img_parent);
+
 
 
         areaName();
@@ -198,7 +198,6 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         listView.setAdapter(adapter);*/
         adapter1 = new AreawiseCustSelExpandableListAdapter(getApplicationContext(),area_map, areaid_list, party_map, partyid_list, area_party_map, areaid_partyId_map,childls);
         exp_listView.setAdapter(adapter1);
-
     }
 
     /*private  void areaName(){

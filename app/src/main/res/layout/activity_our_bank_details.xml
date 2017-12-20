@@ -1,34 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <TextView
+        
         style="@style/textViewMob"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@android:style/TextAppearance.Medium"
         android:textColor="@color/pinkd"
-        android:text="Select Arealine.."
+        android:text="Our Bank Details.."
         android:id="@+id/tv_arealine" />
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/listView"
-        android:layout_gravity="center_horizontal"
-        android:visibility="gone" />
-
-    <ExpandableListView
-        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/exp_listView"
-        android:visibility="visible"
+        android:id="@+id/lv_account"
         android:layout_weight="1" />
     <TextView
         style="@style/footerstyleMob"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
 </LinearLayout>

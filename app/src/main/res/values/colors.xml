@@ -10,7 +10,11 @@
     <color name="lightgreen">#00A933</color>
     <color name="lightyellow">#FFCC00</color>
     <color name="lightgray">#b3b3b3</color>
+    <color name="dgray">#808080</color>
+    <color name="fffgray">#C0C0C0</color>
     <color name="faintgray">#CABBBB</color>
+    <color name="ffgray">#A9A9A9</color>
+    <color name="fgray">#D3D3D3</color>
     <color name="orange">#fa6c04</color>
     <color name="red">#FF0000</color>
     <color name="purpule">#660394</color>

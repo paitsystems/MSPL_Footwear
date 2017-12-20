@@ -2,10 +2,12 @@ package com.lnbinfotech.msplfootwearex.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lnbinfotech.msplfootwearex.R;
@@ -29,6 +31,7 @@ public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdap
     HashMap<Integer,List<String>> childls;
 
 
+
     public AreawiseCustSelExpandableListAdapter(Context _context,HashMap<Integer,List<String>> _area_map,List<Integer> _areaid_list,HashMap<Integer,String> _party_map,
             List<Integer> _partyid_list,HashMap<Integer,Integer> _area_party_map,HashMap<Integer,List<Integer>> _areaid_partyId_map,HashMap<Integer,List<String>> _childls){
         this.context = _context;
@@ -39,6 +42,7 @@ public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdap
         this.area_party_map = _area_party_map;
         this.areaid_partyId_map = _areaid_partyId_map;
         this.childls = _childls;
+
     }
 
     @Override
@@ -70,9 +74,17 @@ public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdap
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.explist_parent_item,null);
         TextView tv_area_name = (TextView) view.findViewById(R.id.tv_area_name);
-
-       /* String s = String.valueOf(area_map.get(areaid_list.get(group_position)));
-        String[] str = s.split("")*/
+        ImageView img_parent = (ImageView) view.findViewById(R.id.img_parent);
+        if(b) {
+            img_parent.setImageResource(R.drawable.expand_16);
+        }else {
+            img_parent.setImageResource(R.drawable.compress_16);
+        }
+        if(group_position % 2 == 1){
+            view.setBackgroundColor(Color.parseColor("#29B6F6"));
+        }else {
+            view.setBackgroundColor(Color.parseColor("#FF8F00"));
+        }
 
         tv_area_name.setText(String.valueOf(getGroup(group_position)));
         Constant.showLog("group name:"+String.valueOf(getGroup(group_position)));
