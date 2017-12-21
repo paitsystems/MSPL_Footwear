@@ -10,7 +10,7 @@
         android:layout_height="30dp">
 
         <TextView
-            android:layout_width="60dp"
+            android:layout_width="@dimen/vieworder_prodid"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/prod"
@@ -20,7 +20,7 @@
             android:id="@+id/tv_prod_id"
             android:gravity="center" />
         <TextView
-            android:layout_width="60dp"
+            android:layout_width="@dimen/vieworder_sizegroup"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/sizeg"
@@ -29,7 +29,7 @@
             android:gravity="center"
             android:id="@+id/tv_size_group" />
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="@dimen/vieworder_colour"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/color"
@@ -39,7 +39,7 @@
             android:id="@+id/tv_color" />
 
         <TextView
-            android:layout_width="50dp"
+            android:layout_width="@dimen/vieworder_looseqty"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/looseq"
@@ -48,7 +48,7 @@
             android:gravity="center"
             android:id="@+id/tv_loose_qty" />
         <TextView
-            android:layout_width="60dp"
+            android:layout_width="@dimen/vieworder_wsp"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/wsp"
@@ -57,7 +57,7 @@
             android:gravity="center"
             android:id="@+id/tv_wsp" />
         <TextView
-            android:layout_width="60dp"
+            android:layout_width="@dimen/vieworder_mrp"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/mr"
@@ -66,7 +66,7 @@
             android:gravity="center"
             android:id="@+id/tv_mr" />
         <TextView
-            android:layout_width="60dp"
+            android:layout_width="@dimen/vieworder_amnt"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/amt"
@@ -75,7 +75,7 @@
             android:gravity="center"
             android:id="@+id/tv_amt" />
         <TextView
-            android:layout_width="40dp"
+            android:layout_width="@dimen/vieworder_gst"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/gst"

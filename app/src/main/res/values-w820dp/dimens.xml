@@ -3,4 +3,21 @@
          (such as screen margins) for screens with more than 820dp of available width. This
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
     <dimen name="activity_horizontal_margin">64dp</dimen>
+
+    <dimen name="vieworder_prodid">80dp</dimen>
+    <dimen name="vieworder_sizegroup">80dp</dimen>
+    <dimen name="vieworder_colour">100dp</dimen>
+    <dimen name="vieworder_looseqty">60dp</dimen>
+    <dimen name="vieworder_wsp">70dp</dimen>
+    <dimen name="vieworder_mrp">70dp</dimen>
+    <dimen name="vieworder_amnt">70dp</dimen>
+    <dimen name="vieworder_gst">50dp</dimen>
+    <dimen name="vieworder_tset">80dp</dimen>
+    <dimen name="vieworder_tqty">80dp</dimen>
+    <dimen name="vieworder_grossamnt">100dp</dimen>
+    <dimen name="vieworder_discper">60dp</dimen>
+    <dimen name="vieworder_discmant">80dp</dimen>
+    <dimen name="vieworder_gstamnt">90dp</dimen>
+    <dimen name="vieworder_netamt">100dp</dimen>
+
 </resources>

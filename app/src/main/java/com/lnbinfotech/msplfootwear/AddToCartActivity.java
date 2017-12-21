@@ -53,7 +53,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     private EditText ed_prod_search;
     private RadioButton rdo_pack, rdo_unpack;
     private Spinner sp_sizeGroup;
-    private TextView tv_wsp, tv_mrp, tv_hsncode, tv_gstper, tv_add_to_card, tv_checkstock, tv_remove_item, tv_cancel_item,
+    private TextView tv_wsp, tv_mrp, tv_hsncode, tv_gstper,tv_gstperint,tv_marginup,tv_margindown, tv_add_to_card, tv_checkstock, tv_remove_item, tv_cancel_item,
             tv_add_to_card_final, tv_checkout, tv_vieworder, tv_totqty, tv_totamnt, tv_totset, tv_totnetamt, actionbar_noti_tv,
             tv_new_item;
     private RecyclerView rv_size, rv_color;
@@ -157,7 +157,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             tv_remove_item.setVisibility(View.GONE);
             tv_cancel_item.setVisibility(View.GONE);
             sp_sizeGroup.setEnabled(true);
-            tv_add_to_card.setText("Add-To-Card");
+            tv_add_to_card.setText("Add-To-Cart");
             ed_prod_search.setText(null);
             rdo_pack.setChecked(true);
             rdo_unpack.setChecked(false);
@@ -167,6 +167,9 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             tv_wsp.setText("0");
             tv_mrp.setText("0");
             tv_gstper.setText("0");
+            tv_gstperint.setText("0");
+            tv_marginup.setText("0");
+            tv_margindown.setText("0");
             tv_hsncode.setText("0");
             sp_sizeGroup.setAdapter(null);
             rv_color.setAdapter(null);
@@ -180,7 +183,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             tv_remove_item.setVisibility(View.GONE);
             tv_cancel_item.setVisibility(View.GONE);
             sp_sizeGroup.setEnabled(true);
-            tv_add_to_card.setText("Add-To-Card");
+            tv_add_to_card.setText("Add-To-Cart");
             if (selProd != null) {
                 ed_prod_search.setText(selProd);
                 if (getPackUnPack().equals("M")) {
@@ -322,6 +325,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 showDia(2);
                 break;
             case R.id.tv_check_stock:
+                //TODO : Comment When Delivery
                 //db.deleteTable(DBHandler.Table_CustomerOrder);
                 break;
             case R.id.tv_add_to_card_final:
@@ -401,7 +405,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
 
     private void setData() {
         setProductWiseOrderList(selProdId);
-        Cursor res = db.getProductDetails(getPackUnPack());
+        //Cursor res = db.getProductDetails(getPackUnPack());
+        Cursor res = db.getProductDetails();
         if (res.moveToFirst()) {
             do {
                 prodIdStr = res.getString(res.getColumnIndex(DBHandler.PM_ProdId));
@@ -409,6 +414,9 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 tv_mrp.setText(res.getString(res.getColumnIndex(DBHandler.PM_MRPRate)));
                 tv_hsncode.setText(res.getString(res.getColumnIndex(DBHandler.PM_HSNCode)));
                 tv_gstper.setText(res.getString(res.getColumnIndex(DBHandler.PM_GSTGroup)));
+                tv_gstperint.setText(res.getString(res.getColumnIndex(DBHandler.GST_GSTPer)));
+                tv_marginup.setText(res.getString(res.getColumnIndex(DBHandler.PM_MarkUp)));
+                tv_margindown.setText(res.getString(res.getColumnIndex(DBHandler.PM_MarkDown)));
             } while (res.moveToNext());
         }
         res.close();
@@ -488,7 +496,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
 
         int unClickCount = -1;
 
-        Cursor res = db.getProductDetails(getPackUnPack());
+        Cursor res = db.getProductDetails();
         if (res.moveToFirst()) {
             do {
                 prodIdStr = res.getString(res.getColumnIndex(DBHandler.PM_ProdId));
@@ -496,6 +504,9 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 tv_mrp.setText(res.getString(res.getColumnIndex(DBHandler.PM_MRPRate)));
                 tv_hsncode.setText(res.getString(res.getColumnIndex(DBHandler.PM_HSNCode)));
                 tv_gstper.setText(res.getString(res.getColumnIndex(DBHandler.PM_GSTGroup)));
+                tv_gstperint.setText(res.getString(res.getColumnIndex(DBHandler.GST_GSTPer)));
+                tv_marginup.setText(res.getString(res.getColumnIndex(DBHandler.PM_MarkUp)));
+                tv_margindown.setText(res.getString(res.getColumnIndex(DBHandler.PM_MarkDown)));
             } while (res.moveToNext());
         }
         res.close();
@@ -731,7 +742,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
 
                 }
                 if (isDataInserted == 1) {
-                    showToast("Added-To-Card");
+                    showToast("Added-To-Cart");
                     clearFiledsUnPack();
                     setProductWiseOrderList(selProdId);
                 } else {
@@ -868,7 +879,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                     }
                 }
             }
-            showToast("Added-To-Card");
+            showToast("Added-To-Cart");
             clearFiledsPack();
             setProductWiseOrderList(selProdId);
         } else {
@@ -1005,7 +1016,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             }
             lay_comp_pack.setVisibility(View.GONE);
             clearFiledsPack();
-            showToast("Added-To-Card");
+            showToast("Added-To-Cart");
             setProductWiseOrderList(selProdId);
         } else {
             showToast("Please Update GST Master");
@@ -1084,7 +1095,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         setProductWiseOrderList(selProdId);
         String prodName = "";
 
-        Cursor res = db.getProductDetails(getPackUnPack());
+        Cursor res = db.getProductDetails();
         if (res.moveToFirst()) {
             do {
                 prodIdStr = res.getString(res.getColumnIndex(DBHandler.PM_ProdId));
@@ -1093,6 +1104,9 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 tv_mrp.setText(res.getString(res.getColumnIndex(DBHandler.PM_MRPRate)));
                 tv_hsncode.setText(res.getString(res.getColumnIndex(DBHandler.PM_HSNCode)));
                 tv_gstper.setText(res.getString(res.getColumnIndex(DBHandler.PM_GSTGroup)));
+                tv_gstperint.setText(res.getString(res.getColumnIndex(DBHandler.GST_GSTPer)));
+                tv_marginup.setText(res.getString(res.getColumnIndex(DBHandler.PM_MarkUp)));
+                tv_margindown.setText(res.getString(res.getColumnIndex(DBHandler.PM_MarkDown)));
             } while (res.moveToNext());
         }
         res.close();
@@ -1495,7 +1509,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                     }
                 }
                 if (isDataInserted == 1) {
-                    //showToast("Added-To-Card");
+                    //showToast("Added-To-Cart");
                     showDia(22);
                 } else {
                     showToast("Please Enter Qty");
@@ -1633,7 +1647,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                     }
                 }
             }
-            showToast("Added To Card");
+            showToast("Added To Cart");
         } else {
             showToast("GST Status Cancelled");
         }
@@ -1771,7 +1785,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 }
             }
             clearFiledsPack();
-            showToast("Added To Card");
+            showToast("Added To Cart");
         } else {
             showToast("GST Status Cancelled");
         }
@@ -1867,6 +1881,9 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         tv_mrp = (TextView) findViewById(R.id.tv_mrp);
         tv_hsncode = (TextView) findViewById(R.id.tv_hsncode);
         tv_gstper = (TextView) findViewById(R.id.tv_gstper);
+        tv_gstperint = (TextView) findViewById(R.id.tv_gstperint);
+        tv_marginup = (TextView) findViewById(R.id.tv_marginup);
+        tv_margindown = (TextView) findViewById(R.id.tv_margindown);
         tv_add_to_card = (TextView) findViewById(R.id.tv_add_to_card);
         tv_checkstock = (TextView) findViewById(R.id.tv_check_stock);
         tv_remove_item = (TextView) findViewById(R.id.tv_remove_item);
@@ -2012,7 +2029,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
-        alertDialogBuilder.setPositiveButton("Add To Card", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setPositiveButton("Add To Cart", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 String str = auto_set.getText().toString();
                 if(!str.equals("")) {

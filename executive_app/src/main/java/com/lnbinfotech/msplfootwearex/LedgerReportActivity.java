@@ -38,15 +38,15 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
     private Constant constant, constant1;
     private Toast toast;
     private ListView lv_ledger;
-    private TextView tv_fdate,tv_tdate,tot_clb,tot_ob,tot_credit,tot_debit,tv_outstanding;
+    private TextView tv_fdate, tv_tdate, tot_clb, tot_ob, tot_credit, tot_debit, tv_outstanding;
     private CheckBox cb_all;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
     private SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
     private int day, month, year;
     private Calendar cal = Calendar.getInstance();
-    private static final int fdt = 1,tdt = 2;
-    private String fromdate="",todate="", all = "";
-    private double total_op = 0, total_cl = 0,total_debit = 0,total_credit = 0;
+    private static final int fdt = 1, tdt = 2;
+    private String fromdate = "", todate = "", all = "";
+    private double total_op = 0, total_cl = 0, total_debit = 0, total_credit = 0;
     private DecimalFormat flt_price;
     private Button btn_show;
     private int custId = 0;
@@ -64,7 +64,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
 
         todate = sdf1.format(cal.getTime());
         // todate = "1-Nov-2017";
-        Constant.showLog("todate_dafault-"+todate);
+        Constant.showLog("todate_dafault-" + todate);
         tv_tdate.setText(todate);
 
         int day = 1;
@@ -73,7 +73,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
         int numOfDaysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         Constant.showLog("First Day of month: " + cal.getTime());
         fromdate = sdf1.format(cal.getTime());
-        Constant.showLog("fromdate_dafault-"+fromdate);
+        Constant.showLog("fromdate_dafault-" + fromdate);
 
         // fromdate = "1-Aug-2017";
         tv_fdate.setText(fromdate);
@@ -124,24 +124,24 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_show:
-                if(cb_all.isChecked()){
+                if (cb_all.isChecked()) {
                     all = "Y";
                     fromdate = "NA";
                     todate = "NA";
-                }else {
+                } else {
                     all = "N";
                     fromdate = tv_fdate.getText().toString();
-                    Constant.showLog("fromdate-"+fromdate);
-                    todate =  tv_tdate.getText().toString();
-                    Constant.showLog("todate-"+todate);
+                    Constant.showLog("fromdate-" + fromdate);
+                    todate = tv_tdate.getText().toString();
+                    Constant.showLog("todate-" + todate);
                 }
                 showLedgerReport();
                 break;
             case R.id.tv_outstanding:
-                Intent in =  new Intent(getApplicationContext(),OutstandingBillReportActivity.class);
-                in.putExtra("cust_id",String.valueOf(custId));
+                Intent in = new Intent(getApplicationContext(), OutstandingBillReportActivity.class);
+                in.putExtra("cust_id", String.valueOf(custId));
                 startActivity(in);
-                overridePendingTransition(R.anim.enter,R.anim.exit);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
 
         }
@@ -186,15 +186,15 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                 String _fromdate = URLEncoder.encode(fromdate, "UTF-8");
                 String _todate = URLEncoder.encode(todate, "UTF-8");
 
-                String _all =  URLEncoder.encode(all, "UTF-8");
-                Constant.showLog("all"+all);
+                String _all = URLEncoder.encode(all, "UTF-8");
+                Constant.showLog("all" + all);
 
                 /*int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
                 Constant.showLog("id"+id);*/
 
 
-                String url = Constant.ipaddress + "/GetLedgerReport?custid="+custId+"&fdate="+_fromdate+"&tdate="+_todate+"&all="+_all;
-                 // String url = Constant.ipaddress + "/GetLedgerReport?custid=100&fdate=1-Aug-2017&tdate=1-Dec-2017&all=N";
+                String url = Constant.ipaddress + "/GetLedgerReport?custid=" + custId + "&fdate=" + _fromdate + "&tdate=" + _todate + "&all=" + _all;
+                // String url = Constant.ipaddress + "/GetLedgerReport?custid=100&fdate=1-Aug-2017&tdate=1-Dec-2017&all=N";
                 Constant.showLog(url);
                 writeLog("showLedgerReport_" + url);
                 constant.showPD();
@@ -250,33 +250,27 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
 
 
     private void setTotal(List<LedgerReportClass> list) {
-
         total_op = 0;
         total_cl = 0;
         total_debit = 0;
         total_credit = 0;
-
+        int a= 0;
         for (LedgerReportClass ledger : list) {
-
-            total_op = total_op + ledger.getOpnbal();
-            total_cl = total_cl + ledger.getClsbal();
+            if(a==0) {
+                total_op = total_op + ledger.getOpnbal();
+                a=1;
+            }
+            //total_cl = total_cl + ledger.getClsbal();
             total_debit = total_debit + ledger.getDebit();
             total_credit = total_credit + ledger.getCredit();
-
-
         }
-       // if(list.size() != 0) {
-            tot_clb.setText(flt_price.format(total_cl));
-            tot_debit.setText(flt_price.format(total_debit));
-            tot_credit.setText(flt_price.format(total_credit));
-            tot_ob.setText(flt_price.format(total_op));
-       /* }else {
-            tot_clb.setText("0");
-            tot_debit.setText("0");
-            tot_credit.setText("0");
-            tot_ob.setText("0");
-        }*/
 
+        total_cl = (total_op + total_debit) - total_credit;
+
+        tot_clb.setText(flt_price.format(total_cl));
+        tot_debit.setText(flt_price.format(total_debit));
+        tot_credit.setText(flt_price.format(total_credit));
+        tot_ob.setText(flt_price.format(total_op));
 
     }
 
@@ -284,13 +278,13 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case fdt:
-                return new DatePickerDialog(this, fdate, year,month,day);
+                return new DatePickerDialog(this, fdate, year, month, day);
 
             case tdt:
-                return new DatePickerDialog(this, tdate,year,month,day);
+                return new DatePickerDialog(this, tdate, year, month, day);
 
         }
-        return  null;
+        return null;
     }
 
     DatePickerDialog.OnDateSetListener fdate = new DatePickerDialog.OnDateSetListener() {
@@ -299,8 +293,8 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
             try {
                 Date date = sdf.parse(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                 tv_fdate.setText(sdf1.format(date));
-                Constant.showLog("tv_fdate:"+sdf1.format(date));
-            }catch (Exception e){
+                Constant.showLog("tv_fdate:" + sdf1.format(date));
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -312,7 +306,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
             try {
                 Date date = sdf.parse(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                 tv_tdate.setText(sdf1.format(date));
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -320,7 +314,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
 
     private void init() {
         btn_show = (Button) findViewById(R.id.btn_show);
-        tv_outstanding= (TextView) findViewById(R.id.tv_outstanding);
+        tv_outstanding = (TextView) findViewById(R.id.tv_outstanding);
         tv_fdate = (TextView) findViewById(R.id.tv_fdate);
         tv_tdate = (TextView) findViewById(R.id.tv_tdate);
         lv_ledger = (ListView) findViewById(R.id.lv_ledger);
@@ -402,12 +396,12 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
         builder.create().show();
     }
 
-    private void visibility(){
-        if(cb_all.isChecked()){
+    private void visibility() {
+        if (cb_all.isChecked()) {
             tv_fdate.setEnabled(false);
             tv_tdate.setEnabled(false);
 
-        }else{
+        } else {
             tv_fdate.setEnabled(true);
             tv_tdate.setEnabled(true);
         }

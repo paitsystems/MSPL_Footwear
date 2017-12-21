@@ -37,6 +37,8 @@ public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements Vi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cutsize_sizewise_order);
 
+        DisplayCustOutstandingActivity.outClass = null;
+
         init();
 
         if (getSupportActionBar() != null) {

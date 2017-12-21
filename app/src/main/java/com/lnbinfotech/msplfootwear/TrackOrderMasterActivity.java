@@ -49,7 +49,7 @@ public class TrackOrderMasterActivity extends AppCompatActivity implements View.
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(listView.getWindowToken(), 0);
                 TrackOrderMasterClass trackOrderClass = (TrackOrderMasterClass) listView.getItemAtPosition(i);
-                Intent intent = new Intent(TrackOrderMasterActivity.this,TrackOrderDetailActivity.class);
+                Intent intent = new Intent(TrackOrderMasterActivity.this,TrackOrderDetailActivityChanged.class);
                 intent.putExtra("trackorderclass", trackOrderClass);
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter,R.anim.exit);

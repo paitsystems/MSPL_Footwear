@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -10,9 +11,8 @@
         android:padding="@dimen/mobpadding5"
         android:weightSum="1">
 
-
-
         <TextView
+            android:id="@+id/tv_date"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left|center"
@@ -20,39 +20,10 @@
             android:text="Date"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:visibility="visible"
-            android:id="@+id/tv_date" />
-
-
-
+            android:visibility="visible" />
 
         <TextView
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|center"
-            android:gravity="left"
-            android:text="type"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black"
-            android:visibility="visible"
-            android:id="@+id/tv_type" />
-
-
-
-
-        <TextView
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|center"
-            android:gravity="left"
-            android:text="Dcno"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black"
-            android:visibility="visible"
-            android:id="@+id/tv_dcno" />
-
-
-        <TextView
+            android:id="@+id/tv_total"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right|center"
@@ -60,9 +31,29 @@
             android:text="Total"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:visibility="visible"
-            android:id="@+id/tv_total" />
+            android:visibility="visible" />
 
+        <TextView
+            android:id="@+id/tv_type"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="type"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"
+            android:visibility="visible"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/tv_dcno"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center"
+            android:gravity="left"
+            android:text="Dcno"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"
+            android:visibility="visible" />
 
     </LinearLayout>
 

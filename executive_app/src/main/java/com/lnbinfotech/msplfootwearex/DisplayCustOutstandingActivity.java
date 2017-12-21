@@ -21,7 +21,7 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
     private Constant constant, constant1;
     private Toast toast;
     public static CustOutstandingClass outClass;
-    private TextView tv_cl,tv_days,tv_pdc,tv_co,tv_bfp,tv_oda,tv_corder,tv_uo,tv_noa,tv_ol;
+    private TextView tv_cl,tv_days,tv_odays,tv_pdc,tv_co,tv_bfp,tv_oda,tv_corder,tv_uo,tv_noa,tv_ol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +75,7 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
 
         tv_cl = (TextView) findViewById(R.id.tv_cl);
         tv_days = (TextView) findViewById(R.id.tv_days);
+        tv_odays = (TextView) findViewById(R.id.tv_odays);
         tv_pdc = (TextView) findViewById(R.id.tv_pdc);
         tv_co = (TextView) findViewById(R.id.tv_co);
         tv_bfp = (TextView) findViewById(R.id.tv_bfp);
@@ -102,6 +103,7 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
             @Override
             public void onFailure(Object result) {
                 constant.showPD();
+                writeLog("loadOustandingdetail_onFailure_"+result);
                 showPopup(2);
             }
         });
@@ -111,6 +113,7 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
         String currOrder =  FirstActivity.pref.getString("totalNetAmnt","");
         tv_cl.setText(outClass.getCreditlimit());
         tv_days.setText(outClass.getCreditdays());
+        tv_odays.setText(outClass.getOverDueDays());
         tv_co.setText(outClass.getCurrOutstnd());
         tv_corder.setText(currOrder);
         tv_pdc.setText(outClass.getPostDatedCheque());

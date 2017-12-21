@@ -125,6 +125,24 @@
                     android:gravity="center"
                     android:text="GST %" />
 
+                <TextView
+                    style="@style/textViewMobAddToCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.4"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center"
+                    android:text="Mar.Up" />
+
+                <TextView
+                    style="@style/textViewMobAddToCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.4"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center"
+                    android:text="Mar.Down" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -172,6 +190,43 @@
 
                 <TextView
                     android:id="@+id/tv_gstper"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.4"
+                    android:background="@drawable/line_right_bottom_draw"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_gstperint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.4"
+                    android:background="@drawable/line_right_bottom_draw"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_marginup"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.4"
+                    android:background="@drawable/line_right_bottom_draw"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_margindown"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="0.4"
@@ -291,7 +346,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.6"
-                android:text="Enter Number Of Set"
+                android:text="Enter Number Of Cartoon"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
@@ -301,7 +356,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.4"
-                android:hint="Enter Number of Set"
+                android:hint="Enter Number of Cartoon"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
@@ -331,7 +386,7 @@
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
                 android:gravity="center"
-                android:text="Add-To-Card"
+                android:text="Add-To-Cart"
                 android:singleLine="true" />
 
             <TextView
@@ -411,12 +466,6 @@
 
 
         </LinearLayout>
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/listView"
-            android:visibility="visible" />
-
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

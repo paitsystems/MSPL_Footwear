@@ -912,6 +912,17 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
+    public Cursor getProductDetails() {
+        String str = "select " + Table_ProductMaster +"." + PM_ProductID + "," + Table_ProductMaster +"." + PM_SRate + "," +
+                Table_ProductMaster + "."+PM_MRPRate + "," + Table_ProductMaster +"."+ PM_HSNCode + "," + Table_ProductMaster +"." +
+                PM_GSTGroup +"," + Table_GSTMASTER + "." + GST_GSTPer + "," + Table_ProductMaster + "." + PM_Finalprod +"," + Table_ProductMaster +
+                "." + PM_ProdId +"," + Table_ProductMaster + "." + PM_MarkUp+ "," + Table_ProductMaster + "." + PM_MarkDown +
+                " from " + Table_ProductMaster + "," + Table_GSTMASTER + " where " + Table_ProductMaster +"." + PM_GSTGroup + "="
+                + Table_GSTMASTER + "." + GST_GroupNm + " and "+ Table_ProductMaster + "." + PM_ProductID + "=" + AddToCartActivity.selProdId;
+        Constant.showLog("getProductDetails :- " + str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
     public Cursor getDistinctSizeGroup(String packUnpackType) {
         String str = "select distinct " + ARSD_SizeGroup + " from " + Table_AllRequiredSizesDesigns +
                 " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_typ + "='" + packUnpackType + "' and "

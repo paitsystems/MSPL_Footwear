@@ -35,21 +35,20 @@
     <dimen name="tot_textsize">20dp</dimen>
     <dimen name="addtocardtvheight">30dp</dimen>
 
-
-    <dimen name="vieworder_prodid">60dp</dimen>
-    <dimen name="vieworder_sizegroup">60dp</dimen>
-    <dimen name="vieworder_colour">80dp</dimen>
-    <dimen name="vieworder_looseqty">50dp</dimen>
-    <dimen name="vieworder_wsp">60dp</dimen>
-    <dimen name="vieworder_mrp">60dp</dimen>
-    <dimen name="vieworder_amnt">60dp</dimen>
-    <dimen name="vieworder_gst">40dp</dimen>
-    <dimen name="vieworder_tset">60dp</dimen>
-    <dimen name="vieworder_tqty">60dp</dimen>
-    <dimen name="vieworder_grossamnt">80dp</dimen>
-    <dimen name="vieworder_discper">50dp</dimen>
-    <dimen name="vieworder_discmant">70dp</dimen>
-    <dimen name="vieworder_gstamnt">70dp</dimen>
-    <dimen name="vieworder_netamt">80dp</dimen>
+    <dimen name="vieworder_prodid">80dp</dimen>
+    <dimen name="vieworder_sizegroup">80dp</dimen>
+    <dimen name="vieworder_colour">100dp</dimen>
+    <dimen name="vieworder_looseqty">60dp</dimen>
+    <dimen name="vieworder_wsp">70dp</dimen>
+    <dimen name="vieworder_mrp">70dp</dimen>
+    <dimen name="vieworder_amnt">70dp</dimen>
+    <dimen name="vieworder_gst">50dp</dimen>
+    <dimen name="vieworder_tset">80dp</dimen>
+    <dimen name="vieworder_tqty">80dp</dimen>
+    <dimen name="vieworder_grossamnt">100dp</dimen>
+    <dimen name="vieworder_discper">60dp</dimen>
+    <dimen name="vieworder_discmant">80dp</dimen>
+    <dimen name="vieworder_gstamnt">90dp</dimen>
+    <dimen name="vieworder_netamt">100dp</dimen>
 
 </resources>

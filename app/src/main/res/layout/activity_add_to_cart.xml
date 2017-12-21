@@ -13,8 +13,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <!--<EditText
             android:id="@+id/ed_prod_search"
@@ -42,8 +42,8 @@
                 android:layout_height="30dp"
                 android:layout_weight="0.1"
                 android:background="@null"
-                android:hint="Search Product here..."
                 android:focusable="false"
+                android:hint="Search Product here..."
                 android:singleLine="false" />
 
             <ImageView
@@ -124,6 +124,24 @@
                     android:gravity="center"
                     android:text="GST %" />
 
+                <TextView
+                    style="@style/textViewMobAddToCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.4"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center"
+                    android:text="Mar.Up" />
+
+                <TextView
+                    style="@style/textViewMobAddToCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.4"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center"
+                    android:text="Mar.Down" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -179,8 +197,44 @@
                     android:text="0"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_gstperint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.4"
+                    android:background="@drawable/line_right_bottom_draw"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black"
                     android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/tv_marginup"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.4"
+                    android:background="@drawable/line_right_bottom_draw"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_margindown"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.4"
+                    android:background="@drawable/line_right_bottom_draw"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
 
@@ -207,21 +261,21 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="top"
                     android:layout_weight="0.4"
                     android:background="@drawable/sizegroup_spinner_draw"
                     android:orientation="vertical"
-                    android:padding="@dimen/mobpadding2"
-                    android:layout_gravity="top">
+                    android:padding="@dimen/mobpadding2">
 
                     <Spinner
                         android:id="@+id/sp_sizegroup"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:gravity="top"
                         android:imeOptions="actionNext"
                         android:maxLines="1"
                         android:spinnerMode="dropdown"
-                        android:textStyle="bold"
-                        android:gravity="top" />
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -280,17 +334,17 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lay_comp_pack"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:id="@+id/lay_comp_pack"
             android:visibility="gone">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.6"
-                android:text="Enter Number Of Set"
+                android:text="Enter Number Of Cartoon"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
@@ -300,7 +354,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.4"
-                android:hint="Enter Number of Set"
+                android:hint="Enter Number of Cartoon"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
@@ -328,8 +382,8 @@
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
                 android:gravity="center"
-                android:text="Add-To-Card"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="Add-To-Cart" />
 
             <TextView
                 android:id="@+id/tv_remove_item"
@@ -340,9 +394,9 @@
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
                 android:gravity="center"
+                android:singleLine="true"
                 android:text="Remove"
-                android:visibility="gone"
-                android:singleLine="true" />
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_cancel_item"
@@ -353,9 +407,9 @@
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
                 android:gravity="center"
+                android:singleLine="true"
                 android:text="Cancel"
-                android:visibility="gone"
-                android:singleLine="true" />
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_check_stock"
@@ -366,8 +420,8 @@
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
                 android:gravity="center"
-                android:text="Check Stock"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="Check Stock" />
 
             <TextView
                 android:id="@+id/tv_new_item"
@@ -378,8 +432,8 @@
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
                 android:gravity="center"
-                android:text="New Item"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="New Item" />
 
             <!--<android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_add_to_card"
@@ -409,11 +463,10 @@
         </LinearLayout>
 
         <ListView
+            android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/listView"
             android:visibility="visible" />
-
 
 
     </LinearLayout>
@@ -604,6 +657,7 @@
 
         </LinearLayout>
     </LinearLayout>
+
     <TextView
         style="@style/footerstyleMob"
         android:layout_width="match_parent"

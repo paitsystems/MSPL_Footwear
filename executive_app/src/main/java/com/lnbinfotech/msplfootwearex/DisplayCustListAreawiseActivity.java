@@ -76,8 +76,8 @@ public class DisplayCustListAreawiseActivity extends AppCompatActivity implement
                 Constant.showLog("selctedCustomerName: " + select_item);
                 writeLog("setOnItemClickListener():list item selected:" + select_item);
                 //finish();
-                int cust_id = db.getCustNameId(select_item);
-                Constant.showLog("cust_id: " + cust_id);
+                DisplayCustListActivity.custId = db.getCustNameId(select_item);
+                Constant.showLog("cust_id: " + DisplayCustListActivity.custId);
                 finish();
                 startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
