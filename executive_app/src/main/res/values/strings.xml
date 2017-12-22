@@ -279,4 +279,7 @@
     <string name="orderstatus">Order Status:</string>
     <string name="pref_hocode">hocode</string>
     <string name="pref_mob">mobno</string>
+
+    <string name="warehouse">Godown</string>
+
 </resources>

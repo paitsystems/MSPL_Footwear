@@ -6,9 +6,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/mobmargin5"
-        android:layout_weight="1"
         android:orientation="vertical">
 
         <LinearLayout
@@ -476,6 +475,90 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/greend"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/textViewMob"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/warehouse"
+                android:layout_weight="0.3"
+                android:gravity="left" />
+            <TextView
+                style="@style/textViewMob"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/qty"
+                android:layout_weight="0.4"
+                android:gravity="right" />
+            <TextView
+                style="@style/textViewMob"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/amt"
+                android:layout_weight="0.4"
+                android:gravity="right" />
+        </LinearLayout>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lv_warhouse_detail" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/greend"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <TextView
+                style="@style/textViewMob"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/total"
+                android:layout_weight="0.3"
+                android:gravity="left" />
+            <TextView
+                style="@style/textViewMob"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0"
+                android:layout_weight="0.4"
+                android:gravity="right"
+                android:id="@+id/tot_qty" />
+            <TextView
+                style="@style/textViewMob"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0"
+                android:layout_weight="0.4"
+                android:gravity="right"
+                android:id="@+id/tot_amt" />
+        </LinearLayout>
+        </LinearLayout>
+
 
     <TextView
         style="@style/footerstyleMob"

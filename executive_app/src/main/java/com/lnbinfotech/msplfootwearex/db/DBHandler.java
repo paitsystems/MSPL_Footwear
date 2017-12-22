@@ -933,8 +933,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
-    public Cursor getCustName() {
-        String str = "select " + CM_PartyName + " from " + Table_Customermaster + " where " + CM_Status + "='A' order by " + CM_PartyName;
+    public Cursor getCustName(int hocode) {
+        //String str = "select " + CM_PartyName + " from " + Table_Customermaster + " where " + CM_Status + "='A' order by " + CM_PartyName;
+        String str = "select " + CM_PartyName + " from " + Table_Customermaster + " where " + CM_Status + "='A' and "+CM_HOCode+" = "+hocode+" order by " + CM_PartyName;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
     }
@@ -1277,6 +1278,13 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         res.close();
         return a;
+    }
+
+    public Cursor getWarehouseData(){
+        String str = "select "+CO_BranchId+","+Company_Initial+",Sum("+CO_LooseQty+") LooseQty, Sum("+CO_NetAmt+") NetAmt from "+Table_CustomerOrder+","+Table_CompanyMaster+
+                " where "+Table_CustomerOrder+"."+CO_BranchId+" = "+Table_CompanyMaster+"."+Company_Id+" group by "+CO_BranchId;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str,null);
     }
 }
 

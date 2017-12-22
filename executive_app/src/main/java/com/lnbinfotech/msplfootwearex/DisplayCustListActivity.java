@@ -121,7 +121,8 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
     }
 
     public void setCusList() {
-        Cursor cur = db.getCustName();
+        int hocode = FirstActivity.pref.getInt(getString(R.string.pref_hocode),0);
+        Cursor cur = db.getCustName(hocode);
         if (cur.moveToFirst()) {
             do {
                 cus_list.add(cur.getString(cur.getColumnIndex(DBHandler.CM_PartyName)));
@@ -131,6 +132,7 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
 
         adapter = new DisplayCustListAdapter(this, cus_list);
         lv_cus.setAdapter(adapter);
+       Constant.showLog("cus_list.size():"+cus_list.size());
     }
 
     private void showDia(int a) {
