@@ -19,7 +19,7 @@
         <EditText
             android:id="@+id/ed_search"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="@dimen/product_search_edheight30"
             android:layout_weight="0.1"
             android:background="@null"
             android:hint="Search here..."

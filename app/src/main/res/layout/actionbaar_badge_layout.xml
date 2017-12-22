@@ -10,7 +10,7 @@
 
     <ImageView
         android:id="@+id/img"
-        android:layout_width="50dp"
+        android:layout_width="@dimen/actionbar_badge_layout_img50"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:src="@drawable/cart_32"/>
@@ -18,8 +18,8 @@
     <TextView
         style="@style/textViewMob"
         android:id="@+id/actionbar_noti_tv"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/actionbar_badge_layout_tv30"
+        android:layout_height="@dimen/actionbar_badge_layout_tv30"
         android:layout_gravity="right|end|top"
         android:layout_marginEnd="-5dp"
         android:layout_marginRight="-5dp"

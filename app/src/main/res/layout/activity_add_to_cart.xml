@@ -39,7 +39,7 @@
                 android:id="@+id/ed_prod_search"
                 style="@style/textViewMob"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="@dimen/add_to_cart_edheight30"
                 android:layout_weight="0.1"
                 android:background="@null"
                 android:focusable="false"
@@ -84,7 +84,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="@dimen/add_to_cart_edheight30"
                 android:orientation="horizontal">
 
                 <TextView
@@ -247,7 +247,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="@dimen/add_to_cart_layheight35"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -377,7 +377,7 @@
                 android:id="@+id/tv_add_to_card"
                 style="@style/textViewMobW"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/addtocardtvheight"
+                android:layout_height="@dimen/add_to_cart_edheight30"
                 android:layout_margin="@dimen/mobpadding2"
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
@@ -389,7 +389,7 @@
                 android:id="@+id/tv_remove_item"
                 style="@style/textViewMobW"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/addtocardtvheight"
+                android:layout_height="@dimen/add_to_cart_edheight30"
                 android:layout_margin="@dimen/mobpadding2"
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
@@ -402,7 +402,7 @@
                 android:id="@+id/tv_cancel_item"
                 style="@style/textViewMobW"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/addtocardtvheight"
+                android:layout_height="@dimen/add_to_cart_edheight30"
                 android:layout_margin="@dimen/mobpadding2"
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
@@ -415,7 +415,7 @@
                 android:id="@+id/tv_check_stock"
                 style="@style/textViewMobW"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/addtocardtvheight"
+                android:layout_height="@dimen/add_to_cart_edheight30"
                 android:layout_margin="@dimen/mobpadding2"
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
@@ -427,7 +427,7 @@
                 android:id="@+id/tv_new_item"
                 style="@style/textViewMobW"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/addtocardtvheight"
+                android:layout_height="@dimen/add_to_cart_edheight30"
                 android:layout_margin="@dimen/mobpadding2"
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
@@ -517,7 +517,7 @@
             android:id="@+id/tv_add_to_card_final"
             style="@style/textViewMobW"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/addtocardtvheight"
+            android:layout_height="@dimen/add_to_cart_edheight30"
             android:layout_margin="@dimen/mobpadding2"
             android:layout_weight="0.4"
             android:background="@drawable/btn_draw_maroon_curve"
@@ -529,7 +529,7 @@
             android:id="@+id/tv_checkout"
             style="@style/textViewMobW"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/addtocardtvheight"
+            android:layout_height="@dimen/add_to_cart_edheight30"
             android:layout_margin="@dimen/mobpadding2"
             android:layout_weight="0.5"
             android:background="@drawable/btn_draw_maroon_curve"
@@ -541,7 +541,7 @@
             android:id="@+id/tv_vieworder"
             style="@style/textViewMobW"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/addtocardtvheight"
+            android:layout_height="@dimen/add_to_cart_edheight30"
             android:layout_margin="@dimen/mobpadding2"
             android:layout_weight="0.5"
             android:background="@drawable/btn_draw_maroon_curve"
@@ -558,7 +558,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="@dimen/add_to_cart_edheight30"
             android:orientation="horizontal">
 
             <TextView
@@ -602,7 +602,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="@dimen/add_to_cart_edheight30"
             android:orientation="horizontal">
 
             <TextView

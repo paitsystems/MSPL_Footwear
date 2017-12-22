@@ -29,8 +29,8 @@
 
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="@dimen/grid_item_gents_width150"
+                android:layout_height="@dimen/grid_item_gents_width150"
                 android:contentDescription="img"
                 android:src="@drawable/bg"
                 android:layout_gravity="center" />

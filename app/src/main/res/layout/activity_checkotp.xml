@@ -72,7 +72,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/checkOTP_height50"
                 android:layout_margin="@dimen/mobmargin5"
                 android:orientation="vertical">
 

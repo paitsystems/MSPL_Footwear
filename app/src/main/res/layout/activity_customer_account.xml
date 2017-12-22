@@ -39,7 +39,7 @@
                     <ImageView
                         android:id="@+id/imgv_bills"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="@dimen/customer_account_height40"
                         android:layout_gravity="center"
                         android:src="@drawable/order_64" />
 
@@ -77,7 +77,7 @@
                     <ImageView
                         android:id="@+id/imgv_ledger_statement"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="@dimen/customer_account_height40"
                         android:layout_gravity="center"
                         android:src="@drawable/ledger_statement_64" />
 
@@ -271,7 +271,7 @@
                     <ImageView
                         android:id="@+id/imgv_gst_report"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="@dimen/customer_account_height40"
                         android:layout_gravity="center"
                         android:src="@drawable/gst_report_64" />
 

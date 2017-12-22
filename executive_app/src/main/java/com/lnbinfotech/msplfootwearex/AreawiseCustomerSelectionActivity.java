@@ -95,6 +95,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
             }
         });
 */
+        exp_listView.setGroupIndicator(null);
         exp_listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int group_postion, int child_position, long l) {

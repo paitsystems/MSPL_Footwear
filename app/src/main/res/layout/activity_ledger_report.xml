@@ -128,7 +128,7 @@
             android:layout_gravity="center"
             android:layout_weight="0.6"
             android:gravity="right"
-            android:text="View Outstanding Bills"
+            android:text="@string/viewoutstandingbills"
             android:textColor="@color/orange" />
 
 
@@ -155,7 +155,7 @@
 
                 <LinearLayout
 
-                    android:layout_width="90dp"
+                    android:layout_width="@dimen/ledgerreport_date_90"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center"
                     android:gravity="center"
@@ -164,7 +164,7 @@
 
                     <TextView
                         style="@style/textViewMob"
-                        android:layout_width="90dp"
+                        android:layout_width="@dimen/ledgerreport_date_90"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center"
                         android:text="Date"
@@ -175,7 +175,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="180dp"
+                    android:layout_width="@dimen/ledgerreport_against_180"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -184,7 +184,7 @@
 
                     <TextView
                         style="@style/textViewMob"
-                        android:layout_width="180dp"
+                        android:layout_width="@dimen/ledgerreport_against_180"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center"
                         android:text="Against"
@@ -196,7 +196,7 @@
 
                 <LinearLayout
 
-                    android:layout_width="90dp"
+                    android:layout_width="@dimen/ledgerreport_date_90"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -205,7 +205,7 @@
 
                     <TextView
                         style="@style/textViewMob"
-                        android:layout_width="90dp"
+                        android:layout_width="@dimen/ledgerreport_date_90"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|center"
                         android:gravity="right"
@@ -217,7 +217,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="90dp"
+                    android:layout_width="@dimen/ledgerreport_date_90"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -226,7 +226,7 @@
 
                     <TextView
                         style="@style/textViewMob"
-                        android:layout_width="90dp"
+                        android:layout_width="@dimen/ledgerreport_date_90"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|center"
                         android:gravity="right"
@@ -238,7 +238,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="90dp"
+                    android:layout_width="@dimen/ledgerreport_date_90"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -247,7 +247,7 @@
 
                     <TextView
                         style="@style/textViewMob"
-                        android:layout_width="90dp"
+                        android:layout_width="@dimen/ledgerreport_date_90"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|center"
                         android:gravity="right"
@@ -259,7 +259,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="90dp"
+                    android:layout_width="@dimen/ledgerreport_date_90"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -269,7 +269,7 @@
 
                     <TextView
                         style="@style/textViewMob"
-                        android:layout_width="90dp"
+                        android:layout_width="@dimen/ledgerreport_date_90"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|center"
                         android:gravity="right"
@@ -281,7 +281,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="180dp"
+                    android:layout_width="@dimen/ledgerreport_against_180"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -290,7 +290,7 @@
 
                     <TextView
                         style="@style/textViewMob"
-                        android:layout_width="180dp"
+                        android:layout_width="@dimen/ledgerreport_against_180"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center"
                         android:gravity="right"
@@ -322,7 +322,7 @@
                 <TextView
                     android:id="@+id/lay_total"
                     style="@style/textViewMob"
-                    android:layout_width="90dp"
+                    android:layout_width="@dimen/ledgerreport_date_90"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center"
                     android:gravity="left"
@@ -344,7 +344,7 @@
                 <TextView
                     android:id="@+id/tot_ob"
                     style="@style/textViewMob"
-                    android:layout_width="90dp"
+                    android:layout_width="@dimen/ledgerreport_date_90"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center"
                     android:gravity="right"
@@ -356,7 +356,7 @@
                 <TextView
                     android:id="@+id/tot_debit"
                     style="@style/textViewMob"
-                    android:layout_width="90dp"
+                    android:layout_width="@dimen/ledgerreport_date_90"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center"
                     android:gravity="right"
@@ -368,7 +368,7 @@
                 <TextView
                     android:id="@+id/tot_credit"
                     style="@style/textViewMob"
-                    android:layout_width="90dp"
+                    android:layout_width="@dimen/ledgerreport_date_90"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center"
                     android:gravity="right"
@@ -380,7 +380,7 @@
                 <TextView
                     android:id="@+id/tot_clb"
                     style="@style/textViewMob"
-                    android:layout_width="90dp"
+                    android:layout_width="@dimen/ledgerreport_date_90"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center"
                     android:text="0"
@@ -391,7 +391,7 @@
 
                     <TextView
                         style="@style/textViewMob"
-                        android:layout_width="180dp"
+                        android:layout_width="@dimen/ledgerreport_against_180"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center"
                         android:gravity="right"

@@ -8,8 +8,8 @@
     <TextView
         android:id="@+id/textView"
         style="@style/textViewMob"
-        android:layout_width="30dp"
-        android:layout_height="25dp"
+        android:layout_width="@dimen/list_item_sizegrp_width30"
+        android:layout_height="@dimen/list_item_sizegrp_height25"
         android:background="@drawable/black_border_draw"
         android:padding="@dimen/mobpadding2"
         android:text="00"

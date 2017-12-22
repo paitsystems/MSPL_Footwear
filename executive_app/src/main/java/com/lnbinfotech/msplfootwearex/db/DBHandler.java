@@ -941,7 +941,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public Cursor getExpListData() {
         String str = "select " + Table_AreaMaster + "." + Area_Id + "," + Table_AreaMaster + "." + Area_Area + "," + Table_Customermaster + "." + CM_RetailCustID + "," + Table_Customermaster + "." + CM_PartyName + "," + Table_Customermaster + "." + CM_AreaId +
-                " from " + Table_AreaMaster + "," + Table_Customermaster + " where " + Table_AreaMaster + "." + Area_Id + "=" + Table_Customermaster + "." + CM_AreaId + " group by " + Table_AreaMaster + "." + Area_Id + "," + Table_Customermaster + "." + CM_Name + " order by " + Table_AreaMaster + "." + Area_Area;
+                " from " + Table_AreaMaster + "," + Table_Customermaster + " where " + Table_AreaMaster + "." + Area_Id + "=" + Table_Customermaster + "." + CM_AreaId + " group by " + Table_AreaMaster + "." + Area_Id + "," + Table_Customermaster + "." + CM_Name + " order by " + Table_AreaMaster + "." + Area_Area +","+Table_Customermaster + "." + CM_PartyName;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
     }

@@ -39,7 +39,7 @@ public class Constant {
     //ftp_directory = "SMVisit_Indus",
 
     //TODO: Check Ip Address
-    //public static final String ipaddress = "http://172.30.1.38/MSPL/service.svc";
+   // public static final String ipaddress = "http://172.30.1.38/MSPL/service.svc";
     public static final String ipaddress = "http://license.lnbinfotech.com/MSPL/service.svc";
     //public static final String ipaddress = "http://103.68.10.9/MSPL/service.svc";
 

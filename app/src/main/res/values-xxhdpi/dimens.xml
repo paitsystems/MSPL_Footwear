@@ -51,4 +51,42 @@
     <dimen name="vieworder_gstamnt">90dp</dimen>
     <dimen name="vieworder_netamt">100dp</dimen>
 
+    <!--sneha changes 12/21/17-->
+    <dimen name="ledgerreport_date_90">90dp</dimen>
+    <dimen name="ledgerreport_against_180">180dp</dimen>
+    <dimen name="outstndngreport_date_120">120dp</dimen>
+    <dimen name="outstndngreport_dcno_200">200dp</dimen>
+    <dimen name="actionbar_badge_layout_img50">50dp</dimen>
+    <dimen name="actionbar_badge_layout_tv30">30dp</dimen>
+    <dimen name="add_to_cart_edheight30">30dp</dimen>
+    <dimen name="add_to_cart_layheight35">35dp</dimen>
+    <dimen name="checkOTP_height50">50dp</dimen>
+    <dimen name="checkOUT_custorder_height30">30dp</dimen>
+    <dimen name="checkOUT_custorder_width60">60dp</dimen>
+    <dimen name="checkOUT_custorder_width80">80dp</dimen>
+    <dimen name="checkOUT_custorder_width70">70dp</dimen>
+    <dimen name="customer_account_height40">40dp</dimen>
+    <dimen name="customer_login_height50">50dp</dimen>
+    <dimen name="cussize_sizewise_height60">60dp</dimen>
+    <dimen name="feedback_spinner_height50">50dp</dimen>
+    <dimen name="feedback_auto_height30">30dp</dimen>
+    <dimen name="feedback_lay_height100">100dp</dimen>
+    <dimen name="product_search_edheight30">30dp</dimen>
+    <dimen name="profile_dataupdate_edheight40">40dp</dimen>
+    <dimen name="trackorder_detail_layheight40">40dp</dimen>
+    <dimen name="trackorder_detail_tvwidth40">40dp</dimen>
+    <dimen name="trackorder_detail_tvwidth60">60dp</dimen>
+    <dimen name="trackorder_detail_tvwidth80">80dp</dimen>
+    <dimen name="trackorder_detail_tvwidth50">50dp</dimen>
+    <dimen name="trackorder_detail_tvwidth70">70dp</dimen>
+    <dimen name="trackorder_detail_layheight30">30dp</dimen>
+    <dimen name="checkout_custorder_listitm_width80">80dp</dimen>
+    <dimen name="checkout_custorder_listitm_width60">60dp</dimen>
+    <dimen name="grid_item_gents_width150">150dp</dimen>
+    <dimen name="list_item_sizegrp_width80">80dp</dimen>
+    <dimen name="list_item_sizegrp_height20">20dp</dimen>
+    <dimen name="list_item_sizegrp_width30">30dp</dimen>
+    <dimen name="list_item_sizegrp_height25">25dp</dimen>
+    <dimen name="list_item_sizegrp_height40">40dp</dimen>
+
 </resources>

@@ -225,4 +225,5 @@
     <string name="accno">Acc Number:</string>
     <string name="ifsc">IFSC:</string>
     <string name="micr">MICR:</string>
+    <string name="viewoutstandingbills"><u> View Outstanding Bills</u>.</string>
 </resources>

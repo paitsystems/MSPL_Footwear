@@ -22,8 +22,8 @@
             <TextView
                 android:id="@+id/textView"
                 style="@style/textViewMob"
-                android:layout_width="80dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/list_item_sizegrp_width80"
+                android:layout_height="@dimen/list_item_sizegrp_height20"
                 android:padding="@dimen/mobpadding2"
                 android:text="BrownBlu"
                 android:gravity="center" />

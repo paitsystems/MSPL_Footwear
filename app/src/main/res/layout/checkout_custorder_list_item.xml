@@ -10,7 +10,7 @@
         android:layout_height="30dp">
 
         <TextView
-            android:layout_width="60dp"
+            android:layout_width="@dimen/checkout_custorder_listitm_width60"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/prod"
@@ -20,7 +20,7 @@
             android:gravity="center"
             android:id="@+id/tv_prod_id" />
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="@dimen/checkout_custorder_listitm_width80"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/sizeg"
@@ -29,7 +29,7 @@
             android:gravity="center"
             android:id="@+id/tv_size_group" />
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="@dimen/checkout_custorder_listitm_width80"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/color"
@@ -39,7 +39,7 @@
             android:id="@+id/tv_color" />
 
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="@dimen/checkout_custorder_listitm_width80"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/looseq"
@@ -48,7 +48,7 @@
             android:gravity="center"
             android:id="@+id/tv_loose_qty" />
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="@dimen/checkout_custorder_listitm_width80"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/wsp"
@@ -58,7 +58,7 @@
             android:id="@+id/tv_wsp"
             android:visibility="gone" />
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="@dimen/checkout_custorder_listitm_width80"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/availableqty"
@@ -77,7 +77,7 @@
             android:id="@+id/tv_amt"
             android:visibility="gone" />
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="@dimen/checkout_custorder_listitm_width80"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/gst"

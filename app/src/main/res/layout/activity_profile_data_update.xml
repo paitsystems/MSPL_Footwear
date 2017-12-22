@@ -66,7 +66,7 @@
                             android:singleLine="true"
                             android:maxLines="1"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
+                            android:layout_height="@dimen/profile_dataupdate_edheight40"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:id="@+id/ed_mobno" />
                     </LinearLayout>
@@ -119,7 +119,7 @@
                             android:singleLine="true"
                             android:maxLines="1"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
+                            android:layout_height="@dimen/profile_dataupdate_edheight40"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:id="@+id/ed_emailid" />
                     </LinearLayout>
@@ -146,7 +146,7 @@
                             android:maxLines="1"
                             android:inputType="textEmailAddress"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
+                            android:layout_height="@dimen/profile_dataupdate_edheight40"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:id="@+id/ed_cc" />
 

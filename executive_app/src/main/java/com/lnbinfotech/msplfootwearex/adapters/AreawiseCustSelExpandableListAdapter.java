@@ -32,6 +32,7 @@ public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdap
 
 
 
+
     public AreawiseCustSelExpandableListAdapter(Context _context,HashMap<Integer,List<String>> _area_map,List<Integer> _areaid_list,HashMap<Integer,String> _party_map,
             List<Integer> _partyid_list,HashMap<Integer,Integer> _area_party_map,HashMap<Integer,List<Integer>> _areaid_partyId_map,HashMap<Integer,List<String>> _childls){
         this.context = _context;
@@ -74,6 +75,7 @@ public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdap
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.explist_parent_item,null);
         TextView tv_area_name = (TextView) view.findViewById(R.id.tv_area_name);
+        TextView tv_child_count = (TextView) view.findViewById(R.id.tv_child_count);
         ImageView img_parent = (ImageView) view.findViewById(R.id.img_parent);
         if(b) {
             img_parent.setImageResource(R.drawable.expand_16);
@@ -86,7 +88,9 @@ public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdap
             view.setBackgroundColor(Color.parseColor("#FF8F00"));
         }
 
+        String count = "["+String.valueOf(areaid_partyId_map.get(areaid_list.get(group_position)).size())+"]";
         tv_area_name.setText(String.valueOf(getGroup(group_position)));
+        tv_child_count.setText(count);
         Constant.showLog("group name:"+String.valueOf(getGroup(group_position)));
         return view;
     }
@@ -118,10 +122,28 @@ public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdap
 
     @Override
     public View getChildView(int group_position, int child_position, boolean b, View view, ViewGroup viewGroup) {
+
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.explist_chlid_item,null);
         TextView tv_party_name = (TextView) view.findViewById(R.id.party_name);
+        TextView tv_party_no = (TextView) view.findViewById(R.id.party_no);
+
+        if(group_position % 2 == 1){
+            tv_party_name.setTextColor(Color.parseColor("#29B6F6"));
+            tv_party_no.setTextColor(Color.parseColor("#29B6F6"));             //blue
+        }else {
+            tv_party_name.setTextColor(Color.parseColor("#FF8F00"));
+            tv_party_no.setTextColor(Color.parseColor("#fa6c04"));               ///orange
+        }
+
         tv_party_name.setText(String.valueOf(getChild(group_position,child_position)));
+        tv_party_no.setText(String.valueOf(child_position + 1));
+
+        /*for (int i = child_position;i<=getChildrenCount(group_position);i++){
+            Constant.showLog("child_position>>>>>>>>>>:"+i);
+            tv_party_no.setText(String.valueOf(i));
+        }*/
+
         return view;
     }
 

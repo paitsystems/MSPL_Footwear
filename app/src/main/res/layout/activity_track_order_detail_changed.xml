@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/trackorder_detail_layheight40"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="@dimen/mobpadding5"
@@ -77,7 +77,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth60"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_left_top_right_bottom_draw"
                     android:text="@string/prod"
@@ -88,7 +88,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth60"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
@@ -98,7 +98,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="80dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth80"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
@@ -108,7 +108,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="50dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth50"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
@@ -118,7 +118,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth60"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
@@ -128,7 +128,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth60"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
@@ -138,7 +138,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth60"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
@@ -148,7 +148,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="40dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth40"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
@@ -165,13 +165,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="@dimen/trackorder_detail_layheight30"
                 android:background="@color/red"
                 android:orientation="horizontal">
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth60"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_left_top_right_bottom_draw"
                     android:gravity="center"
@@ -182,7 +182,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth60"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
@@ -192,7 +192,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="80dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth80"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
@@ -202,7 +202,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="50dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth50"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
@@ -212,7 +212,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="70dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth70"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
@@ -222,7 +222,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="70dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth70"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
@@ -232,7 +232,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="80dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth80"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
@@ -251,7 +251,7 @@
 
                     android:id="@+id/tv_tot_set"
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth60"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_left_right_bottom_draw"
                     android:gravity="center"
@@ -262,7 +262,7 @@
                 <TextView
                     android:id="@+id/tv_tot_qty"
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth60"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_right_bottom_draw"
                     android:gravity="center"
@@ -272,7 +272,7 @@
                 <TextView
                     android:id="@+id/tv_gross_amt"
                     style="@style/textViewMob"
-                    android:layout_width="80dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth80"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_right_bottom_draw"
                     android:gravity="center"
@@ -282,7 +282,7 @@
                 <TextView
                     android:id="@+id/tv_disc_per"
                     style="@style/textViewMob"
-                    android:layout_width="50dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth50"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_right_bottom_draw"
                     android:gravity="center"
@@ -292,7 +292,7 @@
                 <TextView
                     android:id="@+id/tv_disc_amt"
                     style="@style/textViewMob"
-                    android:layout_width="70dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth70"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_right_bottom_draw"
                     android:gravity="center"
@@ -302,7 +302,7 @@
                 <TextView
                     android:id="@+id/tv_gst_amt"
                     style="@style/textViewMob"
-                    android:layout_width="70dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth70"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_right_bottom_draw"
                     android:gravity="center"
@@ -312,7 +312,7 @@
                 <TextView
                     android:id="@+id/tv_amt"
                     style="@style/textViewMob"
-                    android:layout_width="80dp"
+                    android:layout_width="@dimen/trackorder_detail_tvwidth80"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_right_bottom_draw"
                     android:gravity="center"

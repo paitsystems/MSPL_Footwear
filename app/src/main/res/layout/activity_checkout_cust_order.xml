@@ -19,12 +19,12 @@
                 android:background="@color/red"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="@dimen/checkOUT_custorder_height30"
                 android:weightSum="1">
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width60"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/prod"
@@ -34,7 +34,7 @@
                     android:gravity="center" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="80dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width80"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/sizeg"
@@ -43,7 +43,7 @@
                     android:gravity="center" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="80dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width80"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/color"
@@ -53,7 +53,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="80dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width80"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/looseq"
@@ -73,7 +73,7 @@
                     android:visibility="gone" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="80dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width80"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/availableqty"
@@ -112,12 +112,12 @@
                 android:background="@color/red"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="@dimen/checkOUT_custorder_height30"
                 android:visibility="visible">
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="60dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width60"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/totalno"
@@ -127,7 +127,7 @@
                     android:gravity="center" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="80dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width80"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/white"
@@ -135,7 +135,7 @@
                     android:visibility="visible" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="80dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width80"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/total"
@@ -145,7 +145,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="80dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width80"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/totlqty"
@@ -167,7 +167,7 @@
                     android:autoText="false" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="80dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width80"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/gstamt"
@@ -177,7 +177,7 @@
                     android:visibility="invisible" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="80dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width80"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/netamt"
@@ -191,13 +191,13 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="@dimen/checkOUT_custorder_height30"
                 android:visibility="gone">
 
                 <TextView
 
                     style="@style/textViewMob"
-                    android:layout_width="70dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width70"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/black"
@@ -206,7 +206,7 @@
                     android:id="@+id/tv_tot_no" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="70dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width70"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/black"
@@ -216,7 +216,7 @@
                     android:visibility="invisible" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="80dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width80"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/black"
@@ -226,7 +226,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="70dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width70"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/black"
@@ -235,7 +235,7 @@
                     android:id="@+id/tv_disc_per" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="70dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width70"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/black"
@@ -244,7 +244,7 @@
                     android:id="@+id/tv_disc_amt" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="70dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width70"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/black"
@@ -253,7 +253,7 @@
                     android:id="@+id/tv_net_am" />
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="70dp"
+                    android:layout_width="@dimen/checkOUT_custorder_width70"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/black"

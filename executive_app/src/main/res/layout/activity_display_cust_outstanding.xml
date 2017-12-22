@@ -59,13 +59,14 @@
 
 
                     <TextView
+                        android:padding="@dimen/mobpadding5"
                         android:id="@+id/tv_cl"
                         style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="0.3"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:text="456"
                         android:textColor="@color/greend" />
 
@@ -147,7 +148,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="center"
+                    android:gravity="left"
                     android:padding="@dimen/mobpadding5"
                     android:text="456"
                     android:textColor="@color/greend" />
@@ -191,9 +192,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="center"
+                    android:gravity="left"
                     android:padding="@dimen/mobpadding5"
-                    android:textColor="@color/greend" />
+                    android:textColor="@color/greend"
+                    android:text="896" />
             </LinearLayout>
 
             <LinearLayout
@@ -234,9 +236,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="center"
                     android:padding="@dimen/mobpadding5"
-                    android:textColor="@color/greend" />
+                    android:textColor="@color/greend"
+                    android:gravity="left"
+                    android:text="523" />
             </LinearLayout>
 
             <LinearLayout
@@ -279,14 +282,16 @@
 
 
                     <TextView
+
                         android:id="@+id/tv_oda"
                         style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:padding="@dimen/mobpadding5"
                         android:textColor="@color/greend"
-                        android:layout_weight="0.3" />
+                        android:layout_weight="0.3"
+                        android:text="123" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -366,9 +371,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="center"
                     android:padding="@dimen/mobpadding5"
-                    android:textColor="@color/greend" />
+                    android:textColor="@color/greend"
+                    android:gravity="left"
+                    android:text="856" />
             </LinearLayout>
 
             <LinearLayout
@@ -463,9 +469,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:gravity="center"
+                    android:gravity="left"
                     android:padding="@dimen/mobpadding5"
-                    android:textColor="@color/greend" />
+                    android:textColor="@color/greend"
+                    android:text="856" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

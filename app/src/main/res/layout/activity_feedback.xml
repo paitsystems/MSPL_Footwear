@@ -41,7 +41,7 @@
                     <Spinner
                         android:id="@+id/fedback_spinner"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp" />
+                        android:layout_height="@dimen/feedback_spinner_height50" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -59,7 +59,7 @@
                     android:id="@+id/auto_"
                     style="@style/textViewMob"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="@dimen/feedback_auto_height30"
                     android:background="@null"
                     android:hint="@string/entertexthere"
                     android:inputType="textCapWords"
@@ -283,8 +283,8 @@
 
 
                             <LinearLayout
-                                android:layout_width="100dp"
-                                android:layout_height="100dp"
+                                android:layout_width="@dimen/feedback_lay_height100"
+                                android:layout_height="@dimen/feedback_lay_height100"
                                 android:layout_gravity="center"
                                 android:background="@drawable/black_border_draw"
                                 android:gravity="center"
@@ -312,8 +312,8 @@
 
 
                             <LinearLayout
-                                android:layout_width="100dp"
-                                android:layout_height="100dp"
+                                android:layout_width="@dimen/feedback_lay_height100"
+                                android:layout_height="@dimen/feedback_lay_height100"
                                 android:layout_gravity="center"
                                 android:background="@drawable/black_border_draw"
                                 android:gravity="center"
