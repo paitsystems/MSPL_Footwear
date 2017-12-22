@@ -45,8 +45,9 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
     private HashMap<Integer,Integer> area_party_map;
     private HashMap<Integer,List<String>> childls;
     private int areaId = 0,custId = 0;
-    private String area_name = "";
+    private String area_name = "", child_sel = "";
     private ImageView img_parent;
+    private int cust_id = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,23 +102,31 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
             public boolean onChildClick(ExpandableListView expandableListView, View view, int group_postion, int child_position, long l) {
                 //String sel_child = (String) adapter1.getChild(group_postion,child_position);
                 String a = String.valueOf(area_map.get(areaid_list.get(group_postion)));
-                area_name = a.toString().replace("[","").replace("]","");
+                area_name = a.replace("[","").replace("]","");
                 Constant.showLog("area_name:"+area_name);
 
-                String child_sel =  party_map.get(areaid_partyId_map.get(areaid_list.get(group_postion)).get(child_position));
+                child_sel =  party_map.get(areaid_partyId_map.get(areaid_list.get(group_postion)).get(child_position));
                 Constant.showLog("child_selected:"+child_sel);
 
-                int cust_id =  db.getCustid(child_sel);
+                cust_id =  db.getCustid(child_sel);
                 Constant.showLog("cust_id:"+cust_id);
 
-                Intent in = new Intent(getApplicationContext(),VisitOptionsActivity.class);
-                in.putExtra("area_name",area_name);
-                in.putExtra("child_selected",child_sel);
-                in.putExtra("cust_id",String.valueOf(cust_id));
-                startActivity(in);
-                overridePendingTransition(R.anim.enter,R.anim.exit);
+                int selCustId = FirstActivity.pref.getInt(getString(R.string.pref_selcustid), 0);
+                if(selCustId!=0){
+                    if(selCustId!=cust_id){
+                        int count = db.getCustOrderDetail();
+                        if(count!=0) {
+                            showDia(1);
+                        }else{
+                            saveNCountinue();
+                        }
+                    }else{
+                        saveNCountinue();
+                    }
+                }else{
+                    saveNCountinue();
+                }
                 return true;
-
             }
         });
 
@@ -167,52 +176,11 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         areaid_partyId_map = new HashMap<>();
         childls = new HashMap<>();
 
-
-
-
         areaName();
 
-        /*AreawiseCustomerSelectionClass areaClass = new AreawiseCustomerSelectionClass();
-        areaClass.setAreaname("Aundh Line");
-        areaList.add(areaClass);
-        AreawiseCustomerSelectionClass areaClass1 = new AreawiseCustomerSelectionClass();
-        areaClass1.setAreaname("Dhayri Line");
-        areaList.add(areaClass1);
-        AreawiseCustomerSelectionClass areaClass2 = new AreawiseCustomerSelectionClass();
-        areaClass2.setAreaname("Hadapsar Line");
-        areaList.add(areaClass2);
-        AreawiseCustomerSelectionClass areaClass3 = new AreawiseCustomerSelectionClass();
-        areaClass3.setAreaname("Kondhwa Line");
-        areaList.add(areaClass3);
-        AreawiseCustomerSelectionClass areaClass4 = new AreawiseCustomerSelectionClass();
-        areaClass4.setAreaname("Pune City Line");
-        areaList.add(areaClass4);
-        AreawiseCustomerSelectionClass areaClass5 = new AreawiseCustomerSelectionClass();
-        areaClass5.setAreaname("Shirur Line");
-        areaList.add(areaClass5);
-        AreawiseCustomerSelectionClass areaClass6 = new AreawiseCustomerSelectionClass();
-        areaClass5.setAreaname("Area Line");
-        areaList.add(areaClass6);*/
-
-
-       /* adapter = new AreawiseCustSelListAdapter(getApplicationContext(),areaList);
-        listView.setAdapter(adapter);*/
         adapter1 = new AreawiseCustSelExpandableListAdapter(getApplicationContext(),area_map, areaid_list, party_map, partyid_list, area_party_map, areaid_partyId_map,childls);
         exp_listView.setAdapter(adapter1);
     }
-
-    /*private  void areaName(){
-        Cursor cursor =  db.getAreaName(FirstActivity.pref.getInt(getString(R.string.pref_cityid),0));
-        if(cursor.moveToFirst()){
-            do{
-                AreawiseCustomerSelectionClass  areaclass = new AreawiseCustomerSelectionClass();
-                areaclass.setAreaname(cursor.getString(cursor.getColumnIndex(DBHandler.Area_Area)));
-                areaList.add(areaclass);
-                Constant.showLog("arealist:"+areaList.size());
-            }while (cursor.moveToNext());
-        }
-        cursor.close();
-    }*/
 
     private  void areaName(){
         Cursor cursor =  db.getExpListData();
@@ -230,12 +198,12 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                 if(!areaid_list.contains(areaId)) {
                     areaid_list.add(areaId);
                 }
-                Constant.showLog("areaid_list:"+areaid_list.size());
+                //Constant.showLog("areaid_list:"+areaid_list.size());
 
                 if(!partyid_list.contains(custId)) {
                     partyid_list.add(custId);
                 }
-                Constant.showLog("partyid_list:"+partyid_list.size());
+                //Constant.showLog("partyid_list:"+partyid_list.size());
 
                 if(area_map.isEmpty()) {
                     List<String> ar_NameLs = new ArrayList<>();
@@ -256,7 +224,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                         area_map.put(areaId,ar_NameLs);
                     }
                 }
-                Constant.showLog("area_map:"+area_map.size());
+                //Constant.showLog("area_map:"+area_map.size());
 
                 /*if(party_map.isEmpty()) {
                     List<String> cus_NameLs = new ArrayList<>();
@@ -291,7 +259,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
 
 
                 area_party_map.put(areaId,custId);
-                Constant.showLog("area_party_map:"+area_party_map.size());
+                //Constant.showLog("area_party_map:"+area_party_map.size());
 
                /* if(area_party_map.isEmpty()) {
                     area_party_map.put(areaId,custId);
@@ -319,7 +287,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                         areaid_partyId_map.put(areaId,cus_IdLs);
                     }
                 }
-                Constant.showLog("areaid_partyId_map:"+areaid_partyId_map.size());
+                //Constant.showLog("areaid_partyId_map:"+areaid_partyId_map.size());
 
                 if(childls.isEmpty()) {
                     List<String> child_NameLs = new ArrayList<>();
@@ -332,7 +300,6 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                         if(!child_NameLs1.contains(cust_name)) {
                             child_NameLs1.add(cust_name);
                         }
-
                         childls.put(areaId,child_NameLs1);
                     }else{
                         List<String> child_NameLs = new ArrayList<>();
@@ -340,17 +307,25 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                         childls.put(areaId,child_NameLs);
                     }
                 }
-                Constant.showLog("childls:"+childls.size());
-
-
+                //Constant.showLog("childls:"+childls.size());
             }while (cursor.moveToNext());
         }
         cursor.close();
-
     }
 
-
-
+    private void saveNCountinue(){
+        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+        editor.putInt(getString(R.string.pref_selcustid),cust_id);
+        editor.putString(getString(R.string.pref_selcustname),child_sel);
+        editor.apply();
+        Intent in = new Intent(getApplicationContext(),VisitOptionsActivity.class);
+        in.putExtra("area_name",area_name);
+        in.putExtra("child_selected",child_sel);
+        in.putExtra("cust_id",String.valueOf(cust_id));
+        finish();
+        startActivity(in);
+        overridePendingTransition(R.anim.enter,R.anim.exit);
+    }
 
     private void showDia(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(AreawiseCustomerSelectionActivity.this);
@@ -365,6 +340,44 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 1) {
+            String custName = FirstActivity.pref.getString(getString(R.string.pref_selcustname),"");
+            builder.setMessage("There Is Already Pending Order For Customer - "+custName);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.setNeutralButton("Clear Last Order", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                    editor.putInt(getString(R.string.pref_selcustid),0);
+                    editor.putString(getString(R.string.pref_selcustname),"");
+                    editor.putString("totalNetAmnt","0");
+                    DisplayCustOutstandingActivity.outClass = null;
+                    editor.apply();
+                    db.deleteTable(DBHandler.Table_CustomerOrder);
+                    dialog.dismiss();
+                    showDia(2);
+                }
+            });
+        }else if (a == 2) {
+            builder.setMessage("Previous Order Cleared Successfully");
+            builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    saveNCountinue();
+                }
+            });
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

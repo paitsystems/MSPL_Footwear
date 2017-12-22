@@ -96,7 +96,8 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         if(DisplayCustOutstandingActivity.outClass==null) {
             loadOustandingdetail();
         }else{
-            String str = "Credit Limit :  "+DisplayCustOutstandingActivity.outClass.getCreditlimit();
+            String str = "Credit Limit : "+DisplayCustOutstandingActivity.outClass.getCreditlimit()+
+                        " Cur. Outstndg : "+DisplayCustOutstandingActivity.outClass.getCurrOutstnd();
             tv_creaditlimit.setText(str);
         }
     }
@@ -439,7 +440,8 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
             @Override
             public void onSuccess(Object result) {
                 constant.showPD();
-                String str = "Credit Limit :  "+DisplayCustOutstandingActivity.outClass.getCreditlimit();
+                String str = "Credit Limit : "+DisplayCustOutstandingActivity.outClass.getCreditlimit()+
+                        " Cur. Outstndg : "+DisplayCustOutstandingActivity.outClass.getCurrOutstnd();
                 tv_creaditlimit.setText(str);
                 //checkLimit();
             }
@@ -453,28 +455,33 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
     }
 
     private void checkLimit() {
-        String currOrder = FirstActivity.pref.getString("totalNetAmnt", "0");
-        if (!currOrder.equals("0")) {
-            float netAmt = Float.parseFloat(currOrder);
-            float creditLimit = 0;
-            String str = DisplayCustOutstandingActivity.outClass.getCreditlimit();
-            if (str != null && !str.equals("")) {
-                creditLimit = Float.parseFloat(str);
-                if (netAmt > creditLimit) {
-                    showDia(4);
+        if(DisplayCustOutstandingActivity.outClass!=null) {
+            String currOrder = FirstActivity.pref.getString("totalNetAmnt", "0");
+            if (!currOrder.equals("0")) {
+                float netAmt = Float.parseFloat(currOrder);
+                float creditLimit = 0;
+                String str = DisplayCustOutstandingActivity.outClass.getCreditlimit();
+                if (str != null && !str.equals("")) {
+                    creditLimit = Float.parseFloat(str);
+                    if (netAmt > creditLimit) {
+                        showDia(4);
+                    } else {
+                        finish();
+                        Intent intent = new Intent(this, CheckoutCustOrderActivity.class);
+                        intent.putExtra("from", from);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.enter, R.anim.exit);
+                    }
                 } else {
-                    finish();
-                    Intent intent = new Intent(this, CheckoutCustOrderActivity.class);
-                    intent.putExtra("from", from);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                    toast.setText("Something Went Wrong");
+                    toast.show();
                 }
             } else {
-                toast.setText("Something Went Wrong");
+                toast.setText("Please Place Order");
                 toast.show();
             }
-        } else {
-            toast.setText("Please Place Order");
+        }else {
+            toast.setText("Something Went Wrong");
             toast.show();
         }
     }

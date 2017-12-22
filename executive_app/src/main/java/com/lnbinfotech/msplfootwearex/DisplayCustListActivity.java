@@ -2,6 +2,7 @@ package com.lnbinfotech.msplfootwearex;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -34,6 +35,7 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
     private EditText ed_cus_name;
     private DisplayCustListAdapter adapter;
     public static int custId = 0;
+    String select_item = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,16 +73,38 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
         lv_cus.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
-                String select_item = (String) parent.getItemAtPosition(position);
+                select_item = (String) parent.getItemAtPosition(position);
                 Constant.showLog("selctedCustomerName: " + select_item);
                 writeLog("setOnItemClickListener():list item selected:" + select_item);
                 custId = db.getCustNameId(select_item);
-                Constant.showLog("cust_id: " + custId);
-                startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
-                overridePendingTransition(R.anim.enter, R.anim.exit);
-                finish();
+                int selCustId = FirstActivity.pref.getInt(getString(R.string.pref_selcustid), 0);
+                if(selCustId!=0){
+                    if(selCustId!=custId){
+                        int count = db.getCustOrderDetail();
+                        if(count!=0) {
+                            showDia(1);
+                        }else{
+                            saveNCountinue();
+                        }
+                    }else{
+                        saveNCountinue();
+                    }
+                }else{
+                    saveNCountinue();
+                }
+                Constant.showLog("cust_id: " + custId+"-"+select_item);
             }
         });
+    }
+
+    private void saveNCountinue(){
+        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+        editor.putInt(getString(R.string.pref_selcustid),custId);
+        editor.putString(getString(R.string.pref_selcustname),select_item);
+        editor.apply();
+        finish();
+        startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
+        overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
     @Override
@@ -148,6 +172,44 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 1) {
+            String custName = FirstActivity.pref.getString(getString(R.string.pref_selcustname),"");
+            builder.setMessage("There Is Already Pending Order For Customer - "+custName);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.setNeutralButton("Clear Last Order", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                    editor.putInt(getString(R.string.pref_selcustid),0);
+                    editor.putString(getString(R.string.pref_selcustname),"");
+                    editor.putString("totalNetAmnt","0");
+                    DisplayCustOutstandingActivity.outClass = null;
+                    editor.apply();
+                    db.deleteTable(DBHandler.Table_CustomerOrder);
+                    dialog.dismiss();
+                    showDia(2);
+                }
+            });
+        }else if (a == 2) {
+            builder.setMessage("Previous Order Cleared Successfully");
+            builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    saveNCountinue();
+                }
+            });
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

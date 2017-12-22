@@ -39,7 +39,8 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
     private Constant constant, constant1;
     private Toast toast;
 
-    private TextView tv_totset, tv_totqty, tv_totamnt, tv_tot_gstamt, tv_tot_grossamt, tv_disc_per, tv_discamnt, tv_creaditlimit;
+    private TextView tv_totset, tv_totqty, tv_totamnt, tv_tot_gstamt, tv_tot_grossamt,
+                    tv_disc_per, tv_discamnt, tv_creaditlimit, tv_custname;
     private ListView lv_vOrder;
     private Button btn_proceed;
     private String from, filter = "";
@@ -92,7 +93,8 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         if(DisplayCustOutstandingActivity.outClass==null) {
             loadOustandingdetail();
         }else{
-            String str = "Credit Limit :  "+DisplayCustOutstandingActivity.outClass.getCreditlimit();
+            String str = "Credit Limit : "+DisplayCustOutstandingActivity.outClass.getCreditlimit()+
+                    " Cur. Outstndg : "+DisplayCustOutstandingActivity.outClass.getCurrOutstnd();
             tv_creaditlimit.setText(str);
         }
     }
@@ -287,8 +289,11 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         tv_disc_per = (TextView) findViewById(R.id.tv_disc_per);
         tv_discamnt = (TextView) findViewById(R.id.tv_disc_amt);
         tv_creaditlimit = (TextView) findViewById(R.id.tv_creaditlimit);
+        tv_custname = (TextView) findViewById(R.id.tv_custname1);
         btn_proceed = (Button) findViewById(R.id.btn_proceed);
         rv_dispatchcenter = (RecyclerView) findViewById(R.id.rv_dispatchcenter);
+
+        tv_custname.setText(FirstActivity.pref.getString(getString(R.string.pref_selcustname),""));
 
         workingDispatchCenter = new ArrayList<>();
         workingDispatchCenter.add("U5%");
@@ -426,7 +431,7 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
     }
 
     private void loadOustandingdetail(){
-        int cust_id = DisplayCustListActivity.custId;
+        int cust_id = FirstActivity.pref.getInt(getString(R.string.pref_selcustid),0);
         String url = Constant.ipaddress + "/GetCustOutstanding?Id=" +cust_id ;
         Constant.showLog(url);
         writeLog("loadOustandingdetail_" + url);
@@ -436,7 +441,9 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
             @Override
             public void onSuccess(Object result) {
                 constant.showPD();
-                String str = "Credit Limit :  "+DisplayCustOutstandingActivity.outClass.getCreditlimit();
+                String str = "Credit Limit : "+DisplayCustOutstandingActivity.outClass.getCreditlimit()+
+                        " Cur. Outstndg : "+DisplayCustOutstandingActivity.outClass.getCurrOutstnd();
+
                 tv_creaditlimit.setText(str);
                 //checkLimit();
             }
@@ -450,28 +457,33 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
     }
 
     private void checkLimit(){
-        String currOrder =  FirstActivity.pref.getString("totalNetAmnt","0");
-        if(!currOrder.equals("0")) {
-            float netAmt = Float.parseFloat(currOrder);
-            float creditLimit = 0;
-            String str = DisplayCustOutstandingActivity.outClass.getCreditlimit();
-            if(str!=null && !str.equals("")) {
-                creditLimit = Float.parseFloat(str);
-                if (netAmt > creditLimit) {
-                    showDia(4);
+        if(DisplayCustOutstandingActivity.outClass!=null) {
+            String currOrder = FirstActivity.pref.getString("totalNetAmnt", "0");
+            if (!currOrder.equals("0")) {
+                float netAmt = Float.parseFloat(currOrder);
+                float creditLimit = 0;
+                String str = DisplayCustOutstandingActivity.outClass.getCreditlimit();
+                if (str != null && !str.equals("")) {
+                    creditLimit = Float.parseFloat(str);
+                    if (netAmt > creditLimit) {
+                        showDia(4);
+                    } else {
+                        finish();
+                        Intent intent = new Intent(this, CheckoutCustOrderActivity.class);
+                        intent.putExtra("from", from);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.enter, R.anim.exit);
+                    }
                 } else {
-                    finish();
-                    Intent intent = new Intent(this, CheckoutCustOrderActivity.class);
-                    intent.putExtra("from", from);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                    toast.setText("Something Went Wrong");
+                    toast.show();
                 }
-            }else{
-                toast.setText("Something Went Wrong");
+            } else {
+                toast.setText("Please Place Order");
                 toast.show();
             }
         }else{
-            toast.setText("Please Place Order");
+            toast.setText("Something Went Wrong");
             toast.show();
         }
     }

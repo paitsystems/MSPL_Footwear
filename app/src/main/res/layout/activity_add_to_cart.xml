@@ -78,6 +78,45 @@
         </LinearLayout>
 
         <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/mobpadding2">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/textViewMob"
+                android:text="Mark Up"
+                android:layout_weight="0.5"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/textViewMob"
+                android:text="0"
+                android:layout_weight="0.5"
+                android:id="@+id/tv_marginup"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/textViewMob"
+                android:text="Mark Down"
+                android:layout_weight="0.5"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/textViewMob"
+                android:text="0"
+                android:layout_weight="0.5"
+                android:id="@+id/tv_margindown"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -131,7 +170,8 @@
                     android:layout_weight="0.4"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
-                    android:text="Mar.Up" />
+                    android:text="Mar.Up"
+                    android:visibility="gone" />
 
                 <TextView
                     style="@style/textViewMobAddToCard"
@@ -140,7 +180,8 @@
                     android:layout_weight="0.4"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
-                    android:text="Mar.Down" />
+                    android:text="Mar.Down"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -213,7 +254,6 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_marginup"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="0.4"
@@ -222,10 +262,10 @@
                     android:text="0"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/tv_margindown"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="0.4"
@@ -234,7 +274,8 @@
                     android:text="0"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
 

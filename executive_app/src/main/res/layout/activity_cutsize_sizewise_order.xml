@@ -10,6 +10,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/textViewMob"
+            android:text="Customer Name"
+            android:id="@+id/tv_custname1" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"

@@ -2,7 +2,6 @@ package com.lnbinfotech.msplfootwearex;
 
 import android.content.DialogInterface;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,13 +9,9 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.lnbinfotech.msplfootwearex.adapters.WarehousesDetailAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
@@ -35,14 +30,12 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
     private Constant constant, constant1;
     private Toast toast;
     public static CustOutstandingClass outClass;
-    private TextView tv_cl, tv_days, tv_odays, tv_pdc, tv_co, tv_bfp, tv_oda, tv_corder, tv_uo, tv_noa, tv_ol, tot_qty, tot_amt;
+    private TextView tv_cl, tv_days, tv_odays, tv_pdc, tv_co, tv_bfp, tv_oda,
+            tv_corder, tv_uo, tv_noa, tv_ol, tot_qty, tot_amt, tv_custname;
     private ListView lv_warehouse_detail;
     private DBHandler db;
     float total_qty = 0, total_amt = 0;
     private DecimalFormat dc;
-
-    private GoogleApiClient client;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,20 +43,18 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_display_cust_outstanding);
 
         init();
-        showWarehouseData();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        if (DisplayCustOutstandingActivity.outClass == null) {
+        if(DisplayCustOutstandingActivity.outClass==null) {
             loadOustandingdetail();
-        } else {
+        }else{
             setData();
         }
 
-
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        showWarehouseData();
     }
 
     @Override
@@ -108,6 +99,8 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
         tv_uo = (TextView) findViewById(R.id.tv_uo);
         tv_noa = (TextView) findViewById(R.id.tv_noa);
         tv_ol = (TextView) findViewById(R.id.tv_ol);
+        tv_custname = (TextView) findViewById(R.id.tv_custname1);
+        tv_custname.setText(FirstActivity.pref.getString(getString(R.string.pref_selcustname),""));
         lv_warehouse_detail = (ListView) findViewById(R.id.lv_warhouse_detail);
         db = new DBHandler(this);
         tot_qty = (TextView) findViewById(R.id.tot_qty);
@@ -151,9 +144,9 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
     }
 
 
-    private void loadOustandingdetail() {
-        int cust_id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
-        String url = Constant.ipaddress + "/GetCustOutstanding?Id=" + cust_id;
+    private void loadOustandingdetail(){
+        int cust_id = FirstActivity.pref.getInt(getString(R.string.pref_selcustid),0);
+        String url = Constant.ipaddress + "/GetCustOutstanding?Id=" +cust_id ;
         Constant.showLog(url);
         writeLog("loadOustandingdetail_" + url);
         constant.showPD();
@@ -162,21 +155,20 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
             @Override
             public void onSuccess(Object result) {
                 constant.showPD();
-                //  outClass = (CustOutstandingClass) result;
+              //  outClass = (CustOutstandingClass) result;
                 setData();
             }
-
             @Override
             public void onFailure(Object result) {
                 constant.showPD();
-                writeLog("loadOustandingdetail_onFailure_" + result);
+                writeLog("loadOustandingdetail_onFailure_"+result);
                 showPopup(2);
             }
         });
     }
 
-    private void setData() {
-        String currOrder = FirstActivity.pref.getString("totalNetAmnt", "");
+    private void setData(){
+        String currOrder =  FirstActivity.pref.getString("totalNetAmnt","0");
         tv_cl.setText(outClass.getCreditlimit());
         tv_days.setText(outClass.getCreditdays());
         tv_odays.setText(outClass.getOverDueDays());
@@ -236,6 +228,4 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "DisplayCustOutstandingActivity_" + _data);
     }
-
-
 }

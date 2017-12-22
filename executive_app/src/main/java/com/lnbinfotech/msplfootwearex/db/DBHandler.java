@@ -1229,6 +1229,18 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
+    public int getCustOrderDetail() {
+        int count = 0;
+        String str = "select count("+CO_Auto+") from " + Table_CustomerOrder;
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if(res.moveToFirst()){
+            count = res.getInt(0);
+        }
+        res.close();
+        return  count;
+    }
+
+
     public void updateAvailQty(List<CheckoutCustOrderClass> custOrderList) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();

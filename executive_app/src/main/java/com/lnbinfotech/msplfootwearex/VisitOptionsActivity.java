@@ -38,11 +38,11 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
             getSupportActionBar().setTitle(R.string.visitoption);
         }
         String arealine = "Selected Arealine-"+getIntent().getExtras().getString("area_name");
-        Constant.showLog(arealine);
+        //Constant.showLog(arealine);
         custName = getIntent().getExtras().getString("child_selected");
         custId = Integer.parseInt(getIntent().getExtras().getString("cust_id"));
         DisplayCustListActivity.custId = custId;
-        Constant.showLog(custName);
+        //Constant.showLog(custName);
         //tv_arealine.setText("Selected Arealine-" +arealine);
         tv_arealine_display.setText(arealine);
         tv_custname_display.setText("CustomerName-"+custName);

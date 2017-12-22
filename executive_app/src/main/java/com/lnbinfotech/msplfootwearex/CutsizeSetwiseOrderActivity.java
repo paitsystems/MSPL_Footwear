@@ -31,6 +31,7 @@ public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements Vi
     private CutsizewiseViewPagerAdapter adapter;
     private Constant constant;
     private Toast toast;
+    private TextView tv_custname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +129,8 @@ public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements Vi
 
     private void init() {
         toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
+        tv_custname = (TextView) findViewById(R.id.tv_custname1);
+        tv_custname.setText(FirstActivity.pref.getString(getString(R.string.pref_selcustname),""));
         toast.setGravity(Gravity.CENTER,0,0);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         pager = (ViewPager) findViewById(R.id.pager);

@@ -40,7 +40,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
 
     private ListView lv_check;
     private Button btn_save;
-    private TextView tv_tot_looseQty, tv_tot_availQty;
+    private TextView tv_tot_looseQty, tv_tot_availQty, tv_custname;
 
     private List<CustomerOrderClass> list;
     private DBHandler db;
@@ -120,6 +120,8 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
         lv_check = (ListView) findViewById(R.id.lv_check);
         tv_tot_looseQty = (TextView) findViewById(R.id.tv_tot_looseQty);
         tv_tot_availQty = (TextView) findViewById(R.id.tv_tot_availQty);
+        tv_custname = (TextView) findViewById(R.id.tv_custname1);
+        tv_custname.setText(FirstActivity.pref.getString(getString(R.string.pref_selcustname),""));
         btn_save = (Button) findViewById(R.id.btn_save);
         list = new ArrayList<>();
         urlList = new ArrayList<>();
@@ -246,7 +248,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
         res.close();
 
         int hoCode = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
-        int custId = DisplayCustListActivity.custId;
+        int custId = FirstActivity.pref.getInt(getString(R.string.pref_selcustid), 0);
         int saleExe = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
 
         //for(int branchId:branchIdList){
@@ -477,6 +479,10 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                    editor.putInt(getString(R.string.pref_selcustid),0);
+                    editor.putString(getString(R.string.pref_selcustname),"");
+                    editor.apply();
                     dialog.dismiss();
                     checkLimit();
                 }
