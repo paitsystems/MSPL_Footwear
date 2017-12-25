@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,18 +40,19 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
     private Constant constant, constant1;
     private Toast toast;
     private ListView lv_ledger;
-    private TextView tv_fdate, tv_tdate, tot_clb, tot_ob, tot_credit, tot_debit, tv_outstanding;
+    private TextView tv_fdate, tv_tdate, tot_clb, tot_ob, tot_credit, tot_debit, tv_outstanding,tv_custname;
     private CheckBox cb_all;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
     private SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
     private int day, month, year;
     private Calendar cal = Calendar.getInstance();
     private static final int fdt = 1, tdt = 2;
-    private String fromdate = "", todate = "", all = "";
+    private String fromdate = "", todate = "", all = "",custName = "";
     private double total_op = 0, total_cl = 0, total_debit = 0, total_credit = 0;
     private DecimalFormat flt_price;
-    private Button btn_show;
+    private AppCompatButton btn_view_ledger,btn_view_out,btn_view_credit;
     private int custId = 0;
+    private ImageView imgv_i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +63,8 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
         // visibility();
 
         custId = Integer.parseInt(getIntent().getExtras().getString("cust_id"));
-
+        custName = "CustomerName-"+getIntent().getExtras().getString("child_selected");
+        tv_custname.setText(custName);
 
         todate = sdf1.format(cal.getTime());
         // todate = "1-Nov-2017";
@@ -84,8 +88,9 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        btn_show.setOnClickListener(this);
-        tv_outstanding.setOnClickListener(this);
+        btn_view_ledger.setOnClickListener(this);
+        btn_view_out.setOnClickListener(this);
+        btn_view_credit.setOnClickListener(this);
         //tv_fdate.setOnClickListener(this);
         //tv_tdate.setOnClickListener(this);
         tv_fdate.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +128,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_show:
+            case R.id.btn_view_ledger:
                 if (cb_all.isChecked()) {
                     all = "Y";
                     fromdate = "NA";
@@ -137,10 +142,17 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                 }
                 showLedgerReport();
                 break;
-            case R.id.tv_outstanding:
+            case R.id.btn_view_out:
                 Intent in = new Intent(getApplicationContext(), OutstandingBillReportActivity.class);
                 in.putExtra("cust_id", String.valueOf(custId));
+                in.putExtra("child_selected",custName);
                 startActivity(in);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                break;
+            case R.id.btn_view_credit:
+                Intent intent = new Intent(getApplicationContext(), DisplayCustOutstandingActivity.class);
+                intent.putExtra("val","1");
+                startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
 
@@ -313,7 +325,9 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
     };
 
     private void init() {
-        btn_show = (Button) findViewById(R.id.btn_show);
+        btn_view_ledger = (AppCompatButton) findViewById(R.id.btn_view_ledger);
+        btn_view_out = (AppCompatButton) findViewById(R.id.btn_view_out);
+        btn_view_credit = (AppCompatButton) findViewById(R.id.btn_view_credit);
         tv_outstanding = (TextView) findViewById(R.id.tv_outstanding);
         tv_fdate = (TextView) findViewById(R.id.tv_fdate);
         tv_tdate = (TextView) findViewById(R.id.tv_tdate);
@@ -322,6 +336,8 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
         tot_ob = (TextView) findViewById(R.id.tot_ob);
         tot_credit = (TextView) findViewById(R.id.tot_credit);
         tot_debit = (TextView) findViewById(R.id.tot_debit);
+        tv_custname = (TextView) findViewById(R.id.tv_custname);
+        imgv_i = (ImageView) findViewById(R.id.imgv_i);
 
         cb_all = (CheckBox) findViewById(R.id.cb_all);
         constant = new Constant(LedgerReportActivity.this);

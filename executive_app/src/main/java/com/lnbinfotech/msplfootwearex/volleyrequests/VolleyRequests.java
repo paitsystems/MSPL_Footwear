@@ -136,11 +136,12 @@ public class VolleyRequests {
                 Constant.showLog(response);
                 response = response.replace("\\","");
                 response = response.replace("\"","");
-                if(!response.equals("0")) {
+                callback.onSuccess(response);
+               /* if(!response.equals("0")) {
                     callback.onSuccess(response);
                 }else {
                     callback.onFailure("Error");
-                }
+                }*/
             }
         }, new Response.ErrorListener() {
             @Override

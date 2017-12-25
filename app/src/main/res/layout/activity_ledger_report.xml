@@ -103,6 +103,13 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <LinearLayout
+            android:padding="@dimen/mobpadding5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
@@ -110,15 +117,55 @@
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_show"
-                android:layout_width="wrap_content"
+                android:id="@+id/btn_view_ledger"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:drawableLeft="@drawable/show_16"
-                android:text="Show"
+                android:text="View Ledger Report"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/i_orange" />
+
         </LinearLayout>
+            <LinearLayout
+                android:padding="@dimen/mobpadding5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_view_out"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableLeft="@drawable/show_16"
+                    android:text="View Outstanding report"
+                    android:textColor="@color/white"
+                    app:backgroundTint="@color/i_orange" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:padding="@dimen/mobpadding5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_view_credit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableLeft="@drawable/show_16"
+                    android:text="View Credit Limit"
+                    android:textColor="@color/white"
+                    app:backgroundTint="@color/i_orange" />
+
+            </LinearLayout>
+            </LinearLayout>
 
         <TextView
 
@@ -129,7 +176,8 @@
             android:layout_weight="0.6"
             android:gravity="right"
             android:text="@string/viewoutstandingbills"
-            android:textColor="@color/orange" />
+            android:textColor="@color/orange"
+            android:visibility="gone" />
 
 
     </LinearLayout>
@@ -155,7 +203,7 @@
 
                 <LinearLayout
 
-                    android:layout_width="@dimen/ledgerreport_date_90"
+                    android:layout_width="@dimen/ledgerreport_date_110"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center"
                     android:gravity="center"
@@ -164,7 +212,7 @@
 
                     <TextView
                         style="@style/textViewMob"
-                        android:layout_width="@dimen/ledgerreport_date_90"
+                        android:layout_width="@dimen/ledgerreport_date_110"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center"
                         android:text="Date"
@@ -322,7 +370,7 @@
                 <TextView
                     android:id="@+id/lay_total"
                     style="@style/textViewMob"
-                    android:layout_width="@dimen/ledgerreport_date_90"
+                    android:layout_width="@dimen/ledgerreport_date_110"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center"
                     android:gravity="left"

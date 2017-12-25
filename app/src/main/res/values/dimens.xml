@@ -54,10 +54,11 @@
     <dimen name="vieworder_netamt">80dp</dimen>
 
     <!--sneha changes 12/21/17-->
+    <dimen name="ledgerreport_date_110">110dp</dimen>
     <dimen name="ledgerreport_date_90">90dp</dimen>
     <dimen name="ledgerreport_against_180">180dp</dimen>
-    <dimen name="outstndngreport_date_120">120dp</dimen>
-    <dimen name="outstndngreport_dcno_200">200dp</dimen>
+    <dimen name="outstndngreport_date_90">90dp</dimen>
+    <dimen name="outstndngreport_dcno_180">180dp</dimen>
     <dimen name="actionbar_badge_layout_img50">50dp</dimen>
     <dimen name="actionbar_badge_layout_tv30">30dp</dimen>
     <dimen name="add_to_cart_edheight30">30dp</dimen>

@@ -1,28 +1,45 @@
 package com.lnbinfotech.msplfootwear;
 
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Gravity;
 
+import com.lnbinfotech.msplfootwear.adapters.WarehousesDetailAdapter;
 import com.lnbinfotech.msplfootwear.constant.Constant;
+import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.CustOutstandingClass;
 import com.lnbinfotech.msplfootwear.model.GSTMasterClass;
+import com.lnbinfotech.msplfootwear.model.WarehouseDetailsClass;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DisplayCustOutstandingActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Constant constant, constant1;
     private Toast toast;
     public static CustOutstandingClass outClass;
-    private TextView tv_cl,tv_days,tv_odays,tv_pdc,tv_co,tv_bfp,tv_oda,tv_corder,tv_uo,tv_noa,tv_ol;
+    private TextView tv_cl,tv_days,tv_odays,tv_pdc,tv_co,tv_bfp,tv_oda,tv_corder,tv_uo,tv_noa,tv_ol,tot_qty, tot_amt,tv_custname;
+    private DBHandler db;
+    private ListView lv_warehouse_detail;
+    float total_qty = 0, total_amt = 0;
+    private DecimalFormat dc;
+    private  int cust_id ;
+    private String str = "";
+    private LinearLayout lay_warehouse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +47,9 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_display_cust_outstanding);
 
         init();
+        cust_id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
+        //String str = db.getName(cust_id);
+       // tv_custname.setText(str);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -39,6 +59,15 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
             loadOustandingdetail();
         }else{
             setData();
+        }
+
+        str = getIntent().getExtras().getString("val");
+        if(str.equals("1")) {
+            lay_warehouse.setVisibility(View.GONE);
+
+        }else {
+            lay_warehouse.setVisibility(View.VISIBLE);
+            showWarehouseData();
         }
 
     }
@@ -69,11 +98,16 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
     }
 
     private void init() {
+        db = new DBHandler(this);
         constant = new Constant(DisplayCustOutstandingActivity.this);
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
+        lv_warehouse_detail = (ListView) findViewById(R.id.lv_warhouse_detail);
+        lay_warehouse = (LinearLayout) findViewById(R.id.lay_warehouse);
 
+        tot_qty = (TextView) findViewById(R.id.tot_qty);
+        tot_amt = (TextView) findViewById(R.id.tot_amt);
         tv_cl = (TextView) findViewById(R.id.tv_cl);
         tv_days = (TextView) findViewById(R.id.tv_days);
         tv_odays = (TextView) findViewById(R.id.tv_odays);
@@ -85,10 +119,34 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
         tv_uo = (TextView) findViewById(R.id.tv_uo);
         tv_noa = (TextView) findViewById(R.id.tv_noa);
         tv_ol = (TextView) findViewById(R.id.tv_ol);
+        tv_custname = (TextView) findViewById(R.id.tv_custname);
+
+        dc = new DecimalFormat();
+        dc.setMaximumFractionDigits(2);
+    }
+
+    private void showWarehouseData() {
+        Cursor cursor = db.getWarehouseData();
+        List<WarehouseDetailsClass> wlist = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                WarehouseDetailsClass wclass = new WarehouseDetailsClass();
+                wclass.setBranchid(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_BranchId)));
+                wclass.setWarehouse(cursor.getString(cursor.getColumnIndex(DBHandler.Company_Initial)));
+                wclass.setQty(cursor.getFloat(cursor.getColumnIndex(DBHandler.CO_LooseQty)));
+                wclass.setAmt(cursor.getFloat(cursor.getColumnIndex(DBHandler.CO_NetAmt)));
+                wlist.add(wclass);
+            } while (cursor.moveToNext());
+            db.close();
+            cursor.close();
+            WarehousesDetailAdapter adapter = new WarehousesDetailAdapter(getApplicationContext(), wlist);
+            lv_warehouse_detail.setAdapter(adapter);
+            setTotal(wlist);
+        }
     }
 
     private void loadOustandingdetail(){
-        int cust_id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
+
         String url = Constant.ipaddress + "/GetCustOutstanding?Id=" +cust_id ;
         Constant.showLog(url);
         writeLog("loadOustandingdetail_" + url);
@@ -121,6 +179,20 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
         tv_bfp.setText(outClass.getBalForPayment());
         tv_oda.setText(outClass.getOverDueAmnt());
         tv_ol.setText(outClass.getOverLimit());
+    }
+
+    private void setTotal(List<WarehouseDetailsClass> wrList) {
+        total_amt = 0;
+        total_qty = 0;
+        for (WarehouseDetailsClass wdClass : wrList) {
+            total_amt = total_amt + wdClass.getAmt();
+            Constant.showLog("total_amt"+wdClass.getAmt());
+            total_qty = total_qty + wdClass.getQty();
+            Constant.showLog("total_qty"+wdClass.getQty());
+        }
+
+        tot_qty.setText(dc.format(total_qty));
+        tot_amt.setText(dc.format(total_amt));
     }
 
     private void showPopup(int id) {

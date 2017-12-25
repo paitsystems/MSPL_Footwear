@@ -83,9 +83,11 @@ public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdap
             img_parent.setImageResource(R.drawable.compress_16);
         }
         if(group_position % 2 == 1){
-            view.setBackgroundColor(Color.parseColor("#29B6F6"));
+            //view.setBackgroundColor(Color.parseColor("#29B6F6"));  //blue
+             view.setBackgroundColor(Color.parseColor("#8BC34A"));   //green
         }else {
-            view.setBackgroundColor(Color.parseColor("#FF8F00"));
+            //view.setBackgroundColor(Color.parseColor("#FF8F00"));    //orange
+            view.setBackgroundColor(Color.parseColor("#D500F9"));      //purple
         }
 
         String count = "["+String.valueOf(areaid_partyId_map.get(areaid_list.get(group_position)).size())+"]";
@@ -129,10 +131,10 @@ public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdap
         TextView tv_party_no = (TextView) view.findViewById(R.id.party_no);
 
         if(group_position % 2 == 1){
-            tv_party_name.setTextColor(Color.parseColor("#29B6F6"));
-            tv_party_no.setTextColor(Color.parseColor("#29B6F6"));             //blue
+            tv_party_name.setTextColor(Color.parseColor("#3F51B5"));
+            tv_party_no.setTextColor(Color.parseColor("#3F51B5"));             //blue
         }else {
-            tv_party_name.setTextColor(Color.parseColor("#FF8F00"));
+            tv_party_name.setTextColor(Color.parseColor("#fa6c04"));
             tv_party_no.setTextColor(Color.parseColor("#fa6c04"));               ///orange
         }
 

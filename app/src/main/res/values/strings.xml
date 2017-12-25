@@ -226,4 +226,5 @@
     <string name="ifsc">IFSC:</string>
     <string name="micr">MICR:</string>
     <string name="viewoutstandingbills"><u> View Outstanding Bills</u>.</string>
+    <string name="warehouse">Godown</string>
 </resources>

@@ -36,4 +36,7 @@
 
     <dimen name="addtocardtvheight">30dp</dimen>
 
+    <dimen name="outstndngreport_date_90">90dp</dimen>
+    <dimen name="outstndngreport_dcno_180">180dp</dimen>
+
 </resources>

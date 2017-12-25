@@ -444,7 +444,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
             if (cursor.moveToFirst()) {
                 do {
                     custId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_RetailCustID));
-                  //  BranchId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_BranchId));
+                   //  BranchId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_BranchId));
                     District = cursor.getString(cursor.getColumnIndex(DBHandler.UM_District));
                     Taluka = cursor.getString(cursor.getColumnIndex(DBHandler.UM_Taluka));
                     CityId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_CityId));
@@ -497,7 +497,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                 requests.saveCustomerDetail(url, new ServerCallback() {
                     @Override
                     public void onSuccess(String result) {
-                         cust_id = Integer.parseInt(result);
+                        cust_id = Integer.parseInt(result);
                         OptionsActivity.new_cus.setCust_id(result);
                         Constant.showLog("result of newcust:"+result);
                         showPopup(1);

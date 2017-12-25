@@ -13,7 +13,7 @@
 
 
         <TextView
-            android:layout_width="90dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left|center"
             android:text="02/Aug/2017"

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,9 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
     private DBHandler db;
     float total_qty = 0, total_amt = 0;
     private DecimalFormat dc;
+    private String str = "";
+
+    private LinearLayout lay_warehouse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,14 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
             setData();
         }
 
-        showWarehouseData();
+        str = getIntent().getExtras().getString("val");
+        if(str.equals("1")) {
+            lay_warehouse.setVisibility(View.GONE);
+
+        }else {
+            lay_warehouse.setVisibility(View.VISIBLE);
+            showWarehouseData();
+        }
     }
 
     @Override
@@ -88,6 +99,7 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
 
+        lay_warehouse = (LinearLayout) findViewById(R.id.lay_warehouse);
         tv_cl = (TextView) findViewById(R.id.tv_cl);
         tv_days = (TextView) findViewById(R.id.tv_days);
         tv_odays = (TextView) findViewById(R.id.tv_odays);

@@ -74,6 +74,7 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
             case R.id.card_ledger_report:
                 Intent in =  new Intent(getApplicationContext(),LedgerReportActivity.class);
                 in.putExtra("cust_id",String.valueOf(custId));
+                in.putExtra("child_selected",custName);
                 startActivity(in);
                 overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;

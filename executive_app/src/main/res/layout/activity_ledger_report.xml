@@ -6,6 +6,42 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:padding="@dimen/mobpadding5"
+        android:textColor="@color/bluedd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/textViewMob"
+        android:text="Customer Name"
+        android:id="@+id/tv_custname" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/mobpadding5"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_creaditlimit"
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="View Credit Limit.."
+            android:textColor="@color/greend" />
+
+        <ImageView
+            android:id="@+id/imgv_i"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:src="@drawable/infog_32" />
+
+    </LinearLayout>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -103,21 +139,68 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:gravity="center"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_show"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:padding="@dimen/mobpadding5"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:drawableLeft="@drawable/show_16"
-                android:text="Show"
-                android:textColor="@color/white"
-                app:backgroundTint="@color/i_orange" />
+                android:layout_weight="0.4"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_view_ledger"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableLeft="@drawable/show_16"
+                    android:text="View Ledger Report"
+                    android:textColor="@color/white"
+                    app:backgroundTint="@color/i_orange" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:padding="@dimen/mobpadding5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_view_out"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableLeft="@drawable/show_16"
+                    android:text="View Outstanding report"
+                    android:textColor="@color/white"
+                    app:backgroundTint="@color/i_orange" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:padding="@dimen/mobpadding5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_view_credit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableLeft="@drawable/show_16"
+                    android:text="View Credit Limit"
+                    android:textColor="@color/white"
+                    app:backgroundTint="@color/i_orange" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <TextView
@@ -129,7 +212,8 @@
             android:layout_weight="0.6"
             android:gravity="right"
             android:text="View Outstanding Bills"
-            android:textColor="@color/orange" />
+            android:textColor="@color/orange"
+            android:visibility="gone" />
 
 
     </LinearLayout>
@@ -155,7 +239,7 @@
 
                 <LinearLayout
 
-                    android:layout_width="90dp"
+                    android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center"
                     android:gravity="center"
@@ -164,7 +248,7 @@
 
                     <TextView
                         style="@style/textViewMob"
-                        android:layout_width="90dp"
+                        android:layout_width="110dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center"
                         android:text="Date"
@@ -322,7 +406,7 @@
                 <TextView
                     android:id="@+id/lay_total"
                     style="@style/textViewMob"
-                    android:layout_width="90dp"
+                    android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center"
                     android:gravity="left"

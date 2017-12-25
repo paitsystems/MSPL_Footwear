@@ -6,9 +6,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_margin="@dimen/mobmargin5"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_weight="1">
 
         <TextView
             android:layout_width="match_parent"
@@ -487,7 +488,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:padding="5sp"
+        android:orientation="vertical"
+        android:id="@+id/lay_warehouse">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

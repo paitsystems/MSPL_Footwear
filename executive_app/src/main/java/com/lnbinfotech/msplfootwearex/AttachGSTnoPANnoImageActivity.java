@@ -56,6 +56,7 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
     private Toast toast;
     private final int requestCode = 1;
     private DBHandler db;
+    private String value = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,38 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
             getSupportActionBar().setTitle(R.string.newcustomerentry);
         }
         init();
+
+        value = "VAT Certificate Copy";
+        Constant.showLog("setIdValue():gstvalue:"+value);
+        Cursor cursor =  db.getIdOfDocType(value);
+        if(cursor.moveToFirst()){
+            OptionsActivity.new_cus.setId_gstpan_proof(cursor.getString(cursor.getColumnIndex(DBHandler.Document_Id)));
+        }
+        Constant.showLog("Documentid:"+OptionsActivity.new_cus.getId_gstpan_proof());
+        cursor.close();
+
+        if (flag == 0) {
+            save_lay.setVisibility(View.GONE);
+            update_lay.setVisibility(View.VISIBLE);
+            set_value_attachgstpan_no();
+        } else {
+            save_lay.setVisibility(View.VISIBLE);
+            update_lay.setVisibility(View.GONE);
+        }
+
+        //setIdValue();
+
+        bt_update.setOnClickListener(this);
+        bt_cancel.setOnClickListener(this);
+
+        rdo_gst.setOnClickListener(this);
+        rdo_pan.setOnClickListener(this);
+
+        imageView_pan_img.setOnClickListener(this);
+        imageView_gst_img.setOnClickListener(this);
+        bt_next.setOnClickListener(this);
+
+
     }
 
     private void init() {
@@ -86,23 +119,7 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
         imageView_gst_img = (ImageView) findViewById(R.id.imageView_gst_img);
         imageView_pan_img = (ImageView) findViewById(R.id.imageView_pan_img);
 
-        if (flag == 0) {
-            save_lay.setVisibility(View.GONE);
-            update_lay.setVisibility(View.VISIBLE);
-            set_value_attachgstpan_no();
-        } else {
-            save_lay.setVisibility(View.VISIBLE);
-            update_lay.setVisibility(View.GONE);
-        }
-        bt_update.setOnClickListener(this);
-        bt_cancel.setOnClickListener(this);
 
-        rdo_gst.setOnClickListener(this);
-        rdo_pan.setOnClickListener(this);
-
-        imageView_pan_img.setOnClickListener(this);
-        imageView_gst_img.setOnClickListener(this);
-        bt_next.setOnClickListener(this);
     }
 
     @Override
@@ -319,20 +336,19 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
     }*/
 
     private void setIdValue(){
-        String value = "";
-        if (_flag == 0) {
+
+        if (radio_flag == 2) {
             value = "PAN CARD";
             Constant.showLog("setIdValue():panvalue:"+value);
-        } else if (_flag == 1) {
+        } else if (radio_flag == 1) {
             value = "GSTIN";
             Constant.showLog("setIdValue():gstvalue:"+value);
         }
         Cursor cursor =  db.getIdOfDocType(value);
         if(cursor.moveToFirst()){
-            do{
-                OptionsActivity.new_cus.setId_gstpan_proof(cursor.getString(cursor.getColumnIndex(DBHandler.Document_Id)));
-            }while (cursor.moveToNext());
+            OptionsActivity.new_cus.setId_gstpan_proof(cursor.getString(cursor.getColumnIndex(DBHandler.Document_Id)));
         }
+        Constant.showLog("Documentid:"+OptionsActivity.new_cus.getId_gstpan_proof());
         cursor.close();
     }
 

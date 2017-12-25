@@ -13,7 +13,7 @@
 
 
             <TextView
-                android:layout_width="@dimen/ledgerreport_date_90"
+                android:layout_width="@dimen/ledgerreport_date_110"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center"
                 android:text="02/Aug/2017"

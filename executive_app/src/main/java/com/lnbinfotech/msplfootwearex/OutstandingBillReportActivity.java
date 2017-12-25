@@ -27,10 +27,11 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
     private Constant constant, constant1;
     private Toast toast;
     private ListView lv_out;
-    private TextView tot_Total;
+    private TextView tot_Total,tv_custname;
     private double total = 0;
     private DecimalFormat dc_format;
     private int custId = 0;
+    private String custName="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,8 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
         init();
 
         custId = Integer.parseInt(getIntent().getExtras().getString("cust_id"));
+        custName = getIntent().getExtras().getString("child_selected");
+        tv_custname.setText("CustomerName-"+custName);
         showOutstandingReport();
 
         if (getSupportActionBar() != null) {
@@ -132,6 +135,7 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
     }
 
     private void init() {
+        tv_custname = (TextView) findViewById(R.id.tv_custname);
         lv_out = (ListView) findViewById(R.id.lv_out);
         tot_Total = (TextView) findViewById(R.id.tot_Total);
         constant = new Constant(OutstandingBillReportActivity.this);

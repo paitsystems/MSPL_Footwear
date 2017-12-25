@@ -108,6 +108,7 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
             case R.id.imgv_i:
                 //finish();
                 Intent in = new Intent(this, DisplayCustOutstandingActivity.class);
+                in.putExtra("val","0");
                 startActivity(in);
                 overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;

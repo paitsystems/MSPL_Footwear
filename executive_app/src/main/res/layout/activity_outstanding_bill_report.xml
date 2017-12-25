@@ -5,6 +5,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:textColor="@color/bluedd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/textViewMob"
+        android:padding="@dimen/mobpadding5"
+        android:text="Customer Name"
+        android:id="@+id/tv_custname" />
+
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -26,7 +35,7 @@
 
                 <LinearLayout
 
-                    android:layout_width="120dp"
+                    android:layout_width="@dimen/outstndngreport_date_90"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center"
                     android:gravity="center"
@@ -35,7 +44,7 @@
 
                     <TextView
                         style="@style/textViewMob"
-                        android:layout_width="120dp"
+                        android:layout_width="@dimen/outstndngreport_date_90"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center"
                         android:gravity="left"
@@ -54,7 +63,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="120dp"
+                    android:layout_width="@dimen/outstndngreport_date_90"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -63,7 +72,7 @@
 
                     <TextView
                         style="@style/textViewMob"
-                        android:layout_width="120dp"
+                        android:layout_width="@dimen/outstndngreport_date_90"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|center"
                         android:gravity="right"
@@ -83,7 +92,7 @@
 
 
                 <LinearLayout
-                    android:layout_width="120dp"
+                    android:layout_width="@dimen/outstndngreport_date_90"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -92,7 +101,7 @@
 
                     <TextView
                         style="@style/textViewMob"
-                        android:layout_width="120dp"
+                        android:layout_width="@dimen/outstndngreport_date_90"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
@@ -112,7 +121,7 @@
 
                 <LinearLayout
 
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/outstndngreport_dcno_180"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -121,7 +130,7 @@
 
                     <TextView
                         style="@style/textViewMob"
-                        android:layout_width="200dp"
+                        android:layout_width="@dimen/outstndngreport_dcno_180"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center"
                         android:gravity="left"
@@ -160,7 +169,7 @@
                 <TextView
                     android:id="@+id/lay_total"
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="@dimen/outstndngreport_date_90"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center"
                     android:gravity="left"
@@ -172,7 +181,7 @@
                 <TextView
                     android:id="@+id/tot_Total"
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="@dimen/outstndngreport_date_90"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center"
                     android:gravity="right"
@@ -183,7 +192,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="@dimen/outstndngreport_date_90"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center"
                     android:gravity="right"
@@ -193,7 +202,7 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/outstndngreport_dcno_180"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center"
                     android:gravity="right"
