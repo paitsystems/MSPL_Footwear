@@ -83,11 +83,11 @@ public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdap
             img_parent.setImageResource(R.drawable.compress_16);
         }
         if(group_position % 2 == 1){
-            //view.setBackgroundColor(Color.parseColor("#29B6F6"));  //blue
-             view.setBackgroundColor(Color.parseColor("#8BC34A"));   //green
+            view.setBackgroundColor(Color.parseColor("#29B6F6"));  //blue
+           //  view.setBackgroundColor(Color.parseColor("#8BC34A"));   //green
         }else {
-            //view.setBackgroundColor(Color.parseColor("#FF8F00"));    //orange
-            view.setBackgroundColor(Color.parseColor("#D500F9"));      //purple
+            view.setBackgroundColor(Color.parseColor("#FF8F00"));    //orange
+           // view.setBackgroundColor(Color.parseColor("#D500F9"));      //purple
         }
 
         String count = "["+String.valueOf(areaid_partyId_map.get(areaid_list.get(group_position)).size())+"]";

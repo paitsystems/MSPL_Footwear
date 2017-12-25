@@ -2,15 +2,14 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
 
-    <!--<stroke android:color="@color/peachpink" android:width="1dp"/>
+    <stroke android:color="@color/peachpink" android:width="1dp"/>
     <corners android:radius="5dp"/>
     <size android:width="50dp"
         android:height="50dp"/>
     <solid android:color="@color/peachpink"/>
--->
-    <stroke android:color="@color/white" android:width="1dp"/>
+   <!-- <stroke android:color="@color/white" android:width="1dp"/>
     <corners android:radius="5dp"/>
     <size android:width="50dp"
         android:height="50dp"/>
-    <solid android:color="@color/white"/>
+    <solid android:color="@color/white"/>-->
 </shape>

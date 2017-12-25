@@ -63,13 +63,12 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
 
         str = getIntent().getExtras().getString("val");
         if(str.equals("1")) {
-            lay_warehouse.setVisibility(View.GONE);
+            lay_warehouse.setVisibility(View.INVISIBLE);
 
         }else {
             lay_warehouse.setVisibility(View.VISIBLE);
             showWarehouseData();
         }
-
     }
 
     @Override

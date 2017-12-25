@@ -97,8 +97,6 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
         imageView_pan_img.setOnClickListener(this);
         imageView_gst_img.setOnClickListener(this);
         bt_next.setOnClickListener(this);
-
-
     }
 
     private void init() {
@@ -118,8 +116,6 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
         update_lay = (LinearLayout) findViewById(R.id.update_lay);
         imageView_gst_img = (ImageView) findViewById(R.id.imageView_gst_img);
         imageView_pan_img = (ImageView) findViewById(R.id.imageView_pan_img);
-
-
     }
 
     @Override

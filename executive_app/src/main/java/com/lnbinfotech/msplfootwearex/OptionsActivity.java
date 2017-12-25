@@ -41,8 +41,8 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_options);
-        setContentView(R.layout.optionstext);
-        //setContentView(R.layout.test1);
+       // setContentView(R.layout.optionstext);
+        setContentView(R.layout.test);
 
         init();
 

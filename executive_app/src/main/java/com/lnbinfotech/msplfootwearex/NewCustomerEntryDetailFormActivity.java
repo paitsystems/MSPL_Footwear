@@ -498,9 +498,13 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                     @Override
                     public void onSuccess(String result) {
                         cust_id = Integer.parseInt(result);
-                        OptionsActivity.new_cus.setCust_id(result);
-                        Constant.showLog("result of newcust:"+result);
-                        showPopup(1);
+                        if(!result.equals("0")) {
+                            OptionsActivity.new_cus.setCust_id(result);
+                            Constant.showLog("result of newcust:" + result);
+                            showPopup(1);
+                        }else{
+                            showPopup(2);
+                        }
                     }
 
                     @Override

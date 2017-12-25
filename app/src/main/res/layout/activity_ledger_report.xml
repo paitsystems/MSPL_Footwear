@@ -109,7 +109,7 @@
             android:orientation="horizontal">
 
         <LinearLayout
-            android:padding="@dimen/mobpadding5"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
@@ -121,33 +121,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawableLeft="@drawable/show_16"
-                android:text="View Ledger Report"
+
+                android:text="Ledger Report"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/i_orange" />
 
         </LinearLayout>
             <LinearLayout
-                android:padding="@dimen/mobpadding5"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3"
+                android:layout_weight="0.4"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/btn_view_out"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:drawableLeft="@drawable/show_16"
-                    android:text="View Outstanding report"
+
+                    android:text="Outstanding report"
                     android:textColor="@color/white"
                     app:backgroundTint="@color/i_orange" />
 
             </LinearLayout>
             <LinearLayout
-                android:padding="@dimen/mobpadding5"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.4"
@@ -156,11 +156,11 @@
 
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/btn_view_credit"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:drawableLeft="@drawable/show_16"
-                    android:text="View Credit Limit"
+
+                    android:text="Credit Limit"
                     android:textColor="@color/white"
                     app:backgroundTint="@color/i_orange" />
 
