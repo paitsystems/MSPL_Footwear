@@ -23,6 +23,7 @@ import com.lnbinfotech.msplfootwear.model.HOMasterClass;
 import com.lnbinfotech.msplfootwear.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwear.model.SizeNDesignClass;
 import com.lnbinfotech.msplfootwear.model.StockInfoMasterClass;
+import com.lnbinfotech.msplfootwear.model.TrackOrderDetailChangedClass;
 import com.lnbinfotech.msplfootwear.model.UserClass;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
     //TODO: Check DB Version
-    public static final int Database_Version = 1;
+    public static final int Database_Version = 3;
 
     //retailCustID,name,address,mobile,status,branchId,email,District,Taluka,cityId,areaId,
     // Panno,ImagePath,HoCode,GSTNo,IMEINo,isRegistered,AadharNo,PIN
@@ -278,6 +279,27 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String GST_CGSTSHARE = "CGSTSHARE";
     public static final String GST_SGSTSHARE = "SGSTSHARE";
 
+    public static final String Table_TrackCustomerOrder = "TrackCustomerOrder";
+    public static final String TCO_Auto = "Auto";
+    public static final String TCO_Productid = "Productid";
+    public static final String TCO_SizeGroup = "SizeGroup";
+    public static final String TCO_Color = "Color";
+    public static final String TCO_HashCode = "HashCode";
+    public static final String TCO_Rate = "Rate";
+    public static final String TCO_MRP = "MRP";
+    public static final String TCO_OrderQty = "OrderQty";
+    public static final String TCO_LoosePackTyp = "LoosePackTyp";
+    public static final String TCO_CreditApp = "CreditApp";
+    public static final String TCO_AllotedToPck = "AllotedToPck";
+    public static final String TCO_TaxInvMade = "TaxInvMade";
+    public static final String TCO_InvNo = "InvNo";
+    public static final String TCO_InvAmt = "InvAmnt";
+    public static final String TCO_Transporter = "Transporter";
+    public static final String TCO_Prodid = "ProdId";
+    public static final String TCO_InvQty = "InvQty";
+    public static final String TCO_CancelQty = "CancelQty";
+    public static final String TCO_Status = "Status";
+
     public DBHandler(Context context) {
 
         //super(context, "/mnt/sdcard/"+Constant.folder_name+"/"+Database_Name, null, Database_Version);
@@ -353,6 +375,10 @@ public class DBHandler extends SQLiteOpenHelper {
             GST_GroupNm + " text," + GST_Status + " text," + GST_GSTPer + " text," + GST_CGSTPer + " text," +
             GST_SGSTPer + " text," + GST_CESSPer + " text," + GST_CGSTSHARE + " text," + GST_SGSTSHARE + " text)";
 
+    String create_trackcustomerorder_table = "create table if not exists "+Table_TrackCustomerOrder+"("+TCO_Auto+" int,"+TCO_Productid+" int,"+TCO_SizeGroup+" text,"+
+            TCO_Color+" text,"+TCO_HashCode+" text,"+TCO_Rate+" text,"+TCO_MRP+" text,"+TCO_OrderQty+" int,"+TCO_LoosePackTyp+" text,"+TCO_CreditApp+" text,"+TCO_AllotedToPck+" text,"+TCO_TaxInvMade+" text,"+
+            TCO_InvNo+" text,"+TCO_InvAmt+" text,"+TCO_Transporter+" text,"+TCO_Prodid+" text,"+TCO_InvQty+" int,"+TCO_CancelQty+" int,"+TCO_Status+" text)";
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         Constant.showLog(create_cust_master);
@@ -385,13 +411,17 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(create_custorder_table);
         Constant.showLog(create_gstmaster_table);
         db.execSQL(create_gstmaster_table);
+        Constant.showLog(create_trackcustomerorder_table);
+        db.execSQL(create_trackcustomerorder_table);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < newVersion) {
-            db.execSQL("drop table " + Table_AllRequiredSizesDesigns);
-            db.execSQL(create_arsd_master);
+            db.execSQL(create_trackcustomerorder_table);
+            //TODO" Remove below line
+            String str = "alter table "+Table_TrackCustomerOrder+" add "+TCO_Status+" text";
+            db.execSQL(str);
         }
     }
 
@@ -711,6 +741,36 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().insert(Table_GSTMASTER, null, cv);
     }
 
+    public void addTrackOrderDetailChanged(List<TrackOrderDetailChangedClass> trackOrderList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        ContentValues cv = new ContentValues();
+        for (TrackOrderDetailChangedClass trackClass : trackOrderList) {
+            cv.put(TCO_Auto,trackClass.getAuto());
+            cv.put(TCO_Productid,trackClass.getProductid());
+            cv.put(TCO_SizeGroup,trackClass.getSize_group());
+            cv.put(TCO_Color,trackClass.getColor());
+            cv.put(TCO_HashCode,trackClass.getHashcode());
+            cv.put(TCO_MRP,trackClass.getMrp());
+            cv.put(TCO_Rate,trackClass.getRate());
+            cv.put(TCO_OrderQty,trackClass.getOrderqty());
+            cv.put(TCO_LoosePackTyp,trackClass.getLoosePackTyp());
+            cv.put(TCO_CreditApp,trackClass.getCreditapp());
+            cv.put(TCO_AllotedToPck,trackClass.getAllowtopck());
+            cv.put(TCO_TaxInvMade,trackClass.getTaxinvmade());
+            cv.put(TCO_InvNo,trackClass.getInvno());
+            cv.put(TCO_InvAmt,trackClass.getInvamnt());
+            cv.put(TCO_Transporter,trackClass.getTransporter());
+            cv.put(TCO_Prodid,trackClass.getProdid());
+            cv.put(TCO_InvQty,trackClass.getInvqty());
+            cv.put(TCO_CancelQty,trackClass.getCanqty());
+            cv.put(TCO_Status,trackClass.getStatus());
+            db.insert(Table_TrackCustomerOrder, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+    }
+
     public ArrayList<CustomerDetailClass> getCustomerDetail() {
         ArrayList<CustomerDetailClass> list = new ArrayList<>();
         String str = "select * from " + Table_Usermaster;
@@ -926,7 +986,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public Cursor getDistinctSizeGroup(String packUnpackType) {
         String str = "select distinct " + ARSD_SizeGroup + " from " + Table_AllRequiredSizesDesigns +
                 " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_typ + "='" + packUnpackType + "' and "
-                + ARSD_InOutType + "='I' order by " + ARSD_SizeGroup;
+                + ARSD_InOutType + "='I' order by cast(" + ARSD_SizeGroup+" as int)";
         Constant.showLog("getDistinctSizeGroup :- " + str);
         return getWritableDatabase().rawQuery(str, null);
     }
@@ -1093,6 +1153,13 @@ public class DBHandler extends SQLiteOpenHelper {
         }else{
             str = "select * from " + Table_CustomerOrder + " where "+CO_BranchId+" in("+branchIds+") order by " + CO_Productid + "," + CO_SizeGroup;
         }
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getTrackOrderDetailData() {
+        String str;
+        str = "select * from " + Table_TrackCustomerOrder;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
     }

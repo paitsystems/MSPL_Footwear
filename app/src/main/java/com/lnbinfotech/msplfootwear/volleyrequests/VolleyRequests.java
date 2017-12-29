@@ -735,12 +735,13 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        HashMap<Integer, List<TrackOrderDetailClass>> map = new ParseJSON(response, context).parseloadDetailOrder();
-                        if (map.size() != 0) {
-                            callback.onSuccess(map);
-                        } else {
+                        int a = new ParseJSON(response, context).parseloadDetailOrderChanged();
+                        if(a==1) {
+                            callback.onSuccess(a);
+                        }else{
                             callback.onFailure("Error");
                         }
+
                     }
                 },
                 new Response.ErrorListener() {

@@ -61,7 +61,7 @@ public class ViewAddedToCardItemAdapter extends BaseAdapter {
         //tv.setLayoutParams(new TableLayout.LayoutParams(80, 50, 0.5f));
         //tv.setPadding(2,1,2,1);
         //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(80,40);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(110,60);
         params.setMargins(2,1,2,1);
         tv.setLayoutParams(params);
         holder.lay_horizontal.addView(tv);

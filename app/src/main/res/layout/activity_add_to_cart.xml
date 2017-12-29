@@ -78,42 +78,42 @@
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:padding="@dimen/mobpadding2">
 
             <TextView
+                style="@style/textViewMob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/textViewMob"
-                android:text="Mark Up"
-                android:layout_weight="0.5"/>
+                android:layout_weight="0.5"
+                android:text="Mark Up" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/textViewMob"
-                android:text="0"
-                android:layout_weight="0.5"
                 android:id="@+id/tv_marginup"
-                android:gravity="center" />
-
-            <TextView
+                style="@style/textViewMob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/textViewMob"
-                android:text="Mark Down"
-                android:layout_weight="0.5"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/textViewMob"
-                android:text="0"
                 android:layout_weight="0.5"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="Mark Down" />
+
+            <TextView
                 android:id="@+id/tv_margindown"
-                android:gravity="center" />
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:text="0" />
         </LinearLayout>
 
         <LinearLayout

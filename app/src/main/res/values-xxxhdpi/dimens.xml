@@ -51,6 +51,7 @@
     <dimen name="vieworder_gstamnt">90dp</dimen>
     <dimen name="vieworder_netamt">100dp</dimen>
 
+
     <!--sneha changes 12/21/17-->
     <!--sneha changes 12/21/17-->
     <dimen name="ledgerreport_date_90">90dp</dimen>
@@ -89,5 +90,7 @@
     <dimen name="list_item_sizegrp_width30">30dp</dimen>
     <dimen name="list_item_sizegrp_height25">25dp</dimen>
     <dimen name="list_item_sizegrp_height40">40dp</dimen>
+    <dimen name="list_item_viewaddtocart_sizegrwd">110dp</dimen>
+    <dimen name="list_item_viewaddtocart_sizegrhg">60dp</dimen>
 
 </resources>

@@ -26,6 +26,7 @@ import com.lnbinfotech.msplfootwear.model.OurBankDetailsClass;
 import com.lnbinfotech.msplfootwear.model.OuststandingReportClass;
 import com.lnbinfotech.msplfootwear.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwear.model.StockInfoMasterClass;
+import com.lnbinfotech.msplfootwear.model.TrackOrderDetailChangedClass;
 import com.lnbinfotech.msplfootwear.model.TrackOrderDetailClass;
 import com.lnbinfotech.msplfootwear.model.TrackOrderMasterClass;
 import com.lnbinfotech.msplfootwear.model.UserClass;
@@ -541,6 +542,47 @@ public class ParseJSON {
             writeLog("parseloadDetailOrder_" + e.getMessage());
         }
         return map;
+    }
+
+    public int parseloadDetailOrderChanged(){
+        int a = 0;
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            List<TrackOrderDetailChangedClass> list = new ArrayList<>();
+            if (jsonArray.length() >= 1) {
+                db.deleteTable(DBHandler.Table_TrackCustomerOrder);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    TrackOrderDetailChangedClass orderClass = new TrackOrderDetailChangedClass();
+                    orderClass.setAuto(jsonArray.getJSONObject(i).getInt("auto"));
+                    orderClass.setProductid(jsonArray.getJSONObject(i).getInt("productid"));
+                    orderClass.setSize_group(jsonArray.getJSONObject(i).getString("SizeGroup"));
+                    orderClass.setColor(jsonArray.getJSONObject(i).getString("Color"));
+                    orderClass.setHashcode(jsonArray.getJSONObject(i).getString("HashCode"));
+                    orderClass.setMrp(jsonArray.getJSONObject(i).getString("MRP"));
+                    orderClass.setRate(jsonArray.getJSONObject(i).getString("Rate"));
+                    orderClass.setOrderqty(jsonArray.getJSONObject(i).getInt("OrderQty"));
+                    orderClass.setLoosePackTyp(jsonArray.getJSONObject(i).getString("LoosePackTyp"));
+                    orderClass.setCreditapp(jsonArray.getJSONObject(i).getString("CreditApp"));
+                    orderClass.setAllowtopck(jsonArray.getJSONObject(i).getString("AllotedtoPck"));
+                    orderClass.setTaxinvmade(jsonArray.getJSONObject(i).getString("TaxInvMad"));
+                    orderClass.setInvno(jsonArray.getJSONObject(i).getString("InvNo"));
+                    orderClass.setInvamnt(jsonArray.getJSONObject(i).getString("InvAmt"));
+                    orderClass.setTransporter(jsonArray.getJSONObject(i).getString("Transporter"));
+                    orderClass.setProdid(jsonArray.getJSONObject(i).getString("prodid"));
+                    orderClass.setInvqty(jsonArray.getJSONObject(i).getInt("Invo"));
+                    orderClass.setCanqty(jsonArray.getJSONObject(i).getInt("Can"));
+                    orderClass.setStatus(jsonArray.getJSONObject(i).getString("STATUS"));
+                    list.add(orderClass);
+                }
+                db.addTrackOrderDetailChanged(list);
+                a = 1;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseloadDetailOrderChanged_" + e.getMessage());
+            a = 0;
+        }
+        return a;
     }
 
     public int parseGSTMaster(){

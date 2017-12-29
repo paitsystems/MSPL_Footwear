@@ -92,7 +92,31 @@
     <dimen name="list_item_sizegrp_height25">25dp</dimen>
     <dimen name="list_item_sizegrp_height40">40dp</dimen>
 
+    <dimen name="list_item_viewaddtocart_sizegrwd">80dp</dimen>
+    <dimen name="list_item_viewaddtocart_sizegrhg">40dp</dimen>
 
+    <dimen name="trackorderc_detail_layheight40">40dp</dimen>
+    <dimen name="trackorderc_detail_tvwidth40">40dp</dimen>
+    <dimen name="trackorderc_detail_tvwidth60">60dp</dimen>
+    <dimen name="trackorderc_detail_tvwidth80">80dp</dimen>
+    <dimen name="trackorderc_detail_tvwidth50">50dp</dimen>
+    <dimen name="trackorderc_detail_tvwidth70">70dp</dimen>
+    <dimen name="trackorderc_detail_layheight30">30dp</dimen>
 
-
+    <dimen name="vieworderc_layheight">40dp</dimen>
+    <dimen name="vieworderc_prodid">60dp</dimen>
+    <dimen name="vieworderc_sizegroup">60dp</dimen>
+    <dimen name="vieworderc_colour">80dp</dimen>
+    <dimen name="vieworderc_looseqty">50dp</dimen>
+    <dimen name="vieworderc_wsp">60dp</dimen>
+    <dimen name="vieworderc_mrp">60dp</dimen>
+    <dimen name="viewordecr_amnt">60dp</dimen>
+    <dimen name="vieworderc_gst">40dp</dimen>
+    <dimen name="vieworderc_tset">60dp</dimen>
+    <dimen name="vieworderc_tqty">60dp</dimen>
+    <dimen name="vieworderc_grossamnt">80dp</dimen>
+    <dimen name="vieworderc_discper">50dp</dimen>
+    <dimen name="vieworderc_discmant">70dp</dimen>
+    <dimen name="vieworderc_gstamnt">70dp</dimen>
+    <dimen name="vieworderc_netamt">80dp</dimen>
 </resources>

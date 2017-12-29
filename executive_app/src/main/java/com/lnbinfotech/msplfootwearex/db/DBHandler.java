@@ -950,7 +950,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public Cursor getDistinctSizeGroup(String packUnpackType) {
         String str = "select distinct " + ARSD_SizeGroup + " from " + Table_AllRequiredSizesDesigns +
                 " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_typ + "='" + packUnpackType + "' and "
-                + ARSD_InOutType + "='I' order by " + ARSD_SizeGroup;
+                + ARSD_InOutType + "='I' order by cast(" + ARSD_SizeGroup+" as int)";
         Constant.showLog("getDistinctSizeGroup :- " + str);
         return getWritableDatabase().rawQuery(str, null);
     }

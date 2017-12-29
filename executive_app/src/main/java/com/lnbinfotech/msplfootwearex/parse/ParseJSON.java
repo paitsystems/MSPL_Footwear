@@ -679,7 +679,6 @@ public class ParseJSON {
         return ret;
     }
 
-
     private void writeLog(String _data){
         new WriteLog().writeLog(context,"ParseJSON_"+_data);
     }

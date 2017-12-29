@@ -21,7 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwear.adapters.DispatchCenterListAdapter;
+import com.lnbinfotech.msplfootwear.adapters.TrackOrderDetailChangedAdapter;
 import com.lnbinfotech.msplfootwear.adapters.ViewCustomerOrderAdapter;
+import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.interfaces.RecyclerViewToActivityInterface;
@@ -29,6 +31,8 @@ import com.lnbinfotech.msplfootwear.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.CompanyMasterClass;
 import com.lnbinfotech.msplfootwear.model.CustomerOrderClass;
+import com.lnbinfotech.msplfootwear.model.TrackOrderDetailChangedClass;
+import com.lnbinfotech.msplfootwear.model.TrackOrderMasterClass;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
 
 import java.util.ArrayList;
@@ -38,16 +42,18 @@ import java.util.Set;
 
 public class TrackOrderDetailActivityChanged extends AppCompatActivity implements View.OnClickListener,RecyclerViewToActivityInterface {
 
-
     private Constant constant, constant1;
     private Toast toast;
+    private TrackOrderMasterClass orderClass;
 
-    private TextView tv_totset, tv_totqty, tv_totamnt, tv_tot_gstamt, tv_tot_grossamt, tv_disc_per, tv_discamnt, tv_creaditlimit;
+    private TextView tv_orderstatus, tv_invno, tv_transporter, tv_creditapp, tv_alltopckg, tv_taxinvmade,
+            tv_invamnt,tv_totset, tv_totqty, tv_totamnt, tv_tot_gstamt, tv_tot_grossamt,
+            tv_disc_per, tv_discamnt, tv_creaditlimit;
     private ListView lv_vOrder;
     private Button btn_proceed;
-    private String from, filter = "";
+    private String filter = "";
     private DBHandler db;
-    private List<CustomerOrderClass> list;
+    private List<TrackOrderDetailChangedClass> list;
     private ImageView imgv_i;
     private RecyclerView rv_dispatchcenter;
     public static List<CompanyMasterClass> dispatchcenter_list;
@@ -61,13 +67,8 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_order_detail_changed);
 
-        from = getIntent().getExtras().getString("from");
-
         if (getSupportActionBar() != null) {
-            assert from != null;
-            if (from.equals("addtocard")) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            }
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("Your Order");
         }
 
@@ -76,28 +77,28 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
 
         btn_proceed.setOnClickListener(this);
 
-        setDispatchCenterData();
-
-        setData();
+        //setDispatchCenterData();
 
         lv_vOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (from.equals("addtocard")) {
+                /*if (from.equals("addtocard")) {
                     list.get(i);
                     Constant.showLog("selected pos:" + i);
                     AddToCartActivity.updateCustOrder = list.get(i);
                     showDia(1);
-                }
+                }*/
             }
         });
 
-        if (DisplayCustOutstandingActivity.outClass == null) {
+        getOrder();
+
+        /*if (DisplayCustOutstandingActivity.outClass == null) {
             loadOustandingdetail();
         } else {
             String str = "Credit Limit :  " + DisplayCustOutstandingActivity.outClass.getCreditlimit();
             tv_creaditlimit.setText(str);
-        }
+        }*/
     }
 
     @Override
@@ -123,9 +124,9 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!from.equals("addtocard")) {
+        /*if (!from.equals("addtocard")) {
             getMenuInflater().inflate(R.menu.vieworderactivity_menu, menu);
-        }
+        }*/
         return true;
     }
 
@@ -198,37 +199,95 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         }
     }
 
+    private void getOrder() {
+        orderClass = (TrackOrderMasterClass) getIntent().getSerializableExtra("trackorderclass");
+        /*String stat = orderClass.getApprove();
+        if (stat.equalsIgnoreCase("Y")) {
+            tv_orderstatus.setText("Approved");
+            tv_orderstatus.setTextColor(getResources().getColor(R.color.darkgreen));
+        } else {
+            tv_orderstatus.setText("Not Approved");
+            tv_orderstatus.setTextColor(getResources().getColor(R.color.red));
+        }*/
+        if (ConnectivityTest.getNetStat(getApplicationContext())) {
+            loadOrderDetails();
+        } else {
+            toast.setText("You Are Offline");
+            toast.show();
+        }
+    }
+
+    private void loadOrderDetails() {
+        String url = Constant.ipaddress + "/GetTrackOrderDetail?mastId=" + orderClass.getAuto();
+        Constant.showLog(url);
+        writeLog("loadOrderDetails_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(TrackOrderDetailActivityChanged.this);
+        requests.loadDetailOrder(url, new ServerCallbackList() {
+            @Override
+            public void onSuccess(Object result) {
+                constant.showPD();
+                setData();
+            }
+            @Override
+            public void onFailure(Object result) {
+                constant.showPD();
+                showDia(2);
+            }
+        });
+    }
+
     private void setData() {
         list.clear();
         lv_vOrder.setAdapter(null);
-        Cursor cursor = db.getViewOrderData(allBranch, filter);
+        Cursor cursor = db.getTrackOrderDetailData();
+        String invNo="", transporter="", creditApp="", allotedTopck="", taxInvMade="", status="", invamt = "";
         if (cursor.moveToFirst()) {
             do {
-                CustomerOrderClass order = new CustomerOrderClass();
-                order.setAuto(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_Auto)));
-                order.setProductid(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_Productid)));
-                order.setSizeGroup(cursor.getString(cursor.getColumnIndex(DBHandler.CO_SizeGroup)));
-                order.setColor(cursor.getString(cursor.getColumnIndex(DBHandler.CO_Color)));
-                order.setHashCode(cursor.getString(cursor.getColumnIndex(DBHandler.CO_HashCode)));
-                order.setLooseQty(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_LooseQty)));
-                order.setMrp(cursor.getString(cursor.getColumnIndex(DBHandler.CO_MRP)));
-                order.setAmount(cursor.getString(cursor.getColumnIndex(DBHandler.CO_Amount)));
-                order.setGstper(cursor.getString(cursor.getColumnIndex(DBHandler.CO_GSTPer)));
-                order.setRate(cursor.getString(cursor.getColumnIndex(DBHandler.CO_Rate)));
-                order.setQty(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_Qty)));
-                order.setActLooseQty(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_ActLooseQty)));
-                order.setLoosePackTyp(cursor.getString(cursor.getColumnIndex(DBHandler.CO_LoosePackTyp)));
-                order.setPerPackQty(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_PerPackQty)));
-                order.setOrderType(cursor.getString(cursor.getColumnIndex(DBHandler.CO_OrderType)));
-                order.setAvailQty(cursor.getInt(cursor.getColumnIndex(DBHandler.CO_AvailQty)));
-                order.setProdId(cursor.getString(cursor.getColumnIndex(DBHandler.CO_Prodid)));
+                TrackOrderDetailChangedClass order = new TrackOrderDetailChangedClass();
+                order.setAuto(cursor.getInt(cursor.getColumnIndex(DBHandler.TCO_Auto)));
+                order.setProductid(cursor.getInt(cursor.getColumnIndex(DBHandler.TCO_Productid)));
+                order.setSize_group(cursor.getString(cursor.getColumnIndex(DBHandler.TCO_SizeGroup)));
+                order.setColor(cursor.getString(cursor.getColumnIndex(DBHandler.TCO_Color)));
+                order.setHashcode(cursor.getString(cursor.getColumnIndex(DBHandler.TCO_HashCode)));
+                order.setMrp(cursor.getString(cursor.getColumnIndex(DBHandler.TCO_MRP)));
+                order.setRate(cursor.getString(cursor.getColumnIndex(DBHandler.TCO_Rate)));
+                order.setOrderqty(cursor.getInt(cursor.getColumnIndex(DBHandler.TCO_OrderQty)));
+                order.setLoosePackTyp(cursor.getString(cursor.getColumnIndex(DBHandler.TCO_LoosePackTyp)));
+                creditApp = cursor.getString(cursor.getColumnIndex(DBHandler.TCO_CreditApp));
+                order.setCreditapp(creditApp);
+                allotedTopck = cursor.getString(cursor.getColumnIndex(DBHandler.TCO_AllotedToPck));
+                order.setAllowtopck(allotedTopck);
+                taxInvMade = cursor.getString(cursor.getColumnIndex(DBHandler.TCO_TaxInvMade));
+                order.setTaxinvmade(taxInvMade);
+                invNo = cursor.getString(cursor.getColumnIndex(DBHandler.TCO_InvNo));
+                order.setInvno(invNo);
+                invamt = cursor.getString(cursor.getColumnIndex(DBHandler.TCO_InvAmt));
+                order.setInvamnt(invamt);
+                transporter = cursor.getString(cursor.getColumnIndex(DBHandler.TCO_Transporter));
+                order.setTransporter(transporter);
+                order.setProdid(cursor.getString(cursor.getColumnIndex(DBHandler.TCO_Prodid)));
+                order.setInvqty(cursor.getInt(cursor.getColumnIndex(DBHandler.TCO_InvQty)));
+                order.setCanqty(cursor.getInt(cursor.getColumnIndex(DBHandler.TCO_CancelQty)));
+                status = cursor.getString(cursor.getColumnIndex(DBHandler.TCO_Status));
+                order.setStatus(status);
                 list.add(order);
             } while (cursor.moveToNext());
         }
         cursor.close();
-        ViewCustomerOrderAdapter adapter = new ViewCustomerOrderAdapter(list, getApplicationContext());
+        status = "Order Status :- "+status;
+        tv_orderstatus.setText(status);
+        invNo = "Invoice No :- "+invNo;
+        tv_invno.setText(invNo);
+        transporter = "Transporter :- "+transporter;
+        tv_transporter.setText(transporter);
+        tv_creditapp.setText(creditApp);
+        tv_alltopckg.setText(allotedTopck);
+        tv_taxinvmade.setText(taxInvMade);
+        tv_invamnt.setText(invamt);
+        TrackOrderDetailChangedAdapter adapter = new TrackOrderDetailChangedAdapter(list, getApplicationContext());
         lv_vOrder.setAdapter(adapter);
-        totalCalculations();
+        //totalCalculations();
     }
 
     private void totalCalculations() {
@@ -288,6 +347,13 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         lv_vOrder = (ListView) findViewById(R.id.lv_vOrder);
         db = new DBHandler(TrackOrderDetailActivityChanged.this);
         list = new ArrayList<>();
+        tv_orderstatus = (TextView) findViewById(R.id.tv_orderStatus);
+        tv_invno = (TextView) findViewById(R.id.tv_invoiceno);
+        tv_transporter = (TextView) findViewById(R.id.tv_trasporter);
+        tv_creditapp = (TextView) findViewById(R.id.tv_creditapp);
+        tv_alltopckg = (TextView) findViewById(R.id.tv_alltopckg);
+        tv_taxinvmade = (TextView) findViewById(R.id.tv_tavinvmade);
+        tv_invamnt = (TextView) findViewById(R.id.tv_invamnt);
         tv_totset = (TextView) findViewById(R.id.tv_tot_set);
         tv_totqty = (TextView) findViewById(R.id.tv_tot_qty);
         tv_totamnt = (TextView) findViewById(R.id.tv_amt);
@@ -313,95 +379,19 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
     private void showDia(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(TrackOrderDetailActivityChanged.this);
         builder.setCancelable(false);
-        if (a == 0) {
-            builder.setMessage("Do You Want To Exit App?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        if (a == 2) {
+            builder.setMessage("Error While Loading Data?");
+            builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    new Constant(TrackOrderDetailActivityChanged.this).doFinish();
-                    dialog.dismiss();
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-        } else if (a == 1) {
-            builder.setMessage("Do You Want To Update Order?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    AddToCartActivity.activityToFrom = 2;
-                    new Constant(TrackOrderDetailActivityChanged.this).doFinish();
-                    dialog.dismiss();
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-        } else if (a == 2) {
-            builder.setMessage("Do You Want To Add Order?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                    startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
-                    overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
-                    dialog.dismiss();
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-        } else if (a == 3) {
-            builder.setMessage("Please Try Again");
-            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    loadOustandingdetail();
-                    dialog.dismiss();
+                    loadOrderDetails();
                 }
             });
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-        } else if (a == 4) {
-            builder.setTitle("Payment");
-            builder.setMessage("Your Order Amount Exceed Credit Limit");
-            builder.setPositiveButton("Details", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    startActivity(new Intent(getApplicationContext(), DisplayCustOutstandingActivity.class));
-                    overridePendingTransition(R.anim.enter, R.anim.exit);
-                }
-            });
-            builder.setNegativeButton("Continue", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    finish();
-                    Intent intent = new Intent(getApplicationContext(), CheckoutCustOrderActivity.class);
-                    intent.putExtra("from", from);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.enter, R.anim.exit);
-                }
-            });
-            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                    new Constant(TrackOrderDetailActivityChanged.this).doFinish();
                 }
             });
         }
@@ -471,7 +461,7 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
                 } else {
                     finish();
                     Intent intent = new Intent(this, CheckoutCustOrderActivity.class);
-                    intent.putExtra("from", from);
+                    intent.putExtra("from", "");
                     startActivity(intent);
                     overridePendingTransition(R.anim.enter, R.anim.exit);
                 }
