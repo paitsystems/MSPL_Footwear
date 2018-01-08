@@ -17,6 +17,7 @@ import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
+import com.lnbinfotech.msplfootwear.model.CheckAvailStockClass;
 import com.lnbinfotech.msplfootwear.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwear.model.LedgerReportClass;
@@ -841,7 +842,6 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
-
     public void loadLedgerReport(String url, final ServerCallbackList callback) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
@@ -926,6 +926,33 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
+    public void getAvailStock(String url, final ServerCallbackList callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        //response = response.replace("\\", "");
+                        //response = response.replace("''", "");
+                        //response = response.substring(1, response.length() - 1);
+                        List<CheckAvailStockClass> list = new ParseJSON(response, context).parseAvailQty();
+                        if (list.size()!=0) {
+                            callback.onSuccess(list);
+                        } else {
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("Error");
+                        Constant.showLog(error.getMessage());
+                        writeLog("getAvailStock_" + error.getMessage());
+                    }
+                });
+        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
+    }
 
     private void writeLog(String _data) {
         new WriteLog().writeLog(context, "VolleyRequest_" + _data);

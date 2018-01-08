@@ -27,12 +27,13 @@ public class SizeGroupWiseColourAdapter extends RecyclerView.Adapter<SizeGroupWi
     private int var = -1;
     private int[] intArr;
     //private List<Integer> selColorList = new ArrayList<>();
+    private List<String> whiteHashCodeList = new ArrayList<>();
 
     public SizeGroupWiseColourAdapter(List<String> _list, Context _context) {
         this.colourList = _list;
         this.context = _context;
         this.intArr = new int[_list.size()];
-
+        addToList();
     }
 
     @Override
@@ -41,7 +42,6 @@ public class SizeGroupWiseColourAdapter extends RecyclerView.Adapter<SizeGroupWi
         return new SizeGroupWiseColourViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(SizeGroupWiseColourViewHolder holder, int position) {
         String _colourHashCode = colourList.get(position);
@@ -49,7 +49,7 @@ public class SizeGroupWiseColourAdapter extends RecyclerView.Adapter<SizeGroupWi
         holder.textView.setText(colourHashCode[0]);
         holder.textView.setTag(position);
         String hashCode = colourHashCode[1];
-        if (hashCode.equalsIgnoreCase("#FFFFFF")) {
+        if (whiteHashCodeList.contains(hashCode)) {
             holder.textView.setTextColor(Color.parseColor("#000000"));
             holder.textView.setBackgroundResource(R.drawable.green_boarder_draw);
         } else {
@@ -119,6 +119,22 @@ public class SizeGroupWiseColourAdapter extends RecyclerView.Adapter<SizeGroupWi
            // recyclerViewToActivityInterface.onItemClick(textView.getText().toString());
             var = getAdapterPosition();
         }
+    }
+
+    private void addToList() {
+        whiteHashCodeList.clear();
+        whiteHashCodeList.add("#FFFFF0");
+        whiteHashCodeList.add("#FFFFF1");
+        whiteHashCodeList.add("#FFFFF2");
+        whiteHashCodeList.add("#FFFFF3");
+        whiteHashCodeList.add("#FFFFF4");
+        whiteHashCodeList.add("#FFFFF5");
+        whiteHashCodeList.add("#FFFFF6");
+        whiteHashCodeList.add("#FFFFF7");
+        whiteHashCodeList.add("#FFFFF8");
+        whiteHashCodeList.add("#FFFFF9");
+        whiteHashCodeList.add("#FFFFFA");
+        whiteHashCodeList.add("#FFFFFF");
     }
 }
 

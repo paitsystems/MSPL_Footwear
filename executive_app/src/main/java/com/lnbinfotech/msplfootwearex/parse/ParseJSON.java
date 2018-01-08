@@ -13,6 +13,7 @@ import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.AreaMasterClass;
 import com.lnbinfotech.msplfootwearex.model.BankBranchMasterClass;
 import com.lnbinfotech.msplfootwearex.model.BankMasterClass;
+import com.lnbinfotech.msplfootwearex.model.CheckAvailStockClass;
 import com.lnbinfotech.msplfootwearex.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwearex.model.CityMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CompanyMasterClass;
@@ -678,6 +679,33 @@ public class ParseJSON {
         }
         return ret;
     }
+
+    public List<CheckAvailStockClass> parseAvailQty(){
+        List<CheckAvailStockClass> list = new ArrayList<>();
+        try{
+            JSONArray jsonArray = new JSONArray(new JSONObject(json).get("CheckLooseStockResult").toString());
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    CheckAvailStockClass checkStock = new CheckAvailStockClass();
+                    checkStock.setProductid(jsonArray.getJSONObject(i).getInt("Product_id"));
+                    checkStock.setColor(jsonArray.getJSONObject(i).getString("Color"));
+                    checkStock.setSizegroup(jsonArray.getJSONObject(i).getString("SizeGroup"));
+                    checkStock.setAvailQty(jsonArray.getJSONObject(i).getInt("AvailQty"));
+                    checkStock.setRate(jsonArray.getJSONObject(i).getString("Rate"));
+                    checkStock.setBranchid(jsonArray.getJSONObject(i).getInt("BranchId"));
+                    checkStock.setAlias(jsonArray.getJSONObject(i).getString("Alias"));
+                    checkStock.setStat(jsonArray.getJSONObject(i).getString("Stat"));
+                    checkStock.setHashcode(jsonArray.getJSONObject(i).getString("HashCode"));
+                    list.add(checkStock);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseAvailQty_" + e.getMessage());
+        }
+        return list;
+    }
+
 
     private void writeLog(String _data){
         new WriteLog().writeLog(context,"ParseJSON_"+_data);

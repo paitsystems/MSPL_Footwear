@@ -29,6 +29,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lnbinfotech.msplfootwearex.adapters.CheckAvailStockAdapter;
 import com.lnbinfotech.msplfootwearex.adapters.CustomerOrderUnpackGridAdpater;
 import com.lnbinfotech.msplfootwearex.adapters.SizeGroupWiseColourAdapter;
 import com.lnbinfotech.msplfootwearex.adapters.SizeGroupWiseQtyAdapter;
@@ -36,10 +37,14 @@ import com.lnbinfotech.msplfootwearex.adapters.ViewAddedToCardItemAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.interfaces.RecyclerViewToActivityInterface;
+import com.lnbinfotech.msplfootwearex.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
+import com.lnbinfotech.msplfootwearex.model.CheckAvailStockClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerOrderClass;
+import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +61,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     private TextView tv_wsp, tv_mrp, tv_hsncode, tv_gstper,tv_gstperint,tv_marginup,tv_margindown, tv_add_to_card, tv_checkstock, tv_remove_item, tv_cancel_item,
             tv_add_to_card_final, tv_checkout, tv_vieworder, tv_totqty, tv_totamnt, tv_totset, tv_totnetamt, actionbar_noti_tv,
             tv_new_item;
-    private RecyclerView rv_size, rv_color;
+    private RecyclerView rv_size, rv_color, rv_stockinfo;
     private GridView gridView;
     private LinearLayout lay_pack, lay_comp_pack;
     private AutoCompleteTextView auto_set;
@@ -68,12 +73,13 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     public static List<String> sizeGroup_list;
     public static List<String> colour_list;
     private List<String> unpackSizeList;
+    private List<CheckAvailStockClass> stockList;
     public static List<Integer> unClickablePositionsList, allSizeChangeList;
     public static HashMap<Integer, Integer> map;
     private String selSizeGroup = "", prodIdStr = "";
     public static String selProd = null;
     private int selQtyLocal = 0, compPackQty = 0;
-    public static int selProdId = 0, selQty = -1, activityToFrom = 0;
+    public static int selProdId = 0, selQty = -1, activityToFrom = 0, isStockChecked = 0;
     public static CustomerOrderClass updateCustOrder;
     private Menu mMenu;
 
@@ -173,6 +179,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             tv_hsncode.setText("0");
             sp_sizeGroup.setAdapter(null);
             rv_color.setAdapter(null);
+            rv_stockinfo.setAdapter(null);
+            isStockChecked = 0;
             rv_size.setAdapter(null);
             gridView.setAdapter(null);
             listView.setAdapter(null);
@@ -219,6 +227,10 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             case R.id.rdo_pack:
                 rdo_pack.setChecked(true);
                 rdo_unpack.setChecked(false);
+
+                rv_stockinfo.setAdapter(null);
+                isStockChecked = 0;
+
                 if (selProdId != 0) {
                     setData();
                 }
@@ -229,6 +241,10 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             case R.id.rdo_unpack:
                 rdo_pack.setChecked(false);
                 rdo_unpack.setChecked(true);
+
+                rv_stockinfo.setAdapter(null);
+                isStockChecked = 0;
+
                 if (selProdId != 0) {
                     setUnpackData();
                 }
@@ -244,7 +260,19 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                 if (selQtyLocal != compPackQty) {
                                     InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                     mgr.hideSoftInputFromWindow(tv_add_to_card.getWindowToken(), 0);
-                                    addToCard();
+                                    //addToCard();
+                                    if(isStockChecked!=0){
+                                        if(stockList==null){
+                                            stockList = new ArrayList<>();
+                                        }
+                                        if(stockList.size()!=0){
+                                            convertPackToLoose(stockList);
+                                        }else{
+                                            checkLooseStock();
+                                        }
+                                    }else{
+                                        checkLooseStock();
+                                    }
                                 } else {
                                     String str = auto_set.getText().toString();
                                     if (!str.equals("")) {
@@ -325,8 +353,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 showDia(2);
                 break;
             case R.id.tv_check_stock:
-                //TODO : Comment When Delivery
-                //db.deleteTable(DBHandler.Table_CustomerOrder);
+                isStockChecked = 1;
+                checkLooseStock();
                 break;
             case R.id.tv_add_to_card_final:
                 break;
@@ -337,6 +365,10 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 startViewCustOrderActivity();
                 break;
             case R.id.tv_new_item:
+                //TODO : Comment When Delivery
+                //db.deleteTable(DBHandler.Table_CustomerOrder);
+                //toast.setText("Order Cleared");
+                //toast.show();
                 new Constant(AddToCartActivity.this).doFinish();
                 break;
         }
@@ -440,6 +472,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         colour_list.clear();
         rv_size.setAdapter(null);
         rv_color.setAdapter(null);
+        //rv_stockinfo.setAdapter(null);
 
         Cursor res1 = db.getDistinctSizes(getPackUnPack(), sizegroup);
         if (res1.moveToFirst()) {
@@ -465,6 +498,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         colour_list.clear();
         map.clear();
         rv_color.setAdapter(null);
+        rv_stockinfo.setAdapter(null);
         Cursor res1 = db.getDistinctColour(size);
         if (res1.moveToFirst()) {
             do {
@@ -1201,6 +1235,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         map.clear();
         colour_list.clear();
         rv_color.setAdapter(null);
+        rv_stockinfo.setAdapter(null);
+        isStockChecked = 0;
 
         int i = 0;
         Cursor res1 = db.getDistinctColour(size);
@@ -1797,6 +1833,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         lay_comp_pack.setVisibility(View.GONE);
         rv_size.setAdapter(null);
         rv_color.setAdapter(null);
+        isStockChecked = 0;
         setSizeData(selSizeGroup);
     }
 
@@ -1814,9 +1851,9 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 if(orderMap.isEmpty()){
                     List<String> list = new ArrayList<>();
                     String str =  res.getString(res.getColumnIndex(DBHandler.CO_SizeGroup))+"-"+
-                            res.getString(res.getColumnIndex(DBHandler.CO_Color))+"-"+
-                            res.getString(res.getColumnIndex(DBHandler.CO_HashCode))+"-"+
-                            res.getString(res.getColumnIndex(DBHandler.CO_Qty))+"-"+
+                                res.getString(res.getColumnIndex(DBHandler.CO_Color))+"-"+
+                                res.getString(res.getColumnIndex(DBHandler.CO_HashCode))+"-"+
+                                res.getString(res.getColumnIndex(DBHandler.CO_Qty))+"-"+
                             res.getString(res.getColumnIndex(DBHandler.CO_LooseQty))+"-"+
                             res.getString(res.getColumnIndex(DBHandler.CO_OrderType));
                     list.add(str);
@@ -1901,6 +1938,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
 
         rv_size = (RecyclerView) findViewById(R.id.rv_size);
         rv_color = (RecyclerView) findViewById(R.id.rv_color);
+        rv_stockinfo = (RecyclerView) findViewById(R.id.rv_stockinfo);
 
         listView = (ListView) findViewById(R.id.listView);
         gridView = (GridView) findViewById(R.id.gridView);
@@ -2070,6 +2108,441 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
 
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "AddToCartActivity_" + _data);
+    }
+
+    private void checkLooseStock(){
+        try {
+            String branchid, prodid, sizegroup, color = "", hashcode = "", enterqty, rate, type = "";
+            branchid = String.valueOf(getDispatchCenterId());
+            prodid = String.valueOf(selProdId);
+            sizegroup = "0";
+
+            int flag = 0;
+            if (rdo_pack.isChecked()) {
+                flag = 1;
+                if (selQtyLocal != compPackQty) {
+                    type = "M";
+                }else{
+                    type = "C";
+                    sizegroup = sizeGroup_list.get(sp_sizeGroup.getSelectedItemPosition());
+                }
+            } else if (rdo_unpack.isChecked()) {
+                flag = 2;
+                type = "D";
+            }
+            if (flag == 1) {
+                if (validateOrder()) {
+                    Set<Integer> set = map.keySet();
+                    for (Integer pos : set) {
+                        int isSelected = map.get(pos);
+                        if (isSelected == 1) {
+                            String colorStr = colour_list.get(pos);
+                            String colorArr[] = colorStr.split("\\-");
+                            color = color + "'" + colorArr[0] + "',";
+                            hashcode = hashcode + "'" + colorArr[1] + "',";
+                        }
+                    }
+                } else {
+                    flag = 0;
+                    showToast("Please Select Item");
+                }
+            } else if (flag == 2) {
+                if(!ed_prod_search.getText().toString().equals("")) {
+                    if(colour_list.size()!=0) {
+                        for (String colorStr : colour_list) {
+                            String colorArr[] = colorStr.split("\\-");
+                            color = color + "'" + colorArr[0] + "',";
+                            hashcode = hashcode + "'" + colorArr[1] + "',";
+                        }
+                    }else {
+                        flag = 0;
+                        showToast("Please Select Item");
+                    }
+                }else {
+                    flag = 0;
+                    showToast("Please Select Item");
+                }
+            }
+            if(flag!=0) {
+                if (!color.equals("")) {
+                    color = color.substring(0, color.length() - 1);
+                }
+                if (!hashcode.equals("")) {
+                    hashcode = hashcode.substring(0, hashcode.length() - 1);
+                }
+                enterqty = "0";
+                rate = tv_mrp.getText().toString();
+                String data = branchid + "^" + prodid + "^" + sizegroup + "^" + color + "^" + hashcode + "^" + enterqty + "^" + rate + "^" + type;
+                Constant.showLog(data);
+                data = URLEncoder.encode(data, "UTF-8");
+                checkLooseStock(data);
+            }else{
+                showToast("Please Select Order Type");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void checkLooseStock(String data) {
+        rv_stockinfo.setAdapter(null);
+        String url = Constant.ipaddress+"/CheckLooseStock?data="+data;
+        Constant.showLog(url);
+        writeLog("checkLooseStock_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(AddToCartActivity.this);
+        requests.getAvailStock(url, new ServerCallbackList() {
+            @Override
+            public void onSuccess(Object result) {
+                constant.showPD();
+                stockList = (List<CheckAvailStockClass>) result;
+                if(stockList.size()!=0) {
+                    CheckAvailStockAdapter adapter = new CheckAvailStockAdapter(stockList, getApplicationContext());
+                    rv_stockinfo.setAdapter(adapter);
+                    if (isStockChecked==0) {
+                        convertPackToLoose(stockList);
+                    }
+                }else{
+                    showToast("Please Try Again");
+                }
+            }
+            @Override
+            public void onFailure(Object result) {
+                constant.showPD();
+            }
+        });
+    }
+
+    private int getDispatchCenterId(){
+        int hocode = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
+        String prodCol = "";
+        if (hocode == 1) {
+            prodCol = DBHandler.PM_HKHO;
+        } else if (hocode == 12) {
+            prodCol = DBHandler.PM_HKRD;
+        } else if (hocode == 13) {
+            prodCol = DBHandler.PM_HANR;
+        }
+        return db.getDispatchCenter(prodCol);
+    }
+
+    private void convertPackToLoose(List<CheckAvailStockClass> stockList){
+
+        unpackSizeList.clear();
+        int part = Integer.parseInt(size_list.get(selQty));
+        String designNo = db.getDesignNo(selSizeGroup,part);
+        List<String> sizeQtyList = db.getSizeDetails(selSizeGroup,designNo,part);
+
+        List<String> qtyList = new ArrayList<>();
+        HashMap<String,String> sizeQtyMap = new HashMap<>();
+        HashMap<String,List<String>> sizeQtyHashMap = new HashMap<>();
+        List<String> sizeGroupList = new ArrayList<>();
+        List<String> sizeGroupListAvail = new ArrayList<>();
+
+        String size = "";
+        for(int i=0;i<sizeQtyList.size();i++){
+            String sizeQty = sizeQtyList.get(i);
+            String sizeQtyArr[] = sizeQty.split("\\^");
+            if(i==0){
+                size = sizeQtyArr[0];
+            }
+            sizeGroupListAvail.add(sizeQtyArr[0]);
+            qtyList.add(sizeQtyArr[1]);
+            sizeQtyMap.put(sizeQtyArr[0],sizeQtyArr[1]);
+        }
+
+        /*for(int i=0;i<sizeGroupListAvail.size();i++){
+            if(stockList.size()>i) {
+                CheckAvailStockClass stock = stockList.get(i);
+                String availSize = stock.getSizegroup();
+                if (sizeGroupListAvail.contains(availSize)) {
+                    sizeGroupList.add(i,sizeGroupListAvail.get(i));
+                    if(stock.getStat().equals("N")){
+                        qtyList.remove(i);
+                        qtyList.add(i,"0");
+                    }
+                }
+            }
+        }*/
+
+        qtyList.clear();
+        for(int i=0;i<stockList.size();i++) {
+            CheckAvailStockClass stock = stockList.get(i);
+            String availSize = stock.getSizegroup();
+            if (sizeGroupListAvail.contains(availSize)) {
+                sizeGroupList.add(availSize);
+                if (stock.getStat().equals("N")) {
+                    if(sizeQtyHashMap.isEmpty()){
+                        List<String> list = new ArrayList<>();
+                        list.add("0^"+stock.getColor()+"-"+stock.getHashcode());
+                        sizeQtyHashMap.put(availSize,list);
+                    }else if(sizeQtyHashMap.containsKey(availSize)){
+                        List<String> list = sizeQtyHashMap.get(availSize);
+                        list.add("0^"+stock.getColor()+"-"+stock.getHashcode());
+                        sizeQtyHashMap.put(availSize,list);
+                    }else{
+                        List<String> list = new ArrayList<>();
+                        list.add("0^"+stock.getColor()+"-"+stock.getHashcode());
+                        sizeQtyHashMap.put(availSize,list);
+                    }
+                    qtyList.add("0");
+                }else{
+                    if(sizeQtyHashMap.isEmpty()){
+                        List<String> list = new ArrayList<>();
+                        list.add(sizeQtyMap.get(availSize)+"^"+stock.getColor()+"-"+stock.getHashcode());
+                        sizeQtyHashMap.put(availSize,list);
+                    }else if(sizeQtyHashMap.containsKey(availSize)){
+                        List<String> list = sizeQtyHashMap.get(availSize);
+                        list.add(sizeQtyMap.get(availSize)+"^"+stock.getColor()+"-"+stock.getHashcode());
+                        sizeQtyHashMap.put(availSize,list);
+                    }else{
+                        List<String> list = new ArrayList<>();
+                        list.add(sizeQtyMap.get(availSize)+"^"+stock.getColor()+"-"+stock.getHashcode());
+                        sizeQtyHashMap.put(availSize,list);
+                    }
+                    qtyList.add(sizeQtyMap.get(availSize));
+                }
+            }else{
+
+            }
+        }
+
+        List<String> colorList = new ArrayList<>();
+
+        Set<Integer> set = map.keySet();
+        for (Integer pos : set) {
+            int isSelected = map.get(pos);
+            if (isSelected == 1) {
+                String colStr = colour_list.get(pos);
+                String colArr[] = colStr.split("\\-");
+                String hashCode = colArr[1];
+                colorList.add(db.getDistinctColour(size,hashCode));
+            }
+        }
+
+        //int unClickCount = -1;
+        unpackSizeList.clear();
+        unpackSizeList.add("+2");
+        for (int i = 0; i < colorList.size(); i++) {
+            //unClickCount++;
+            unpackSizeList.add(colorList.get(i));
+        }
+
+        //unClickCount++;
+        unpackSizeList.add("+1");
+        for (int i = 0; i < colorList.size(); i++) {
+            //unClickCount++;
+            //allSizeChangeList.add(unClickCount);
+            unpackSizeList.add("0");
+        }
+
+
+        /*for (int i = 0; i < sizeGroupList.size(); i++) {
+            //unClickCount++;
+            //unClickablePositionsList.add(unClickCount);
+            unpackSizeList.add(sizeGroupList.get(i));
+            for (int j = 0; j < colorList.size(); j++) {
+
+                unpackSizeList.add(qtyList.get(i));
+            }
+        }*/
+
+        Set<String> keySet = sizeQtyHashMap.keySet();
+        for(String size1 : keySet) {
+            unpackSizeList.add(size1);
+            List<String> list = sizeQtyHashMap.get(size1);
+            int colorListSize = colorList.size();
+            int dataset = 0;
+            String color = "";
+            if (list.size() < colorListSize) {
+                dataset = 1;
+            }
+            for (int j = 0; j < list.size(); j++) {
+                String scolor = list.get(j);
+                String scolArr[] = scolor.split("\\^");
+                color = scolArr[1];
+                unpackSizeList.add(list.get(j));
+            }
+            if (dataset == 1) {
+                int a = colorListSize - list.size();
+                for (int b = 0; b < a; b++) {
+                    unpackSizeList.add("0^" + color);
+                }
+            }
+        }
+        addToCardAfterConversion(colorList);
+    }
+
+    private void addToCardAfterConversion(List<String> colourList){
+        int counter = 0, isDataInserted = 0;
+        HashMap<String, List<String>> output = new HashMap<>();
+        for (int i = 0; i < unpackSizeList.size(); i++) {
+            int getColour = -1;
+            List<String> list = new ArrayList<>();
+            for (int j = 0; j <= colourList.size(); j++) {
+                if (j == 0) {
+                    output.put(unpackSizeList.get(counter), list);
+                } else {
+                    getColour++;
+                    String colour = colourList.get(getColour);
+                    /*String qty = unpackSizeList.get(counter);
+                    if (qty.equals("")) {
+                        qty = "0";
+                    }
+                    list.add(qty + "^" + colour);*/
+                    String qtyCol = unpackSizeList.get(counter);
+                    list.add(qtyCol);
+                }
+                counter++;
+            }
+            i = counter;
+        }
+
+        if (!output.isEmpty()) {
+            String rate = tv_wsp.getText().toString();
+            String mrp = tv_mrp.getText().toString();
+            float floatRate = Float.parseFloat(rate);
+
+            String gstgroupName = tv_gstper.getText().toString();
+            float gstPer = 0, cgstPer = 0, sgstPer = 0, cessPer = 0, cgstShare = 0, sgstShare = 0;
+            float amount = 0, amountAfterDisc = 0, _discAmnt = 0, gstAmt = 0, cgstAmt = 0, sgstAmt = 0, cessAmt = 0, igstAmt = 0, totalAmt;
+            String gstStatus = "";
+            Cursor res = db.getGSTDetails(gstgroupName);
+            if (res.moveToFirst()) {
+                gstStatus = res.getString(res.getColumnIndex(DBHandler.GST_Status));
+                gstPer = res.getFloat(res.getColumnIndex(DBHandler.GST_GSTPer));
+                cgstPer = res.getFloat(res.getColumnIndex(DBHandler.GST_CGSTPer));
+                sgstPer = res.getFloat(res.getColumnIndex(DBHandler.GST_SGSTPer));
+                cessPer = res.getFloat(res.getColumnIndex(DBHandler.GST_CESSPer));
+                cgstShare = res.getFloat(res.getColumnIndex(DBHandler.GST_CGSTSHARE));
+                sgstShare = res.getFloat(res.getColumnIndex(DBHandler.GST_SGSTSHARE));
+            }
+            res.close();
+
+            if (gstStatus.equalsIgnoreCase("A")) {
+
+                int hocode = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
+                String prodCol = "";
+                if (hocode == 1) {
+                    prodCol = DBHandler.PM_HKHO;
+                } else if (hocode == 12) {
+                    prodCol = DBHandler.PM_HKRD;
+                } else if (hocode == 13) {
+                    prodCol = DBHandler.PM_HANR;
+                }
+                int branchId = db.getDispatchCenter(prodCol);
+
+                Set<String> set = output.keySet();
+                for (String sizeGroup : set) {
+                    if (!sizeGroup.equals("+2") && !sizeGroup.equals("+1")) {
+                        List<String> list = output.get(sizeGroup);
+                        for (int i = 0; i < list.size(); i++) {
+                            String qtyColourStr = list.get(i);
+                            String qtyColour[] = qtyColourStr.split("\\^");
+
+                            int looseQty = Integer.parseInt(qtyColour[0]);
+                            String colourStr = qtyColour[1];
+                            String colourhashCode[] = colourStr.split("\\-");
+                            String colour = colourhashCode[0];
+                            String hashCode = colourhashCode[1];
+                            if (looseQty != 0) {
+                                if (isDataInserted == 0) {
+                                    isDataInserted = 1;
+                                }
+                                /*amount = 0;
+                                gstAmt = 0;
+                                totalAmt = 0;
+                                cgstAmt = 0;
+                                sgstAmt = 0;
+                                cessAmt = 0;*/
+
+                                amount = floatRate * looseQty;
+
+                                if (OptionsActivity.custDisc != 0) {
+                                    _discAmnt = (amount * OptionsActivity.custDisc) / 100;
+                                    _discAmnt = round(_discAmnt, 2);
+                                    amountAfterDisc = amount - _discAmnt;
+                                } else {
+                                    amountAfterDisc = amount;
+                                }
+
+                                amount = round(amount, 2);
+                                amountAfterDisc = round(amountAfterDisc, 2);
+
+                                gstAmt = (amountAfterDisc * gstPer) / 100;
+                                gstAmt = round(gstAmt, 2);
+                                totalAmt = amountAfterDisc + gstAmt;
+                                totalAmt = round(totalAmt, 2);
+
+                                cgstAmt = (amountAfterDisc * cgstPer) / 100;
+                                cgstAmt = round(cgstAmt, 2);
+                                sgstAmt = (amountAfterDisc * sgstPer) / 100;
+                                sgstAmt = round(sgstAmt, 2);
+                                cessAmt = (amountAfterDisc * cessPer) / 100;
+                                cessAmt = round(cessAmt, 2);
+
+                                CustomerOrderClass custOrder = new CustomerOrderClass();
+                                int auto = db.getCustOrderMax();
+                                custOrder.setAuto(auto);
+                                custOrder.setBranchId(branchId);
+                                custOrder.setProductid(selProdId);
+                                custOrder.setSizeGroup(sizeGroup);
+                                custOrder.setRequiredSize(sizeGroup);
+                                custOrder.setPerPackQty(1);
+                                custOrder.setColor(colour);
+                                custOrder.setHashCode(hashCode);
+                                custOrder.setRate(rate);
+                                custOrder.setMrp(mrp);
+                                custOrder.setQty(looseQty);
+                                custOrder.setLooseQty(looseQty);
+                                custOrder.setActLooseQty(looseQty);
+                                custOrder.setAmount(String.valueOf(amount));
+                                custOrder.setLoosePackTyp("Unpack");
+                                custOrder.setPendingLooseQty(looseQty);
+                                custOrder.setTotalamt(String.valueOf(totalAmt));
+                                custOrder.setNetamnt(String.valueOf(totalAmt));
+                                custOrder.setAmtAfterDisc(String.valueOf(amountAfterDisc));
+                                custOrder.setGstper(String.valueOf(gstPer));
+                                custOrder.setGstAmt(String.valueOf(gstAmt));
+                                custOrder.setCgstamt(String.valueOf(cgstAmt));
+                                custOrder.setSgstamt(String.valueOf(sgstAmt));
+                                custOrder.setIgstamt(String.valueOf(igstAmt));
+                                custOrder.setCgstper(String.valueOf(cgstPer));
+                                custOrder.setSgstper(String.valueOf(sgstPer));
+                                custOrder.setCessper(String.valueOf(cessPer));
+                                custOrder.setCessamt(String.valueOf(cessAmt));
+                                custOrder.setDiscamnt(String.valueOf(_discAmnt));
+                                custOrder.setDiscPer(String.valueOf(OptionsActivity.custDisc));
+                                custOrder.setOrderType("U");
+                                custOrder.setAvailQty(0);
+                                custOrder.setProdId(prodIdStr);
+                                db.addCustomerOrder(custOrder);
+
+                                Constant.showLog("HOCODE-" + hocode + "-ProdCol-" + prodCol + "-Auto-" + auto + "-BranchId-" + branchId +
+                                        "-SelProdId-" + selProdId + "-SizeGroup-" + sizeGroup + "-SelColor-" + colour +
+                                        "-RequiredSize-" + sizeGroup + "-PerPackQty-1" +
+                                        "-SelQty-" + looseQty + "-MRP-" + mrp + "-Amount-" + amount + "-TotalAmt-" + totalAmt + "-GSTPer-" + gstPer +
+                                        "-CGSTAMt-" + cgstAmt + "-SGSTAMt-" + sgstAmt + "-IGSTAMt-" + igstAmt + "-CGSTPer-" + cgstPer + "-SGSTPer-" + sgstPer +
+                                        "-CESSPer-" + cessPer + "-CESSAmt-" + cessAmt + "-DiscPer-" + OptionsActivity.custDisc + "-DiscAmnt-" + _discAmnt);
+                            }
+                        }
+                    }
+
+                }
+                if (isDataInserted == 1) {
+                    showToast("Added-To-Cart");
+                    //rv_stockinfo.setAdapter(null);
+                    clearFiledsPack();
+                    setProductWiseOrderList(selProdId);
+                } else {
+                    showToast("Please Enter Qty");
+                }
+
+            } else {
+                showToast("Please Refresh GSTMaster");
+            }
+        }
+        totalCalculations();
     }
 
     @Override

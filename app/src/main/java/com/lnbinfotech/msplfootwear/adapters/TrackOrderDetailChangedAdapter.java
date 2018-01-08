@@ -13,6 +13,7 @@ import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.model.TrackOrderDetailChangedClass;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 //Created by ANUP on 12/28/2017.
@@ -23,6 +24,7 @@ public class TrackOrderDetailChangedAdapter extends BaseAdapter{
     private Context context;
     private LayoutInflater inflater;
     private DecimalFormat flt_price;
+    private List<String> whiteHashCodeList = new ArrayList<>();
 
     public TrackOrderDetailChangedAdapter(List<TrackOrderDetailChangedClass> _orderList, Context _context) {
         this.orderList = _orderList;
@@ -30,6 +32,7 @@ public class TrackOrderDetailChangedAdapter extends BaseAdapter{
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         flt_price = new DecimalFormat();
         flt_price.setMaximumFractionDigits(2);
+        addToList();
     }
 
     @Override
@@ -74,7 +77,7 @@ public class TrackOrderDetailChangedAdapter extends BaseAdapter{
         holder.tv_size_group.setText(order.getSize_group());
         holder.tv_color.setText(order.getColor());
         String hashCode = order.getHashcode();
-        if (hashCode.equalsIgnoreCase("#FFFFFF")) {
+        if (whiteHashCodeList.contains(hashCode)) {
             holder.tv_color.setTextColor(Color.parseColor("#000000"));
             holder.tv_color.setBackgroundResource(R.drawable.black_border_draw);
         } else {
@@ -93,4 +96,19 @@ public class TrackOrderDetailChangedAdapter extends BaseAdapter{
                         tv_invqty, tv_canqty;
     }
 
+    private void addToList() {
+        whiteHashCodeList.clear();
+        whiteHashCodeList.add("#FFFFF0");
+        whiteHashCodeList.add("#FFFFF1");
+        whiteHashCodeList.add("#FFFFF2");
+        whiteHashCodeList.add("#FFFFF3");
+        whiteHashCodeList.add("#FFFFF4");
+        whiteHashCodeList.add("#FFFFF5");
+        whiteHashCodeList.add("#FFFFF6");
+        whiteHashCodeList.add("#FFFFF7");
+        whiteHashCodeList.add("#FFFFF8");
+        whiteHashCodeList.add("#FFFFF9");
+        whiteHashCodeList.add("#FFFFFA");
+        whiteHashCodeList.add("#FFFFFF");
+    }
 }

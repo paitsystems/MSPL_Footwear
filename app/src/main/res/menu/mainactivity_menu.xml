@@ -19,6 +19,11 @@
         android:icon="@drawable/refresh"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/clear"
+        android:title="@string/clear"
+        android:icon="@drawable/refresh"
+        app:showAsAction="never"/>
+
     <item android:id="@+id/report_error"
         android:title="@string/report_error"
         app:showAsAction="never"/>

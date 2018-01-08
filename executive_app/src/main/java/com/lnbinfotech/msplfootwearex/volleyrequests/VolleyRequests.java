@@ -18,6 +18,7 @@ import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
+import com.lnbinfotech.msplfootwearex.model.CheckAvailStockClass;
 import com.lnbinfotech.msplfootwearex.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwearex.model.LedgerReportClass;
@@ -830,6 +831,34 @@ public class VolleyRequests {
 
     private void writeLog(String _data){
         new WriteLog().writeLog(context,"VolleyRequest_"+_data);
+    }
+
+    public void getAvailStock(String url, final ServerCallbackList callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        //response = response.replace("\\", "");
+                        //response = response.replace("''", "");
+                        //response = response.substring(1, response.length() - 1);
+                        List<CheckAvailStockClass> list = new ParseJSON(response, context).parseAvailQty();
+                        if (list.size()!=0) {
+                            callback.onSuccess(list);
+                        } else {
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("Error");
+                        Constant.showLog(error.getMessage());
+                        writeLog("getAvailStock_" + error.getMessage());
+                    }
+                });
+        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
 }

@@ -1,5 +1,6 @@
 package com.lnbinfotech.msplfootwear;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -22,11 +23,19 @@ import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
+import com.lnbinfotech.msplfootwear.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwear.model.CustomerOrderClass;
 import com.lnbinfotech.msplfootwear.post.Post;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -111,6 +120,12 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //constant = new Constant(CheckoutCustOrderActivity.this);
+    }
+
     private void init() {
         constant = new Constant(CheckoutCustOrderActivity.this);
         constant1 = new Constant(getApplicationContext());
@@ -137,7 +152,8 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                 String hashcode = res.getString(res.getColumnIndex(DBHandler.CO_HashCode));
                 String rate = res.getString(res.getColumnIndex(DBHandler.CO_MRP));
                 String looseqty = res.getString(res.getColumnIndex(DBHandler.CO_LooseQty));
-                String str = branchId+"^"+prodId+"^"+size+"^"+color+"^"+hashcode+"^"+rate+"^"+looseqty+",";
+                String otype = res.getString(res.getColumnIndex(DBHandler.CO_OrderType));
+                String str = branchId+"^"+prodId+"^"+size+"^"+color+"^"+hashcode+"^"+rate+"^"+looseqty+"^"+otype+",";
                 data = data + str;
             }while (res.moveToNext());
         }
@@ -145,7 +161,10 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
         if(!data.equals("")){
             data = data.substring(0,data.length()-1);
         }
-        showCheckoutOrderDetails(data);
+        Constant.showLog(data);
+        //Constant.showLog(data);
+        //showCheckoutOrderDetails(data);
+        new showCheckoutOrderDetailsClass(0).execute(data);
     }
 
     private void showCheckoutOrderDetails(String data) {
@@ -189,7 +208,84 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
         }
     }
 
-    private void setData(){
+    private class showCheckoutOrderDetailsClass extends AsyncTask<String, Void, String>{
+        private int branchId = 0;
+        private ProgressDialog pd;
+
+        public showCheckoutOrderDetailsClass(int _branchId) {
+            this.branchId = _branchId;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(CheckoutCustOrderActivity.this);
+            pd.setMessage("Please Wait...");
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+        @Override
+        protected String doInBackground(String... url) {
+            String value = "";
+            HttpPost request = new HttpPost(Constant.ipaddress + "/json/checkStock");
+            request.setHeader("Accept", "application/json");
+            request.setHeader("Content-type", "application/json");
+            try {
+                JSONStringer vehicle = new JSONStringer().object().key("rData")
+                        .object().key("details").value(url[0]).endObject().endObject();
+
+                StringEntity entity = new StringEntity(vehicle.toString());
+                request.setEntity(entity);
+
+                // Send request to WCF service
+                DefaultHttpClient httpClient = new DefaultHttpClient();
+                HttpResponse response = httpClient.execute(request);
+                Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
+                value = new BasicResponseHandler().handleResponse(response);
+                //return Post.POST(url[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                writeLog("showCheckoutOrderDetailsClass_result_" + e.getMessage());
+            }
+            return value;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Constant.showLog(result);
+            pd.dismiss();
+            List<CheckoutCustOrderClass> list = new ArrayList<>();
+            try{
+                JSONArray jsonArray = new JSONArray(new JSONObject(result).get("CheckStockFinalResult").toString());
+                if (jsonArray.length() >= 1) {
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        CheckoutCustOrderClass checkout = new CheckoutCustOrderClass();
+                        checkout.setBranchId(jsonArray.getJSONObject(i).getString("Branch_id"));
+                        checkout.setProductId(jsonArray.getJSONObject(i).getString("Product_id"));
+                        checkout.setColor(jsonArray.getJSONObject(i).getString("Color"));
+                        checkout.setSizeGroup(jsonArray.getJSONObject(i).getString("SizeGroup"));
+                        checkout.setAvailableQty(jsonArray.getJSONObject(i).getString("AvailQty"));
+                        checkout.setRate(jsonArray.getJSONObject(i).getString("Rate"));
+                        checkout.setHashCode(jsonArray.getJSONObject(i).getString("HashCode"));
+                        checkout.setEnterQty(jsonArray.getJSONObject(i).getString("EnterQty"));
+                        list.add(checkout);
+                    }
+                    db.updateAvailQty(list);
+                    setData();
+                }else{
+                    showDia(2);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                writeLog("showCheckoutOrderDetailsClass_" + e.getMessage());
+                showDia(2);
+            }
+        }
+    }
+
+    private void setData() {
         int totLooseQty = 0, totAvailQty = 0;
         list.clear();
         Cursor cursor = new DBHandler(getApplicationContext()).getViewOrderData(1,"");
@@ -317,9 +413,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                         totNetAmt = custOrderRes.getFloat(custOrderRes.getColumnIndex(DBHandler.CO_NetAmt));
                         totAmtAfterDisc = custOrderRes.getFloat(custOrderRes.getColumnIndex(DBHandler.CO_AmtAfterDisc));*/
 
-                        data = data + prodId + "^" + sizeGroup + "^" + requiredSize + "^" + perPackQty + "^" + color + "^" + rate + "^" + mrp + "^" + qty
-                                + "^" + looseQty + "^" + actLooseQty + "^" + amount + "^" + loosePackTyp + "^" + gstAmt + "^" + totalAmt
-                                + "^" + pendingLooseQty + "^" + gstPer + "^" + CGSTAmt + "^" + SGSTAmt + "^" + IGSTAmt + "^" + CGSTPer + "^" + SGSTPer
+                        data = data + prodId + "^" + sizeGroup + "^" + requiredSize + "^" + perPackQty + "^" + color + "^" + rate + "^" + mrp + "^" + qty + "^" + looseQty + "^" + actLooseQty + "^" + amount + "^" + loosePackTyp + "^" + gstAmt + "^" + totalAmt + "^" + pendingLooseQty + "^" + gstPer + "^" + CGSTAmt + "^" + SGSTAmt + "^" + IGSTAmt + "^" + CGSTPer + "^" + SGSTPer
                                 + "^" + CessPer + "^" + CESSAmt + ",";
 
                         Constant.showLog(data);
@@ -333,16 +427,18 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                     data = data.substring(0, data.length() - 1);
                     remark = URLEncoder.encode(remark, "UTF-8");
                     groupNm = URLEncoder.encode(groupNm, "UTF-8");
-                    data = URLEncoder.encode(data, "UTF-8");
+                    //data = URLEncoder.encode(data, "UTF-8");
 
-                    String url = Constant.ipaddress + "/SaveCustOrderMast?branchid=" + hoCode + "&CustId=" + custId + "&SalesExe=" + saleExe + "&TotalQty=" + totQty
+                    /*String url = Constant.ipaddress + "/SaveCustOrderMast?branchid=" + hoCode + "&CustId=" + custId + "&SalesExe=" + saleExe + "&TotalQty=" + totQty
                             + "&LooseQty=" + totLooseQty + "&Amount=" + totAmt + "&Vat=" + totGSTAmt + "&Total=" + totTotalAmt + "&OtherAddLess=0&NetAmt=" + totNetAmt
-                            + "&createby=" + custId + "&Remark=" + remark + "&Transporter=1&ItemVat=0&GroupNm=" + groupNm + "&discPer=" + custDiscPer
-                            + "&discAmt=" + totDisc + "&AmtAfterDisc=" + totAmtAfterDisc + "&DispatchCmp=" + dispatchCmp + "&data=" + data;
+                            + "&createby=" + saleExe + "&Remark=" + remark + "&Transporter=1&ItemVat=0&GroupNm=" + groupNm + "&discPer=" + custDiscPer
+                            + "&discAmt=" + totDisc + "&AmtAfterDisc=" + totAmtAfterDisc + "&DispatchCmp=" + dispatchCmp + "&data=" + data;*/
 
+                    String url = hoCode + "|" + custId + "|" + saleExe + "|" + totQty + "|" + totLooseQty + "|" + totAmt + "|" + totGSTAmt + "|" + totTotalAmt + "|0|" + totNetAmt + "|" + saleExe + "|" + remark + "|1|0|" + groupNm + "|" + custDiscPer + "|" + totDisc + "|" + totAmtAfterDisc + "|" + dispatchCmp + "|" + data;
                     Constant.showLog(url);
                     //urlList.add(url);
-                    constant.showPD();
+                    //constant.showPD();
+                    writeLog("getSaveOrderData_"+url);
                     new saveOrderAsyncTask(branchId).execute(url);
                 }else{
                     toast.setText("Something Went Wrong");
@@ -375,15 +471,59 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
     }
 
     private class saveOrderAsyncTask extends AsyncTask<String,Void,String>{
-        int branchId = 0;
+        private int branchId = 0;
+        private ProgressDialog pd;
 
         public saveOrderAsyncTask(int _branchId){
             this.branchId = _branchId;
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(CheckoutCustOrderActivity.this);
+            pd.setMessage("Please Wait...");
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+        @Override
         protected String doInBackground(String... url) {
-            return Post.POST(url[0]);
+            String value = "";
+            HttpPost request = new HttpPost(Constant.ipaddress + "/json/saveOrder");
+            request.setHeader("Accept", "application/json");
+            request.setHeader("Content-type", "application/json");
+            try {
+                /*JSONStringer vehicle = new JSONStringer()
+                    .object()
+                    .key("rData")
+                    .object()
+                    .key("details").value("bar|bob|b@h.us|why")
+                    .endObject()
+                    .endObject();*/
+
+                JSONStringer vehicle = new JSONStringer()
+                        .object()
+                        .key("rData")
+                        .object()
+                        .key("details").value(url[0])
+                        .endObject()
+                        .endObject();
+
+                StringEntity entity = new StringEntity(vehicle.toString());
+                request.setEntity(entity);
+
+                // Send request to WCF service
+                DefaultHttpClient httpClient = new DefaultHttpClient();
+                HttpResponse response = httpClient.execute(request);
+                Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
+                value = new BasicResponseHandler().handleResponse(response);
+                //return Post.POST(url[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                writeLog("saveOrderAsyncTask_result_" + e.getMessage());
+            }
+            return value;
         }
 
         @Override
@@ -391,10 +531,11 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
             super.onPostExecute(result);
             try {
                 Constant.showLog(result);
-                String str = new JSONObject(result).getString("SaveCustOrderMasterResult");
+                String str = new JSONObject(result).getString("SaveCustOrderResult");
                 str = str.replace("\"","");
                 Constant.showLog(str);
-                constant.showPD();
+                pd.dismiss();
+                writeLog("saveOrderAsyncTask_result_"+str+"_"+result);
                 String[] retAutoBranchId = str.split("\\-");
                 if(retAutoBranchId.length>1) {
                     if(!retAutoBranchId[0].equals("0")) {
@@ -417,10 +558,10 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                 //counter++;
                 //saveCustOrder();
             }catch (Exception e){
+                writeLog("saveOrderAsyncTask_"+e.getMessage());
                 e.printStackTrace();
                 showDia(4);
-                writeLog("saveOrderAsyncTask_"+e.getMessage());
-                constant.showPD();
+                pd.dismiss();
             }
         }
     }

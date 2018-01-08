@@ -84,11 +84,13 @@
             android:padding="@dimen/mobpadding2">
 
             <TextView
-                style="@style/textViewMob"
+                style="@style/textViewMobAddToCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="Mark Up" />
+                android:background="@drawable/line_left_top_right_bottom_draw"
+                android:text="Mark Up"
+                android:gravity="center" />
 
             <TextView
                 android:id="@+id/tv_marginup"
@@ -96,15 +98,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
+                android:background="@drawable/line_top_right_bottom_white_draw"
                 android:gravity="center"
                 android:text="0" />
 
             <TextView
-                style="@style/textViewMob"
+                style="@style/textViewMobAddToCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="Mark Down" />
+                android:background="@drawable/line_top_right_bottom_draw"
+                android:text="Mark Down"
+                android:gravity="center" />
 
             <TextView
                 android:id="@+id/tv_margindown"
@@ -112,6 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
+                android:background="@drawable/line_top_right_bottom_white_draw"
                 android:gravity="center"
                 android:text="0" />
         </LinearLayout>
@@ -385,7 +391,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.6"
-                android:text="Enter Number Of Cartoon"
+                android:text="No Of Cartoon"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
@@ -474,7 +480,7 @@
                 android:background="@drawable/btn_draw_maroon_curve"
                 android:gravity="center"
                 android:singleLine="true"
-                android:text="New Item" />
+                android:text="New Category" />
 
             <!--<android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_add_to_card"
@@ -502,6 +508,33 @@
 
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.9"
+                android:text="Qty" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_stockinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:divider="@null"
+                android:layoutDirection="rtl"
+                android:orientation="horizontal"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                app:reverseLayout="true" />
+
+        </LinearLayout>
+
 
         <ListView
             android:id="@+id/listView"

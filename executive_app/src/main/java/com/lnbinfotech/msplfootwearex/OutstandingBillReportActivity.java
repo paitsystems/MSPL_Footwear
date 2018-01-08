@@ -42,7 +42,7 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
 
         custId = Integer.parseInt(getIntent().getExtras().getString("cust_id"));
         custName = getIntent().getExtras().getString("child_selected");
-        tv_custname.setText("CustomerName-"+custName);
+        tv_custname.setText(custName);
         showOutstandingReport();
 
         if (getSupportActionBar() != null) {

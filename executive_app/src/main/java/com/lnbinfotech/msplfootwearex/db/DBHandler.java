@@ -22,6 +22,7 @@ import com.lnbinfotech.msplfootwearex.model.EmployeeMasterClass;
 import com.lnbinfotech.msplfootwearex.model.GSTMasterClass;
 import com.lnbinfotech.msplfootwearex.model.HOMasterClass;
 import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
+import com.lnbinfotech.msplfootwearex.model.SizeDesignMastDetClass;
 import com.lnbinfotech.msplfootwearex.model.SizeNDesignClass;
 import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
 import com.lnbinfotech.msplfootwearex.model.UserClass;
@@ -267,60 +268,95 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String GST_CGSTSHARE = "CGSTSHARE";
     public static final String GST_SGSTSHARE = "SGSTSHARE";
 
+    public static final String Table_TrackCustomerOrder = "TrackCustomerOrder";
+    public static final String TCO_Auto = "Auto";
+    public static final String TCO_Productid = "Productid";
+    public static final String TCO_SizeGroup = "SizeGroup";
+    public static final String TCO_Color = "Color";
+    public static final String TCO_HashCode = "HashCode";
+    public static final String TCO_Rate = "Rate";
+    public static final String TCO_MRP = "MRP";
+    public static final String TCO_OrderQty = "OrderQty";
+    public static final String TCO_LoosePackTyp = "LoosePackTyp";
+    public static final String TCO_CreditApp = "CreditApp";
+    public static final String TCO_AllotedToPck = "AllotedToPck";
+    public static final String TCO_TaxInvMade = "TaxInvMade";
+    public static final String TCO_InvNo = "InvNo";
+    public static final String TCO_InvDate = "InvDate";
+    public static final String TCO_InvAmt = "InvAmnt";
+    public static final String TCO_Transporter = "Transporter";
+    public static final String TCO_TransporterNo = "TransporterNo";
+    public static final String TCO_Prodid = "ProdId";
+    public static final String TCO_InvQty = "InvQty";
+    public static final String TCO_CancelQty = "CancelQty";
+    public static final String TCO_Status = "Status";
+
+    public static final String Table_SizeDesignMastDet = "SizeDesignMastDet";
+    public static final String SDMD_Auto = "Auto";
+    public static final String SDMD_ProductId = "Productid";
+    public static final String SDMD_DesignNo = "DesignNo";
+    public static final String SDMD_SizeGroupFrom = "SizeGroupFrom";
+    public static final String SDMD_SizeGroupTo = "SizeGroupTo";
+    public static final String SDMD_Total = "Total";
+    public static final String SDMD_SizeGroup = "SizeGroup";
+    public static final String SDMD_Colour = "Colour";
+    public static final String SDMD_Size = "Size";
+    public static final String SDMD_Qty = "Qty";
+
     public DBHandler(Context context) {
         super(context, Database_Name, null, Database_Version);
     }
 
-    String create_cust_master = "create table if not exists " + Table_Customermaster + "(" +
+    private String create_cust_master = "create table if not exists " + Table_Customermaster + "(" +
             CM_RetailCustID + " int," + CM_Name + " text," + CM_Address + " text," + CM_MobileNo + " text," + CM_Status + " text," +
             CM_BranchId + " int," + CM_Email + " text," + CM_District + " text," + CM_Taluka + " text," + CM_CityId + " int," +
             CM_AreaId + " int," + CM_PANNo + " text," + CM_PartyName + " text," + CM_ImagePath + " text," + CM_HOCode + " int," + CM_GSTNo + " text," + CM_IMEINo + " text," +
             CM_isRegistered + " text," + CM_AadhaarNo + " text," + CM_PIN + " int," + CM_Discount + " float)";
 
-    String create_prod_master = "create table if not exists " + Table_ProductMaster + "(" +
+    private String create_prod_master = "create table if not exists " + Table_ProductMaster + "(" +
             PM_ProductID + " int," + PM_Cat1 + " text," + PM_Cat2 + " text," + PM_Cat3 + " text," + PM_Cat4 + " text," + PM_Cat5 + " text," + PM_Cat6 + " text," +
             PM_Finalprod + " text," + PM_UOM + " text," + PM_SRate + " text," + PM_PRate + " text," + PM_BranchId + " int," + PM_Status + " text," + PM_NoOfPieces + " int," +
             PM_CompanyId + " int," + PM_MRPRate + " text," + PM_ProdId + " text," + PM_Cat7 + " text," + PM_Cat8 + " text," + PM_MinStkQty + " int," +
-            PM_MaxStkQty + " int," + PM_GSTGroup + " text," + PM_HSNCode + " text," + PM_Cat9 + " text," + PM_Cat10 + " text," + PM_HKHO + " int," + PM_HKRD + " int," + PM_HANR + " int," +
-            PM_MarkUp + " text," + PM_MarkDown + " text)";
+            PM_MaxStkQty + " int," + PM_GSTGroup + " text," + PM_HSNCode + " text," + PM_Cat9 + " text," + PM_Cat10 + " text," + PM_HKHO + " int," + PM_HKRD + " int," + PM_HANR + " int,"+
+            PM_MarkUp+" text,"+ PM_MarkDown+" text)";
 
-    String create_si_master = "create table if not exists " + Table_StockInfo + "(" +
+    private String create_si_master = "create table if not exists " + Table_StockInfo + "(" +
             SI_Company + " text," + SI_ProdId + " text," + SI_Color + " text," + SI_Size + " text," + SI_Rate + " text," +
             SI_LQty + " int," + SI_PQty + " int," + SI_PackUnpack + " text," + SI_PerPackQty + " int," + SI_SaleRate + " text," +
             SI_ProductID + " int)";
 
-    String create_emp_master = "create table if not exists " + Table_Employee + "(" +
+    private String create_emp_master = "create table if not exists " + Table_Employee + "(" +
             EMP_EmpId + " int," + EMP_Name + " text," + EMP_MobNo + " text," + EMP_Adress + " text," + EMP_DesignId + " int," + EMP_BranchId + " int," +
             EMP_Status + " text," + EMP_DesignName + " text," + EMP_CompName + " text," + EMP_CompInit + " text," + EMP_HoCode + " int," + EMP_PIN + " text)";
 
-    String create_ho_master = "create table if not exists " + Table_HOMaster + "(" +
+    private String create_ho_master = "create table if not exists " + Table_HOMaster + "(" +
             HO_Auto + " int," + HO_Id + " int," + HO_Name + " text," + HO_City + " int," + HO_State + " int," + HO_ini + " text)";
 
-    String create_area_master = "create table if not exists " + Table_AreaMaster + "(" +
+    private String create_area_master = "create table if not exists " + Table_AreaMaster + "(" +
             Area_Auto + " int," + Area_Id + " int," + Area_Area + " text," + Area_Cityid + " int)";
 
-    String create_city_master = "create table if not exists " + Table_CityMaster + "(" +
+    private String create_city_master = "create table if not exists " + Table_CityMaster + "(" +
             City_Auto + " int," + City_Id + " int," + City_City + " text," + City_Stateid + " int)";
 
-    String create_company_master = "create table if not exists " + Table_CompanyMaster + "(" + Company_Id + " int," + Company_Name + " text,"
+    private String create_company_master = "create table if not exists " + Table_CompanyMaster + "(" + Company_Id + " int," + Company_Name + " text,"
             + Company_Initial + " text," + Company_Pan + " text," + Company_DisplayCmp + " text," + Company_GSTNo + " text," + Company_HOCode + " text)";
 
-    String create_bank_master = "create table if not exists " + Table_BankMaster + "(" + Bank_Id + " int," + Bank_BranchId + " int," + Bank_Name + " text,"
+    private String create_bank_master = "create table if not exists " + Table_BankMaster + "(" + Bank_Id + " int," + Bank_BranchId + " int," + Bank_Name + " text,"
             + Bank_AccountNo + " text," + Bank_Status + " text," + Bank_IFSC + " text," + Bank_MICR + " text," + Bank_CustType + " text," + Bank_HoCode + " text)";
 
-    String create_bank_branch_master = "create table if not exists " + Table_BankBranchMaster + "(" + Branch_AutoId + " int," + Branch_Id + " int,"
+    private String create_bank_branch_master = "create table if not exists " + Table_BankBranchMaster + "(" + Branch_AutoId + " int," + Branch_Id + " int,"
             + Branch_Branch + " text," + Branch_CustId + " int," + Branch_AccountNo + " text," + Branch_CBankId + " int," + Branch_CBranch + " text)";
 
-    String create_document_master = "create table if not exists " + Table_DocumentMaster + "(" + Document_Id + " int,"
+    private String create_document_master = "create table if not exists " + Table_DocumentMaster + "(" + Document_Id + " int,"
             + Document_DocName + " text," + Document_ForWhom + " text," + Document_Compulsary + " text)";
 
-    String create_user_master = "create table if not exists " + Table_Usermaster + "(" +
+    private String create_user_master = "create table if not exists " + Table_Usermaster + "(" +
             UM_RetailCustID + " int," + UM_Name + " text," + UM_Address + " text," + UM_MobileNo + " text," + UM_Status + " text," +
             UM_BranchId + " int," + UM_Email + " text," + UM_District + " text," + UM_Taluka + " text," + UM_CityId + " int," +
             UM_AreaId + " int," + UM_PANNo + " text," + UM_PartyName + " text," + UM_ImagePath + " text," + UM_HOCode + " int," + UM_GSTNo + " text," + UM_IMEINo + " text," +
             UM_isRegistered + " text," + UM_AadhaarNo + " text," + UM_PIN + " int)";
 
-    String create_arsd_master = "create table if not exists " + Table_AllRequiredSizesDesigns + "(" +
+    private String create_arsd_master = "create table if not exists " + Table_AllRequiredSizesDesigns + "(" +
             ARSD_Productid + " int," + ARSD_Cat1 + " text," + ARSD_Cat2 + " text," + ARSD_Cat3 + " text," +
             ARSD_Cat4 + " text," + ARSD_Cat5 + " text," + ARSD_Cat6 + " text," + ARSD_Final_prod + " text," +
             ARSD_Uom + " text," + ARSD_Vat + " text," + ARSD_DesignNo + " text," + ARSD_Colour + " text," +
@@ -328,17 +364,24 @@ public class DBHandler extends SQLiteOpenHelper {
             ARSD_ActualInw + " text," + ARSD_GSTGroup + " text," + ARSD_InOutType + " text," + ARSD_Total + " int," +
             ARSD_HashCode + " text," + ARSD_ImageName + " text)";
 
-    String create_custorder_table = "create table if not exists " + Table_CustomerOrder + "(" + CO_Auto + " int," +
+    private String create_custorder_table = "create table if not exists " + Table_CustomerOrder + "(" + CO_Auto + " int," +
             CO_BranchId + " int," + CO_Productid + " int," + CO_SizeGroup + " text," + CO_RequiredSize + " text," +
             CO_PerPackQty + " int," + CO_Color + " text," + CO_HashCode + " text," + CO_Rate + " text," + CO_MRP + " text," + CO_Qty + " int," +
             CO_LooseQty + " int," + CO_ActLooseQty + " int," + CO_Amount + " text," + CO_LoosePackTyp + " text," + CO_PendingLooseQty + " int," + CO_TotalAmt + " text," +
             CO_NetAmt + " text," + CO_AmtAfterDisc + " text," + CO_GSTPer + " text," + CO_GSTAmt + " text," + CO_CGSTAmt + " text," +
-            CO_SGSTAmt + " text," + CO_IGSTAmt + " text," + CO_CGSTPer + " text," + CO_SGSTPer + " text," + CO_CESSPer + " text," +
-            CO_CESSAmt + " text," + CO_DiscPer + " text," + CO_DiscAmt + " text," + CO_OrderType + " text," + CO_AvailQty + " int," + CO_Prodid + " text)";
+            CO_SGSTAmt + " text," + CO_IGSTAmt + " text," + CO_CGSTPer + " text," +CO_SGSTPer + " text," + CO_CESSPer + " text," +
+            CO_CESSAmt + " text," + CO_DiscPer + " text," + CO_DiscAmt + " text," + CO_OrderType + " text," + CO_AvailQty + " int,"+CO_Prodid+" text)";
 
-    String create_gstmaster_table = "create table if not exists " + Table_GSTMASTER + "(" + GST_Auto + " int," +
+    private String create_gstmaster_table = "create table if not exists " + Table_GSTMASTER + "(" + GST_Auto + " int," +
             GST_GroupNm + " text," + GST_Status + " text," + GST_GSTPer + " text," + GST_CGSTPer + " text," +
             GST_SGSTPer + " text," + GST_CESSPer + " text," + GST_CGSTSHARE + " text," + GST_SGSTSHARE + " text)";
+
+    private String create_trackcustomerorder_table = "create table if not exists "+Table_TrackCustomerOrder+"("+TCO_Auto+" int,"+TCO_Productid+" int,"+TCO_SizeGroup+" text,"+
+            TCO_Color+" text,"+TCO_HashCode+" text,"+TCO_Rate+" text,"+TCO_MRP+" text,"+TCO_OrderQty+" int,"+TCO_LoosePackTyp+" text,"+TCO_CreditApp+" text,"+TCO_AllotedToPck+" text,"+TCO_TaxInvMade+" text,"+
+            TCO_InvNo+" text,"+TCO_InvDate+" text,"+TCO_InvAmt+" text,"+TCO_Transporter+" text,"+TCO_TransporterNo+" text,"+TCO_Prodid+" text,"+TCO_InvQty+" int,"+TCO_CancelQty+" int,"+TCO_Status+" text)";
+
+    private String create_sizedesignmastdet_table = "create table if not exists "+Table_SizeDesignMastDet+"("+SDMD_Auto+" int,"+SDMD_ProductId+" int,"+SDMD_DesignNo+" text,"+SDMD_SizeGroupFrom+" int,"
+            +SDMD_SizeGroupTo+" int,"+SDMD_Total+" int,"+SDMD_SizeGroup+" text,"+SDMD_Colour+" text,"+SDMD_Size+" int,"+SDMD_Qty+" int)";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -372,10 +415,18 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(create_custorder_table);
         Constant.showLog(create_gstmaster_table);
         db.execSQL(create_gstmaster_table);
+        Constant.showLog(create_trackcustomerorder_table);
+        db.execSQL(create_trackcustomerorder_table);
+        Constant.showLog(create_sizedesignmastdet_table);
+        db.execSQL(create_sizedesignmastdet_table);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < newVersion) {
+            db.execSQL(create_trackcustomerorder_table);
+            db.execSQL(create_sizedesignmastdet_table);
+        }
     }
 
     public void addCustomerDetail(ArrayList<CustomerDetailClass> custList) {
@@ -396,13 +447,13 @@ public class DBHandler extends SQLiteOpenHelper {
             cv.put(CM_ImagePath, cust.getImagePath());
             cv.put(CM_PIN, "-1");
             cv.put(CM_Discount, cust.getDiscount());
-            cv.put(CM_BranchId, cust.getBranchId());
-            cv.put(CM_District, cust.getDistrict());
-            cv.put(CM_Taluka, cust.getTaluka());
-            cv.put(CM_CityId, cust.getCityId());
-            cv.put(CM_AreaId, cust.getAreaId());
-            cv.put(CM_HOCode, cust.getHOCode());
-            cv.put(CM_AadhaarNo, cust.getAadharNo());
+            cv.put(CM_BranchId,cust.getBranchId());
+            cv.put(CM_District,cust.getDistrict());
+            cv.put(CM_Taluka,cust.getTaluka());
+            cv.put(CM_CityId,cust.getCityId());
+            cv.put(CM_AreaId,cust.getAreaId());
+            cv.put(CM_HOCode,cust.getHOCode());
+            cv.put(CM_AadhaarNo,cust.getAadharNo());
             db.insert(Table_Customermaster, null, cv);
             Constant.showLog("" + count++);
         }
@@ -546,6 +597,28 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void addSizeDesignMastDet(List<SizeDesignMastDetClass> sizeNDesignList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        ContentValues cv = new ContentValues();
+        for (SizeDesignMastDetClass sizeNDesignClass : sizeNDesignList) {
+            cv.put(SDMD_Auto,sizeNDesignClass.getAuto());
+            cv.put(SDMD_ProductId,sizeNDesignClass.getProductid());
+            cv.put(SDMD_DesignNo,sizeNDesignClass.getDesignNo());
+            cv.put(SDMD_SizeGroupFrom,sizeNDesignClass.getSizeGroupFrom());
+            cv.put(SDMD_SizeGroupTo,sizeNDesignClass.getSizeGroupTo());
+            cv.put(SDMD_Total,sizeNDesignClass.getTotal());
+            cv.put(SDMD_SizeGroup,sizeNDesignClass.getSizeGroup());
+            cv.put(SDMD_Colour,sizeNDesignClass.getColour());
+            cv.put(SDMD_Size,sizeNDesignClass.getSize());
+            cv.put(SDMD_Qty,sizeNDesignClass.getQty());
+            db.insert(Table_SizeDesignMastDet, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+    }
+
     public void addProductMaster(List<ProductMasterClass> prodList) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -579,8 +652,8 @@ public class DBHandler extends SQLiteOpenHelper {
             cv.put(PM_HKHO, prodClass.getHKHO());
             cv.put(PM_HKRD, prodClass.getHKRD());
             cv.put(PM_HANR, prodClass.getHANR());
-            cv.put(PM_MarkUp, prodClass.getMarkUp());
-            cv.put(PM_MarkDown, prodClass.getMarkDown());
+            cv.put(PM_MarkUp,prodClass.getMarkUp());
+            cv.put(PM_MarkDown,prodClass.getMarkDown());
             db.insert(Table_ProductMaster, null, cv);
         }
         db.setTransactionSuccessful();
@@ -889,10 +962,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public Cursor getFinalProduct(String cat2, String cat9) {
         String str = "";
-        if (cat2.equals("0") && cat9.equals("0")) {
-            str = "select distinct " + PM_Finalprod + "," + PM_ProductID + "," + PM_Cat2 + "," + PM_Cat9 + " from " + Table_ProductMaster + " where " + PM_Cat9 + " not like 'Item' order by " + PM_Finalprod;
-        } else {
-            str = "select distinct " + PM_Finalprod + "," + PM_ProductID + "," + PM_Cat2 + "," + PM_Cat9 + " from " + Table_ProductMaster + " where " + PM_Cat2 + "='" + cat2 + "' and " + PM_Cat9 + "='" + cat9 + "' order by " + PM_Finalprod;
+        if(cat2.equals("0")&&cat9.equals("0")){
+            str = "select distinct " + PM_Finalprod + "," + PM_ProductID+ "," + PM_Cat2+ "," + PM_Cat9 + " from " + Table_ProductMaster + " where " + PM_Cat9 + " not like 'Item' order by "+PM_Finalprod;
+        }else {
+            str = "select distinct " + PM_Finalprod + "," + PM_ProductID+ "," + PM_Cat2+ "," + PM_Cat9 + " from " + Table_ProductMaster + " where " + PM_Cat2 + "='" + cat2 + "' and " + PM_Cat9 + "='" + cat9 + "' order by "+PM_Finalprod;
         }
         return getWritableDatabase().rawQuery(str, null);
     }
@@ -1012,6 +1085,17 @@ public class DBHandler extends SQLiteOpenHelper {
         return a;
     }
 
+    public int getMaxAuto() {
+        int a = 0;
+        String str = "select max(" + SDMD_Auto + ") from " + Table_SizeDesignMastDet;
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if (res.moveToFirst()) {
+            a = res.getInt(0);
+        }
+        res.close();
+        return a;
+    }
+
     public int getDispatchCenter(String colName) {
         String str = "select " + colName + " from " + Table_ProductMaster + " where " + PM_ProductID + "=" + AddToCartActivity.selProdId;
         Constant.showLog("Dispatch Center :- " + str);
@@ -1025,13 +1109,13 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public Cursor getDispatchCenter(int hocode) {
-        String str = "select " + Company_Id + "," + Company_Initial + " from " + Table_CompanyMaster + " where " + Company_HOCode + "=" + hocode + " and " + Company_Name + " not like '%damage%' order By " + Company_Name;
+        String str = "select " + Company_Id+","+Company_Initial + " from " + Table_CompanyMaster + " where " + Company_HOCode + "=" + hocode +" and "+Company_Name+" not like '%damage%' order By "+Company_Name;
         Constant.showLog("getDispatch Center :- " + str);
         return getWritableDatabase().rawQuery(str, null);
     }
 
     public Cursor getDispatchCenterWiseTotal() {
-        String str = "select " + CO_BranchId + ",Sum(" + CO_LooseQty + ") " + CO_LooseQty + " from " + Table_CustomerOrder + " group by " + CO_BranchId;
+        String str = "select "+CO_BranchId+",Sum("+CO_LooseQty+") "+CO_LooseQty+" from "+Table_CustomerOrder+" group by "+CO_BranchId;
         Constant.showLog("DispatchwiseTotal Center :- " + str);
         return getWritableDatabase().rawQuery(str, null);
     }
@@ -1112,10 +1196,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public Cursor getViewOrderData(int isAllBranch, String branchIds) {
         String str;
-        if (isAllBranch == 1) {
-            str = "select * from " + Table_CustomerOrder + " order by " + CO_Productid + "," + CO_SizeGroup;
-        } else {
-            str = "select * from " + Table_CustomerOrder + " where " + CO_BranchId + " in(" + branchIds + ") order by " + CO_Productid + "," + CO_SizeGroup;
+        if(isAllBranch==1) {
+            str = "select * from " + Table_CustomerOrder + " order by " + CO_Productid + ",cast(" + CO_SizeGroup+" as int)";
+        }else{
+            str = "select * from " + Table_CustomerOrder + " where "+CO_BranchId+" in("+branchIds+") order by " + CO_Productid + ",cast(" + CO_SizeGroup+" as int)";
         }
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
@@ -1142,17 +1226,17 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
-    public Cursor getCustOrderTotalsAtViewOrder(int allBranch, String branchIds) {
+    public Cursor getCustOrderTotalsAtViewOrder(int allBranch,String branchIds) {
         String str;
-        if (allBranch == 1) {
+        if(allBranch==1) {
             str = "select count(" + CO_Auto + ") as " + CO_Auto + ",sum(" + CO_LooseQty + ") as " + CO_LooseQty + ", sum(" + CO_Amount +
                     ") as " + CO_Amount + ", sum(" + CO_NetAmt + ") as " + CO_NetAmt + ", sum(" + CO_AmtAfterDisc + ") as " + CO_AmtAfterDisc + "," +
                     "SUM(" + CO_GSTAmt + ") as " + CO_GSTAmt + ", sum(" + CO_DiscAmt + ") as " + CO_DiscAmt + " from " + Table_CustomerOrder;
-        } else {
+        }else{
             str = "select count(" + CO_Auto + ") as " + CO_Auto + ",sum(" + CO_LooseQty + ") as " + CO_LooseQty + ", sum(" + CO_Amount +
                     ") as " + CO_Amount + ", sum(" + CO_NetAmt + ") as " + CO_NetAmt + ", sum(" + CO_AmtAfterDisc + ") as " + CO_AmtAfterDisc + "," +
                     "SUM(" + CO_GSTAmt + ") as " + CO_GSTAmt + ", sum(" + CO_DiscAmt + ") as " + CO_DiscAmt + " from " + Table_CustomerOrder
-                    + " where " + CO_BranchId + " in(" + branchIds + ")";
+                    + " where "+CO_BranchId+" in("+branchIds+")";
         }
         Constant.showLog("getCustOrderTotals :- " + str);
         return getWritableDatabase().rawQuery(str, null);
@@ -1201,7 +1285,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str,null);
     }*/
 
-
     public Cursor getSavedUnpackOrder() {
         String str = "select " + CO_SizeGroup + "," + CO_Qty + "," + CO_Color + "," + CO_HashCode + " from " + Table_CustomerOrder + " where " + CO_OrderType + "='U' and " + CO_Productid + "=" + AddToCartActivity.selProdId;
         return getWritableDatabase().rawQuery(str, null);
@@ -1211,10 +1294,8 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().execSQL("delete from " + Table_CustomerOrder + " where " + CO_OrderType + "='U' and " + CO_Productid + "=" + AddToCartActivity.selProdId);
     }
 
-
-
     public Cursor getDataToCheck() {
-        String str = "select " + CO_BranchId + "," + CO_Productid + "," + CO_SizeGroup + "," + CO_Color + "," + CO_HashCode + "," + CO_MRP + "," + CO_LooseQty + " from " + Table_CustomerOrder + " order by " + CO_Productid + "," + CO_SizeGroup;
+        String str = "select " + CO_BranchId + "," + CO_Productid + "," + CO_SizeGroup + "," + CO_Color + "," + CO_HashCode + "," + CO_MRP + "," + CO_LooseQty +"," + CO_OrderType + " from " + Table_CustomerOrder + " order by " + CO_Productid + "," + CO_SizeGroup;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
     }
@@ -1240,7 +1321,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return  count;
     }
 
-
     public void updateAvailQty(List<CheckoutCustOrderClass> custOrderList) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -1256,7 +1336,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-
     public Cursor getCustOrderMaster(int branchid) {
         String str = "select sum(" + CO_Qty + ") as " + CO_Qty + ", Sum(" + CO_LooseQty + ") as " + CO_LooseQty +
                 ",sum(" + CO_Amount + ") as " + CO_Amount + ",sum(" + CO_GSTAmt + ") as " + CO_GSTAmt + ",Sum(" +
@@ -1265,7 +1344,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
-
     public Cursor getProductWiseOrderList(int prodId) {
         /*String str = "select "+CO_Productid+","+CO_SizeGroup+","+CO_Color+","+CO_HashCode+","+CO_Qty
                     +","+CO_LooseQty+","+CO_OrderType+" from "+Table_CustomerOrder+" where "
@@ -1273,12 +1351,11 @@ public class DBHandler extends SQLiteOpenHelper {
 
         String str = "select " + CO_Productid + "," + CO_SizeGroup + "," + CO_Color + "," + CO_HashCode + ",sum(" + CO_Qty
                 + ")" + CO_Qty + ",sum(" + CO_LooseQty + ")" + CO_LooseQty + "," + CO_OrderType + " from " + Table_CustomerOrder + " where "
-                + CO_Productid + "=" + prodId + " group by " + CO_SizeGroup + "," + CO_Color + " order by " + CO_SizeGroup;
+                + CO_Productid + "=" + prodId + " group by " + CO_SizeGroup + "," + CO_Color + " order by cast(" + CO_SizeGroup+" as int)";
 
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
     }
-
 
     public int getCustid(String name) {
         int a = 0;
@@ -1298,6 +1375,54 @@ public class DBHandler extends SQLiteOpenHelper {
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str,null);
     }
+
+    public String getDesignNo(String sizegroup, int total) {
+        String str = "select " + ARSD_DesignNo + " from " + Table_AllRequiredSizesDesigns +
+                " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_SizeGroup +
+                " like '" + sizegroup + "' and " + ARSD_InOutType + "='O' and " + ARSD_Total + "=" + total;
+        Constant.showLog("getDesignNo :- " + str);
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        String output = "";
+        if (res.moveToFirst()) {
+            output = res.getString(0);
+        }
+        res.close();
+        return output;
+    }
+
+    public List<String> getSizeDetails(String sizegroup, String designNo, int total) {
+        String str = "select " + SDMD_Size+ ","+ SDMD_Qty + " from " + Table_SizeDesignMastDet +
+                " where " + SDMD_ProductId + "=" + AddToCartActivity.selProdId + " and " + SDMD_SizeGroup +
+                " like '" + sizegroup + "' and " + SDMD_DesignNo + "='"+designNo+"' and " + SDMD_Total + "=" + total;
+        Constant.showLog("getSizeDetails :- " + str);
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        List<String> list = new ArrayList<>();
+        if (res.moveToFirst()) {
+            do {
+                String output = res.getInt(0) + "^" + res.getInt(1);
+                list.add(output);
+            }while (res.moveToNext());
+        }
+        res.close();
+        return list;
+    }
+
+    public String getDistinctColour(String sizegroup, String hashCode) {
+        String str = "select Distinct " + ARSD_Colour + "," + ARSD_HashCode + " from " + Table_AllRequiredSizesDesigns +
+                " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_InOutType + "='I' and " +
+                ARSD_SizeGroup + " like '" + sizegroup + "' and "+ARSD_HashCode+"='"+hashCode+"' order by " + ARSD_Colour;
+        Constant.showLog("getDistinctColourConversion :- " + str);
+        String colourHashcode = "";
+        Cursor res1 = getWritableDatabase().rawQuery(str, null);
+        if (res1.moveToFirst()) {
+            colourHashcode = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour))
+                    +"-"+
+                    res1.getString(res1.getColumnIndex(DBHandler.ARSD_HashCode));
+        }
+        res1.close();
+        return colourHashcode;
+    }
+
 }
 
 

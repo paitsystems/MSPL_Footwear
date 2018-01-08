@@ -13,8 +13,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <!--<EditText
             android:id="@+id/ed_prod_search"
@@ -42,8 +42,8 @@
                 android:layout_height="30dp"
                 android:layout_weight="0.1"
                 android:background="@null"
-                android:hint="Search Product here..."
                 android:focusable="false"
+                android:hint="Search Product here..."
                 android:singleLine="false" />
 
             <ImageView
@@ -79,43 +79,50 @@
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:padding="@dimen/mobpadding2">
 
             <TextView
+                style="@style/textViewMobAddToCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/textViewMob"
-                android:text="Mark Up"
-                android:layout_weight="0.5"/>
+                android:layout_weight="0.5"
+                android:background="@drawable/line_left_top_right_bottom_draw"
+                android:gravity="center"
+                android:text="Mark Up" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/textViewMob"
-                android:text="0"
-                android:layout_weight="0.5"
                 android:id="@+id/tv_marginup"
-                android:gravity="center" />
-
-            <TextView
+                style="@style/textViewMob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/textViewMob"
-                android:text="Mark Down"
-                android:layout_weight="0.5"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/textViewMob"
-                android:text="0"
                 android:layout_weight="0.5"
+                android:background="@drawable/line_top_right_bottom_white_draw"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                style="@style/textViewMobAddToCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:background="@drawable/line_top_right_bottom_draw"
+                android:gravity="center"
+                android:text="Mark Down" />
+
+            <TextView
                 android:id="@+id/tv_margindown"
-                android:gravity="center" />
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:background="@drawable/line_top_right_bottom_white_draw"
+                android:gravity="center"
+                android:text="0" />
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -304,21 +311,21 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="top"
                     android:layout_weight="0.4"
                     android:background="@drawable/sizegroup_spinner_draw"
                     android:orientation="vertical"
-                    android:padding="@dimen/mobpadding2"
-                    android:layout_gravity="top">
+                    android:padding="@dimen/mobpadding2">
 
                     <Spinner
                         android:id="@+id/sp_sizegroup"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:gravity="top"
                         android:imeOptions="actionNext"
                         android:maxLines="1"
                         android:spinnerMode="dropdown"
-                        android:textStyle="bold"
-                        android:gravity="top" />
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -377,17 +384,17 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lay_comp_pack"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:id="@+id/lay_comp_pack"
             android:visibility="gone">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.6"
-                android:text="Enter Number Of Cartoon"
+                android:text="No Of Cartoon"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
@@ -417,7 +424,6 @@
             android:visibility="visible">
 
 
-
             <TextView
                 android:id="@+id/tv_add_to_card"
                 style="@style/textViewMobW"
@@ -427,8 +433,8 @@
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
                 android:gravity="center"
-                android:text="Add-To-Cart"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="Add-To-Cart" />
 
             <TextView
                 android:id="@+id/tv_remove_item"
@@ -439,8 +445,8 @@
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
                 android:gravity="center"
-                android:text="Remove"
                 android:singleLine="true"
+                android:text="Remove"
                 android:visibility="gone" />
 
             <TextView
@@ -452,8 +458,8 @@
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
                 android:gravity="center"
-                android:text="Cancel"
                 android:singleLine="true"
+                android:text="Cancel"
                 android:visibility="gone" />
 
             <TextView
@@ -463,11 +469,11 @@
                 android:layout_height="@dimen/addtocardtvheight"
                 android:layout_margin="@dimen/mobpadding2"
                 android:layout_weight="0.5"
+                android:autoText="false"
                 android:background="@drawable/btn_draw_maroon_curve"
                 android:gravity="center"
-                android:text="Check Stock"
-                android:autoText="false"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="Check Stock" />
 
             <TextView
                 android:id="@+id/tv_new_item"
@@ -478,8 +484,8 @@
                 android:layout_weight="0.5"
                 android:background="@drawable/btn_draw_maroon_curve"
                 android:gravity="center"
-                android:text="New Item"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="New Category" />
 
             <!--<android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_add_to_card"
@@ -507,10 +513,37 @@
 
 
         </LinearLayout>
-        <ListView
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.9"
+                android:text="Qty" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_stockinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:divider="@null"
+                android:layoutDirection="rtl"
+                android:orientation="horizontal"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                app:reverseLayout="true" />
+
+        </LinearLayout>
+
+        <ListView
             android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:visibility="visible" />
 
     </LinearLayout>

@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwear.adapters.DispatchCenterListAdapter;
 import com.lnbinfotech.msplfootwear.adapters.TrackOrderDetailChangedAdapter;
-import com.lnbinfotech.msplfootwear.adapters.ViewCustomerOrderAdapter;
 import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
@@ -30,7 +29,6 @@ import com.lnbinfotech.msplfootwear.interfaces.RecyclerViewToActivityInterface;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.CompanyMasterClass;
-import com.lnbinfotech.msplfootwear.model.CustomerOrderClass;
 import com.lnbinfotech.msplfootwear.model.TrackOrderDetailChangedClass;
 import com.lnbinfotech.msplfootwear.model.TrackOrderMasterClass;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
@@ -47,7 +45,7 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
     private TrackOrderMasterClass orderClass;
 
     private TextView tv_orderstatus, tv_invno, tv_transporter, tv_creditapp, tv_alltopckg, tv_taxinvmade,
-            tv_invamnt,tv_totset, tv_totqty, tv_totamnt, tv_tot_gstamt, tv_tot_grossamt,
+            tv_invamnt,tv_totset, tv_totqty, tv_tot_inv_qty,tv_tot_can_qty, tv_totamnt, tv_tot_gstamt, tv_tot_grossamt,
             tv_disc_per, tv_discamnt, tv_creaditlimit;
     private ListView lv_vOrder;
     private Button btn_proceed;
@@ -241,7 +239,8 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         list.clear();
         lv_vOrder.setAdapter(null);
         Cursor cursor = db.getTrackOrderDetailData();
-        String invNo="", transporter="", creditApp="", allotedTopck="", taxInvMade="", status="", invamt = "";
+        String invNo="", invDate="", transporter="", transporterNo="", creditApp="", allotedTopck="",
+                taxInvMade="", status="",invamt = "";
         if (cursor.moveToFirst()) {
             do {
                 TrackOrderDetailChangedClass order = new TrackOrderDetailChangedClass();
@@ -262,10 +261,12 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
                 order.setTaxinvmade(taxInvMade);
                 invNo = cursor.getString(cursor.getColumnIndex(DBHandler.TCO_InvNo));
                 order.setInvno(invNo);
+                invDate = cursor.getString(cursor.getColumnIndex(DBHandler.TCO_InvDate));
                 invamt = cursor.getString(cursor.getColumnIndex(DBHandler.TCO_InvAmt));
                 order.setInvamnt(invamt);
                 transporter = cursor.getString(cursor.getColumnIndex(DBHandler.TCO_Transporter));
                 order.setTransporter(transporter);
+                transporterNo = cursor.getString(cursor.getColumnIndex(DBHandler.TCO_TransporterNo));
                 order.setProdid(cursor.getString(cursor.getColumnIndex(DBHandler.TCO_Prodid)));
                 order.setInvqty(cursor.getInt(cursor.getColumnIndex(DBHandler.TCO_InvQty)));
                 order.setCanqty(cursor.getInt(cursor.getColumnIndex(DBHandler.TCO_CancelQty)));
@@ -277,9 +278,9 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         cursor.close();
         status = "Order Status :- "+status;
         tv_orderstatus.setText(status);
-        invNo = "Invoice No :- "+invNo;
+        invNo = "Invoice No :- "+invNo +" Inv.Date :- "+invDate;
         tv_invno.setText(invNo);
-        transporter = "Transporter :- "+transporter;
+        transporter = "Transporter :- "+transporter + "  " + transporterNo;
         tv_transporter.setText(transporter);
         tv_creditapp.setText(creditApp);
         tv_alltopckg.setText(allotedTopck);
@@ -287,22 +288,19 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         tv_invamnt.setText(invamt);
         TrackOrderDetailChangedAdapter adapter = new TrackOrderDetailChangedAdapter(list, getApplicationContext());
         lv_vOrder.setAdapter(adapter);
-        //totalCalculations();
+        totalCalculations();
     }
 
     private void totalCalculations() {
-        String totalSet = "0", totalQty = "0", totalAmnt = "0", totalNetAmnt = "0",
-                totalGrossAmnt = "0", totalDiscAmnt = "0", totalGSTAmnt = "0";
+        String totalSet = "0", totalQty = "0", totalInvQty = "0", totalCanQty = "0";
+        //totalAmnt = "0", totalNetAmnt = "0",totalGrossAmnt = "0", totalDiscAmnt = "0", totalGSTAmnt = "0";
 
-        Cursor res = db.getCustOrderTotalsAtViewOrder(allBranch, filter);
+        Cursor res = db.getCustOrderTotalsAtTrackOrder(1, filter);
         if (res.moveToFirst()) {
-            totalQty = res.getString(res.getColumnIndex(DBHandler.CO_LooseQty));
-            totalSet = res.getString(res.getColumnIndex(DBHandler.CO_Auto));
-            totalAmnt = res.getString(res.getColumnIndex(DBHandler.CO_Amount));
-            totalNetAmnt = res.getString(res.getColumnIndex(DBHandler.CO_NetAmt));
-            totalGrossAmnt = res.getString(res.getColumnIndex(DBHandler.CO_AmtAfterDisc));
-            totalGSTAmnt = res.getString(res.getColumnIndex(DBHandler.CO_GSTAmt));
-            totalDiscAmnt = res.getString(res.getColumnIndex(DBHandler.CO_DiscAmt));
+            totalSet = res.getString(res.getColumnIndex(DBHandler.TCO_Auto));
+            totalQty = res.getString(res.getColumnIndex(DBHandler.TCO_OrderQty));
+            totalInvQty = res.getString(res.getColumnIndex(DBHandler.TCO_InvQty));
+            totalCanQty = res.getString(res.getColumnIndex(DBHandler.TCO_CancelQty));
         }
         res.close();
 
@@ -312,13 +310,13 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         if (totalSet == null) {
             totalSet = "0";
         }
-        if (totalAmnt == null) {
-            totalAmnt = "0";
+        if (totalInvQty == null) {
+            totalInvQty = "0";
         }
-        if (totalNetAmnt == null) {
-            totalNetAmnt = "0";
+        if (totalCanQty == null) {
+            totalCanQty = "0";
         }
-        if (totalGrossAmnt == null) {
+        /*if (totalGrossAmnt == null) {
             totalGrossAmnt = "0";
         }
         if (totalGSTAmnt == null) {
@@ -326,15 +324,18 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         }
         if (totalDiscAmnt == null) {
             totalDiscAmnt = "0";
-        }
+        }*/
 
-        tv_totqty.setText(totalQty);
         tv_totset.setText(totalSet);
-        tv_totamnt.setText(totalNetAmnt);
-        tv_tot_gstamt.setText(totalGSTAmnt);
-        tv_tot_grossamt.setText(totalAmnt);
-        tv_disc_per.setText(String.valueOf(OptionsActivity.custDisc));
-        tv_discamnt.setText(totalDiscAmnt);
+        tv_totqty.setText(totalQty);
+        tv_tot_inv_qty.setText(totalInvQty);
+        tv_tot_can_qty.setText(totalCanQty);
+
+        //tv_totamnt.setText(totalNetAmnt);
+        //tv_tot_gstamt.setText(totalGSTAmnt);
+        //tv_tot_grossamt.setText(totalAmnt);
+        //tv_disc_per.setText(String.valueOf(OptionsActivity.custDisc));
+        //tv_discamnt.setText(totalDiscAmnt);
 
     }
 
@@ -355,7 +356,9 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         tv_taxinvmade = (TextView) findViewById(R.id.tv_tavinvmade);
         tv_invamnt = (TextView) findViewById(R.id.tv_invamnt);
         tv_totset = (TextView) findViewById(R.id.tv_tot_set);
-        tv_totqty = (TextView) findViewById(R.id.tv_tot_qty);
+        tv_totqty = (TextView) findViewById(R.id.tv_tot_ord_qty);
+        tv_tot_inv_qty = (TextView) findViewById(R.id.tv_tot_inv_qty);
+        tv_tot_can_qty = (TextView) findViewById(R.id.tv_tot_can_qty);
         tv_totamnt = (TextView) findViewById(R.id.tv_amt);
         tv_tot_gstamt = (TextView) findViewById(R.id.tv_gst_amt);
         tv_tot_grossamt = (TextView) findViewById(R.id.tv_gross_amt);

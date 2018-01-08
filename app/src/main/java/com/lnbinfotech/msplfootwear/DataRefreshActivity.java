@@ -22,6 +22,7 @@ import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.BankBranchMasterClass;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
+import com.lnbinfotech.msplfootwear.model.SizeDesignMastDetClass;
 import com.lnbinfotech.msplfootwear.model.SizeNDesignClass;
 import com.lnbinfotech.msplfootwear.model.StockInfoMasterClass;
 import com.lnbinfotech.msplfootwear.post.Post;
@@ -49,9 +50,14 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private String writeFilename = "Write.txt";
     private DBHandler db;
     private ProgressDialog pd1;
-    private int maxProdId = 0;
+    private int maxProdId = 0, maxSDMDAuto = 0;
     private ProgressDialog sndpd;
     private Test test;
+    private static String areaMaster = "Area Master", bankMaster = "Bank Master", bankBrancMaster = "Bank's Branch Master",
+                            cityMaster = "City Master", companyMaster = "Company Master", custMaster = "Customer Master",
+                            docMaster = "Document Master", empMaster = "Employee Master", hoMaster = "HOMaster Master",
+                            prodMaster = "Product Master", sizenDesignMaster = "SizeAndDesign Master", stockMaster = "Stock Master",
+                            gstMaster = "GST Master", sdmdMaster = "SizeDetail Master";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,32 +77,36 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     //0-AreaMaster,1-BankMaster,2-BankBranchMaster,3-CityMaster
                     //4-CompanyMaster,5-CustomerMaster,6-DocumentMaster,7-EmployeeMaster,8-HOMaster
                     //9-ProductMaster,10-LoadAllSizeNDesign,11-StockMaster,12-GSTMaster
-                    if (i == 0) {
+                    String name = refreshList.get(i);
+
+                    if (name.equals(areaMaster)) {
                         refreshDataDia(0);
-                    } else if (i == 1) {
+                    } else if (name.equals(bankMaster)) {
                         refreshDataDia(1);
-                    } else if (i == 2) {
+                    } else if (name.equals(bankBrancMaster)) {
                         refreshDataDia(2);
-                    } else if (i == 3) {
+                    } else if (name.equals(cityMaster)) {
                         refreshDataDia(3);
-                    } else if (i == 4) {
+                    } else if (name.equals(companyMaster)) {
                         refreshDataDia(4);
-                    } else if (i == 5) {
+                    } else if (name.equals(custMaster)) {
                         refreshDataDia(5);
-                    } else if (i == 6) {
+                    } else if (name.equals(docMaster)) {
                         refreshDataDia(6);
-                    } else if (i == 7) {
+                    } else if (name.equals(empMaster)) {
                         refreshDataDia(7);
-                    } else if (i == 8) {
+                    } else if (name.equals(hoMaster)) {
                         refreshDataDia(8);
-                    } else if (i == 9) {
+                    } else if (name.equals(prodMaster)) {
                         refreshDataDia(9);
-                    } else if (i == 10) {
+                    } else if (name.equals(sizenDesignMaster)) {
                         refreshDataDia(10);
-                    } else if (i == 11) {
+                    } else if (name.equals(stockMaster)) {
                         refreshDataDia(11);
-                    } else if (i == 12) {
+                    } else if (name.equals(gstMaster)) {
                         refreshDataDia(12);
+                    }else if (name.equals(sdmdMaster)) {
+                        refreshDataDia(13);
                     }
                 } else {
                     toast.setText("You Are Offline");
@@ -398,19 +408,20 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         toast.setGravity(Gravity.CENTER, 0, 0);
         listView = (ListView) findViewById(R.id.listView);
         refreshList = new ArrayList<>();
-        refreshList.add("Area Master");
-        refreshList.add("Bank Master");
-        refreshList.add("Bank's Branch Master");
-        refreshList.add("City Master");
-        refreshList.add("Company Master");
-        refreshList.add("Customer Master");
-        refreshList.add("Document Master");
-        refreshList.add("Employee Master");
-        refreshList.add("HOMaster Master");
-        refreshList.add("Product Master");
-        refreshList.add("SizeAndDesign Master");
-        refreshList.add("Stock Master");
-        refreshList.add("GST Master");
+        refreshList.add(areaMaster);
+        refreshList.add(bankMaster);
+        refreshList.add(bankBrancMaster);
+        refreshList.add(cityMaster);
+        refreshList.add(companyMaster);
+        refreshList.add(custMaster);
+        refreshList.add(docMaster);
+        refreshList.add(empMaster);
+        refreshList.add(hoMaster);
+        refreshList.add(prodMaster);
+        refreshList.add(sizenDesignMaster);
+        refreshList.add(stockMaster);
+        refreshList.add(gstMaster);
+        refreshList.add(sdmdMaster);
         listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.list_item_data_refresh, refreshList));
     }
 
@@ -454,6 +465,9 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    if(sndpd!=null){
+                        sndpd.dismiss();
+                    }
                     dialog.dismiss();
                 }
             });
@@ -504,6 +518,19 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     //loadStockInfo();
                 } else if (a == 12) {
                     loadGSTMaster();
+                }else if (a == 13) {
+                    //TODO : Remove
+                    //db.deleteTable(DBHandler.Table_SizeDesignMastDet);
+                    maxSDMDAuto = db.getMaxAuto();
+                    if (maxSDMDAuto != 0) {
+                        Constant.showLog("maxSDMDAuto :- "+maxSDMDAuto);
+                        db.deleteTable(DBHandler.Table_SizeDesignMastDet);
+                    }else{
+                        maxSDMDAuto = 34036;
+                    }
+                    //TODO : Remove
+                    //loadSDMD(10101, 10600);
+                    loadSDMD(0,100);
                 }
             }
         });
@@ -536,6 +563,44 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         }
 
         new getSizeNDesignMaster(to).execute(url);
+        /*VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
+        requests.refreshSizeNDesignMaster1(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                new readJSON(result,"SizeNDesign").execute();
+            }
+
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                showDia(2);
+                writeLog("loadSizeNDesignMaster_onFailure_"+result);
+            }
+        });*/
+    }
+
+    private void loadSDMD(int from, int to) {
+        String url = Constant.ipaddress + "/GetAllSizeDesignMastDet?Id=" + from + "&ToId=" + to;
+        Constant.showLog(url);
+        writeLog("loadSDMD_" + url);
+        //TODO: REMOVE
+        //if (from == 10101) {
+        if (from == 0) {
+            sndpd = new ProgressDialog(DataRefreshActivity.this);
+            sndpd.setCancelable(false);
+            sndpd.setProgressNumberFormat(null);
+            sndpd.setProgressPercentFormat(null);
+            sndpd.setProgressNumberFormat("%1d/%2d");
+            NumberFormat percentInstance = NumberFormat.getPercentInstance();
+            percentInstance.setMaximumFractionDigits(0);
+            sndpd.setProgressPercentFormat(percentInstance);
+            sndpd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            sndpd.setTitle("Please Wait");
+            sndpd.setMessage("It will take app. 4-5 min");
+            sndpd.show();
+        }
+
+        new getSizeDesignMastDet(to).execute(url);
         /*VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
         requests.refreshSizeNDesignMaster1(url, new ServerCallback() {
             @Override
@@ -1368,6 +1433,220 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             writeLog("parseBankBranchMaster_" + e.getMessage());
             e.printStackTrace();
             constant.showPD();
+            showDia(2);
+        }
+    }
+
+    private class getSizeDesignMastDet extends AsyncTask<String, Void, String> {
+        int to;
+
+        public getSizeDesignMastDet(int _to) {
+            this.to = _to;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            return Post.POST(strings[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            super.onPostExecute(response);
+            response = response.substring(1, response.length() - 1);
+            new readJSONSDMD(response, "SDMD", to).execute();
+        }
+    }
+
+    private class readJSONSDMD extends AsyncTask<Void, Void, String> {
+        private int to;
+        private File writeFile;
+        private String result, parseType;
+
+        public readJSONSDMD(String _result, String _parseType, int _to) {
+            this.result = _result;
+            this.parseType = _parseType;
+            this.to = _to;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String retValue = "B";
+            File sdFile = Constant.checkFolder(Constant.folder_name);
+            FileWriter writer;
+            try {
+                String search = "\\\\", replace = "";
+                writeFile = new File(sdFile, writeFilename);
+                writer = new FileWriter(writeFile);
+                int size = result.length();
+                if (size > 2) {
+                    Log.d("Log", "Replacing");
+                    int b = 50000;
+                    for (int i = 0; i < size; i++) {
+                        if (b >= size) {
+                            b = size;
+                        }
+                        String q = result.substring(i, b);
+                        String g = q.replaceAll(search, replace);
+                        System.gc();
+                        writer.append(g);
+                        i = b - 1;
+                        b = b + 50000;
+                    }
+                    retValue = "A";
+                }
+                writer.flush();
+                writer.close();
+                return retValue;
+            } catch (IOException | OutOfMemoryError e) {
+                db.deleteTable(DBHandler.Table_SizeDesignMastDet);
+                try {
+                    writer = new FileWriter(new File(sdFile, "Log.txt"));
+                    writer.append(e.getMessage());
+                    writer.flush();
+                    writer.close();
+                } catch (Exception e1) {
+                    e.printStackTrace();
+                }
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s.equals("A")) {
+                new writeDBSDMD(parseType, to).execute();
+            }else if (s.equals("B")) {
+                nextValue(to,writeFile);
+            } else {
+                showDia(2);
+            }
+        }
+    }
+
+    private class writeDBSDMD extends AsyncTask<Void, String, String> {
+
+        private File writeFile;
+        private String parseType;
+        private int to;
+
+        public writeDBSDMD(String _parseType, int _to) {
+            this.parseType = _parseType;
+            this.to = _to;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            File sdFile = Constant.checkFolder(Constant.folder_name);
+            JsonFactory f = new JsonFactory();
+            try {
+                writeFile = new File(sdFile, writeFilename);
+                JsonParser jp = f.createJsonParser(writeFile);
+                parseSDMD(jp, to);
+                return "";
+            } catch (Exception e) {
+                db.deleteTable(DBHandler.Table_SizeDesignMastDet);
+                try {
+                    FileWriter writer = new FileWriter(new File(sdFile, "Log.txt"));
+                    writer.append(e.getMessage());
+                    writer.flush();
+                    writer.close();
+                } catch (Exception e1) {
+                    e.printStackTrace();
+                    return null;
+                }
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s != null) {
+                if (s.equals("")) {
+                    nextValue(to,writeFile);
+                } else {
+                    showDia(2);
+                }
+            } else {
+                showDia(2);
+            }
+        }
+    }
+
+    private void nextValue(int to,File writeFile){
+        sndpd.setProgress((to * 100) / maxSDMDAuto);
+        Constant.showLog("s is blank:");
+        if (writeFile.delete()) {
+            Constant.showLog("Write Delete");
+            if (to == maxSDMDAuto) {
+                sndpd.dismiss();
+                showDia(1);
+            } else {
+                int from = to + 1;
+                to = to + 500;
+                Constant.showLog("From-" + from + "-To-" + to);
+                if (to > maxSDMDAuto) {
+                    to = maxSDMDAuto;
+                }
+                loadSDMD(from,to);
+            }
+        }
+    }
+
+    private void parseSDMD(JsonParser jp, int to) {
+        try {
+            int count = 0;
+            List<SizeDesignMastDetClass> list = new ArrayList<>();
+            while (jp.nextToken() != JsonToken.END_ARRAY) {
+                count++;
+                SizeDesignMastDetClass sizeNDesignClass = new SizeDesignMastDetClass();
+                while (jp.nextToken() != JsonToken.END_OBJECT) {
+                    String token = jp.getCurrentName();
+                    if (DBHandler.SDMD_Auto.equals(token)) {
+                        jp.nextToken();
+                        sizeNDesignClass.setAuto(jp.getValueAsInt());
+                    } else if (DBHandler.SDMD_ProductId.equals(token)) {
+                        jp.nextToken();
+                        sizeNDesignClass.setProductid(jp.getValueAsInt());
+                    } else if (DBHandler.SDMD_DesignNo.equals(token)) {
+                        jp.nextToken();
+                        String dn = jp.getText();
+                        sizeNDesignClass.setDesignNo(dn);
+                    } else if (DBHandler.SDMD_SizeGroupFrom.equals(token)) {
+                        jp.nextToken();
+                        sizeNDesignClass.setSizeGroupFrom(jp.getValueAsInt());
+                    } else if (DBHandler.SDMD_SizeGroupTo.equals(token)) {
+                        jp.nextToken();
+                        sizeNDesignClass.setSizeGroupTo(jp.getValueAsInt());
+                    }else if (DBHandler.SDMD_Total.equals(token)) {
+                        jp.nextToken();
+                        sizeNDesignClass.setTotal(jp.getValueAsInt());
+                    } else if (DBHandler.SDMD_SizeGroup.equals(token)) {
+                        jp.nextToken();
+                        sizeNDesignClass.setSizeGroup(jp.getText());
+                    } else if (DBHandler.SDMD_Colour.equals(token)) {
+                        jp.nextToken();
+                        String col = jp.getText();
+                        sizeNDesignClass.setColour(col);
+                    } else if (DBHandler.SDMD_Size.equals(token)) {
+                        jp.nextToken();
+                        sizeNDesignClass.setSize(jp.getValueAsInt());
+                    } else if (DBHandler.SDMD_Qty.equals(token)) {
+                        jp.nextToken();
+                        sizeNDesignClass.setQty(jp.getValueAsInt());
+                    }
+                }
+                list.add(sizeNDesignClass);
+            }
+            db.addSizeDesignMastDet(list);
+            Constant.showLog("" + count);
+        } catch (Exception e) {
+            writeLog("sdmd_" + e.getMessage());
+            e.printStackTrace();
+            db.deleteTable(DBHandler.Table_SizeDesignMastDet);
             showDia(2);
         }
     }

@@ -12,6 +12,7 @@ import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.AreaMasterClass;
 import com.lnbinfotech.msplfootwear.model.BankBranchMasterClass;
 import com.lnbinfotech.msplfootwear.model.BankMasterClass;
+import com.lnbinfotech.msplfootwear.model.CheckAvailStockClass;
 import com.lnbinfotech.msplfootwear.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwear.model.CityMasterClass;
 import com.lnbinfotech.msplfootwear.model.CompanyMasterClass;
@@ -566,8 +567,10 @@ public class ParseJSON {
                     orderClass.setAllowtopck(jsonArray.getJSONObject(i).getString("AllotedtoPck"));
                     orderClass.setTaxinvmade(jsonArray.getJSONObject(i).getString("TaxInvMad"));
                     orderClass.setInvno(jsonArray.getJSONObject(i).getString("InvNo"));
+                    orderClass.setInvdate(jsonArray.getJSONObject(i).getString("InvDate"));
                     orderClass.setInvamnt(jsonArray.getJSONObject(i).getString("InvAmt"));
                     orderClass.setTransporter(jsonArray.getJSONObject(i).getString("Transporter"));
+                    orderClass.setTransNo(jsonArray.getJSONObject(i).getString("TransporterNo"));
                     orderClass.setProdid(jsonArray.getJSONObject(i).getString("prodid"));
                     orderClass.setInvqty(jsonArray.getJSONObject(i).getInt("Invo"));
                     orderClass.setCanqty(jsonArray.getJSONObject(i).getInt("Can"));
@@ -744,6 +747,33 @@ public class ParseJSON {
         }
         return list;
     }
+
+    public List<CheckAvailStockClass> parseAvailQty(){
+        List<CheckAvailStockClass> list = new ArrayList<>();
+        try{
+            JSONArray jsonArray = new JSONArray(new JSONObject(json).get("CheckLooseStockResult").toString());
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    CheckAvailStockClass checkStock = new CheckAvailStockClass();
+                    checkStock.setProductid(jsonArray.getJSONObject(i).getInt("Product_id"));
+                    checkStock.setColor(jsonArray.getJSONObject(i).getString("Color"));
+                    checkStock.setSizegroup(jsonArray.getJSONObject(i).getString("SizeGroup"));
+                    checkStock.setAvailQty(jsonArray.getJSONObject(i).getInt("AvailQty"));
+                    checkStock.setRate(jsonArray.getJSONObject(i).getString("Rate"));
+                    checkStock.setBranchid(jsonArray.getJSONObject(i).getInt("BranchId"));
+                    checkStock.setAlias(jsonArray.getJSONObject(i).getString("Alias"));
+                    checkStock.setStat(jsonArray.getJSONObject(i).getString("Stat"));
+                    checkStock.setHashcode(jsonArray.getJSONObject(i).getString("HashCode"));
+                    list.add(checkStock);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseAvailQty_" + e.getMessage());
+        }
+        return list;
+    }
+
 
     private void writeLog(String _data){
         new WriteLog().writeLog(context,"ParseJSON_"+_data);

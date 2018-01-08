@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.lnbinfotech.msplfootwearex.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,11 +23,13 @@ public class ViewAddedToCardItemAdapter extends BaseAdapter {
     private HashMap<String, List<String>> orderMap;
     private Context context;
     private List<String> sizeGroupList;
+    private List<String> whiteHashCodeList = new ArrayList<>();
 
     public ViewAddedToCardItemAdapter(HashMap<String, List<String>> _orderMap, Context _context, List<String> _sizeGroupList) {
         this.orderMap = _orderMap;
         this.context = _context;
         this.sizeGroupList = _sizeGroupList;
+        addToList();
     }
 
     @Override
@@ -73,7 +76,7 @@ public class ViewAddedToCardItemAdapter extends BaseAdapter {
             tv.setText(strArr[4]);
             tv.setGravity(Gravity.CENTER);
             String hashCode = strArr[2];
-            if (hashCode.equalsIgnoreCase("#FFFFFF")) {
+            if (whiteHashCodeList.contains(hashCode)) {
                 tv.setTextColor(Color.parseColor("#000000"));
                 tv.setBackgroundResource(R.drawable.black_border_draw);
             } else {
@@ -90,5 +93,21 @@ public class ViewAddedToCardItemAdapter extends BaseAdapter {
 
     private class ViewHolder {
         public LinearLayout lay_horizontal;
+    }
+
+    private void addToList() {
+        whiteHashCodeList.clear();
+        whiteHashCodeList.add("#FFFFF0");
+        whiteHashCodeList.add("#FFFFF1");
+        whiteHashCodeList.add("#FFFFF2");
+        whiteHashCodeList.add("#FFFFF3");
+        whiteHashCodeList.add("#FFFFF4");
+        whiteHashCodeList.add("#FFFFF5");
+        whiteHashCodeList.add("#FFFFF6");
+        whiteHashCodeList.add("#FFFFF7");
+        whiteHashCodeList.add("#FFFFF8");
+        whiteHashCodeList.add("#FFFFF9");
+        whiteHashCodeList.add("#FFFFFA");
+        whiteHashCodeList.add("#FFFFFF");
     }
 }

@@ -16,6 +16,7 @@ import com.lnbinfotech.msplfootwear.AddToCartActivity;
 import com.lnbinfotech.msplfootwear.R;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //Created by ANUP on 11/26/2017.
@@ -25,10 +26,12 @@ public class CustomerOrderUnpackGridAdpater extends BaseAdapter {
     private Context context;
     private List<String> sizeList;
     private int requestFocus = 0;
+    private List<String> whiteHashCodeList = new ArrayList<>();
 
     public CustomerOrderUnpackGridAdpater(Context _context, List<String> _sizeList){
         this.context = _context;
         this.sizeList = _sizeList;
+        addToList();
     }
 
     @Override
@@ -49,14 +52,14 @@ public class CustomerOrderUnpackGridAdpater extends BaseAdapter {
     @Override
     public View getView(final int pos, View view, ViewGroup viewGroup) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view=inflater.inflate(R.layout.grid_item_cust_order_unpack, viewGroup, false);
+        view = inflater.inflate(R.layout.grid_item_cust_order_unpack, viewGroup, false);
 
         final EditText tv = (EditText) view.findViewById(R.id.ed_looseqty);
         String _colourHashCode = sizeList.get(pos);
         String[] colourHashCode = _colourHashCode.split("\\-");
         if(colourHashCode.length>1) {
             String hashCode = colourHashCode[1];
-            if (hashCode.equalsIgnoreCase("#FFFFFF")) {
+            if (whiteHashCodeList.contains(hashCode)) {
                 tv.setTextColor(Color.parseColor("#000000"));
                 GradientDrawable background = (GradientDrawable) tv.getBackground();
                 background.setColor(Color.parseColor("#FFFFFF"));
@@ -90,6 +93,7 @@ public class CustomerOrderUnpackGridAdpater extends BaseAdapter {
                 tv.addTextChangedListener(null);
             }else {
                 tv.setFocusable(true);
+                tv.setSelectAllOnFocus(true);
                 tv.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -141,5 +145,21 @@ public class CustomerOrderUnpackGridAdpater extends BaseAdapter {
     private class ViewHolder {
         //private TextView tv;
         private EditText tv;
+    }
+
+    private void addToList() {
+        whiteHashCodeList.clear();
+        whiteHashCodeList.add("#FFFFF0");
+        whiteHashCodeList.add("#FFFFF1");
+        whiteHashCodeList.add("#FFFFF2");
+        whiteHashCodeList.add("#FFFFF3");
+        whiteHashCodeList.add("#FFFFF4");
+        whiteHashCodeList.add("#FFFFF5");
+        whiteHashCodeList.add("#FFFFF6");
+        whiteHashCodeList.add("#FFFFF7");
+        whiteHashCodeList.add("#FFFFF8");
+        whiteHashCodeList.add("#FFFFF9");
+        whiteHashCodeList.add("#FFFFFA");
+        whiteHashCodeList.add("#FFFFFF");
     }
 }

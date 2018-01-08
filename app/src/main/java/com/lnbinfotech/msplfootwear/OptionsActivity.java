@@ -43,7 +43,6 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
        // setContentView(R.layout.optionstest);
         setContentView(R.layout.test);
 
-
         init();
 
         if (getSupportActionBar() != null) {
@@ -159,6 +158,9 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
+            case R.id.clear:
+                showDia(7);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -249,6 +251,26 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                         toast.setText("You Are Offline");
                         toast.show();
                     }
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 7) {
+            builder.setMessage("Do You Want To Clear Saved Order?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    db.deleteTable(DBHandler.Table_CustomerOrder);
+                    if(mMenu!=null){
+                        onCreateOptionsMenu(mMenu);
+                    }
+                    toast.setText("Order Cleared");
+                    toast.show();
                     dialog.dismiss();
                 }
             });

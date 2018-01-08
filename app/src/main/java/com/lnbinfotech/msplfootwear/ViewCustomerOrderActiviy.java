@@ -1,12 +1,10 @@
 package com.lnbinfotech.msplfootwear;
 
-import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.Gravity;
 
 import com.lnbinfotech.msplfootwear.adapters.DispatchCenterListAdapter;
 import com.lnbinfotech.msplfootwear.adapters.ViewCustomerOrderAdapter;
@@ -274,6 +271,9 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         tv_disc_per.setText(String.valueOf(OptionsActivity.custDisc));
         tv_discamnt.setText(totalDiscAmnt);
 
+        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+        editor.putString("totalNetAmnt",tv_totamnt.getText().toString());
+        editor.apply();
     }
 
     private void init() {
@@ -380,7 +380,9 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    startActivity(new Intent(getApplicationContext(), DisplayCustOutstandingActivity.class));
+                    Intent intent = new Intent(getApplicationContext(), DisplayCustOutstandingActivity.class);
+                    intent.putExtra("val","0");
+                    startActivity(intent);
                     overridePendingTransition(R.anim.enter,R.anim.exit);
                 }
             });

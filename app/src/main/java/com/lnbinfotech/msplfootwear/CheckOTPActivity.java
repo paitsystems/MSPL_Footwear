@@ -64,7 +64,6 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         mobNo = otpClass.getMobileno();
         imeiNo = otpClass.getImeino();
 
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setTitle(R.string.title_activity_login);

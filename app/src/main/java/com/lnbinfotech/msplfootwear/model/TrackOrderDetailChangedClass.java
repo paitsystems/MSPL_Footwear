@@ -4,7 +4,7 @@ package com.lnbinfotech.msplfootwear.model;
 
 public class TrackOrderDetailChangedClass {
     private String size_group,color,hashcode,rate,mrp,loosePackTyp,
-            creditapp,allowtopck,taxinvmade,invno,invamnt,transporter,prodid,status;
+            creditapp,allowtopck,taxinvmade,invno,invdate,invamnt,transporter, transNo,prodid,status;
     private int auto,productid,orderqty,invqty,canqty;
 
     public String getSize_group() {
@@ -157,5 +157,21 @@ public class TrackOrderDetailChangedClass {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getInvdate() {
+        return invdate;
+    }
+
+    public void setInvdate(String invdate) {
+        this.invdate = invdate;
+    }
+
+    public String getTransNo() {
+        return transNo;
+    }
+
+    public void setTransNo(String transNo) {
+        this.transNo = transNo;
     }
 }
