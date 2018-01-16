@@ -25,15 +25,7 @@ public class Constant {
 
     //TODO: Check VersionCode and Version Name
 
-    public static String folder_name = "MSPL Footwear",
-            image_folder = "Caputured_img",
-            captured_images_folder = "MSPL_CapturedImages",
-            log_file_name = "MSPL_Footwear",
-            automailID = "automail@lnbinfotech.com",
-            autoamilPass = "auto#456",
-            mail_subject = "Log File",
-            mail_body = "Find the Attached Log File",
-            mailReceipient = "anup.p@lnbinfotech.com";
+    public static String folder_name = "MSPL Footwear", image_folder = "Caputured_img", captured_images_folder = "MSPL_CapturedImages", log_file_name = "MSPL_Footwear", automailID = "automail@lnbinfotech.com", autoamilPass = "auto#456", mail_subject = "Log File", mail_body = "Find the Attached Log File", mailReceipient = "anup.p@lnbinfotech.com";
     //ftp_adress = "ftp.lnbinfotech.com"
     //ftp_username = "supportftp@lnbinfotech.com",
     //ftp_password = "support$456",
@@ -41,8 +33,8 @@ public class Constant {
 
     //TODO: Check Ip Address
     //public static final String ipaddress = "http://172.30.1.38/MSPL/service.svc";
-    public static final String ipaddress = "http://license.lnbinfotech.com/MSPL/service.svc";
-   // public static final String ipaddress = "http://103.68.10.9/MSPL/service.svc";
+    //public static final String ipaddress = "http://license.lnbinfotech.com/MSPL/service.svc";
+    public static final String ipaddress = "http://103.68.10.9:24086/MSPL/service.svc";
 
     //TODO: Check liveTestFlag 1-Live, 0-Test
     public static int liveTestFlag = 0;
@@ -53,7 +45,7 @@ public class Constant {
     public static ProgressDialog pd;
 
     public static void showLog(String log) {
-        Log.d("Log", ""+log);
+        Log.d("Log", "" + log);
     }
 
     public Constant(Activity activity) {
@@ -114,8 +106,8 @@ public class Constant {
         }
     }
 
-    public String getIMEINo(){
-        TelephonyManager manager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+    public String getIMEINo() {
+        TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return manager.getDeviceId();
     }
 

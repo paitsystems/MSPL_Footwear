@@ -1247,8 +1247,8 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().execSQL("delete from " + Table_CustomerOrder + " where " + CO_Auto + "=" + auto);
     }
 
-    public void deleteOrderTableAfterSave(int branchid) {
-        getWritableDatabase().execSQL("delete from " + Table_CustomerOrder + " where " + CO_BranchId + "=" + branchid);
+    public void deleteOrderTableAfterSave(int branchid, String gstPer) {
+        getWritableDatabase().execSQL("delete from " + Table_CustomerOrder + " where " + CO_BranchId + "=" + branchid+" and "+CO_GSTPer+"='"+gstPer+"'");
     }
 
     public Cursor getProdName(String prodids) {
@@ -1302,11 +1302,19 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public Cursor getDistinctBrachIdFromCustOrder() {
         String str = "select distinct " + CO_BranchId + " from " + Table_CustomerOrder;
+        Constant.showLog("getDistinctBrachIdFromCustOrder :- "+str);
         return getWritableDatabase().rawQuery(str, null);
     }
 
-    public Cursor getCustOrderDetail(int branchid) {
-        String str = "select * from " + Table_CustomerOrder + " where " + CO_BranchId + "=" + branchid;
+    public Cursor getCustOrderDetail(int branchid, String gstPer) {
+        String str = "select * from " + Table_CustomerOrder + " where " + CO_BranchId + "=" + branchid+" and "+CO_GSTPer+"='"+gstPer+"' order by "+CO_Productid+","+CO_Color+",cast("+CO_SizeGroup+" as int)";
+        Constant.showLog("getCustOrderDetail :- "+str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getDistinctGSTPerFromCustOrder(int branchid) {
+        String str = "select distinct " + CO_GSTPer + " from " + Table_CustomerOrder +" where "+CO_BranchId+"="+branchid;//+" limit 1";
+        Constant.showLog("getDistinctGSTPerFromCustOrder :- "+str);
         return getWritableDatabase().rawQuery(str, null);
     }
 

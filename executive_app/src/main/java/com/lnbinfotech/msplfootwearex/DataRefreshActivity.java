@@ -524,12 +524,13 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 }else if (a == 13) {
                     //TODO : Remove
                     //db.deleteTable(DBHandler.Table_SizeDesignMastDet);
-                    maxSDMDAuto = db.getMaxAuto();
+                    maxSDMDAuto = db.getMaxProdId();
                     if (maxSDMDAuto != 0) {
                         Constant.showLog("maxSDMDAuto :- "+maxSDMDAuto);
                         db.deleteTable(DBHandler.Table_SizeDesignMastDet);
-                    }else{
-                        maxSDMDAuto = 34036;
+                    } else {
+                        toast.setText("Please Update ProductMaster First");
+                        toast.show();
                     }
                     //TODO : Remove
                     //loadSDMD(10101, 10600);
@@ -1589,7 +1590,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 showDia(1);
             } else {
                 int from = to + 1;
-                to = to + 500;
+                to = to + 100;
                 Constant.showLog("From-" + from + "-To-" + to);
                 if (to > maxSDMDAuto) {
                     to = maxSDMDAuto;

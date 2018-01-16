@@ -1260,8 +1260,8 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().execSQL("delete from " + Table_CustomerOrder + " where " + CO_Auto + "=" + auto);
     }
 
-    public void deleteOrderTableAfterSave(int branchid) {
-        getWritableDatabase().execSQL("delete from " + Table_CustomerOrder + " where " + CO_BranchId + "=" + branchid);
+    public void deleteOrderTableAfterSave(int branchid, String gstPer) {
+        getWritableDatabase().execSQL("delete from " + Table_CustomerOrder + " where " + CO_BranchId + "=" + branchid+" and "+CO_GSTPer+"='"+gstPer+"'");
     }
 
     public void deleteOrderTableUnpack() {
@@ -1279,6 +1279,35 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
+    public Cursor getDistinctBrachIdFromCustOrder() {
+        String str = "select distinct " + CO_BranchId + " from " + Table_CustomerOrder;
+        Constant.showLog("getDistinctBrachIdFromCustOrder :- "+str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getCustOrderDetail(int branchid, String gstPer) {
+        String str = "select * from " + Table_CustomerOrder + " where " + CO_BranchId + "=" + branchid+" and "+CO_GSTPer+"='"+gstPer+"' order by "+CO_Productid+","+CO_Color+",cast("+CO_SizeGroup+" as int)";
+        Constant.showLog("getCustOrderDetail :- "+str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getDistinctGSTPerFromCustOrder(int branchid) {
+        String str = "select distinct " + CO_GSTPer + " from " + Table_CustomerOrder +" where "+CO_BranchId+"="+branchid;//+" limit 1";
+        Constant.showLog("getDistinctGSTPerFromCustOrder :- "+str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public int getCustOrderDetail() {
+        int count = 0;
+        String str = "select count("+CO_Auto+") from " + Table_CustomerOrder;
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if(res.moveToFirst()){
+            count = res.getInt(0);
+        }
+        res.close();
+        return  count;
+    }
+
     public void updateAvailQty(List<CheckoutCustOrderClass> custOrderList) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -1292,11 +1321,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();
-    }
-
-    public Cursor getDistinctBrachIdFromCustOrder() {
-        String str = "select distinct " + CO_BranchId + " from " + Table_CustomerOrder;
-        return getWritableDatabase().rawQuery(str, null);
     }
 
     public Cursor getCustOrderMaster(int branchid) {

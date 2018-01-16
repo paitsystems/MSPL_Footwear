@@ -54,7 +54,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
     private DBHandler db;
     private List<String> urlList;
     private int counter = 0;
-    private String from;
+    private String from, gstPer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -335,9 +335,9 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
             do {
                 branchIdList.add(res.getInt(res.getColumnIndex(DBHandler.CO_BranchId)));
             } while (res.moveToNext());
-            if(res.getCount()==1){
-                counter=1;
-            }
+            /*if (res.getCount() == 1) {
+                counter = 1;
+            }*/
         }
         res.close();
 
@@ -360,7 +360,19 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                 String groupNm = "NA";
                 String data = "";
 
-                Cursor custOrderRes = db.getCustOrderDetail(branchId);
+                Cursor resGST = db.getDistinctGSTPerFromCustOrder(branchId);
+                if (resGST.moveToFirst()) {
+                    do {
+                        gstPer = resGST.getString(resGST.getColumnIndex(DBHandler.CO_GSTPer));
+                    } while (resGST.moveToNext());
+                    if (branchIdList.size() == 1) {
+                        if (resGST.getCount() == 1) {
+                            counter = 1;
+                        }
+                    }
+                }
+                resGST.close();
+                Cursor custOrderRes = db.getCustOrderDetail(branchId, gstPer);
                 if (custOrderRes.moveToFirst()) {
                     do {
                         int prodId, perPackQty, qty, looseQty, actLooseQty, pendingLooseQty;
@@ -540,8 +552,8 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                 if(retAutoBranchId.length>1) {
                     if(!retAutoBranchId[0].equals("0")) {
                         if (retAutoBranchId[1].equals(String.valueOf(branchId))) {
-                            db.deleteOrderTableAfterSave(branchId);
-                            if(counter==1){
+                            db.deleteOrderTableAfterSave(branchId, gstPer);
+                            if (counter == 1) {
                                 showDia(3);
                             }else {
                                 getSaveOrderData();
