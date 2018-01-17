@@ -26,11 +26,11 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
-import com.lnbinfotech.msplfootwearex.model.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
 import java.io.File;

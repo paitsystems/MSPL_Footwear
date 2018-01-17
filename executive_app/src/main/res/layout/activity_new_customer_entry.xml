@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.lnbinfotech.msplfootwearex.NewCustomerEntryActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.lnbinfotech.msplfootwearex.NewCustomerEntryActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                     android:layout_height="match_parent"
                     android:clickable="true"
                     android:focusable="true"
-                    android:hint="@string/enetrcustomername" />
+                    android:hint="@string/enetrcustomername"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -49,9 +49,9 @@
                     android:layout_height="match_parent"
                     android:clickable="true"
                     android:focusable="true"
+                    android:hint="@string/mobile_no"
                     android:inputType="number"
-                    android:maxLength="10"
-                    android:hint="@string/mobile_no" />
+                    android:maxLength="10"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -67,7 +67,7 @@
                     android:layout_height="match_parent"
                     android:clickable="true"
                     android:focusable="true"
-                    android:hint="@string/email_id" />
+                    android:hint="@string/email_id"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -84,7 +84,7 @@
                     android:ems="10"
                     android:gravity="top"
                     android:hint="@string/address"
-                    android:lines="2" />
+                    android:lines="2"/>
             </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
@@ -104,7 +104,7 @@
                     android:drawableRight="@drawable/next16"
                     android:text="@string/next"
                     android:textColor="@color/white"
-                    app:backgroundTint="@color/buttoncolor" />
+                    app:backgroundTint="@color/buttoncolor"/>
             </LinearLayout>
 
             <LinearLayout
@@ -124,7 +124,7 @@
                     android:drawableLeft="@drawable/update"
                     android:text="@string/update"
                     android:textColor="@color/white"
-                    app:backgroundTint="@color/buttoncolor" />
+                    app:backgroundTint="@color/buttoncolor"/>
 
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/btn_cancel"
@@ -135,12 +135,13 @@
                     android:drawableLeft="@drawable/cancel"
                     android:text="@string/cancel"
                     android:textColor="@color/white"
-                    app:backgroundTint="@color/buttoncolor" />
+                    app:backgroundTint="@color/buttoncolor"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
     <TextView
         style="@style/footerstyleMob"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 </LinearLayout>

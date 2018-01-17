@@ -184,6 +184,35 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "AREA");
     }
 
+    public void refreshArealineMaster(String url, final ServerCallback callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\", "");
+                        response = response.replace("''", "");
+                        response = response.substring(1, response.length() - 1);
+                        int ret = new ParseJSON(response, context).parseArealineMaster();
+                        if(ret == 1) {
+                            callback.onSuccess(response);
+                        }else{
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("refreshArealineMaster_" + error.getMessage());
+                        Constant.showLog(error.getMessage());
+                        writeLog("refreshArealineMaster_"+error.getMessage());
+                    }
+                }
+        );
+        AppSingleton.getInstance(context).addToRequestQueue(request, "AREA");
+    }
+
     public void refreshCityMaster(String url, final ServerCallback callback) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {

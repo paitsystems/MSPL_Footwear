@@ -56,7 +56,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private int maxProdId = 0, maxSDMDAuto = 0;
     private ProgressDialog sndpd;
     private Test test;
-    private static String areaMaster = "Area Master", bankMaster = "Bank Master", bankBrancMaster = "Bank's Branch Master",
+    private static String arealineMaster = "AreaLine Master",areaMaster = "Area Master", bankMaster = "Bank Master", bankBrancMaster = "Bank's Branch Master",
                             cityMaster = "City Master", companyMaster = "Company Master", custMaster = "Customer Master",
                             docMaster = "Document Master", empMaster = "Employee Master", hoMaster = "HOMaster Master",
                             prodMaster = "Product Master", sizenDesignMaster = "SizeAndDesign Master", stockMaster = "Stock Master",
@@ -81,7 +81,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     //4-CompanyMaster,5-CustomerMaster,6-DocumentMaster,7-EmployeeMaster,8-HOMaster
                     //9-ProductMaster,10-LoadAllSizeNDesign,11-StockMaster,12-GSTMaster
                     String name = refreshList.get(i);
-
                     if (name.equals(areaMaster)) {
                         refreshDataDia(0);
                     } else if (name.equals(bankMaster)) {
@@ -110,6 +109,8 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                         refreshDataDia(12);
                     }else if (name.equals(sdmdMaster)) {
                         refreshDataDia(13);
+                    }else if (name.equals(arealineMaster)) {
+                        refreshDataDia(14);
                     }
                 } else {
                     toast.setText("You Are Offline");
@@ -151,6 +152,27 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         constant.showPD();
         VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
         requests.refreshAreaMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                showDia(1);
+            }
+
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                showDia(2);
+            }
+        });
+    }
+
+    private void loadArealineMaster() {
+        String url = Constant.ipaddress + "/GetArealineMaster?Id=0";
+        Constant.showLog(url);
+        writeLog("loadArealineMaster_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
+        requests.refreshArealineMaster(url, new ServerCallback() {
             @Override
             public void onSuccess(String result) {
                 constant.showPD();
@@ -411,6 +433,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         toast.setGravity(Gravity.CENTER, 0, 0);
         listView = (ListView) findViewById(R.id.listView);
         refreshList = new ArrayList<>();
+        refreshList.add(arealineMaster);
         refreshList.add(areaMaster);
         refreshList.add(bankMaster);
         refreshList.add(bankBrancMaster);
@@ -535,6 +558,8 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     //TODO : Remove
                     //loadSDMD(10101, 10600);
                     loadSDMD(0,100);
+                }else if(a==14){
+                    loadArealineMaster();
                 }
             }
         });

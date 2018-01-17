@@ -285,4 +285,5 @@
 
     <string name="warehouse">Godown</string>
     <string name="clear">Clear Order</string>
+    <string name="allvisit">All Visit</string>
 </resources>

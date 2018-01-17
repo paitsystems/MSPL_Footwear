@@ -29,7 +29,6 @@ import android.widget.Toast;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
-import com.lnbinfotech.msplfootwearex.model.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.model.FeedbackClass;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 

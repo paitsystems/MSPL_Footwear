@@ -76,7 +76,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_visit:
-                startActivity(new Intent(getApplicationContext(), AreawiseCustomerSelectionActivity.class));
+                startActivity(new Intent(getApplicationContext(), ArealinewiseAreaSelectionActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_reports:

@@ -37,15 +37,19 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.visitoption);
         }
-        String arealine = "Selected Arealine-"+getIntent().getExtras().getString("area_name");
-        //Constant.showLog(arealine);
-        custName = getIntent().getExtras().getString("child_selected");
-        custId = Integer.parseInt(getIntent().getExtras().getString("cust_id"));
-        DisplayCustListActivity.custId = custId;
-        //Constant.showLog(custName);
-        //tv_arealine.setText("Selected Arealine-" +arealine);
-        tv_arealine_display.setText(arealine);
-        tv_custname_display.setText("CustomerName-"+custName);
+        try {
+            String arealine = getIntent().getExtras().getString("area_line");
+            String area = getIntent().getExtras().getString("area_name");
+            custName = getIntent().getExtras().getString("child_selected");
+            custId = Integer.parseInt(getIntent().getExtras().getString("cust_id"));
+            DisplayCustListActivity.custId = custId;
+            String str = arealine+" - "+area;
+            tv_arealine_display.setText(str);
+            String cust = "Customer - " + custName;
+            tv_custname_display.setText(cust);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         card_take_order.setOnClickListener(this);
         card_payment.setOnClickListener(this);
         card_ledger_report.setOnClickListener(this);
@@ -63,13 +67,13 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_payment:
-                toast.setText("Under Development");
-                toast.show();
-                /*Intent intent =  new Intent(getApplicationContext(),VisitPaymentFormActivity.class);
+                //toast.setText("Under Development");
+                //toast.show();
+                Intent intent =  new Intent(getApplicationContext(),VisitPaymentFormActivity.class);
                 intent.putExtra("cust_id",String.valueOf(custId));
                 intent.putExtra("child_selected",custName);
                 startActivity(intent);
-                overridePendingTransition(R.anim.enter,R.anim.exit);*/
+                overridePendingTransition(R.anim.enter,R.anim.exit);
                 break;
             case R.id.card_ledger_report:
                 Intent in =  new Intent(getApplicationContext(),LedgerReportActivity.class);

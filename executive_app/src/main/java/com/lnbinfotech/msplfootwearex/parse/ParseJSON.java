@@ -11,6 +11,7 @@ import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.AreaMasterClass;
+import com.lnbinfotech.msplfootwearex.model.ArealineMasterClass;
 import com.lnbinfotech.msplfootwearex.model.BankBranchMasterClass;
 import com.lnbinfotech.msplfootwearex.model.BankMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CheckAvailStockClass;
@@ -147,7 +148,6 @@ public class ParseJSON {
                     areaClass.setArea(jsonArray.getJSONObject(i).getString("area"));
                     areaClass.setCityid(jsonArray.getJSONObject(i).getInt("cityid"));
                     areaList.add(areaClass);
-
                 }
                 db.addAreaMaster(areaList);
                 db.close();
@@ -156,6 +156,32 @@ public class ParseJSON {
         }catch (Exception e){
             e.printStackTrace();
             writeLog("parseAreaMaster_"+e.getMessage());
+        }
+        return ret;
+    }
+
+    public int parseArealineMaster(){
+        int ret = 0;
+        List<ArealineMasterClass> areaList = new ArrayList<>();
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                db.deleteTable(DBHandler.Table_AreaLineMaster);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    ArealineMasterClass areaClass = new ArealineMasterClass();
+                    areaClass.setAuto(jsonArray.getJSONObject(i).getInt("Auto"));
+                    areaClass.setAreaid(jsonArray.getJSONObject(i).getInt("Areaid"));
+                    areaClass.setArea(jsonArray.getJSONObject(i).getString("Area"));
+                    areaClass.setCustcount(jsonArray.getJSONObject(i).getInt("Custcount"));
+                    areaList.add(areaClass);
+                }
+                db.addAreaLineMaster(areaList);
+                db.close();
+                ret = 1;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseArealineMaster_"+e.getMessage());
         }
         return ret;
     }

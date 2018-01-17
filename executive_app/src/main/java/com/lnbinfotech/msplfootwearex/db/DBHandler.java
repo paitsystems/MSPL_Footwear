@@ -10,6 +10,7 @@ import com.lnbinfotech.msplfootwearex.AddToCartActivity;
 import com.lnbinfotech.msplfootwearex.OptionsActivity;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.model.AreaMasterClass;
+import com.lnbinfotech.msplfootwearex.model.ArealineMasterClass;
 import com.lnbinfotech.msplfootwearex.model.BankBranchMasterClass;
 import com.lnbinfotech.msplfootwearex.model.BankMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CheckoutCustOrderClass;
@@ -36,7 +37,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
     //TODO: Change Version
-    public static final int Database_Version = 1;
+    public static final int Database_Version = 2;
 
     public static final String Table_Customermaster = "CustomerMaster";
     public static final String CM_RetailCustID = "CustID";
@@ -127,6 +128,12 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String HO_City = "City";
     public static final String HO_State = "State";
     public static final String HO_ini = "ini";
+
+    public static final String Table_AreaLineMaster = "AreaLineMaster";
+    public static final String AL_Auto = "Auto";
+    public static final String AL_AreaId = "AreaId";
+    public static final String AL_Area = "Area";
+    public static final String AL_CustCount = "CustCount";
 
     public static final String Table_AreaMaster = "AreaMaster";
     public static final String Area_Auto = "Auto";
@@ -335,6 +342,9 @@ public class DBHandler extends SQLiteOpenHelper {
     private String create_area_master = "create table if not exists " + Table_AreaMaster + "(" +
             Area_Auto + " int," + Area_Id + " int," + Area_Area + " text," + Area_Cityid + " int)";
 
+    private String create_arealine_master = "create table if not exists " + Table_AreaLineMaster + "(" +
+            AL_Auto + " int," + AL_AreaId + " int," + AL_Area + " text," + AL_CustCount + " int)";
+
     private String create_city_master = "create table if not exists " + Table_CityMaster + "(" +
             City_Auto + " int," + City_Id + " int," + City_City + " text," + City_Stateid + " int)";
 
@@ -395,6 +405,8 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(create_emp_master);
         Constant.showLog(create_ho_master);
         db.execSQL(create_ho_master);
+        Constant.showLog(create_arealine_master);
+        db.execSQL(create_arealine_master);
         Constant.showLog(create_area_master);
         db.execSQL(create_area_master);
         Constant.showLog(create_city_master);
@@ -423,9 +435,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < newVersion) {
-            db.execSQL(create_trackcustomerorder_table);
-            db.execSQL(create_sizedesignmastdet_table);
+        if (oldVersion < 2) {
+            db.execSQL(create_arealine_master);
         }
     }
 
@@ -472,6 +483,21 @@ public class DBHandler extends SQLiteOpenHelper {
             cv.put(Area_Area, areaClass.getArea());
             cv.put(Area_Cityid, areaClass.getCityid());
             db.insert(Table_AreaMaster, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+    }
+
+    public void addAreaLineMaster(List<ArealineMasterClass> areaClassList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        ContentValues cv = new ContentValues();
+        for (ArealineMasterClass areaClass : areaClassList) {
+            cv.put(AL_Auto, areaClass.getAuto());
+            cv.put(AL_AreaId, areaClass.getAreaid());
+            cv.put(AL_Area, areaClass.getArea());
+            cv.put(AL_CustCount, areaClass.getCustcount());
+            db.insert(Table_AreaLineMaster, null, cv);
         }
         db.setTransactionSuccessful();
         db.endTransaction();
@@ -883,6 +909,12 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
+    public Cursor getDistinctAreaLine() {
+        String str = "select distinct " + AL_Area + " from " + Table_AreaLineMaster + " order by " + AL_Area;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
     public Cursor getAreaId(String area) {
         String str = "select " + Area_Id + " from " + Table_AreaMaster + " where " + Area_Area + " = '" + area + "'";
         Constant.showLog(str);
@@ -1013,9 +1045,12 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
-    public Cursor getExpListData() {
+    public Cursor getExpListData(String areaIds) {
         String str = "select " + Table_AreaMaster + "." + Area_Id + "," + Table_AreaMaster + "." + Area_Area + "," + Table_Customermaster + "." + CM_RetailCustID + "," + Table_Customermaster + "." + CM_PartyName + "," + Table_Customermaster + "." + CM_AreaId +
-                " from " + Table_AreaMaster + "," + Table_Customermaster + " where " + Table_AreaMaster + "." + Area_Id + "=" + Table_Customermaster + "." + CM_AreaId + " group by " + Table_AreaMaster + "." + Area_Id + "," + Table_Customermaster + "." + CM_Name + " order by " + Table_AreaMaster + "." + Area_Area +","+Table_Customermaster + "." + CM_PartyName;
+                " from " + Table_AreaMaster + "," + Table_Customermaster +
+                " where " + Table_AreaMaster + "." + Area_Id + "=" + Table_Customermaster + "." + CM_AreaId +
+                " and " + Table_AreaMaster + "." + Area_Id + " in("+areaIds+") group by " + Table_AreaMaster + "." + Area_Id + "," + Table_Customermaster + "." + CM_Name +
+                " order by " + Table_AreaMaster + "." + Area_Area +","+Table_Customermaster + "." + CM_PartyName;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
     }
@@ -1242,7 +1277,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
-
     public void deleteOrderTable(int auto) {
         getWritableDatabase().execSQL("delete from " + Table_CustomerOrder + " where " + CO_Auto + "=" + auto);
     }
@@ -1431,6 +1465,11 @@ public class DBHandler extends SQLiteOpenHelper {
         return colourHashcode;
     }
 
+    public Cursor getAreaIdAreaLineWise(String areaLine){
+        String str = "select "+AL_AreaId+" from "+Table_AreaLineMaster+" where "+AL_Area+"='"+areaLine+"' order by "+AL_AreaId;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str,null);
+    }
 }
 
 

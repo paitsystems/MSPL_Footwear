@@ -633,10 +633,10 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                    editor.putInt(getString(R.string.pref_selcustid), 0);
-                    editor.putString(getString(R.string.pref_selcustname), "");
-                    editor.apply();
+                    //SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                    //editor.putInt(getString(R.string.pref_selcustid), 0);
+                    //editor.putString(getString(R.string.pref_selcustname), "");
+                    //editor.apply();
                     dialog.dismiss();
                     checkLimit();
                 }

@@ -8,18 +8,20 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.adapters.AreawiseCustSelExpandableListAdapter;
 import com.lnbinfotech.msplfootwearex.adapters.AreawiseCustSelListAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
+import com.lnbinfotech.msplfootwearex.model.ArealineMasterClass;
 import com.lnbinfotech.msplfootwearex.model.AreawiseCustomerSelectionClass;
 
 import java.util.ArrayList;
@@ -48,6 +50,8 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
     private String area_name = "", child_sel = "";
     private ImageView img_parent;
     private int cust_id = 0;
+    private ArealineMasterClass areaLineClass;
+    private TextView tv_arealine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,12 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
             getSupportActionBar().setTitle(R.string.visit);
         }
 
+        try {
+            areaLineClass = (ArealineMasterClass) getIntent().getSerializableExtra("arealine");
+            tv_arealine.setText(areaLineClass.getArea());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
        /* listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -130,6 +140,8 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
             }
         });
 
+        areaName();
+
     }
 
     @Override
@@ -166,6 +178,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         toast.setGravity(Gravity.CENTER,0,0);
         listView = (ListView) findViewById(R.id.listView);
         exp_listView = (ExpandableListView) findViewById(R.id.exp_listView);
+        tv_arealine = (TextView) findViewById(R.id.tv_arealine);
         areaList = new ArrayList<>();
 
         area_map = new HashMap<>();
@@ -176,20 +189,25 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         areaid_partyId_map = new HashMap<>();
         childls = new HashMap<>();
 
-        areaName();
-
         adapter1 = new AreawiseCustSelExpandableListAdapter(getApplicationContext(),area_map, areaid_list, party_map, partyid_list, area_party_map, areaid_partyId_map,childls);
         exp_listView.setAdapter(adapter1);
     }
 
     private  void areaName(){
-        Cursor cursor =  db.getExpListData();
+        String areaIds = "";
+        Cursor res = db.getAreaIdAreaLineWise(areaLineClass.getArea());
+        if(res.moveToFirst()){
+            do {
+                areaIds = areaIds + res.getString(res.getColumnIndex(DBHandler.AL_AreaId)) +",";
+            }while (res.moveToNext());
+        }
+        areaIds = areaIds.substring(0,areaIds.length()-1);
+        res.close();
+        Cursor cursor =  db.getExpListData(areaIds);
         if(cursor.moveToFirst()){
             do{
-
                 String area_name = "",cust_name = "";
                // AreawiseCustomerSelectionClass  areaclass = new AreawiseCustomerSelectionClass();
-
                 areaId =  cursor.getInt(cursor.getColumnIndex(DBHandler.Area_Id));
                 area_name = cursor.getString(cursor.getColumnIndex(DBHandler.Area_Area));
                 custId = cursor.getInt(cursor.getColumnIndex(DBHandler.CM_RetailCustID));
@@ -319,10 +337,11 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         editor.putString(getString(R.string.pref_selcustname),child_sel);
         editor.apply();
         Intent in = new Intent(getApplicationContext(),VisitOptionsActivity.class);
+        in.putExtra("area_line",areaLineClass.getArea());
         in.putExtra("area_name",area_name);
         in.putExtra("child_selected",child_sel);
         in.putExtra("cust_id",String.valueOf(cust_id));
-        finish();
+        //finish();
         startActivity(in);
         overridePendingTransition(R.anim.enter,R.anim.exit);
     }

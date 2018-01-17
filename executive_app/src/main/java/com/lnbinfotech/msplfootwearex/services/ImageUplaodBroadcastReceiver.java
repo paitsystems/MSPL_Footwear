@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
 
+import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
-import com.lnbinfotech.msplfootwearex.model.ConnectivityTest;
 
 import java.io.File;
 
