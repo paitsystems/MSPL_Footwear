@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.lnbinfotech.msplfootwearex.AddToCartActivity;
 import com.lnbinfotech.msplfootwearex.OptionsActivity;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.interfaces.DatabaseUpdateInterface;
 import com.lnbinfotech.msplfootwearex.model.AreaMasterClass;
 import com.lnbinfotech.msplfootwearex.model.ArealineMasterClass;
 import com.lnbinfotech.msplfootwearex.model.BankBranchMasterClass;
@@ -16,6 +17,7 @@ import com.lnbinfotech.msplfootwearex.model.BankMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwearex.model.CityMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CompanyMasterClass;
+import com.lnbinfotech.msplfootwearex.model.CurrencyMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerOrderClass;
 import com.lnbinfotech.msplfootwearex.model.DocumentMasterClass;
@@ -35,9 +37,11 @@ import java.util.List;
 
 public class DBHandler extends SQLiteOpenHelper {
 
+    //private DatabaseUpdateInterface dbInterface;
+
     public static final String Database_Name = "SmartGST.db";
     //TODO: Change Version
-    public static final int Database_Version = 2;
+    public static final int Database_Version = 3;
 
     public static final String Table_Customermaster = "CustomerMaster";
     public static final String CM_RetailCustID = "CustID";
@@ -310,6 +314,12 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String SDMD_Size = "Size";
     public static final String SDMD_Qty = "Qty";
 
+    public static final String Table_CurrencyMaster = "CurrencyMasterClass";
+    public static final String Curr_Auto = "Auto";
+    public static final String Curr_Currency = "Currency";
+    public static final String Curr_Status = "Status";
+
+
     public DBHandler(Context context) {
         super(context, Database_Name, null, Database_Version);
     }
@@ -393,6 +403,9 @@ public class DBHandler extends SQLiteOpenHelper {
     private String create_sizedesignmastdet_table = "create table if not exists "+Table_SizeDesignMastDet+"("+SDMD_Auto+" int,"+SDMD_ProductId+" int,"+SDMD_DesignNo+" text,"+SDMD_SizeGroupFrom+" int,"
             +SDMD_SizeGroupTo+" int,"+SDMD_Total+" int,"+SDMD_SizeGroup+" text,"+SDMD_Colour+" text,"+SDMD_Size+" int,"+SDMD_Qty+" int)";
 
+    private String create_currency_master = "create table if not exists " + Table_CurrencyMaster + "(" +
+            Curr_Auto + " int," + Curr_Currency + " int," + Curr_Status + " text)";
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         Constant.showLog(create_cust_master);
@@ -438,6 +451,10 @@ public class DBHandler extends SQLiteOpenHelper {
         if (oldVersion < 2) {
             db.execSQL(create_arealine_master);
         }
+        if(oldVersion<3){
+            db.execSQL(create_currency_master);
+        }
+        //dbInterface.dbUpdated();
     }
 
     public void addCustomerDetail(ArrayList<CustomerDetailClass> custList) {
@@ -928,14 +945,27 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public Cursor getBankName() {
-        String str = "select " + Bank_Name + " from " + Table_BankMaster;
+        String str = "select distinct " + Bank_Name + " from " + Table_BankMaster + " order by "+Bank_Name;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
     }
 
     public Cursor getBranchName() {
         // String str = "select "+Branch_CBranch+" from "+Table_BankBranchMaster+" where "+Branch_CBranch+"  <> ''";
-        String str = "select " + Branch_CBranch + " from " + Table_BankBranchMaster;
+        String str = "select distinct " + Branch_CBranch + " from " + Table_BankBranchMaster + " order by "+Branch_CBranch;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getOffBankName() {
+        String str = "select distinct " + Bank_Name + " from " + Table_BankMaster + " order by "+Bank_Name;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getOffBranchName() {
+        // String str = "select "+Branch_CBranch+" from "+Table_BankBranchMaster+" where "+Branch_CBranch+"  <> ''";
+        String str = "select distinct " + Branch_CBranch + " from " + Table_BankBranchMaster + " order by "+Branch_CBranch;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
     }
@@ -1054,6 +1084,17 @@ public class DBHandler extends SQLiteOpenHelper {
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
     }
+
+    public Cursor getExpListData() {
+        String str = "select " + Table_AreaMaster + "." + Area_Id + "," + Table_AreaMaster + "." + Area_Area + "," + Table_Customermaster + "." + CM_RetailCustID + "," + Table_Customermaster + "." + CM_PartyName + "," + Table_Customermaster + "." + CM_AreaId +
+                " from " + Table_AreaMaster + "," + Table_Customermaster +
+                " where " + Table_AreaMaster + "." + Area_Id + "=" + Table_Customermaster + "." + CM_AreaId +
+                " group by " + Table_AreaMaster + "." + Area_Id + "," + Table_Customermaster + "." + CM_Name +
+                " order by " + Table_AreaMaster + "." + Area_Area +","+Table_Customermaster + "." + CM_PartyName;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
 
     public Cursor getDistinctSizeGroup(String packUnpackType) {
         String str = "select distinct " + ARSD_SizeGroup + " from " + Table_AllRequiredSizesDesigns +
@@ -1470,6 +1511,31 @@ public class DBHandler extends SQLiteOpenHelper {
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str,null);
     }
+
+    public void addCurrencyMaster(List<CurrencyMasterClass> currClassList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        ContentValues cv = new ContentValues();
+        for (CurrencyMasterClass currClass : currClassList) {
+            cv.put(Curr_Auto, currClass.getAuto());
+            cv.put(Curr_Currency, currClass.getCurrency());
+            cv.put(Curr_Status, currClass.getStatus());
+            db.insert(Table_CurrencyMaster, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+    }
+
+    /*public void initInterface(DatabaseUpdateInterface _dbInterface){
+        this.dbInterface = _dbInterface;
+    }*/
+
+    public Cursor getCurrenyMaster() {
+        String str = "select " + Curr_Currency + " from " + Table_CurrencyMaster + " order by " + Curr_Currency + " desc";
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
 }
 
 

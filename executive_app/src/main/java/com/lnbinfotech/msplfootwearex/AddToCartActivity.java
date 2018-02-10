@@ -365,10 +365,6 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 startViewCustOrderActivity();
                 break;
             case R.id.tv_new_item:
-                //TODO : Comment When Delivery
-                //db.deleteTable(DBHandler.Table_CustomerOrder);
-                //toast.setText("Order Cleared");
-                //toast.show();
                 new Constant(AddToCartActivity.this).doFinish();
                 break;
         }
@@ -1015,7 +1011,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             custOrder.setLooseQty(looseQty);
                             custOrder.setActLooseQty(looseQty);
                             custOrder.setAmount(String.valueOf(amount));
-                            custOrder.setLoosePackTyp("Unpack");
+                            custOrder.setLoosePackTyp("Pack");
                             custOrder.setPendingLooseQty(looseQty);
                             custOrder.setTotalamt(String.valueOf(totalAmt));
                             custOrder.setNetamnt(String.valueOf(totalAmt));
@@ -1787,7 +1783,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             custOrder.setLooseQty(looseQty);
                             custOrder.setActLooseQty(looseQty);
                             custOrder.setAmount(String.valueOf(amount));
-                            custOrder.setLoosePackTyp("Unpack");
+                            custOrder.setLoosePackTyp("Pack");
                             custOrder.setPendingLooseQty(looseQty);
                             custOrder.setTotalamt(String.valueOf(totalAmt));
                             custOrder.setNetamnt(String.valueOf(totalAmt));

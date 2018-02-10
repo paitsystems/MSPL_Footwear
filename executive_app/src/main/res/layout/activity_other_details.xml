@@ -60,7 +60,7 @@
                     android:layout_height="50dp"
                     android:layout_margin="@dimen/mobmargin2"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <TextView
                         style="@style/textViewMob"
@@ -89,7 +89,7 @@
                     android:layout_height="50dp"
                     android:layout_margin="@dimen/mobmargin2"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <TextView
                         style="@style/textViewMob"
@@ -138,7 +138,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/mobmargin2"
-                    android:text="@string/enterno"
+                    android:layout_weight="0.3"
+                    android:text="@string/enteramt"
                     android:textAppearance="?android:attr/textAppearanceSmall"/>
 
                 <LinearLayout
@@ -146,71 +147,12 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/mobmargin2"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    >
 
                     <EditText
-
-                        android:id="@+id/ed_chq_no"
+                        android:id="@+id/ed_amnt"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:allowUndo="false"
-                        android:drawableRight="@drawable/cheque_number"
-                        android:ems="10"
-                        android:inputType="numberDecimal"
-                        android:padding="5sp"
-                        android:visibility="visible"/>
-                </LinearLayout>
-
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/mobmargin2"
-                    android:layout_weight="0.3"
-                    android:text="@string/enteramount"
-                    android:textAppearance="?android:attr/textAppearanceSmall"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/mobmargin2"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
-
-                    <EditText
-
-                        android:id="@+id/ed_chq_amt"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:drawableRight="@drawable/cheque_amount"
-                        android:ems="10"
-                        android:inputType="numberDecimal"
-                        android:padding="5sp"
-                        android:visibility="visible"/>
-                </LinearLayout>
-
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/mobmargin2"
-                    android:layout_weight="0.3"
-                    android:text="@string/enteragainstref"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:visibility="gone"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/mobmargin2"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <EditText
-                        android:id="@+id/ed_chq_ref"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:drawableRight="@drawable/cheque_ref"
                         android:ems="10"
                         android:inputType="text"
                         android:padding="5sp"
@@ -221,8 +163,62 @@
                     style="@style/textViewMob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/mobmargin2"
+                    android:text="Payment Made Type"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/mobmargin2"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <EditText
+
+                        android:id="@+id/ed_mode_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:allowUndo="false"
+                        android:ems="10"
+                        android:inputType="text"
+                        android:padding="5sp"
+                        android:visibility="visible"/>
+                </LinearLayout>
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/mobmargin2"
+                    android:layout_weight="0.3"
+                    android:text="Enter Remark"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/mobmargin2"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <EditText
+
+                        android:id="@+id/ed_remark"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:ems="10"
+                        android:padding="5sp"
+                        android:visibility="visible"
+                        android:inputType="text"/>
+                </LinearLayout>
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_margin="10sp"
-                    android:text="@string/attachchequeimage"/>
+                    android:text="Attach Image"/>
 
 
                 <LinearLayout
@@ -264,119 +260,6 @@
 
             </LinearLayout>
         </ScrollView>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/list_lay"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.3"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/red"
-            android:orientation="horizontal"
-            android:padding="5sp">
-
-            <TextView
-                style="@style/textViewMob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:gravity="left"
-                android:text="Chq Date"
-                android:textColor="@color/white"/>
-
-            <TextView
-                style="@style/textViewMob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:gravity="left"
-                android:text="@string/number"
-                android:textColor="@color/white"/>
-
-            <TextView
-                style="@style/textViewMob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:gravity="right"
-                android:text="@string/amt"
-                android:textColor="@color/white"/>
-
-            <TextView
-                style="@style/textViewMob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:gravity="right"
-                android:text="@string/againstref"
-                android:textColor="@color/white"
-                android:visibility="gone"/>
-
-        </LinearLayout>
-
-        <ListView
-            android:id="@+id/lv_show_chq_detail"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:headerDividersEnabled="false"
-            android:visibility="visible"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/red"
-            android:orientation="horizontal"
-            android:padding="5sp"
-            >
-
-            <TextView
-                style="@style/textViewMob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:gravity="left"
-                android:text="@string/total"
-                android:textColor="@color/white"/>
-
-            <TextView
-                style="@style/textViewMob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:gravity="left"
-                android:text="@string/number"
-                android:textColor="@color/white"
-                android:visibility="invisible"/>
-
-            <TextView
-                android:id="@+id/tv_total"
-                style="@style/textViewMob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:gravity="right"
-                android:text="@string/amt"
-                android:textColor="@color/white"/>
-
-            <TextView
-                style="@style/textViewMob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:gravity="right"
-                android:text="@string/againstref"
-                android:textColor="@color/white"
-                android:visibility="gone"/>
-
-        </LinearLayout>
-
     </LinearLayout>
 
     <TextView

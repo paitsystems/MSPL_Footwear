@@ -699,7 +699,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.4"
-                android:background="@drawable/line_left_right_bottom_draw"
+                android:background="@drawable/line_right_bottom_draw"
                 android:gravity="center"
                 android:text="0"
                 android:textAppearance="?android:attr/textAppearanceSmall"

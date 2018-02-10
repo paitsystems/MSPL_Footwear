@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/mobpadding5"
+        android:weightSum="1">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cb"
+            style="@style/textViewMob"/>
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="@dimen/outstndngreport_date_90"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center"
+            android:gravity="left"
+            android:text="Date"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_dcno"
+            android:layout_width="@dimen/outstndngreport_dcno_180"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Dcno"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"
+            android:visibility="visible"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/tv_total"
+            android:layout_width="@dimen/outstndngreport_date_90"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center"
+            android:gravity="right"
+            android:text="Total"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_type"
+            android:layout_width="@dimen/outstndngreport_date_90"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="type"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/tv_paidamnt"
+            android:layout_width="@dimen/outstndngreport_date_90"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center"
+            android:gravity="right"
+            android:text="0"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_outstndamnt"
+            android:layout_width="@dimen/outstndngreport_date_90"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center"
+            android:gravity="right"
+            android:text="0"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+</LinearLayout>

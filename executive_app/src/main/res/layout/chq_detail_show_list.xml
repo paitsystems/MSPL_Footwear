@@ -40,6 +40,7 @@
             style="@style/textViewMob"
             android:id="@+id/tv_ref"
             android:layout_weight="0.3"
-            android:gravity="right" />
+            android:gravity="right"
+            android:visibility="gone"/>
     </LinearLayout>
 </LinearLayout>

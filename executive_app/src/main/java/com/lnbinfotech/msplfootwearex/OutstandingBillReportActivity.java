@@ -76,7 +76,6 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
         return super.onOptionsItemSelected(item);
     }
 
-
     private void showOutstandingReport() {
         if (ConnectivityTest.getNetStat(OutstandingBillReportActivity.this)) {
             try {
@@ -121,7 +120,6 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
             toast.show();
         }
     }
-
 
     private void setTotal(List<OuststandingReportClass> list){
         total = 0;
@@ -206,6 +204,7 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
 
         builder.create().show();
     }
+
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "OutstandingBillReportActivity_" + _data);
     }

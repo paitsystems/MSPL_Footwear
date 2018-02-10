@@ -10,13 +10,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,9 +23,12 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lnbinfotech.msplfootwearex.adapters.ShowChqDetailAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.ChequeDetailsGetterSetter;
@@ -34,9 +36,7 @@ import com.lnbinfotech.msplfootwearex.model.SelectAutoItemGetterSetter;
 
 import java.io.File;
 import java.io.FileInputStream;
-
 import java.io.FileOutputStream;
-
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -44,21 +44,24 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-
 public class ChequeDetailsActivity extends AppCompatActivity implements View.OnClickListener {
-    private EditText ed_branch, ed_bank, ed_chq_no, ed_chq_amt, ed_chq_ref;
+
+    private ListView lv_show_chq_detail;
+    private LinearLayout lay_img, lay_list;
+    private EditText ed_branch, ed_bank, ed_chq_no, ed_chq_amt, ed_chq_ref, ed_total_chq, ed_chq_date;
     private AppCompatButton btn_submit;
-    private TextView tv_chq_date;
+    private TextView tv_chq_date, tv_total;
     private ImageView imageView_cheque_img;
-    private String auto_type, current_time, imagePath;
+    private String auto_type, imagePath;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
     private Calendar cal = Calendar.getInstance();
     private final int requestCode = 21;
     public static SelectAutoItemGetterSetter selectAuto;
-    public static ChequeDetailsGetterSetter chequeDetails;
+    public ChequeDetailsGetterSetter chequeDetails;
     private Date today_date = Calendar.getInstance().getTime();
     private int day, month, year;
     private Toast toast;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,10 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
             getSupportActionBar().setTitle(R.string.payment);
         }
         init();
+        if(!VisitPaymentFormActivity.ls.isEmpty()){
+            lay_list.setVisibility(View.VISIBLE);
+            show_chq_adapter();
+        }
     }
 
     private void init() {
@@ -76,7 +83,6 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         selectAuto = new SelectAutoItemGetterSetter();
-        chequeDetails = new ChequeDetailsGetterSetter();
         day = cal.get(Calendar.DAY_OF_MONTH);
         month = cal.get(Calendar.MONTH);
         year = cal.get(Calendar.YEAR);
@@ -84,19 +90,26 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
         ed_bank = (EditText) findViewById(R.id.ed_bank);
         ed_branch = (EditText) findViewById(R.id.ed_branch);
         tv_chq_date = (TextView) findViewById(R.id.tv_chq_date);
+        tv_total = (TextView) findViewById(R.id.tv_total);
         ed_chq_no = (EditText) findViewById(R.id.ed_chq_no);
         ed_chq_amt = (EditText) findViewById(R.id.ed_chq_amt);
         ed_chq_ref = (EditText) findViewById(R.id.ed_chq_ref);
+        ed_total_chq = (EditText) findViewById(R.id.ed_total_chq);
+        ed_chq_date = (EditText) findViewById(R.id.ed_chq_date);
         imageView_cheque_img = (ImageView) findViewById(R.id.imageView_cheque_img);
         btn_submit = (AppCompatButton) findViewById(R.id.btn_submt);
-
+        lv_show_chq_detail = (ListView) findViewById(R.id.lv_show_chq_detail);
+        lay_img = (LinearLayout) findViewById(R.id.lay_img);
+        lay_list = (LinearLayout) findViewById(R.id.list_lay);
         tv_chq_date.setText(sdf.format(today_date));
 
         ed_bank.setOnClickListener(this);
         ed_branch.setOnClickListener(this);
+        ed_chq_date.setOnClickListener(this);
         tv_chq_date.setOnClickListener(this);
-        imageView_cheque_img.setOnClickListener(this);
+        lay_img.setOnClickListener(this);
         btn_submit.setOnClickListener(this);
+
     }
 
     @Override
@@ -105,15 +118,19 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
             case R.id.btn_submt:
                 validations();
                 break;
-            case R.id.imageView_cheque_img:
+            case R.id.lay_img:
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 File f = Constant.checkFolder(Constant.folder_name);
                 f = new File(f.getAbsolutePath(), "temp.jpg");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
                 startActivityForResult(intent, requestCode);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 //capture_image();
                 break;
             case R.id.tv_chq_date:
+                showDialog(1);
+                break;
+            case R.id.ed_chq_date:
                 showDialog(1);
                 break;
             case R.id.ed_bank:
@@ -137,12 +154,16 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onBackPressed() {
-        showPopup();
+        showPopup(1);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+        this.menu = menu;
+        if(VisitPaymentFormActivity.ls.size()>=1) {
+            getMenuInflater().inflate(R.menu.chequedetail_menu, menu);
+        }
+        return true;
     }
 
     @Override
@@ -150,7 +171,13 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
         switch (item.getItemId()) {
             case android.R.id.home:
                 //new Constant(ChequeDetailsActivity.this).doFinish();
-                showPopup();
+                showPopup(1);
+                break;
+            case R.id.chq_save:
+                showPopup(2);
+                break;
+            case R.id.chq_clear:
+                showPopup(3);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -160,32 +187,9 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
         super.onResume();
         get_auto_branchlist();
         get_auto_banklist();
-    }
-
-    private void get_data() {
-        String bank = ed_bank.getText().toString();
-        chequeDetails.setChq_det_bank(bank);
-
-        String branch = ed_branch.getText().toString();
-        chequeDetails.setChq_det_branch(branch);
-
-        String date = tv_chq_date.getText().toString();
-        chequeDetails.setChq_det_date(date);
-
-        String number = ed_chq_no.getText().toString();
-        chequeDetails.setChq_det_number(number);
-
-        String amount = ed_chq_amt.getText().toString();
-        chequeDetails.setChq_det_amt(amount);
-
-        String ref = ed_chq_ref.getText().toString();
-        chequeDetails.setChq_det_ref(ref);
-
-        chequeDetails.setChq_det_image(imagePath);
-        Constant.showLog("file_name: " + imagePath);
-        VisitPaymentFormActivity.ls.add(chequeDetails);
-        //finish();
-        new Constant(ChequeDetailsActivity.this).doFinish();
+        if (VisitPaymentFormActivity.ls.size() != 0) {
+            show_chq_adapter();
+        }
     }
 
     private void get_auto_banklist() {
@@ -196,30 +200,104 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
     private void get_auto_branchlist() {
         ed_branch.setText(selectAuto.getChq_auto_branch());
         Constant.showLog("ed_branch: " + selectAuto.getChq_auto_branch());
+
     }
 
     private void validations() {
         if (ed_bank.getText().toString().equals("")) {
-            toast.setText("Please enter bank name");
+            toast.setText("Please Select Bank Name");
             toast.show();
         } else if (ed_branch.getText().toString().equals("")) {
-            toast.setText("Please enter branch name");
+            toast.setText("Please Select Branch Name");
             toast.show();
         } else if (tv_chq_date.getText().toString().equals("")) {
-            toast.setText("Please,enter cheque date");
+            toast.setText("Please Select Cheque Date");
+            toast.show();
+        } else if (ed_total_chq.getText().toString().equals("")) {
+            toast.setText("Please Enter Number of Cheques");
             toast.show();
         } else if (ed_chq_no.getText().toString().equals("")) {
-            toast.setText("Please,enter cheque number");
+            toast.setText("Please Enter Cheque Number");
             toast.show();
         } else if (ed_chq_amt.getText().toString().equals("")) {
-            toast.setText("Please,enter cheque amount");
+            toast.setText("Please Enter Cheque Amount");
             toast.show();
-        } else if (ed_chq_ref.getText().toString().equals("")) {
+        } /*else if (ed_chq_ref.getText().toString().equals("")) {
             toast.setText("Please,enter cheque reference");
             toast.show();
-        } else {
+        } */ else {
             get_data();
         }
+    }
+
+    private void get_data() {
+        try {
+            chequeDetails = new ChequeDetailsGetterSetter();
+            String bank = ed_bank.getText().toString();
+            chequeDetails.setChq_det_bank(bank);
+
+            String branch = ed_branch.getText().toString();
+            chequeDetails.setChq_det_branch(branch);
+
+            String tot_chq = ed_total_chq.getText().toString();
+            chequeDetails.setNo_of_chq(tot_chq);
+
+            String date = tv_chq_date.getText().toString();
+            date = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH).format(new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).parse(date));
+            chequeDetails.setChq_det_date(date);
+
+            String number = ed_chq_no.getText().toString();
+            chequeDetails.setChq_det_number(number);
+
+            String amount = ed_chq_amt.getText().toString();
+            chequeDetails.setChq_det_amt(amount);
+            int tot = Integer.parseInt(amount);
+            VisitPaymentFormActivity.total = VisitPaymentFormActivity.total + tot;
+            tv_total.setText(String.valueOf(VisitPaymentFormActivity.total));
+
+            String ref = ed_chq_ref.getText().toString();
+            chequeDetails.setChq_det_ref(ref);
+
+            chequeDetails.setChq_det_image(imagePath);
+            Constant.showLog("file_name: " + imagePath);
+
+            String bankName = ed_bank.getText().toString();
+            String bankBranch = ed_branch.getText().toString();
+
+            chequeDetails.setCustBankName(bankName);
+            chequeDetails.setCustBankBranch(bankBranch);
+
+            VisitPaymentFormActivity.ls.add(chequeDetails);
+            clearFields();
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("ChequeDetailsActivity_get_Data_"+e.getMessage());
+            toast.setText("Something went wrong");
+            toast.show();
+        }
+        //finish();
+        //new Constant(ChequeDetailsActivity.this).doFinish();
+    }
+
+    private void clearFields() {
+        ed_chq_no.setText(null);
+        ed_chq_amt.setText(null);
+        ed_chq_no.requestFocus();
+        imageView_cheque_img.setImageResource(R.drawable.camera);
+        show_chq_adapter();
+    }
+
+    private void show_chq_adapter() {
+        if(VisitPaymentFormActivity.ls.size()==1){
+            lay_list.setVisibility(View.VISIBLE);
+            if(menu!=null) {
+                onCreateOptionsMenu(this.menu);
+            }
+        }
+        lv_show_chq_detail.setAdapter(null);
+        ShowChqDetailAdapter adapter = new ShowChqDetailAdapter(this, VisitPaymentFormActivity.ls);
+        Constant.showLog("listchq: " + VisitPaymentFormActivity.ls.size());
+        lv_show_chq_detail.setAdapter(adapter);
     }
 
     @Override
@@ -233,9 +311,7 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
                 long datetime = System.currentTimeMillis();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
                 Date resultdate = new Date(datetime);
-
                 imagePath = "Cheque_Img_" + sdf.format(resultdate) + ".jpg";
-
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name);
                 for (File temp : f.listFiles()) {
                     if (temp.getName().equals("temp.jpg")) {
@@ -247,6 +323,7 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
                 Bitmap bitmap;
                 BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
                 bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
+
                 File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name, imagePath);
                 try {
                     outFile = new FileOutputStream(file);
@@ -255,12 +332,10 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
                     outFile.close();
                 } catch (Exception e) {
                     writeLog("onActivityResult():FileNotFoundException:" + e);
-                    //writeLog("AddNewTicketActivity_onActivityResult_outFile_"+e.getMessage());
                     e.printStackTrace();
                 }
             } catch (Exception e) {
                 writeLog("onActivityResult():Exception:" + e);
-                //writeLog("AddNewTicketActivity_onActivityResult_"+e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -323,34 +398,68 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
             try {
                 Date select_date = sdf.parse(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                 tv_chq_date.setText(sdf.format(select_date));
+                ed_chq_date.setText(sdf.format(select_date));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     };
 
-    private void showPopup() {
+    private void showPopup(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setMessage("Do you want to clear cheque details");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                new Constant(ChequeDetailsActivity.this).doFinish();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
+        if(a==1) {
+            builder.setMessage("Do You Want To Go Back ?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    VisitPaymentFormActivity.ls.clear();
+                    new Constant(ChequeDetailsActivity.this).doFinish();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+        }else if(a==2){
+            builder.setMessage("Save Cheque Details ?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    VisitPaymentFormActivity.isChequeDataSaved = 1;
+                    new Constant(ChequeDetailsActivity.this).doFinish();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+        }else if(a==3){
+            builder.setMessage("Do You Want To Clear All Cheque Details ?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    VisitPaymentFormActivity.ls.clear();
+                    VisitPaymentFormActivity.isChequeDataSaved = 0;
+                    show_chq_adapter();
+                    dialogInterface.dismiss();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+        }
         builder.create().show();
     }
 
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "VisitPaymentFormActivity_" + _data);
     }
-
-
 }

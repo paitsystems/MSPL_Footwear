@@ -551,7 +551,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                 writeLog("saveOrderAsyncTask_result_" + str + "_" + result);
                 String[] retAutoBranchId = str.split("\\-");
                 if (retAutoBranchId.length > 1) {
-                    if (!retAutoBranchId[0].equals("0")) {
+                    if (!retAutoBranchId[0].equals("0") && !retAutoBranchId[0].equals("+2") && !retAutoBranchId[0].equals("+3")) {
                         if (retAutoBranchId[1].equals(String.valueOf(branchId))) {
                             db.deleteOrderTableAfterSave(branchId, gstPer);
                             if (counter == 1) {

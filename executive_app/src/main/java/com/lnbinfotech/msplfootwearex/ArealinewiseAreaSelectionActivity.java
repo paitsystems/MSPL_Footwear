@@ -118,7 +118,7 @@ public class ArealinewiseAreaSelectionActivity extends AppCompatActivity impleme
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.arealinewiseareaselection_menu,menu);
+        getMenuInflater().inflate(R.menu.arealinewiseareaselection_menu,menu);
         return true;
     }
 
@@ -171,7 +171,7 @@ public class ArealinewiseAreaSelectionActivity extends AppCompatActivity impleme
 
     private void getTodaysVisit(){
         //int saleExe = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
-        //TODO: Remove Hardcoded 152
+        //TODO: Remove when live
         int saleExe = 152;
         String weekDay;
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
@@ -184,7 +184,6 @@ public class ArealinewiseAreaSelectionActivity extends AppCompatActivity impleme
             toast.setText("You Are Offline");
             toast.show();
         }
-
     }
 
     private class getTodaysVisit extends AsyncTask<String, Void, String> {

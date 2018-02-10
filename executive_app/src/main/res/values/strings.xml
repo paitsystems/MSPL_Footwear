@@ -42,7 +42,7 @@
     <string name="company_details">Company Details</string>
     <string name="company_name">Company</string>
     <string name="address">Address</string>
-    <string name="enterdate">Enter Cheque Date</string>
+    <string name="enterdate">Select Cheque Date</string>
     <string name="enterno">Enter Cheque Number</string>
     <string name="enteramt">Enter Amount</string>
     <string name="enteragainstref">Enter Against Ref</string>
@@ -58,7 +58,7 @@
     <string name="save">Save</string>
     <string name="next">Next</string>
     <string name="submit">Submit</string>
-    <string name="addmore">Add more cheque..</string>
+    <string name="addmore">Add Cheque Details</string>
     <string name="enterchequedetails">Enter Cheque Details</string>
     <string name="enteraddresshere">Enter Address Here</string>
     <string name="total_number_of_tables_you_have">Total Number Of Tables You Have</string>
@@ -148,7 +148,7 @@
     <string name="selectcustomername">Select Customer Name</string>
     <string name="enetrcustomername">Enter Customer Name</string>
     <string name="selectbranch">Select Branch Name</string>
-    <string name="selectbank">Select Bank Name</string>
+    <string name="selectbank">Select Customer Bank Name</string>
     <string name="selectaddressproof">Select Address Proof</string>
     <string name="_selectaddressproof">Address Proof</string>
     <string name="selectidproof">Select Id Proof</string>
@@ -168,8 +168,8 @@
     <string name="_gstnoimage">GST No Image</string>
     <string name="_pannoimage">PAN No Image</string>
     <string name="date">Date</string>
-    <string name="number">Number</string>
-    <string name="amt">Amount</string>
+    <string name="number">Chq Number</string>
+    <string name="amt">Chq Amount</string>
     <string name="againstref">Against Ref</string>
 
     <string-array name="navigationName">
@@ -286,4 +286,7 @@
     <string name="warehouse">Godown</string>
     <string name="clear">Clear Order</string>
     <string name="allvisit">All Visit</string>
+    <string name="other">Other</string>
+    <string name="noofcheque">Total Cheques</string>
+    <string name="showbill">Show Bill</string>
 </resources>

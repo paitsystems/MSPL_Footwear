@@ -57,7 +57,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private ProgressDialog sndpd;
     private Test test;
     private static String arealineMaster = "AreaLine Master",areaMaster = "Area Master", bankMaster = "Bank Master", bankBrancMaster = "Bank's Branch Master",
-                            cityMaster = "City Master", companyMaster = "Company Master", custMaster = "Customer Master",
+                            cityMaster = "City Master", companyMaster = "Company Master", custMaster = "Customer Master", currencyMaster = "Currency Master",
                             docMaster = "Document Master", empMaster = "Employee Master", hoMaster = "HOMaster Master",
                             prodMaster = "Product Master", sizenDesignMaster = "SizeAndDesign Master", stockMaster = "Stock Master",
                             gstMaster = "GST Master", sdmdMaster = "SizeDetail Master";
@@ -111,6 +111,8 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                         refreshDataDia(13);
                     }else if (name.equals(arealineMaster)) {
                         refreshDataDia(14);
+                    }else if (name.equals(currencyMaster)) {
+                        refreshDataDia(15);
                     }
                 } else {
                     toast.setText("You Are Offline");
@@ -440,6 +442,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         refreshList.add(cityMaster);
         refreshList.add(companyMaster);
         refreshList.add(custMaster);
+        refreshList.add(currencyMaster);
         refreshList.add(docMaster);
         refreshList.add(empMaster);
         refreshList.add(hoMaster);
@@ -545,8 +548,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 } else if (a == 12) {
                     loadGSTMaster();
                 }else if (a == 13) {
-                    //TODO : Remove
-                    //db.deleteTable(DBHandler.Table_SizeDesignMastDet);
                     maxSDMDAuto = db.getMaxProdId();
                     if (maxSDMDAuto != 0) {
                         Constant.showLog("maxSDMDAuto :- "+maxSDMDAuto);
@@ -555,11 +556,12 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                         toast.setText("Please Update ProductMaster First");
                         toast.show();
                     }
-                    //TODO : Remove
-                    //loadSDMD(10101, 10600);
+
                     loadSDMD(0,100);
                 }else if(a==14){
                     loadArealineMaster();
+                }else if(a==15){
+                    loadCurrencyMaster();
                 }
             }
         });
@@ -612,8 +614,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         String url = Constant.ipaddress + "/GetAllSizeDesignMastDet?Id=" + from + "&ToId=" + to;
         Constant.showLog(url);
         writeLog("loadSDMD_" + url);
-        //TODO: REMOVE
-        //if (from == 10101) {
+
         if (from == 0) {
             sndpd = new ProgressDialog(DataRefreshActivity.this);
             sndpd.setCancelable(false);
@@ -1678,6 +1679,27 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             db.deleteTable(DBHandler.Table_SizeDesignMastDet);
             showDia(2);
         }
+    }
+
+    private void loadCurrencyMaster(){
+        String url = Constant.ipaddress + "/GetCurrencyMaster?Id=0";
+        Constant.showLog(url);
+        writeLog("loadCurrencyMaster_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
+        requests.getCurrencyMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                showDia(1);
+            }
+
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                showDia(2);
+            }
+        });
     }
 
     private void writeLog(String _data){

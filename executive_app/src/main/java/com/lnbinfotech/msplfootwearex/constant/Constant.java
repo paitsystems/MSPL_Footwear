@@ -42,7 +42,7 @@ public class Constant {
     private Activity activity;
     private Context context;
 
-    public static ProgressDialog pd;
+    private static ProgressDialog pd;
 
     public static void showLog(String log) {
         Log.d("Log", "" + log);

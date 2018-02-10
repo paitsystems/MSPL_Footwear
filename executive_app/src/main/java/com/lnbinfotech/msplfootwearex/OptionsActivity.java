@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
+import com.lnbinfotech.msplfootwearex.interfaces.DatabaseUpdateInterface;
 import com.lnbinfotech.msplfootwearex.log.CopyLog;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.mail.GMailSender;
@@ -27,7 +28,7 @@ import com.lnbinfotech.msplfootwearex.model.NewCustomerEntryGetterSetter;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class OptionsActivity extends AppCompatActivity implements View.OnClickListener {
+public class OptionsActivity extends AppCompatActivity implements View.OnClickListener, DatabaseUpdateInterface {
 
     public static NewCustomerEntryGetterSetter new_cus;
     private CardView card_take_order, card_visit, card_report, card_new_cust_entry;
@@ -77,6 +78,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.card_visit:
                 startActivity(new Intent(getApplicationContext(), ArealinewiseAreaSelectionActivity.class));
+                //startActivity(new Intent(getApplicationContext(), AreawiseCustomerSelectionActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_reports:
@@ -152,6 +154,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         db = new DBHandler(this);
+        //db.initInterface(OptionsActivity.this);
         new_cus = new NewCustomerEntryGetterSetter();
         card_take_order = (CardView) findViewById(R.id.card_take_order);
         card_visit = (CardView) findViewById(R.id.card_visit);
@@ -162,7 +165,15 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     private void showDia(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(OptionsActivity.this);
         builder.setCancelable(false);
-        if (a == 0) {
+        if (a == -2) {
+            builder.setMessage("Please Update Currency Master");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 0) {
             builder.setMessage("Do You Want To Exit App?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -293,6 +304,11 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void dbUpdated() {
+        showDia(-2);
     }
 
     private class sendMail extends AsyncTask<String, Void, String> {

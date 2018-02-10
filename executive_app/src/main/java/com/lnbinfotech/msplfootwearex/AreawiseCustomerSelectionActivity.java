@@ -57,7 +57,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_areawise_customer_selection);
-       // FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
 
         init();
 
@@ -71,6 +71,8 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
             tv_arealine.setText(areaLineClass.getArea());
         }catch (Exception e){
             e.printStackTrace();
+            toast.setText("Something Went Wrong");
+            toast.show();
         }
        /* listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -107,6 +109,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         });
 */
         exp_listView.setGroupIndicator(null);
+
         exp_listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int group_postion, int child_position, long l) {
@@ -203,46 +206,48 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         }
         areaIds = areaIds.substring(0,areaIds.length()-1);
         res.close();
-        Cursor cursor =  db.getExpListData(areaIds);
-        if(cursor.moveToFirst()){
-            do{
-                String area_name = "",cust_name = "";
-               // AreawiseCustomerSelectionClass  areaclass = new AreawiseCustomerSelectionClass();
-                areaId =  cursor.getInt(cursor.getColumnIndex(DBHandler.Area_Id));
-                area_name = cursor.getString(cursor.getColumnIndex(DBHandler.Area_Area));
-                custId = cursor.getInt(cursor.getColumnIndex(DBHandler.CM_RetailCustID));
-                cust_name = cursor.getString(cursor.getColumnIndex(DBHandler.CM_PartyName));
+        if(!areaIds.equals("")) {
+            Cursor cursor = db.getExpListData(areaIds);
+            //Cursor cursor =  db.getExpListData();
+            if (cursor.moveToFirst()) {
+                do {
+                    String area_name = "", cust_name = "";
+                    // AreawiseCustomerSelectionClass  areaclass = new AreawiseCustomerSelectionClass();
+                    areaId = cursor.getInt(cursor.getColumnIndex(DBHandler.Area_Id));
+                    area_name = cursor.getString(cursor.getColumnIndex(DBHandler.Area_Area));
+                    custId = cursor.getInt(cursor.getColumnIndex(DBHandler.CM_RetailCustID));
+                    cust_name = cursor.getString(cursor.getColumnIndex(DBHandler.CM_PartyName));
 
-                if(!areaid_list.contains(areaId)) {
-                    areaid_list.add(areaId);
-                }
-                //Constant.showLog("areaid_list:"+areaid_list.size());
+                    if (!areaid_list.contains(areaId)) {
+                        areaid_list.add(areaId);
+                    }
+                    //Constant.showLog("areaid_list:"+areaid_list.size());
 
-                if(!partyid_list.contains(custId)) {
-                    partyid_list.add(custId);
-                }
-                //Constant.showLog("partyid_list:"+partyid_list.size());
+                    if (!partyid_list.contains(custId)) {
+                        partyid_list.add(custId);
+                    }
+                    //Constant.showLog("partyid_list:"+partyid_list.size());
 
-                if(area_map.isEmpty()) {
-                    List<String> ar_NameLs = new ArrayList<>();
-                    ar_NameLs.add(area_name);
-                    area_map.put(areaId,ar_NameLs);
-                }else {
-                    if(area_map.containsKey(areaId)){
-                       List<String> ar_NameLs1  = area_map.get(areaId);
-                        //List<String> ar_NameLs1  = new ArrayList<>();
-                            if(!ar_NameLs1.contains(area_name)) {
+                    if (area_map.isEmpty()) {
+                        List<String> ar_NameLs = new ArrayList<>();
+                        ar_NameLs.add(area_name);
+                        area_map.put(areaId, ar_NameLs);
+                    } else {
+                        if (area_map.containsKey(areaId)) {
+                            List<String> ar_NameLs1 = area_map.get(areaId);
+                            //List<String> ar_NameLs1  = new ArrayList<>();
+                            if (!ar_NameLs1.contains(area_name)) {
                                 ar_NameLs1.add(area_name);
                             }
 
-                        area_map.put(areaId,ar_NameLs1);
-                    }else{
-                        List<String> ar_NameLs = new ArrayList<>();
-                        ar_NameLs.add(area_name);
-                        area_map.put(areaId,ar_NameLs);
+                            area_map.put(areaId, ar_NameLs1);
+                        } else {
+                            List<String> ar_NameLs = new ArrayList<>();
+                            ar_NameLs.add(area_name);
+                            area_map.put(areaId, ar_NameLs);
+                        }
                     }
-                }
-                //Constant.showLog("area_map:"+area_map.size());
+                    //Constant.showLog("area_map:"+area_map.size());
 
                 /*if(party_map.isEmpty()) {
                     List<String> cus_NameLs = new ArrayList<>();
@@ -261,23 +266,23 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                 }
                 Constant.showLog("party_map:"+party_map.size());*/
 
-                if(party_map.isEmpty()){
-                    party_map.put(custId,cust_name);
-                }else {
-                    if(party_map.containsKey(custId)){
-                       String s = party_map.get(custId);
-                        if(!s.equals(cust_name)){
-                            s = cust_name;
+                    if (party_map.isEmpty()) {
+                        party_map.put(custId, cust_name);
+                    } else {
+                        if (party_map.containsKey(custId)) {
+                            String s = party_map.get(custId);
+                            if (!s.equals(cust_name)) {
+                                s = cust_name;
+                            }
+                            party_map.put(custId, s);
+                        } else {
+                            party_map.put(custId, cust_name);
                         }
-                        party_map.put(custId,s);
-                    }else{
-                        party_map.put(custId,cust_name);
                     }
-                }
 
 
-                area_party_map.put(areaId,custId);
-                //Constant.showLog("area_party_map:"+area_party_map.size());
+                    area_party_map.put(areaId, custId);
+                    //Constant.showLog("area_party_map:"+area_party_map.size());
 
                /* if(area_party_map.isEmpty()) {
                     area_party_map.put(areaId,custId);
@@ -289,46 +294,50 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                     }
                 }*/
 
-               // areaid_partyId_map.put(areaId,)
-                if(areaid_partyId_map.isEmpty()) {
-                    List<Integer> cus_IdLs = new ArrayList<>();
-                    cus_IdLs.add(custId);
-                    areaid_partyId_map.put(areaId,cus_IdLs);
-                }else {
-                    if(areaid_partyId_map.containsKey(areaId)){
-                        List<Integer> cus_IdLs1 = areaid_partyId_map.get(areaId);
-                        cus_IdLs1.add(custId);
-                        areaid_partyId_map.put(areaId,cus_IdLs1);
-                    }else{
+                    // areaid_partyId_map.put(areaId,)
+                    if (areaid_partyId_map.isEmpty()) {
                         List<Integer> cus_IdLs = new ArrayList<>();
                         cus_IdLs.add(custId);
-                        areaid_partyId_map.put(areaId,cus_IdLs);
-                    }
-                }
-                //Constant.showLog("areaid_partyId_map:"+areaid_partyId_map.size());
-
-                if(childls.isEmpty()) {
-                    List<String> child_NameLs = new ArrayList<>();
-                    child_NameLs.add(cust_name);
-                    childls.put(areaId,child_NameLs);
-                }else {
-                    if(childls.containsKey(areaId)){
-                        List<String> child_NameLs1  = childls.get(areaId);
-                        //List<String> ar_NameLs1  = new ArrayList<>();
-                        if(!child_NameLs1.contains(cust_name)) {
-                            child_NameLs1.add(cust_name);
+                        areaid_partyId_map.put(areaId, cus_IdLs);
+                    } else {
+                        if (areaid_partyId_map.containsKey(areaId)) {
+                            List<Integer> cus_IdLs1 = areaid_partyId_map.get(areaId);
+                            cus_IdLs1.add(custId);
+                            areaid_partyId_map.put(areaId, cus_IdLs1);
+                        } else {
+                            List<Integer> cus_IdLs = new ArrayList<>();
+                            cus_IdLs.add(custId);
+                            areaid_partyId_map.put(areaId, cus_IdLs);
                         }
-                        childls.put(areaId,child_NameLs1);
-                    }else{
+                    }
+                    //Constant.showLog("areaid_partyId_map:"+areaid_partyId_map.size());
+
+                    if (childls.isEmpty()) {
                         List<String> child_NameLs = new ArrayList<>();
                         child_NameLs.add(cust_name);
-                        childls.put(areaId,child_NameLs);
+                        childls.put(areaId, child_NameLs);
+                    } else {
+                        if (childls.containsKey(areaId)) {
+                            List<String> child_NameLs1 = childls.get(areaId);
+                            //List<String> ar_NameLs1  = new ArrayList<>();
+                            if (!child_NameLs1.contains(cust_name)) {
+                                child_NameLs1.add(cust_name);
+                            }
+                            childls.put(areaId, child_NameLs1);
+                        } else {
+                            List<String> child_NameLs = new ArrayList<>();
+                            child_NameLs.add(cust_name);
+                            childls.put(areaId, child_NameLs);
+                        }
                     }
-                }
-                //Constant.showLog("childls:"+childls.size());
-            }while (cursor.moveToNext());
+                    //Constant.showLog("childls:"+childls.size());
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        }else{
+            toast.setText("No Record Available");
+            toast.show();
         }
-        cursor.close();
     }
 
     private void saveNCountinue(){

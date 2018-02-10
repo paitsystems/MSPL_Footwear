@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import com.lnbinfotech.msplfootwearex.DisplayCustOutstandingActivity;
 import com.lnbinfotech.msplfootwearex.FirstActivity;
 import com.lnbinfotech.msplfootwearex.R;
-import com.lnbinfotech.msplfootwearex.TrackOrderActivity;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
@@ -18,6 +17,7 @@ import com.lnbinfotech.msplfootwearex.model.CheckAvailStockClass;
 import com.lnbinfotech.msplfootwearex.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwearex.model.CityMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CompanyMasterClass;
+import com.lnbinfotech.msplfootwearex.model.CurrencyMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CustOutstandingClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwearex.model.DocumentMasterClass;
@@ -28,7 +28,6 @@ import com.lnbinfotech.msplfootwearex.model.LedgerReportClass;
 import com.lnbinfotech.msplfootwearex.model.OuststandingReportClass;
 import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
-import com.lnbinfotech.msplfootwearex.model.TrackOrderClass;
 import com.lnbinfotech.msplfootwearex.model.UserClass;
 
 import org.json.JSONArray;
@@ -665,7 +664,11 @@ public class ParseJSON {
                     outClass.setType(jsonArray.getJSONObject(i).getString("Type"));
                     outClass.setDcno(jsonArray.getJSONObject(i).getString("dcNo"));
                     outClass.setTotal(jsonArray.getJSONObject(i).getDouble("Total"));
-
+                    outClass.setRecAmnt(jsonArray.getJSONObject(i).getDouble("ReceivedAmt"));
+                    outClass.setNetAmt(jsonArray.getJSONObject(i).getDouble("NetAmt"));
+                    outClass.setPaidAmnt(0);
+                    outClass.setChecked(false);
+                    outClass.setOutAmnt(jsonArray.getJSONObject(i).getDouble("Total"));
                     list.add(outClass);
                 }
             }
@@ -732,9 +735,32 @@ public class ParseJSON {
         return list;
     }
 
-
     private void writeLog(String _data){
         new WriteLog().writeLog(context,"ParseJSON_"+_data);
+    }
+
+    public int parseCurrencyMaster(){
+        int ret = 0;
+        List<CurrencyMasterClass> currencyList = new ArrayList<>();
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    CurrencyMasterClass currency = new CurrencyMasterClass();
+                    currency.setAuto(jsonArray.getJSONObject(i).getString("Auto"));
+                    currency.setCurrency(jsonArray.getJSONObject(i).getString("Currency"));
+                    currency.setStatus(jsonArray.getJSONObject(i).getString("Status"));
+                    currencyList.add(currency);
+                }
+                db.addCurrencyMaster(currencyList);
+                db.close();
+                ret = 1;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseCurrencyMaster_"+e.getMessage());
+        }
+        return ret;
     }
 
 }

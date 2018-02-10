@@ -14,10 +14,10 @@ import com.lnbinfotech.msplfootwearex.model.OuststandingReportClass;
 import java.text.DecimalFormat;
 import java.util.List;
 
-/**
- * Created by SNEHA on 12/11/2017.
- */
+//Created by SNEHA on 12/11/2017.
+
 public class OuststandingReportAdapter extends BaseAdapter {
+
     private List<OuststandingReportClass> out_List;
     private Context context;
     private LayoutInflater inflater;

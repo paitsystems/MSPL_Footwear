@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +25,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collections;
+import java.util.List;
 
 // Created by lnb on 8/11/2016.
 
@@ -100,8 +105,6 @@ public class FirstActivity extends AppCompatActivity {
             editor.apply();
            // editor.commit();
         }
-        DBHandler db = new DBHandler(getApplicationContext());
-        db.close();
         overridePendingTransition(R.anim.enter,R.anim.exit);
         doFinish();
     }
