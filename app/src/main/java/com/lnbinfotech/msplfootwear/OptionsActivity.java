@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -14,6 +16,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,7 @@ import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.log.CopyLog;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.mail.GMailSender;
+import com.lnbinfotech.msplfootwear.services.AutoSyncService;
 
 import java.io.File;
 import java.util.Locale;
@@ -33,7 +37,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     private CardView card_bank_details,card_give_order, card_account, card_track_order, card_profile, card_scheme, card_whats_new, card_feedback;
     public static float custDisc = 0;
     private Menu mMenu;
-    private TextView actionbar_noti_tv;
+    private TextView actionbar_noti_tv, tv_address, tv_phone1,tv_phone2,tv_mobile1, tv_mobile2, tv_email, tv_lastSync;
     private DBHandler db;
     private Toast toast;
 
@@ -41,6 +45,11 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        // setContentView(R.layout.optionstest);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.test);
 
         init();
@@ -57,6 +66,15 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         card_whats_new.setOnClickListener(this);
         card_feedback.setOnClickListener(this);
         card_bank_details.setOnClickListener(this);
+        tv_phone1.setOnClickListener(this);
+        tv_phone2.setOnClickListener(this);
+        tv_mobile1.setOnClickListener(this);
+        tv_mobile2.setOnClickListener(this);
+
+        Intent intent1 = new Intent(getApplicationContext(),AutoSyncService.class);
+        startService(intent1);
+
+        setContactUs();
     }
 
     @Override
@@ -107,6 +125,31 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(new Intent(getApplicationContext(), OurBankDetailsActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
+            case R.id.tv_phone1:
+                String phone1 = tv_phone1.getText().toString();
+                if(!phone1.equals("")&& !phone1.equals("0")){
+                    makeCall(phone1);
+                }
+                break;
+            case R.id.tv_phone2:
+                String phone2 = tv_phone2.getText().toString();
+                if(!phone2.equals("")&& !phone2.equals("0")){
+                    makeCall(phone2);
+                }
+                break;
+            case R.id.tv_mobile1:
+                String mob1 = tv_mobile1.getText().toString();
+                if(!mob1.equals("")&& !mob1.equals("0")){
+                    makeCall(mob1);
+                }
+                break;
+            case R.id.tv_mobile2:
+                String mob2 = tv_mobile2.getText().toString();
+                if(!mob2.equals("")&& !mob2.equals("0")){
+                    makeCall(mob2);
+                }
+                break;
+
         }
     }
 
@@ -177,6 +220,13 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         card_whats_new = (CardView) findViewById(R.id.card_whatsnew);
         card_feedback = (CardView) findViewById(R.id.card_feedback);
         card_bank_details = (CardView) findViewById(R.id.card_bank_details);
+        tv_address = (TextView) findViewById(R.id.tv_address);
+        tv_phone1 = (TextView) findViewById(R.id.tv_phone1);
+        tv_phone2 = (TextView) findViewById(R.id.tv_phone2);
+        tv_mobile1 = (TextView) findViewById(R.id.tv_mobile1);
+        tv_mobile2 = (TextView) findViewById(R.id.tv_mobile2);
+        tv_email = (TextView) findViewById(R.id.tv_email);
+        tv_lastSync = (TextView) findViewById(R.id.tv_lastSync);
     }
 
     private void showDia(int a) {
@@ -197,8 +247,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                     dialog.dismiss();
                 }
             });
-        }
-        if (a == 1) {
+        }else if (a == 1) {
             builder.setTitle("Take Order");
             builder.setMessage("How do you want to take order?");
             builder.setPositiveButton("Imagewise", new DialogInterface.OnClickListener() {
@@ -291,6 +340,31 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         Locale.setDefault(locale);
         configuration.locale = locale;
         Constant.showLog("locale:"+locale);
+    }
+
+    private void setContactUs(){
+        int hocode = FirstActivity.pref.getInt(getString(R.string.pref_branchid),0);
+        Cursor res = db.getContactUsData(hocode);
+        if(res.moveToFirst()){
+            do{
+                tv_address.setText(res.getString(res.getColumnIndex(DBHandler.Company_Company_Add)));
+                tv_phone1.setText(res.getString(res.getColumnIndex(DBHandler.Company_Company_Phno)));
+                tv_phone2.setText(res.getString(res.getColumnIndex(DBHandler.Company_Company_Phone2)));
+                tv_mobile1.setText(res.getString(res.getColumnIndex(DBHandler.Company_MobileNo)));
+                tv_mobile2.setText(res.getString(res.getColumnIndex(DBHandler.Company_Mobileno2)));
+                tv_email.setText(res.getString(res.getColumnIndex(DBHandler.Company_Company_Email)));
+            }while (res.moveToNext());
+        }
+        res.close();
+        String lastSync = FirstActivity.pref.getString(getString(R.string.pref_lastSync),"");
+        tv_lastSync.setText("Data Last Sync On - "+lastSync);
+    }
+
+    private void makeCall(String number){
+        Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
+                "tel", number, null));
+        startActivity(phoneIntent);
+        overridePendingTransition(R.anim.enter,R.anim.exit);
     }
 
     private void exportfile() {

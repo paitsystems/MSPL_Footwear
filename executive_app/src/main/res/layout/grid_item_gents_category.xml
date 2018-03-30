@@ -58,7 +58,8 @@
                     android:text="Rs. 275"
                     android:textColor="@color/darkgreen"
                     android:id="@+id/tv_rate"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
 
             </LinearLayout>
         </LinearLayout>

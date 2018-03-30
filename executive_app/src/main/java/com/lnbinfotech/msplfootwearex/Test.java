@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.lnbinfotech.msplfootwearex.constant.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +22,11 @@ public class Test extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_test);
 
         listView = (ListView) findViewById(R.id.listView2);

@@ -3,28 +3,29 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="horizontal">
+
     <TextView
         android:id="@+id/tv_cust_curr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0.5"
         android:padding="5sp"
         android:textAppearance="@android:style/TextAppearance.Medium"
         android:textColor="@color/black"
-        android:textStyle="bold"
-        android:layout_weight="0.5"/>
+        android:textStyle="bold"/>
 
     <EditText
-        android:textAppearance="@android:style/TextAppearance.Medium"
-        android:textColor="@color/black"
-        android:textStyle="bold"
+        android:id="@+id/ed_cust_curr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ed_cust_curr"
         android:layout_weight="0.5"
+        android:imeOptions="actionNext"
+        android:inputType="number"
+        android:selectAllOnFocus="true"
         android:singleLine="true"
         android:text="0"
-        android:selectAllOnFocus="true"
-        android:inputType="number"
-        android:imeOptions="actionNext"/>
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textColor="@color/black"
+        android:textStyle="bold"/>
 
 </LinearLayout>

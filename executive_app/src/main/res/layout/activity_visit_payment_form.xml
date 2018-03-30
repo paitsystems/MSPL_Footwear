@@ -69,7 +69,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:checked="true"
+                    android:checked="false"
                     android:text="@string/_cash"/>
 
                 <RadioButton
@@ -99,7 +99,7 @@
                 android:gravity="right"
                 android:orientation="horizontal"
                 android:padding="5sp"
-                >
+                android:visibility="gone">
 
                 <TextView
                     style="@style/textViewMob"
@@ -170,6 +170,9 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:inputType="numberDecimal"
+                        android:focusable="false"
+                        android:editable="false"
+                        android:clickable="false"
                         android:visibility="visible"/>
                 </LinearLayout>
 
@@ -177,16 +180,6 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btn_showbill"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:drawableLeft="@drawable/save_button_back"
-        android:text="@string/showbill"
-        android:textColor="@color/white"
-        app:backgroundTint="@color/orange"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -227,7 +220,8 @@
                 android:background="@drawable/line_top_right_bottom_draw"
                 android:gravity="center"
                 android:text="TPAID"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:visibility="gone"/>
 
             <TextView
                 style="@style/textViewMobAddToCard"
@@ -237,7 +231,8 @@
                 android:background="@drawable/line_top_right_bottom_draw"
                 android:gravity="center"
                 android:text="TALLOCATION"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
@@ -281,7 +276,8 @@
                 android:text="0"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/black"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone"/>
 
 
             <TextView
@@ -294,7 +290,8 @@
                 android:text="0"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/black"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
@@ -323,7 +320,7 @@
                 <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="1dp"
-                    android:visibility="invisible"/>
+                    android:visibility="gone"/>
 
                 <LinearLayout
 
@@ -438,7 +435,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <TextView
                         style="@style/textViewMob"
@@ -463,7 +460,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <TextView
                         style="@style/textViewMob"
@@ -548,15 +545,33 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btn_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:drawableLeft="@drawable/save_button_back"
-        android:text="@string/save"
-        android:textColor="@color/white"
-        app:backgroundTint="@color/orange"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_showbill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/showbill"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/orange"
+            android:layout_weight="0.5"
+            android:visibility="gone"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/save"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/orange"
+            android:layout_weight="0.5"/>
+    </LinearLayout>
+
 
     <TextView
         style="@style/footerstyleMob"

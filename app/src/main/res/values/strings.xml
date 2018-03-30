@@ -228,4 +228,21 @@
     <string name="viewoutstandingbills"><u> View Outstanding Bills</u>.</string>
     <string name="warehouse">Godown</string>
     <string name="clear">Clear Order</string>
+
+    <string name="pref_autoArealine">Arealine</string>
+    <string name="pref_autoArea">Area</string>
+    <string name="pref_autoBank">Bank</string>
+    <string name="pref_autoBankBranch">BankBranch</string>
+    <string name="pref_autoCity">City</string>
+    <string name="pref_autoCompany">Company</string>
+    <string name="pref_autoCustomer">Customer</string>
+    <string name="pref_autoDocument">Document</string>
+    <string name="pref_autoEmployee">Employee</string>
+    <string name="pref_autoHO">HO</string>
+    <string name="pref_autoProduct">Product</string>
+    <string name="pref_autoSizeNDesign">SizeNDesign</string>
+    <string name="pref_autoGST">GST</string>
+    <string name="pref_autoSizeDetail">SizeDetail</string>
+    <string name="pref_autoCurrency">Currency</string>
+    <string name="pref_lastSync">LastSync</string>
 </resources>

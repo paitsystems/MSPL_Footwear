@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,20 +32,18 @@ public class FullImageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_full_image);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        tv_catname = (TextView) findViewById(R.id.tv_catname);
-        tv_prodname = (TextView) findViewById(R.id.tv_prodname);
-        tv_mrp = (TextView) findViewById(R.id.tv_mrp);
-        tv_margin = (TextView) findViewById(R.id.tv_margin);
-
-        imageView = (TouchImageView) findViewById(R.id.touch_imageview);
-        toast = Toast.makeText(getApplicationContext(),"File Not Found",Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER,0,0);
+        init();
 
         /*String imageName = getIntent().getExtras().getString("imagename");
         Constant.checkFolder(Constant.folder_name);
@@ -59,9 +58,9 @@ public class FullImageActivity extends AppCompatActivity {
         }*/
 
         GentsCategoryClass gentClass = (GentsCategoryClass) getIntent().getExtras().getSerializable("data");
-        int id  = getIntent().getExtras().getInt("id");
+        //int id  = getIntent().getExtras().getInt("id");
 
-        imageView.setImageResource(id);
+        //imageView.setImageResource(id);
         tv_catname.setText(gentClass.getCategoryName());
         tv_prodname.setText(gentClass.getProductName());
         tv_mrp.setText(gentClass.getMrp());
@@ -82,6 +81,17 @@ public class FullImageActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         new Constant(FullImageActivity.this).doFinish();
+    }
+
+    private void init(){
+        tv_catname = (TextView) findViewById(R.id.tv_catname);
+        tv_prodname = (TextView) findViewById(R.id.tv_prodname);
+        tv_mrp = (TextView) findViewById(R.id.tv_mrp);
+        tv_margin = (TextView) findViewById(R.id.tv_margin);
+
+        imageView = (TouchImageView) findViewById(R.id.touch_imageview);
+        toast = Toast.makeText(getApplicationContext(),"File Not Found",Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER,0,0);
     }
 
     private String getRealPathFromURI(String contentURI) {

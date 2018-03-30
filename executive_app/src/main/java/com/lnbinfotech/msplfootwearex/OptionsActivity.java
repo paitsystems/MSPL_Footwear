@@ -3,6 +3,8 @@ package com.lnbinfotech.msplfootwearex;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -13,6 +15,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,24 +26,30 @@ import com.lnbinfotech.msplfootwearex.interfaces.DatabaseUpdateInterface;
 import com.lnbinfotech.msplfootwearex.log.CopyLog;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.mail.GMailSender;
-import com.lnbinfotech.msplfootwearex.model.NewCustomerEntryGetterSetter;
+import com.lnbinfotech.msplfootwearex.model.NewCustomerEntryClass;
+import com.lnbinfotech.msplfootwearex.services.AutoSyncService;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class OptionsActivity extends AppCompatActivity implements View.OnClickListener, DatabaseUpdateInterface {
 
-    public static NewCustomerEntryGetterSetter new_cus;
-    private CardView card_take_order, card_visit, card_report, card_new_cust_entry;
+    public static NewCustomerEntryClass new_cus;
+    private CardView card_take_order, card_visit, card_report, card_new_cust_entry, card_track_order;
     public static float custDisc = 0;
     private Toast toast;
     private Menu mMenu;
-    private TextView actionbar_noti_tv;
+    private TextView actionbar_noti_tv, tv_address, tv_phone1,tv_phone2,tv_mobile1, tv_mobile2, tv_email, tv_lastSync;
     private DBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         //setContentView(R.layout.activity_options);
        // setContentView(R.layout.optionstext);
         setContentView(R.layout.test);
@@ -52,9 +61,19 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         card_take_order.setOnClickListener(this);
+        card_track_order.setOnClickListener(this);
         card_visit.setOnClickListener(this);
         card_report.setOnClickListener(this);
         card_new_cust_entry.setOnClickListener(this);
+        tv_phone1.setOnClickListener(this);
+        tv_phone2.setOnClickListener(this);
+        tv_mobile1.setOnClickListener(this);
+        tv_mobile2.setOnClickListener(this);
+
+        Intent intent1 = new Intent(getApplicationContext(),AutoSyncService.class);
+        startService(intent1);
+
+        setContactUs();
     }
 
     @Override
@@ -73,7 +92,9 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 //int custId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
                 //custDisc = new DBHandler(getApplicationContext()).getCustDiscount(custId);
                 //startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
-                startActivity(new Intent(getApplicationContext(), DisplayCustListActivity.class));
+                Intent in = new Intent(getApplicationContext(), DisplayCustListActivity.class);
+                in.putExtra("from","order");
+                startActivity(in);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_visit:
@@ -90,6 +111,39 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(new Intent(getApplicationContext(), NewCustomerEntryActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
+            case R.id.card_track_order:
+                //toast.setText("Under Development");
+                //toast.show();
+                Intent in1 = new Intent(getApplicationContext(), DisplayCustListActivity.class);
+                in1.putExtra("from","trackorder");
+                startActivity(in1);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                break;
+            case R.id.tv_phone1:
+                String phone1 = tv_phone1.getText().toString();
+                if(!phone1.equals("")&& !phone1.equals("0")){
+                    makeCall(phone1);
+                }
+                break;
+            case R.id.tv_phone2:
+                String phone2 = tv_phone2.getText().toString();
+                if(!phone2.equals("")&& !phone2.equals("0")){
+                    makeCall(phone2);
+                }
+                break;
+            case R.id.tv_mobile1:
+                String mob1 = tv_mobile1.getText().toString();
+                if(!mob1.equals("")&& !mob1.equals("0")){
+                    makeCall(mob1);
+                }
+                break;
+            case R.id.tv_mobile2:
+                String mob2 = tv_mobile2.getText().toString();
+                if(!mob2.equals("")&& !mob2.equals("0")){
+                    makeCall(mob2);
+                }
+                break;
+
         }
     }
 
@@ -155,11 +209,19 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         toast.setGravity(Gravity.CENTER, 0, 0);
         db = new DBHandler(this);
         //db.initInterface(OptionsActivity.this);
-        new_cus = new NewCustomerEntryGetterSetter();
+        new_cus = new NewCustomerEntryClass();
         card_take_order = (CardView) findViewById(R.id.card_take_order);
         card_visit = (CardView) findViewById(R.id.card_visit);
         card_report = (CardView) findViewById(R.id.card_reports);
         card_new_cust_entry = (CardView) findViewById(R.id.card_new_cust_entry);
+        tv_address = (TextView) findViewById(R.id.tv_address);
+        tv_phone1 = (TextView) findViewById(R.id.tv_phone1);
+        tv_phone2 = (TextView) findViewById(R.id.tv_phone2);
+        tv_mobile1 = (TextView) findViewById(R.id.tv_mobile1);
+        tv_mobile2 = (TextView) findViewById(R.id.tv_mobile2);
+        tv_email = (TextView) findViewById(R.id.tv_email);
+        card_track_order = (CardView) findViewById(R.id.card_track_order);
+        tv_lastSync = (TextView) findViewById(R.id.tv_lastSync);
     }
 
     private void showDia(int a) {
@@ -194,7 +256,9 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             builder.setPositiveButton("Imagewise", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(getApplicationContext(), ImagewiseSetwiseOrderActivity.class));
+                    //startActivity(new Intent(getApplicationContext(), ImagewiseSetwiseOrderActivity.class));
+                    //startActivity(new Intent(getApplicationContext(), TabImagewiseSetwiseOrderActivity.class));
+                    startActivity(new Intent(getApplicationContext(), MainImagewiseSetwiseOrderActivity.class));
                     overridePendingTransition(R.anim.enter, R.anim.exit);
                     dialog.dismiss();
                 }
@@ -203,7 +267,9 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                    // startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
-                    startActivity(new Intent(getApplicationContext(), DisplayCustListActivity.class));
+                    Intent in = new Intent(getApplicationContext(), DisplayCustListActivity.class);
+                    in.putExtra("from","order");
+                    startActivity(in);
                     overridePendingTransition(R.anim.enter, R.anim.exit);
                     dialog.dismiss();
                 }
@@ -271,6 +337,31 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             });
         }
         builder.create().show();
+    }
+
+    private void setContactUs(){
+        int hocode = FirstActivity.pref.getInt(getString(R.string.pref_branchid),0);
+        Cursor res = db.getContactUsData(hocode);
+        if(res.moveToFirst()){
+            do{
+                tv_address.setText(res.getString(res.getColumnIndex(DBHandler.Company_Company_Add)));
+                tv_phone1.setText(res.getString(res.getColumnIndex(DBHandler.Company_Company_Phno)));
+                tv_phone2.setText(res.getString(res.getColumnIndex(DBHandler.Company_Company_Phone2)));
+                tv_mobile1.setText(res.getString(res.getColumnIndex(DBHandler.Company_MobileNo)));
+                tv_mobile2.setText(res.getString(res.getColumnIndex(DBHandler.Company_Mobileno2)));
+                tv_email.setText(res.getString(res.getColumnIndex(DBHandler.Company_Company_Email)));
+            }while (res.moveToNext());
+        }
+        res.close();
+        String lastSync = FirstActivity.pref.getString(getString(R.string.pref_lastSync),"");
+        tv_lastSync.setText("Last Data Sync On - "+lastSync);
+    }
+
+    private void makeCall(String number){
+        Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
+                "tel", number, null));
+        startActivity(phoneIntent);
+        overridePendingTransition(R.anim.enter,R.anim.exit);
     }
 
     private void writeLog(String _data) {

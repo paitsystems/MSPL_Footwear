@@ -25,6 +25,7 @@ import com.lnbinfotech.msplfootwearex.model.LedgerReportClass;
 import com.lnbinfotech.msplfootwearex.model.OuststandingReportClass;
 import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
 import com.lnbinfotech.msplfootwearex.model.TrackOrderClass;
+import com.lnbinfotech.msplfootwearex.model.TrackOrderMasterClass;
 import com.lnbinfotech.msplfootwearex.model.UserClass;
 import com.lnbinfotech.msplfootwearex.parse.ParseJSON;
 
@@ -130,30 +131,29 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
-    public void saveCustomerDetail(String url, final ServerCallback callback){
+    public void saveCustomerDetail(String url, final ServerCallback callback) {
         StringRequest request = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Constant.showLog(response);
-                response = response.replace("\\","");
-                response = response.replace("\"","");
-               // callback.onSuccess(response);
-                if(!response.equals("0")) {
+                response = response.replace("\\", "");
+                response = response.replace("\"", "");
+                // callback.onSuccess(response);
+                if (!response.equals("0")) {
                     callback.onSuccess(response);
-                }else {
+                } else {
                     callback.onFailure("Error");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                callback.onFailure("saveCustomerDetail_Error_"+error.getMessage());
+                callback.onFailure("saveCustomerDetail_Error_" + error.getMessage());
                 Constant.showLog(error.getMessage());
             }
         });
-        AppSingleton.getInstance(context).addToRequestQueue(request,"");
-
-}
+        AppSingleton.getInstance(context).addToRequestQueue(request, "");
+    }
 
     public void refreshAreaMaster(String url, final ServerCallback callback) {
         StringRequest request = new StringRequest(url,
@@ -554,6 +554,7 @@ public class VolleyRequests {
                     @Override
                     public void onResponse(String response) {
                         Constant.showLog(response);
+                        response = response.replace("\\\\r\\\\n", "");
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
@@ -746,7 +747,6 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
-
     /*public void loadTrackOrederDetail(String url, final ServerCallbackList callback){
         StringRequest request = new StringRequest(url, new Response.Listener<String>() {
             @Override
@@ -918,5 +918,63 @@ public class VolleyRequests {
         );
         AppSingleton.getInstance(context).addToRequestQueue(request, "CITY");
     }
+
+    public void loadTrackOrder(String url, final ServerCallbackList callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\", "");
+                        response = response.replace("''", "");
+                        response = response.substring(1, response.length() - 1);
+                        List<TrackOrderMasterClass> list = new ParseJSON(response, context).parseloadTrackOreder();
+                        if (list.size() != 0) {
+                            callback.onSuccess(list);
+                        } else {
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("Error");
+                        Constant.showLog(error.getMessage());
+                        writeLog("loadTrackOreder_" + error.getMessage());
+                    }
+                });
+        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
+    }
+
+    public void loadDetailOrder(String url, final ServerCallbackList callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\", "");
+                        response = response.replace("''", "");
+                        response = response.substring(1, response.length() - 1);
+                        int a = new ParseJSON(response, context).parseloadDetailOrderChanged();
+                        if(a==1) {
+                            callback.onSuccess(a);
+                        }else{
+                            callback.onFailure("Error");
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("Error");
+                        Constant.showLog(error.getMessage());
+                        writeLog("loadTrackOrder_" + error.getMessage());
+                    }
+                });
+        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
+    }
+
 
 }

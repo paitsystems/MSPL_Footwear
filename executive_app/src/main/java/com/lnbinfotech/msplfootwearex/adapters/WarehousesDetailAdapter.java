@@ -51,7 +51,7 @@ public class WarehousesDetailAdapter extends BaseAdapter {
         final ViewHolder holder;
         if(view == null){
             holder = new ViewHolder();
-            view = inflater.inflate(R.layout.warehouse_detail_list_item,viewGroup,false);
+            view = inflater.inflate(R.layout.list_item_warehouse_detail,viewGroup,false);
             holder.tv_warehouse = (TextView) view.findViewById(R.id.tv_warehouse);
             holder.tv_qty = (TextView) view.findViewById(R.id.tv_qty);
             holder.tv_amt = (TextView) view.findViewById(R.id.tv_amt);

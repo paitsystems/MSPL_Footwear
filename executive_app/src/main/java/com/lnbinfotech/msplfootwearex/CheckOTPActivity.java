@@ -16,9 +16,11 @@ import android.support.v7.widget.AppCompatButton;
 import android.telephony.SmsMessage;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,6 +59,11 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_checkotp);
         init();
         otpClass = (CheckOtpClass) getIntent().getSerializableExtra("otp");
@@ -280,7 +287,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                     ed3.getText().toString()+ed4.getText().toString()+
                     ed5.getText().toString()+ed6.getText().toString();
             Constant.showLog(otp);
-            Constant.showLog("response_value:"+response_value);
+            Log.d("Log","response_value:"+response_value);
             writeLog("response_value:"+response_value);
             if(otp.equals(response_value)) {
                 Constant.showLog("response_value:"+response_value);

@@ -1,6 +1,6 @@
 package com.lnbinfotech.msplfootwearex.model;// Created by anup on 9/26/2017.
 
-public class NewCustomerEntryGetterSetter {
+public class NewCustomerEntryClass {
     private String cust_id,id_addressproof,id_idproof,id_gstpan_proof,gstpan_img,Cust_name,mobile_no,email_id,address,cus_image,address_proof,address_proof_image, id_proof,id_proof_image, gst_no,gst_no_image, pan_no,pan_no_image,status,
     custId , BranchId , District, Taluka, CityId , AreaId , HOCode,IMEINo,isReg,pin;
 

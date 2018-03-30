@@ -17,6 +17,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,8 +28,8 @@ import android.view.Gravity;
 
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
-import com.lnbinfotech.msplfootwearex.model.ChequeDetailsGetterSetter;
-import com.lnbinfotech.msplfootwearex.model.SelectAutoItemGetterSetter;
+import com.lnbinfotech.msplfootwearex.model.ChequeDetailsClass;
+import com.lnbinfotech.msplfootwearex.model.SelectAutoItemClass;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,16 +56,21 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
     private Calendar cal = Calendar.getInstance();
     private final int requestCode = 21;
-    public ChequeDetailsGetterSetter chequeDetails;
+    public ChequeDetailsClass chequeDetails;
     private Date today_date = Calendar.getInstance().getTime();
     private int day, month, year;
     private Toast toast;
-    private List<ChequeDetailsGetterSetter> ls;
+    private List<ChequeDetailsClass> ls;
     private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_other_details);
 
         init();
@@ -184,7 +190,7 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
 
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
-        ChequeDetailsActivity.selectAuto = new SelectAutoItemGetterSetter();
+        ChequeDetailsActivity.selectAuto = new SelectAutoItemClass();
         day = cal.get(Calendar.DAY_OF_MONTH);
         month = cal.get(Calendar.MONTH);
         year = cal.get(Calendar.YEAR);
@@ -252,20 +258,20 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
         } */else if (ed_mode_type.getText().toString().equals("")) {
             toast.setText("Please Enter Cheque Number");
             toast.show();
-        } else if (ed_remark.getText().toString().equals("")) {
+        } /*else if (ed_remark.getText().toString().equals("")) {
             toast.setText("Please Enter Cheque Amount");
             toast.show();
-        } /*else if (ed_amnt.getText().toString().equals("")) {
-            toast.setText("Please,enter cheque reference");
+        }*/ else if (ed_amnt.getText().toString().equals("")) {
+            toast.setText("Please,Enter Amount");
             toast.show();
-        } */ else {
+        } else {
             get_data();
         }
     }
 
     private void get_data() {
         try {
-            chequeDetails = new ChequeDetailsGetterSetter();
+            chequeDetails = new ChequeDetailsClass();
             String bank = ed_bank.getText().toString();
             chequeDetails.setChq_det_bank(bank);
 
@@ -282,12 +288,12 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
             String number = ed_mode_type.getText().toString();
             chequeDetails.setChq_det_number(number);
 
-            String amount = ed_remark.getText().toString();
+            String amount = ed_amnt.getText().toString();
+            int tot = Integer.parseInt(amount);
+            VisitPaymentFormActivity.total = VisitPaymentFormActivity.total + tot;
             chequeDetails.setChq_det_amt(amount);
 
-            String ref = ed_amnt.getText().toString();
-            int tot = Integer.parseInt(ref);
-            VisitPaymentFormActivity.total = VisitPaymentFormActivity.total + tot;
+            String ref = ed_remark.getText().toString();
             chequeDetails.setChq_det_ref(ref);
 
             chequeDetails.setChq_det_image(imagePath);

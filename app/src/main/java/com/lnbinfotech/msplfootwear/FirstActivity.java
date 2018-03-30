@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
@@ -22,6 +23,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 // Created by lnb on 8/11/2016.
 
@@ -38,6 +42,11 @@ public class FirstActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_first);
 
         overridePendingTransition(R.anim.enter,R.anim.exit);
@@ -132,6 +141,13 @@ public class FirstActivity extends AppCompatActivity {
             db.deleteTable(DBHandler.Table_CustomerOrder);
             db.deleteTable(DBHandler.Table_Usermaster);
             //constant.showPD();
+            if(!pref.contains(getString(R.string.pref_lastSync))){
+                SharedPreferences.Editor editor = pref.edit();
+                String str = getTime();
+                Constant.showLog("Last Sync - "+str);
+                editor.putString(getString(R.string.pref_lastSync),str);
+                editor.apply();
+            }
         }
     }
 
@@ -182,6 +198,16 @@ public class FirstActivity extends AppCompatActivity {
         finish();
         toast.cancel();
         overridePendingTransition(R.anim.enter,R.anim.exit);
+    }
+
+    private String getTime() {
+        String str = "";
+        try{
+            str = new SimpleDateFormat("dd/MMM/yyyy HH:mm", Locale.ENGLISH).format(new Date());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return str;
     }
 
     private void writeLog(String _data){

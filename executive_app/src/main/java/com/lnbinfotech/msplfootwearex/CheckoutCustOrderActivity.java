@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -35,6 +36,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONStringer;
@@ -61,6 +65,11 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_checkout_cust_order);
 
         init();
@@ -245,7 +254,10 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                 request.setEntity(entity);
 
                 // Send request to WCF service
-                DefaultHttpClient httpClient = new DefaultHttpClient();
+                HttpParams httpParams = new BasicHttpParams();
+                HttpConnectionParams.setConnectionTimeout(httpParams,Constant.TIMEOUT_CON);
+                HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);
+                DefaultHttpClient httpClient = new DefaultHttpClient(httpParams);
                 HttpResponse response = httpClient.execute(request);
                 Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
                 value = new BasicResponseHandler().handleResponse(response);

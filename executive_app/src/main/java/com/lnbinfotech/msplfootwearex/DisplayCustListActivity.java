@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DisplayCustListActivity extends AppCompatActivity implements View.OnClickListener {
+
     private Constant constant, constant1;
     private Toast toast;
     private ListView lv_cus;
@@ -35,11 +37,16 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
     private EditText ed_cus_name;
     private DisplayCustListAdapter adapter;
     public static int custId = 0;
-    String select_item = "";
+    private String select_item = "", from = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_display_cust_list);
 
         init();
@@ -48,6 +55,12 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("Take Order");
+        }
+
+        try{
+            from = getIntent().getExtras().getString("from");
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
         ed_cus_name.addTextChangedListener(new TextWatcher() {
@@ -103,7 +116,11 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
         editor.putString(getString(R.string.pref_selcustname),select_item);
         editor.apply();
         finish();
-        startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
+        if(from.equals("order")) {
+            startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
+        }else{
+            startActivity(new Intent(getApplicationContext(), TrackOrderMasterActivity.class));
+        }
         overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 

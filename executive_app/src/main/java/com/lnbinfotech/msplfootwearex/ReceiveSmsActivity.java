@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 
+import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 
 public class ReceiveSmsActivity extends AppCompatActivity implements DialogInterface.OnClickListener {
@@ -19,6 +21,11 @@ public class ReceiveSmsActivity extends AppCompatActivity implements DialogInter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_default);
     }
 

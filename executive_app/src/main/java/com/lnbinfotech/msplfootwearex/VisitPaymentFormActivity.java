@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -26,9 +27,9 @@ import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.interfaces.PaymentTotalInterface;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
-import com.lnbinfotech.msplfootwearex.model.ChequeDetailsGetterSetter;
+import com.lnbinfotech.msplfootwearex.model.ChequeDetailsClass;
 import com.lnbinfotech.msplfootwearex.model.OuststandingReportClass;
-import com.lnbinfotech.msplfootwearex.model.VisitPaymentFormGetterSetter;
+import com.lnbinfotech.msplfootwearex.model.VisitPaymentFormClass;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
 import org.apache.http.HttpResponse;
@@ -50,20 +51,25 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
     private LinearLayout add_cash_lay, add_cheque_lay, add_other_lay, list_lay, cash_lay;
     private String auto_type;
     private AppCompatButton btn_save, btn_showBill;
-    public static VisitPaymentFormGetterSetter visit;
+    public static VisitPaymentFormClass visit;
     private int total_amt = 0;
     private Toast toast;
     private String custName = "", custId = "0";
     private ListView lv_out;
     private Constant constant;
-    public static int total = 0, totBal = 0, totPaid = 0, totAlloc = 0, isChequeDataSaved = 0;
+    public static int total = 0, totBal = 0, totPaid = 0, totAlloc = 0, isChequeDataSaved = 0, isCurrencyDataSaved = 0;
     private TextView tv_temant, tv_tbal, tv_paid, tv_talloc;
     private List<OuststandingReportClass> invlist, orgList;
-    public static List<ChequeDetailsGetterSetter> ls;
+    public static List<ChequeDetailsClass> ls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_visit_payment_form);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -80,6 +86,14 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         ed_cus_name.setText(custName);
         ed_cus_name.setEnabled(false);
         get_auto_cuslist();
+
+        if(ConnectivityTest.getNetStat(getApplicationContext())){
+            totBal = 0;
+            showOutstandingReport();
+        }else{
+            toast.setText("You Are Offline");
+            toast.show();
+        }
     }
 
     @Override
@@ -96,7 +110,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                 break;
             case R.id.btn_showbill:
                 ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(btn_showBill.getWindowToken(), 0);
-                if (rdo_cash.isChecked()) {
+                /*if (rdo_cash.isChecked()) {
                     if (!ed_amount.getText().toString().equals("")) {
                         total = Integer.parseInt(ed_amount.getText().toString());
                         ed_amount.setError(null);
@@ -114,27 +128,21 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                     } else {
                         showOutstandingReport();
                     }
-                }
+                }*/
+                totBal = 0;
+                showOutstandingReport();
                 break;
             case R.id.add_cheque_lay:
                 setAmount();
                 //cheque_button_validation();
-                Intent intent3 = new Intent(VisitPaymentFormActivity.this, ChequeDetailsActivity.class);
-                startActivity(intent3);
-                overridePendingTransition(R.anim.enter, R.anim.exit);
+                startCheqActivity();
                 break;
             case R.id.add_other_lay:
-                Intent intent1 = new Intent(VisitPaymentFormActivity.this, OtherDetailsActivity.class);
-                startActivity(intent1);
-                overridePendingTransition(R.anim.enter, R.anim.exit);
-                writeLog("goes to ChequeDetailsActivity");
+                startOtherActivity();
                 //finish();
                 break;
             case R.id.add_cash_lay:
-                Intent intent2 = new Intent(VisitPaymentFormActivity.this, CurrencyDetailsActivity.class);
-                startActivity(intent2);
-                overridePendingTransition(R.anim.enter, R.anim.exit);
-                writeLog("goes to ChequeDetailsActivity");
+                startCashActivity();
                 //finish();
                 break;
             case R.id.ed_cus_name:
@@ -149,21 +157,24 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                 if (totBal == 0) {
                     setrdoCash();
                 } else {
-                    showPopup(2);
+                    //showPopup(2);
+                    startCashActivity();
                 }
                 break;
             case R.id.rdo_cheque:
                 if (totBal == 0) {
                     setrdoCheque();
                 } else {
-                    showPopup(3);
+                    //showPopup(3);
+                    startCheqActivity();
                 }
                 break;
             case R.id.rdo_other:
                 if (totBal == 0) {
                     setrdoOther();
                 } else {
-                    showPopup(4);
+                    //showPopup(4);
+                    startOtherActivity();
                 }
                 break;
         }
@@ -196,20 +207,35 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         super.onResume();
         if (isChequeDataSaved == 1) {
             isChequeDataSaved = 0;
-            lv_out.setAdapter(null);
+            //lv_out.setAdapter(null);
             cash_lay.setVisibility(View.VISIBLE);
             ed_amount.setText(String.valueOf(total));
+            tv_temant.setText(String.valueOf(total));
+            tv_paid.setText(String.valueOf(total));
             add_cheque_lay.setVisibility(View.VISIBLE);
             add_other_lay.setVisibility(View.GONE);
             add_cash_lay.setVisibility(View.GONE);
         }else if (isChequeDataSaved == 2) {
             isChequeDataSaved = 0;
-            lv_out.setAdapter(null);
+            //lv_out.setAdapter(null);
             cash_lay.setVisibility(View.VISIBLE);
             ed_amount.setText(String.valueOf(total));
+            tv_temant.setText(String.valueOf(total));
+            tv_paid.setText(String.valueOf(total));
             add_cheque_lay.setVisibility(View.GONE);
             add_other_lay.setVisibility(View.VISIBLE);
             add_cash_lay.setVisibility(View.GONE);
+        }
+        if(isCurrencyDataSaved==1){
+            isCurrencyDataSaved = 0;
+            //lv_out.setAdapter(null);
+            cash_lay.setVisibility(View.VISIBLE);
+            ed_amount.setText(String.valueOf(total));
+            tv_temant.setText(String.valueOf(total));
+            tv_paid.setText(String.valueOf(total));
+            add_cheque_lay.setVisibility(View.GONE);
+            add_other_lay.setVisibility(View.GONE);
+            add_cash_lay.setVisibility(View.VISIBLE);
         }
     }
 
@@ -258,7 +284,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         tv_tbal = (TextView) findViewById(R.id.tv_tbal);
         tv_paid = (TextView) findViewById(R.id.tv_tpaid);
         tv_talloc = (TextView) findViewById(R.id.tv_talloc);
-        visit = new VisitPaymentFormGetterSetter();
+        visit = new VisitPaymentFormClass();
         invlist = new ArrayList<>();
         orgList = new ArrayList<>();
         ls = new ArrayList<>();
@@ -268,6 +294,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
 
     private void showPopup(int id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
         if (id == 0) {
             builder.setMessage("Do you want to delete cheque amount?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -457,7 +484,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                     @Override
                     public void onSuccess(Object result) {
                         constant.showPD();
-                        totBal = 0;
+                        //totBal = 0;
                         totPaid = 0;
                         totAlloc = 0;
                         totalsCalculation("");
@@ -469,6 +496,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                             InvoiceDetailForPaymentAdapter adapter = new InvoiceDetailForPaymentAdapter(invlist, getApplicationContext());
                             adapter.initInterface(VisitPaymentFormActivity.this);
                             lv_out.setAdapter(adapter);
+                            tv_tbal.setText(String.valueOf(totBal));
                         } else {
                             toast.setText("No Record Available");
                             toast.show();
@@ -500,9 +528,10 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         totPaid = 0;
         totAlloc = 0;
         totalsCalculation("");
-        lv_out.setAdapter(null);
+        //lv_out.setAdapter(null);
         invlist.clear();
         orgList.clear();
+        //VisitPaymentFormActivity.ls.clear();
         //lv_out.setAdapter(new InvoiceDetailForPaymentAdapter(orgList, getApplicationContext()));
     }
 
@@ -545,13 +574,13 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         int branch = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
         int createdby = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
 
-        int siteid = 0, totalPaidAmt = totPaid, cashAmt = totPaid, cardAmt = 0, cardNo = 0, chequeAmt = 0,
+        int siteid = 0, totalPaidAmt = total, cashAmt = total, cardAmt = 0, cardNo = 0, chequeAmt = 0,
                 totalRecpt = cashAmt, totalDisc = 0, totalMDRNote = 0, totalMCRNote = 0, totalGoodsRet = 0,
                 totalAdvance = 0, receiptType = 0, bankid = 0, refNo = 0, otherTotal = 0;
 
         String status = "A", accNo = "NA", chqMode = "NA", CBankid = "NA", CBranch = "NA", chequeClear = "Y",
                 chequeMode = "NA", ref = "NA", modeType = "NA", taxInvNo = "", det = "", chequDate = "24/Jan/2018",
-                remark = "NA", chequeNo = "0", chqImg = "NA", custCurrDet = "NA", custRetDet = "NA",otherBank = "NA",
+                remark = "NA", chequeNo = "0", chqImg = "NA", custCurrDet = "NA", custRetDet = "NA", otherBank = "NA",
                 otherBranch = "NA", otherPaymentMode = "NA", otherRemark = "NA", otherImg = "NA";
 
         for (OuststandingReportClass out : invlist) {
@@ -562,122 +591,126 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                 det = det + out.getNetAmt() + "^" + out.getRecAmnt() + "^" + out.getTotal() + "^0^0^0^0^0^" + out.getTotal() + "^" + out.getPaidAmnt() + "^" + out.getOutAmnt() + "^0^0^0^0^0^0^0^0^0^0^" + out.getDcno() + ",";
             }
         }
-
-        taxInvNo = taxInvNo.substring(0, taxInvNo.length() - 1);
-        det = det.substring(0, det.length() - 1);
-
-        String data = branch + "|" + custId + "|" + siteid + "|" + totalPaidAmt + "|" + cashAmt + "|" + cardAmt + "|" + chequeAmt + "|" + cardNo + "|" + chequeNo + "|" +
-                chequDate + "|" + totalRecpt + "|" + totalDisc + "|" + totalMDRNote + "|" + totalMCRNote + "|" + totalGoodsRet + "|" + totalAdvance + "|" +
-                createdby + "|" + remark + "|" + receiptType + "|" + bankid + "|" + accNo + "|" + taxInvNo + "|" + chqMode + "|" + CBankid + "|" + CBranch + "|" +
-                chequeClear + "|" + chequeMode + "|" + refNo + "|" + ref + "|" + modeType + "|" + chqImg + "|" +
-                custCurrDet + "|" +custRetDet + "|" +otherBank + "|" +otherBranch + "|" +otherPaymentMode + "|" +
-                otherRemark + "|" +otherImg + "|" + otherTotal + "|" + status + "|" + det;
-
-        new SavePayment(1).execute(data);
-
         try {
+            //taxInvNo = taxInvNo.substring(0, taxInvNo.length() - 1);
+            //det = det.substring(0, det.length() - 1);
+
+            String data = branch + "|" + custId + "|" + siteid + "|" + totalPaidAmt + "|" + cashAmt + "|" + cardAmt + "|" + chequeAmt + "|" + cardNo + "|" + chequeNo + "|" +
+                    chequDate + "|" + totalRecpt + "|" + totalDisc + "|" + totalMDRNote + "|" + totalMCRNote + "|" + totalGoodsRet + "|" + totalAdvance + "|" +
+                    createdby + "|" + remark + "|" + receiptType + "|" + bankid + "|" + accNo + "|" + taxInvNo + "|" + chqMode + "|" + CBankid + "|" + CBranch + "|" +
+                    chequeClear + "|" + chequeMode + "|" + refNo + "|" + ref + "|" + modeType + "|" + chqImg + "|" +
+                    custCurrDet + "|" + custRetDet + "|" + otherBank + "|" + otherBranch + "|" + otherPaymentMode + "|" +
+                    otherRemark + "|" + otherImg + "|" + otherTotal + "|" + status + "|" + det;
+
+            new SavePayment(1).execute(data);
             JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(data).endObject().endObject();
             Constant.showLog(vehicle.toString());
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("savePaymentCash_"+e.getMessage());
+            writeLog("savePaymentCash_" + e.getMessage());
         }
-
     }
 
     private void savePaymentCheque() {
+        if(ls.size()!=0) {
+            for(ChequeDetailsClass chqClass : ls) {
+                int branch = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
+                int createdby = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
 
-        ChequeDetailsGetterSetter chqClass = ls.get(0);
+                int siteid = 0, totalPaidAmt = total, cashAmt = 0, cardAmt = 0, cardNo = 0, chequeAmt = total,
+                        totalRecpt = total, totalDisc = 0, totalMDRNote = 0, totalMCRNote = 0, totalGoodsRet = 0,
+                        totalAdvance = 0, receiptType = 0, bankid = 0, refNo = 0, otherTotal = 0;
 
-        int branch = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
-        int createdby = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
+                String status = "A", accNo = "NA", chqMode = "Direct", chequeNo = chqClass.getChq_det_number(),
+                        CBankid = chqClass.getCustBankName(), CBranch = chqClass.getCustBankBranch(), chequeClear = "N",
+                        chequeMode = "NA", ref = "NA", modeType = "NA", taxInvNo = "", det = "", chequDate = chqClass.getChq_det_date(),
+                        remark = "NA", chqImg = chqClass.getChq_det_image(), custCurrDet = "NA", custRetDet = "NA", otherBank = "NA",
+                        otherBranch = "NA", otherPaymentMode = "NA", otherRemark = "NA", otherImg = "NA";
 
-        int siteid = 0, totalPaidAmt = totPaid, cashAmt = 0, cardAmt = 0, cardNo = 0, chequeAmt = totPaid,
-                totalRecpt = totPaid, totalDisc = 0, totalMDRNote = 0, totalMCRNote = 0, totalGoodsRet = 0,
-                totalAdvance = 0, receiptType = 0, bankid = 0, refNo = 0, otherTotal = 0;
+                for (OuststandingReportClass out : invlist) {
+                    if (out.isChecked()) {
+                        //billAmt-PreviuosPaid-Balance-ManualDr-ManualCr-GoodsRet-Advance-Disc-TotBal-Rec-Outstnd-ManualDlrlds-
+                        // ManualDrAmt-ManualCrlds-ManualCrAmt-GoodsRetIds-GoodsRetAmts-AdvancePayIds-AdvancePayAmnts-Type-ToBranchIds
+                        taxInvNo = taxInvNo + out.getDcno() + ",";
+                        det = det + out.getNetAmt() + "^" + out.getRecAmnt() + "^" + out.getTotal() + "^0^0^0^0^0^" + out.getTotal() + "^" + out.getPaidAmnt() + "^" + out.getOutAmnt() + "^0^0^0^0^0^0^0^0^0^0^" + out.getDcno() + ",";
+                    }
+                }
 
-        String status = "A", accNo = "NA", chqMode = "Direct", chequeNo = chqClass.getChq_det_number(),
-                CBankid = chqClass.getCustBankName(),CBranch = chqClass.getCustBankBranch(), chequeClear = "N",
-                chequeMode = "NA", ref = "NA", modeType = "NA", taxInvNo = "", det = "", chequDate = chqClass.getChq_det_date(),
-                remark = "NA", chqImg = chqClass.getChq_det_image(), custCurrDet = "NA", custRetDet = "NA",otherBank = "NA",
-                otherBranch = "NA", otherPaymentMode = "NA", otherRemark = "NA", otherImg = "NA";
+                try {
+                    //taxInvNo = taxInvNo.substring(0, taxInvNo.length() - 1);
+                    //det = det.substring(0, det.length() - 1);
 
-        for (OuststandingReportClass out : invlist) {
-            if (out.isChecked()) {
-                //billAmt-PreviuosPaid-Balance-ManualDr-ManualCr-GoodsRet-Advance-Disc-TotBal-Rec-Outstnd-ManualDlrlds-
-                // ManualDrAmt-ManualCrlds-ManualCrAmt-GoodsRetIds-GoodsRetAmts-AdvancePayIds-AdvancePayAmnts-Type-ToBranchIds
-                taxInvNo = taxInvNo + out.getDcno() + ",";
-                det = det + out.getNetAmt() + "^" + out.getRecAmnt() + "^" + out.getTotal() + "^0^0^0^0^0^" + out.getTotal() + "^" + out.getPaidAmnt() + "^" + out.getOutAmnt() + "^0^0^0^0^0^0^0^0^0^0^" + out.getDcno() + ",";
+                    String data = branch + "|" + custId + "|" + siteid + "|" + totalPaidAmt + "|" + cashAmt + "|" + cardAmt + "|" + chequeAmt + "|" + cardNo + "|" + chequeNo + "|" +
+                            chequDate + "|" + totalRecpt + "|" + totalDisc + "|" + totalMDRNote + "|" + totalMCRNote + "|" + totalGoodsRet + "|" + totalAdvance + "|" +
+                            createdby + "|" + remark + "|" + receiptType + "|" + bankid + "|" + accNo + "|" + taxInvNo + "|" + chqMode + "|" + CBankid + "|" + CBranch + "|" +
+                            chequeClear + "|" + chequeMode + "|" + refNo + "|" + ref + "|" + modeType + "|" + chqImg + "|" +
+                            custCurrDet + "|" + custRetDet + "|" + otherBank + "|" + otherBranch + "|" + otherPaymentMode + "|" +
+                            otherRemark + "|" + otherImg + "|" + otherTotal + "|" + status + "|" + det;
+
+                    new SavePayment(1).execute(data);
+
+                    JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(data).endObject().endObject();
+                    Constant.showLog(vehicle.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    writeLog("savePaymentCheque_" + e.getMessage());
+                }
             }
-        }
-
-        taxInvNo = taxInvNo.substring(0, taxInvNo.length() - 1);
-        det = det.substring(0, det.length() - 1);
-
-        String data = branch + "|" + custId + "|" + siteid + "|" + totalPaidAmt + "|" + cashAmt + "|" + cardAmt + "|" + chequeAmt + "|" + cardNo + "|" + chequeNo + "|" +
-                chequDate + "|" + totalRecpt + "|" + totalDisc + "|" + totalMDRNote + "|" + totalMCRNote + "|" + totalGoodsRet + "|" + totalAdvance + "|" +
-                createdby + "|" + remark + "|" + receiptType + "|" + bankid + "|" + accNo + "|" + taxInvNo + "|" + chqMode + "|" + CBankid + "|" + CBranch + "|" +
-                chequeClear + "|" + chequeMode + "|" + refNo + "|" + ref + "|" + modeType + "|" + chqImg + "|" +
-                custCurrDet + "|" +custRetDet + "|" +otherBank + "|" +otherBranch + "|" +otherPaymentMode + "|" +
-                otherRemark + "|" +otherImg + "|" + otherTotal + "|" + status +  "|" + det;
-
-        new SavePayment(1).execute(data);
-
-        try {
-            JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(data).endObject().endObject();
-            Constant.showLog(vehicle.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-            writeLog("savePaymentCheque_"+e.getMessage());
+        }else{
+            toast.setText("Please Enter Values");
+            toast.show();
         }
     }
 
     private void savePaymentOther() {
+        if (ls.size() != 0) {
+            for (ChequeDetailsClass chqClass : ls) {
+                int branch = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
+                int createdby = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
 
-        ChequeDetailsGetterSetter chqClass = ls.get(0);
+                int siteid = 0, totalPaidAmt = total, cashAmt = 0, cardAmt = 0, cardNo = 0, chequeAmt = 0,
+                        totalRecpt = 0, totalDisc = 0, totalMDRNote = 0, totalMCRNote = 0, totalGoodsRet = 0,
+                        totalAdvance = 0, receiptType = 0, bankid = 0, refNo = 0,
+                        otherTotal = Integer.parseInt(chqClass.getChq_det_amt());
 
-        int branch = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
-        int createdby = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
+                String status = "A", accNo = "NA", chqMode = "Direct", chequeNo = "NA",
+                        CBankid = "NA", CBranch = "NA", chequeClear = "N",
+                        chequeMode = "NA", ref = "NA", modeType = "NA", taxInvNo = "", det = "", chequDate = "10/Feb/2018",
+                        remark = "NA", chqImg = "NA", custCurrDet = "NA", custRetDet = "NA", otherBank = chqClass.getCustBankName(),
+                        otherBranch = chqClass.getCustBankBranch(), otherPaymentMode = chqClass.getChq_det_number(),
+                        otherRemark = chqClass.getChq_det_ref(), otherImg = chqClass.getChq_det_image();
 
-        int siteid = 0, totalPaidAmt = 0, cashAmt = 0, cardAmt = 0, cardNo = 0, chequeAmt = 0,
-                totalRecpt = 0, totalDisc = 0, totalMDRNote = 0, totalMCRNote = 0, totalGoodsRet = 0,
-                totalAdvance = 0, receiptType = 0, bankid = 0, refNo = 0,
-                otherTotal = Integer.parseInt(chqClass.getChq_det_ref());
+                for (OuststandingReportClass out : invlist) {
+                    if (out.isChecked()) {
+                        //billAmt-PreviuosPaid-Balance-ManualDr-ManualCr-GoodsRet-Advance-Disc-TotBal-Rec-Outstnd-ManualDlrlds-
+                        // ManualDrAmt-ManualCrlds-ManualCrAmt-GoodsRetIds-GoodsRetAmts-AdvancePayIds-AdvancePayAmnts-Type-ToBranchIds
+                        taxInvNo = taxInvNo + out.getDcno() + ",";
+                        det = det + out.getNetAmt() + "^" + out.getRecAmnt() + "^" + out.getTotal() + "^0^0^0^0^0^" + out.getTotal() + "^" + out.getPaidAmnt() + "^" + out.getOutAmnt() + "^0^0^0^0^0^0^0^0^0^0^" + out.getDcno() + ",";
+                    }
+                }
 
-        String status = "A", accNo = "NA", chqMode = "Direct", chequeNo = "NA",
-                CBankid = "NA",CBranch = "NA", chequeClear = "N",
-                chequeMode = "NA", ref = "NA", modeType = "NA", taxInvNo = "", det = "", chequDate = "10/Feb/2018",
-                remark = "NA", chqImg = "NA", custCurrDet = "NA", custRetDet = "NA",otherBank =  chqClass.getCustBankName(),
-                otherBranch = chqClass.getCustBankBranch(), otherPaymentMode = chqClass.getChq_det_number(), otherRemark = chqClass.getChq_det_amt(),
-                otherImg = chqClass.getChq_det_image();
+                try {
+                    //taxInvNo = taxInvNo.substring(0, taxInvNo.length() - 1);
+                    //det = det.substring(0, det.length() - 1);
+                    String data = branch + "|" + custId + "|" + siteid + "|" + totalPaidAmt + "|" + cashAmt + "|" + cardAmt + "|" + chequeAmt + "|" + cardNo + "|" + chequeNo + "|" +
+                            chequDate + "|" + totalRecpt + "|" + totalDisc + "|" + totalMDRNote + "|" + totalMCRNote + "|" + totalGoodsRet + "|" + totalAdvance + "|" +
+                            createdby + "|" + remark + "|" + receiptType + "|" + bankid + "|" + accNo + "|" + taxInvNo + "|" + chqMode + "|" + CBankid + "|" + CBranch + "|" +
+                            chequeClear + "|" + chequeMode + "|" + refNo + "|" + ref + "|" + modeType + "|" + chqImg + "|" +
+                            custCurrDet + "|" + custRetDet + "|" + otherBank + "|" + otherBranch + "|" + otherPaymentMode + "|" +
+                            otherRemark + "|" + otherImg + "|" + otherTotal + "|" + status + "|" + det;
 
-        for (OuststandingReportClass out : invlist) {
-            if (out.isChecked()) {
-                //billAmt-PreviuosPaid-Balance-ManualDr-ManualCr-GoodsRet-Advance-Disc-TotBal-Rec-Outstnd-ManualDlrlds-
-                // ManualDrAmt-ManualCrlds-ManualCrAmt-GoodsRetIds-GoodsRetAmts-AdvancePayIds-AdvancePayAmnts-Type-ToBranchIds
-                taxInvNo = taxInvNo + out.getDcno() + ",";
-                det = det + out.getNetAmt() + "^" + out.getRecAmnt() + "^" + out.getTotal() + "^0^0^0^0^0^" + out.getTotal() + "^" + out.getPaidAmnt() + "^" + out.getOutAmnt() + "^0^0^0^0^0^0^0^0^0^0^" + out.getDcno() + ",";
+                    new SavePayment(1).execute(data);
+
+                    JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(data).endObject().endObject();
+                    Constant.showLog(vehicle.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    writeLog("savePaymentOther_" + e.getMessage());
+                }
             }
-        }
-
-        taxInvNo = taxInvNo.substring(0, taxInvNo.length() - 1);
-        det = det.substring(0, det.length() - 1);
-
-        String data = branch + "|" + custId + "|" + siteid + "|" + totalPaidAmt + "|" + cashAmt + "|" + cardAmt + "|" + chequeAmt + "|" + cardNo + "|" + chequeNo + "|" +
-                chequDate + "|" + totalRecpt + "|" + totalDisc + "|" + totalMDRNote + "|" + totalMCRNote + "|" + totalGoodsRet + "|" + totalAdvance + "|" +
-                createdby + "|" + remark + "|" + receiptType + "|" + bankid + "|" + accNo + "|" + taxInvNo + "|" + chqMode + "|" + CBankid + "|" + CBranch + "|" +
-                chequeClear + "|" + chequeMode + "|" + refNo + "|" + ref + "|" + modeType + "|" + chqImg + "|" +
-                custCurrDet + "|" +custRetDet + "|" +otherBank + "|" +otherBranch + "|" +otherPaymentMode + "|" +
-                otherRemark + "|" +otherImg + "|" + otherTotal  + "|" + status +  "|" + det;
-
-        new SavePayment(1).execute(data);
-
-        try {
-            JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(data).endObject().endObject();
-            Constant.showLog(vehicle.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-            writeLog("savePaymentOther_"+e.getMessage());
+        } else {
+            toast.setText("Please Enter Values");
+            toast.show();
         }
     }
 
@@ -753,11 +786,11 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
 
     private void setDefault() {
         if (ls != null) {
-            ls.clear();
+            //ls.clear();
         }
         invlist.clear();
         orgList.clear();
-        lv_out.setAdapter(null);
+        //lv_out.setAdapter(null);
         if (rdo_cash.isChecked()) {
             add_cash_lay.setVisibility(View.VISIBLE);
         } else {
@@ -773,6 +806,35 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         totPaid = 0;
         totAlloc = 0;
         isChequeDataSaved = 0;
+    }
+
+    private void startCheqActivity(){
+        rdo_cheque.setChecked(true);
+        rdo_cash.setChecked(false);
+        rdo_other.setChecked(false);
+        Intent intent3 = new Intent(VisitPaymentFormActivity.this, ChequeDetailsActivityChanged.class);
+        startActivity(intent3);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
+    }
+
+    private void startCashActivity(){
+        rdo_cheque.setChecked(false);
+        rdo_cash.setChecked(true);
+        rdo_other.setChecked(false);
+        Intent intent2 = new Intent(VisitPaymentFormActivity.this, CurrencyDetailsActivity.class);
+        startActivity(intent2);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
+        writeLog("goes to ChequeDetailsActivity");
+    }
+
+    private void startOtherActivity(){
+        rdo_cheque.setChecked(false);
+        rdo_cash.setChecked(false);
+        rdo_other.setChecked(true);
+        Intent intent1 = new Intent(VisitPaymentFormActivity.this, OtherDetailsActivity.class);
+        startActivity(intent1);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
+        writeLog("goes to ChequeDetailsActivity");
     }
 
     private void writeLog(String _data) {

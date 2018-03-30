@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -10,47 +11,39 @@
         android:padding="@dimen/mobpadding5"
         android:weightSum="1">
 
-
-
         <TextView
+            android:id="@+id/tv_date"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left|center"
             android:text="02/Aug/2017"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:visibility="visible"
-            android:id="@+id/tv_date" />
-
-
-
+            android:visibility="visible"/>
 
         <TextView
+            android:id="@+id/tv_agnst"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left|center"
             android:text="Against"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:visibility="visible"
-            android:id="@+id/tv_agnst" />
-
-
-
+            android:visibility="visible"/>
 
         <TextView
+            android:id="@+id/tv_ob"
             android:layout_width="90dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:gravity="right"
             android:text="OpnBal"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:visibility="visible"
-            android:id="@+id/tv_ob"
-            android:gravity="right" />
-
+            android:visibility="visible"/>
 
         <TextView
+            android:id="@+id/tv_db"
             android:layout_width="90dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -58,25 +51,21 @@
             android:text="Debit"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:visibility="visible"
-            android:id="@+id/tv_db" />
-
-
+            android:visibility="visible"/>
 
         <TextView
+            android:id="@+id/tv_cd"
             android:layout_width="90dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:gravity="right"
             android:text="Credit"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:visibility="visible"
-            android:id="@+id/tv_cd"
-            android:gravity="right" />
-
-
+            android:visibility="visible"/>
 
         <TextView
+            android:id="@+id/tv_clb"
             android:layout_width="90dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -84,11 +73,10 @@
             android:text="ClBal"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:visibility="visible"
-            android:id="@+id/tv_clb" />
-
+            android:visibility="visible"/>
 
         <TextView
+            android:id="@+id/tv_tno"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -96,8 +84,7 @@
             android:text="TransNo"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:visibility="visible"
-            android:id="@+id/tv_tno" />
+            android:visibility="visible"/>
     </LinearLayout>
 
 </LinearLayout>

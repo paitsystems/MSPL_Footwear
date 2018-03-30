@@ -1,6 +1,7 @@
 package com.lnbinfotech.msplfootwear;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -53,7 +55,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private int maxProdId = 0, maxSDMDAuto = 0;
     private ProgressDialog sndpd;
     private Test test;
-    private static String areaMaster = "Area Master", bankMaster = "Bank Master", bankBrancMaster = "Bank's Branch Master",
+    private String areaMaster = "Area Master", bankMaster = "Bank Master", bankBrancMaster = "Bank's Branch Master",
                             cityMaster = "City Master", companyMaster = "Company Master", custMaster = "Customer Master",
                             docMaster = "Document Master", empMaster = "Employee Master", hoMaster = "HOMaster Master",
                             prodMaster = "Product Master", sizenDesignMaster = "SizeAndDesign Master", stockMaster = "Stock Master",
@@ -62,8 +64,14 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_data_refresh);
 
+        setSyncDate();
         init();
 
         if (getSupportActionBar() != null) {
@@ -139,6 +147,65 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setSyncDate(){
+        String str = isSynced(getString(R.string.pref_autoArea));
+        areaMaster = areaMaster+" -- "+str;
+
+        str = isSynced(getString(R.string.pref_autoBank));
+        bankMaster = bankMaster+" -- "+str;
+
+        str = isSynced(getString(R.string.pref_autoBankBranch));
+        bankBrancMaster = bankBrancMaster+" -- "+str;
+
+        str = isSynced(getString(R.string.pref_autoCity));
+        cityMaster = cityMaster+" -- "+str;
+
+        str = isSynced(getString(R.string.pref_autoCompany));
+        companyMaster = companyMaster+" -- "+str;
+
+        str = isSynced(getString(R.string.pref_autoCustomer));
+        custMaster = custMaster+" -- "+str;
+
+        str = isSynced(getString(R.string.pref_autoDocument));
+        docMaster = docMaster+" -- "+str;
+
+        str = isSynced(getString(R.string.pref_autoEmployee));
+        empMaster = empMaster+" -- "+str;
+
+        str = isSynced(getString(R.string.pref_autoGST));
+        gstMaster = gstMaster+" -- "+str;
+
+        str = isSynced(getString(R.string.pref_autoHO));
+        hoMaster = hoMaster+" -- "+str;
+
+        str = isSynced(getString(R.string.pref_autoProduct));
+        prodMaster = prodMaster+" -- "+str;
+
+        str = isSynced(getString(R.string.pref_autoSizeNDesign));
+        sizenDesignMaster = sizenDesignMaster+" -- "+str;
+
+        str = isSynced(getString(R.string.pref_autoSizeDetail));
+        sdmdMaster = sdmdMaster+" -- "+str;
+
+    }
+
+    private String isSynced(String prefName){
+        String savedDate = "";
+        try {
+            FirstActivity.pref = getApplicationContext().getSharedPreferences(FirstActivity.PREF_NAME, Context.MODE_PRIVATE);
+            String str = FirstActivity.pref.getString(prefName, "");
+            String strArr[] = str.split("\\-");
+            if (strArr.length > 1) {
+                savedDate = strArr[2];
+            }else{
+                savedDate = str;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return savedDate;
     }
 
     private void loadAreaMaster() {
@@ -416,11 +483,11 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         refreshList.add(custMaster);
         refreshList.add(docMaster);
         refreshList.add(empMaster);
+        refreshList.add(gstMaster);
         refreshList.add(hoMaster);
         refreshList.add(prodMaster);
         refreshList.add(sizenDesignMaster);
-        refreshList.add(stockMaster);
-        refreshList.add(gstMaster);
+        //refreshList.add(stockMaster);
         refreshList.add(sdmdMaster);
         listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.list_item_data_refresh, refreshList));
     }
@@ -783,6 +850,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
+            response = response.replace("\\\\r\\\\n", "");
             response = response.substring(1, response.length() - 1);
             constant.showPD();
             new readCustJSON(response, "CustMast").execute();
@@ -793,7 +861,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         private String result, parseType;
         private ProgressDialog pd;
 
-        readCustJSON(String _result, String _parseType) {
+        public readCustJSON(String _result, String _parseType) {
             this.result = _result;
             this.parseType = _parseType;
         }

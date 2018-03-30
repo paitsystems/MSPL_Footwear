@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -56,6 +57,11 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_areawise_customer_selection);
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
 
@@ -196,7 +202,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         exp_listView.setAdapter(adapter1);
     }
 
-    private  void areaName(){
+    private void areaName(){
         String areaIds = "";
         Cursor res = db.getAreaIdAreaLineWise(areaLineClass.getArea());
         if(res.moveToFirst()){
@@ -204,7 +210,9 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                 areaIds = areaIds + res.getString(res.getColumnIndex(DBHandler.AL_AreaId)) +",";
             }while (res.moveToNext());
         }
-        areaIds = areaIds.substring(0,areaIds.length()-1);
+        if(!areaIds.equals("")) {
+            areaIds = areaIds.substring(0, areaIds.length() - 1);
+        }
         res.close();
         if(!areaIds.equals("")) {
             Cursor cursor = db.getExpListData(areaIds);
@@ -347,6 +355,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         editor.apply();
         Intent in = new Intent(getApplicationContext(),VisitOptionsActivity.class);
         in.putExtra("area_line",areaLineClass.getArea());
+        //in.putExtra("area_line","NA");
         in.putExtra("area_name",area_name);
         in.putExtra("child_selected",child_sel);
         in.putExtra("cust_id",String.valueOf(cust_id));

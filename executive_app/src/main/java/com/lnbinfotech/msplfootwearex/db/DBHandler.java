@@ -28,6 +28,7 @@ import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwearex.model.SizeDesignMastDetClass;
 import com.lnbinfotech.msplfootwearex.model.SizeNDesignClass;
 import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
+import com.lnbinfotech.msplfootwearex.model.TrackOrderDetailChangedClass;
 import com.lnbinfotech.msplfootwearex.model.UserClass;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
     //TODO: Change Version
-    public static final int Database_Version = 3;
+    public static final int Database_Version = 5;
 
     public static final String Table_Customermaster = "CustomerMaster";
     public static final String CM_RetailCustID = "CustID";
@@ -159,6 +160,12 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String Company_DisplayCmp = "DisplayCmp";
     public static final String Company_HOCode = "HOCode";
     public static final String Company_GSTNo = "GSTNo";
+    public static final String Company_Company_Add = "Company_Add";
+    public static final String Company_Company_Phno = "Company_Phno";
+    public static final String Company_Company_Email = "Company_Email";
+    public static final String Company_MobileNo = "MobileNo";
+    public static final String Company_Company_Phone2 = "Company_Phone2";
+    public static final String Company_Mobileno2 = "Mobileno2";
 
     public static final String Table_BankMaster = "BankMaster";
     public static final String Bank_Id = "Id";
@@ -208,6 +215,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String UM_isRegistered = "isRegistered";
     public static final String UM_AadhaarNo = "AadhaarNo";
     public static final String UM_PIN = "PIN";
+    public static final String UM_PINText = "PINTEXT";
 
     public static final String Table_AllRequiredSizesDesigns = "AllRequiredSizesdesigns";
     public static final String ARSD_Productid = "Productid";
@@ -359,7 +367,9 @@ public class DBHandler extends SQLiteOpenHelper {
             City_Auto + " int," + City_Id + " int," + City_City + " text," + City_Stateid + " int)";
 
     private String create_company_master = "create table if not exists " + Table_CompanyMaster + "(" + Company_Id + " int," + Company_Name + " text,"
-            + Company_Initial + " text," + Company_Pan + " text," + Company_DisplayCmp + " text," + Company_GSTNo + " text," + Company_HOCode + " text)";
+            + Company_Initial + " text," + Company_Pan + " text," + Company_DisplayCmp + " text," + Company_GSTNo + " text," + Company_HOCode + " text,"+
+            Company_Company_Add + " text," + Company_Company_Phno + " text," + Company_Company_Email + " text," +
+            Company_MobileNo + " text," + Company_Company_Phone2 + " text," + Company_Mobileno2 + " text)";
 
     private String create_bank_master = "create table if not exists " + Table_BankMaster + "(" + Bank_Id + " int," + Bank_BranchId + " int," + Bank_Name + " text,"
             + Bank_AccountNo + " text," + Bank_Status + " text," + Bank_IFSC + " text," + Bank_MICR + " text," + Bank_CustType + " text," + Bank_HoCode + " text)";
@@ -374,7 +384,7 @@ public class DBHandler extends SQLiteOpenHelper {
             UM_RetailCustID + " int," + UM_Name + " text," + UM_Address + " text," + UM_MobileNo + " text," + UM_Status + " text," +
             UM_BranchId + " int," + UM_Email + " text," + UM_District + " text," + UM_Taluka + " text," + UM_CityId + " int," +
             UM_AreaId + " int," + UM_PANNo + " text," + UM_PartyName + " text," + UM_ImagePath + " text," + UM_HOCode + " int," + UM_GSTNo + " text," + UM_IMEINo + " text," +
-            UM_isRegistered + " text," + UM_AadhaarNo + " text," + UM_PIN + " int)";
+            UM_isRegistered + " text," + UM_AadhaarNo + " text," + UM_PIN + " int,"+UM_PINText+" text)";
 
     private String create_arsd_master = "create table if not exists " + Table_AllRequiredSizesDesigns + "(" +
             ARSD_Productid + " int," + ARSD_Cat1 + " text," + ARSD_Cat2 + " text," + ARSD_Cat3 + " text," +
@@ -444,6 +454,8 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(create_trackcustomerorder_table);
         Constant.showLog(create_sizedesignmastdet_table);
         db.execSQL(create_sizedesignmastdet_table);
+        Constant.showLog(create_currency_master);
+        db.execSQL(create_currency_master);
     }
 
     @Override
@@ -453,6 +465,26 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         if(oldVersion<3){
             db.execSQL(create_currency_master);
+        }
+        if(oldVersion<4){
+            String str = "alter table "+Table_Usermaster+" add "+UM_PINText+" text";
+            db.execSQL(str);
+            str = "update "+Table_Usermaster+" set "+UM_PINText+"="+UM_PIN;
+            db.execSQL(str);
+        }
+        if(oldVersion<5){
+            String str = "alter table "+Table_CompanyMaster+" add "+Company_Company_Add + " text";
+            db.execSQL(str);
+            str = "alter table "+Table_CompanyMaster+" add "+Company_Company_Phno + " text";
+            db.execSQL(str);
+            str = "alter table "+Table_CompanyMaster+" add "+Company_Company_Email + " text";
+            db.execSQL(str);
+            str = "alter table "+Table_CompanyMaster+" add "+Company_MobileNo + " text";
+            db.execSQL(str);
+            str = "alter table "+Table_CompanyMaster+" add "+Company_Company_Phone2 + " text";
+            db.execSQL(str);
+            str = "alter table "+Table_CompanyMaster+" add "+Company_Mobileno2 + " text";
+            db.execSQL(str);
         }
         //dbInterface.dbUpdated();
     }
@@ -483,8 +515,9 @@ public class DBHandler extends SQLiteOpenHelper {
             cv.put(CM_HOCode,cust.getHOCode());
             cv.put(CM_AadhaarNo,cust.getAadharNo());
             db.insert(Table_Customermaster, null, cv);
-            Constant.showLog("" + count++);
+            count++;
         }
+        Constant.showLog("Customer Count " + count);
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();
@@ -721,13 +754,19 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void addCompanyMaster(CompanyMasterClass company) {
         ContentValues cv = new ContentValues();
-        cv.put(Company_Id, company.companyId);
+        cv.put(Company_Id, company.getCompanyId());
         cv.put(Company_Name, company.getCompanyName());
         cv.put(Company_Initial, company.getCompanyInitial());
         cv.put(Company_Pan, company.getCompanyPan());
         cv.put(Company_DisplayCmp, company.getDisplayCmp());
         cv.put(Company_GSTNo, company.getGSTNo());
         cv.put(Company_HOCode, company.getHOCode());
+        cv.put(Company_Company_Add, company.getCompany_Add());
+        cv.put(Company_Company_Phno, company.getCompany_Phno());
+        cv.put(Company_Company_Email, company.getCompany_Email());
+        cv.put(Company_MobileNo, company.getMobileNo());
+        cv.put(Company_Company_Phone2, company.getCompany_Phone2());
+        cv.put(Company_Mobileno2, company.getMobileno2());
         getWritableDatabase().insert(Table_CompanyMaster, null, cv);
     }
 
@@ -812,11 +851,13 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(UM_Taluka, user.getTaluka());
         cv.put(UM_CityId, user.getCityId());
         cv.put(UM_AreaId, user.getAreaId());
+        cv.put(UM_BranchId, user.getBranchId());
         cv.put(UM_HOCode, user.getHOCode());
         cv.put(UM_IMEINo, user.getIMEINo());
         cv.put(UM_isRegistered, user.getIsRegistered());
         cv.put(UM_AadhaarNo, user.getAadharNo());
         cv.put(UM_PIN, "-1");
+        cv.put(UM_PINText, "-1");
         getWritableDatabase().insert(Table_Usermaster, null, cv);
     }
 
@@ -877,6 +918,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 userClass.setTaluka(res.getString(res.getColumnIndex(UM_Taluka)));
                 userClass.setCityId(res.getInt(res.getColumnIndex(UM_CityId)));
                 userClass.setAreaId(res.getInt(res.getColumnIndex(UM_AreaId)));
+                userClass.setBranchId(res.getInt(res.getColumnIndex(UM_BranchId)));
                 userClass.setHOCode(res.getInt(res.getColumnIndex(UM_HOCode)));
                 userClass.setIMEINo(res.getString(res.getColumnIndex(UM_IMEINo)));
                 userClass.setIsRegistered(res.getString(res.getColumnIndex(UM_isRegistered)));
@@ -890,11 +932,11 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public String getCustPIN(String custid) {
         String pin = "-1";
-        String str = "select " + UM_PIN + " from " + Table_Usermaster + " where " + UM_RetailCustID + "=" + custid;
+        String str = "select " + UM_PINText + " from " + Table_Usermaster + " where " + UM_RetailCustID + "=" + custid;
         Cursor res = getWritableDatabase().rawQuery(str, null);
         if (res.moveToFirst()) {
             do {
-                pin = res.getString(res.getColumnIndex(UM_PIN));
+                pin = res.getString(res.getColumnIndex(UM_PINText));
             } while (res.moveToNext());
         }
         res.close();
@@ -903,11 +945,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public List<String> checkPINUnsetID() {
         List<String> list = new ArrayList<>();
-        String str = "select " + UM_PIN + " from " + Table_Usermaster + " where " + UM_PIN + "=-1";
+        //String str = "select " + UM_PIN + " from " + Table_Usermaster + " where " + UM_PIN + "=-1";
+        String str = "select " + UM_PINText + " from " + Table_Usermaster + " where " + UM_PINText + "=-1";
         Cursor res = getWritableDatabase().rawQuery(str, null);
         if (res.moveToFirst()) {
             do {
-                list.add(res.getString(res.getColumnIndex(UM_PIN)));
+                //list.add(res.getString(res.getColumnIndex(UM_PIN)));
+                list.add(res.getString(res.getColumnIndex(UM_PINText)));
             } while (res.moveToNext());
         }
         res.close();
@@ -916,7 +960,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void updatePIN(String custid, String pin) {
         ContentValues cv = new ContentValues();
-        cv.put(UM_PIN, pin);
+        //cv.put(UM_PIN, pin);
+        cv.put(UM_PINText, pin);
         getWritableDatabase().update(Table_Usermaster, cv, UM_RetailCustID + "=?", new String[]{custid});
     }
 
@@ -945,7 +990,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public Cursor getBankName() {
-        String str = "select distinct " + Bank_Name + " from " + Table_BankMaster + " order by "+Bank_Name;
+        String str = "select distinct " + Bank_Name + " from " + Table_BankMaster + " where "+Bank_CustType+"='C' order by "+Bank_Name;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
     }
@@ -1095,7 +1140,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
-
     public Cursor getDistinctSizeGroup(String packUnpackType) {
         String str = "select distinct " + ARSD_SizeGroup + " from " + Table_AllRequiredSizesDesigns +
                 " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_typ + "='" + packUnpackType + "' and "
@@ -1124,7 +1168,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 + " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId
                 + " and " + ARSD_typ + "='" + packUnpackType + "' and InOutType='I' and " + ARSD_SizeGroup + " like '" + sizegroup + "'"
                 + " order by " + ARSD_Total;
-        ;
         Constant.showLog("getDistinctSizes :- " + str);
         return getWritableDatabase().rawQuery(str, null);
     }
@@ -1534,6 +1577,109 @@ public class DBHandler extends SQLiteOpenHelper {
         String str = "select " + Curr_Currency + " from " + Table_CurrencyMaster + " order by " + Curr_Currency + " desc";
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getImageSubCategory(String catName) {
+        String str = "select "+Table_ProductMaster+"."+PM_ProductID+","+Table_ProductMaster+"."+PM_Cat2+","+Table_AllRequiredSizesDesigns+"."+
+                ARSD_ImageName+" from "+Table_ProductMaster+","+ Table_AllRequiredSizesDesigns+" where "+
+                Table_ProductMaster+"."+PM_Cat9+"='"+catName+"' and "+Table_AllRequiredSizesDesigns+"."+ARSD_Productid+"="+
+                Table_ProductMaster+"."+PM_ProductID+" group by "+Table_ProductMaster+"."+PM_Cat2+" order by "+
+                Table_ProductMaster+"."+PM_Cat2;
+        //Constant.showLog("getImageSubCategory :- "+str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getImageSubCategory1(String catName, String subCatName) {
+        String str = "select "+Table_ProductMaster+"."+PM_ProductID+","+Table_ProductMaster+"."+PM_Cat2+","
+                +Table_ProductMaster+"."+PM_Finalprod+","+Table_ProductMaster+"."+PM_ProdId+","+Table_AllRequiredSizesDesigns+"."+
+                ARSD_ImageName+" from "+Table_ProductMaster+","+ Table_AllRequiredSizesDesigns+" where "+
+                Table_ProductMaster+"."+PM_Cat9+"='"+catName+"' and "+Table_ProductMaster+"."+PM_Cat2+"='"+subCatName+"' and "
+                +Table_AllRequiredSizesDesigns+"."+ARSD_Productid+"="+
+                Table_ProductMaster+"."+PM_ProductID+" group by "+Table_ProductMaster+"."+PM_Finalprod+" order by "+
+                Table_ProductMaster+"."+PM_Cat2;
+        //Constant.showLog("getImageSubCategory 1 :- "+str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getContactUsData(int hocode){
+        String str = "";
+        if(hocode==1){
+            str = "select * from "+Table_CompanyMaster+" where "+Company_Initial+"='HKHO'";
+        }else if(hocode==12){
+            str = "select * from "+Table_CompanyMaster+" where "+Company_Initial+"='HKRD'";
+        }else if(hocode==13){
+            str = "select * from "+Table_CompanyMaster+" where "+Company_Initial+"='HANR'";
+        }
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
+    public Cursor getCustInfo(int custId) {
+        String str = "select "+CM_Name+","+CM_Address+","+CM_ImagePath+","+CM_MobileNo+" from " + Table_Customermaster + " where " + CM_RetailCustID + "="+custId;
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getTrackOrderDetailData() {
+        String str;
+        str = "select * from " + Table_TrackCustomerOrder;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public void addTrackOrderDetailChanged(List<TrackOrderDetailChangedClass> trackOrderList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        ContentValues cv = new ContentValues();
+        for (TrackOrderDetailChangedClass trackClass : trackOrderList) {
+            cv.put(TCO_Auto,trackClass.getAuto());
+            cv.put(TCO_Productid,trackClass.getProductid());
+            cv.put(TCO_SizeGroup,trackClass.getSize_group());
+            cv.put(TCO_Color,trackClass.getColor());
+            cv.put(TCO_HashCode,trackClass.getHashcode());
+            cv.put(TCO_MRP,trackClass.getMrp());
+            cv.put(TCO_Rate,trackClass.getRate());
+            cv.put(TCO_OrderQty,trackClass.getOrderqty());
+            cv.put(TCO_LoosePackTyp,trackClass.getLoosePackTyp());
+            cv.put(TCO_CreditApp,trackClass.getCreditapp());
+            cv.put(TCO_AllotedToPck,trackClass.getAllowtopck());
+            cv.put(TCO_TaxInvMade,trackClass.getTaxinvmade());
+            cv.put(TCO_InvNo,trackClass.getInvno());
+            cv.put(TCO_InvDate,trackClass.getInvdate());
+            cv.put(TCO_InvAmt,trackClass.getInvamnt());
+            cv.put(TCO_Transporter,trackClass.getTransporter());
+            cv.put(TCO_TransporterNo,trackClass.getTransNo());
+            cv.put(TCO_Prodid,trackClass.getProdid());
+            cv.put(TCO_InvQty,trackClass.getInvqty());
+            cv.put(TCO_CancelQty,trackClass.getCanqty());
+            cv.put(TCO_Status,trackClass.getStatus());
+            db.insert(Table_TrackCustomerOrder, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+    }
+
+    public Cursor getCustOrderTotalsAtTrackOrder(int allBranch,String branchIds) {
+        String str;
+        if(allBranch==1) {
+            str = "select count(" + TCO_Auto + ") as " + TCO_Auto + ",sum(" + TCO_OrderQty + ") as " + TCO_OrderQty + ", sum(" + TCO_InvQty +
+                    ") as " + TCO_InvQty + ", sum(" + TCO_CancelQty + ") as " + TCO_CancelQty + " from " + Table_TrackCustomerOrder;
+        }else{
+            str = "select count(" + CO_Auto + ") as " + CO_Auto + ",sum(" + CO_LooseQty + ") as " + CO_LooseQty + ", sum(" + CO_Amount +
+                    ") as " + CO_Amount + ", sum(" + CO_NetAmt + ") as " + CO_NetAmt + ", sum(" + CO_AmtAfterDisc + ") as " + CO_AmtAfterDisc + "," +
+                    "SUM(" + CO_GSTAmt + ") as " + CO_GSTAmt + ", sum(" + CO_DiscAmt + ") as " + CO_DiscAmt + " from " + Table_TrackCustomerOrder
+                    + " where "+CO_BranchId+" in("+branchIds+")";
+        }
+        Constant.showLog("getCustOrderTotals :- " + str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public void deleteTableFromToRange(String tableName, int from, int to) {
+        Constant.showLog("Delete From "+tableName+"-"+from+"-"+to);
+        getWritableDatabase().execSQL("delete from " + tableName + "  where "+PM_ProdId +" between "+from+" and "+to);
+    }
+
+    public void deleteTableFromToRangeSDMD(String tableName, int from, int to) {
+        Constant.showLog("Delete From "+tableName+"-"+from+"-"+to);
+        getWritableDatabase().execSQL("delete from " + tableName + "  where "+SDMD_ProductId +" between "+from+" and "+to);
     }
 
 }

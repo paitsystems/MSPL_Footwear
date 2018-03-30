@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.lnbinfotech.msplfootwear.constant.Constant;
 
 public class ProfileDataUpdateActivity extends AppCompatActivity {
     EditText ed_mobno,ed_emailid,ed_cc,ed_cusname,ed_cgst,ed_panno;
@@ -18,6 +21,11 @@ public class ProfileDataUpdateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_profile_data_update);
         init();
     }

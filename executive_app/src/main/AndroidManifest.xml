@@ -31,8 +31,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
-        <service android:name=".services.DownloadImageService" />
-        <service android:name=".services.CheckNewTicketService" />
+        <service android:name=".services.AutoSyncService" />
+        <service android:name=".services.DataUpdateService" />
         <service android:name=".services.UploadImageService" />
 
         <receiver android:name=".braodcasts.AutoUpdateBroadcastReceiver" />
@@ -49,8 +49,7 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".braodcasts.ReadSms">
-        </receiver>
+        <receiver android:name=".braodcasts.ReadSms"/>
 
         <activity
             android:name=".RegistrationActivity"
@@ -156,7 +155,7 @@
             android:name=".AddToCartActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".ProductSearchActivity"
             android:screenOrientation="portrait"
@@ -203,6 +202,22 @@
             android:name=".CurrencyDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".MainImagewiseSetwiseOrderActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".TrackOrderMasterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".TrackOrderDetailActivityChanged"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ChequeDetailsActivityChanged"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
     </application>
 

@@ -7,9 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lnbinfotech.msplfootwearex.R;
+import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwearex.model.UserClass;
 
@@ -51,6 +55,7 @@ public class CustomerDetailListAdapter extends BaseAdapter {
             holder.tv_custaddress = (TextView) view.findViewById(R.id.tv_custaddress);
             holder.tv_custmobile = (TextView) view.findViewById(R.id.tv_custmobile);
             holder.tv_custemail = (TextView) view.findViewById(R.id.tv_custemail);
+            holder.img_cust = (ImageView) view.findViewById(R.id.img_cust);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
@@ -60,10 +65,18 @@ public class CustomerDetailListAdapter extends BaseAdapter {
         holder.tv_custaddress.setText(userClass.getAddress());
         holder.tv_custmobile.setText(userClass.getMobile());
         holder.tv_custemail.setText(userClass.getEmail());
+        Glide.with(context).load(Constant.custimgUrl+userClass.getImagePath())
+                .thumbnail(0.5f)
+                .crossFade()
+                .placeholder(R.drawable.user32)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.img_cust);
+
         return view;
     }
 
     private class ViewHolder {
         TextView tv_custname, tv_custaddress, tv_custmobile, tv_custemail;
+        ImageView img_cust;
     }
 }

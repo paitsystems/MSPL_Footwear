@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -86,6 +87,11 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_add_to_cart);
 
         init();
@@ -2261,47 +2267,6 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             }
         }*/
 
-        qtyList.clear();
-        for(int i=0;i<stockList.size();i++) {
-            CheckAvailStockClass stock = stockList.get(i);
-            String availSize = stock.getSizegroup();
-            if (sizeGroupListAvail.contains(availSize)) {
-                sizeGroupList.add(availSize);
-                if (stock.getStat().equals("N")) {
-                    if(sizeQtyHashMap.isEmpty()){
-                        List<String> list = new ArrayList<>();
-                        list.add("0^"+stock.getColor()+"-"+stock.getHashcode());
-                        sizeQtyHashMap.put(availSize,list);
-                    }else if(sizeQtyHashMap.containsKey(availSize)){
-                        List<String> list = sizeQtyHashMap.get(availSize);
-                        list.add("0^"+stock.getColor()+"-"+stock.getHashcode());
-                        sizeQtyHashMap.put(availSize,list);
-                    }else{
-                        List<String> list = new ArrayList<>();
-                        list.add("0^"+stock.getColor()+"-"+stock.getHashcode());
-                        sizeQtyHashMap.put(availSize,list);
-                    }
-                    qtyList.add("0");
-                }else{
-                    if(sizeQtyHashMap.isEmpty()){
-                        List<String> list = new ArrayList<>();
-                        list.add(sizeQtyMap.get(availSize)+"^"+stock.getColor()+"-"+stock.getHashcode());
-                        sizeQtyHashMap.put(availSize,list);
-                    }else if(sizeQtyHashMap.containsKey(availSize)){
-                        List<String> list = sizeQtyHashMap.get(availSize);
-                        list.add(sizeQtyMap.get(availSize)+"^"+stock.getColor()+"-"+stock.getHashcode());
-                        sizeQtyHashMap.put(availSize,list);
-                    }else{
-                        List<String> list = new ArrayList<>();
-                        list.add(sizeQtyMap.get(availSize)+"^"+stock.getColor()+"-"+stock.getHashcode());
-                        sizeQtyHashMap.put(availSize,list);
-                    }
-                    qtyList.add(sizeQtyMap.get(availSize));
-                }
-            }else{
-
-            }
-        }
 
         List<String> colorList = new ArrayList<>();
 
@@ -2313,6 +2278,49 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 String colArr[] = colStr.split("\\-");
                 String hashCode = colArr[1];
                 colorList.add(db.getDistinctColour(size,hashCode));
+            }
+        }
+
+        qtyList.clear();
+        for(int i=0;i<stockList.size();i++) {
+            CheckAvailStockClass stock = stockList.get(i);
+            String colCode = stock.getColor()+"-"+stock.getHashcode();
+            if(colorList.contains(colCode)) {
+                String availSize = stock.getSizegroup();
+                if (sizeGroupListAvail.contains(availSize)) {
+                    sizeGroupList.add(availSize);
+                    if (stock.getStat().equals("N")) {
+                        if (sizeQtyHashMap.isEmpty()) {
+                            List<String> list = new ArrayList<>();
+                            list.add("0^" + stock.getColor() + "-" + stock.getHashcode());
+                            sizeQtyHashMap.put(availSize, list);
+                        } else if (sizeQtyHashMap.containsKey(availSize)) {
+                            List<String> list = sizeQtyHashMap.get(availSize);
+                            list.add("0^" + stock.getColor() + "-" + stock.getHashcode());
+                            sizeQtyHashMap.put(availSize, list);
+                        } else {
+                            List<String> list = new ArrayList<>();
+                            list.add("0^" + stock.getColor() + "-" + stock.getHashcode());
+                            sizeQtyHashMap.put(availSize, list);
+                        }
+                        qtyList.add("0");
+                    } else {
+                        if (sizeQtyHashMap.isEmpty()) {
+                            List<String> list = new ArrayList<>();
+                            list.add(sizeQtyMap.get(availSize) + "^" + stock.getColor() + "-" + stock.getHashcode());
+                            sizeQtyHashMap.put(availSize, list);
+                        } else if (sizeQtyHashMap.containsKey(availSize)) {
+                            List<String> list = sizeQtyHashMap.get(availSize);
+                            list.add(sizeQtyMap.get(availSize) + "^" + stock.getColor() + "-" + stock.getHashcode());
+                            sizeQtyHashMap.put(availSize, list);
+                        } else {
+                            List<String> list = new ArrayList<>();
+                            list.add(sizeQtyMap.get(availSize) + "^" + stock.getColor() + "-" + stock.getHashcode());
+                            sizeQtyHashMap.put(availSize, list);
+                        }
+                        qtyList.add(sizeQtyMap.get(availSize));
+                    }
+                }
             }
         }
 
@@ -2380,7 +2388,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                     output.put(unpackSizeList.get(counter), list);
                 } else {
                     getColour++;
-                    String colour = colourList.get(getColour);
+                    //String colour = colourList.get(getColour);
                     /*String qty = unpackSizeList.get(counter);
                     if (qty.equals("")) {
                         qty = "0";

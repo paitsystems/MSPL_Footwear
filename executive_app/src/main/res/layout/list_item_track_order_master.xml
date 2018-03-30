@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,10 +17,10 @@
             android:layout_gravity="center"
             android:layout_weight="0.5"
             android:gravity="left"
+            android:text="28/Oct/2017"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="28/Oct/2017" />
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/tv_orderno"
@@ -29,10 +29,10 @@
             android:layout_gravity="center"
             android:layout_weight="0.4"
             android:gravity="left"
+            android:text="U5%/G/17-18/4949"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="U5%/G/17-18/4949" />
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/tv_orderqty"
@@ -41,10 +41,10 @@
             android:layout_gravity="center"
             android:layout_weight="0.6"
             android:gravity="right"
+            android:text="30"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="30" />
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/tv_orderamt"
@@ -53,10 +53,10 @@
             android:layout_gravity="center"
             android:layout_weight="0.5"
             android:gravity="right"
+            android:text="99999"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="99999" />
+            android:textStyle="bold"/>
     </LinearLayout>
 
 

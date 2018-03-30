@@ -1,6 +1,7 @@
 package com.lnbinfotech.msplfootwearex.fragments;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +13,10 @@ import android.widget.GridView;
 
 import com.lnbinfotech.msplfootwearex.FullImageActivity;
 import com.lnbinfotech.msplfootwearex.R;
+import com.lnbinfotech.msplfootwearex.adapters.HawaiNEvaCategoryGridAdapter;
 import com.lnbinfotech.msplfootwearex.adapters.SchoolShoeCategoryGridAdapter;
+import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.model.GentsCategoryClass;
 
 import java.util.ArrayList;
@@ -24,8 +28,13 @@ public class ISchoolShoesCategoryFragment extends Fragment {
 
     private GridView gridView;
     private SchoolShoeCategoryGridAdapter adapter;
-    private int[] drawId = {R.drawable.formal,
-            R.drawable.simulus,R.drawable.paralite,R.drawable.acusole,R.drawable.casual};
+    //private int[] drawId = {R.drawable.formal,R.drawable.simulus,R.drawable.paralite,R.drawable.acusole,R.drawable.casual};
+
+    private String[] drawId = {"http://103.68.10.9:24086/IMAGES/9773_Stimulus Sports Shoes_BlackRed_P1.jpg",
+            "http://103.68.10.9:24086/IMAGES/9769_Stimulus Sports Shoes_YellowNavyBlue_P2.jpg",
+            "http://103.68.10.9:24086/IMAGES/9700_Stimulus Sports Shoes_BlackSilver_P1.jpg",
+            "http://103.68.10.9:24086/IMAGES/9104_Stimulus Sandals_BlueGrey_P4.jpg",
+            "http://103.68.10.9:24086/IMAGES/6678_Vertex_Black_P4.jpg"};
 
     @Nullable
     @Override
@@ -39,7 +48,7 @@ public class ISchoolShoesCategoryFragment extends Fragment {
                 GentsCategoryClass gentClass = (GentsCategoryClass) adapterView.getItemAtPosition(i);
                 Intent intent = new Intent(getContext(), FullImageActivity.class);
                 intent.putExtra("data",gentClass);
-                intent.putExtra("id",drawId[i]);
+                //intent.putExtra("id",drawId[i]);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.enter,R.anim.exit);
             }
@@ -50,7 +59,7 @@ public class ISchoolShoesCategoryFragment extends Fragment {
 
     private void setData(){
         List<GentsCategoryClass> list = new ArrayList<>();
-        GentsCategoryClass gents1 = new GentsCategoryClass();
+        /*GentsCategoryClass gents1 = new GentsCategoryClass();
         gents1.setCategoryName("Formal");
         gents1.setMrp("275");
         gents1.setMargin("30%");
@@ -85,8 +94,30 @@ public class ISchoolShoesCategoryFragment extends Fragment {
         gents5.setProductName("66050-Casual-Gents-6X10-PU-Flat Chappals");
         list.add(gents6);
         adapter = new SchoolShoeCategoryGridAdapter(getContext(),list,drawId);
+        gridView.setAdapter(adapter);*/
 
+        DBHandler db = new DBHandler(getContext());
+        Cursor res = db.getImageSubCategory("School Shoes");
+        if(res.moveToFirst()){
+            do {
+                GentsCategoryClass gentsClass = new GentsCategoryClass();
+                gentsClass.setCategoryName(res.getString(res.getColumnIndex(DBHandler.PM_Cat2)));
+                String img = res.getString(res.getColumnIndex(DBHandler.ARSD_ImageName));
+                String imgArr[] = img.split("\\,");
+                img = Constant.imgUrl;
+                if(imgArr.length>1){
+                    img = img+imgArr[0];
+                }
+                img = img + ".jpg";
+                Constant.showLog(img);
+                gentsClass.setImgName(img);
+                list.add(gentsClass);
+            }while (res.moveToNext());
+        }
+        res.close();
+        adapter = new SchoolShoeCategoryGridAdapter(getContext(),list,drawId);
         gridView.setAdapter(adapter);
+
     }
 
 }

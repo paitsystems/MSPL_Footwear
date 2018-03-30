@@ -141,7 +141,6 @@ public class ParseJSON {
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
-                db.deleteTable(DBHandler.Table_AreaMaster);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     AreaMasterClass areaClass = new AreaMasterClass();
                     areaClass.setAuto(jsonArray.getJSONObject(i).getInt("auto"));
@@ -149,8 +148,8 @@ public class ParseJSON {
                     areaClass.setArea(jsonArray.getJSONObject(i).getString("area"));
                     areaClass.setCityid(jsonArray.getJSONObject(i).getInt("cityid"));
                     areaList.add(areaClass);
-
                 }
+                db.deleteTable(DBHandler.Table_AreaMaster);
                 db.addAreaMaster(areaList);
                 db.close();
                 ret = 1;
@@ -168,7 +167,6 @@ public class ParseJSON {
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
-                db.deleteTable(DBHandler.Table_CityMaster);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     CityMasterClass cityClass = new CityMasterClass();
                     cityClass.setAuto(jsonArray.getJSONObject(i).getInt("auto"));
@@ -177,6 +175,7 @@ public class ParseJSON {
                     cityClass.setStId(jsonArray.getJSONObject(i).getInt("stId"));
                     cityList.add(cityClass);
                 }
+                db.deleteTable(DBHandler.Table_CityMaster);
                 db.addCityMaster(cityList);
                 db.close();
                 ret = 1;
@@ -280,7 +279,6 @@ public class ParseJSON {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 List<ProductMasterClass> prodList = new ArrayList<>();
-                db.deleteTable(DBHandler.Table_ProductMaster);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ProductMasterClass prodClass = new ProductMasterClass();
                     prodClass.setProduct_id(jsonArray.getJSONObject(i).getInt("Product_id"));
@@ -316,6 +314,7 @@ public class ParseJSON {
                     //db.addProductMaster(prodClass);
                     prodList.add(prodClass);
                 }
+                db.deleteTable(DBHandler.Table_ProductMaster);
                 db.addProductMaster(prodList);
                 db.close();
                 ret = 1;
@@ -333,7 +332,6 @@ public class ParseJSON {
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
-                db.deleteTable(DBHandler.Table_Customermaster);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     CustomerDetailClass custClass = new CustomerDetailClass();
                     custClass.setCustID(jsonArray.getJSONObject(i).getInt("retailCustID"));
@@ -357,6 +355,7 @@ public class ParseJSON {
                     custClass.setPIN(jsonArray.getJSONObject(i).getString("PIN"));
                     CustomerDetailList.add(custClass);
                 }
+                db.deleteTable(DBHandler.Table_Customermaster);
                 db.addCustomerMaster(CustomerDetailList);
                 db.close();
                 ret = 1;
@@ -383,6 +382,12 @@ public class ParseJSON {
                     companyClass.setDisplayCmp(jsonArray.getJSONObject(i).getString("DisplayCmp"));
                     companyClass.setGSTNo(jsonArray.getJSONObject(i).getString("GSTNo"));
                     companyClass.setHOCode(jsonArray.getJSONObject(i).getString("HOCode"));
+                    companyClass.setCompany_Add(jsonArray.getJSONObject(i).getString("Company_Add"));
+                    companyClass.setCompany_Phno(jsonArray.getJSONObject(i).getString("Company_Phno"));
+                    companyClass.setCompany_Email(jsonArray.getJSONObject(i).getString("Company_Email"));
+                    companyClass.setMobileNo(jsonArray.getJSONObject(i).getString("MobileNo"));
+                    companyClass.setCompany_Phone2(jsonArray.getJSONObject(i).getString("company_phone2"));
+                    companyClass.setMobileno2(jsonArray.getJSONObject(i).getString("Mobileno2"));
                     db.addCompanyMaster(companyClass);
                 }
                 db.close();
@@ -430,7 +435,6 @@ public class ParseJSON {
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
-                db.deleteTable(DBHandler.Table_BankBranchMaster);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     BankBranchMasterClass branchClass = new BankBranchMasterClass();
                     branchClass.setAutoid(jsonArray.getJSONObject(i).getString("Autoid"));
@@ -443,6 +447,7 @@ public class ParseJSON {
                     //db.addBankBranchMaster(branchClass);
                     bankBranchList.add(branchClass);
                 }
+                db.deleteTable(DBHandler.Table_BankBranchMaster);
                 db.addBankBranchMaster(bankBranchList);
                 db.close();
                 ret = 1;
@@ -551,7 +556,6 @@ public class ParseJSON {
             JSONArray jsonArray = new JSONArray(json);
             List<TrackOrderDetailChangedClass> list = new ArrayList<>();
             if (jsonArray.length() >= 1) {
-                db.deleteTable(DBHandler.Table_TrackCustomerOrder);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     TrackOrderDetailChangedClass orderClass = new TrackOrderDetailChangedClass();
                     orderClass.setAuto(jsonArray.getJSONObject(i).getInt("auto"));
@@ -577,6 +581,7 @@ public class ParseJSON {
                     orderClass.setStatus(jsonArray.getJSONObject(i).getString("STATUS"));
                     list.add(orderClass);
                 }
+                db.deleteTable(DBHandler.Table_TrackCustomerOrder);
                 db.addTrackOrderDetailChanged(list);
                 a = 1;
             }

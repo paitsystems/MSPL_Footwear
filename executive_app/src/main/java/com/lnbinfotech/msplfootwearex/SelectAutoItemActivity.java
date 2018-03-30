@@ -15,6 +15,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -51,6 +52,11 @@ public class SelectAutoItemActivity extends AppCompatActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_select_auto_item);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -164,7 +170,7 @@ public class SelectAutoItemActivity extends AppCompatActivity implements View.On
                 } else if (get_type.equals("bank")) {
                     //String select_item = bank_list.get(position);
                     String select_item = (String) parent.getItemAtPosition(position);
-                    ChequeDetailsActivity.selectAuto.setChq_auto_bank(select_item);
+                    ChequeDetailsActivityChanged.selectAuto.setChq_auto_bank(select_item);
                     ed_bank.setText(select_item);
                     Constant.showLog("selcted_item: " + select_item);
                     writeLog("setOnItemClickListener():list item selected:" + select_item);
@@ -173,7 +179,7 @@ public class SelectAutoItemActivity extends AppCompatActivity implements View.On
                 } else if (get_type.equals("branch")) {
                     //String select_item = branch_list.get(position);
                     String select_item = (String) parent.getItemAtPosition(position);
-                    ChequeDetailsActivity.selectAuto.setChq_auto_branch(select_item);
+                    ChequeDetailsActivityChanged.selectAuto.setChq_auto_branch(select_item);
                     ed_branch.setText(select_item);
                     Constant.showLog("selcted_item: " + select_item);
                     writeLog("setOnItemClickListener():list item selected:" + select_item);
@@ -182,7 +188,7 @@ public class SelectAutoItemActivity extends AppCompatActivity implements View.On
                 }else if (get_type.equals("bank1")) {
                     //String select_item = bank_list.get(position);
                     String select_item = (String) parent.getItemAtPosition(position);
-                    ChequeDetailsActivity.selectAuto.setChq_auto_bank(select_item);
+                    ChequeDetailsActivityChanged.selectAuto.setChq_auto_bank(select_item);
                     ed_bank.setText(select_item);
                     Constant.showLog("selcted_item: " + select_item);
                     writeLog("setOnItemClickListener():list item selected:" + select_item);
@@ -191,7 +197,7 @@ public class SelectAutoItemActivity extends AppCompatActivity implements View.On
                 } else if (get_type.equals("branch1")) {
                     //String select_item = branch_list.get(position);
                     String select_item = (String) parent.getItemAtPosition(position);
-                    ChequeDetailsActivity.selectAuto.setChq_auto_branch(select_item);
+                    ChequeDetailsActivityChanged.selectAuto.setChq_auto_branch(select_item);
                     ed_branch.setText(select_item);
                     Constant.showLog("selcted_item: " + select_item);
                     writeLog("setOnItemClickListener():list item selected:" + select_item);
@@ -200,7 +206,6 @@ public class SelectAutoItemActivity extends AppCompatActivity implements View.On
                 }
             }
         });
-
     }
 
     public void setCusList() {

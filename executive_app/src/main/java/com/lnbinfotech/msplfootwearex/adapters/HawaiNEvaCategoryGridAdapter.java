@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.model.GentsCategoryClass;
 
@@ -21,9 +23,9 @@ public class HawaiNEvaCategoryGridAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
     private List<GentsCategoryClass> gents;
-    private int[] drawId;
+    private String[] drawId;
 
-    public HawaiNEvaCategoryGridAdapter(Context _context,List<GentsCategoryClass> _gents, int[] _drawId){
+    public HawaiNEvaCategoryGridAdapter(Context _context,List<GentsCategoryClass> _gents, String[] _drawId){
         this.context = _context;
         this.gents = _gents;
         this.drawId = _drawId;
@@ -59,7 +61,12 @@ public class HawaiNEvaCategoryGridAdapter extends BaseAdapter {
         }
         GentsCategoryClass gentsClass = (GentsCategoryClass) getItem(i);
         holder.tv_catname.setText(gentsClass.getCategoryName());
-        holder.img.setImageResource(drawId[i]);
+        //holder.img.setImageResource(drawId[i]);
+        Glide.with(context).load(gentsClass.getImgName())
+                .thumbnail(0.5f)
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.img);
         return view;
     }
 

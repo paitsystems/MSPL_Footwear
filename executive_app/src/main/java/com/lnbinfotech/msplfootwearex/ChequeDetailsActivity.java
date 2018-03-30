@@ -20,6 +20,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,8 +32,8 @@ import android.widget.Toast;
 import com.lnbinfotech.msplfootwearex.adapters.ShowChqDetailAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
-import com.lnbinfotech.msplfootwearex.model.ChequeDetailsGetterSetter;
-import com.lnbinfotech.msplfootwearex.model.SelectAutoItemGetterSetter;
+import com.lnbinfotech.msplfootwearex.model.ChequeDetailsClass;
+import com.lnbinfotech.msplfootwearex.model.SelectAutoItemClass;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,8 +57,8 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
     private Calendar cal = Calendar.getInstance();
     private final int requestCode = 21;
-    public static SelectAutoItemGetterSetter selectAuto;
-    public ChequeDetailsGetterSetter chequeDetails;
+    public static SelectAutoItemClass selectAuto;
+    public ChequeDetailsClass chequeDetails;
     private Date today_date = Calendar.getInstance().getTime();
     private int day, month, year;
     private Toast toast;
@@ -66,6 +67,11 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_cheque_details);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -79,10 +85,9 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
     }
 
     private void init() {
-
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
-        selectAuto = new SelectAutoItemGetterSetter();
+        selectAuto = new SelectAutoItemClass();
         day = cal.get(Calendar.DAY_OF_MONTH);
         month = cal.get(Calendar.MONTH);
         year = cal.get(Calendar.YEAR);
@@ -232,7 +237,7 @@ public class ChequeDetailsActivity extends AppCompatActivity implements View.OnC
 
     private void get_data() {
         try {
-            chequeDetails = new ChequeDetailsGetterSetter();
+            chequeDetails = new ChequeDetailsClass();
             String bank = ed_bank.getText().toString();
             chequeDetails.setChq_det_bank(bank);
 

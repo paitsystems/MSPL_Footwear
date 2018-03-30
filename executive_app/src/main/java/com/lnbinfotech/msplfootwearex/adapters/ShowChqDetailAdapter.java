@@ -9,27 +9,27 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.lnbinfotech.msplfootwearex.R;
-import com.lnbinfotech.msplfootwearex.VisitPaymentFormActivity;
-import com.lnbinfotech.msplfootwearex.model.ChequeDetailsGetterSetter;
+import com.lnbinfotech.msplfootwearex.model.ChequeDetailsClass;
 
 import java.util.List;
 
 public class ShowChqDetailAdapter extends BaseAdapter{
-    Activity activity;
-    List<ChequeDetailsGetterSetter> cheque_list;
 
-    public ShowChqDetailAdapter(Activity _activity,List<ChequeDetailsGetterSetter> _cheque_list){
+    Activity activity;
+    List<ChequeDetailsClass> cheque_list;
+
+    public ShowChqDetailAdapter(Activity _activity,List<ChequeDetailsClass> _cheque_list){
         this.activity = _activity;
         this.cheque_list = _cheque_list;
-
     }
+
     @Override
     public int getCount() {
         return cheque_list.size();
     }
 
     @Override
-    public ChequeDetailsGetterSetter getItem(int position) {
+    public ChequeDetailsClass getItem(int position) {
         return cheque_list.get(position);
     }
 
@@ -55,7 +55,7 @@ public class ShowChqDetailAdapter extends BaseAdapter{
         }else {
             holder = (ViewHolder) convertView.getTag();
         }
-           ChequeDetailsGetterSetter cd = getItem(position);
+           ChequeDetailsClass cd = getItem(position);
            holder.tv_date.setText(cd.getChq_det_date());
            Log.d("Log","tv_date: "+cd.getChq_det_date());
            holder.tv_number.setText(cd.getChq_det_number());

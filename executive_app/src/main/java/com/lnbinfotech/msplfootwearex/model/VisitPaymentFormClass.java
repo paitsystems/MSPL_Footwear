@@ -1,6 +1,6 @@
 package com.lnbinfotech.msplfootwearex.model;// Created by anup on 9/20/2017.
 
-public  class VisitPaymentFormGetterSetter {
+public  class VisitPaymentFormClass {
      String  customer_name,amount;
 
     public String getCustomer_name() {

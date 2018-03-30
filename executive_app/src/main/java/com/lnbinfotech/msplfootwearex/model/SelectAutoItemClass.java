@@ -1,6 +1,6 @@
 package com.lnbinfotech.msplfootwearex.model;// Created by anup on 9/23/2017.
 
-public class SelectAutoItemGetterSetter {
+public class SelectAutoItemClass {
     public  String chq_auto_cus,chq_auto_bank,chq_auto_branch;
 
     public String getChq_auto_cus() {

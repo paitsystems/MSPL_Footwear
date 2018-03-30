@@ -1,72 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".TrackOrderMasterActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:context=".TrackOrderMasterActivity"
+              android:orientation="vertical">
+
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/maroon"
+        android:orientation="horizontal"
+        android:padding="@dimen/mobpadding5">
 
-        <LinearLayout
-            android:background="@color/peachpink"
-            android:orientation="horizontal"
+        <TextView
+            style="@style/textViewMob"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/mobpadding5">
+            android:layout_gravity="left|center"
+            android:layout_weight="0.2"
+            android:gravity="left"
+            android:text="@string/date"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white" />
 
-            <TextView
-                style="@style/textViewMob"
-                android:textColor="@color/white"
-                android:layout_gravity="left|center"
-                android:gravity="left"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/date"
-                android:layout_weight="0.2" />
-            <TextView
-                style="@style/textViewMob"
-                android:textColor="@color/white"
-                android:layout_gravity="left|center"
-                android:gravity="left"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/orderno"
-                android:layout_weight="0.2" />
-            <TextView
-                style="@style/textViewMob"
-                android:textColor="@color/white"
-                android:layout_gravity="right|center"
-                android:gravity="right"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/orderqty"
-                android:layout_weight="0.2" />
-            <TextView
-                style="@style/textViewMob"
-                android:textColor="@color/white"
-                android:layout_gravity="right|center"
-                android:gravity="right"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/orderamt"
-                android:layout_weight="0.2" />
-        </LinearLayout>
-        <ListView
-            android:id="@+id/listView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
         <TextView
-            style="@style/footerstyleMob"
+            style="@style/textViewMob"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center"
+            android:layout_weight="0.2"
+            android:gravity="left"
+            android:text="@string/orderno"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white" />
+
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center"
+            android:layout_weight="0.2"
+            android:gravity="right"
+            android:text="@string/orderqty"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white" />
+
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center"
+            android:layout_weight="0.2"
+            android:gravity="right"
+            android:text="@string/orderamt"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white" />
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <TextView
+        style="@style/footerstyleMob"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
 

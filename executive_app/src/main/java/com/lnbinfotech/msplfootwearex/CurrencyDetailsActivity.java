@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -46,6 +47,11 @@ public class CurrencyDetailsActivity extends AppCompatActivity implements View.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_currency_detail);
 
         init();
@@ -234,6 +240,8 @@ public class CurrencyDetailsActivity extends AppCompatActivity implements View.O
                 public void onClick(DialogInterface dialog, int which) {
                     if(custCurrencyList.size()!=0 && seCurrencyList.size()!=0) {
                         if(!tv_total.getText().toString().equals("0")) {
+                            VisitPaymentFormActivity.total = Integer.parseInt(tv_total.getText().toString());
+                            VisitPaymentFormActivity.isCurrencyDataSaved = 1;
                             new Constant(CurrencyDetailsActivity.this).doFinish();
                         }else{
                             toast.setText("Please Enter Values");
@@ -249,6 +257,7 @@ public class CurrencyDetailsActivity extends AppCompatActivity implements View.O
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    VisitPaymentFormActivity.isCurrencyDataSaved = 0;
                     dialog.dismiss();
                 }
             });
@@ -257,6 +266,7 @@ public class CurrencyDetailsActivity extends AppCompatActivity implements View.O
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    VisitPaymentFormActivity.isCurrencyDataSaved = 0;
                     custCurrencyList.clear();
                     seCurrencyList.clear();
                     cust_lay.setVisibility(View.GONE);

@@ -352,7 +352,9 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
                 public void onClick(DialogInterface dialog, int which) {
                     finish();
                     //startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
-                    startActivity(new Intent(getApplicationContext(), DisplayCustListActivity.class));
+                    Intent in = new Intent(getApplicationContext(), DisplayCustListActivity.class);
+                    in.putExtra("from","order");
+                    startActivity(in);
                     overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
                     dialog.dismiss();
                 }

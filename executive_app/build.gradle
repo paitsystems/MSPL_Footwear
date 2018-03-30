@@ -14,7 +14,15 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -33,5 +41,5 @@ dependencies {
     compile files('libs/activation.jar')
     compile files('libs/additionnal.jar')
     compile files('libs/jackson-all-1.9.0.jar')
-    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }

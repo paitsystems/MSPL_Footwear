@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -14,8 +14,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_gravity="center"
+            android:orientation="vertical"
             android:padding="10dp">
 
             <LinearLayout
@@ -43,10 +43,10 @@
                         android:orientation="vertical">
 
                         <LinearLayout
-                            android:background="@color/fffgray"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/mobmargin5"
+                            android:background="@color/fffgray"
                             android:gravity="center"
                             android:orientation="vertical">
 
@@ -62,18 +62,19 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/place322dg" />
+                                    android:src="@drawable/place322dg"/>
                             </LinearLayout>
                         </LinearLayout>
 
                         <TextView
-                            style="@style/textViewTab"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/mobmargin5"
                             android:gravity="center"
                             android:text="PLACE ORDER"
-                            android:textColor="@color/red" />
+                            android:textAppearance="@android:style/TextAppearance.Small"
+                            android:textColor="@color/red"
+                            android:textStyle="bold"/>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -99,9 +100,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/mobmargin5"
+                            android:background="@color/fffgray"
                             android:gravity="center"
-                            android:orientation="vertical"
-                            android:background="@color/fffgray">
+                            android:orientation="vertical">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -115,18 +116,19 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/visit32dg" />
+                                    android:src="@drawable/visit32dg"/>
                             </LinearLayout>
                         </LinearLayout>
 
                         <TextView
-                            style="@style/textViewTab"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/mobmargin5"
                             android:gravity="center"
                             android:text="VISIT"
-                            android:textColor="@color/red" />
+                            android:textAppearance="@android:style/TextAppearance.Small"
+                            android:textColor="@color/red"
+                            android:textStyle="bold"/>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -160,9 +162,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/mobmargin5"
+                            android:background="@color/fffgray"
                             android:gravity="center"
-                            android:orientation="vertical"
-                            android:background="@color/fffgray">
+                            android:orientation="vertical">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -176,7 +178,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/report32dg" />
+                                    android:src="@drawable/report32dg"/>
                             </LinearLayout>
                         </LinearLayout>
 
@@ -187,7 +189,7 @@
                             android:layout_margin="@dimen/mobmargin5"
                             android:gravity="center"
                             android:text="REPORT"
-                            android:textColor="@color/red" />
+                            android:textColor="@color/red"/>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -213,9 +215,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/mobmargin5"
+                            android:background="@color/fffgray"
                             android:gravity="center"
-                            android:orientation="vertical"
-                            android:background="@color/fffgray">
+                            android:orientation="vertical">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -229,7 +231,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/add32dg" />
+                                    android:src="@drawable/add32dg"/>
                             </LinearLayout>
                         </LinearLayout>
 
@@ -240,7 +242,7 @@
                             android:layout_margin="@dimen/mobmargin5"
                             android:gravity="center"
                             android:text="ADD CUST"
-                            android:textColor="@color/red" />
+                            android:textColor="@color/red"/>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -252,7 +254,7 @@
     <TextView
         style="@style/footerstyleMob"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
 
 </LinearLayout>

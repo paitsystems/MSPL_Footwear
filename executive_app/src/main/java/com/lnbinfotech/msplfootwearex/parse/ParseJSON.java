@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.lnbinfotech.msplfootwearex.DisplayCustOutstandingActivity;
 import com.lnbinfotech.msplfootwearex.FirstActivity;
 import com.lnbinfotech.msplfootwearex.R;
+import com.lnbinfotech.msplfootwearex.VisitPaymentFormActivity;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
@@ -28,12 +29,15 @@ import com.lnbinfotech.msplfootwearex.model.LedgerReportClass;
 import com.lnbinfotech.msplfootwearex.model.OuststandingReportClass;
 import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
+import com.lnbinfotech.msplfootwearex.model.TrackOrderDetailChangedClass;
+import com.lnbinfotech.msplfootwearex.model.TrackOrderMasterClass;
 import com.lnbinfotech.msplfootwearex.model.UserClass;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 // Created by lnb on 8/11/2016.
@@ -139,7 +143,6 @@ public class ParseJSON {
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
-                db.deleteTable(DBHandler.Table_AreaMaster);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     AreaMasterClass areaClass = new AreaMasterClass();
                     areaClass.setAuto(jsonArray.getJSONObject(i).getInt("auto"));
@@ -148,6 +151,7 @@ public class ParseJSON {
                     areaClass.setCityid(jsonArray.getJSONObject(i).getInt("cityid"));
                     areaList.add(areaClass);
                 }
+                db.deleteTable(DBHandler.Table_AreaMaster);
                 db.addAreaMaster(areaList);
                 db.close();
                 ret = 1;
@@ -165,7 +169,6 @@ public class ParseJSON {
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
-                db.deleteTable(DBHandler.Table_AreaLineMaster);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ArealineMasterClass areaClass = new ArealineMasterClass();
                     areaClass.setAuto(jsonArray.getJSONObject(i).getInt("Auto"));
@@ -174,6 +177,7 @@ public class ParseJSON {
                     areaClass.setCustcount(jsonArray.getJSONObject(i).getInt("Custcount"));
                     areaList.add(areaClass);
                 }
+                db.deleteTable(DBHandler.Table_AreaLineMaster);
                 db.addAreaLineMaster(areaList);
                 db.close();
                 ret = 1;
@@ -191,7 +195,6 @@ public class ParseJSON {
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
-                db.deleteTable(DBHandler.Table_CityMaster);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     CityMasterClass cityClass = new CityMasterClass();
                     cityClass.setAuto(jsonArray.getJSONObject(i).getInt("auto"));
@@ -200,6 +203,7 @@ public class ParseJSON {
                     cityClass.setStId(jsonArray.getJSONObject(i).getInt("stId"));
                     cityList.add(cityClass);
                 }
+                db.deleteTable(DBHandler.Table_CityMaster);
                 db.addCityMaster(cityList);
                 db.close();
                 ret = 1;
@@ -303,7 +307,6 @@ public class ParseJSON {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 List<ProductMasterClass> prodList = new ArrayList<>();
-                db.deleteTable(DBHandler.Table_ProductMaster);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ProductMasterClass prodClass = new ProductMasterClass();
                     prodClass.setProduct_id(jsonArray.getJSONObject(i).getInt("Product_id"));
@@ -339,6 +342,7 @@ public class ParseJSON {
                     //db.addProductMaster(prodClass);
                     prodList.add(prodClass);
                 }
+                db.deleteTable(DBHandler.Table_ProductMaster);
                 db.addProductMaster(prodList);
                 db.close();
                 ret = 1;
@@ -356,7 +360,6 @@ public class ParseJSON {
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
-                db.deleteTable(DBHandler.Table_Customermaster);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     CustomerDetailClass custClass = new CustomerDetailClass();
                     custClass.setCustID(jsonArray.getJSONObject(i).getInt("retailCustID"));
@@ -380,6 +383,7 @@ public class ParseJSON {
                     custClass.setPIN(jsonArray.getJSONObject(i).getString("PIN"));
                     CustomerDetailList.add(custClass);
                 }
+                db.deleteTable(DBHandler.Table_Customermaster);
                 db.addCustomerMaster(CustomerDetailList);
                 db.close();
                 ret = 1;
@@ -406,6 +410,12 @@ public class ParseJSON {
                     companyClass.setDisplayCmp(jsonArray.getJSONObject(i).getString("DisplayCmp"));
                     companyClass.setGSTNo(jsonArray.getJSONObject(i).getString("GSTNo"));
                     companyClass.setHOCode(jsonArray.getJSONObject(i).getString("HOCode"));
+                    companyClass.setCompany_Add(jsonArray.getJSONObject(i).getString("Company_Add"));
+                    companyClass.setCompany_Phno(jsonArray.getJSONObject(i).getString("Company_Phno"));
+                    companyClass.setCompany_Email(jsonArray.getJSONObject(i).getString("Company_Email"));
+                    companyClass.setMobileNo(jsonArray.getJSONObject(i).getString("MobileNo"));
+                    companyClass.setCompany_Phone2(jsonArray.getJSONObject(i).getString("company_phone2"));
+                    companyClass.setMobileno2(jsonArray.getJSONObject(i).getString("Mobileno2"));
                     db.addCompanyMaster(companyClass);
                 }
                 db.close();
@@ -453,7 +463,6 @@ public class ParseJSON {
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
-                db.deleteTable(DBHandler.Table_BankBranchMaster);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     BankBranchMasterClass branchClass = new BankBranchMasterClass();
                     branchClass.setAutoid(jsonArray.getJSONObject(i).getString("Autoid"));
@@ -466,6 +475,7 @@ public class ParseJSON {
                     //db.addBankBranchMaster(branchClass);
                     bankBranchList.add(branchClass);
                 }
+                db.deleteTable(DBHandler.Table_BankBranchMaster);
                 db.addBankBranchMaster(bankBranchList);
                 db.close();
                 ret = 1;
@@ -653,7 +663,6 @@ public class ParseJSON {
     }
 
     public List<OuststandingReportClass> parseOutStndReport(){
-
         List<OuststandingReportClass> list = new ArrayList<>();
         try{
             JSONArray jsonArray = new JSONArray(json);
@@ -669,6 +678,7 @@ public class ParseJSON {
                     outClass.setPaidAmnt(0);
                     outClass.setChecked(false);
                     outClass.setOutAmnt(jsonArray.getJSONObject(i).getDouble("Total"));
+                    VisitPaymentFormActivity.totBal = (int) (VisitPaymentFormActivity.totBal + outClass.getOutAmnt());
                     list.add(outClass);
                 }
             }
@@ -752,6 +762,7 @@ public class ParseJSON {
                     currency.setStatus(jsonArray.getJSONObject(i).getString("Status"));
                     currencyList.add(currency);
                 }
+                db.deleteTable(DBHandler.Table_CurrencyMaster);
                 db.addCurrencyMaster(currencyList);
                 db.close();
                 ret = 1;
@@ -761,6 +772,77 @@ public class ParseJSON {
             writeLog("parseCurrencyMaster_"+e.getMessage());
         }
         return ret;
+    }
+
+    public List<TrackOrderMasterClass> parseloadTrackOreder(){
+
+        List<TrackOrderMasterClass> list = new ArrayList<>();
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    TrackOrderMasterClass trackOrderClass = new TrackOrderMasterClass();
+                    trackOrderClass.setAuto(jsonArray.getJSONObject(i).getString("auto"));
+                    trackOrderClass.setBranchid(jsonArray.getJSONObject(i).getString("branchid"));
+                    trackOrderClass.setId(jsonArray.getJSONObject(i).getString("id"));
+                    trackOrderClass.setPODate(jsonArray.getJSONObject(i).getString("PODate"));
+                    trackOrderClass.setPono(jsonArray.getJSONObject(i).getString("PONO"));
+                    trackOrderClass.setCustid(jsonArray.getJSONObject(i).getString("CUstid"));
+                    trackOrderClass.setSalesExe(jsonArray.getJSONObject(i).getString("SalesExe"));
+                    trackOrderClass.setLooseQty(jsonArray.getJSONObject(i).getString("LooseQty"));
+                    trackOrderClass.setNetAmt(jsonArray.getJSONObject(i).getString("NetAmt"));
+                    trackOrderClass.setApprove(jsonArray.getJSONObject(i).getString("Approve"));
+                    list.add(trackOrderClass);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseloadTrackOreder_" + e.getMessage());
+        }
+        return list;
+    }
+
+    public int parseloadDetailOrderChanged(){
+        int a = 0;
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            List<TrackOrderDetailChangedClass> list = new ArrayList<>();
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    TrackOrderDetailChangedClass orderClass = new TrackOrderDetailChangedClass();
+                    orderClass.setAuto(jsonArray.getJSONObject(i).getInt("auto"));
+                    orderClass.setProductid(jsonArray.getJSONObject(i).getInt("productid"));
+                    orderClass.setSize_group(jsonArray.getJSONObject(i).getString("SizeGroup"));
+                    orderClass.setColor(jsonArray.getJSONObject(i).getString("Color"));
+                    orderClass.setHashcode(jsonArray.getJSONObject(i).getString("HashCode"));
+                    orderClass.setMrp(jsonArray.getJSONObject(i).getString("MRP"));
+                    orderClass.setRate(jsonArray.getJSONObject(i).getString("Rate"));
+                    orderClass.setOrderqty(jsonArray.getJSONObject(i).getInt("OrderQty"));
+                    orderClass.setLoosePackTyp(jsonArray.getJSONObject(i).getString("LoosePackTyp"));
+                    orderClass.setCreditapp(jsonArray.getJSONObject(i).getString("CreditApp"));
+                    orderClass.setAllowtopck(jsonArray.getJSONObject(i).getString("AllotedtoPck"));
+                    orderClass.setTaxinvmade(jsonArray.getJSONObject(i).getString("TaxInvMad"));
+                    orderClass.setInvno(jsonArray.getJSONObject(i).getString("InvNo"));
+                    orderClass.setInvdate(jsonArray.getJSONObject(i).getString("InvDate"));
+                    orderClass.setInvamnt(jsonArray.getJSONObject(i).getString("InvAmt"));
+                    orderClass.setTransporter(jsonArray.getJSONObject(i).getString("Transporter"));
+                    orderClass.setTransNo(jsonArray.getJSONObject(i).getString("TransporterNo"));
+                    orderClass.setProdid(jsonArray.getJSONObject(i).getString("prodid"));
+                    orderClass.setInvqty(jsonArray.getJSONObject(i).getInt("Invo"));
+                    orderClass.setCanqty(jsonArray.getJSONObject(i).getInt("Can"));
+                    orderClass.setStatus(jsonArray.getJSONObject(i).getString("STATUS"));
+                    list.add(orderClass);
+                }
+                db.deleteTable(DBHandler.Table_TrackCustomerOrder);
+                db.addTrackOrderDetailChanged(list);
+                a = 1;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseloadDetailOrderChanged_" + e.getMessage());
+            a = 0;
+        }
+        return a;
     }
 
 }

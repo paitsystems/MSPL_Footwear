@@ -1,11 +1,18 @@
 package com.lnbinfotech.msplfootwear.post;
 
+import com.lnbinfotech.msplfootwear.constant.Constant;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import java.io.IOException;
 
@@ -13,34 +20,23 @@ import java.io.IOException;
 
 public class Post {
 
-    static int TIMEOUT_MILLISEC = 2000;
-    static String u = null;
-    static public String POST(String url)
-    {
-        u = url;
+    static public String POST(String url) {
         String responseBody = null;
-        /*try
-        {
+        try{
             HttpParams httpParams = new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(httpParams,TIMEOUT_MILLISEC);
-            HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_MILLISEC);
-            HttpParams hp = new BasicHttpParams();
-            HttpClient httpclient = new DefaultHttpClient(hp);
+            HttpConnectionParams.setConnectionTimeout(httpParams,Constant.TIMEOUT_CON);
+            HttpConnectionParams.setSoTimeout(httpParams,Constant.TIMEOUT_SO);
+            HttpClient httpclient = new DefaultHttpClient(httpParams);
             HttpGet httpget = new HttpGet(url);
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             responseBody = httpclient.execute(httpget, responseHandler);
-        }catch (HttpHostConnectException e){
-           e.printStackTrace();
-        }
-        catch (ClientProtocolException e){
+        }catch (Exception e){
             e.printStackTrace();
-        } catch (IOException e){
-            e.printStackTrace();
+            Constant.showLog("POST - Timeout");
         }
-        Log.d("responseBody.toString()",responseBody.toString());
-        return responseBody.toString();*/
+        return responseBody;
 
-        final DefaultHttpClient client = new DefaultHttpClient();
+        /*final DefaultHttpClient client = new DefaultHttpClient();
         HttpGet httpget = new HttpGet(u);
         try{
             HttpResponse response = client.execute(httpget);
@@ -54,6 +50,6 @@ public class Post {
             httpget.abort();
             e.printStackTrace();
         }
-        return  responseBody;
+        return  responseBody;*/
     }
 }

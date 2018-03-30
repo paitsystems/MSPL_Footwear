@@ -1,8 +1,17 @@
 package com.lnbinfotech.msplfootwearex.model;// Created by anup on 9/21/2017.
 
-public class ChequeDetailsGetterSetter {
-    public  String chq_det_bank, chq_det_branch, chq_det_date, chq_det_number, chq_det_amt, chq_det_ref,
+public class ChequeDetailsClass {
+    private String chq_det_bank, chq_det_branch, chq_det_date, chq_det_number, chq_det_amt, chq_det_ref,
                     chq_det_image, no_of_chq, custBankName, custBankBranch;
+    private int srNo;
+
+    public int getSrNo() {
+        return srNo;
+    }
+
+    public void setSrNo(int srNo) {
+        this.srNo = srNo;
+    }
 
     public String getChq_det_bank() {
         return chq_det_bank;

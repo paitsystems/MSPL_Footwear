@@ -27,8 +27,8 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".services.DownloadImageService" />
-        <service android:name=".services.CheckNewTicketService" />
+        <service android:name=".services.AutoSyncService" />
+        <service android:name=".services.DataUpdateService" />
         <service android:name=".services.UploadImageService" />
 
         <receiver android:name=".braodcasts.AutoUpdateBroadcastReceiver" />
@@ -45,9 +45,7 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".braodcasts.ReadSms">
-
-        </receiver>
+        <receiver android:name=".braodcasts.ReadSms"/>
 
         <activity
             android:name=".RegistrationActivity"

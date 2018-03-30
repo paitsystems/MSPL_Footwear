@@ -12,12 +12,16 @@ import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
@@ -29,6 +33,7 @@ import java.util.List;
 public class CustomerLoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView tv_custname, tv_custaddress, tv_custmobile, tv_custemail;
+    private ImageView img_cust;
     private EditText ed1,ed2,ed3,ed4,ed5,ed6,ed7,ed8,ed9,ed10,ed11,ed12;
     private Button btn_save;
     private Toast toast;
@@ -41,6 +46,11 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_customer_login);
 
         init();
@@ -258,6 +268,12 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             }
         });
 
+        Glide.with(getApplicationContext()).load(Constant.custimgUrl+userClass.getImagePath())
+                .thumbnail(0.5f)
+                .crossFade()
+                .placeholder(R.drawable.user32)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(img_cust);
     }
 
     @Override
@@ -398,6 +414,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         tv_custaddress = (TextView) findViewById(R.id.tv_custaddress);
         tv_custmobile = (TextView) findViewById(R.id.tv_custmobile);
         tv_custemail = (TextView) findViewById(R.id.tv_custemail);
+        img_cust = (ImageView) findViewById(R.id.img_cust);
         ed1 = (EditText) findViewById(R.id.ed1);
         ed2 = (EditText) findViewById(R.id.ed2);
         ed3 = (EditText) findViewById(R.id.ed3);

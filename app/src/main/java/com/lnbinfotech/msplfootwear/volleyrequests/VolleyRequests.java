@@ -565,6 +565,7 @@ public class VolleyRequests {
                     @Override
                     public void onResponse(String response) {
                         Constant.showLog(response);
+                        response = response.replace("\\\\r\\\\n", "");
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);

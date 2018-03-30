@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -25,19 +26,36 @@ public class Constant {
 
     //TODO: Check VersionCode and Version Name
 
-    public static String folder_name = "MSPL Footwear", image_folder = "Caputured_img", captured_images_folder = "MSPL_CapturedImages", log_file_name = "MSPL_Footwear_Ex", automailID = "automail@lnbinfotech.com", autoamilPass = "auto#456", mail_subject = "Log File", mail_body = "Find the Attached Log File", mailReceipient = "anup.p@lnbinfotech.com";
-    //ftp_adress = "ftp.lnbinfotech.com"
-    //ftp_username = "supportftp@lnbinfotech.com",
-    //ftp_password = "support$456",
-    //ftp_directory = "SMVisit_Indus",
+    public static String folder_name = "MSPL Footwear",
+            image_folder = "Caputured_img",
+            captured_images_folder = "MSPL_CapturedImages",
+            log_file_name = "MSPL_Footwear_Ex",
+            automailID = "automail@lnbinfotech.com",
+            autoamilPass = "auto#456",
+            mail_subject = "Log File",
+            mail_body = "Find the Attached Log File",
+            mailReceipient = "anup.p@lnbinfotech.com";
+            //ftp_adress = "ftp.lnbinfotech.com"
+            //ftp_username = "supportftp@lnbinfotech.com",
+            //ftp_password = "support$456",
+            //ftp_directory = "SMVisit_Indus",
 
     //TODO: Check Ip Address
     //public static final String ipaddress = "http://172.30.1.38/MSPL/service.svc";
-    public static final String ipaddress = "http://license.lnbinfotech.com/MSPL/service.svc";
-    //public static final String ipaddress = "http://103.68.10.9:24086/MSPL/service.svc";
+    //public static final String ipaddress = "http://license.lnbinfotech.com/MSPL/service.svc";
+    public static final String ipaddress = "http://103.68.10.9:24086/MSPLV1/service.svc";
 
-    //TODO: Check liveTestFlag 1-Live, 0-TestInterface
+    //TODO: Check Image Url
+    public static final String imgUrl = "http://103.68.10.9:24086/IMAGES/";
+
+    //TODO: Check CustImage Url
+    public static final String custimgUrl = "http://103.68.10.9:24086/custImage/";
+
+    //TODO: Check liveTestFlag 1-Live, 0-Test
     public static int liveTestFlag = 0;
+
+    public static int TIMEOUT_CON = 10*1000;
+    public static int TIMEOUT_SO = 70*1000;
 
     private Activity activity;
     private Context context;
@@ -45,7 +63,9 @@ public class Constant {
     private static ProgressDialog pd;
 
     public static void showLog(String log) {
-        Log.d("Log", "" + log);
+        if(liveTestFlag==0) {
+            Log.d("Log", "" + log);
+        }
     }
 
     public Constant(Activity activity) {
@@ -107,8 +127,14 @@ public class Constant {
     }
 
     public String getIMEINo() {
+        String myAndroidDeviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        return manager.getDeviceId();
+        if (manager.getDeviceId() != null) {
+            myAndroidDeviceId = manager.getDeviceId();
+        } else {
+            myAndroidDeviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        }
+        return myAndroidDeviceId;
     }
 
     private void writeLog(String _data) {

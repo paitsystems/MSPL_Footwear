@@ -13,6 +13,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -57,6 +58,11 @@ public class ArealinewiseAreaSelectionActivity extends AppCompatActivity impleme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_arealinewiseareaselection);
 
         init();
@@ -118,7 +124,7 @@ public class ArealinewiseAreaSelectionActivity extends AppCompatActivity impleme
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.arealinewiseareaselection_menu,menu);
+        //getMenuInflater().inflate(R.menu.arealinewiseareaselection_menu,menu);
         return true;
     }
 
@@ -170,9 +176,9 @@ public class ArealinewiseAreaSelectionActivity extends AppCompatActivity impleme
     }
 
     private void getTodaysVisit(){
-        //int saleExe = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
+        int saleExe = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
         //TODO: Remove when live
-        int saleExe = 152;
+        //int saleExe = 152;
         String weekDay;
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
         Calendar calendar = Calendar.getInstance();
