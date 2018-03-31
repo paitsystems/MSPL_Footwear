@@ -1,6 +1,7 @@
 package com.lnbinfotech.msplfootwearex;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -10,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.WindowManager;
@@ -81,17 +83,10 @@ public class FirstActivity extends AppCompatActivity {
         }else if(!permission.checkSendSMSPermission(getApplicationContext())){
             permission.requestSendSMSPermission(getApplicationContext(),FirstActivity.this);//11
         }else {
-            /*if(ConnectivityTest.getNetStat(getApplicationContext())) {
+            if(ConnectivityTest.getNetStat(getApplicationContext())) {
                 doThis();
             }else{
-                toast.setText(getString(R.string.you_are_offline));
-                toast.show();
-            }*/
-            doThis();
-
-            if(!ConnectivityTest.getNetStat(getApplicationContext())) {
-                toast.setText(getString(R.string.you_are_offline));
-                toast.show();
+                showDia(1);
             }
         }
     }
@@ -214,6 +209,31 @@ public class FirstActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return str;
+    }
+
+    private void showDia(int a) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(FirstActivity.this);
+        builder.setCancelable(false);
+        if (a == 1) {
+            builder.setTitle("You Are Offline");
+            builder.setMessage("Please Connect To Network?");
+            builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    checkpermmission();
+
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    new Constant(FirstActivity.this).doFinish();
+                }
+            });
+        }
+        builder.create().show();
     }
 
     private void writeLog(String _data){

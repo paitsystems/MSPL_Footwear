@@ -18,7 +18,6 @@ import com.lnbinfotech.msplfootwearex.adapters.GentsCategoryGridAdapter;
 import com.lnbinfotech.msplfootwearex.adapters.GentsCategoryListAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
-import com.lnbinfotech.msplfootwearex.interfaces.TestInterface;
 import com.lnbinfotech.msplfootwearex.model.GentsCategoryClass;
 
 import java.util.ArrayList;

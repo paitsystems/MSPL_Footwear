@@ -14,10 +14,14 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwear.adapters.CustomerDetailListAdapter;
+import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
+import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
+import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwear.model.UserClass;
+import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
 
 import java.util.ArrayList;
 
@@ -27,6 +31,7 @@ public class CustomerDetailsActivity extends AppCompatActivity implements View.O
     private CustomerDetailListAdapter adapter;
     private DBHandler db;
     private Toast toast;
+    private Constant constant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +49,7 @@ public class CustomerDetailsActivity extends AppCompatActivity implements View.O
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
 
-        loadData();
+        checkIsActive();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -82,21 +87,17 @@ public class CustomerDetailsActivity extends AppCompatActivity implements View.O
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadData(){
-        ArrayList<UserClass> list = db.getUserDetail();
-        adapter = new CustomerDetailListAdapter(CustomerDetailsActivity.this,list);
-        listView.setAdapter(adapter);
-    }
-
     private void init() {
         listView = (ListView) findViewById(R.id.listView);
         db = new DBHandler(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
+        constant = new Constant(CustomerDetailsActivity.this);
     }
 
     private void showDia(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(CustomerDetailsActivity.this);
+        builder.setCancelable(false);
         if (a == 0) {
             builder.setMessage("Do You Want To Exit App?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -113,8 +114,94 @@ public class CustomerDetailsActivity extends AppCompatActivity implements View.O
                     dialog.dismiss();
                 }
             });
+        }else if (a == 1) {
+            builder.setMessage("You Are Not An Active Customer?");
+            builder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    toast.cancel();
+                    new Constant(CustomerDetailsActivity.this).doFinish();
+                }
+            });
+        }else if (a == 2) {
+            builder.setMessage("Please Try Again");
+            builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    checkIsActive();
+                }
+            });
+            builder.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    toast.cancel();
+                    new Constant(CustomerDetailsActivity.this).doFinish();
+                }
+            });
+        }else if (a == 3) {
+            builder.setTitle("You Are Offline");
+            builder.setMessage("Please Connect To Network?");
+            builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    checkIsActive();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    new Constant(CustomerDetailsActivity.this).doFinish();
+
+                }
+            });
         }
         builder.create().show();
+    }
+
+    private void checkIsActive() {
+        constant = new Constant(CustomerDetailsActivity.this);
+        if (ConnectivityTest.getNetStat(getApplicationContext())) {
+            int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
+            String url = Constant.ipaddress + "/GetActiveStatus?id=" + id + "&type=C";
+            Constant.showLog(url);
+            writeLog("checkIsActive_" + url);
+            constant.showPD();
+            VolleyRequests requests = new VolleyRequests(CustomerDetailsActivity.this);
+            requests.getActiveStatus(url, new ServerCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    constant.showPD();
+                    if (result.equals("A")) {
+                        loadData();
+                    } else {
+                        showDia(1);
+                    }
+                }
+
+                @Override
+                public void onFailure(String result) {
+                    constant.showPD();
+                    showDia(2);
+                }
+            });
+        } else {
+            showDia(3);
+        }
+    }
+
+    private void loadData(){
+        ArrayList<UserClass> list = db.getUserDetail();
+        adapter = new CustomerDetailListAdapter(CustomerDetailsActivity.this,list);
+        listView.setAdapter(adapter);
+    }
+
+    private void writeLog(String _data){
+        new WriteLog().writeLog(getApplicationContext(),"CustomerDetailsActivity_"+_data);
     }
 
 }

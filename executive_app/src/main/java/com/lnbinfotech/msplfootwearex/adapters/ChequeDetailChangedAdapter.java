@@ -1,6 +1,16 @@
 package com.lnbinfotech.msplfootwearex.adapters;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.RectF;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -8,26 +18,44 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.interfaces.TestInterface;
+import com.lnbinfotech.msplfootwearex.interfaces.TestInterface1;
 import com.lnbinfotech.msplfootwearex.model.ChequeDetailsClass;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 //Created by ANUP on 3/27/2018.
 
-public class ChequeDetailChangedAdapter extends BaseAdapter {
+public class ChequeDetailChangedAdapter extends BaseAdapter implements TestInterface1{
 
-    private Activity activity;
+    private Context context;
     private List<ChequeDetailsClass> cheque_list;
+    private int dtPos;
+    private TestInterface testInterface;
 
-    public ChequeDetailChangedAdapter(Activity _activity, List<ChequeDetailsClass> _cheque_list) {
-        this.activity = _activity;
+    public ChequeDetailChangedAdapter(Context _context, List<ChequeDetailsClass> _cheque_list) {
+        this.context = _context;
         this.cheque_list = _cheque_list;
+    }
+
+    public void initInterface(TestInterface _testInterface){
+        this.testInterface = _testInterface;
     }
 
     @Override
@@ -49,7 +77,7 @@ public class ChequeDetailChangedAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, final ViewGroup viewGroup) {
         View v = convertView;
         final ViewHolder holder;
-        LayoutInflater inflater = activity.getLayoutInflater();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
             v = inflater.inflate(R.layout.list_item_cheque_detail_changed, null);
             holder = new ViewHolder();
@@ -58,6 +86,7 @@ public class ChequeDetailChangedAdapter extends BaseAdapter {
             holder.ed_cqno = (EditText) v.findViewById(R.id.ed_cqno);
             holder.ed_amnt = (EditText) v.findViewById(R.id.ed_amnt);
             holder.tv_img = (TextView) v.findViewById(R.id.tv_img);
+            holder.img_chq = (ImageView) v.findViewById(R.id.img_cq);
 
             holder.ed_cqno.addTextChangedListener(new GenericTextWatcher(holder.ed_cqno,position));
             holder.ed_amnt.addTextChangedListener(new GenericTextWatcher(holder.ed_amnt,position));
@@ -65,32 +94,71 @@ public class ChequeDetailChangedAdapter extends BaseAdapter {
             holder.tv_cqdate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Constant.showLog(holder.tv_cqdate.getText().toString());
+                    dtPos = position;
+                    testInterface.onResumeFragment("","",context);
                 }
             });
 
-            holder.tv_img.setOnClickListener(new View.OnClickListener() {
+            holder.img_chq.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Constant.showLog(holder.tv_img.getText().toString());
+                    dtPos = position;
+                    testInterface.onPauseFragment("","",context);
                 }
             });
             v.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ChequeDetailsClass cd = cheque_list.get(position);
+        ChequeDetailsClass cd = getItem(position);
         holder.tv_srno.setText(String.valueOf(cd.getSrNo()));
         holder.tv_cqdate.setText(cd.getChq_det_date());
         holder.ed_cqno.setText(cd.getChq_det_number());
         holder.ed_amnt.setText(cd.getChq_det_amt());
-        //holder.tv_img.setText(cd.getChq_det_ref());
+
+        String completePath = Environment.getExternalStorageDirectory() + "/" + cd.getChq_det_image();
+        File file = new File(completePath);
+        Uri imageUri = Uri.fromFile(file);
+        Glide.with(context).load(imageUri)
+                .thumbnail(0.5f)
+                .crossFade()
+                .placeholder(R.drawable.user32)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.img_chq);
+
         return v;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return getCount();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
+    public void returnDate(String dt) {
+        ChequeDetailsClass chq = cheque_list.get(dtPos);
+        chq.setChq_det_date(dt);
+        cheque_list.set(dtPos,chq);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void returnImage(String img) {
+        ChequeDetailsClass chq = cheque_list.get(dtPos);
+        chq.setChq_det_image(img);
+        cheque_list.set(dtPos,chq);
+        notifyDataSetChanged();
     }
 
     private class ViewHolder {
         private TextView tv_srno, tv_cqdate, tv_img;
         private EditText ed_cqno, ed_amnt;
+        private ImageView img_chq;
     }
 
     private class GenericTextWatcher implements TextWatcher {
@@ -132,4 +200,5 @@ public class ChequeDetailChangedAdapter extends BaseAdapter {
             }
         }
     }
+
 }

@@ -122,13 +122,13 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
                 //String sel_child = (String) adapter1.getChild(group_postion,child_position);
                 String a = String.valueOf(area_map.get(areaid_list.get(group_postion)));
                 area_name = a.replace("[","").replace("]","");
-                Constant.showLog("area_name:"+area_name);
+                //Constant.showLog("area_name:"+area_name);
 
                 child_sel =  party_map.get(areaid_partyId_map.get(areaid_list.get(group_postion)).get(child_position));
-                Constant.showLog("child_selected:"+child_sel);
+                //Constant.showLog("child_selected:"+child_sel);
 
                 cust_id =  db.getCustid(child_sel);
-                Constant.showLog("cust_id:"+cust_id);
+                //Constant.showLog("cust_id:"+cust_id);
 
                 int selCustId = FirstActivity.pref.getInt(getString(R.string.pref_selcustid), 0);
                 if(selCustId!=0){

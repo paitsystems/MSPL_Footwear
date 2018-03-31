@@ -31,6 +31,7 @@ import com.lnbinfotech.msplfootwear.parse.ParseJSON;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -953,6 +954,44 @@ public class VolleyRequests {
                     }
                 });
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
+    }
+
+    public void getActiveStatus(String url, final ServerCallback callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\", "");
+                        response = response.replace("''", "");
+                        response = response.substring(1, response.length() - 1);
+                        String status = "C";
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+                            if (jsonArray.length() >= 1) {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    status = jsonArray.getJSONObject(i).getString("status");
+                                }
+                                callback.onSuccess(status);
+                            }else{
+                                callback.onFailure("Error");
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("getActiveStatus_" + error.getMessage());
+                        Constant.showLog(error.getMessage());
+                        writeLog("getActiveStatus_"+error.getMessage());
+                    }
+                }
+        );
+        AppSingleton.getInstance(context).addToRequestQueue(request, "AREA");
     }
 
     private void writeLog(String _data) {

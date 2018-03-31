@@ -1,8 +1,18 @@
 package com.lnbinfotech.msplfootwearex;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.RectF;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -13,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -20,23 +31,34 @@ import android.view.Gravity;
 
 import com.lnbinfotech.msplfootwearex.adapters.ChequeDetailChangedAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.interfaces.TestInterface;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.ChequeDetailsClass;
 import com.lnbinfotech.msplfootwearex.model.SelectAutoItemClass;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
-public class ChequeDetailsActivityChanged extends AppCompatActivity implements View.OnClickListener{
+public class ChequeDetailsActivityChanged extends AppCompatActivity implements View.OnClickListener, TestInterface{
 
     private ListView listView;
     private EditText ed_branch, ed_bank, ed_chq_no;
     private AppCompatButton btn_submit;
     private Toast toast;
-    private String auto_type;
+    private String auto_type,imagePath;
     private Menu menu;
     public static SelectAutoItemClass selectAuto;
     private List<ChequeDetailsClass> list;
+    private ChequeDetailChangedAdapter adapter;
+    private int requestCode = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +186,6 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
     private void get_auto_branchlist() {
         ed_branch.setText(selectAuto.getChq_auto_branch());
         Constant.showLog("ed_branch: " + selectAuto.getChq_auto_branch());
-
     }
 
     private void setData(){
@@ -179,7 +200,9 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
             cheque.setChq_det_date("27/Mar/2018");
             list.add(cheque);
         }
-        listView.setAdapter(new ChequeDetailChangedAdapter(ChequeDetailsActivityChanged.this, list));
+        adapter = new ChequeDetailChangedAdapter(getApplicationContext(), list);
+        adapter.initInterface(ChequeDetailsActivityChanged.this);
+        listView.setAdapter(adapter);
     }
 
     private void showDia(int a) {
@@ -238,4 +261,73 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "ChequeDetailsActivityChanged_" + _data);
     }
+
+    @Override
+    public void onResumeFragment(String data1, String data2, Context context) {
+        new DatePickerDialog(ChequeDetailsActivityChanged.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH);
+                    Date select_date = sdf.parse(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                    String dt = sdf1.format(select_date);
+                    Constant.showLog(dt);
+                    adapter.returnDate(dt);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 2018, 2, 30).show();
+    }
+
+    @Override
+    public void onPauseFragment(String data1, String data2, Context context) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File f = Constant.checkFolder(Constant.folder_name);
+        f = new File(f.getAbsolutePath(), "temp.jpg");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+        startActivityForResult(intent, requestCode);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (this.requestCode == requestCode && resultCode == RESULT_OK) {
+            try {
+                long datetime = System.currentTimeMillis();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
+                Date resultdate = new Date(datetime);
+                imagePath = "Cheque_Img_" + sdf.format(resultdate) + ".jpg";
+                File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name);
+                for (File temp : f.listFiles()) {
+                    if (temp.getName().equals("temp.jpg")) {
+                        f = temp;
+                        break;
+                    }
+                }
+                OutputStream outFile;
+                Bitmap bitmap;
+                BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+                bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
+
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name, imagePath);
+                try {
+                    outFile = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 15, outFile);
+                    outFile.flush();
+                    outFile.close();
+                    adapter.returnImage(imagePath);
+                } catch (Exception e) {
+                    writeLog("onActivityResult():FileNotFoundException:" + e);
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                writeLog("onActivityResult():Exception:" + e);
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

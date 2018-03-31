@@ -18,6 +18,7 @@ import com.lnbinfotech.msplfootwearex.braodcasts.AutoUpdateBroadcastReceiver;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -41,9 +42,9 @@ public class Constant {
             //ftp_directory = "SMVisit_Indus",
 
     //TODO: Check Ip Address
-    //public static final String ipaddress = "http://172.30.1.38/MSPL/service.svc";
-    //public static final String ipaddress = "http://license.lnbinfotech.com/MSPL/service.svc";
-    public static final String ipaddress = "http://103.68.10.9:24086/MSPLV1/service.svc";
+    //public static final String ipaddress = "http://172.30.1.38/MSPLV2/service.svc";
+    //public static final String ipaddress = "http://license.lnbinfotech.com/MSPLV2/service.svc";
+    public static final String ipaddress = "http://103.68.10.9:24086/MSPLV2/service.svc";
 
     //TODO: Check Image Url
     public static final String imgUrl = "http://103.68.10.9:24086/IMAGES/";
@@ -136,6 +137,31 @@ public class Constant {
         }
         return myAndroidDeviceId;
     }
+
+    public String getIMEINo1(){
+        String imeino="";
+        TelephonyManager telephony = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        try {
+            Class<?> telephonyClass = Class.forName(telephony.getClass().getName());
+            Class<?>[] parameter = new Class[1];
+            parameter[0] = int.class;
+            Method getFirstMethod = telephonyClass.getMethod("getDeviceId", parameter);
+            Log.d("Log", getFirstMethod.toString());
+            Object[] obParameter = new Object[1];
+            obParameter[0] = 0;
+            //TelephonyManager manager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+            String first = (String) getFirstMethod.invoke(telephony, obParameter);
+            Log.d("Log", "FIRST :" + first);
+            obParameter[0] = 1;
+            String second = (String) getFirstMethod.invoke(telephony, obParameter);
+            Log.d("Log", "SECOND :" + second);
+            imeino = first;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return imeino;
+    }
+
 
     private void writeLog(String _data) {
         new WriteLog().writeLog(context, _data);
