@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 
+import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 
@@ -54,14 +55,17 @@ public class AutoSyncService extends Service {
                     int hour = Integer.parseInt(getTime());
                     Constant.showLog("AutoSync_"+hour);
                     if(hour<13||hour>19) {
-                        getApplicationContext().startService(new Intent(getApplicationContext(), DataUpdateService.class));
-                        writeLog("AutoSync_Started_"+hour);
+                        if (ConnectivityTest.getNetStat(getApplicationContext())) {
+                            getApplicationContext().startService(new Intent(getApplicationContext(), DataUpdateService.class));
+                            writeLog("AutoSync_Started_Online_" + hour);
+                        } else {
+                            writeLog("AutoSync_Started_Offline_" + hour);
+                        }
                     }else{
                         writeLog("AutoSync_NOT_Started_"+hour);
                     }
                 }
             });
-
         }
     }
 

@@ -212,9 +212,9 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
             ed_amount.setText(String.valueOf(total));
             tv_temant.setText(String.valueOf(total));
             tv_paid.setText(String.valueOf(total));
-            add_cheque_lay.setVisibility(View.VISIBLE);
-            add_other_lay.setVisibility(View.GONE);
-            add_cash_lay.setVisibility(View.GONE);
+            //add_cheque_lay.setVisibility(View.VISIBLE);
+            //add_other_lay.setVisibility(View.GONE);
+            //add_cash_lay.setVisibility(View.GONE);
         }else if (isChequeDataSaved == 2) {
             isChequeDataSaved = 0;
             //lv_out.setAdapter(null);
@@ -222,9 +222,9 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
             ed_amount.setText(String.valueOf(total));
             tv_temant.setText(String.valueOf(total));
             tv_paid.setText(String.valueOf(total));
-            add_cheque_lay.setVisibility(View.GONE);
-            add_other_lay.setVisibility(View.VISIBLE);
-            add_cash_lay.setVisibility(View.GONE);
+            //add_cheque_lay.setVisibility(View.GONE);
+            //add_other_lay.setVisibility(View.VISIBLE);
+            //add_cash_lay.setVisibility(View.GONE);
         }
         if(isCurrencyDataSaved==1){
             isCurrencyDataSaved = 0;
@@ -233,9 +233,9 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
             ed_amount.setText(String.valueOf(total));
             tv_temant.setText(String.valueOf(total));
             tv_paid.setText(String.valueOf(total));
-            add_cheque_lay.setVisibility(View.GONE);
-            add_other_lay.setVisibility(View.GONE);
-            add_cash_lay.setVisibility(View.VISIBLE);
+            //add_cheque_lay.setVisibility(View.GONE);
+            //add_other_lay.setVisibility(View.GONE);
+            //add_cash_lay.setVisibility(View.VISIBLE);
         }
     }
 
@@ -617,8 +617,8 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                 int branch = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
                 int createdby = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
 
-                int siteid = 0, totalPaidAmt = total, cashAmt = 0, cardAmt = 0, cardNo = 0, chequeAmt = total,
-                        totalRecpt = total, totalDisc = 0, totalMDRNote = 0, totalMCRNote = 0, totalGoodsRet = 0,
+                int siteid = 0, totalPaidAmt = Integer.parseInt(chqClass.getChq_det_amt()), cashAmt = 0, cardAmt = 0, cardNo = 0, chequeAmt = Integer.parseInt(chqClass.getChq_det_amt()),
+                        totalRecpt = Integer.parseInt(chqClass.getChq_det_amt()), totalDisc = 0, totalMDRNote = 0, totalMCRNote = 0, totalGoodsRet = 0,
                         totalAdvance = 0, receiptType = 0, bankid = 0, refNo = 0, otherTotal = 0;
 
                 String status = "A", accNo = "NA", chqMode = "Direct", chequeNo = chqClass.getChq_det_number(),
@@ -806,6 +806,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         totPaid = 0;
         totAlloc = 0;
         isChequeDataSaved = 0;
+        new Constant(VisitPaymentFormActivity.this).doFinish();
     }
 
     private void startCheqActivity(){
@@ -821,7 +822,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         rdo_cheque.setChecked(false);
         rdo_cash.setChecked(true);
         rdo_other.setChecked(false);
-        Intent intent2 = new Intent(VisitPaymentFormActivity.this, CurrencyDetailsActivity.class);
+        Intent intent2 = new Intent(VisitPaymentFormActivity.this, CurrencyDetailsActivityChanged.class);
         startActivity(intent2);
         overridePendingTransition(R.anim.enter, R.anim.exit);
         writeLog("goes to ChequeDetailsActivity");

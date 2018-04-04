@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -59,6 +60,7 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
     private List<ChequeDetailsClass> list;
     private ChequeDetailChangedAdapter adapter;
     private int requestCode = 0;
+    public ChequeDetailsClass chequeDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +117,7 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_submt:
+                validations();
                 break;
             case R.id.ed_bank:
                 Intent k = new Intent(ChequeDetailsActivityChanged.this, SelectAutoItemActivity.class);
@@ -258,12 +261,60 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
         builder.create().show();
     }
 
+    private void validations() {
+        if (ed_bank.getText().toString().equals("")) {
+            toast.setText("Please Select Bank Name");
+            toast.show();
+        } else if (ed_branch.getText().toString().equals("")) {
+            toast.setText("Please Select Branch Name");
+            toast.show();
+        } else {
+            get_data();
+        }
+    }
+
+    private void get_data() {
+        try {
+            for(int i=0;i<list.size();i++) {
+                chequeDetails = (ChequeDetailsClass) listView.getItemAtPosition(i);
+
+                String bank = ed_bank.getText().toString();
+                chequeDetails.setChq_det_bank(bank);
+
+                String branch = ed_branch.getText().toString();
+                chequeDetails.setChq_det_branch(branch);
+
+                String bankName = ed_bank.getText().toString();
+                String bankBranch = ed_branch.getText().toString();
+                chequeDetails.setCustBankName(bankName);
+                chequeDetails.setCustBankBranch(bankBranch);
+
+                String amount = chequeDetails.getChq_det_amt();
+                int tot = Integer.parseInt(amount);
+                VisitPaymentFormActivity.total = VisitPaymentFormActivity.total + tot;
+
+                VisitPaymentFormActivity.ls.add(chequeDetails);
+            }
+            Constant.showLog(""+VisitPaymentFormActivity.total);
+            VisitPaymentFormActivity.isChequeDataSaved = 1;
+            new Constant(ChequeDetailsActivityChanged.this).doFinish();
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("ChequeDetailsActivity_get_Data_"+e.getMessage());
+            toast.setText("Something went wrong");
+            toast.show();
+        }
+        //finish();
+        //new Constant(ChequeDetailsActivity.this).doFinish();
+    }
+
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "ChequeDetailsActivityChanged_" + _data);
     }
 
     @Override
     public void onResumeFragment(String data1, String data2, Context context) {
+        ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(btn_submit.getWindowToken(),0);
         new DatePickerDialog(ChequeDetailsActivityChanged.this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {

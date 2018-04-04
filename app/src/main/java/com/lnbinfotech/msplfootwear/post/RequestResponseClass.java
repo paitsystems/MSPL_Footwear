@@ -250,8 +250,12 @@ public class RequestResponseClass {
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
-            response = response.substring(1, response.length() - 1);
-            new readJSON(response, "SizeNDesign", from, to).execute();
+            if(response!=null && !response.equals("")) {
+                response = response.substring(1, response.length() - 1);
+                new readJSON(response, "SizeNDesign", from, to).execute();
+            }else{
+                writeLog("getSizeNDesignMaster_response_null");
+            }
         }
     }
 
@@ -494,9 +498,13 @@ public class RequestResponseClass {
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
-            response = response.replace("\\\\r\\\\n", "");
-            response = response.substring(1, response.length() - 1);
-            new readCustJSON(response, "CustMast").execute();
+            if(response!=null && !response.equals("")) {
+                response = response.replace("\\\\r\\\\n", "");
+                response = response.substring(1, response.length() - 1);
+                new readCustJSON(response, "CustMast").execute();
+            }else{
+                writeLog("getCustomerMaster_response_null");
+            }
         }
     }
 
@@ -708,8 +716,12 @@ public class RequestResponseClass {
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
-            response = response.substring(1, response.length() - 1);
-            new readBBJSON(response, "BankBranchMast").execute();
+            if(response!=null && !response.equals("")) {
+                response = response.substring(1, response.length() - 1);
+                new readBBJSON(response, "BankBranchMast").execute();
+            }else{
+                writeLog("getBankBranchMaster_response_null");
+            }
         }
     }
 
@@ -910,8 +922,12 @@ public class RequestResponseClass {
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
-            response = response.substring(1, response.length() - 1);
-            new readJSONSDMD(response, "SDMD", from, to).execute();
+            if(response!=null && !response.equals("")) {
+                response = response.substring(1, response.length() - 1);
+                new readJSONSDMD(response, "SDMD", from, to).execute();
+            }else{
+                writeLog("getSizeDesignMastDet_response_null");
+            }
         }
     }
 

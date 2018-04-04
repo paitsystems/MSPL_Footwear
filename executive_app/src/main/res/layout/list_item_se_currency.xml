@@ -3,28 +3,59 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="horizontal">
-    <TextView
-        android:id="@+id/tv_se_curr"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5sp"
-        android:textAppearance="@android:style/TextAppearance.Medium"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:layout_weight="0.5"/>
 
-    <EditText
-        android:textAppearance="@android:style/TextAppearance.Medium"
-        android:textColor="@color/black"
-        android:textStyle="bold"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/ed_se_curr"
-        android:layout_weight="0.5"
-        android:singleLine="true"
-        android:text="0"
-        android:selectAllOnFocus="true"
-        android:inputType="number"
-        android:imeOptions="actionNext"/>
+        android:layout_height="50dp">
+
+        <TextView
+            android:id="@+id/tv_se_curr"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5sp"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_weight="0.5"
+            android:background="@drawable/line_left_right_bottom_draw"
+            android:gravity="left|center" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="@drawable/line_left_right_bottom_draw">
+
+            <EditText
+                android:textAppearance="@android:style/TextAppearance.Medium"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ed_se_curr"
+                android:layout_weight="0.5"
+                android:singleLine="true"
+                android:text="0"
+                android:selectAllOnFocus="true"
+                android:inputType="number"
+                android:imeOptions="actionNext"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_se_curr_total"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:padding="5sp"
+            android:text="0"
+            android:gravity="center"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:background="@drawable/line_left_right_bottom_draw" />
+    </LinearLayout>
 
 </LinearLayout>

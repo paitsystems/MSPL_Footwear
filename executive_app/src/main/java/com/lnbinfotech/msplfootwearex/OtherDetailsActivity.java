@@ -14,17 +14,19 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.Gravity;
 
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
@@ -62,6 +64,8 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
     private Toast toast;
     private List<ChequeDetailsClass> ls;
     private Menu menu;
+    private Spinner sp_sizeGroup;
+    List<String> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,10 +191,9 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void init() {
-
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
-        ChequeDetailsActivity.selectAuto = new SelectAutoItemClass();
+        ChequeDetailsActivityChanged.selectAuto = new SelectAutoItemClass();
         day = cal.get(Calendar.DAY_OF_MONTH);
         month = cal.get(Calendar.MONTH);
         year = cal.get(Calendar.YEAR);
@@ -218,6 +221,12 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
         lay_img.setOnClickListener(this);
         btn_submit.setOnClickListener(this);
         ls = new ArrayList<>();
+        sp_sizeGroup = (Spinner) findViewById(R.id.sp_mode_type);
+        list = new ArrayList<>();
+        list.add("Cash");list.add("RTGS");list.add("NEFT");list.add("IMPS");
+        list.add("Direct Deposit");
+        sp_sizeGroup.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.sizegroup_spinner_row, list));
+
     }
 
     private void showDia(int a) {
@@ -255,10 +264,10 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
         } else if (ed_total_chq.getText().toString().equals("")) {
             toast.setText("Please Enter Number of Cheques");
             toast.show();
-        } */else if (ed_mode_type.getText().toString().equals("")) {
+        } else if (ed_mode_type.getText().toString().equals("")) {
             toast.setText("Please Enter Cheque Number");
             toast.show();
-        } /*else if (ed_remark.getText().toString().equals("")) {
+        } else if (ed_remark.getText().toString().equals("")) {
             toast.setText("Please Enter Cheque Amount");
             toast.show();
         }*/ else if (ed_amnt.getText().toString().equals("")) {
@@ -285,7 +294,8 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
             date = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH).format(new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).parse(date));
             chequeDetails.setChq_det_date(date);
 
-            String number = ed_mode_type.getText().toString();
+            //String number = ed_mode_type.getText().toString();
+            String number = list.get(sp_sizeGroup.getSelectedItemPosition());
             chequeDetails.setChq_det_number(number);
 
             String amount = ed_amnt.getText().toString();
@@ -316,17 +326,17 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
             toast.show();
         }
         //finish();
-        //new Constant(ChequeDetailsActivity.this).doFinish();
+        //new Constant(ChequeDetailsActivityChanged.this).doFinish();
     }
 
     private void get_auto_banklist() {
-        ed_bank.setText(ChequeDetailsActivity.selectAuto.getChq_auto_bank());
-        Constant.showLog("ed_bank: " + ChequeDetailsActivity.selectAuto.getChq_auto_bank());
+        ed_bank.setText(ChequeDetailsActivityChanged.selectAuto.getChq_auto_bank());
+        Constant.showLog("ed_bank: " + ChequeDetailsActivityChanged.selectAuto.getChq_auto_bank());
     }
 
     private void get_auto_branchlist() {
-        ed_branch.setText(ChequeDetailsActivity.selectAuto.getChq_auto_branch());
-        Constant.showLog("ed_branch: " + ChequeDetailsActivity.selectAuto.getChq_auto_branch());
+        ed_branch.setText(ChequeDetailsActivityChanged.selectAuto.getChq_auto_branch());
+        Constant.showLog("ed_branch: " + ChequeDetailsActivityChanged.selectAuto.getChq_auto_branch());
     }
 
     private String getRealPathFromURI(String contentURI) {
@@ -379,3 +389,4 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
         new WriteLog().writeLog(getApplicationContext(), "OtherDetailsActivity_" + _data);
     }
 }
+

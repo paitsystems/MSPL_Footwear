@@ -1503,9 +1503,13 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public String getDesignNo(String sizegroup, int total) {
+        /*String str = "select " + ARSD_DesignNo + " from " + Table_AllRequiredSizesDesigns +
+                " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_SizeGroup +
+                " like '" + sizegroup + "' and " + ARSD_InOutType + "='O' and " + ARSD_Total + "=" + total;*/
         String str = "select " + ARSD_DesignNo + " from " + Table_AllRequiredSizesDesigns +
                 " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_SizeGroup +
-                " like '" + sizegroup + "' and " + ARSD_InOutType + "='O' and " + ARSD_Total + "=" + total;
+                " like '" + sizegroup + "' and " + ARSD_InOutType + "='O' and " + ARSD_Total + "=" + total+
+                " and "+ARSD_Colour+"='1 Color'";
         Constant.showLog("getDesignNo :- " + str);
         Cursor res = getWritableDatabase().rawQuery(str, null);
         String output = "";

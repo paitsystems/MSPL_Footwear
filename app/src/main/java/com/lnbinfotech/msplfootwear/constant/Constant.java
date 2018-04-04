@@ -52,7 +52,7 @@ public class Constant {
     public static final String custimgUrl = "http://219.91.211.9:24086/custImage/";
 
     //TODO: Check liveTestFlag 1-Live, 0-Test
-    public static int liveTestFlag = 0;
+    public static int liveTestFlag = 1;
 
     public static int TIMEOUT_CON = 10*1000;
     public static int TIMEOUT_SO = 70*1000;

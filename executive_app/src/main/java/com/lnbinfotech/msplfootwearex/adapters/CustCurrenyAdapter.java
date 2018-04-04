@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.interfaces.CurrencyInterface;
+import com.lnbinfotech.msplfootwearex.model.ChequeDetailsClass;
 import com.lnbinfotech.msplfootwearex.model.CurrencyMasterClass;
 
 import java.util.ArrayList;
@@ -47,59 +48,90 @@ public class CustCurrenyAdapter extends BaseAdapter {
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
         final ViewHolder holder;
-        holder = new ViewHolder();
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.list_item_cust_currency, null);
-        holder.tv_curr = (TextView) view.findViewById(R.id.tv_cust_curr);
-        holder.ed_value = (EditText) view.findViewById(R.id.ed_cust_curr);
-        if(i==0){
-            holder.ed_value.requestFocus();
-        }
-        /*if (view == null) {
+        if (view == null) {
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.list_item_cust_currency, null);
             holder.tv_curr = (TextView) view.findViewById(R.id.tv_cust_curr);
+            holder.tv_tot = (TextView) view.findViewById(R.id.tv_cust_curr_total);
             holder.ed_value = (EditText) view.findViewById(R.id.ed_cust_curr);
+            holder.ed_value.addTextChangedListener(new GenericTextWatcher(holder.ed_value,i,holder));
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
-        }*/
-        final CurrencyMasterClass descClass = (CurrencyMasterClass) getItem(i);
+        }
+        CurrencyMasterClass descClass = (CurrencyMasterClass) getItem(i);
         holder.tv_curr.setText(descClass.getCurrency());
-        holder.ed_value.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                String value = holder.ed_value.getText().toString();
-                if(!value.equals("")){
-                    descClass.setValue(value);
-                }else{
-                    descClass.setValue("0");
-                }
-                currClassList.set(i,descClass);
-                //notifyDataSetChanged();
-                currInterface.custCurrency(String.valueOf(""));
-            }
-        });
+        holder.tv_tot.setText(descClass.getTotal());
         return view;
     }
 
+    @Override
+    public int getViewTypeCount() {
+        return getCount();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     private class ViewHolder {
-        private TextView tv_curr;
+        private TextView tv_curr, tv_tot;
         private EditText ed_value;
     }
 
     public void initInterface(CurrencyInterface _interface){
         currInterface = _interface;
     }
+
+    private class GenericTextWatcher implements TextWatcher {
+
+        private View view;
+        private int pos;
+        private ViewHolder holder;
+
+        private GenericTextWatcher(View _view, int _pos, ViewHolder _holder){
+            this.view = _view;
+            this.pos = _pos;
+            this.holder = _holder;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            switch (view.getId()){
+                case R.id.ed_cust_curr:
+                    String value = editable.toString();
+                    if(!value.equals("")){
+                        CurrencyMasterClass descClass = currClassList.get(pos);
+                        String cur = descClass.getCurrency();
+                        int tot = Integer.parseInt(cur)*Integer.parseInt(value);
+                        descClass.setValue(value);
+                        descClass.setTotal(String.valueOf(tot));
+                        holder.tv_tot.setText(String.valueOf(tot));
+                        currClassList.set(pos,descClass);
+                    }else{
+                        CurrencyMasterClass descClass = currClassList.get(pos);
+                        descClass.setValue("0");
+                        descClass.setTotal("0");
+                        holder.tv_tot.setText("0");
+                        currClassList.set(pos,descClass);
+                    }
+                    //notifyDataSetChanged();
+                    currInterface.custCurrency(String.valueOf(""));
+                    break;
+            }
+        }
+    }
+
 }

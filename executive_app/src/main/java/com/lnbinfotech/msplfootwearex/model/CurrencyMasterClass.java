@@ -4,7 +4,7 @@ package com.lnbinfotech.msplfootwearex.model;
 
 public class CurrencyMasterClass {
 
-    private String auto, currency, status, value;
+    private String auto, currency, status, value, total;
 
     public String getAuto() {
         return auto;
@@ -36,5 +36,13 @@ public class CurrencyMasterClass {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getTotal() {
+        return total;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
     }
 }

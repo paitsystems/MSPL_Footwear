@@ -4,7 +4,7 @@ package com.lnbinfotech.msplfootwearex.interfaces;
 
 public interface CurrencyInterface {
 
-    public void custCurrency(String value);
-    public void seCurrency(String value);
+    void custCurrency(String value);
+    void seCurrency(String value);
 
 }

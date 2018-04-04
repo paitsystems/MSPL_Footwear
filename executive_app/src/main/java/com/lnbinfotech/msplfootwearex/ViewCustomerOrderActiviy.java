@@ -301,7 +301,8 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         tv_custname.setText(FirstActivity.pref.getString(getString(R.string.pref_selcustname),""));
 
         workingDispatchCenter = new ArrayList<>();
-        workingDispatchCenter.add("U5%");
+        //workingDispatchCenter.add("U5%");
+        workingDispatchCenter.add("UHWE");
         workingDispatchCenter.add("UGNT");
         workingDispatchCenter.add("ULKS");
         workingDispatchCenter.add("USCH");

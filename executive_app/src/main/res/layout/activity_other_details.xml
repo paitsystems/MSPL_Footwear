@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="com.lnbinfotech.msplfootwearex.ChequeDetailsActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.lnbinfotech.msplfootwearex.ChequeDetailsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                         android:layout_height="match_parent"
                         android:drawableRight="@drawable/search"
                         android:focusable="false"
-                        android:hint="@string/selectbank"/>
+                        android:hint="@string/selectbank" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -51,7 +51,7 @@
                         android:layout_height="match_parent"
                         android:drawableRight="@drawable/search"
                         android:focusable="false"
-                        android:hint="@string/selectbranch"/>
+                        android:hint="@string/selectbranch" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -68,7 +68,7 @@
                         android:layout_weight="0.4"
                         android:gravity="center_vertical"
                         android:text="@string/noofcheque"
-                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
 
                     <EditText
                         android:id="@+id/ed_total_chq"
@@ -79,7 +79,7 @@
                         android:ems="10"
                         android:inputType="numberDecimal"
                         android:padding="5sp"
-                        android:visibility="visible"/>
+                        android:visibility="visible" />
 
                 </LinearLayout>
 
@@ -97,7 +97,7 @@
                         android:layout_weight="0.4"
                         android:gravity="center_vertical"
                         android:text="@string/enterdate"
-                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
 
                     <TextView
                         android:id="@+id/tv_chq_date"
@@ -108,7 +108,7 @@
                         android:drawableRight="@drawable/cheque_date"
                         android:gravity="center"
                         android:text="bvndn"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black" />
 
                     <EditText
                         android:id="@+id/ed_chq_date"
@@ -119,7 +119,7 @@
                         android:ems="10"
                         android:inputType="numberDecimal"
                         android:padding="5sp"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
                     <!-- <EditText
                          android:id="@+id/ed_chq_date"
                          android:layout_width="match_parent"
@@ -139,23 +139,22 @@
                     android:layout_margin="@dimen/mobmargin2"
                     android:layout_weight="0.3"
                     android:text="@string/enteramt"
-                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/mobmargin2"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
 
                     <EditText
                         android:id="@+id/ed_amnt"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:ems="10"
-                        android:inputType="text"
+                        android:inputType="number"
                         android:padding="5sp"
-                        android:visibility="visible"/>
+                        android:visibility="visible" />
                 </LinearLayout>
 
                 <TextView
@@ -164,7 +163,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/mobmargin2"
                     android:text="Payment Made Type"
-                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -174,7 +173,6 @@
                     android:visibility="visible">
 
                     <EditText
-
                         android:id="@+id/ed_mode_type"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
@@ -182,7 +180,28 @@
                         android:ems="10"
                         android:inputType="text"
                         android:padding="5sp"
-                        android:visibility="visible"/>
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:layout_weight="0.4"
+                        android:background="@drawable/sizegroup_spinner_draw"
+                        android:orientation="vertical"
+                        android:padding="@dimen/mobpadding2">
+
+                        <Spinner
+                            android:id="@+id/sp_mode_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="top"
+                            android:imeOptions="actionNext"
+                            android:maxLines="1"
+                            android:spinnerMode="dropdown"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <TextView
@@ -192,7 +211,7 @@
                     android:layout_margin="@dimen/mobmargin2"
                     android:layout_weight="0.3"
                     android:text="Enter Remark"
-                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -209,7 +228,7 @@
                         android:ems="10"
                         android:inputType="text"
                         android:padding="5sp"
-                        android:visibility="visible"/>
+                        android:visibility="visible" />
                 </LinearLayout>
 
                 <TextView
@@ -217,7 +236,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10sp"
-                    android:text="Attach Image"/>
+                    android:text="Attach Image" />
 
 
                 <LinearLayout
@@ -243,7 +262,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/camera"
-                            android:visibility="visible"/>
+                            android:visibility="visible" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -255,7 +274,7 @@
                     android:drawableLeft="@drawable/save_button_back"
                     android:text="@string/submit"
                     android:textColor="@color/white"
-                    app:backgroundTint="@color/maroon"/>
+                    app:backgroundTint="@color/maroon" />
 
             </LinearLayout>
         </ScrollView>
@@ -264,5 +283,5 @@
     <TextView
         style="@style/footerstyleMob"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 </LinearLayout>
