@@ -43,7 +43,7 @@ public class Constant {
     //public static final String ipaddress = "http://172.30.1.38/MSPLV2/service.svc";
     //public static final String ipaddress = "http://license.lnbinfotech.com/MSPLV2/service.svc";
     //public static final String ipaddress = "http://103.68.10.9:24086/MSPLV2/service.svc";
-    public static final String ipaddress = "http://219.91.211.9:24086/MSPLV2/service.svc";
+    public static final String ipaddress = "http://219.91.211.9:24086/MSPLV3/service.svc";
 
     //TODO: Check Image Url
     public static final String imgUrl = "http://219.91.211.9:24086/IMAGES/";

@@ -10,9 +10,8 @@ import com.lnbinfotech.msplfootwearex.CheckOTPActivity;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.interfaces.SmsListener;
 
-/**
- * Created by SNEHA on 10/14/2017.
- */
+// Created by SNEHA on 10/14/2017.
+
 public class ReadSms extends BroadcastReceiver {
     boolean b ;
     String text;
@@ -20,21 +19,25 @@ public class ReadSms extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         final Bundle bundle = intent.getExtras();
-        if(bundle != null){
-            final Object[] pdusobj = (Object[]) bundle.get("pdus");
-            for (int i = 0; i <= pdusobj.length-1; i++){
-                SmsMessage current_msg = SmsMessage.createFromPdu((byte[]) pdusobj[i]);
-                String mob_no = current_msg.getDisplayOriginatingAddress();
-                String sender_no = mob_no;
-                String message = current_msg.getDisplayMessageBody();
-                text = message.replaceAll("[^0-9]","");
-                Constant.showLog("text:"+text.substring(0,6));
-                Constant.showLog("text:"+text.substring(0,1));
-                Constant.showLog("text:"+text.substring(1,2));
-                if (!b){
-                  smsListener.onReceivedMessage(text);
+        if(smsListener!=null) {
+            if (bundle != null) {
+                final Object[] pdusobj = (Object[]) bundle.get("pdus");
+                for (int i = 0; i <= pdusobj.length - 1; i++) {
+                    SmsMessage current_msg = SmsMessage.createFromPdu((byte[]) pdusobj[i]);
+                    String mob_no = current_msg.getDisplayOriginatingAddress();
+                    String sender_no = mob_no;
+                    String message = current_msg.getDisplayMessageBody();
+                    text = message.replaceAll("[^0-9]", "");
+                    //if(text.length()>=6 && text!=null) {
+                    Constant.showLog("text:" + text.substring(0, 6));
+                    Constant.showLog("text:" + text.substring(0, 1));
+                    Constant.showLog("text:" + text.substring(1, 2));
+                    if (!b) {
+                        smsListener.onReceivedMessage(text);
+                    }
+                    Constant.showLog("ReadSMS_onReceive_Called");
+                    //}
                 }
-                Constant.showLog("ReadSMS_onReceive_Called");
             }
         }
     }

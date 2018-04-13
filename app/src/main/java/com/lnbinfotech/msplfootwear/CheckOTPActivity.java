@@ -50,8 +50,8 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     private CountDownTimer countDown;
     private String mobNo,imeiNo;
     private  String response_value;
-    //private ReadSms receiver;
-    private MySMSReceiver myReceiver;
+    private ReadSms receiver;
+    //private MySMSReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +75,42 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             getSupportActionBar().setTitle(R.string.title_activity_login);
         }
 
-        //autoOTP();
-        /*receiver = new ReadSms();
+        autoOTP();
+        receiver = new ReadSms();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(getPackageName() + "android.provider.Telephony.SMS_RECEIVED");
+        registerReceiver(receiver, filter);
+
+        receiver.bindListener(new SmsListener() {
+            @Override
+            public void onReceivedMessage(String message) {
+                Constant.showLog("message:"+message);
+                ed1.setText(message.substring(0,1));
+                Constant.showLog("message:"+message.substring(0,1));
+                ed2.setText(message.substring(1,2));
+                Constant.showLog("message:"+message.substring(1,2));
+                ed3.setText(message.substring(2,3));
+                Constant.showLog("message:"+message.substring(2,3));
+                ed4.setText(message.substring(3,4));
+                Constant.showLog("message:"+message.substring(3,4));
+                ed5.setText(message.substring(4,5));
+                Constant.showLog("message:"+message.substring(4,5));
+                ed6.setText(message.substring(5,6));
+                Constant.showLog("message:"+message.substring(5,6));
+                timer.cancel();
+                countDown.cancel();
+                tv_text1.setText("OTP get successfully");
+                Constant.showLog("CheckOTPActivity_onReceivedMessage_Called");
+            }
+        });
+
+        /*IntentFilter filter = new IntentFilter();
+        filter.addAction(getPackageName() + "android.provider.Telephony.SMS_RECEIVED");
+
+        receiver = new MySMSReceiver();
+        registerReceiver(receiver, filter);
+
         receiver.bindListener(new SmsListener() {
             @Override
             public void onReceivedMessage(String message) {
@@ -99,35 +133,6 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 Constant.showLog("CheckOTPActivity_onReceivedMessage_Called");
             }
         });*/
-
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(getPackageName() + "android.provider.Telephony.SMS_RECEIVED");
-
-        myReceiver = new MySMSReceiver();
-        registerReceiver(myReceiver, filter);
-
-        myReceiver.bindListener(new SmsListener() {
-            @Override
-            public void onReceivedMessage(String message) {
-                Constant.showLog("message:"+message);
-                ed1.setText(message.substring(0,1));
-                Constant.showLog("message:"+message.substring(0,1));
-                ed2.setText(message.substring(1,2));
-                Constant.showLog("message:"+message.substring(1,2));
-                ed3.setText(message.substring(2,3));
-                Constant.showLog("message:"+message.substring(2,3));
-                ed4.setText(message.substring(3,4));
-                Constant.showLog("message:"+message.substring(3,4));
-                ed5.setText(message.substring(4,5));
-                Constant.showLog("message:"+message.substring(4,5));
-                ed6.setText(message.substring(5,6));
-                Constant.showLog("message:"+message.substring(5,6));
-                timer.cancel();
-                countDown.cancel();
-                tv_text1.setText("OTP get successfully");
-                Constant.showLog("CheckOTPActivity_onReceivedMessage_Called");
-            }
-        });
 
         if(countDown == null) {
             tv_text1.setText("Your OTP will get within 3 min..");
@@ -277,6 +282,12 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
+    }
+
     private void verifyOTP(){
         if(ed1.getText().toString().length()==1 && ed2.getText().toString().length()==1 &&
                 ed3.getText().toString().length()==1 && ed4.getText().toString().length()==1 &&
@@ -341,6 +352,31 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 //btn_resendotp.setBackgroundColor(getResources().getColor(R.color.maroon));
             }
         }.start();
+    }
+
+    private void autoOTP(){
+        ReadSms.bindListener(new SmsListener() {
+            @Override
+            public void onReceivedMessage(String message) {
+                Constant.showLog("message:"+message);
+                ed1.setText(message.substring(0,1));
+                Constant.showLog("message:"+message.substring(0,1));
+                ed2.setText(message.substring(1,2));
+                Constant.showLog("message:"+message.substring(1,2));
+                ed3.setText(message.substring(2,3));
+                Constant.showLog("message:"+message.substring(2,3));
+                ed4.setText(message.substring(3,4));
+                Constant.showLog("message:"+message.substring(3,4));
+                ed5.setText(message.substring(4,5));
+                Constant.showLog("message:"+message.substring(4,5));
+                ed6.setText(message.substring(5,6));
+                Constant.showLog("message:"+message.substring(5,6));
+                timer.cancel();
+                countDown.cancel();
+                tv_text1.setText("OTP get successfully");
+
+            }
+        });
     }
 
     private void resendOTP(){
@@ -426,7 +462,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         SharedPreferences.Editor editor = FirstActivity.pref.edit();
         editor.putBoolean(getString(R.string.pref_isRegistered),true);
         editor.apply();
-        unregisterReceiver(myReceiver);
+        unregisterReceiver(receiver);
         finish();
         Intent intent = new Intent(getApplicationContext(), CustomerDetailsActivity.class);
         intent.putExtra("otp",otpClass);
@@ -470,7 +506,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    unregisterReceiver(myReceiver);
+                    unregisterReceiver(receiver);
                     if(countDown!=null) {
                         countDown.cancel();
                     }

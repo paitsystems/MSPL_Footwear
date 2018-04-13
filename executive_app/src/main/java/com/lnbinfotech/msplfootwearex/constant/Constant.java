@@ -44,7 +44,7 @@ public class Constant {
     //TODO: Check Ip Address
     //public static final String ipaddress = "http://172.30.1.38/MSPLV2/service.svc";
     //public static final String ipaddress = "http://license.lnbinfotech.com/MSPLV2/service.svc";
-    public static final String ipaddress = "http://103.68.10.9:24086/MSPLV2/service.svc";
+    public static final String ipaddress = "http://103.68.10.9:24086/MSPLV3/service.svc";
 
     //TODO: Check Image Url
     public static final String imgUrl = "http://103.68.10.9:24086/IMAGES/";
@@ -53,7 +53,7 @@ public class Constant {
     public static final String custimgUrl = "http://103.68.10.9:24086/custImage/";
 
     //TODO: Check liveTestFlag 1-Live, 0-Test
-    public static int liveTestFlag = 0;
+    public static int liveTestFlag = 1;
 
     public static int TIMEOUT_CON = 10*1000;
     public static int TIMEOUT_SO = 70*1000;
@@ -161,7 +161,6 @@ public class Constant {
         }
         return imeino;
     }
-
 
     private void writeLog(String _data) {
         new WriteLog().writeLog(context, _data);

@@ -48,7 +48,7 @@ public class ReadSms extends BroadcastReceiver {
         }
     }
 
-    public void bindListener(SmsListener listener) {
+    public static void bindListener(SmsListener listener) {
         smsListener = listener;
         Constant.showLog("ReadSMS_bindListener_Called");
     }

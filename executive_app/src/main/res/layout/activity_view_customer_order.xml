@@ -197,21 +197,22 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center"
-                    android:text="@string/grossamt"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    style="@style/textViewMob"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
                     android:text="@string/discper"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    style="@style/textViewMob"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/line_top_right_bottom_draw"
+                    android:gravity="center"
+                    android:text="@string/grossamt"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/white" />
 
