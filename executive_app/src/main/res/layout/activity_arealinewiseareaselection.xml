@@ -29,9 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="0.9"
-            android:src="@drawable/search24" />
+            android:src="@drawable/ic_search" />
     </LinearLayout>
-
 
     <ListView
         android:layout_width="match_parent"

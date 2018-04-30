@@ -16,7 +16,6 @@ import com.lnbinfotech.msplfootwearex.constant.Constant;
 import java.util.HashMap;
 import java.util.List;
 
-
 // Created by SNEHA on 12/14/2017.
 
 public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdapter{
@@ -29,9 +28,6 @@ public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdap
     List<Integer> partyid_list;
     HashMap<Integer,Integer> area_party_map;
     HashMap<Integer,List<String>> childls;
-
-
-
 
     public AreawiseCustSelExpandableListAdapter(Context _context,HashMap<Integer,List<String>> _area_map,List<Integer> _areaid_list,HashMap<Integer,String> _party_map,
             List<Integer> _partyid_list,HashMap<Integer,Integer> _area_party_map,HashMap<Integer,List<Integer>> _areaid_partyId_map,HashMap<Integer,List<String>> _childls){
@@ -78,9 +74,9 @@ public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdap
         TextView tv_child_count = (TextView) view.findViewById(R.id.tv_child_count);
         ImageView img_parent = (ImageView) view.findViewById(R.id.img_parent);
         if(b) {
-            img_parent.setImageResource(R.drawable.expand_16);
+            img_parent.setImageResource(R.drawable.ic_expand_more_black_24dp);
         }else {
-            img_parent.setImageResource(R.drawable.compress_16);
+            img_parent.setImageResource(R.drawable.ic_chevron_right_black_24dp);
         }
         if(group_position % 2 == 1){
             view.setBackgroundColor(Color.parseColor("#29B6F6"));  //blue
@@ -105,11 +101,8 @@ public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdap
 
     @Override
     public Object getChild(int group_position, int child_position) {
-
         Constant.showLog("mp:"+party_map.get(areaid_partyId_map.get(areaid_list.get(group_position)).get(child_position)));
         return party_map.get(areaid_partyId_map.get(areaid_list.get(group_position)).get(child_position));
-
-
     }
 
     @Override

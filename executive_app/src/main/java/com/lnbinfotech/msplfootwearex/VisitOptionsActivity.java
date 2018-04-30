@@ -57,7 +57,7 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
             custId = Integer.parseInt(getIntent().getExtras().getString("cust_id"));
             DisplayCustListActivity.custId = custId;
             tv_arealine.setText(arealine);
-            tv_area.setText(area);
+            tv_area.setText("- " +area);
             tv_shopname_display.setText(custName);
             setCustInfo();
         }catch (Exception e){
@@ -145,7 +145,7 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
                 Glide.with(getApplicationContext()).load(Constant.custimgUrl+imgName)
                         .thumbnail(0.5f)
                         .crossFade()
-                        .placeholder(R.drawable.user32)
+                        .placeholder(R.drawable.ic_male)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(img);
             }while (res.moveToNext());

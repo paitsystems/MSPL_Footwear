@@ -1017,4 +1017,29 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "AREA");
     }
 
+    public void getCustDiscLimit(String url, final ServerCallback callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\", "");
+                        response = response.replace("''", "");
+                        response = response.substring(1, response.length() - 1);
+                        double ret = new ParseJSON(response, context).parseCustDiscLimit();
+                        callback.onSuccess(String.valueOf(ret));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("getCustDiscLimit_" + error.getMessage());
+                        Constant.showLog(error.getMessage());
+                        writeLog("getCustDiscLimit_"+error.getMessage());
+                    }
+                }
+        );
+        AppSingleton.getInstance(context).addToRequestQueue(request, "AREA");
+    }
+
 }

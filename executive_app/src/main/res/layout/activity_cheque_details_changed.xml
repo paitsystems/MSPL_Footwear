@@ -25,7 +25,7 @@
                 style="@style/textViewMob"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:drawableRight="@drawable/search"
+                android:drawableRight="@drawable/ic_search"
                 android:focusable="false"
                 android:hint="@string/selectbank"/>
         </LinearLayout>
@@ -41,7 +41,7 @@
                 style="@style/textViewMob"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:drawableRight="@drawable/search"
+                android:drawableRight="@drawable/ic_search"
                 android:focusable="false"
                 android:hint="@string/selectbranch"/>
         </LinearLayout>

@@ -353,6 +353,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onFinish() {
                 tv_text1.setText("Time's up!!");
+                response_value = "0";
                 btn_resendotp.setEnabled(true);
                // btn_resendotp.setBackgroundColor(getResources().getColor(R.color.maroon));
                 btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),R.color.maroon));

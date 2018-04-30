@@ -68,7 +68,7 @@ public class CustomerDetailListAdapter extends BaseAdapter {
         Glide.with(context).load(Constant.custimgUrl+userClass.getImagePath())
                 .thumbnail(0.5f)
                 .crossFade()
-                .placeholder(R.drawable.user32)
+                .placeholder(R.drawable.ic_male)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.img_cust);
 

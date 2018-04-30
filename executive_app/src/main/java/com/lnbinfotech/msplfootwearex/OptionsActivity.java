@@ -11,6 +11,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,15 +51,20 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
 
+
+
         //setContentView(R.layout.activity_options);
        // setContentView(R.layout.optionstext);
         setContentView(R.layout.test);
 
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+
         init();
 
-        if (getSupportActionBar() != null) {
+        /*if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        }
+        }*/
 
         card_take_order.setOnClickListener(this);
         card_track_order.setOnClickListener(this);
@@ -88,14 +94,14 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.card_take_order:
-                //showDia(1);
+                showDia(1);
                 //int custId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
                 //custDisc = new DBHandler(getApplicationContext()).getCustDiscount(custId);
                 //startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
-                Intent in = new Intent(getApplicationContext(), DisplayCustListActivity.class);
-                in.putExtra("from","order");
-                startActivity(in);
-                overridePendingTransition(R.anim.enter, R.anim.exit);
+                //Intent in = new Intent(getApplicationContext(), DisplayCustListActivity.class);
+                //in.putExtra("from","order");
+                //startActivity(in);
+                //overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_visit:
                 startActivity(new Intent(getApplicationContext(), ArealinewiseAreaSelectionActivity.class));

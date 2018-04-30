@@ -8,11 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.lnbinfotech.msplfootwear.adapters.CustomerDetailListAdapter;
 import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.constant.Constant;
@@ -62,6 +65,16 @@ public class CustomerDetailsActivity extends AppCompatActivity implements View.O
             }
         });
 
+        /*Button crashButton = new Button(this);
+        crashButton.setText("Crash!");
+        crashButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Crashlytics.getInstance().crash(); // Force a crash
+            }
+        });
+        addContentView(crashButton,
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));*/
     }
 
     @Override

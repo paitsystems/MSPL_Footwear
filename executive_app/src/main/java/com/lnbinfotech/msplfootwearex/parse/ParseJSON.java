@@ -845,4 +845,20 @@ public class ParseJSON {
         return a;
     }
 
+    public double parseCustDiscLimit(){
+        double ret = 0;
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    ret = jsonArray.getJSONObject(i).getDouble("Limit");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseCustDiscLimit_"+e.getMessage());
+        }
+        return ret;
+    }
+
 }

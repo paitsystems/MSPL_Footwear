@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/imgv_img2"
-            android:src="@drawable/paragonlogo160" />
+            android:src="@drawable/paragonlogonew" />
     </LinearLayout>
 
 
@@ -32,6 +32,13 @@
         android:id="@+id/listView"
         android:divider="@null"
         android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/tv_version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        style="@style/textViewMob"/>
 
     <TextView
         style="@style/footerstyleMob"

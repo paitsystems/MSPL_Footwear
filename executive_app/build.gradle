@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 23
@@ -19,12 +20,12 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        debug {
+        /*debug {
             debuggable true
             //minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+        }*/
     }
 }
 
@@ -42,4 +43,10 @@ dependencies {
     compile files('libs/additionnal.jar')
     compile files('libs/jackson-all-1.9.0.jar')
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.google.android.gms:play-services-maps:11.2.0'
+    compile 'com.google.android.gms:play-services-location:11.2.0'
+    compile 'com.google.firebase:firebase-crash:11.2.0'
+    compile 'com.google.firebase:firebase-core:11.2.0'
+    compile 'com.crashlytics.sdk.android:crashlytics:2.9.1'
 }
+apply plugin: 'com.google.gms.google-services'

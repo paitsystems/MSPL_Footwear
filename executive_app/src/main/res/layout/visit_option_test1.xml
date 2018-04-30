@@ -211,7 +211,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/order_32" />
+                                    android:src="@drawable/ic_buying_on_smartphone" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -264,7 +264,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/payment_32" />
+                                    android:src="@drawable/ic_black_and_white_credit_cards" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -325,7 +325,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ledger_report_32" />
+                                    android:src="@drawable/ic_stats" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -377,7 +377,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/feedback_32" />
+                                    android:src="@drawable/ic_feedback" />
                             </LinearLayout>
                         </LinearLayout>
 

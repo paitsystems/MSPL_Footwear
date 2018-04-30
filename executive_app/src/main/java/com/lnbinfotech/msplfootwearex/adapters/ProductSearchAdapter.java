@@ -65,8 +65,8 @@ public class ProductSearchAdapter extends BaseAdapter {
         TextView tv_branch;
     }
 
-    public void filter(String searchText){
-        if(_prodList.size()!=0 && prodList.size()!=0) {
+    public void filter(String searchText) {
+        if (_prodList.size() != 0 && prodList.size() != 0) {
             searchText = searchText.toLowerCase().toLowerCase(Locale.getDefault());
             prodList.clear();
             if (searchText.length() == 0) {
@@ -79,7 +79,8 @@ public class ProductSearchAdapter extends BaseAdapter {
                 }
             }
             notifyDataSetChanged();
-        }else if(_prodList.size()!=0 && prodList.size()==0) {
+        } else if (_prodList.size() != 0 && prodList.size() == 0) {
             prodList.addAll(_prodList);
         }
-    }}
+    }
+}

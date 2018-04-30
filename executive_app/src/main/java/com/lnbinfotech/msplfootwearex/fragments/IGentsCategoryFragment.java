@@ -20,6 +20,7 @@ import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.model.GentsCategoryClass;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,28 +79,36 @@ public class IGentsCategoryFragment extends Fragment {
     }
 
     private void setData() {
-        List<GentsCategoryClass> list = new ArrayList<>();
-        DBHandler db = new DBHandler(getContext());
-        Cursor res = db.getImageSubCategory1(cat,subCat);
-        if(res.moveToFirst()){
-            do {
-                GentsCategoryClass gentsClass = new GentsCategoryClass();
-                gentsClass.setCategoryName(res.getString(res.getColumnIndex(DBHandler.PM_ProdId)));
-                String img = res.getString(res.getColumnIndex(DBHandler.ARSD_ImageName));
-                String imgArr[] = img.split("\\,");
-                img = Constant.imgUrl;
-                if(imgArr.length>1){
-                    img = img+imgArr[0];
-                }
-                img = img + ".jpg";
-                //Constant.showLog(img);
-                gentsClass.setImgName(img);
-                list.add(gentsClass);
-            }while (res.moveToNext());
+        try {
+            List<GentsCategoryClass> list = new ArrayList<>();
+            DBHandler db = new DBHandler(getContext());
+            Cursor res = db.getImageSubCategory1(cat, subCat);
+            if (res.moveToFirst()) {
+                do {
+                    GentsCategoryClass gentsClass = new GentsCategoryClass();
+                    gentsClass.setCategoryName(res.getString(res.getColumnIndex(DBHandler.PM_ProdId)));
+                    String img = res.getString(res.getColumnIndex(DBHandler.ARSD_ImageName));
+                    String imgArr[] = img.split("\\,");
+                    img = Constant.imgUrl;
+                    if (imgArr.length > 1) {
+                        //Constant.showLog(imgArr[0]);
+                        String img1 = imgArr[0];
+                        img1 = URLEncoder.encode(img1, "UTF-8");
+                        //Constant.showLog(img1);
+                        img = img + img1;
+                    }
+                    img = img + ".jpg";
+                    Constant.showLog(img);
+                    gentsClass.setImgName(img);
+                    list.add(gentsClass);
+                } while (res.moveToNext());
+            }
+            res.close();
+            adapter = new GentsCategoryGridAdapter(getContext(), list, drawId);
+            gridView.setAdapter(adapter);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        res.close();
-        adapter = new GentsCategoryGridAdapter(getContext(),list,drawId);
-        gridView.setAdapter(adapter);
     }
 
 }

@@ -1599,9 +1599,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 ARSD_ImageName+" from "+Table_ProductMaster+","+ Table_AllRequiredSizesDesigns+" where "+
                 Table_ProductMaster+"."+PM_Cat9+"='"+catName+"' and "+Table_ProductMaster+"."+PM_Cat2+"='"+subCatName+"' and "
                 +Table_AllRequiredSizesDesigns+"."+ARSD_Productid+"="+
-                Table_ProductMaster+"."+PM_ProductID+" group by "+Table_ProductMaster+"."+PM_Finalprod+" order by "+
+                Table_ProductMaster+"."+PM_ProductID+" and "+Table_AllRequiredSizesDesigns+"."+ARSD_InOutType+"='I'" +
+                " group by "+Table_ProductMaster+"."+PM_Finalprod+" order by "+
                 Table_ProductMaster+"."+PM_Cat2;
-        //Constant.showLog("getImageSubCategory 1 :- "+str);
+        Constant.showLog("getImageSubCategory 1 :- "+str);
         return getWritableDatabase().rawQuery(str, null);
     }
 

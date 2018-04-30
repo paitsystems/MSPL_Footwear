@@ -348,6 +348,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             public void onFinish() {
                 tv_text1.setText("Time's up!!");
                 btn_resendotp.setEnabled(true);
+                response_value = "0";
                 btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),R.color.maroon));
                 //btn_resendotp.setBackgroundColor(getResources().getColor(R.color.maroon));
             }
@@ -462,7 +463,6 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         SharedPreferences.Editor editor = FirstActivity.pref.edit();
         editor.putBoolean(getString(R.string.pref_isRegistered),true);
         editor.apply();
-        unregisterReceiver(receiver);
         finish();
         Intent intent = new Intent(getApplicationContext(), CustomerDetailsActivity.class);
         intent.putExtra("otp",otpClass);

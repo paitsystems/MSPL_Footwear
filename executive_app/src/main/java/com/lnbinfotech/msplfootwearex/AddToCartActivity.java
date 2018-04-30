@@ -38,6 +38,7 @@ import com.lnbinfotech.msplfootwearex.adapters.ViewAddedToCardItemAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.interfaces.RecyclerViewToActivityInterface;
+import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.CheckAvailStockClass;
@@ -272,12 +273,15 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                             stockList = new ArrayList<>();
                                         }
                                         if(stockList.size()!=0){
-                                            convertPackToLoose(stockList);
+                                            //convertPackToLoose(stockList);
+                                            loadCustDiscLimit(1);
                                         }else{
-                                            checkLooseStock();
+                                            //checkLooseStock();
+                                            loadCustDiscLimit(2);
                                         }
                                     }else{
-                                        checkLooseStock();
+                                        //checkLooseStock();
+                                        loadCustDiscLimit(2);
                                     }
                                 } else {
                                     String str = auto_set.getText().toString();
@@ -286,7 +290,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                         if (selQtyLocal != 0) {
                                             InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                             mgr.hideSoftInputFromWindow(tv_add_to_card.getWindowToken(), 0);
-                                            addToCardCompPack();
+                                            //addToCardCompPack();
+                                            loadCustDiscLimit(3);
                                         } else {
                                             showToast("Please Enter Non Zero Value");
                                         }
@@ -305,7 +310,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             Constant.showLog(str1);
                             InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             mgr.hideSoftInputFromWindow(tv_add_to_card.getWindowToken(), 0);
-                            addToCardUnpack();
+                            //addToCardUnpack();
+                            loadCustDiscLimit(4);
                         }
                     } else if (activityToFrom == 2) {
                         if (updateCustOrder != null) {
@@ -317,7 +323,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                         if (lay_comp_pack.getVisibility() == View.VISIBLE) {
                                             showToast("Can Not Update");
                                         } else {
-                                            addToCardUpdate();
+                                            //addToCardUpdate();
+                                            loadCustDiscLimit(5);
                                         }
                                     } else if (updateCustOrder.getOrderType().equals("C")) {
                                         String str = auto_set.getText().toString();
@@ -327,7 +334,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                                 InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                                 mgr.hideSoftInputFromWindow(auto_set.getWindowToken(), 0);
                                                 if (lay_comp_pack.getVisibility() == View.VISIBLE) {
-                                                    addToCardCompPackUpdate();
+                                                    //addToCardCompPackUpdate();
+                                                    loadCustDiscLimit(6);
                                                 } else {
                                                     showToast("Can Not Update");
                                                 }
@@ -344,7 +352,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             } else if (updateCustOrder.getOrderType().equals("U")) {
                                 InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                 mgr.hideSoftInputFromWindow(tv_add_to_card.getWindowToken(), 0);
-                                addToCardUnpackUpdate();
+                                //addToCardUnpackUpdate();
+                                loadCustDiscLimit(7);
                             }
                         }
                     }
@@ -2026,6 +2035,20 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                     startViewCustOrderActivity();
                 }
             });
+        }else if (a == 3) {
+            builder.setMessage("Please Try Again");
+            builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
         }
 
         builder.create().show();
@@ -2576,4 +2599,53 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             showToast("No Colour Available");
         }
     }
+
+    private void loadCustDiscLimit(final int a) {
+        int custId = FirstActivity.pref.getInt(getString(R.string.pref_selcustid), 0);
+        int hocode = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
+        String prodCol = "";
+        if (hocode == 1) {
+            prodCol = DBHandler.PM_HKHO;
+        } else if (hocode == 12) {
+            prodCol = DBHandler.PM_HKRD;
+        } else if (hocode == 13) {
+            prodCol = DBHandler.PM_HANR;
+        }
+        int branchId = db.getDispatchCenter(prodCol);
+        String url = Constant.ipaddress + "/GetCustDiscLimit?custId="+custId+"&banchId="+branchId;
+        Constant.showLog(url);
+        writeLog("GetCustDiscLimit_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(AddToCartActivity.this);
+        requests.getCustDiscLimit(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                OptionsActivity.custDisc = Float.parseFloat(result);
+                if(a==1){
+                    convertPackToLoose(stockList);
+                }else if(a==2){
+                    checkLooseStock();
+                }else if(a==3){
+                    addToCardCompPack();
+                }else if(a==4){
+                    addToCardUnpack();
+                }else if(a==5){
+                    addToCardUpdate();
+                }else if(a==6){
+                    addToCardCompPackUpdate();
+                }else if(a==7){
+                    addToCardUnpackUpdate();
+                }
+            }
+
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                toast.setText("Please Try Again...");
+                toast.show();
+            }
+        });
+    }
+
 }

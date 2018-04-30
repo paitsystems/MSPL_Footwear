@@ -5,7 +5,7 @@
     <item
         android:title="Product Search"
         android:id="@+id/prod_search"
-        android:icon="@drawable/searchw24"
+        android:icon="@drawable/ic_search_w"
         app:showAsAction="always"/>
 
 </menu>

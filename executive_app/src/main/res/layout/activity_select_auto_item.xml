@@ -31,7 +31,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clickable="true"
-                    android:drawableRight="@drawable/search"
+                    android:drawableRight="@drawable/ic_search"
                     android:focusable="true"
                     android:hint="@string/selectcustomername" />
             </android.support.design.widget.TextInputLayout>
@@ -57,7 +57,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clickable="true"
-                    android:drawableRight="@drawable/search"
+                    android:drawableRight="@drawable/ic_search"
                     android:focusable="true"
                     android:hint="@string/selectbank" />
             </android.support.design.widget.TextInputLayout>
@@ -88,7 +88,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clickable="true"
-                    android:drawableRight="@drawable/search"
+                    android:drawableRight="@drawable/ic_search"
                     android:focusable="true"
                     android:hint="@string/selectbranch" />
             </android.support.design.widget.TextInputLayout>

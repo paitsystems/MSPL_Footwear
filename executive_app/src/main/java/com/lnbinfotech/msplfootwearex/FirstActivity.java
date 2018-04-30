@@ -82,6 +82,10 @@ public class FirstActivity extends AppCompatActivity {
             permission.requestReadSMSPermission(getApplicationContext(),FirstActivity.this);//10
         }else if(!permission.checkSendSMSPermission(getApplicationContext())){
             permission.requestSendSMSPermission(getApplicationContext(),FirstActivity.this);//11
+        }else if(!permission.checkCoarseLocationPermission(getApplicationContext())){
+            permission.requestCoarseLocationPermission(getApplicationContext(),FirstActivity.this);//6
+        }else if(!permission.checkFineLocationPermission(getApplicationContext())){
+            permission.requestFineLocationPermission(getApplicationContext(),FirstActivity.this);//5
         }else {
             if(ConnectivityTest.getNetStat(getApplicationContext())) {
                 doThis();
@@ -182,6 +186,12 @@ public class FirstActivity extends AppCompatActivity {
                 checkpermmission();
                 break;
             case 11:
+                checkpermmission();
+                break;
+            case 6:
+                checkpermmission();
+                break;
+            case 5:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     writeLog("All_Permission_Granted");
                     doThis();
