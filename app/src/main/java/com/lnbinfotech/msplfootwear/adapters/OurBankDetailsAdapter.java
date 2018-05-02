@@ -14,9 +14,8 @@ import com.lnbinfotech.msplfootwear.model.OuststandingReportClass;
 import java.text.DecimalFormat;
 import java.util.List;
 
-/**
- * Created by SNEHA on 12/16/2017.
- */
+//Created by SNEHA on 12/16/2017.
+
 public class OurBankDetailsAdapter extends BaseAdapter {
     private List<OurBankDetailsClass> bank_List;
     private Context context;

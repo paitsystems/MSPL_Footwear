@@ -104,7 +104,7 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         lay_warehouse = (LinearLayout) findViewById(R.id.lay_warehouse);
         tv_cl = (TextView) findViewById(R.id.tv_cl);
         tv_days = (TextView) findViewById(R.id.tv_days);

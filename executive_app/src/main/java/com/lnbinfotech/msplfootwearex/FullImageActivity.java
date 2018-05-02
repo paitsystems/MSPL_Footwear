@@ -88,7 +88,7 @@ public class FullImageActivity extends AppCompatActivity {
         tv_prodname = (TextView) findViewById(R.id.tv_prodname);
         tv_mrp = (TextView) findViewById(R.id.tv_mrp);
         tv_margin = (TextView) findViewById(R.id.tv_margin);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         imageView = (TouchImageView) findViewById(R.id.touch_imageview);
         toast = Toast.makeText(getApplicationContext(),"File Not Found",Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER,0,0);

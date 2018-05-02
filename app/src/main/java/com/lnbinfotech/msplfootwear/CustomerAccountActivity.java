@@ -34,6 +34,8 @@ public class CustomerAccountActivity extends AppCompatActivity implements View.O
         init();
         card_ledger.setOnClickListener(this);
         card_out.setOnClickListener(this);
+        card_gst.setOnClickListener(this);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -84,6 +86,7 @@ public class CustomerAccountActivity extends AppCompatActivity implements View.O
         card_gst= (CardView) findViewById(R.id.card_gst);
         card_ledger = (CardView) findViewById(R.id.card_ledger);
         card_out = (CardView) findViewById(R.id.card_out);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     private void showDia(int a) {

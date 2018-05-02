@@ -253,7 +253,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.90"
-                            android:src="@drawable/camera_p" />
+                            android:src="@drawable/ic_photo_camera" />
 
                         <TextView
                             android:id="@+id/textView"
@@ -294,7 +294,7 @@
                                     android:id="@+id/imgv_img1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/camera"
+                                    android:src="@drawable/ic_photo_camera"
                                     android:visibility="visible" />
                             </LinearLayout>
 
@@ -413,7 +413,7 @@
             style="@style/textViewMob"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/btn_img_background"
+            android:drawableLeft="@drawable/ic_sent_mail"
             android:text="@string/sendfed"
             android:textColor="@color/white"
             app:backgroundTint="@color/red" />

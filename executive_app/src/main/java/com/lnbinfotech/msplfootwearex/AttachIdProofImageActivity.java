@@ -89,7 +89,7 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
         save_lay = (LinearLayout) findViewById(R.id.save_lay);
         update_lay = (LinearLayout) findViewById(R.id.update_lay);
         spinner_idproof = (Spinner) findViewById(R.id.spinner_idproof);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         setDocList();
         adapter_id = new ArrayAdapter<>(this, R.layout.id_list, doc_list);
         spinner_idproof.setAdapter(adapter_id);

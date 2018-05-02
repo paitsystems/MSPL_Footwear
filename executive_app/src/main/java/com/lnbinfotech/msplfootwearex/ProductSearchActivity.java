@@ -135,6 +135,7 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         ed_search = (EditText) findViewById(R.id.ed_search);
         listView = (ListView) findViewById(R.id.listView);
         db = new DBHandler(getApplicationContext());

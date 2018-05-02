@@ -44,6 +44,7 @@ public class AccountBillsActivity extends AppCompatActivity implements View.OnCl
         sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER,0,0);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         rd_all_bills = (RadioButton) findViewById(R.id.rd_all_bills);
         rd_outs_bills = (RadioButton) findViewById(R.id.rd_outs_bills);
         ed_search = (EditText) findViewById(R.id.ed_search);

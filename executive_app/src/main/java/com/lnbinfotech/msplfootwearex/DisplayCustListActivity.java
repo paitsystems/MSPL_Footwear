@@ -159,6 +159,7 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
         toast.setGravity(Gravity.CENTER, 0, 0);
         ed_cus_name = (EditText) findViewById(R.id.ed_cus_name);
         cus_list = new ArrayList<>();
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     public void setCusList() {

@@ -238,7 +238,7 @@ public class RequestResponseClass {
         });
     }
 
-    public void loadSizeNDesignMaster(){
+    private void loadSizeNDesignMaster(){
         maxProdId = new DBHandler(context).getMaxProdId();
         if (maxProdId != 0) {
             //new DBHandler(context).deleteTable(DBHandler.Table_AllRequiredSizesDesigns);
@@ -256,7 +256,7 @@ public class RequestResponseClass {
     private class getSizeNDesignMaster extends AsyncTask<String, Void, String> {
         int from, to;
 
-        public getSizeNDesignMaster(int _from,int _to) {
+        private getSizeNDesignMaster(int _from,int _to) {
             this.from = _from;
             this.to = _to;
         }
@@ -282,7 +282,7 @@ public class RequestResponseClass {
         int from,to;
         private String result, parseType;
 
-        public readJSON(String _result, String _parseType, int _from, int _to) {
+        private readJSON(String _result, String _parseType, int _from, int _to) {
             this.result = _result;
             this.parseType = _parseType;
             this.from = _from;
@@ -352,7 +352,7 @@ public class RequestResponseClass {
         private String parseType;
         private int from, to;
 
-        public writeDB(String _parseType, int _from, int _to) {
+        private writeDB(String _parseType, int _from, int _to) {
             this.parseType = _parseType;
             this.from = _from;
             this.to = _to;
@@ -531,7 +531,7 @@ public class RequestResponseClass {
     private class readCustJSON extends AsyncTask<Void, Void, String> {
         private String result, parseType;
 
-        public readCustJSON(String _result, String _parseType) {
+        private readCustJSON(String _result, String _parseType) {
             this.result = _result;
             this.parseType = _parseType;
         }
@@ -597,7 +597,7 @@ public class RequestResponseClass {
         private File writeFile;
         private String parseType;
 
-        public writeCustDB(String _parseType) {
+        private writeCustDB(String _parseType) {
             this.parseType = _parseType;
         }
 
@@ -748,7 +748,7 @@ public class RequestResponseClass {
     private class readBBJSON extends AsyncTask<Void, Void, String> {
         private String result, parseType;
 
-        public readBBJSON(String _result, String _parseType) {
+        private readBBJSON(String _result, String _parseType) {
             this.result = _result;
             this.parseType = _parseType;
         }
@@ -814,7 +814,7 @@ public class RequestResponseClass {
         private File writeFile;
         private String parseType;
 
-        public writeBBDB(String _parseType) {
+        private writeBBDB(String _parseType) {
             this.parseType = _parseType;
         }
 
@@ -910,7 +910,7 @@ public class RequestResponseClass {
         }
     }
 
-    public void loadSDMD(){
+    private void loadSDMD(){
         maxSDMDAuto = new DBHandler(context).getMaxProdId();
         if (maxSDMDAuto != 0) {
             Constant.showLog("maxSDMDAuto :- "+maxSDMDAuto);
@@ -929,7 +929,7 @@ public class RequestResponseClass {
     private class getSizeDesignMastDet extends AsyncTask<String, Void, String> {
         private int from, to;
 
-        public getSizeDesignMastDet(int _from,int _to) {
+        private getSizeDesignMastDet(int _from,int _to) {
             this.to = _to;
             this.from = _from;
         }
@@ -956,7 +956,7 @@ public class RequestResponseClass {
         private File writeFile;
         private String result, parseType;
 
-        public readJSONSDMD(String _result, String _parseType, int _from, int _to) {
+        private readJSONSDMD(String _result, String _parseType, int _from, int _to) {
             this.result = _result;
             this.parseType = _parseType;
             this.from = _from;
@@ -1026,7 +1026,7 @@ public class RequestResponseClass {
         private String parseType;
         private int from,to;
 
-        public writeDBSDMD(String _parseType, int _from, int _to) {
+        private writeDBSDMD(String _parseType, int _from, int _to) {
             this.parseType = _parseType;
             this.from = _from;
             this.to = _to;

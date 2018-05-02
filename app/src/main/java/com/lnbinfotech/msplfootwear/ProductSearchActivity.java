@@ -139,7 +139,7 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
         listView = (ListView) findViewById(R.id.listView);
         db = new DBHandler(getApplicationContext());
         prodList = new ArrayList<>();
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         Cursor res = db.getFinalProduct(cat2,cat9);
         if(res.moveToFirst()){
             do{

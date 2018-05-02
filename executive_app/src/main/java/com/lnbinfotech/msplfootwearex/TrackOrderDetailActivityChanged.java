@@ -373,7 +373,7 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         tv_creaditlimit = (TextView) findViewById(R.id.tv_creaditlimit);
         btn_proceed = (Button) findViewById(R.id.btn_proceed);
         rv_dispatchcenter = (RecyclerView) findViewById(R.id.rv_dispatchcenter);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         workingDispatchCenter = new ArrayList<>();
         workingDispatchCenter.add("U5%");
         workingDispatchCenter.add("UGNT");

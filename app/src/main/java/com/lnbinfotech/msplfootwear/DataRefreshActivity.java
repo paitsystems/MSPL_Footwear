@@ -3,6 +3,7 @@ package com.lnbinfotech.msplfootwear;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -40,8 +41,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DataRefreshActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -49,12 +53,11 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private Toast toast;
     private ListView listView;
     private List<String> refreshList;
-    private String writeFilename = "Write.txt";
+    private String writeFilename = "Write.txt", prefname = "";;
     private DBHandler db;
     private ProgressDialog pd1;
     private int maxProdId = 0, maxSDMDAuto = 0;
     private ProgressDialog sndpd;
-    private Test test;
     private String areaMaster = "Area Master", bankMaster = "Bank Master", bankBrancMaster = "Bank's Branch Master",
                             cityMaster = "City Master", companyMaster = "Company Master", custMaster = "Customer Master",
                             docMaster = "Document Master", empMaster = "Employee Master", hoMaster = "HOMaster Master",
@@ -72,6 +75,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_data_refresh);
 
         setSyncDate();
+
         init();
 
         if (getSupportActionBar() != null) {
@@ -218,6 +222,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onSuccess(String result) {
                 constant.showPD();
+                prefname = getString(R.string.pref_autoArea);
                 showDia(1);
             }
 
@@ -239,6 +244,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onSuccess(String result) {
                 constant.showPD();
+                prefname = getString(R.string.pref_autoCity);
                 showDia(1);
             }
 
@@ -260,6 +266,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onSuccess(String result) {
                 constant.showPD();
+                prefname = getString(R.string.pref_autoHO);
                 showDia(1);
             }
 
@@ -281,6 +288,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onSuccess(String result) {
                 constant.showPD();
+                prefname = getString(R.string.pref_autoEmployee);
                 showDia(1);
             }
 
@@ -322,6 +330,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onSuccess(String result) {
                 constant.showPD();
+                prefname = getString(R.string.pref_autoProduct);
                 showDia(1);
             }
 
@@ -367,6 +376,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onSuccess(String result) {
                 constant.showPD();
+                prefname = getString(R.string.pref_autoCompany);
                 showDia(1);
             }
 
@@ -389,6 +399,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onSuccess(String result) {
                 constant.showPD();
+                prefname = getString(R.string.pref_autoBank);
                 showDia(1);
             }
 
@@ -435,6 +446,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onSuccess(String result) {
                 constant.showPD();
+                prefname = getString(R.string.pref_autoDocument);
                 showDia(1);
             }
 
@@ -456,6 +468,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onSuccess(String result) {
                 constant.showPD();
+                prefname = getString(R.string.pref_autoGST);
                 showDia(1);
             }
 
@@ -490,6 +503,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         //refreshList.add(stockMaster);
         refreshList.add(sdmdMaster);
         listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.list_item_data_refresh, refreshList));
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     private void showDia(int a) {
@@ -524,6 +538,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    updateSharedPref(prefname,"Y");
                     dialog.dismiss();
                 }
             });
@@ -586,8 +601,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 } else if (a == 12) {
                     loadGSTMaster();
                 }else if (a == 13) {
-                    //TODO : Remove
-                    //db.deleteTable(DBHandler.Table_SizeDesignMastDet);
                     maxSDMDAuto = db.getMaxProdId();
                     if (maxSDMDAuto != 0) {
                         Constant.showLog("maxSDMDAuto :- "+maxSDMDAuto);
@@ -596,8 +609,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                         toast.setText("Please Update ProductMaster First");
                         toast.show();
                     }
-                    //TODO : Remove
-                    //loadSDMD(10101, 10600);
                     loadSDMD(0,100);
                 }
             }
@@ -651,8 +662,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         String url = Constant.ipaddress + "/GetAllSizeDesignMastDet?Id=" + from + "&ToId=" + to;
         Constant.showLog(url);
         writeLog("loadSDMD_" + url);
-        //TODO: REMOVE
-        //if (from == 10101) {
         if (from == 0) {
             sndpd = new ProgressDialog(DataRefreshActivity.this);
             sndpd.setCancelable(false);
@@ -688,7 +697,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private class getSizeNDesignMaster extends AsyncTask<String, Void, String> {
         int to;
 
-        public getSizeNDesignMaster(int _to) {
+        private getSizeNDesignMaster(int _to) {
             this.to = _to;
         }
 
@@ -700,8 +709,12 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
-            response = response.substring(1, response.length() - 1);
-            new readJSON(response, "SizeNDesign", to).execute();
+            if(response!=null && !response.equals("")) {
+                response = response.substring(1, response.length() - 1);
+                new readJSON(response, "SizeNDesign", to).execute();
+            }else{
+                writeLog("getSizeNDesignMaster_response_null");
+            }
         }
     }
 
@@ -709,7 +722,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         int to;
         private String result, parseType;
 
-        public readJSON(String _result, String _parseType, int _to) {
+        private readJSON(String _result, String _parseType, int _to) {
             this.result = _result;
             this.parseType = _parseType;
             this.to = _to;
@@ -775,7 +788,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         private String parseType;
         private int to;
 
-        public writeDB(String _parseType, int _to) {
+        private writeDB(String _parseType, int _to) {
             this.parseType = _parseType;
             this.to = _to;
         }
@@ -820,6 +833,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                         Constant.showLog("Write Delete");
                         if (to == maxProdId) {
                             sndpd.dismiss();
+                            prefname = getString(R.string.pref_autoSizeNDesign);
                             showDia(1);
                         } else {
                             int from = to + 1;
@@ -850,10 +864,14 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
-            response = response.replace("\\\\r\\\\n", "");
-            response = response.substring(1, response.length() - 1);
-            constant.showPD();
-            new readCustJSON(response, "CustMast").execute();
+            if (response != null && !response.equals("")) {
+                response = response.replace("\\\\r\\\\n", "");
+                response = response.substring(1, response.length() - 1);
+                constant.showPD();
+                new readCustJSON(response, "CustMast").execute();
+            } else {
+                writeLog("getCustomerMaster_response_null");
+            }
         }
     }
 
@@ -861,7 +879,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         private String result, parseType;
         private ProgressDialog pd;
 
-        public readCustJSON(String _result, String _parseType) {
+        private readCustJSON(String _result, String _parseType) {
             this.result = _result;
             this.parseType = _parseType;
         }
@@ -936,7 +954,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         private File writeFile;
         private String parseType;
 
-        public writeCustDB(String _parseType) {
+        private writeCustDB(String _parseType) {
             this.parseType = _parseType;
         }
 
@@ -991,6 +1009,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             if (s.equals("")) {
                 if (writeFile.delete()) {
                     Constant.showLog("Write Delete");
+                    prefname = getString(R.string.pref_autoCustomer);
                     showDia(1);
                 }
             } else {
@@ -1097,9 +1116,13 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
-            response = response.substring(1, response.length() - 1);
-            constant.showPD();
-            new readBBJSON(response, "BankBranchMast").execute();
+            if (response != null && !response.equals("")) {
+                response = response.substring(1, response.length() - 1);
+                constant.showPD();
+                new readBBJSON(response, "BankBranchMast").execute();
+            } else {
+                writeLog("getBankBranchMaster_response_null");
+            }
         }
     }
 
@@ -1182,7 +1205,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         private File writeFile;
         private String parseType;
 
-        public writeBBDB(String _parseType) {
+        private writeBBDB(String _parseType) {
             this.parseType = _parseType;
         }
 
@@ -1237,6 +1260,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             if (s.equals("")) {
                 if (writeFile.delete()) {
                     Constant.showLog("Write Delete");
+                    prefname = getString(R.string.pref_autoBankBranch);
                     showDia(1);
                 }
             } else {
@@ -1509,7 +1533,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private class getSizeDesignMastDet extends AsyncTask<String, Void, String> {
         int to;
 
-        public getSizeDesignMastDet(int _to) {
+        private getSizeDesignMastDet(int _to) {
             this.to = _to;
         }
 
@@ -1521,8 +1545,13 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
-            response = response.substring(1, response.length() - 1);
-            new readJSONSDMD(response, "SDMD", to).execute();
+            if(response!=null && !response.equals("")) {
+                response = response.substring(1, response.length() - 1);
+                new readJSONSDMD(response, "SDMD", to).execute();
+            }else{
+                writeLog("getSizeDesignMastDet_response_null");
+            }
+
         }
     }
 
@@ -1531,7 +1560,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         private File writeFile;
         private String result, parseType;
 
-        public readJSONSDMD(String _result, String _parseType, int _to) {
+        private readJSONSDMD(String _result, String _parseType, int _to) {
             this.result = _result;
             this.parseType = _parseType;
             this.to = _to;
@@ -1600,7 +1629,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         private String parseType;
         private int to;
 
-        public writeDBSDMD(String _parseType, int _to) {
+        private writeDBSDMD(String _parseType, int _to) {
             this.parseType = _parseType;
             this.to = _to;
         }
@@ -1652,6 +1681,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             Constant.showLog("Write Delete");
             if (to == maxSDMDAuto) {
                 sndpd.dismiss();
+                prefname = getString(R.string.pref_autoSizeDetail);
                 showDia(1);
             } else {
                 int from = to + 1;
@@ -1718,6 +1748,37 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             db.deleteTable(DBHandler.Table_SizeDesignMastDet);
             showDia(2);
         }
+    }
+
+    private void updateSharedPref(String prefname, String value){
+        writeLog(prefname+"_"+value);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+        String str = getDateTime()+"-"+value+"-"+getTime();
+        Constant.showLog(prefname+"-"+str);
+        editor.putString(prefname, getTime());
+        editor.apply();
+        setSyncDate();
+    }
+
+    private String getDateTime() {
+        String str = "";
+        try{
+            str = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH).format(new Date());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return str;
+    }
+
+    private String getTime() {
+        String str = "";
+        try{
+            str = new SimpleDateFormat("dd/MMM/yyyy HH:mm", Locale.ENGLISH).format(new Date());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return str;
     }
 
     private void writeLog(String _data) {

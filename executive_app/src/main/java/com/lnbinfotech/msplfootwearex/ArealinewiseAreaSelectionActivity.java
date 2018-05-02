@@ -156,6 +156,7 @@ public class ArealinewiseAreaSelectionActivity extends AppCompatActivity impleme
         listView = (ListView) findViewById(R.id.listView);
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         areaLineList = new ArrayList<>();
         db = new DBHandler(getApplicationContext());
         ed_search = (EditText) findViewById(R.id.ed_search);
@@ -177,8 +178,6 @@ public class ArealinewiseAreaSelectionActivity extends AppCompatActivity impleme
 
     private void getTodaysVisit(){
         int saleExe = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
-        //TODO: Remove when live
-        //int saleExe = 152;
         String weekDay;
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
         Calendar calendar = Calendar.getInstance();

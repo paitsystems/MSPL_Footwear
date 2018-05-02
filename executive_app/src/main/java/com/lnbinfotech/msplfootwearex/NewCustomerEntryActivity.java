@@ -46,7 +46,7 @@ public class NewCustomerEntryActivity extends AppCompatActivity implements View.
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         //toast.show();
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         ed_cus_name = (EditText) findViewById(R.id.ed_cus_name);
         ed_mobile_no = (EditText) findViewById(R.id.ed_mobile_no);
         ed_email_id = (EditText) findViewById(R.id.ed_emailid);

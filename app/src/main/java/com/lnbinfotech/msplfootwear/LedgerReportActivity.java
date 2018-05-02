@@ -331,7 +331,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
         tot_ob = (TextView) findViewById(R.id.tot_ob);
         tot_credit = (TextView) findViewById(R.id.tot_credit);
         tot_debit = (TextView) findViewById(R.id.tot_debit);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         cb_all = (CheckBox) findViewById(R.id.cb_all);
         constant = new Constant(LedgerReportActivity.this);
         constant1 = new Constant(getApplicationContext());

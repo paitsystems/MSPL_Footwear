@@ -80,6 +80,7 @@ public class OurBankDetailsActivity extends AppCompatActivity implements View.On
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         lv_account = (ListView) findViewById(R.id.lv_account);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     private void showBankDetails() {

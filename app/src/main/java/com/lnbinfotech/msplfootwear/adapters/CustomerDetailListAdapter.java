@@ -17,6 +17,7 @@ import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwear.model.UserClass;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class CustomerDetailListAdapter extends BaseAdapter {
@@ -65,10 +66,12 @@ public class CustomerDetailListAdapter extends BaseAdapter {
         holder.tv_custaddress.setText(userClass.getAddress());
         holder.tv_custmobile.setText(userClass.getMobile());
         holder.tv_custemail.setText(userClass.getEmail());
+        String img = userClass.getImagePath();
+        Constant.showLog(Constant.custimgUrl+img);
         Glide.with(context).load(Constant.custimgUrl+userClass.getImagePath())
                 .thumbnail(0.5f)
                 .crossFade()
-                .placeholder(R.drawable.user32)
+                .placeholder(R.drawable.ic_male)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.img_cust);
         return view;

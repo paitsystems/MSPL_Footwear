@@ -316,6 +316,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     private void init() {
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         feedbackClass = new FeedbackClass();
         feedbackClass.setFeed_img1("NA");
         feedbackClass.setFeed_img2("NA");

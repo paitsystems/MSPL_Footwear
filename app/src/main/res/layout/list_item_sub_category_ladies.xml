@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
-            android:src="@drawable/ladiesr32"/>
+            android:src="@drawable/ic_high_heels"/>
 
         <TextView
             android:id="@+id/TextView"

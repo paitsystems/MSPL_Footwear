@@ -101,7 +101,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         try {
             constant.showPD();
             final String mobNo = ed_mobNo.getText().toString();
-            final String imeino = new Constant(getApplicationContext()).getIMEINo();
+            final String imeino = new Constant(getApplicationContext()).getIMEINo1();
             String _mobNo = URLEncoder.encode(mobNo, "UTF-8");
             String _imeino = URLEncoder.encode(imeino, "UTF-8");
             String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"&IMEINo="+_imeino+"&type=C";
@@ -164,6 +164,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void init() {
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         ed_mobNo = (EditText) findViewById(R.id.ed_mobno);
         btn_otp = (Button) findViewById(R.id.btn_otp);
         toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);

@@ -779,6 +779,37 @@ public class ParseJSON {
         return list;
     }
 
+    public double parseCustDiscLimit(){
+        double ret = 0;
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    ret = jsonArray.getJSONObject(i).getDouble("Limit");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseCustDiscLimit_"+e.getMessage());
+        }
+        return ret;
+    }
+
+    public String parseVersion() {
+        String data = null;
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    data = jsonArray.getJSONObject(i).getString("mob_version");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("ParseJSON_parseVersion_"+e.getMessage());
+        }
+        return data;
+    }
 
     private void writeLog(String _data){
         new WriteLog().writeLog(context,"ParseJSON_"+_data);

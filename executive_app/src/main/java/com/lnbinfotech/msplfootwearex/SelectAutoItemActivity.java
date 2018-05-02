@@ -84,7 +84,7 @@ public class SelectAutoItemActivity extends AppCompatActivity implements View.On
         ed_cus_name = (EditText) findViewById(R.id.ed_cus_name);
         ed_bank = (EditText) findViewById(R.id.ed_bank);
         ed_branch = (EditText) findViewById(R.id.ed_branch);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         cus_lay = (LinearLayout) findViewById(R.id.cus_lay);
         bank_lay = (LinearLayout) findViewById(R.id.bank_lay);
         branch_lay = (LinearLayout) findViewById(R.id.branch_lay);

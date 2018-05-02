@@ -861,4 +861,19 @@ public class ParseJSON {
         return ret;
     }
 
+    public String parseVersion() {
+        String data = null;
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    data = jsonArray.getJSONObject(i).getString("mob_version");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("ParseJSON_parseVersion_"+e.getMessage());
+        }
+        return data;
+    }
 }

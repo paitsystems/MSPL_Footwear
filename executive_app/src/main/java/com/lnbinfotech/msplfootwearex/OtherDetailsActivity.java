@@ -197,7 +197,7 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
         day = cal.get(Calendar.DAY_OF_MONTH);
         month = cal.get(Calendar.MONTH);
         year = cal.get(Calendar.YEAR);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         ed_bank = (EditText) findViewById(R.id.ed_bank);
         ed_branch = (EditText) findViewById(R.id.ed_branch);
         tv_chq_date = (TextView) findViewById(R.id.tv_chq_date);

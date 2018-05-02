@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
-            android:src="@drawable/schoolr32"/>
+            android:src="@drawable/ic_sport_shoe_red1"/>
 
         <TextView
             android:id="@+id/TextView"

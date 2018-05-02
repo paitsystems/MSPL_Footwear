@@ -169,6 +169,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER,0,0);
         constant = new Constant(RegistrationActivity.this);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     private void showDia(int a) {

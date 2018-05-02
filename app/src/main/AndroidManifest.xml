@@ -73,7 +73,8 @@
         <activity
             android:name=".OptionsActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:theme="@style/NewAppTheme"/>
         <activity
             android:name=".ImagewiseSetwiseOrderActivity"
             android:screenOrientation="portrait"
@@ -136,7 +137,7 @@
             android:name=".CheckoutCustOrderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".DisplayCustOutstandingActivity"
             android:screenOrientation="portrait"

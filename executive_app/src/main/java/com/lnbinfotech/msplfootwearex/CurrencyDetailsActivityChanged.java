@@ -144,7 +144,7 @@ public class CurrencyDetailsActivityChanged extends AppCompatActivity implements
         btn_submit = (Button) findViewById(R.id.btn_submit);
         cust_lay = (LinearLayout) findViewById(R.id.cust_lay);
         se_lay = (LinearLayout) findViewById(R.id.se_lay);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         tv_custTotal = (TextView) findViewById(R.id.tv_custTotal);
         tv_retTotal = (TextView) findViewById(R.id.tv_retTotal);
         tv_total = (TextView) findViewById(R.id.tv_total);

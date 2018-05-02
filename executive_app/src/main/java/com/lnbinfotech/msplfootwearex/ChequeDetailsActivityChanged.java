@@ -179,6 +179,7 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
         btn_submit = (AppCompatButton) findViewById(R.id.btn_submt);
         listView = (ListView) findViewById(R.id.listView);
         list = new ArrayList<>();
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     private void get_auto_banklist() {

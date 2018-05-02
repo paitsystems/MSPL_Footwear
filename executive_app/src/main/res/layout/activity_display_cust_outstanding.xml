@@ -44,7 +44,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="0.9"
-                        android:src="@drawable/play16" />
+                        android:src="@drawable/ic_play_button" />
 
                     <TextView
                         style="@style/textViewMob"
@@ -89,7 +89,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="0.8"
-                            android:src="@drawable/play16" />
+                            android:src="@drawable/ic_play_button" />
 
                         <TextView
                             style="@style/textViewMob"
@@ -135,7 +135,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="0.9"
-                        android:src="@drawable/play16" />
+                        android:src="@drawable/ic_play_button" />
 
                     <TextView
                         style="@style/textViewMob"
@@ -179,7 +179,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="0.9"
-                        android:src="@drawable/play16" />
+                        android:src="@drawable/ic_play_button" />
 
                     <TextView
                         style="@style/textViewMob"
@@ -223,7 +223,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="0.9"
-                        android:src="@drawable/play16" />
+                        android:src="@drawable/ic_play_button" />
 
                     <TextView
                         style="@style/textViewMob"
@@ -267,7 +267,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="0.9"
-                        android:src="@drawable/play16" />
+                        android:src="@drawable/ic_play_button" />
 
                     <TextView
                         style="@style/textViewMob"
@@ -309,7 +309,7 @@
 
                         <ImageView
                             android:layout_gravity="center"
-                            android:src="@drawable/play16"
+                            android:src="@drawable/ic_play_button"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.8" />
@@ -358,7 +358,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="0.9"
-                        android:src="@drawable/play16" />
+                        android:src="@drawable/ic_play_button" />
 
                     <TextView
                         style="@style/textViewMob"
@@ -456,7 +456,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="0.9"
-                        android:src="@drawable/play16" />
+                        android:src="@drawable/ic_play_button" />
 
                     <TextView
                         style="@style/textViewMob"

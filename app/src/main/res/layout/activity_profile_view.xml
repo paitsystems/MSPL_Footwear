@@ -39,11 +39,11 @@
                         android:layout_margin="10sp">
 
                         <ImageView
+                            android:id="@+id/imgv_camera"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/imgv_camera"
                             android:layout_weight="0.90"
-                            android:src="@drawable/user_p" />
+                            android:src="@drawable/ic_man_user_det" />
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -83,11 +83,11 @@
                         android:layout_margin="10sp">
 
                         <ImageView
+                            android:id="@+id/imgv_cgst"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/imgv_cgst"
                             android:layout_weight="0.90"
-                            android:src="@drawable/cgst" />
+                            android:src="@drawable/ic_voucher_det" />
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -123,11 +123,11 @@
                         android:layout_margin="10sp">
 
                         <ImageView
+                            android:id="@+id/imgv_panno"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/imgv_panno"
                             android:layout_weight="0.90"
-                            android:src="@drawable/panno" />
+                            android:src="@drawable/ic_business_card" />
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -192,11 +192,11 @@
                         android:layout_margin="5sp">
 
                         <ImageView
+                            android:id="@+id/imgv_mobno"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/imgv_mobno"
                             android:layout_weight="0.90"
-                            android:src="@drawable/mob_p" />
+                            android:src="@drawable/ic_phone_symbol" />
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -235,11 +235,11 @@
                         android:layout_margin="5sp">
 
                         <ImageView
+                            android:id="@+id/imgv_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/imgv_email"
                             android:layout_weight="0.90"
-                            android:src="@drawable/mail_p"/>
+                            android:src="@drawable/ic_close_envelope" />
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -287,11 +287,11 @@
                         android:layout_margin="5sp">
 
                         <ImageView
+                            android:id="@+id/imgv_cc"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/imgv_cc"
                             android:layout_weight="0.90"
-                            android:src="@drawable/cc"/>
+                            android:src="@drawable/ic_mail" />
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

@@ -55,6 +55,7 @@ public class TrackOrderActivity extends AppCompatActivity implements View.OnClic
         toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER,0,0);
         listView = (ListView) findViewById(R.id.listView);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     @Override

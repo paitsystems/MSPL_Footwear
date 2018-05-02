@@ -91,7 +91,7 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
         save_lay = (LinearLayout) findViewById(R.id.save_lay);
         update_lay = (LinearLayout) findViewById(R.id.update_lay);
         spinner_addproof = (Spinner) findViewById(R.id.spinner_addproof);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         setDocList();
         adapter_address = new ArrayAdapter<>(this, R.layout.address_list, doc_list);
         spinner_addproof.setAdapter(adapter_address);

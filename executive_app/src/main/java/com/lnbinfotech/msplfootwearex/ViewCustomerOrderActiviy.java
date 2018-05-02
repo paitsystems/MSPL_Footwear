@@ -297,7 +297,7 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         tv_custname = (TextView) findViewById(R.id.tv_custname1);
         btn_proceed = (Button) findViewById(R.id.btn_proceed);
         rv_dispatchcenter = (RecyclerView) findViewById(R.id.rv_dispatchcenter);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         tv_custname.setText(FirstActivity.pref.getString(getString(R.string.pref_selcustname),""));
 
         workingDispatchCenter = new ArrayList<>();

@@ -113,6 +113,7 @@ public class ImagewiseSetwiseOrderActivity extends AppCompatActivity implements 
         toast.setGravity(Gravity.CENTER,0,0);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         pager = (ViewPager) findViewById(R.id.pager);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     private void showDia(int a) {

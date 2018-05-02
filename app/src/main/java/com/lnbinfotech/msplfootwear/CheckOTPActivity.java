@@ -75,7 +75,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             getSupportActionBar().setTitle(R.string.title_activity_login);
         }
 
-        autoOTP();
+        //autoOTP();
         receiver = new ReadSms();
 
         IntentFilter filter = new IntentFilter();
@@ -258,6 +258,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.btn_resendotp:
                 Constant.showLog("resend btn click!!");
+                btn_resendotp.setEnabled(false);
                 resendOTP();
                 //autoOTP();
                 tv_text1.setText("Your OTP will get within 3 min..");
@@ -285,6 +286,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        receiver.bindListener(null);
         unregisterReceiver(receiver);
     }
 
@@ -355,7 +357,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         }.start();
     }
 
-    private void autoOTP(){
+    /*private void autoOTP(){
         ReadSms.bindListener(new SmsListener() {
             @Override
             public void onReceivedMessage(String message) {
@@ -378,7 +380,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
 
             }
         });
-    }
+    }*/
 
     private void resendOTP(){
         try {
@@ -386,7 +388,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             String _mobNo = URLEncoder.encode(mobNo,"UTF-8");
             String _imeiNo = URLEncoder.encode(imeiNo,"UTF-8");
 
-            String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"IMEINo="+_imeiNo+"&type=C";
+            String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"&IMEINo="+_imeiNo+"&type=C";
             Constant.showLog(url);
             writeLog("requestOTP_" + url);
             VolleyRequests requests = new VolleyRequests(CheckOTPActivity.this);
@@ -477,7 +479,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         ed4 = (EditText) findViewById(R.id.ed4);
         ed5 = (EditText) findViewById(R.id.ed5);
         ed6 = (EditText) findViewById(R.id.ed6);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         tv_text1 = (TextView) findViewById(R.id.tv_text1);
         tv_otp = (TextView) findViewById(R.id.tv_otp);
         tv_timecount = (TextView) findViewById(R.id.tv_timecount);

@@ -66,6 +66,7 @@ public class TrackOrderMasterActivity extends AppCompatActivity implements View.
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         listView = (ListView) findViewById(R.id.listView);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     @Override

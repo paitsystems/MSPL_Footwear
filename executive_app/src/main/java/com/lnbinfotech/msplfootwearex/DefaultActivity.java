@@ -38,6 +38,7 @@ public class DefaultActivity extends AppCompatActivity implements View.OnClickLi
          sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
          toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
          toast.setGravity(Gravity.CENTER,0,0);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     @Override

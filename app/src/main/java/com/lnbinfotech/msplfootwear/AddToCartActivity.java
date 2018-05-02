@@ -273,12 +273,15 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                             stockList = new ArrayList<>();
                                         }
                                         if(stockList.size()!=0){
-                                            convertPackToLoose(stockList);
+                                            //convertPackToLoose(stockList);
+                                            loadCustDiscLimit(1);
                                         }else{
-                                            checkLooseStock();
+                                            //checkLooseStock();
+                                            loadCustDiscLimit(2);
                                         }
                                     }else{
-                                        checkLooseStock();
+                                        //checkLooseStock();
+                                        loadCustDiscLimit(2);
                                     }
                                 } else {
                                     String str = auto_set.getText().toString();
@@ -287,7 +290,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                         if (selQtyLocal != 0) {
                                             InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                             mgr.hideSoftInputFromWindow(tv_add_to_card.getWindowToken(), 0);
-                                            addToCardCompPack();
+                                            //addToCardCompPack();
+                                            loadCustDiscLimit(3);
                                         } else {
                                             showToast("Please Enter Non Zero Value");
                                         }
@@ -306,7 +310,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             Constant.showLog(str1);
                             InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             mgr.hideSoftInputFromWindow(tv_add_to_card.getWindowToken(), 0);
-                            addToCardUnpack();
+                            //addToCardUnpack();
+                            loadCustDiscLimit(4);
                         }
                     } else if (activityToFrom == 2) {
                         if (updateCustOrder != null) {
@@ -318,7 +323,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                         if (lay_comp_pack.getVisibility() == View.VISIBLE) {
                                             showToast("Can Not Update");
                                         } else {
-                                            addToCardUpdate();
+                                            //addToCardUpdate();
+                                            loadCustDiscLimit(5);
                                         }
                                     } else if (updateCustOrder.getOrderType().equals("C")) {
                                         String str = auto_set.getText().toString();
@@ -328,7 +334,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                                 InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                                 mgr.hideSoftInputFromWindow(auto_set.getWindowToken(), 0);
                                                 if (lay_comp_pack.getVisibility() == View.VISIBLE) {
-                                                    addToCardCompPackUpdate();
+                                                    //addToCardCompPackUpdate();
+                                                    loadCustDiscLimit(6);
                                                 } else {
                                                     showToast("Can Not Update");
                                                 }
@@ -345,7 +352,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             } else if (updateCustOrder.getOrderType().equals("U")) {
                                 InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                 mgr.hideSoftInputFromWindow(tv_add_to_card.getWindowToken(), 0);
-                                addToCardUnpackUpdate();
+                                //addToCardUnpackUpdate();
+                                loadCustDiscLimit(7);
                             }
                         }
                     }
@@ -372,10 +380,6 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 startViewCustOrderActivity();
                 break;
             case R.id.tv_new_item:
-                //TODO : Comment When Delivery
-                //db.deleteTable(DBHandler.Table_CustomerOrder);
-                //toast.setText("Order Cleared");
-                //toast.show();
                 new Constant(AddToCartActivity.this).doFinish();
                 break;
         }
@@ -1298,6 +1302,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         List<String> savedSizeList = new ArrayList<>();
         List<String> savedSizeListForColor = new ArrayList<>();
         List<String> savedQty = new ArrayList<>();
+        List<String> _colour_list = new ArrayList<>();
 
 
         HashMap<String, String> sizeColorQtyMap = new HashMap<>();
@@ -1307,7 +1312,13 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         Cursor res3 = db.getSavedUnpackOrder();
         if (res3.moveToFirst()) {
             do {
-                String colourHashcode = res3.getString(res3.getColumnIndex(DBHandler.CO_Color)) +
+                /*String colourHashcode = res3.getString(res3.getColumnIndex(DBHandler.CO_Color)) +
+                        "-" +
+                        res3.getString(res3.getColumnIndex(DBHandler.CO_HashCode));
+                savedSizeListForColor.add(colourHashcode);*/
+
+                String str1 = res3.getString(res3.getColumnIndex(DBHandler.CO_Color));
+                String colourHashcode = str1.toLowerCase() +
                         "-" +
                         res3.getString(res3.getColumnIndex(DBHandler.CO_HashCode));
                 savedSizeListForColor.add(colourHashcode);
@@ -1340,13 +1351,16 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         Cursor res1 = db.getDistinctColour(sizeGroup_list.get(0));
         if (res1.moveToFirst()) {
             do {
-                String colourHashcode = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour)) +
+                String str1 = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour));
+                String colourHashcode = str1 +
                         "-" +
                         res1.getString(res1.getColumnIndex(DBHandler.ARSD_HashCode));
                 colour_list.add(colourHashcode);
+                _colour_list.add(str1.toLowerCase()+"-"+res1.getString(res1.getColumnIndex(DBHandler.ARSD_HashCode)));
             } while (res1.moveToNext());
         } else {
             colour_list.add("NA");
+            _colour_list.add("NA");
         }
         res1.close();
 
@@ -1376,7 +1390,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 unClickCount++;
 
                 String sizeGrp = sizeGroup_list.get(i);
-                String colourHashCode = colour_list.get(j);
+                //String colourHashCode = colour_list.get(j);
+                String colourHashCode = _colour_list.get(j);
 
                 String key = sizeGrp + colourHashCode;
 
@@ -1920,7 +1935,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         ed_prod_search = (EditText) findViewById(R.id.ed_prod_search);
         rdo_pack = (RadioButton) findViewById(R.id.rdo_pack);
         rdo_unpack = (RadioButton) findViewById(R.id.rdo_unpack);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         tv_wsp = (TextView) findViewById(R.id.tv_wsp);
         tv_mrp = (TextView) findViewById(R.id.tv_mrp);
         tv_hsncode = (TextView) findViewById(R.id.tv_hsncode);
@@ -2290,40 +2305,43 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         for(int i=0;i<stockList.size();i++) {
             CheckAvailStockClass stock = stockList.get(i);
             String colCode = stock.getColor()+"-"+stock.getHashcode();
-            if(colorList.contains(colCode)) {
-                String availSize = stock.getSizegroup();
-                if (sizeGroupListAvail.contains(availSize)) {
-                    sizeGroupList.add(availSize);
-                    if (stock.getStat().equals("N")) {
-                        if (sizeQtyHashMap.isEmpty()) {
-                            List<String> list = new ArrayList<>();
-                            list.add("0^" + stock.getColor() + "-" + stock.getHashcode());
-                            sizeQtyHashMap.put(availSize, list);
-                        } else if (sizeQtyHashMap.containsKey(availSize)) {
-                            List<String> list = sizeQtyHashMap.get(availSize);
-                            list.add("0^" + stock.getColor() + "-" + stock.getHashcode());
-                            sizeQtyHashMap.put(availSize, list);
+            //if(colorList.contains(colCode)) {
+            for (String col : colorList) {
+                if (col.equalsIgnoreCase(colCode)) {
+                    String availSize = stock.getSizegroup();
+                    if (sizeGroupListAvail.contains(availSize)) {
+                        sizeGroupList.add(availSize);
+                        if (stock.getStat().equals("N")) {
+                            if (sizeQtyHashMap.isEmpty()) {
+                                List<String> list = new ArrayList<>();
+                                list.add("0^" + stock.getColor() + "-" + stock.getHashcode());
+                                sizeQtyHashMap.put(availSize, list);
+                            } else if (sizeQtyHashMap.containsKey(availSize)) {
+                                List<String> list = sizeQtyHashMap.get(availSize);
+                                list.add("0^" + stock.getColor() + "-" + stock.getHashcode());
+                                sizeQtyHashMap.put(availSize, list);
+                            } else {
+                                List<String> list = new ArrayList<>();
+                                list.add("0^" + stock.getColor() + "-" + stock.getHashcode());
+                                sizeQtyHashMap.put(availSize, list);
+                            }
+                            qtyList.add("0");
                         } else {
-                            List<String> list = new ArrayList<>();
-                            list.add("0^" + stock.getColor() + "-" + stock.getHashcode());
-                            sizeQtyHashMap.put(availSize, list);
+                            if (sizeQtyHashMap.isEmpty()) {
+                                List<String> list = new ArrayList<>();
+                                list.add(sizeQtyMap.get(availSize) + "^" + stock.getColor() + "-" + stock.getHashcode());
+                                sizeQtyHashMap.put(availSize, list);
+                            } else if (sizeQtyHashMap.containsKey(availSize)) {
+                                List<String> list = sizeQtyHashMap.get(availSize);
+                                list.add(sizeQtyMap.get(availSize) + "^" + stock.getColor() + "-" + stock.getHashcode());
+                                sizeQtyHashMap.put(availSize, list);
+                            } else {
+                                List<String> list = new ArrayList<>();
+                                list.add(sizeQtyMap.get(availSize) + "^" + stock.getColor() + "-" + stock.getHashcode());
+                                sizeQtyHashMap.put(availSize, list);
+                            }
+                            qtyList.add(sizeQtyMap.get(availSize));
                         }
-                        qtyList.add("0");
-                    } else {
-                        if (sizeQtyHashMap.isEmpty()) {
-                            List<String> list = new ArrayList<>();
-                            list.add(sizeQtyMap.get(availSize) + "^" + stock.getColor() + "-" + stock.getHashcode());
-                            sizeQtyHashMap.put(availSize, list);
-                        } else if (sizeQtyHashMap.containsKey(availSize)) {
-                            List<String> list = sizeQtyHashMap.get(availSize);
-                            list.add(sizeQtyMap.get(availSize) + "^" + stock.getColor() + "-" + stock.getHashcode());
-                            sizeQtyHashMap.put(availSize, list);
-                        } else {
-                            List<String> list = new ArrayList<>();
-                            list.add(sizeQtyMap.get(availSize) + "^" + stock.getColor() + "-" + stock.getHashcode());
-                            sizeQtyHashMap.put(availSize, list);
-                        }
-                        qtyList.add(sizeQtyMap.get(availSize));
                     }
                 }
             }
@@ -2582,4 +2600,54 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             showToast("No Colour Available");
         }
     }
+
+    private void loadCustDiscLimit(final int a) {
+        //int custId = FirstActivity.pref.getInt(getString(R.string.pref_selcustid), 0);
+        int custId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
+        int hocode = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
+        String prodCol = "";
+        if (hocode == 1) {
+            prodCol = DBHandler.PM_HKHO;
+        } else if (hocode == 12) {
+            prodCol = DBHandler.PM_HKRD;
+        } else if (hocode == 13) {
+            prodCol = DBHandler.PM_HANR;
+        }
+        int branchId = db.getDispatchCenter(prodCol);
+        String url = Constant.ipaddress + "/GetCustDiscLimit?custId="+custId+"&banchId="+branchId;
+        Constant.showLog(url);
+        writeLog("GetCustDiscLimit_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(AddToCartActivity.this);
+        requests.getCustDiscLimit(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                OptionsActivity.custDisc = Float.parseFloat(result);
+                if(a==1){
+                    convertPackToLoose(stockList);
+                }else if(a==2){
+                    checkLooseStock();
+                }else if(a==3){
+                    addToCardCompPack();
+                }else if(a==4){
+                    addToCardUnpack();
+                }else if(a==5){
+                    addToCardUpdate();
+                }else if(a==6){
+                    addToCardCompPackUpdate();
+                }else if(a==7){
+                    addToCardUnpackUpdate();
+                }
+            }
+
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                toast.setText("Please Try Again...");
+                toast.show();
+            }
+        });
+    }
+
 }

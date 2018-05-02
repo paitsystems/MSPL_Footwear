@@ -1300,6 +1300,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         gridView.setAdapter(null);
 
         List<String> savedSizeList = new ArrayList<>();
+        List<String> _colour_list = new ArrayList<>();
         List<String> savedSizeListForColor = new ArrayList<>();
         List<String> savedQty = new ArrayList<>();
 
@@ -1311,7 +1312,13 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         Cursor res3 = db.getSavedUnpackOrder();
         if (res3.moveToFirst()) {
             do {
-                String colourHashcode = res3.getString(res3.getColumnIndex(DBHandler.CO_Color)) +
+                /*String colourHashcode = res3.getString(res3.getColumnIndex(DBHandler.CO_Color)) +
+                        "-" +
+                        res3.getString(res3.getColumnIndex(DBHandler.CO_HashCode));
+                savedSizeListForColor.add(colourHashcode);*/
+
+                String str1 = res3.getString(res3.getColumnIndex(DBHandler.CO_Color));
+                String colourHashcode = str1.toLowerCase() +
                         "-" +
                         res3.getString(res3.getColumnIndex(DBHandler.CO_HashCode));
                 savedSizeListForColor.add(colourHashcode);
@@ -1344,13 +1351,16 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         Cursor res1 = db.getDistinctColour(sizeGroup_list.get(0));
         if (res1.moveToFirst()) {
             do {
-                String colourHashcode = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour)) +
+                String str1 = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour));
+                String colourHashcode = str1 +
                         "-" +
                         res1.getString(res1.getColumnIndex(DBHandler.ARSD_HashCode));
                 colour_list.add(colourHashcode);
+                _colour_list.add(str1.toLowerCase()+"-"+res1.getString(res1.getColumnIndex(DBHandler.ARSD_HashCode)));
             } while (res1.moveToNext());
         } else {
             colour_list.add("NA");
+            _colour_list.add("NA");
         }
         res1.close();
 
@@ -1380,7 +1390,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                 unClickCount++;
 
                 String sizeGrp = sizeGroup_list.get(i);
-                String colourHashCode = colour_list.get(j);
+                //String colourHashCode = colour_list.get(j);
+                String colourHashCode = _colour_list.get(j);
 
                 String key = sizeGrp + colourHashCode;
 
@@ -1905,7 +1916,6 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void startViewCustOrderActivity(){
-
         SharedPreferences.Editor editor = FirstActivity.pref.edit();
         editor.putString("totalNetAmnt",tv_totnetamt.getText().toString());
         editor.apply();
@@ -1924,7 +1934,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         ed_prod_search = (EditText) findViewById(R.id.ed_prod_search);
         rdo_pack = (RadioButton) findViewById(R.id.rdo_pack);
         rdo_unpack = (RadioButton) findViewById(R.id.rdo_unpack);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         tv_wsp = (TextView) findViewById(R.id.tv_wsp);
         tv_mrp = (TextView) findViewById(R.id.tv_mrp);
         tv_hsncode = (TextView) findViewById(R.id.tv_hsncode);
@@ -2307,10 +2317,11 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         qtyList.clear();
         for(int i=0;i<stockList.size();i++) {
             CheckAvailStockClass stock = stockList.get(i);
-            String colCode = stock.getColor()+"-"+stock.getHashcode();
-            if(colorList.contains(colCode)) {
-                String availSize = stock.getSizegroup();
-                if (sizeGroupListAvail.contains(availSize)) {
+            String colCode = stock.getColor() + "-" + stock.getHashcode();
+            //if(colorList.contains(colCode)) {
+            for (String col : colorList) {
+                if (col.equalsIgnoreCase(colCode)) {
+                    String availSize = stock.getSizegroup();
                     sizeGroupList.add(availSize);
                     if (stock.getStat().equals("N")) {
                         if (sizeQtyHashMap.isEmpty()) {
@@ -2347,6 +2358,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             }
         }
 
+
         //int unClickCount = -1;
         unpackSizeList.clear();
         unpackSizeList.add("+2");
@@ -2362,7 +2374,6 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             //allSizeChangeList.add(unClickCount);
             unpackSizeList.add("0");
         }
-
 
         /*for (int i = 0; i < sizeGroupList.size(); i++) {
             //unClickCount++;

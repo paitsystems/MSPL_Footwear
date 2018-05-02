@@ -74,7 +74,8 @@ public class AttachCustomerImage extends AppCompatActivity implements View.OnCli
         bt_update = (AppCompatButton) findViewById(R.id.btn_update);
         save_lay = (LinearLayout) findViewById(R.id.save_lay);
         update_lay = (LinearLayout) findViewById(R.id.update_lay);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         if (flag == 0) {
             save_lay.setVisibility(View.GONE);
             update_lay.setVisibility(View.VISIBLE);

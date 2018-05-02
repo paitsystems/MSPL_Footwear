@@ -1,21 +1,29 @@
 package com.lnbinfotech.msplfootwearex;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +33,7 @@ import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallbackList;
+import com.lnbinfotech.msplfootwearex.location.LocationProvider;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.CheckoutCustOrderClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerOrderClass;
@@ -47,7 +56,9 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CheckoutCustOrderActivity extends AppCompatActivity implements View.OnClickListener {
+public class CheckoutCustOrderActivity extends AppCompatActivity
+        implements View.OnClickListener,
+        LocationProvider.LocationCallback1 {
 
     private Constant constant, constant1;
     private Toast toast;
@@ -60,7 +71,9 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
     private DBHandler db;
     private List<String> urlList;
     private int counter = 0;
-    private String from, gstPer;
+    private String from, gstPer, address = "", remark = "";
+    private LocationProvider provider;
+    double lat = 0, lon = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +86,8 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
         setContentView(R.layout.activity_checkout_cust_order);
 
         init();
+
+        provider = new LocationProvider(CheckoutCustOrderActivity.this,CheckoutCustOrderActivity.this,CheckoutCustOrderActivity.this);
 
         from = getIntent().getExtras().getString("from");
 
@@ -105,7 +120,13 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
         switch (view.getId()) {
             case R.id.btn_save:
                 if (ConnectivityTest.getNetStat(getApplicationContext())) {
-                    getSaveOrderData();
+                    if(!remark.equals("")) {
+                        provider.connect();
+                    }else{
+                        toast.setText("Please Enter Remark");
+                        toast.show();
+                    }
+                    //getSaveOrderData();
                 } else {
                     toast.setText("You Are Offline");
                     toast.show();
@@ -122,11 +143,20 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.checkoutcustorderactivity_menu,menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 //showDia(0);
                 new Constant(CheckoutCustOrderActivity.this).doFinish();
+                break;
+            case R.id.remark:
+                showRemark(1);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -135,7 +165,49 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
     @Override
     protected void onResume() {
         super.onResume();
-        //constant = new Constant(CheckoutCustOrderActivity.this);
+        Constant.showLog("onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Constant.showLog("onPause");
+        provider.disconnect();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case LocationProvider.REQUEST_CHECK_SETTINGS:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+                        Constant.showLog("Success");
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        provider.checkLocationAvailability();
+                        Constant.showLog("Cancelled Success");
+                        break;
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void handleNewLocation(Location location,String _address) {
+        Constant.showLog("handleNewLocation");
+        lat = location.getLatitude();
+        lon = location.getLongitude();
+        address = _address;
+        Constant.showLog(lat+"-"+lon);
+        toast.setText(lat+"-"+lon);
+        //toast.show();
+        Constant.showLog(address);
+        getSaveOrderData();
+    }
+
+    @Override
+    public void locationAvailable() {
+        Constant.showLog("Location Available");
     }
 
     private void init() {
@@ -152,6 +224,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
         list = new ArrayList<>();
         urlList = new ArrayList<>();
         db = new DBHandler(getApplicationContext());
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     private void checkStock() {
@@ -228,7 +301,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
         private int branchId = 0;
         private ProgressDialog pd;
 
-        public showCheckoutOrderDetailsClass(int _branchId) {
+        private showCheckoutOrderDetailsClass(int _branchId) {
             this.branchId = _branchId;
         }
 
@@ -374,7 +447,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                 float totAmt = 0, totGSTAmt = 0, totTotalAmt = 0,
                         totNetAmt = 0, totAmtAfterDisc = 0, totPendingQty = 0, totDisc = 0;
                 float custDiscPer = OptionsActivity.custDisc;
-                String remark = "NA";
+                remark = "MA-"+remark;
                 String groupNm = "NA";
                 String data = "";
 
@@ -453,8 +526,8 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                 if (!data.equals("")) {
 
                     data = data.substring(0, data.length() - 1);
-                    remark = URLEncoder.encode(remark, "UTF-8");
-                    groupNm = URLEncoder.encode(groupNm, "UTF-8");
+                    //remark = URLEncoder.encode(remark, "UTF-8");
+                    //groupNm = URLEncoder.encode(groupNm, "UTF-8");
                     //data = URLEncoder.encode(data, "UTF-8");
 
                     /*String url = Constant.ipaddress + "/SaveCustOrderMast?branchid=" + hoCode + "&CustId=" + custId + "&SalesExe=" + saleExe + "&TotalQty=" + totQty
@@ -462,7 +535,11 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                             + "&createby=" + saleExe + "&Remark=" + remark + "&Transporter=1&ItemVat=0&GroupNm=" + groupNm + "&discPer=" + custDiscPer
                             + "&discAmt=" + totDisc + "&AmtAfterDisc=" + totAmtAfterDisc + "&DispatchCmp=" + dispatchCmp + "&data=" + data;*/
 
-                    String url = hoCode + "|" + custId + "|" + saleExe + "|" + totQty + "|" + totLooseQty + "|" + totAmt + "|" + totGSTAmt + "|" + totTotalAmt + "|0|" + totNetAmt + "|" + saleExe + "|" + remark + "|1|0|" + groupNm + "|" + custDiscPer + "|" + totDisc + "|" + totAmtAfterDisc + "|" + dispatchCmp + "|" + data;
+                    String url = hoCode + "|" + custId + "|" + saleExe + "|" + totQty + "|" + totLooseQty + "|"
+                            + totAmt + "|" + totGSTAmt + "|" + totTotalAmt + "|0|" + totNetAmt + "|" + saleExe
+                            + "|" + remark + "|1|0|" + groupNm + "|" + custDiscPer + "|" + totDisc + "|"
+                            + totAmtAfterDisc + "|" + dispatchCmp + "|" + lat + "|" + lon + "|" + address + "|"
+                            + data;
                     Constant.showLog(url);
                     //urlList.add(url);
                     //constant.showPD();
@@ -504,7 +581,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
         private int branchId = 0;
         private ProgressDialog pd;
 
-        public saveOrderAsyncTask(int _branchId) {
+        private saveOrderAsyncTask(int _branchId) {
             this.branchId = _branchId;
         }
 
@@ -680,6 +757,36 @@ public class CheckoutCustOrderActivity extends AppCompatActivity implements View
                 }
             });
         }
+        builder.create().show();
+    }
+
+    private void showRemark(int a) {
+        final EditText ed_remark = new EditText(getApplicationContext());
+        ed_remark.setTextColor(ContextCompat.getColor(getApplicationContext(),R.color.black));
+        ed_remark.setText(remark);
+        ed_remark.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        AlertDialog.Builder builder = new AlertDialog.Builder(CheckoutCustOrderActivity.this,R.style.AlertDialogCustom);
+        builder.setCancelable(false);
+        builder.setView(ed_remark);
+        builder.setMessage("Please Enter Remark");
+        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                mgr.hideSoftInputFromWindow(ed_remark.getWindowToken(), 0);
+                remark = ed_remark.getText().toString();
+                Constant.showLog(remark);
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                mgr.hideSoftInputFromWindow(ed_remark.getWindowToken(), 0);
+                dialog.dismiss();
+            }
+        });
         builder.create().show();
     }
 

@@ -432,6 +432,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         btn_save = (Button) findViewById(R.id.btn_save);
         db = new DBHandler(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         toast.setGravity(Gravity.CENTER, 0, 0);
     }
 

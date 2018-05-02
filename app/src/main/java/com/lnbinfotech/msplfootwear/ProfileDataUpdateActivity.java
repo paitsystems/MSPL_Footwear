@@ -31,7 +31,7 @@ public class ProfileDataUpdateActivity extends AppCompatActivity {
     }
 
     void init(){
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         ed_cusname = (EditText) findViewById(R.id.ed_cusname);
         ed_cgst = (EditText) findViewById(R.id.ed_cgst);
         ed_panno = (EditText) findViewById(R.id.ed_pan_no);

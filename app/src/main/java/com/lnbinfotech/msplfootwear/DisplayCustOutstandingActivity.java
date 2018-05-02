@@ -110,7 +110,7 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
         toast.setGravity(Gravity.CENTER, 0, 0);
         lv_warehouse_detail = (ListView) findViewById(R.id.lv_warhouse_detail);
         lay_warehouse = (LinearLayout) findViewById(R.id.lay_warehouse);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         tot_qty = (TextView) findViewById(R.id.tot_qty);
         tot_amt = (TextView) findViewById(R.id.tot_amt);
         tv_cl = (TextView) findViewById(R.id.tv_cl);

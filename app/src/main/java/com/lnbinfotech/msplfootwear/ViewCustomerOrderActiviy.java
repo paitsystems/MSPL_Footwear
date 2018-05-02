@@ -283,6 +283,7 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
     }
 
     private void init() {
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         imgv_i = (ImageView) findViewById(R.id.imgv_i);
         constant = new Constant(ViewCustomerOrderActiviy.this);
         constant1 = new Constant(getApplicationContext());

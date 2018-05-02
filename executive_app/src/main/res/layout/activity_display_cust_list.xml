@@ -34,7 +34,9 @@
                     android:clickable="true"
                     android:drawableRight="@drawable/ic_search"
                     android:focusable="true"
-                    android:hint="@string/selectcustomername" />
+                    android:hint="@string/selectcustomername"
+                    android:maxLines="1"
+                    android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>

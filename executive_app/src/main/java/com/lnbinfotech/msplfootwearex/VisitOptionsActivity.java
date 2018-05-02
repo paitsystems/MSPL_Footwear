@@ -169,6 +169,7 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
         card_track_order = (CardView) findViewById(R.id.card_track_order);
         tv_custname_display = (TextView) findViewById(R.id.tv_custname_display);
         tv_area = (TextView) findViewById(R.id.tv_area);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     private void showDia(int a) {

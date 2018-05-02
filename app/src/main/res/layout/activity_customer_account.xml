@@ -133,7 +133,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/show_32"/>
+                                android:src="@drawable/ic_stats"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -185,7 +185,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/order_32" />
+                                android:src="@drawable/ic_account_balance" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -237,7 +237,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/gst_report_32" />
+                                android:src="@drawable/ic_voucher" />
                         </LinearLayout>
                     </LinearLayout>
 

@@ -141,7 +141,7 @@ public class OutstandingBillReportActivity extends AppCompatActivity implements 
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         dc_format = new DecimalFormat();
         dc_format.setMaximumFractionDigits(2);
     }

@@ -17,6 +17,7 @@ import com.lnbinfotech.msplfootwear.braodcasts.AutoUpdateBroadcastReceiver;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -33,7 +34,7 @@ public class Constant {
             autoamilPass = "auto#456",
             mail_subject = "Log File",
             mail_body = "Find the Attached Log File",
-            mailReceipient = "anup.p@lnbinfotech.com";
+            mailReceipient = "anup.p@paitsystems.com";
     //ftp_adress = "ftp.lnbinfotech.com"
     //ftp_username = "supportftp@lnbinfotech.com",
     //ftp_password = "support$456",
@@ -43,7 +44,7 @@ public class Constant {
     //public static final String ipaddress = "http://172.30.1.38/MSPLV2/service.svc";
     //public static final String ipaddress = "http://license.lnbinfotech.com/MSPLV2/service.svc";
     //public static final String ipaddress = "http://103.68.10.9:24086/MSPLV2/service.svc";
-    public static final String ipaddress = "http://219.91.211.9:24086/MSPLV3/service.svc";
+    public static final String ipaddress = "http://219.91.211.9:24086/MSPLC4/service.svc";
 
     //TODO: Check Image Url
     public static final String imgUrl = "http://219.91.211.9:24086/IMAGES/";
@@ -60,7 +61,7 @@ public class Constant {
     private Activity activity;
     private Context context;
 
-    public static ProgressDialog pd;
+    private static ProgressDialog pd;
 
     public static void showLog(String log) {
         if(liveTestFlag==0) {
@@ -129,6 +130,31 @@ public class Constant {
     public String getIMEINo() {
         TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return manager.getDeviceId();
+    }
+
+    public String getIMEINo1(){
+        String imeino="";
+        TelephonyManager telephony = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        try {
+            Class<?> telephonyClass = Class.forName(telephony.getClass().getName());
+            Class<?>[] parameter = new Class[1];
+            parameter[0] = int.class;
+            Method getFirstMethod = telephonyClass.getMethod("getDeviceId", parameter);
+            Log.d("Log", getFirstMethod.toString());
+            Object[] obParameter = new Object[1];
+            obParameter[0] = 0;
+            //TelephonyManager manager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+            String first = (String) getFirstMethod.invoke(telephony, obParameter);
+            Log.d("Log", "FIRST :" + first);
+            obParameter[0] = 1;
+            String second = (String) getFirstMethod.invoke(telephony, obParameter);
+            Log.d("Log", "SECOND :" + second);
+            imeino = first;
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getIMEINo1_"+e.getMessage());
+        }
+        return imeino;
     }
 
     private void writeLog(String _data) {

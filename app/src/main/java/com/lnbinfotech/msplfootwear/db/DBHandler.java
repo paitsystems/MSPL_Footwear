@@ -1500,11 +1500,11 @@ public class DBHandler extends SQLiteOpenHelper {
     public Cursor getContactUsData(int hocode){
         String str = "";
         if(hocode==1){
-            str = "select * from "+Table_CompanyMaster+" where "+Company_Initial+"='HKHO'";
+            str = "select * from "+Table_CompanyMaster+" where "+Company_Initial+"='PRSO' and "+ Company_Id+"=5";
         }else if(hocode==12){
-            str = "select * from "+Table_CompanyMaster+" where "+Company_Initial+"='HKRD'";
+            str = "select * from "+Table_CompanyMaster+" where "+Company_Initial+"='HKRD' and "+ Company_Id+"=12";
         }else if(hocode==13){
-            str = "select * from "+Table_CompanyMaster+" where "+Company_Initial+"='HANR'";
+            str = "select * from "+Table_CompanyMaster+" where "+Company_Initial+"='HANR' and "+ Company_Id+"=13";
         }
         return getWritableDatabase().rawQuery(str,null);
     }

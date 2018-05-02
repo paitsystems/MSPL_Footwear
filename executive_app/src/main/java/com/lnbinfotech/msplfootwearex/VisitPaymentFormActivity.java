@@ -288,6 +288,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         invlist = new ArrayList<>();
         orgList = new ArrayList<>();
         ls = new ArrayList<>();
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         //cheque = new ChequeDetailsGetterSetter();
         //setAmount();
     }

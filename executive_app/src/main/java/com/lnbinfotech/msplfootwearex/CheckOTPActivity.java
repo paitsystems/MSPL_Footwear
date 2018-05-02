@@ -78,7 +78,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             getSupportActionBar().setTitle(R.string.title_activity_login);
         }
 
-        autoOTP();
+        //autoOTP();
         receiver = new ReadSms();
 
         IntentFilter filter = new IntentFilter();
@@ -261,6 +261,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.btn_resendotp:
                 Constant.showLog("resend btn click!!");
+                btn_resendotp.setEnabled(false);
                 resendOTP();
                 //autoOTP();
                 tv_text1.setText("Your OTP will get within 3 min..");
@@ -361,7 +362,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         }.start();
     }
 
-    private void autoOTP(){
+    /*private void autoOTP(){
         ReadSms.bindListener(new SmsListener() {
             @Override
             public void onReceivedMessage(String message) {
@@ -384,7 +385,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
 
             }
         });
-    }
+    }*/
 
     private void resendOTP(){
         try {
@@ -465,6 +466,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        receiver.bindListener(null);
         unregisterReceiver(receiver);
     }
 
@@ -493,7 +495,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         tv_otp = (TextView) findViewById(R.id.tv_otp);
         tv_text1 = (TextView) findViewById(R.id.tv_text1);
         tv_timecount = (TextView) findViewById(R.id.tv_timecount);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         btn_verifyotp = (AppCompatButton) findViewById(R.id.btn_verifyotp);
         btn_resendotp = (AppCompatButton) findViewById(R.id.btn_resendotp);
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);

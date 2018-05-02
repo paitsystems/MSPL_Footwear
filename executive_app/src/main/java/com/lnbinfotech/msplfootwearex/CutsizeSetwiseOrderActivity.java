@@ -136,10 +136,12 @@ public class CutsizeSetwiseOrderActivity extends AppCompatActivity implements Vi
     private void init() {
         toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
         tv_custname = (TextView) findViewById(R.id.tv_custname1);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         tv_custname.setText(FirstActivity.pref.getString(getString(R.string.pref_selcustname),""));
         toast.setGravity(Gravity.CENTER,0,0);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         pager = (ViewPager) findViewById(R.id.pager);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     private void showDia(int a) {

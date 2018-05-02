@@ -12,6 +12,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,7 +45,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // setContentView(R.layout.optionstest);
+        // setContentView(R.layout.optionstest);
 
         if(Constant.liveTestFlag==1) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
@@ -52,11 +53,14 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
 
         setContentView(R.layout.test);
 
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+
         init();
 
-        if (getSupportActionBar() != null) {
+       /* if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        }
+        }*/
 
         card_give_order.setOnClickListener(this);
         card_account.setOnClickListener(this);
@@ -212,6 +216,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         db = new DBHandler(this);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         card_give_order = (CardView) findViewById(R.id.card_give_order);
         card_account = (CardView) findViewById(R.id.card_account);
         card_track_order = (CardView) findViewById(R.id.card_track_order);

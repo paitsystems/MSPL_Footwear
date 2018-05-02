@@ -83,6 +83,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
     private void init() {
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         db = new DBHandler(NewCustomerEntryDetailFormActivity.this);
         ed_cus_name = (EditText) findViewById(R.id.ed_cus_name);
         ed_mobile_no = (EditText) findViewById(R.id.ed_mobile_no);

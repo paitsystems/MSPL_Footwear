@@ -83,6 +83,7 @@ public class ProfileViewActivity extends AppCompatActivity implements View.OnCli
 
     private void init() {
         // toast = Toast.makeText()
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         db = new DBHandler(this);
         ed_cusname = (EditText) findViewById(R.id.ed_cusname);
         ed_cgst = (EditText) findViewById(R.id.ed_cgst);

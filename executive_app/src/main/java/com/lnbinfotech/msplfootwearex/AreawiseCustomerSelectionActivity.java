@@ -185,6 +185,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER,0,0);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         listView = (ListView) findViewById(R.id.listView);
         exp_listView = (ExpandableListView) findViewById(R.id.exp_listView);
         tv_arealine = (TextView) findViewById(R.id.tv_arealine);

@@ -51,10 +51,8 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
 
-
-
         //setContentView(R.layout.activity_options);
-       // setContentView(R.layout.optionstext);
+        // setContentView(R.layout.optionstext);
         setContentView(R.layout.test);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -94,14 +92,14 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.card_take_order:
-                showDia(1);
+                //showDia(1);
                 //int custId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
                 //custDisc = new DBHandler(getApplicationContext()).getCustDiscount(custId);
                 //startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
-                //Intent in = new Intent(getApplicationContext(), DisplayCustListActivity.class);
-                //in.putExtra("from","order");
-                //startActivity(in);
-                //overridePendingTransition(R.anim.enter, R.anim.exit);
+                Intent in = new Intent(getApplicationContext(), DisplayCustListActivity.class);
+                in.putExtra("from","order");
+                startActivity(in);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_visit:
                 startActivity(new Intent(getApplicationContext(), ArealinewiseAreaSelectionActivity.class));
@@ -214,6 +212,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         db = new DBHandler(this);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         //db.initInterface(OptionsActivity.this);
         new_cus = new NewCustomerEntryClass();
         card_take_order = (CardView) findViewById(R.id.card_take_order);
