@@ -47,7 +47,7 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".braodcasts.ReadSms"
+        <receiver android:name=".CheckOTPActivity$MySMSReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

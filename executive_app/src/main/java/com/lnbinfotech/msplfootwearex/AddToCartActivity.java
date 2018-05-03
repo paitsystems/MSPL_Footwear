@@ -2322,37 +2322,39 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             for (String col : colorList) {
                 if (col.equalsIgnoreCase(colCode)) {
                     String availSize = stock.getSizegroup();
-                    sizeGroupList.add(availSize);
-                    if (stock.getStat().equals("N")) {
-                        if (sizeQtyHashMap.isEmpty()) {
-                            List<String> list = new ArrayList<>();
-                            list.add("0^" + stock.getColor() + "-" + stock.getHashcode());
-                            sizeQtyHashMap.put(availSize, list);
-                        } else if (sizeQtyHashMap.containsKey(availSize)) {
-                            List<String> list = sizeQtyHashMap.get(availSize);
-                            list.add("0^" + stock.getColor() + "-" + stock.getHashcode());
-                            sizeQtyHashMap.put(availSize, list);
+                    if (sizeGroupListAvail.contains(availSize)) {
+                        sizeGroupList.add(availSize);
+                        if (stock.getStat().equals("N")) {
+                            if (sizeQtyHashMap.isEmpty()) {
+                                List<String> list = new ArrayList<>();
+                                list.add("0^" + stock.getColor() + "-" + stock.getHashcode());
+                                sizeQtyHashMap.put(availSize, list);
+                            } else if (sizeQtyHashMap.containsKey(availSize)) {
+                                List<String> list = sizeQtyHashMap.get(availSize);
+                                list.add("0^" + stock.getColor() + "-" + stock.getHashcode());
+                                sizeQtyHashMap.put(availSize, list);
+                            } else {
+                                List<String> list = new ArrayList<>();
+                                list.add("0^" + stock.getColor() + "-" + stock.getHashcode());
+                                sizeQtyHashMap.put(availSize, list);
+                            }
+                            qtyList.add("0");
                         } else {
-                            List<String> list = new ArrayList<>();
-                            list.add("0^" + stock.getColor() + "-" + stock.getHashcode());
-                            sizeQtyHashMap.put(availSize, list);
+                            if (sizeQtyHashMap.isEmpty()) {
+                                List<String> list = new ArrayList<>();
+                                list.add(sizeQtyMap.get(availSize) + "^" + stock.getColor() + "-" + stock.getHashcode());
+                                sizeQtyHashMap.put(availSize, list);
+                            } else if (sizeQtyHashMap.containsKey(availSize)) {
+                                List<String> list = sizeQtyHashMap.get(availSize);
+                                list.add(sizeQtyMap.get(availSize) + "^" + stock.getColor() + "-" + stock.getHashcode());
+                                sizeQtyHashMap.put(availSize, list);
+                            } else {
+                                List<String> list = new ArrayList<>();
+                                list.add(sizeQtyMap.get(availSize) + "^" + stock.getColor() + "-" + stock.getHashcode());
+                                sizeQtyHashMap.put(availSize, list);
+                            }
+                            qtyList.add(sizeQtyMap.get(availSize));
                         }
-                        qtyList.add("0");
-                    } else {
-                        if (sizeQtyHashMap.isEmpty()) {
-                            List<String> list = new ArrayList<>();
-                            list.add(sizeQtyMap.get(availSize) + "^" + stock.getColor() + "-" + stock.getHashcode());
-                            sizeQtyHashMap.put(availSize, list);
-                        } else if (sizeQtyHashMap.containsKey(availSize)) {
-                            List<String> list = sizeQtyHashMap.get(availSize);
-                            list.add(sizeQtyMap.get(availSize) + "^" + stock.getColor() + "-" + stock.getHashcode());
-                            sizeQtyHashMap.put(availSize, list);
-                        } else {
-                            List<String> list = new ArrayList<>();
-                            list.add(sizeQtyMap.get(availSize) + "^" + stock.getColor() + "-" + stock.getHashcode());
-                            sizeQtyHashMap.put(availSize, list);
-                        }
-                        qtyList.add(sizeQtyMap.get(availSize));
                     }
                 }
             }
@@ -2477,7 +2479,6 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                         for (int i = 0; i < list.size(); i++) {
                             String qtyColourStr = list.get(i);
                             String qtyColour[] = qtyColourStr.split("\\^");
-
                             int looseQty = Integer.parseInt(qtyColour[0]);
                             String colourStr = qtyColour[1];
                             String colourhashCode[] = colourStr.split("\\-");

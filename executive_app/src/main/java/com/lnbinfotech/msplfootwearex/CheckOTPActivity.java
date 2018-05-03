@@ -54,8 +54,8 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     private CountDownTimer countDown;
     private String mobNo,imeiNo;
     private  String response_value;
-    private ReadSms receiver;
-    //private MySMSReceiver receiver;
+    //private ReadSms receiver;
+    private MySMSReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +79,11 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         }
 
         //autoOTP();
-        receiver = new ReadSms();
+        //receiver = new ReadSms();
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(getPackageName() + "android.provider.Telephony.SMS_RECEIVED");
-        registerReceiver(receiver, filter);
+        IntentFilter filter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+        //filter.addAction(getPackageName() + "android.provider.Telephony.SMS_RECEIVED");
+        receiver = new MySMSReceiver();
 
         receiver.bindListener(new SmsListener() {
             @Override
@@ -108,6 +108,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
+        registerReceiver(receiver, filter);
         /*IntentFilter filter = new IntentFilter();
         filter.addAction(getPackageName() + "android.provider.Telephony.SMS_RECEIVED");
 
@@ -246,8 +247,8 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 if(ed6.getText().toString().length()==1){
                     ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(ed6.getWindowToken(),0);
                     verifyOTP();
-                    //btn_resendotp.setBackgroundColor(getResources().getColor(R.color.lightgray));
                     btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),R.color.lightgray));
+                   // btn_resendotp.setBackgroundColor(getResources().getColor(R.color.lightgray));
                 }
             }
         });
@@ -262,6 +263,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             case R.id.btn_resendotp:
                 Constant.showLog("resend btn click!!");
                 btn_resendotp.setEnabled(false);
+                btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),R.color.lightgray));
                 resendOTP();
                 //autoOTP();
                 tv_text1.setText("Your OTP will get within 3 min..");
@@ -389,6 +391,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
 
     private void resendOTP(){
         try {
+            constant = new Constant(CheckOTPActivity.this);
             constant.showPD();
             String _mobNo = URLEncoder.encode(mobNo,"UTF-8");
             String _imeiNo = URLEncoder.encode(imeiNo,"UTF-8");
@@ -443,6 +446,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void getUserInfo(){
+        constant = new Constant(CheckOTPActivity.this);
         String url = Constant.ipaddress+"/GetUserDetail?mobileno="+otpClass.getMobileno()+"&IMEINo="+otpClass.getImeino()+"&type=E";
         Constant.showLog(url);
         writeLog("getUserInfo_" + url);
@@ -465,11 +469,18 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     protected void onDestroy() {
+        try {
+            if(receiver!=null) {
+                receiver.bindListener(null);
+                unregisterReceiver(receiver);
+                receiver = null;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("onDestroy_"+e.getMessage());
+        }
         super.onDestroy();
-        receiver.bindListener(null);
-        unregisterReceiver(receiver);
     }
-
     private void doFinish(){
         if(countDown!=null) {
             countDown.cancel();
@@ -570,7 +581,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         new WriteLog().writeLog(getApplicationContext(),"RegistrationActivity_"+_data);
     }
 
-    private class MySMSReceiver extends BroadcastReceiver {
+    public static class MySMSReceiver extends BroadcastReceiver{
         private boolean b ;
         private String text;
         private SmsListener smsListener;
@@ -582,7 +593,8 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 final Object[] pdusobj = (Object[]) bundle.get("pdus");
                 assert pdusobj != null;
                 for (int i = 0; i <= pdusobj.length-1; i++){
-                    SmsMessage current_msg = SmsMessage.createFromPdu((byte[]) pdusobj[i]);
+                    if(smsListener!=null) {
+                        SmsMessage current_msg = SmsMessage.createFromPdu((byte[]) pdusobj[i]);
 
                     String cmp_name = current_msg.getDisplayOriginatingAddress();
                     Constant.showLog("mob_no"+cmp_name);
@@ -593,16 +605,19 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                     //String sender_no = cmp_name;
                     // if(cmp_name.equals("MD-LNBTCH") && service_center.equals("+919868191090")) {
 
-                    String message = current_msg.getDisplayMessageBody();
-                    text = message.replaceAll("[^0-9]", "");
-                    Constant.showLog("text:" + text.substring(0, 6));
-                    Constant.showLog("text:" + text.substring(0, 1));
-                    Constant.showLog("text:" + text.substring(1, 2));
-                    if (!b) {
-                        smsListener.onReceivedMessage(text);
+                        String message = current_msg.getDisplayMessageBody();
+                        text = message.replaceAll("[^0-9]", "");
+                        Constant.showLog("text:" + text.substring(0, 6));
+                        Constant.showLog("text:" + text.substring(0, 1));
+                        Constant.showLog("text:" + text.substring(1, 2));
+                        if (!b) {
+                            smsListener.onReceivedMessage(text);
+                        }
+                        Constant.showLog("ReadSMS_onReceive_Called");
+                    }else{
+                        Constant.showLog("NULL");
                     }
-                    Constant.showLog("ReadSMS_onReceive_Called");
-                    writeLog("ReadSMS_onReceive_Called");
+                    //writeLog("ReadSMS_onReceive_Called");
                 }
             }
         }
