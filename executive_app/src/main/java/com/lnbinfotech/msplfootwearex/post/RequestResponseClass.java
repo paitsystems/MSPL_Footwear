@@ -338,10 +338,12 @@ public class RequestResponseClass {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if (s.equals("A")) {
-                new writeDB(parseType, from, to).execute();
-            } else {
-                updateSharedPref(context.getString(R.string.pref_autoSizeNDesign),"N");
+            if(s!=null) {
+                if (s.equals("A")) {
+                    new writeDB(parseType, from, to).execute();
+                } else {
+                    updateSharedPref(context.getString(R.string.pref_autoSizeNDesign), "N");
+                }
             }
         }
     }
@@ -585,10 +587,12 @@ public class RequestResponseClass {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if (s.equals("A")) {
-                new writeCustDB(parseType).execute();
-            } else {
-                updateSharedPref(context.getString(R.string.pref_autoCustomer),"N");
+            if(s!=null) {
+                if (s.equals("A")) {
+                    new writeCustDB(parseType).execute();
+                } else {
+                    updateSharedPref(context.getString(R.string.pref_autoCustomer), "N");
+                }
             }
         }
     }
@@ -802,10 +806,12 @@ public class RequestResponseClass {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if (s.equals("A")) {
-                new writeBBDB(parseType).execute();
-            } else {
-                updateSharedPref(context.getString(R.string.pref_autoBankBranch),"N");
+            if(s!=null) {
+                if (s.equals("A")) {
+                    new writeBBDB(parseType).execute();
+                } else {
+                    updateSharedPref(context.getString(R.string.pref_autoBankBranch), "N");
+                }
             }
         }
     }

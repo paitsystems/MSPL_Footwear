@@ -305,6 +305,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                     //lv_show_chq_detail.setAdapter(null);
                     list_lay.setVisibility(View.GONE);
                     add_cheque_lay.setVisibility(View.VISIBLE);
+                    dialogInterface.dismiss();
                     //ChequeDetailsActivity.chequeDetails.setChq_det_amt(null);
                 }
             });
@@ -319,8 +320,9 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
                     setDefault();
-                    new Constant(VisitPaymentFormActivity.this).doFinish();
+                    //new Constant(VisitPaymentFormActivity.this).doFinish();
                     // finish();
                 }
             });
@@ -339,6 +341,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     setrdoCash();
+                    dialogInterface.dismiss();
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -354,6 +357,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     setrdoCheque();
+                    dialogInterface.dismiss();
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -369,6 +373,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     setrdoOther();
+                    dialogInterface.dismiss();
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -392,9 +397,8 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    setDefault();
                     dialog.dismiss();
-
+                    setDefault();
                 }
             });
         } else if (id == 7) {
@@ -719,7 +723,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
 
         private ProgressDialog pd;
 
-        public SavePayment(int _branchId) {
+        private SavePayment(int _branchId) {
         }
 
         @Override

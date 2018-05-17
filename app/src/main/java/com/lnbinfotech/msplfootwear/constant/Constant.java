@@ -52,8 +52,11 @@ public class Constant {
     //TODO: Check CustImage Url
     public static final String custimgUrl = "http://219.91.211.9:24086/custImage/";
 
-    //TODO: Check liveTestFlag 1-Live, 0-Test
+    //TODO: Check liveTestFlag 1-ScreenShowDisable, 0-ScreenShowEnable
     public static int liveTestFlag = 1;
+
+    //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
+    private static int showLogFlag = 1;
 
     public static int TIMEOUT_CON = 10*1000;
     public static int TIMEOUT_SO = 70*1000;
@@ -64,7 +67,7 @@ public class Constant {
     private static ProgressDialog pd;
 
     public static void showLog(String log) {
-        if(liveTestFlag==0) {
+        if(showLogFlag==0) {
             Log.d("Log", "" + log);
         }
     }

@@ -14,7 +14,6 @@ import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.interfaces.RecyclerViewToActivityInterface;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 //Created by ANUP on 11/13/2017.
@@ -42,14 +41,17 @@ public class SizeGroupWiseColourAdapter extends RecyclerView.Adapter<SizeGroupWi
         return new SizeGroupWiseColourViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(SizeGroupWiseColourViewHolder holder, int position) {
         String _colourHashCode = colourList.get(position);
         String[] colourHashCode = _colourHashCode.split("\\-");
         holder.textView.setText(colourHashCode[0]);
         holder.textView.setTag(position);
-        String hashCode = colourHashCode[1];
+        //String hashCode = colourHashCode[1];
+        String hashCode = "#FFFFFF";
+        if(colourHashCode.length>1) {
+             hashCode = colourHashCode[1];
+        }
         if (whiteHashCodeList.contains(hashCode)) {
             holder.textView.setTextColor(Color.parseColor("#000000"));
             holder.textView.setBackgroundResource(R.drawable.green_boarder_draw);

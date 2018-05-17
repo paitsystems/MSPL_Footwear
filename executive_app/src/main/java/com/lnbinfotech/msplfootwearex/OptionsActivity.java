@@ -92,14 +92,14 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.card_take_order:
-                //showDia(1);
+                showDia(1);
                 //int custId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
                 //custDisc = new DBHandler(getApplicationContext()).getCustDiscount(custId);
                 //startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
-                Intent in = new Intent(getApplicationContext(), DisplayCustListActivity.class);
+                /*Intent in = new Intent(getApplicationContext(), DisplayCustListActivity.class);
                 in.putExtra("from","order");
                 startActivity(in);
-                overridePendingTransition(R.anim.enter, R.anim.exit);
+                overridePendingTransition(R.anim.enter, R.anim.exit);*/
                 break;
             case R.id.card_visit:
                 startActivity(new Intent(getApplicationContext(), ArealinewiseAreaSelectionActivity.class));

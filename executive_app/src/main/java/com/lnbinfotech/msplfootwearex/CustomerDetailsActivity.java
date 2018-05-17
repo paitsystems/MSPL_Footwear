@@ -322,6 +322,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
     }
 
     private void checkVersion(){
+        constant = new Constant(CustomerDetailsActivity.this);
         constant.showPD();
         String url1 = Constant.ipaddress+"/GetVersion";
         Constant.showLog(url1);

@@ -2627,6 +2627,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         String url = Constant.ipaddress + "/GetCustDiscLimit?custId="+custId+"&banchId="+branchId;
         Constant.showLog(url);
         writeLog("GetCustDiscLimit_" + url);
+        constant = new Constant(AddToCartActivity.this);
         constant.showPD();
         VolleyRequests requests = new VolleyRequests(AddToCartActivity.this);
         requests.getCustDiscLimit(url, new ServerCallback() {
