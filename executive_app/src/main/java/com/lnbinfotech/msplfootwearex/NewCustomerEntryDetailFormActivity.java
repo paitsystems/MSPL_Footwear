@@ -445,26 +445,26 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                 String _gstno_img = URLEncoder.encode(OptionsActivity.new_cus.getGst_no_image(), "UTF-8");
                 String _pan_no = URLEncoder.encode(OptionsActivity.new_cus.getPan_no(), "UTF-8");
                 String _panno_img = URLEncoder.encode(OptionsActivity.new_cus.getPan_no_image(), "UTF-8");
-             //   String custId = "1", BranchId = "1", District = "Pune", Taluka = "Pune", CityId = "1", AreaId = "1", HOCode = "1";
-                String custId = "", BranchId = "1", District = "", Taluka = "", CityId = "", AreaId = "", HOCode = "",IMEINo = "",isReg = "",pin="";
-            Cursor cursor = db.getUserDetails();
-            if (cursor.moveToFirst()) {
-                do {
-                    custId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_RetailCustID));
-                   //  BranchId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_BranchId));
-                    District = cursor.getString(cursor.getColumnIndex(DBHandler.UM_District));
-                    Taluka = cursor.getString(cursor.getColumnIndex(DBHandler.UM_Taluka));
-                    CityId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_CityId));
-                    AreaId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_AreaId));
-                    HOCode = cursor.getString(cursor.getColumnIndex(DBHandler.UM_HOCode));
-                    IMEINo = cursor.getString(cursor.getColumnIndex(DBHandler.UM_IMEINo));
-                    isReg = cursor.getString(cursor.getColumnIndex(DBHandler.UM_isRegistered));
-                    pin = cursor.getString(cursor.getColumnIndex(DBHandler.UM_PIN));
-                } while (cursor.moveToNext());
-            }
-            cursor.close();
+                //   String custId = "1", BranchId = "1", District = "Pune", Taluka = "Pune", CityId = "1", AreaId = "1", HOCode = "1";
+                String custId = "", BranchId = "1", District = "", Taluka = "", CityId = "", AreaId = "", HOCode = "", IMEINo = "", isReg = "", pin = "";
+                Cursor cursor = db.getUserDetails();
+                if (cursor.moveToFirst()) {
+                    do {
+                        custId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_RetailCustID));
+                        //  BranchId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_BranchId));
+                        District = cursor.getString(cursor.getColumnIndex(DBHandler.UM_District));
+                        Taluka = cursor.getString(cursor.getColumnIndex(DBHandler.UM_Taluka));
+                        CityId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_CityId));
+                        AreaId = cursor.getString(cursor.getColumnIndex(DBHandler.UM_AreaId));
+                        HOCode = cursor.getString(cursor.getColumnIndex(DBHandler.UM_HOCode));
+                        IMEINo = cursor.getString(cursor.getColumnIndex(DBHandler.UM_IMEINo));
+                        isReg = cursor.getString(cursor.getColumnIndex(DBHandler.UM_isRegistered));
+                        pin = cursor.getString(cursor.getColumnIndex(DBHandler.UM_PIN));
+                    } while (cursor.moveToNext());
+                }
+                cursor.close();
 
-               // OptionsActivity.new_cus.setCust_id(custId);
+                // OptionsActivity.new_cus.setCust_id(custId);
                 OptionsActivity.new_cus.setBranchId(BranchId);
                 OptionsActivity.new_cus.setDistrict(District);
                 OptionsActivity.new_cus.setTaluka(Taluka);
@@ -505,11 +505,11 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                     @Override
                     public void onSuccess(String result) {
                         cust_id = Integer.parseInt(result);
-                        if(!result.equals("0")) {
+                        if (!result.equals("0")) {
                             OptionsActivity.new_cus.setCust_id(result);
                             Constant.showLog("result of newcust:" + result);
                             showPopup(1);
-                        }else{
+                        } else {
                             showPopup(2);
                         }
                     }

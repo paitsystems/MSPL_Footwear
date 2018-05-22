@@ -3,6 +3,7 @@ package com.lnbinfotech.msplfootwearex.volleyrequests;
 //Created by lnb on 9/15/2017.
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.JsonToken;
 import android.util.Log;
@@ -12,6 +13,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.lnbinfotech.msplfootwearex.FirstActivity;
+import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.constant.AppSingleton;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
@@ -158,7 +160,7 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "");
     }
 
-    public void refreshAreaMaster(String url, final ServerCallback callback) {
+    public void refreshAreaMaster(String url, final ServerCallback callback,final int max) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -167,7 +169,7 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        int ret = new ParseJSON(response, context).parseAreaMaster();
+                        int ret = new ParseJSON(response, context).parseAreaMaster(max);
                         if(ret == 1) {
                             callback.onSuccess(response);
                         }else{
@@ -187,7 +189,7 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "AREA");
     }
 
-    public void refreshArealineMaster(String url, final ServerCallback callback) {
+    public void refreshArealineMaster(String url, final ServerCallback callback,final int max) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -196,7 +198,7 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        int ret = new ParseJSON(response, context).parseArealineMaster();
+                        int ret = new ParseJSON(response, context).parseArealineMaster(max);
                         if(ret == 1) {
                             callback.onSuccess(response);
                         }else{
@@ -216,7 +218,7 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "AREA");
     }
 
-    public void refreshCityMaster(String url, final ServerCallback callback) {
+    public void refreshCityMaster(String url, final ServerCallback callback,final int max) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -225,7 +227,7 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        int ret = new ParseJSON(response, context).parseCityMaster();
+                        int ret = new ParseJSON(response, context).parseCityMaster(max);
                         if(ret == 1) {
                             callback.onSuccess(response);
                         }else{
@@ -245,7 +247,7 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "CITY");
     }
 
-    public void refreshHOMaster(String url, final ServerCallback callback) {
+    public void refreshHOMaster(String url, final ServerCallback callback,final int max) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -254,7 +256,7 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        int ret = new ParseJSON(response, context).parseHOMaster();
+                        int ret = new ParseJSON(response, context).parseHOMaster(max);
                         if(ret == 1) {
                             callback.onSuccess(response);
                         }else{
@@ -274,7 +276,7 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "CITY");
     }
 
-    public void refreshEmployeeMaster(String url, final ServerCallback callback) {
+    public void refreshEmployeeMaster(String url, final ServerCallback callback,final int max) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -283,7 +285,7 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        int ret = new ParseJSON(response, context).parseEmployeeMaster();
+                        int ret = new ParseJSON(response, context).parseEmployeeMaster(max);
                         if(ret == 1) {
                             callback.onSuccess(response);
                         }else{
@@ -493,7 +495,7 @@ public class VolleyRequests {
         }
     }
 
-    public void refreshProductMaster(String url, final ServerCallback callback) {
+    public void refreshProductMaster(String url, final ServerCallback callback, final int from , final int to) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -502,7 +504,7 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        int ret = new ParseJSON(response, context).parseProductMaster();
+                        int ret = new ParseJSON(response, context).parseProductMaster(from, to);
                         if(ret == 1) {
                             callback.onSuccess(response);
                         }else{
@@ -551,7 +553,7 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
-    public void refreshCompanyMaster(String url, final ServerCallback callback) {
+    public void refreshCompanyMaster(String url, final ServerCallback callback,final int max) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -561,7 +563,7 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        int ret = new ParseJSON(response, context).parseCompanyMaster();
+                        int ret = new ParseJSON(response, context).parseCompanyMaster(max);
                         if(ret == 1) {
                             callback.onSuccess(response);
                         }else{
@@ -581,7 +583,7 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
-    public void refreshBankMaster(String url, final ServerCallback callback) {
+    public void refreshBankMaster(String url, final ServerCallback callback, final int max) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -590,7 +592,7 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        int ret = new ParseJSON(response, context).parseBankMaster();
+                        int ret = new ParseJSON(response, context).parseBankMaster(max);
                         if(ret == 1) {
                             callback.onSuccess(response);
                         }else{
@@ -638,7 +640,7 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
-    public void refreshDocumentMaster(String url, final ServerCallback callback){
+    public void refreshDocumentMaster(String url, final ServerCallback callback,final int max){
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -647,7 +649,7 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        int ret = new ParseJSON(response, context).parseDocumentMaster();
+                        int ret = new ParseJSON(response, context).parseDocumentMaster(max);
                         if (ret == 1) {
                             callback.onSuccess(response);
                         } else {
@@ -692,7 +694,7 @@ public class VolleyRequests {
 
     }
 
-    public void refreshGSTMaster(String url, final ServerCallback callback) {
+    public void refreshGSTMaster(String url, final ServerCallback callback,final int max) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -701,7 +703,7 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        int ret = new ParseJSON(response, context).parseGSTMaster();
+                        int ret = new ParseJSON(response, context).parseGSTMaster(max);
                         if (ret == 1) {
                             callback.onSuccess(response);
                         } else {
@@ -893,7 +895,7 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
-    public void getCurrencyMaster(String url, final ServerCallback callback) {
+    public void getCurrencyMaster(String url, final ServerCallback callback, final int max) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -902,7 +904,7 @@ public class VolleyRequests {
                         response = response.replace("\\", "");
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
-                        int ret = new ParseJSON(response, context).parseCurrencyMaster();
+                        int ret = new ParseJSON(response, context).parseCurrencyMaster(max);
                         if(ret == 1) {
                             callback.onSuccess(response);
                         }else{
@@ -994,6 +996,10 @@ public class VolleyRequests {
                             if (jsonArray.length() >= 1) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     status = jsonArray.getJSONObject(i).getString("status");
+                                    int design = jsonArray.getJSONObject(i).getInt("Desig_Id");
+                                    SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                                    editor.putInt(context.getString(R.string.pref_design),design);
+                                    editor.apply();
                                 }
                                 callback.onSuccess(status);
                             }else{
@@ -1042,4 +1048,32 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "AREA");
     }
 
+    public void getMaxAuto(String url, final ServerCallback callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\", "");
+                        response = response.replace("''", "");
+                        response = response.substring(1, response.length() - 1);
+                        int ret = new ParseJSON(response, context).parseGetMaxAuto();
+                        if(ret != 0) {
+                            callback.onSuccess(String.valueOf(ret));
+                        }else{
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("refreshAreaMaster_" + error.getMessage());
+                        Constant.showLog(error.getMessage());
+                        writeLog("refreshAreaMaster_"+error.getMessage());
+                    }
+                }
+        );
+        AppSingleton.getInstance(context).addToRequestQueue(request, "AREA");
+    }
 }

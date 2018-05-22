@@ -2,11 +2,13 @@ package com.lnbinfotech.msplfootwearex.post;
 
 //Created by ANUP on 3/9/2018.
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.lnbinfotech.msplfootwearex.DataRefreshActivity;
 import com.lnbinfotech.msplfootwearex.FirstActivity;
 import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
@@ -26,6 +28,7 @@ import org.codehaus.jackson.JsonToken;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,7 +39,7 @@ public class RequestResponseClass {
 
     private Context context;
     private String writeFilename = "Write.txt", custfile = "custfile.txt", bankfile="bankfile.txt", sdmdfile="sdmd.txt", sndfile="sndfile.txt";
-    private int maxProdId = 0, maxSDMDAuto = 0;
+    private int maxProdId = 0, maxSDMDAuto = 0, maxCustId = 0, maxBankBranchId = 0;
 
     public RequestResponseClass(Context _context){
         this.context = _context;
@@ -57,7 +60,7 @@ public class RequestResponseClass {
             public void onFailure(String result) {
                 updateSharedPref(context.getString(R.string.pref_autoArea),"N");
             }
-        });
+        },0);
     }
 
     public void loadArealineMaster() {
@@ -75,7 +78,7 @@ public class RequestResponseClass {
             public void onFailure(String result) {
                 updateSharedPref(context.getString(R.string.pref_autoArealine),"N");
             }
-        });
+        },0);
     }
 
     public void loadCityMaster() {
@@ -93,7 +96,7 @@ public class RequestResponseClass {
             public void onFailure(String result) {
                 updateSharedPref(context.getString(R.string.pref_autoCity),"N");
             }
-        });
+        },0);
     }
 
     public void loadHOMaster() {
@@ -111,7 +114,7 @@ public class RequestResponseClass {
             public void onFailure(String result) {
                 updateSharedPref(context.getString(R.string.pref_autoHO),"N");
             }
-        });
+        },0);
     }
 
     public void loadEmployeeMaster() {
@@ -129,34 +132,7 @@ public class RequestResponseClass {
             public void onFailure(String result) {
                 updateSharedPref(context.getString(R.string.pref_autoEmployee),"N");
             }
-        });
-    }
-
-    public void loadProductMaster() {
-        String url = Constant.ipaddress + "/GetProductMaster?Id=0";
-        Constant.showLog(url);
-        writeLog("loadProductMaster_" + url);
-        VolleyRequests requests = new VolleyRequests(context);
-        requests.refreshProductMaster(url, new ServerCallback() {
-            @Override
-            public void onSuccess(String result) {
-                //updateSharedPref(context.getString(R.string.pref_autoProduct),"Y");
-                loadSizeNDesignMaster();
-            }
-
-            @Override
-            public void onFailure(String result) {
-                updateSharedPref(context.getString(R.string.pref_autoProduct),"N");
-            }
-        });
-    }
-
-    public void loadCustomerMaster() {
-        //int a = db.getCustMax();
-        String url = Constant.ipaddress + "/GetCustomerMaster?Id=0";
-        Constant.showLog(url);
-        writeLog("loadCustomerMaster_" + url);
-        new getCustomerMaster().execute(url);
+        },0);
     }
 
     public void loadCompanyMaster() {
@@ -174,7 +150,7 @@ public class RequestResponseClass {
             public void onFailure(String result) {
                 updateSharedPref(context.getString(R.string.pref_autoCompany),"N");
             }
-        });
+        },0);
     }
 
     public void loadBankMaster() {
@@ -192,14 +168,25 @@ public class RequestResponseClass {
             public void onFailure(String result) {
                 updateSharedPref(context.getString(R.string.pref_autoBank),"N");
             }
-        });
+        },0);
     }
 
-    public void loadBankBranchMaster() {
-        String url = Constant.ipaddress + "/GetBankBranchMaster?Id=0";
+    public void loadCurrencyMaster(){
+        String url = Constant.ipaddress + "/GetCurrencyMaster?Id=0";
         Constant.showLog(url);
-        writeLog("loadBankBranchMaster_" + url);
-        new getBankBranchMaster().execute(url);
+        writeLog("loadCurrencyMaster_" + url);
+        VolleyRequests requests = new VolleyRequests(context);
+        requests.getCurrencyMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoCurrency),"Y");
+            }
+
+            @Override
+            public void onFailure(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoCurrency),"N");
+            }
+        },0);
     }
 
     public void loadDocumentMaster() {
@@ -217,7 +204,7 @@ public class RequestResponseClass {
             public void onFailure(String result) {
                 updateSharedPref(context.getString(R.string.pref_autoDocument),"N");
             }
-        });
+        },0);
     }
 
     public void loadGSTMaster() {
@@ -235,13 +222,238 @@ public class RequestResponseClass {
             public void onFailure(String result) {
                 updateSharedPref(context.getString(R.string.pref_autoGST),"N");
             }
-        });
+        },0);
+    }
+
+    public void loadAreaMaster(int max) {
+        String url = Constant.ipaddress + "/GetAreaMaster?Id="+max;
+        Constant.showLog(url);
+        writeLog("loadAreaMaster_" + url);
+        VolleyRequests requests = new VolleyRequests(context);
+        requests.refreshAreaMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoArea),"Y");
+            }
+
+            @Override
+            public void onFailure(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoArea),"N");
+            }
+        },max);
+    }
+
+    public void loadArealineMaster(int max) {
+        String url = Constant.ipaddress + "/GetArealineMaster?Id="+max;
+        Constant.showLog(url);
+        writeLog("loadArealineMaster_" + url);
+        VolleyRequests requests = new VolleyRequests(context);
+        requests.refreshArealineMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoArealine),"Y");
+            }
+
+            @Override
+            public void onFailure(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoArealine),"N");
+            }
+        },max);
+    }
+
+    public void loadCityMaster(int max) {
+        String url = Constant.ipaddress + "/GetCityMaster?Id="+max;
+        Constant.showLog(url);
+        writeLog("loadCityMaster_" + url);
+        VolleyRequests requests = new VolleyRequests(context);
+        requests.refreshCityMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoCity),"Y");
+            }
+
+            @Override
+            public void onFailure(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoCity),"N");
+            }
+        },max);
+    }
+
+    public void loadHOMaster(int max) {
+        String url = Constant.ipaddress + "/GetHOMaster?Id="+max;
+        Constant.showLog(url);
+        writeLog("loadHOMaster_" + url);
+        VolleyRequests requests = new VolleyRequests(context);
+        requests.refreshHOMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoHO),"Y");
+            }
+
+            @Override
+            public void onFailure(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoHO),"N");
+            }
+        },max);
+    }
+
+    public void loadEmployeeMaster(int max) {
+        String url = Constant.ipaddress + "/GetEmployeeMaster?Id="+max;
+        Constant.showLog(url);
+        writeLog("loadEmployeeMaster_" + url);
+        VolleyRequests requests = new VolleyRequests(context);
+        requests.refreshEmployeeMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoEmployee),"Y");
+            }
+
+            @Override
+            public void onFailure(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoEmployee),"N");
+            }
+        },max);
+    }
+
+    public void loadCompanyMaster(int max) {
+        String url = Constant.ipaddress + "/GetCompanyMaster?Id="+max;
+        Constant.showLog(url);
+        writeLog("loadCompanyMaster_" + url);
+        VolleyRequests requests = new VolleyRequests(context);
+        requests.refreshCompanyMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoCompany),"Y");
+            }
+
+            @Override
+            public void onFailure(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoCompany),"N");
+            }
+        },max);
+    }
+
+    public void loadBankMaster(int max) {
+        String url = Constant.ipaddress + "/GetBankMaster?Id="+max;
+        Constant.showLog(url);
+        writeLog("loadBankMaster_" + url);
+        VolleyRequests requests = new VolleyRequests(context);
+        requests.refreshBankMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoBank),"Y");
+            }
+
+            @Override
+            public void onFailure(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoBank),"N");
+            }
+        },max);
+    }
+
+    public void loadDocumentMaster(int max) {
+        String url = Constant.ipaddress + "/GetDocumentMaster?Id="+max;
+        Constant.showLog(url);
+        writeLog("loadDocumentMaster_" + url);
+        VolleyRequests requests = new VolleyRequests(context);
+        requests.refreshDocumentMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoDocument),"Y");
+            }
+
+            @Override
+            public void onFailure(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoDocument),"N");
+            }
+        },max);
+    }
+
+    public void loadGSTMaster(int max) {
+        String url = Constant.ipaddress + "/GetGSTMaster?Id="+max;
+        Constant.showLog(url);
+        writeLog("loadGSTMaster_" + url);
+        VolleyRequests requests = new VolleyRequests(context);
+        requests.refreshGSTMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoGST),"Y");
+            }
+
+            @Override
+            public void onFailure(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoGST),"N");
+            }
+        },max);
+    }
+
+    public void loadCurrencyMaster(int max){
+        String url = Constant.ipaddress + "/GetCurrencyMaster?Id="+max;
+        Constant.showLog(url);
+        writeLog("loadCurrencyMaster_" + url);
+        VolleyRequests requests = new VolleyRequests(context);
+        requests.getCurrencyMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoCurrency),"Y");
+            }
+
+            @Override
+            public void onFailure(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoCurrency),"N");
+            }
+        },max);
+    }
+
+    public void loadProductMaster(final int max) {
+        maxProdId = 1000000;
+        String url = Constant.ipaddress + "/GetProductMaster?Id="+max;
+        Constant.showLog(url);
+        writeLog("loadProductMaster_" + url);
+        VolleyRequests requests = new VolleyRequests(context);
+        requests.refreshProductMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                loadSizeNDesignMaster(max, 1000000);
+            }
+
+            @Override
+            public void onFailure(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoProduct),"N");
+            }
+        },max,1000000);
+    }
+
+    private void loadProductMaster(final int from, final int to) {
+        String url = Constant.ipaddress + "/GetProductMasterV5?from="+from+"&to="+to+"&type=E";
+        Constant.showLog(url);
+        writeLog("loadProductMasterV5_" + url);
+        VolleyRequests requests = new VolleyRequests(context);
+        requests.refreshProductMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                if (to == maxProdId) {
+                    loadSizeNDesignMaster();
+                } else {
+                    int from = to + 1;
+                    int _to = to + 500;
+                    Constant.showLog("From-" + from + "-To-" + _to);
+                    if (_to > maxProdId) {
+                        _to = maxProdId;
+                    }
+                    loadProductMaster(from, _to);
+                }
+            }
+            @Override
+            public void onFailure(String result) {
+                updateSharedPref(context.getString(R.string.pref_autoProduct),"N");
+            }
+        },from,to);
     }
 
     private void loadSizeNDesignMaster(){
         maxProdId = new DBHandler(context).getMaxProdId();
         if (maxProdId != 0) {
-            //new DBHandler(context).deleteTable(DBHandler.Table_AllRequiredSizesDesigns);
             loadSizeNDesignMaster(0, 100);
         }
     }
@@ -344,6 +556,9 @@ public class RequestResponseClass {
                 } else {
                     updateSharedPref(context.getString(R.string.pref_autoSizeNDesign), "N");
                 }
+            }else{
+                updateSharedPref(context.getString(R.string.pref_autoSizeNDesign), "N");
+
             }
         }
     }
@@ -399,7 +614,11 @@ public class RequestResponseClass {
                         Constant.showLog("Write Delete");
                         if (to == maxProdId) {
                             updateSharedPref(context.getString(R.string.pref_autoSizeNDesign),"Y");
-                            loadSDMD();
+                            if(maxProdId==1000000){
+                                loadSDMD(from);
+                            }else {
+                                loadSDMD();
+                            }
                         } else {
                             int from = to + 1;
                             to = to + 100;
@@ -509,7 +728,26 @@ public class RequestResponseClass {
         }
     }
 
+    public void loadCustomerMaster(int max) {
+        maxCustId = 1000000;
+        loadCustomerMaster(max, 1000000);
+    }
+
+    private void loadCustomerMaster(int from, int to) {
+        String url = Constant.ipaddress + "/GetCustomerMasterV5?from="+from+"&to="+to+"&type=E";
+        Constant.showLog(url);
+        writeLog("loadCustomerMaster_" + url);
+        new getCustomerMaster(from, to).execute(url);
+    }
+
     private class getCustomerMaster extends AsyncTask<String, Void, String> {
+
+        private int from,to;
+
+        private getCustomerMaster(int _from, int _to){
+            this.from = _from;
+            this.to = _to;
+        }
 
         @Override
         protected String doInBackground(String... strings) {
@@ -522,7 +760,7 @@ public class RequestResponseClass {
             if(response!=null && !response.equals("")) {
                 response = response.replace("\\\\r\\\\n", "");
                 response = response.substring(1, response.length() - 1);
-                new readCustJSON(response, "CustMast").execute();
+                new readCustJSON(response,from,to, "CustMast").execute();
             }else{
                 writeLog("getCustomerMaster_response_null");
             }
@@ -532,10 +770,13 @@ public class RequestResponseClass {
 
     private class readCustJSON extends AsyncTask<Void, Void, String> {
         private String result, parseType;
+        private int from,to;
 
-        private readCustJSON(String _result, String _parseType) {
+        private readCustJSON(String _result,int _from, int _to, String _parseType) {
             this.result = _result;
             this.parseType = _parseType;
+            this.from = _from;
+            this.to = _to;
         }
 
         @Override
@@ -589,7 +830,7 @@ public class RequestResponseClass {
             super.onPostExecute(s);
             if(s!=null) {
                 if (s.equals("A")) {
-                    new writeCustDB(parseType).execute();
+                    new writeCustDB(parseType, from, to).execute();
                 } else {
                     updateSharedPref(context.getString(R.string.pref_autoCustomer), "N");
                 }
@@ -600,9 +841,12 @@ public class RequestResponseClass {
     private class writeCustDB extends AsyncTask<Void, String, String> {
         private File writeFile;
         private String parseType;
+        private int from,to;
 
-        private writeCustDB(String _parseType) {
+        private writeCustDB(String _parseType,int _from, int _to) {
             this.parseType = _parseType;
+            this.from = _from;
+            this.to = _to;
         }
 
         @Override
@@ -617,7 +861,7 @@ public class RequestResponseClass {
             try {
                 writeFile = new File(sdFile, custfile);
                 JsonParser jp = f.createJsonParser(writeFile);
-                parseCustMaster(jp);
+                parseCustMaster(jp,from,to);
                 return "";
             } catch (Exception e) {
                 writeFile.delete();
@@ -640,23 +884,33 @@ public class RequestResponseClass {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            try {
+            if (s != null) {
                 if (s.equals("")) {
                     if (writeFile.delete()) {
-                        updateSharedPref(context.getString(R.string.pref_autoCustomer), "Y");
                         Constant.showLog("Write Delete");
+                        if (to == maxCustId) {
+                            updateSharedPref(context.getString(R.string.pref_autoCustomer), "Y");
+                            Constant.showLog("Write Delete");
+                        } else {
+                            int from = to + 1;
+                            to = to + 500;
+                            Constant.showLog("From-" + from + "-To-" + to);
+                            if (to > maxCustId) {
+                                to = maxCustId;
+                            }
+                            loadCustomerMaster(from,to);
+                        }
                     }
                 } else {
                     updateSharedPref(context.getString(R.string.pref_autoCustomer), "N");
                 }
-            }catch (Exception e){
-                writeLog("writeCustDB_"+e.getMessage());
+            } else {
                 updateSharedPref(context.getString(R.string.pref_autoCustomer), "N");
             }
         }
     }
 
-    private void parseCustMaster(JsonParser jp) {
+    private void parseCustMaster(JsonParser jp, int from, int to) {
         try {
             ArrayList<CustomerDetailClass> list = new ArrayList<>();
             while (jp.nextToken() != JsonToken.END_ARRAY) {
@@ -721,7 +975,7 @@ public class RequestResponseClass {
                 }
                 list.add(custClass);
             }
-            new DBHandler(context).deleteTable(DBHandler.Table_Customermaster);
+            new DBHandler(context).deleteCustomerTableFromToRange(DBHandler.Table_Customermaster,from,to);
             new DBHandler(context).addCustomerDetail(list);
         } catch (Exception e) {
             updateSharedPref(context.getString(R.string.pref_autoCustomer),"N");
@@ -730,7 +984,26 @@ public class RequestResponseClass {
         }
     }
 
+    public void loadBankBranchMaster(int max) {
+        maxBankBranchId = 1000000;
+        loadBankBranchMaster(max, 1000000);
+    }
+
+    private void loadBankBranchMaster(int from, int to) {
+        String url = Constant.ipaddress + "/GetBankBranchMasterV5?from="+from+"&to="+to+"&type=E";
+        Constant.showLog(url);
+        writeLog("loadBankBranchMaster_" + url);
+        new getBankBranchMaster(from, to).execute(url);
+    }
+
     private class getBankBranchMaster extends AsyncTask<String, Void, String> {
+
+        private int from, to;
+
+        private getBankBranchMaster(int _from, int _to){
+            this.from = _from;
+            this.to = _to;
+        }
 
         @Override
         protected String doInBackground(String... strings) {
@@ -742,7 +1015,7 @@ public class RequestResponseClass {
             super.onPostExecute(response);
             if(response!=null && !response.equals("")) {
                 response = response.substring(1, response.length() - 1);
-                new readBBJSON(response, "BankBranchMast").execute();
+                new readBBJSON(response,from,to, "BankBranchMast").execute();
             }else{
                 writeLog("getBankBranchMaster_response_null");
             }
@@ -751,10 +1024,13 @@ public class RequestResponseClass {
 
     private class readBBJSON extends AsyncTask<Void, Void, String> {
         private String result, parseType;
+        private int from, to;
 
-        private readBBJSON(String _result, String _parseType) {
+        private readBBJSON(String _result,int _from, int _to, String _parseType) {
             this.result = _result;
             this.parseType = _parseType;
+            this.from = _from;
+            this.to = _to;
         }
 
         @Override
@@ -808,10 +1084,12 @@ public class RequestResponseClass {
             super.onPostExecute(s);
             if(s!=null) {
                 if (s.equals("A")) {
-                    new writeBBDB(parseType).execute();
+                    new writeBBDB(parseType, from, to).execute();
                 } else {
                     updateSharedPref(context.getString(R.string.pref_autoBankBranch), "N");
                 }
+            }else {
+                updateSharedPref(context.getString(R.string.pref_autoBankBranch), "N");
             }
         }
     }
@@ -819,9 +1097,12 @@ public class RequestResponseClass {
     private class writeBBDB extends AsyncTask<Void, String, String> {
         private File writeFile;
         private String parseType;
+        private int from, to;
 
-        private writeBBDB(String _parseType) {
+        private writeBBDB(String _parseType,int _from, int _to) {
             this.parseType = _parseType;
+            this.from = _from;
+            this.to = _to;
         }
 
         @Override
@@ -836,7 +1117,7 @@ public class RequestResponseClass {
             try {
                 writeFile = new File(sdFile, bankfile);
                 JsonParser jp = f.createJsonParser(writeFile);
-                parseBankBranchMaster(jp);
+                parseBankBranchMaster(jp, from, to);
                 return "";
             } catch (Exception e) {
                 writeFile.delete();
@@ -859,23 +1140,34 @@ public class RequestResponseClass {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            try {
+            if (s != null) {
                 if (s.equals("")) {
                     if (writeFile.delete()) {
                         Constant.showLog("Write Delete");
+                        if (to == maxBankBranchId) {
+                            updateSharedPref(context.getString(R.string.pref_autoBankBranch), "Y");
+                            Constant.showLog("Write Delete");
+                        } else {
+                            int from = to + 1;
+                            to = to + 1000;
+                            Constant.showLog("From-" + from + "-To-" + to);
+                            if (to > maxBankBranchId) {
+                                to = maxBankBranchId;
+                            }
+                            Constant.showLog(" After From-" + from + "-To-" + to);
+                            loadBankBranchMaster(from,to);
+                        }
                     }
-                    updateSharedPref(context.getString(R.string.pref_autoBankBranch), "Y");
                 } else {
-                    updateSharedPref(context.getString(R.string.pref_autoBankBranch), "N");
+                    updateSharedPref(context.getString(R.string.pref_autoBankBranch), "Y");
                 }
-            }catch (Exception e){
-                writeLog("writeBBDB_" + e.getMessage());
-                updateSharedPref(context.getString(R.string.pref_autoBankBranch), "N");
+            } else {
+                updateSharedPref(context.getString(R.string.pref_autoBankBranch), "Y");
             }
         }
     }
 
-    private void parseBankBranchMaster(JsonParser jp) {
+    private void parseBankBranchMaster(JsonParser jp,int from, int to) {
         try {
             ArrayList<BankBranchMasterClass> list = new ArrayList<>();
             while (jp.nextToken() != JsonToken.END_ARRAY) {
@@ -907,7 +1199,7 @@ public class RequestResponseClass {
                 }
                 list.add(bbClass);
             }
-            new DBHandler(context).deleteTable(DBHandler.Table_BankBranchMaster);
+            new DBHandler(context).deleteBankBranchTableFromToRange(DBHandler.Table_BankBranchMaster,from,to);
             new DBHandler(context).addBankBranchMaster(list);
         } catch (Exception e) {
             writeLog("parseBankBranchMaster_" + e.getMessage());
@@ -916,11 +1208,14 @@ public class RequestResponseClass {
         }
     }
 
+    private void loadSDMD(int max) {
+        loadSDMD(max, 1000000);
+    }
+
     private void loadSDMD(){
         maxSDMDAuto = new DBHandler(context).getMaxProdId();
         if (maxSDMDAuto != 0) {
             Constant.showLog("maxSDMDAuto :- "+maxSDMDAuto);
-            //new DBHandler(context).deleteTable(DBHandler.Table_SizeDesignMastDet);
             loadSDMD(0,100);
         }
     }
@@ -1161,24 +1456,6 @@ public class RequestResponseClass {
         }
     }
 
-    public void loadCurrencyMaster(){
-        String url = Constant.ipaddress + "/GetCurrencyMaster?Id=0";
-        Constant.showLog(url);
-        writeLog("loadCurrencyMaster_" + url);
-        VolleyRequests requests = new VolleyRequests(context);
-        requests.getCurrencyMaster(url, new ServerCallback() {
-            @Override
-            public void onSuccess(String result) {
-                updateSharedPref(context.getString(R.string.pref_autoCurrency),"Y");
-            }
-
-            @Override
-            public void onFailure(String result) {
-                updateSharedPref(context.getString(R.string.pref_autoCurrency),"N");
-            }
-        });
-    }
-
     private void updateSharedPref(String prefname, String value){
         writeLog(prefname+"_"+value);
         FirstActivity.pref = context.getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
@@ -1191,6 +1468,42 @@ public class RequestResponseClass {
             editor.putString(prefname, getTime());
         }
         editor.apply();
+    }
+
+    public void getMaxAuto(final int type) {
+        String url = Constant.ipaddress + "/GetMaxAuto?type="+type;
+        Constant.showLog(url);
+        writeLog("getMaxAuto_" + url);
+        VolleyRequests requests = new VolleyRequests(context);
+        requests.getMaxAuto(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                if(type==1){
+                    maxProdId = Integer.valueOf(result);
+                    loadProductMaster(0, 100);
+                }else if(type==2){
+                    maxCustId = Integer.valueOf(result);
+                    loadCustomerMaster(0, 100);
+                }else if(type==3){
+                    maxBankBranchId = Integer.valueOf(result);
+                    loadBankBranchMaster(0, 100);
+                }
+            }
+
+            @Override
+            public void onFailure(String result) {
+                if(type==1){
+                    maxProdId = new DBHandler(context).getMaxProdId();
+                    loadProductMaster(0, 100);
+                }else if(type==2){
+                    maxCustId = new DBHandler(context).getCustMax();
+                    loadCustomerMaster(0, 100);
+                }else if(type==3){
+                    maxBankBranchId = new DBHandler(context).getBankBranchMax();
+                    loadBankBranchMaster(0, 100);
+                }
+            }
+        });
     }
 
     private String getDateTime() {

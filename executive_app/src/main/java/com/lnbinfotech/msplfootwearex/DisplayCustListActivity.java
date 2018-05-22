@@ -61,6 +61,7 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
             from = getIntent().getExtras().getString("from");
         }catch (Exception e){
             e.printStackTrace();
+            writeLog(e.getMessage());
         }
 
         ed_cus_name.addTextChangedListener(new TextWatcher() {

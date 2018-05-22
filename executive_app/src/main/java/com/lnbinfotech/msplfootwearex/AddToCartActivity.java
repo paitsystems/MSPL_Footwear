@@ -1919,7 +1919,6 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         SharedPreferences.Editor editor = FirstActivity.pref.edit();
         editor.putString("totalNetAmnt",tv_totnetamt.getText().toString());
         editor.apply();
-
         Intent intent = new Intent(getApplicationContext(), ViewCustomerOrderActiviy.class);
         intent.putExtra("from","addtocard");
         startActivity(intent);

@@ -89,8 +89,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:background="@drawable/line_left_top_right_bottom_draw"
-                android:text="Mark Up"
-                android:gravity="center" />
+                android:gravity="center"
+                android:text="Mark Up %" />
 
             <TextView
                 android:id="@+id/tv_marginup"
@@ -108,8 +108,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:background="@drawable/line_top_right_bottom_draw"
-                android:text="Mark Down"
-                android:gravity="center" />
+                android:gravity="center"
+                android:text="Mark Down %" />
 
             <TextView
                 android:id="@+id/tv_margindown"

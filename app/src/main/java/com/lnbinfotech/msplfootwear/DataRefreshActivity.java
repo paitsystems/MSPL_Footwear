@@ -275,7 +275,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 constant.showPD();
                 showDia(2);
             }
-        });
+        },0);
     }
 
     private void loadEmployeeMaster() {
@@ -339,30 +339,67 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 constant.showPD();
                 showDia(2);
             }
-        });
+        },0,0);
     }
 
-    private void loadCustomerMaster() {
-        //int a = db.getCustMax();
-        String url = Constant.ipaddress + "/GetCustomerMaster?Id=0";
+    private void loadProductMaster(final int from, final int to) {
+        String url = Constant.ipaddress + "/GetProductMasterV5?from="+from+"&to="+to+"&type=C";
         Constant.showLog(url);
-        writeLog("loadCustomerMaster_" + url);
-        constant.showPD();
-        new getCustomerMaster().execute(url);
-        /*VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
-        requests.refreshCustomerMaster(url, new ServerCallback() {
+        writeLog("loadProductMasterV5_" + url);
+        if (from == 0) {
+            sndpd = new ProgressDialog(DataRefreshActivity.this);
+            sndpd.setCancelable(false);
+            sndpd.setProgressNumberFormat(null);
+            sndpd.setProgressPercentFormat(null);
+            sndpd.setProgressNumberFormat("%1d/%2d");
+            NumberFormat percentInstance = NumberFormat.getPercentInstance();
+            percentInstance.setMaximumFractionDigits(0);
+            sndpd.setProgressPercentFormat(percentInstance);
+            sndpd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            sndpd.setTitle("Please Wait");
+            sndpd.setMessage("It will take app. 4-5 min");
+            sndpd.show();
+        }
+        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
+        requests.refreshProductMaster(url, new ServerCallback() {
             @Override
             public void onSuccess(String result) {
-                constant.showPD();
-                showDia(1);
+                try {
+                    sndpd.setProgress((to * 100) / maxProdId);
+                    if (to == maxProdId) {
+                        sndpd.dismiss();
+                        prefname = getString(R.string.pref_autoProduct);
+                        showDia(1);
+                    } else {
+                        int from = to + 1;
+                        int _to = to + 500;
+                        Constant.showLog("From-" + from + "-To-" + _to);
+                        if (_to > maxProdId) {
+                            _to = maxProdId;
+                        }
+                        loadProductMaster(from, _to);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    writeLog("loadProductMaster_"+e.getMessage());
+                    showDia(2);
+                }
             }
             @Override
             public void onFailure(String result) {
                 constant.showPD();
                 showDia(2);
             }
-        });*/
+        },from,to);
+    }
 
+    private void loadCustomerMaster() {
+        int from = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
+        String url = Constant.ipaddress + "/GetCustomerMasterV5?from="+from+"&to=0&type=C";
+        Constant.showLog(url);
+        writeLog("loadCustomerMaster_" + url);
+        constant.showPD();
+        new getCustomerMaster().execute(url);
     }
 
     private void loadCompanyMaster() {
@@ -385,7 +422,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 constant.showPD();
                 showDia(2);
             }
-        });
+        },0);
     }
 
     private void loadBankMaster() {
@@ -418,21 +455,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         writeLog("loadBankBranchMaster_" + url);
         constant.showPD();
         new getBankBranchMaster().execute(url);
-        /*VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
-        requests.refreshBankBranchMaster(url, new ServerCallback() {
-            @Override
-            public void onSuccess(String result) {
-                constant.showPD();
-                showDia(1);
-            }
-
-            @Override
-            public void onFailure(String result) {
-                constant.showPD();
-                showDia(2);
-            }
-        });*/
-
     }
 
     private void loadDocumentMaster() {
@@ -477,7 +499,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 constant.showPD();
                 showDia(2);
             }
-        });
+        },0);
     }
 
     private void init() {
@@ -488,14 +510,14 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         toast.setGravity(Gravity.CENTER, 0, 0);
         listView = (ListView) findViewById(R.id.listView);
         refreshList = new ArrayList<>();
-        refreshList.add(areaMaster);
-        refreshList.add(bankMaster);
-        refreshList.add(bankBrancMaster);
-        refreshList.add(cityMaster);
+        //refreshList.add(areaMaster);
+        //refreshList.add(bankMaster);
+        //refreshList.add(bankBrancMaster);
+        //refreshList.add(cityMaster);
         refreshList.add(companyMaster);
         refreshList.add(custMaster);
-        refreshList.add(docMaster);
-        refreshList.add(empMaster);
+        //refreshList.add(docMaster);
+        //refreshList.add(empMaster);
         refreshList.add(gstMaster);
         refreshList.add(hoMaster);
         refreshList.add(prodMaster);
@@ -564,9 +586,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //0-AreaMaster,1-BankMaster,2-BankBranchMaster,3-CityMaster
-                //4-CompanyMaster,5-CustomerMaster,6-DocumentMaster,7-EmployeeMaster,8-HOMaster
-                //9-ProductMaster,10-LoadAllSizeNDesign,11-StockMaster,12-GSTMaster
                 if (a == 0) {
                     loadAreaMaster();
                 } else if (a == 1) {
@@ -586,7 +605,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 } else if (a == 8) {
                     loadHOMaster();
                 } else if (a == 9) {
-                    loadProductMaster();
+                    getMaxAuto(1);
                 } else if (a == 10) {
                     maxProdId = db.getMaxProdId();
                     if (maxProdId != 0) {
@@ -640,22 +659,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             sndpd.setMessage("It will take app. 4-5 min");
             sndpd.show();
         }
-
         new getSizeNDesignMaster(to).execute(url);
-        /*VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
-        requests.refreshSizeNDesignMaster1(url, new ServerCallback() {
-            @Override
-            public void onSuccess(String result) {
-                new readJSON(result,"SizeNDesign").execute();
-            }
-
-            @Override
-            public void onFailure(String result) {
-                constant.showPD();
-                showDia(2);
-                writeLog("loadSizeNDesignMaster_onFailure_"+result);
-            }
-        });*/
     }
 
     private void loadSDMD(int from, int to) {
@@ -678,20 +682,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         }
 
         new getSizeDesignMastDet(to).execute(url);
-        /*VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
-        requests.refreshSizeNDesignMaster1(url, new ServerCallback() {
-            @Override
-            public void onSuccess(String result) {
-                new readJSON(result,"SizeNDesign").execute();
-            }
-
-            @Override
-            public void onFailure(String result) {
-                constant.showPD();
-                showDia(2);
-                writeLog("loadSizeNDesignMaster_onFailure_"+result);
-            }
-        });*/
     }
 
     private class getSizeNDesignMaster extends AsyncTask<String, Void, String> {
@@ -1758,7 +1748,49 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         Constant.showLog(prefname+"-"+str);
         editor.putString(prefname, getTime());
         editor.apply();
-        setSyncDate();
+        //setSyncDate();
+    }
+
+    private void getMaxAuto(final int type) {
+        String url = Constant.ipaddress + "/GetMaxAuto?type="+type;
+        constant = new Constant(DataRefreshActivity.this);
+        constant.showPD();
+        Constant.showLog(url);
+        writeLog("getMaxAuto_" + url);
+        VolleyRequests requests = new VolleyRequests(getApplicationContext());
+        requests.getMaxAuto(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                Constant.showLog(result);
+                if(type==1){
+                    maxProdId = Integer.valueOf(result);
+                    loadProductMaster(0, 100);
+                }/*else if(type==2){
+                    maxProdId = Integer.valueOf(result);
+                    loadCustomerMaster(0, 100);
+                }else if(type==3){
+                    maxProdId = Integer.valueOf(result);
+                    loadBankBranchMaster(0, 100);
+                }*/
+            }
+
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                Constant.showLog(result);
+                if(type==1){
+                    maxProdId = db.getMaxProdId();
+                    loadProductMaster(0, 100);
+                }/*else if(type==2){
+                    maxProdId = db.getCustMax();
+                    loadCustomerMaster(0, 100);
+                }else if(type==3){
+                    maxProdId = db.getBankBranchMax();
+                    loadBankBranchMaster(0, 100);
+                }*/
+            }
+        });
     }
 
     private String getDateTime() {

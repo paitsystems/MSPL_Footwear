@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.adapters.TrackOrderMasterAdapter;
@@ -22,6 +23,8 @@ import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.TrackOrderMasterClass;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class TrackOrderMasterActivity extends AppCompatActivity implements View.OnClickListener {
@@ -29,6 +32,7 @@ public class TrackOrderMasterActivity extends AppCompatActivity implements View.
     private Toast toast;
     private ListView listView;
     private Constant constant;
+    private TextView tv_custName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,9 @@ public class TrackOrderMasterActivity extends AppCompatActivity implements View.
         setContentView(R.layout.activity_track_order_master);
 
         init();
+
+        String custName = FirstActivity.pref.getString(getString(R.string.pref_selcustname),"");
+        tv_custName.setText(custName);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -67,6 +74,7 @@ public class TrackOrderMasterActivity extends AppCompatActivity implements View.
         toast.setGravity(Gravity.CENTER, 0, 0);
         listView = (ListView) findViewById(R.id.listView);
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+        tv_custName = (TextView) findViewById(R.id.tv_custname);
     }
 
     @Override
@@ -129,6 +137,7 @@ public class TrackOrderMasterActivity extends AppCompatActivity implements View.
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
                     finish();
                 }
             });
@@ -147,23 +156,23 @@ public class TrackOrderMasterActivity extends AppCompatActivity implements View.
                 }
             });
         } else if (id == 2) {
-            builder.setMessage("Error While Loading Data?");
-            builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    loadOrderDetails();
-                }
-            });
-        } else if (id == 3) {
-            builder.setMessage("");
+            builder.setMessage("No Record Available");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                 }
             });
+        } else if (id == 3) {
+            builder.setMessage("Error While Loading Data?");
+            builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    loadOrderDetails();
+                }
+            });
         }
-
         builder.create().show();
     }
 

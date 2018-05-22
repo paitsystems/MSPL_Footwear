@@ -536,6 +536,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.setTransactionSuccessful();
         db.endTransaction();
+        db.close();
     }
 
     public void addAreaLineMaster(List<ArealineMasterClass> areaClassList) {
@@ -551,6 +552,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.setTransactionSuccessful();
         db.endTransaction();
+        db.close();
     }
 
     public void addCityMaster(List<CityMasterClass> cityClassList) {
@@ -566,6 +568,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.setTransactionSuccessful();
         db.endTransaction();
+        db.close();
     }
 
     public void addHOMaster(HOMasterClass hoClass) {
@@ -750,6 +753,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.setTransactionSuccessful();
         db.endTransaction();
+        db.close();
     }
 
     public void addCompanyMaster(CompanyMasterClass company) {
@@ -800,6 +804,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.setTransactionSuccessful();
         db.endTransaction();
+        db.close();
     }
 
     public void addNewCustomer() {
@@ -1571,6 +1576,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.setTransactionSuccessful();
         db.endTransaction();
+        db.close();
     }
 
     /*public void initInterface(DatabaseUpdateInterface _dbInterface){
@@ -1660,6 +1666,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.setTransactionSuccessful();
         db.endTransaction();
+        db.close();
     }
 
     public Cursor getCustOrderTotalsAtTrackOrder(int allBranch,String branchIds) {
@@ -1687,6 +1694,44 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().execSQL("delete from " + tableName + "  where "+SDMD_ProductId +" between "+from+" and "+to);
     }
 
+    public void deleteProductTableFromToRange(String tableName, int from, int to) {
+        Constant.showLog("Delete From "+tableName+"-"+from+"-"+to);
+        getWritableDatabase().execSQL("delete from " + tableName + "  where "+PM_ProductID +" between "+from+" and "+to);
+    }
+
+    public void deleteCustomerTableFromToRange(String tableName, int from, int to) {
+        Constant.showLog("Delete From "+tableName+"-"+from+"-"+to);
+        getWritableDatabase().execSQL("delete from " + tableName + "  where "+ CM_RetailCustID +" between "+from+" and "+to);
+    }
+
+    public int getBankBranchMax() {
+        int a = 0;
+        String str = "select max(" + Branch_AutoId+ ") from " + Table_BankBranchMaster;
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if (res.moveToFirst()) {
+            do {
+                a = res.getInt(0);
+            } while (res.moveToNext());
+        }
+        res.close();
+        return a;
+    }
+
+    public void deleteBankBranchTableFromToRange(String tableName, int from, int to) {
+        Constant.showLog("Delete From "+tableName+"-"+from+"-"+to);
+        getWritableDatabase().execSQL("delete from " + tableName + "  where "+ Branch_AutoId +" between "+from+" and "+to);
+    }
+
+    public int getMaxAutoId(String str) {
+        int a = 0;
+        Constant.showLog("getMaxAutoId - "+str);
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if (res.moveToFirst()) {
+            a = res.getInt(0);
+        }
+        res.close();
+        return a;
+    }
 }
 
 

@@ -47,7 +47,7 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
 
     private TextView tv_orderstatus, tv_invno, tv_transporter, tv_creditapp, tv_alltopckg, tv_taxinvmade,
             tv_invamnt,tv_totset, tv_totqty, tv_tot_inv_qty,tv_tot_can_qty, tv_totamnt, tv_tot_gstamt, tv_tot_grossamt,
-            tv_disc_per, tv_discamnt, tv_creaditlimit;
+            tv_disc_per, tv_discamnt, tv_creaditlimit, tv_custName;
     private ListView lv_vOrder;
     private Button btn_proceed;
     private String filter = "";
@@ -77,6 +77,10 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         }
 
         init();
+
+        String custName = FirstActivity.pref.getString(getString(R.string.pref_selcustname),"");
+        tv_custName.setText(custName);
+
         imgv_i.setOnClickListener(this);
 
         btn_proceed.setOnClickListener(this);
@@ -198,8 +202,6 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
             DispatchCenterListAdapter adapter = new DispatchCenterListAdapter(dispatchcenter_list, getApplicationContext());
             adapter.setOnClickListener1(this);
             rv_dispatchcenter.setAdapter(adapter);
-        } else {
-            //showToast("No Qty Avalilable");
         }
     }
 
@@ -375,7 +377,7 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         rv_dispatchcenter = (RecyclerView) findViewById(R.id.rv_dispatchcenter);
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         workingDispatchCenter = new ArrayList<>();
-        workingDispatchCenter.add("U5%");
+        workingDispatchCenter.add("UHWE");
         workingDispatchCenter.add("UGNT");
         workingDispatchCenter.add("ULKS");
         workingDispatchCenter.add("USCH");
@@ -383,6 +385,7 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         workingDispatchCenter.add("AMOT");
         workingDispatchCenter.add("SKRD");
         workingDispatchCenter.add("KRDA");
+        tv_custName = (TextView) findViewById(R.id.tv_custname);
     }
 
     private void showDia(int a) {

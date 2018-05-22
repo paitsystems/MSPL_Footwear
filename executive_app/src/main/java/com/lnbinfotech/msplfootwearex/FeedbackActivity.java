@@ -107,7 +107,6 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.bt_send:
                 setValue();
-
                 break;
         }
     }
@@ -163,7 +162,6 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         switch (requestCode) {
             case 1:
                 if (resultCode == RESULT_OK) {
@@ -200,7 +198,6 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     Log.d("Log", "imgename:" + mbitmap);
                 }
                 break;
-
             case 3:
                 if (resultCode == RESULT_OK) {
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
@@ -216,7 +213,6 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     //feedbackClass.setFeed_img3(String.valueOf(mbitmap));
                 }
                 break;
-
             case 4:
                 if (data != null && resultCode == RESULT_OK) {
                    /* Uri selectedImage = data.getData();
@@ -251,11 +247,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                         e.printStackTrace();
                     }
                 }
-
                 break;
             case 5:
                 if (data != null && resultCode == RESULT_OK) {
-
                     Uri selectedImage = data.getData();
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};
                     Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
@@ -343,30 +337,35 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void setValue() {
-        String article_no = ed_article_no.getText().toString();
-        String invoice_no = auto_invoice_no.getText().toString();
-        String qty = ed_qty.getText().toString();
-        String salesman = ed_salesman.getText().toString();
-        String front_office = ed_front_office.getText().toString();
         String description = ed_description.getText().toString();
-        feedbackClass.setArticle_no(article_no);
-        feedbackClass.setInvoice_no(invoice_no);
-        feedbackClass.setQty(qty);
-        feedbackClass.setSalesman_id(salesman);
-        feedbackClass.setFront_office(front_office);
-        feedbackClass.setDescription(description);
-        if(feedbackClass.getFeed_img1().equals("")){
-            feedbackClass.setFeed_img1("NA");
-        }
+        if(!description.equals("")) {
+            String article_no = ed_article_no.getText().toString();
+            String invoice_no = auto_invoice_no.getText().toString();
+            String qty = ed_qty.getText().toString();
+            String salesman = ed_salesman.getText().toString();
+            String front_office = ed_front_office.getText().toString();
 
-        if(feedbackClass.getFeed_img2().equals("")){
-            feedbackClass.setFeed_img2("NA");
-        }
-        if(feedbackClass.getFeed_img3().equals("")){
-            feedbackClass.setFeed_img3("NA");
-        }
-        saveFeedbackdetail();
+            feedbackClass.setArticle_no(article_no);
+            feedbackClass.setInvoice_no(invoice_no);
+            feedbackClass.setQty(qty);
+            feedbackClass.setSalesman_id(salesman);
+            feedbackClass.setFront_office(front_office);
+            feedbackClass.setDescription(description);
+            if (feedbackClass.getFeed_img1().equals("")) {
+                feedbackClass.setFeed_img1("NA");
+            }
 
+            if (feedbackClass.getFeed_img2().equals("")) {
+                feedbackClass.setFeed_img2("NA");
+            }
+            if (feedbackClass.getFeed_img3().equals("")) {
+                feedbackClass.setFeed_img3("NA");
+            }
+            saveFeedbackdetail();
+        }else{
+            toast.setText("Please Enter Values");
+            toast.show();
+        }
     }
 
     private void show_popup(int id) {

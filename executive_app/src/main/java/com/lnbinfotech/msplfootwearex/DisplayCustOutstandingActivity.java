@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.adapters.WarehousesDetailAdapter;
+import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallbackList;
@@ -38,8 +39,7 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
     private DBHandler db;
     float total_qty = 0, total_amt = 0;
     private DecimalFormat dc;
-    private String str = "";
-
+    private String str = "",cust_id="0";
     private LinearLayout lay_warehouse;
 
     @Override
@@ -58,20 +58,23 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        if(DisplayCustOutstandingActivity.outClass==null) {
-            loadOustandingdetail();
-        }else{
-            setData();
-        }
-
         str = getIntent().getExtras().getString("val");
+        cust_id = getIntent().getExtras().getString("cust_id");
+
         if(str.equals("1")) {
             lay_warehouse.setVisibility(View.INVISIBLE);
         }else {
             lay_warehouse.setVisibility(View.VISIBLE);
             showWarehouseData();
         }
-      //  showWarehouseData();
+
+        if(ConnectivityTest.getNetStat(getApplicationContext())) {
+            loadOustandingdetail();
+        }else {
+            toast.setText("You Are Offline");
+            toast.show();
+        }
+
     }
 
     @Override
@@ -84,7 +87,6 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        //showDia(0);
         new Constant(DisplayCustOutstandingActivity.this).doFinish();
     }
 
@@ -92,7 +94,6 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                //showDia(0);
                 new Constant(DisplayCustOutstandingActivity.this).doFinish();
                 break;
         }
@@ -163,7 +164,6 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
 
 
     private void loadOustandingdetail(){
-        int cust_id = FirstActivity.pref.getInt(getString(R.string.pref_selcustid),0);
         String url = Constant.ipaddress + "/GetCustOutstanding?Id=" +cust_id ;
         Constant.showLog(url);
         writeLog("loadOustandingdetail_" + url);
@@ -173,7 +173,6 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
             @Override
             public void onSuccess(Object result) {
                 constant.showPD();
-              //  outClass = (CustOutstandingClass) result;
                 setData();
             }
             @Override

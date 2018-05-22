@@ -376,7 +376,7 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         rv_dispatchcenter = (RecyclerView) findViewById(R.id.rv_dispatchcenter);
 
         workingDispatchCenter = new ArrayList<>();
-        workingDispatchCenter.add("U5%");
+        workingDispatchCenter.add("UHWE");
         workingDispatchCenter.add("UGNT");
         workingDispatchCenter.add("ULKS");
         workingDispatchCenter.add("USCH");

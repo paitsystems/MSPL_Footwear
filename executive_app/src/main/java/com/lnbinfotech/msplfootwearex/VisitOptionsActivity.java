@@ -2,6 +2,7 @@ package com.lnbinfotech.msplfootwearex;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -76,18 +77,17 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
         switch (view.getId()) {
             case R.id.card_take_order:
                 //showDia(1);
-                //startActivity(new Intent(getApplicationContext(),DisplayCustListAreawiseActivity.class));
                 startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_payment:
-               /* toast.setText("Under Development");
-                toast.show();*/
-                Intent intent = new Intent(getApplicationContext(), VisitPaymentFormActivity.class);
+                toast.setText("Under Development");
+                toast.show();
+                /*Intent intent = new Intent(getApplicationContext(), VisitPaymentFormActivity.class);
                 intent.putExtra("cust_id", String.valueOf(custId));
                 intent.putExtra("child_selected", custName);
                 startActivity(intent);
-                overridePendingTransition(R.anim.enter, R.anim.exit);
+                overridePendingTransition(R.anim.enter, R.anim.exit);*/
                 break;
             case R.id.card_ledger_report:
                 Intent in = new Intent(getApplicationContext(), LedgerReportActivity.class);
@@ -109,8 +109,10 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
                 }
                 break;
             case R.id.card_track_order:
-                //toast.setText("Under Development");
-                //toast.show();
+                SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                editor.putInt(getString(R.string.pref_selcustid),custId);
+                editor.putString(getString(R.string.pref_selcustname),custName);
+                editor.apply();
                 startActivity(new Intent(getApplicationContext(), TrackOrderMasterActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;

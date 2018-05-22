@@ -109,6 +109,8 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
             case R.id.imgv_i:
                 //finish();
                 Intent in = new Intent(this, DisplayCustOutstandingActivity.class);
+                int cust_id = FirstActivity.pref.getInt(getString(R.string.pref_selcustid),0);
+                in.putExtra("cust_id", String.valueOf(cust_id));
                 in.putExtra("val","0");
                 startActivity(in);
                 overridePendingTransition(R.anim.enter,R.anim.exit);
@@ -194,8 +196,6 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
             DispatchCenterListAdapter adapter = new DispatchCenterListAdapter(dispatchcenter_list, getApplicationContext());
             adapter.setOnClickListener1(this);
             rv_dispatchcenter.setAdapter(adapter);
-        } else {
-            //showToast("No Qty Avalilable");
         }
     }
 
@@ -389,6 +389,8 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     Intent intent = new Intent(getApplicationContext(), DisplayCustOutstandingActivity.class);
+                    int cust_id = FirstActivity.pref.getInt(getString(R.string.pref_selcustid),0);
+                    intent.putExtra("cust_id", cust_id);
                     intent.putExtra("val","0");
                     startActivity(intent);
                     overridePendingTransition(R.anim.enter,R.anim.exit);

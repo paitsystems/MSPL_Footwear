@@ -157,6 +157,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                 break;
             case R.id.btn_view_credit:
                 Intent intent = new Intent(getApplicationContext(), DisplayCustOutstandingActivity.class);
+                intent.putExtra("cust_id", String.valueOf(custId));
                 intent.putExtra("val","1");
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);

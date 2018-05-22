@@ -178,11 +178,13 @@ public class ArealinewiseAreaSelectionActivity extends AppCompatActivity impleme
 
     private void getTodaysVisit(){
         int saleExe = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
+        int design = FirstActivity.pref.getInt(getString(R.string.pref_design), 0);
+        int hoCode = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
         String weekDay;
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
         Calendar calendar = Calendar.getInstance();
         weekDay = dayFormat.format(calendar.getTime());
-        String url = saleExe + "|" + weekDay;
+        String url = saleExe + "|" + weekDay+ "|" + design + "|" + hoCode;
         if(ConnectivityTest.getNetStat(getApplicationContext())) {
             new getTodaysVisit(0).execute(url);
         }else{
@@ -195,7 +197,7 @@ public class ArealinewiseAreaSelectionActivity extends AppCompatActivity impleme
         private int branchId = 0;
         private ProgressDialog pd;
 
-        public getTodaysVisit(int _branchId) {
+        private getTodaysVisit(int _branchId) {
             this.branchId = _branchId;
         }
 

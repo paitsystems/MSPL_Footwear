@@ -66,7 +66,6 @@
 
 
                     <TextView
-                        android:padding="@dimen/mobpadding5"
                         android:id="@+id/tv_cl"
                         style="@style/textViewMob"
                         android:layout_width="match_parent"
@@ -74,7 +73,8 @@
                         android:layout_gravity="center"
                         android:layout_weight="0.3"
                         android:gravity="left"
-                        android:text="456"
+                        android:padding="@dimen/mobpadding5"
+                        android:text="0"
                         android:textColor="@color/greend" />
 
                     <LinearLayout
@@ -111,7 +111,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="0.4"
                         android:gravity="center"
-                        android:text=""
+                        android:text="0"
                         android:textColor="@color/greend" />
                 </LinearLayout>
 
@@ -157,7 +157,7 @@
                     android:layout_weight="0.5"
                     android:gravity="left"
                     android:padding="@dimen/mobpadding5"
-                    android:text="456"
+                    android:text="0"
                     android:textColor="@color/greend" />
             </LinearLayout>
 
@@ -202,7 +202,7 @@
                     android:gravity="left"
                     android:padding="@dimen/mobpadding5"
                     android:textColor="@color/greend"
-                    android:text="896" />
+                    android:text="0" />
             </LinearLayout>
 
             <LinearLayout
@@ -246,7 +246,7 @@
                     android:padding="@dimen/mobpadding5"
                     android:textColor="@color/greend"
                     android:gravity="left"
-                    android:text="523" />
+                    android:text="0" />
             </LinearLayout>
 
             <LinearLayout
@@ -298,7 +298,7 @@
                         android:padding="@dimen/mobpadding5"
                         android:textColor="@color/greend"
                         android:layout_weight="0.3"
-                        android:text="123" />
+                        android:text="0" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -333,7 +333,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.4"
-                        android:text=""
+                        android:text="0"
                         android:textColor="@color/greend"
                         android:layout_gravity="center" />
                 </LinearLayout>
@@ -381,7 +381,7 @@
                     android:padding="@dimen/mobpadding5"
                     android:textColor="@color/greend"
                     android:gravity="left"
-                    android:text="856" />
+                    android:text="0" />
             </LinearLayout>
 
             <LinearLayout
@@ -408,7 +408,7 @@
                     android:layout_weight="0.5"
                     android:gravity="center"
                     android:padding="@dimen/mobpadding5"
-                    android:text="Small Text"
+                    android:text=""
                     android:textColor="@color/greend" />
             </LinearLayout>
 
@@ -434,7 +434,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:gravity="center"
-                    android:text="Small Text"
+                    android:text=""
                     android:textColor="@color/greend" />
             </LinearLayout>
 
@@ -479,7 +479,7 @@
                     android:gravity="left"
                     android:padding="@dimen/mobpadding5"
                     android:textColor="@color/greend"
-                    android:text="856" />
+                    android:text="0" />
             </LinearLayout>
         </LinearLayout>
 

@@ -437,7 +437,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
                 float totAmt = 0, totGSTAmt = 0, totTotalAmt = 0,
                         totNetAmt = 0, totAmtAfterDisc = 0, totPendingQty = 0, totDisc = 0;
                 float custDiscPer = OptionsActivity.custDisc;
-                remark = "MA-"+remark;
+                //remark = "MA-"+remark;
                 String groupNm = "NA";
                 String data = "";
 
@@ -764,7 +764,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which) {
                 InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 mgr.hideSoftInputFromWindow(ed_remark.getWindowToken(), 0);
-                remark = ed_remark.getText().toString();
+                remark = "MA-"+ ed_remark.getText().toString();
                 Constant.showLog(remark);
                 dialog.dismiss();
             }

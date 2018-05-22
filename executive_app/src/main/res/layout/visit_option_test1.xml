@@ -398,7 +398,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:padding="5dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/card_track_order"
@@ -427,7 +427,7 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/option_track_order_circle_draw"
+                                android:background="@drawable/option_track_order_circle_pink_draw"
                                 android:gravity="center"
                                 android:orientation="vertical">
 

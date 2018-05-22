@@ -58,7 +58,12 @@
             app:reverseLayout="true" />
     </LinearLayout>
 
-
+    <TextView
+        android:id="@+id/tv_custname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        style="@style/textViewMob"/>
     <TextView
         android:id="@+id/tv_orderStatus"
         style="@style/textViewMob"

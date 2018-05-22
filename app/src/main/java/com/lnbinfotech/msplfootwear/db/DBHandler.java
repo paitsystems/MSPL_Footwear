@@ -38,8 +38,6 @@ public class DBHandler extends SQLiteOpenHelper {
     //TODO: Check DB Version
     public static final int Database_Version = 5;
 
-    //retailCustID,name,address,mobile,status,branchId,email,District,Taluka,cityId,areaId,
-    // Panno,ImagePath,HoCode,GSTNo,IMEINo,isRegistered,AadharNo,PIN
     public static final String Table_Customermaster = "CustomerMaster";
     public static final String CM_RetailCustID = "CustID";
     public static final String CM_Name = "Name";
@@ -63,8 +61,6 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String CM_PIN = "PIN";
     public static final String CM_Discount = "Discount";
 
-    //Product_id,Cat1,Cat2,Cat3,Cat4,Cat5,Cat6,Final_prod,Uom,Srate,Prate,Branchid,Status,NoOfPices,
-    // Company_Id,MRPRate,ProductId,Cat7,Cat8,MinStkQty,MaxStkQty,GSTGroup,HSNCode,Cat9
     public static final String Table_ProductMaster = "ProductMaster";
     public static final String PM_ProductID = "Product_id";
     public static final String PM_Cat1 = "Cat1";
@@ -110,8 +106,6 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String SI_SaleRate = "SaleRate";
     public static final String SI_ProductID = "Product_id";
 
-    //Emp_Id,Emp_Name,Emp_mobno,Emp_Add,Desig_Id,Branch_Id,Emp_Status,
-    // Desig_Name,Company_Name,Company_Initial,HoCode,PIN
     public static final String Table_Employee = "Employee_Master";
     public static final String EMP_EmpId = "EmpID";
     public static final String EMP_Name = "Name";
@@ -126,7 +120,6 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String EMP_HoCode = "HoCode";
     public static final String EMP_PIN = "PIN";
 
-    //auto,id,Name,City,State,ini
     public static final String Table_HOMaster = "HOMaster";
     public static final String HO_Auto = "Auto";
     public static final String HO_Id = "Id";
@@ -135,21 +128,18 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String HO_State = "State";
     public static final String HO_ini = "ini";
 
-    //auto,id,area,cityid
     public static final String Table_AreaMaster = "AreaMaster";
     public static final String Area_Auto = "Auto";
     public static final String Area_Id = "Id";
     public static final String Area_Area = "Area";
     public static final String Area_Cityid = "Cityid";
 
-    //auto,id,city,stId
     public static final String Table_CityMaster = "CityMaster";
     public static final String City_Auto = "Auto";
     public static final String City_Id = "Id";
     public static final String City_City = "City";
     public static final String City_Stateid = "StateId";
 
-    //Company_id,Company_Name,Company_Initial,Company_Pan,DisplayCmp,HOCode,GSTNo
     public static final String Table_CompanyMaster = "CompanyMaster";
     public static final String Company_Id = "Id";
     public static final String Company_Name = "Name";
@@ -165,7 +155,6 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String Company_Company_Phone2 = "Company_Phone2";
     public static final String Company_Mobileno2 = "Mobileno2";
 
-    //bankid,branchid,bankName,accountno,status,IFSC,MICR,CustType,HoCode
     public static final String Table_BankMaster = "BankMaster";
     public static final String Bank_Id = "Id";
     public static final String Bank_BranchId = "BranchId";
@@ -177,7 +166,6 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String Bank_CustType = "CustType";
     public static final String Bank_HoCode = "HoCode";
 
-    //Autoid,Branch,id,Custid,AccountNo,CBankid,CBranch
     public static final String Table_BankBranchMaster = "BankBranchMaster";
     public static final String Branch_AutoId = "AutoId";
     public static final String Branch_Id = "Id";
@@ -187,7 +175,6 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String Branch_CBankId = "CBankId";
     public static final String Branch_CBranch = "CBranch";
 
-    //id,DocName,Alias,ForWhom,Compulsary
     public static final String Table_DocumentMaster = "DocumentMaster";
     public static final String Document_Id = "Id";
     public static final String Document_DocName = "DocName";
@@ -323,8 +310,6 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String SDMD_Qty = "Qty";
 
     public DBHandler(Context context) {
-
-        //super(context, "/mnt/sdcard/"+Constant.folder_name+"/"+Database_Name, null, Database_Version);
         super(context, Database_Name, null, Database_Version);
     }
 
@@ -515,6 +500,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.setTransactionSuccessful();
         db.endTransaction();
+        db.close();
     }
 
     public void addCityMaster(List<CityMasterClass> cityClassList) {
@@ -530,6 +516,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.setTransactionSuccessful();
         db.endTransaction();
+        db.close();
     }
 
     public void addHOMaster(HOMasterClass hoClass) {
@@ -714,6 +701,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.setTransactionSuccessful();
         db.endTransaction();
+        db.close();
     }
 
     public void addCompanyMaster(CompanyMasterClass company) {
@@ -764,6 +752,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.setTransactionSuccessful();
         db.endTransaction();
+        db.close();
     }
 
     public void addDocumentMaster(DocumentMasterClass documentClass) {
@@ -845,6 +834,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.setTransactionSuccessful();
         db.endTransaction();
+        db.close();
     }
 
     public ArrayList<CustomerDetailClass> getCustomerDetail() {
@@ -1017,8 +1007,8 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public Cursor getProfileData(int custid) {
-        // String str = "select "+UM_Name+","+UM_MobileNo+","+UM_Email+","+UM_PANNo+","+UM_GSTNo+" from "+Table_Usermaster+" where "+UM_RetailCustID+" = '"+custid+"'";
-        String str = "select * from " + Table_Usermaster + " where " + UM_RetailCustID + " =" + custid + "";
+        //String str = "select * from " + Table_Usermaster + " where " + UM_RetailCustID + " =" + custid + "";
+        String str = "select * from " + Table_Customermaster + " where " + CM_RetailCustID + " =" + custid + "";
         return getWritableDatabase().rawQuery(str, null);
     }
 
@@ -1517,6 +1507,22 @@ public class DBHandler extends SQLiteOpenHelper {
     public void deleteTableFromToRangeSDMD(String tableName, int from, int to) {
         Constant.showLog("Delete From "+tableName+"-"+from+"-"+to);
         getWritableDatabase().execSQL("delete from " + tableName + "  where "+SDMD_ProductId +" between "+from+" and "+to);
+    }
+
+    public void deleteProductTableFromToRange(String tableName, int from, int to) {
+        Constant.showLog("Delete From "+tableName+"-"+from+"-"+to);
+        getWritableDatabase().execSQL("delete from " + tableName + "  where "+PM_ProductID +" between "+from+" and "+to);
+    }
+
+    public int getMaxAutoId(String str) {
+        int a = 0;
+        Constant.showLog("getMaxAutoId - "+str);
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if (res.moveToFirst()) {
+            a = res.getInt(0);
+        }
+        res.close();
+        return a;
     }
 
 }

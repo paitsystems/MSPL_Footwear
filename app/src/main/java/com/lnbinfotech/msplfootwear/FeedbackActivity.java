@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -24,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
@@ -60,6 +62,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     private int flag;
     private FeedbackClass feedbackClass;
     private Constant constant;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -336,33 +339,38 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         service_or_team_cardlay = (CardView) findViewById(R.id.service_or_team_cardlay);
         feedbk_type = new ArrayAdapter<>(this, R.layout.feedbk_type_list, arr);
         fedback_spinner.setAdapter(feedbk_type);
+        toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
     }
 
     private void setValue() {
-        String article_no = ed_article_no.getText().toString();
-        String invoice_no = auto_invoice_no.getText().toString();
-        String qty = ed_qty.getText().toString();
-        String salesman = ed_salesman.getText().toString();
-        String front_office = ed_front_office.getText().toString();
         String description = ed_description.getText().toString();
-        feedbackClass.setArticle_no(article_no);
-        feedbackClass.setInvoice_no(invoice_no);
-        feedbackClass.setQty(qty);
-        feedbackClass.setSalesman_id(salesman);
-        feedbackClass.setFront_office(front_office);
-        feedbackClass.setDescription(description);
-        if(feedbackClass.getFeed_img1().equals("")){
-            feedbackClass.setFeed_img1("NA");
+        if (!description.equals("")) {
+            String article_no = ed_article_no.getText().toString();
+            String invoice_no = auto_invoice_no.getText().toString();
+            String qty = ed_qty.getText().toString();
+            String salesman = ed_salesman.getText().toString();
+            String front_office = ed_front_office.getText().toString();
+            feedbackClass.setArticle_no(article_no);
+            feedbackClass.setInvoice_no(invoice_no);
+            feedbackClass.setQty(qty);
+            feedbackClass.setSalesman_id(salesman);
+            feedbackClass.setFront_office(front_office);
+            feedbackClass.setDescription(description);
+            if (feedbackClass.getFeed_img1().equals("")) {
+                feedbackClass.setFeed_img1("NA");
+            }
+            if (feedbackClass.getFeed_img2().equals("")) {
+                feedbackClass.setFeed_img2("NA");
+            }
+            if (feedbackClass.getFeed_img3().equals("")) {
+                feedbackClass.setFeed_img3("NA");
+            }
+            saveFeedbackdetail();
+        } else {
+            toast.setText("Please Enter Values");
+            toast.show();
         }
-
-        if(feedbackClass.getFeed_img2().equals("")){
-            feedbackClass.setFeed_img2("NA");
-        }
-        if(feedbackClass.getFeed_img3().equals("")){
-            feedbackClass.setFeed_img3("NA");
-        }
-        saveFeedbackdetail();
-
     }
 
     private void show_popup(int id) {

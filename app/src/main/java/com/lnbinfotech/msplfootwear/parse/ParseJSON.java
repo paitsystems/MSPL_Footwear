@@ -187,12 +187,14 @@ public class ParseJSON {
         return ret;
     }
 
-    public int parseHOMaster(){
+    public int parseHOMaster(int max){
         int ret = 0;
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
-                db.deleteTable(DBHandler.Table_HOMaster);
+                if(max==0) {
+                    db.deleteTable(DBHandler.Table_HOMaster);
+                }
                 for (int i = 0; i < jsonArray.length(); i++) {
                     HOMasterClass hoClass = new HOMasterClass();
                     hoClass.setAuto(jsonArray.getJSONObject(i).getInt("auto"));
@@ -273,7 +275,7 @@ public class ParseJSON {
         }
     }
 
-    public int parseProductMaster(){
+    public int parseProductMaster(int from, int to){
         int ret = 0;
         try{
             JSONArray jsonArray = new JSONArray(json);
@@ -314,7 +316,7 @@ public class ParseJSON {
                     //db.addProductMaster(prodClass);
                     prodList.add(prodClass);
                 }
-                db.deleteTable(DBHandler.Table_ProductMaster);
+                db.deleteProductTableFromToRange(DBHandler.Table_ProductMaster,from,to);
                 db.addProductMaster(prodList);
                 db.close();
                 ret = 1;
@@ -367,12 +369,14 @@ public class ParseJSON {
         return ret;
     }
 
-    public int parseCompanyMaster(){
+    public int parseCompanyMaster(int max){
         int ret = 0;
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
-                db.deleteTable(DBHandler.Table_CompanyMaster);
+                if(max==0) {
+                    db.deleteTable(DBHandler.Table_CompanyMaster);
+                }
                 for (int i = 0; i < jsonArray.length(); i++) {
                     CompanyMasterClass companyClass = new CompanyMasterClass();
                     companyClass.setCompanyId(jsonArray.getJSONObject(i).getString("Company_id"));
@@ -593,12 +597,14 @@ public class ParseJSON {
         return a;
     }
 
-    public int parseGSTMaster(){
+    public int parseGSTMaster(int max){
         int ret = 0;
         try{
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
-                db.deleteTable(DBHandler.Table_GSTMASTER);
+                if(max==0) {
+                    db.deleteTable(DBHandler.Table_GSTMASTER);
+                }
                 for (int i = 0; i < jsonArray.length(); i++) {
                     GSTMasterClass gstClass = new GSTMasterClass();
                     gstClass.setAuto(jsonArray.getJSONObject(i).getInt("Auto"));
@@ -801,7 +807,7 @@ public class ParseJSON {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    data = jsonArray.getJSONObject(i).getString("mob_version");
+                    data = jsonArray.getJSONObject(i).getString("cmob_version");
                 }
             }
         } catch (Exception e) {
@@ -809,6 +815,22 @@ public class ParseJSON {
             writeLog("ParseJSON_parseVersion_"+e.getMessage());
         }
         return data;
+    }
+
+    public int parseGetMaxAuto(){
+        int ret = 0;
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    ret = jsonArray.getJSONObject(i).getInt("maxAuto");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("parseAreaMaster_"+e.getMessage());
+        }
+        return ret;
     }
 
     private void writeLog(String _data){

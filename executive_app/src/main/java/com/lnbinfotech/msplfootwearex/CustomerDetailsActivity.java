@@ -259,6 +259,15 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     dialog.dismiss();
                 }
             });
+        }else if(a==5) {
+            builder.setMessage("This Device Is Not Registered");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    new Constant(CustomerDetailsActivity.this).doFinish();
+                }
+            });
         }else if(a==8) {
             builder.setTitle("Update App");
             builder.setMessage("Smart Ticket New Version Is Available");
@@ -293,7 +302,8 @@ public class CustomerDetailsActivity extends AppCompatActivity
         constant = new Constant(CustomerDetailsActivity.this);
         if(ConnectivityTest.getNetStat(getApplicationContext())) {
             int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
-            String url = Constant.ipaddress + "/GetActiveStatus?id=" + id + "&type=E";
+            String imeino = new Constant(getApplicationContext()).getIMEINo1();
+            String url = Constant.ipaddress + "/GetActiveStatusV5?id=" + id + "&type=E&imeino="+imeino;
             Constant.showLog(url);
             writeLog("checkIsActive_" + url);
             constant.showPD();
@@ -303,8 +313,9 @@ public class CustomerDetailsActivity extends AppCompatActivity
                 public void onSuccess(String result) {
                     constant.showPD();
                     if (result.equals("A")) {
-                        //loadData();
                         checkVersion();
+                    } else if (result.equals("I")) {
+                        showDia(5);
                     } else {
                         showDia(1);
                     }
@@ -324,7 +335,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
     private void checkVersion(){
         constant = new Constant(CustomerDetailsActivity.this);
         constant.showPD();
-        String url1 = Constant.ipaddress+"/GetVersion";
+        String url1 = Constant.ipaddress+"/GetVersionV5?type=E";
         Constant.showLog(url1);
         StringRequest versionRequest = new StringRequest(url1,
                 new Response.Listener<String>() {
