@@ -30,8 +30,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_gravity="center"
+            android:orientation="vertical"
             android:padding="10dp">
 
             <LinearLayout
@@ -371,141 +371,141 @@
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:visibility="gone">
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
                     <TextView
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_weight="0.8"
                         android:text="Address"
-                        style="@style/textViewMob"
-                        android:layout_weight="0.8"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
 
                     <TextView
+                        android:id="@+id/tv_address"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        style="@style/textViewMob"
                         android:layout_weight="0.2"
-                        android:id="@+id/tv_address"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
                     <TextView
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_weight="0.8"
                         android:text="Phone 1"
-                        style="@style/textViewMob"
-                        android:layout_weight="0.8"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
 
                     <TextView
+                        android:id="@+id/tv_phone1"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        style="@style/textViewMob"
                         android:layout_weight="0.2"
-                        android:id="@+id/tv_phone1"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
                     <TextView
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_weight="0.8"
                         android:text="Phone 2"
-                        style="@style/textViewMob"
-                        android:layout_weight="0.8"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
 
                     <TextView
+                        android:id="@+id/tv_phone2"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        style="@style/textViewMob"
                         android:layout_weight="0.2"
-                        android:id="@+id/tv_phone2"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
                     <TextView
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_weight="0.8"
                         android:text="Mobile 1"
-                        style="@style/textViewMob"
-                        android:layout_weight="0.8"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
 
                     <TextView
+                        android:id="@+id/tv_mobile1"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        style="@style/textViewMob"
                         android:layout_weight="0.2"
-                        android:id="@+id/tv_mobile1"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
                     <TextView
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_weight="0.8"
                         android:text="Mobile 2"
-                        style="@style/textViewMob"
-                        android:layout_weight="0.8"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
 
                     <TextView
+                        android:id="@+id/tv_mobile2"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        style="@style/textViewMob"
                         android:layout_weight="0.2"
-                        android:id="@+id/tv_mobile2"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
                     <TextView
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_weight="0.8"
                         android:text="Email"
-                        style="@style/textViewMob"
-                        android:layout_weight="0.8"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
 
                     <TextView
+                        android:id="@+id/tv_email"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        style="@style/textViewMob"
                         android:layout_weight="0.2"
-                        android:id="@+id/tv_email"/>
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
                 </LinearLayout>
 
             </LinearLayout>

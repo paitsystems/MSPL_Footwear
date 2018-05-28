@@ -91,7 +91,7 @@
         android:textColor="@color/black"
         android:gravity="left|center" />
 
-    <HorizontalScrollView
+    <!--<HorizontalScrollView
         android:id="@+id/horizontalScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -100,7 +100,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical">-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -110,8 +110,9 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:background="@drawable/line_left_top_right_bottom_draw"
                     android:gravity="center"
                     android:text="Credit App."
@@ -121,18 +122,20 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
-                    android:text="Alloted To Pckg"
+                    android:text="Alloted To Pck"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/white" />
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
                     android:text="TaxInvMade"
@@ -141,8 +144,9 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
                     android:text="InvAmnt"
@@ -160,8 +164,9 @@
 
                     android:id="@+id/tv_creditapp"
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:background="@drawable/line_left_right_bottom_draw"
                     android:gravity="center"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -171,8 +176,9 @@
                 <TextView
                     android:id="@+id/tv_alltopckg"
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:background="@drawable/line_right_bottom_draw"
                     android:gravity="center"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -181,22 +187,24 @@
                 <TextView
                     android:id="@+id/tv_tavinvmade"
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:background="@drawable/line_right_bottom_draw"
                     android:gravity="center"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/black" />
 
                 <TextView
+                    android:id="@+id/tv_invamnt"
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:background="@drawable/line_right_bottom_draw"
                     android:gravity="center"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/black"
-                    android:id="@+id/tv_invamnt" />
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 
@@ -208,8 +216,9 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:background="@drawable/line_left_top_right_bottom_draw"
                     android:gravity="center"
                     android:text="TSET"
@@ -219,8 +228,9 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
                     android:text="TotOrdQty"
@@ -229,8 +239,9 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
                     android:text="TotInvQty"
@@ -239,8 +250,9 @@
 
                 <TextView
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:background="@drawable/line_top_right_bottom_draw"
                     android:gravity="center"
                     android:text="TotCanQty"
@@ -258,8 +270,9 @@
 
                     android:id="@+id/tv_tot_set"
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:background="@drawable/line_left_right_bottom_draw"
                     android:gravity="center"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -269,147 +282,156 @@
                 <TextView
                     android:id="@+id/tv_tot_ord_qty"
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:background="@drawable/line_right_bottom_draw"
                     android:gravity="center"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/black" />
 
                 <TextView
+                    android:id="@+id/tv_tot_inv_qty"
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:background="@drawable/line_right_bottom_draw"
                     android:gravity="center"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/black"
-                    android:id="@+id/tv_tot_inv_qty" />
+                    android:textColor="@color/black" />
 
                 <TextView
+                    android:id="@+id/tv_tot_can_qty"
                     style="@style/textViewMob"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.5"
                     android:background="@drawable/line_right_bottom_draw"
                     android:gravity="center"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/black"
-                    android:id="@+id/tv_tot_can_qty" />
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/red"
-                android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@color/red"
+        android:orientation="horizontal">
 
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="@dimen/trackorderc_detail_tvwidth60"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/line_left_top_right_bottom_draw"
-                    android:gravity="center"
-                    android:text="@string/prod"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white"
-                    android:visibility="visible" />
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="@drawable/line_left_top_right_bottom_draw"
+            android:gravity="center"
+            android:text="@string/prod"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white"
+            android:visibility="visible" />
 
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="@dimen/trackorderc_detail_tvwidth60"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center"
-                    android:text="@string/sizeg"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white" />
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="@drawable/line_top_right_bottom_draw"
+            android:gravity="center"
+            android:text="@string/sizeg"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white" />
 
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="@dimen/trackorderc_detail_tvwidth80"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center"
-                    android:text="@string/color"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white" />
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="@drawable/line_top_right_bottom_draw"
+            android:gravity="center"
+            android:text="@string/color"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white" />
 
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="@dimen/trackorderc_detail_tvwidth80"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center"
-                    android:text="OrderQty"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white" />
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="@drawable/line_top_right_bottom_draw"
+            android:gravity="center"
+            android:text="OrderQty"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white" />
 
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="@dimen/trackorderc_detail_tvwidth80"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center"
-                    android:text="InvQty"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white" />
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="@drawable/line_top_right_bottom_draw"
+            android:gravity="center"
+            android:text="InvQty"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white" />
 
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="@dimen/trackorderc_detail_tvwidth80"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center"
-                    android:text="CancelQty"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white" />
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="@drawable/line_top_right_bottom_draw"
+            android:gravity="center"
+            android:text="Cancel Qty"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white" />
 
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="@dimen/trackorderc_detail_tvwidth60"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center"
-                    android:text="@string/wsp"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white"
-                    android:visibility="gone" />
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="@dimen/trackorderc_detail_tvwidth60"
+            android:layout_height="match_parent"
+            android:background="@drawable/line_top_right_bottom_draw"
+            android:gravity="center"
+            android:text="@string/wsp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white"
+            android:visibility="gone" />
 
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="@dimen/trackorderc_detail_tvwidth60"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center"
-                    android:text="@string/mr"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white"
-                    android:visibility="gone" />
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="@dimen/trackorderc_detail_tvwidth60"
+            android:layout_height="match_parent"
+            android:background="@drawable/line_top_right_bottom_draw"
+            android:gravity="center"
+            android:text="@string/mr"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white"
+            android:visibility="gone" />
 
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="@dimen/trackorderc_detail_tvwidth60"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center"
-                    android:text="@string/amt"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white"
-                    android:visibility="gone" />
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="@dimen/trackorderc_detail_tvwidth60"
+            android:layout_height="match_parent"
+            android:background="@drawable/line_top_right_bottom_draw"
+            android:gravity="center"
+            android:text="@string/amt"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white"
+            android:visibility="gone" />
 
-                <TextView
-                    style="@style/textViewMob"
-                    android:layout_width="@dimen/trackorderc_detail_tvwidth40"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/line_top_right_bottom_draw"
-                    android:gravity="center"
-                    android:text="@string/gst"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white"
-                    android:visibility="gone" />
-            </LinearLayout>
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="@dimen/trackorderc_detail_tvwidth40"
+            android:layout_height="match_parent"
+            android:background="@drawable/line_top_right_bottom_draw"
+            android:gravity="center"
+            android:text="@string/gst"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+    </LinearLayout>
 
             <ListView
                 android:id="@+id/lv_vOrder"
@@ -575,8 +597,8 @@
 
             </LinearLayout>
 
-        </LinearLayout>
-    </HorizontalScrollView>
+        <!--</LinearLayout>
+    </HorizontalScrollView>-->
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_proceed"

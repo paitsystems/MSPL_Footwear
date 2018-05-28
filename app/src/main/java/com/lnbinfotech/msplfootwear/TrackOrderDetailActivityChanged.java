@@ -5,6 +5,7 @@ package com.lnbinfotech.msplfootwear;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -50,7 +51,7 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
             tv_disc_per, tv_discamnt, tv_creaditlimit;
     private ListView lv_vOrder;
     private Button btn_proceed;
-    private String filter = "";
+    private String filter = "", transporterNo = "0";;
     private DBHandler db;
     private List<TrackOrderDetailChangedClass> list;
     private ImageView imgv_i;
@@ -78,6 +79,7 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
 
         init();
         imgv_i.setOnClickListener(this);
+        tv_transporter.setOnClickListener(this);
 
         btn_proceed.setOnClickListener(this);
 
@@ -108,6 +110,11 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.tv_trasporter:
+                if(!transporterNo.equals("")&& !transporterNo.equals("0")) {
+                    makeCall(transporterNo);
+                }
+                break;
             case R.id.btn_proceed:
                 checkLimit();
                 break;
@@ -245,7 +252,8 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         list.clear();
         lv_vOrder.setAdapter(null);
         Cursor cursor = db.getTrackOrderDetailData();
-        String invNo="", invDate="", transporter="", transporterNo="", creditApp="", allotedTopck="",
+        transporterNo = "0";
+        String invNo="", invDate="", transporter="", creditApp="", allotedTopck="",
                 taxInvMade="", status="",invamt = "";
         if (cursor.moveToFirst()) {
             do {
@@ -483,5 +491,12 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
             toast.setText("Please Place Order");
             toast.show();
         }
+    }
+
+    private void makeCall(String number){
+        Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
+                "tel", number, null));
+        startActivity(phoneIntent);
+        overridePendingTransition(R.anim.enter,R.anim.exit);
     }
 }

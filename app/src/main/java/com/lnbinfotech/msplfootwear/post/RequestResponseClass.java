@@ -258,6 +258,9 @@ public class RequestResponseClass {
             @Override
             public void onFailure(String result) {
                 updateSharedPref(context.getString(R.string.pref_autoProduct),"N");
+                updateSharedPref(context.getString(R.string.pref_autoSizeDetail),"N");
+                updateSharedPref(context.getString(R.string.pref_autoSizeNDesign),"N");
+                updateSharedPref(context.getString(R.string.pref_lastSync),"N");
             }
         },max,1000000);
     }

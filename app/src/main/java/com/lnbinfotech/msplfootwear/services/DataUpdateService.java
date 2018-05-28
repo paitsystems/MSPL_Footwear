@@ -106,12 +106,14 @@ public class DataUpdateService extends IntentService {
         if(getDateDifference(getString(R.string.pref_autoCompany))) {
             reqResp.loadCompanyMaster();
         }else{
-            String str = "select max("+DBHandler.Company_Id+") from "+DBHandler.Table_CompanyMaster;
-            int max = db.getMaxAutoId(str);
-            reqResp.loadCompanyMaster(max);
+            if(isSynced(getString(R.string.pref_autoCompany))) {
+                String str = "select max(" + DBHandler.Company_Id + ") from " + DBHandler.Table_CompanyMaster;
+                int max = db.getMaxAutoId(str);
+                reqResp.loadCompanyMaster(max);
+            }
         }
 
-        if(getDateDifference(getString(R.string.pref_autoCustomer))) {
+        if(isSynced(getString(R.string.pref_autoCustomer))) {
             reqResp.loadCustomerMaster();
         }
 
@@ -134,25 +136,31 @@ public class DataUpdateService extends IntentService {
         if(getDateDifference(getString(R.string.pref_autoGST))) {
             reqResp.loadGSTMaster();
         }else{
-            String str = "select max("+DBHandler.GST_Auto+") from "+DBHandler.Table_GSTMASTER;
-            int max = db.getMaxAutoId(str);
-            reqResp.loadGSTMaster(max);
+            if(isSynced(getString(R.string.pref_autoGST))) {
+                String str = "select max(" + DBHandler.GST_Auto + ") from " + DBHandler.Table_GSTMASTER;
+                int max = db.getMaxAutoId(str);
+                reqResp.loadGSTMaster(max);
+            }
         }
 
         if(getDateDifference(getString(R.string.pref_autoHO))) {
             reqResp.loadHOMaster();
         }else{
-            String str = "select max("+DBHandler.HO_Auto+") from "+DBHandler.Table_HOMaster;
-            int max = db.getMaxAutoId(str);
-            reqResp.loadHOMaster(max);
+            if(isSynced(getString(R.string.pref_autoHO))) {
+                String str = "select max(" + DBHandler.HO_Auto + ") from " + DBHandler.Table_HOMaster;
+                int max = db.getMaxAutoId(str);
+                reqResp.loadHOMaster(max);
+            }
         }
 
         if(getDateDifference(getString(R.string.pref_autoProduct))) {
             reqResp.getMaxAuto(1);
         }else{
-            String str = "select max("+DBHandler.PM_ProductID+") from "+DBHandler.Table_ProductMaster;
-            int max = db.getMaxAutoId(str);
-            reqResp.loadProductMaster(max);
+            if(isSynced(getString(R.string.pref_autoProduct))) {
+                String str = "select max(" + DBHandler.PM_ProductID + ") from " + DBHandler.Table_ProductMaster;
+                int max = db.getMaxAutoId(str);
+                reqResp.loadProductMaster(max);
+            }
         }
     }
 

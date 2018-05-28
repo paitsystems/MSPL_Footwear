@@ -566,7 +566,13 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         }
         res2.close();
 
-        Cursor res1 = db.getDistinctColour(sizeGroup_list.get(0));
+        //TODO Change Here
+        //Cursor res1 = db.getDistinctColour(sizeGroup_list.get(0));
+        int a = sizeGroup_list.size()-1;
+        if(a<0){
+            a=0;
+        }
+        Cursor res1 = db.getDistinctColour(sizeGroup_list.get(a));
         if (res1.moveToFirst()) {
             do {
                 String colourHashcode = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour)) +
@@ -1352,7 +1358,13 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         }
         res2.close();
 
-        Cursor res1 = db.getDistinctColour(sizeGroup_list.get(0));
+        //TODO Change Here
+        //Cursor res1 = db.getDistinctColour(sizeGroup_list.get(0));
+        int a = sizeGroup_list.size()-1;
+        if(a<0){
+            a=0;
+        }
+        Cursor res1 = db.getDistinctColour(sizeGroup_list.get(a));
         if (res1.moveToFirst()) {
             do {
                 String str1 = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour));

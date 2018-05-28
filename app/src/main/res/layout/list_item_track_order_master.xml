@@ -15,48 +15,48 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="0.5"
+            android:layout_weight="0.2"
             android:gravity="left"
+            android:text="28/Oct/2017"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="28/Oct/2017" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_orderno"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="0.4"
+            android:layout_weight="0.16"
             android:gravity="left"
+            android:text="U5%/G/17-18/4949"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="U5%/G/17-18/4949" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_orderqty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="0.6"
+            android:layout_weight="0.2"
             android:gravity="right"
+            android:text="30"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="30" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_orderamt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="0.5"
+            android:layout_weight="0.2"
             android:gravity="right"
+            android:text="99999"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:text="99999" />
+            android:textStyle="bold" />
     </LinearLayout>
 
 
