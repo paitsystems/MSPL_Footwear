@@ -390,7 +390,7 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
                     dialog.dismiss();
                     Intent intent = new Intent(getApplicationContext(), DisplayCustOutstandingActivity.class);
                     int cust_id = FirstActivity.pref.getInt(getString(R.string.pref_selcustid),0);
-                    intent.putExtra("cust_id", cust_id);
+                    intent.putExtra("cust_id",  String.valueOf(cust_id));
                     intent.putExtra("val","0");
                     startActivity(intent);
                     overridePendingTransition(R.anim.enter,R.anim.exit);
