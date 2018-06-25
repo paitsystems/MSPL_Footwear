@@ -44,16 +44,16 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
     private TextView tv_totset, tv_totqty, tv_totamnt, tv_tot_gstamt, tv_tot_grossamt, tv_disc_per, tv_discamnt, tv_creaditlimit;
     private ListView lv_vOrder;
     private Button btn_proceed;
-    private String from, filter = "";
+    private String from, filter = "", titleStr = "";
     private DBHandler db;
     private List<CustomerOrderClass> list;
     private ImageView imgv_i;
     private RecyclerView rv_dispatchcenter;
     public static List<CompanyMasterClass> dispatchcenter_list;
     public static HashMap<Integer,Integer> cbMap;
-    private HashMap<Integer,Integer> dispatchCenterTotalMap;
+    private HashMap<Integer,Integer> dispatchCenterTotalMap, dispatchCenterNetAmtTotalMap;
     private List<String> workingDispatchCenter;
-    private int allBranch = 1;
+    private int allBranch = 1, flag = 0, dispatchCenterOrderLimit = 49000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +64,7 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         }
 
         setContentView(R.layout.activity_view_customer_order);
+        init();
 
         from = getIntent().getExtras().getString("from");
 
@@ -75,7 +76,6 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
             getSupportActionBar().setTitle("Your Order");
         }
 
-        init();
         imgv_i.setOnClickListener(this);
 
         btn_proceed.setOnClickListener(this);
@@ -109,7 +109,11 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_proceed:
-                checkLimit();
+                if(flag==0) {
+                    checkLimit();
+                }else{
+                    showDia(5);
+                }
                 break;
             case R.id.imgv_i:
                 //finish();
@@ -150,16 +154,19 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
     }
 
     private void setDispatchCenterData(){
-        dispatchcenter_list = new ArrayList<>();
-        dispatchCenterTotalMap = new HashMap<>();
-        cbMap = new HashMap<>();
+        dispatchcenter_list.clear();
+        dispatchCenterTotalMap.clear();
+        dispatchCenterNetAmtTotalMap.clear();
+        cbMap.clear();
 
         Cursor res2 = db.getDispatchCenterWiseTotal();
         if (res2.moveToFirst()) {
             do {
                 int id = res2.getInt(res2.getColumnIndex(DBHandler.CO_BranchId));
                 int total = res2.getInt(res2.getColumnIndex(DBHandler.CO_LooseQty));
+                int netAmtTotal = res2.getInt(res2.getColumnIndex(DBHandler.CO_NetAmt));
                 dispatchCenterTotalMap.put(id,total);
+                dispatchCenterNetAmtTotalMap.put(id,netAmtTotal);
             } while (res2.moveToNext());
         }
         res2.close();
@@ -172,12 +179,21 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
                 String id = res1.getString(res1.getColumnIndex(DBHandler.Company_Id));
                 String initial = res1.getString(res1.getColumnIndex(DBHandler.Company_Initial));
                 if(workingDispatchCenter.contains(initial)) {
-                    int total = 0;
+                    int total = 0, netAmtTot  = 0;
                     if (!dispatchCenterTotalMap.isEmpty()) {
                         if (dispatchCenterTotalMap.containsKey(Integer.parseInt(id))) {
                             total = dispatchCenterTotalMap.get(Integer.parseInt(id));
                         } else {
                             total = 0;
+                        }
+                    }
+                    if (!dispatchCenterNetAmtTotalMap.isEmpty()) {
+                        if (dispatchCenterNetAmtTotalMap.containsKey(Integer.parseInt(id))) {
+                            netAmtTot = dispatchCenterNetAmtTotalMap.get(Integer.parseInt(id));
+                            if(netAmtTot>dispatchCenterOrderLimit){
+                                flag = 1;
+                                titleStr = titleStr + initial +" - "+ netAmtTot+"\n";
+                            }
                         }
                     }
                     initial = initial + " - " + total;
@@ -303,6 +319,11 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         btn_proceed = (Button) findViewById(R.id.btn_proceed);
         rv_dispatchcenter = (RecyclerView) findViewById(R.id.rv_dispatchcenter);
 
+        dispatchcenter_list = new ArrayList<>();
+        dispatchCenterTotalMap = new HashMap<>();
+        dispatchCenterNetAmtTotalMap = new HashMap<>();
+        cbMap = new HashMap<>();
+
         workingDispatchCenter = new ArrayList<>();
         //workingDispatchCenter.add("U5%");
         workingDispatchCenter.add("UHWE");
@@ -406,6 +427,15 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
                 }
             });
             builder.setNeutralButton("Cancel",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 5) {
+            builder.setTitle("Dispatch Center Order Should be upto "+dispatchCenterOrderLimit);
+            builder.setMessage(titleStr);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

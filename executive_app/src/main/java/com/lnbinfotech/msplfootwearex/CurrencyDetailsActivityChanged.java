@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -48,6 +49,8 @@ public class CurrencyDetailsActivityChanged extends AppCompatActivity implements
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        tv_total.setText(getIntent().getExtras().getString("total"));
 
         loadCustCurrencyMaster();
         loadSECurrencyMaster();
@@ -179,9 +182,15 @@ public class CurrencyDetailsActivityChanged extends AppCompatActivity implements
                 public void onClick(DialogInterface dialog, int which) {
                     if(custCurrencyList.size()!=0 && seCurrencyList.size()!=0) {
                         if(!tv_total.getText().toString().equals("0")) {
-                            VisitPaymentFormActivity.total = Integer.parseInt(tv_total.getText().toString());
-                            VisitPaymentFormActivity.isCurrencyDataSaved = 1;
-                            new Constant(CurrencyDetailsActivityChanged.this).doFinish();
+                            if(tv_total.getText().toString().equals(getTotal())) {
+                                ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(tv_total.getWindowToken(),0);
+                                VisitPaymentFormActivity.total = Integer.parseInt(tv_total.getText().toString());
+                                VisitPaymentFormActivity.isCurrencyDataSaved = 1;
+                                new Constant(CurrencyDetailsActivityChanged.this).doFinish();
+                            }else{
+                                toast.setText("Paid-Return Does Not Match With Total");
+                                toast.show();
+                            }
                         }else{
                             toast.setText("Please Enter Values");
                             toast.show();
@@ -208,11 +217,11 @@ public class CurrencyDetailsActivityChanged extends AppCompatActivity implements
                     VisitPaymentFormActivity.isCurrencyDataSaved = 0;
                     custCurrencyList.clear();
                     seCurrencyList.clear();
-                    cust_lay.setVisibility(View.GONE);
-                    se_lay.setVisibility(View.GONE);
+                    //cust_lay.setVisibility(View.GONE);
+                    //se_lay.setVisibility(View.GONE);
                     tv_custTotal.setText("0");
                     tv_retTotal.setText("0");
-                    tv_total.setText("0");
+                    //tv_total.setText("0");
                     dialog.dismiss();
                     loadCustCurrencyMaster();
                     loadSECurrencyMaster();
@@ -273,7 +282,13 @@ public class CurrencyDetailsActivityChanged extends AppCompatActivity implements
         int paid = Integer.parseInt(tv_custTotal.getText().toString());
         int ret = Integer.parseInt(tv_retTotal.getText().toString());
         int tot = paid - ret;
-        tv_total.setText(String.valueOf(tot));
+        //tv_total.setText(String.valueOf(tot));
+    }
+
+    private String getTotal(){
+        int paid = Integer.parseInt(tv_custTotal.getText().toString());
+        int ret = Integer.parseInt(tv_retTotal.getText().toString());
+        return String.valueOf(paid - ret);
     }
 
     private void writeLog(String _data) {

@@ -32,7 +32,16 @@
         <service android:name=".services.AutoSyncService" />
         <service android:name=".services.DataUpdateService" />
         <service android:name=".services.UploadImageService" />
-
+        <service
+            android:name=".services.ScheduledJobService"
+            android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
+            <intent-filter>
+                <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".services.ScheduledJobServicePL"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <receiver android:name=".braodcasts.AutoUpdateBroadcastReceiver" />
         <receiver
             android:name=".braodcasts.RebootBroadcastReceiver"
@@ -47,7 +56,8 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".CheckOTPActivity$MySMSReceiver"
+        <receiver
+            android:name=".CheckOTPActivity$MySMSReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -73,8 +83,8 @@
         <activity
             android:name=".OptionsActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/NewAppTheme"/>
+            android:theme="@style/NewAppTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ImagewiseSetwiseOrderActivity"
             android:screenOrientation="portrait"

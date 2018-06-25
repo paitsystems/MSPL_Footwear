@@ -127,15 +127,47 @@
             android:orientation="vertical"
             android:layout_weight="0.5">
 
-            <TextView
-                style="@style/textViewMob"
+
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Customer"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:background="@drawable/line_left_top_right_bottom_draw"
-                android:textColor="@color/white"
-                android:padding="@dimen/mobpadding2" />
+                android:layout_height="wrap_content">
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Customer"
+                    android:layout_weight="0.5"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:background="@drawable/line_left_top_right_bottom_draw"
+                    android:textColor="@color/white"
+                    android:padding="@dimen/mobpadding2" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Enter Count"
+                    android:layout_weight="0.5"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:background="@drawable/line_left_top_right_bottom_draw"
+                    android:textColor="@color/white"
+                    android:padding="@dimen/mobpadding2"
+                    android:gravity="center" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Currency Tot"
+                    android:layout_weight="0.5"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:background="@drawable/line_left_top_right_bottom_draw"
+                    android:textColor="@color/white"
+                    android:padding="@dimen/mobpadding2"
+                    android:gravity="center" />
+
+            </LinearLayout>
 
             <ListView
                 android:id="@+id/custlist"
@@ -150,15 +182,46 @@
             android:orientation="vertical"
             android:layout_weight="0.5">
 
-            <TextView
-                style="@style/textViewMob"
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sales Executive"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:background="@drawable/line_left_top_right_bottom_draw"
-                android:textColor="@color/white"
-                android:padding="@dimen/mobpadding2" />
+                android:layout_height="wrap_content">
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Return Money"
+                    android:layout_weight="0.5"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:background="@drawable/line_left_top_right_bottom_draw"
+                    android:textColor="@color/white"
+                    android:padding="@dimen/mobpadding2" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Enter Count"
+                    android:layout_weight="0.5"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:background="@drawable/line_left_top_right_bottom_draw"
+                    android:textColor="@color/white"
+                    android:padding="@dimen/mobpadding2"
+                    android:gravity="center" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Currency Tot"
+                    android:layout_weight="0.5"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:background="@drawable/line_left_top_right_bottom_draw"
+                    android:textColor="@color/white"
+                    android:padding="@dimen/mobpadding2"
+                    android:gravity="center" />
+
+            </LinearLayout>
 
             <ListView
                 android:id="@+id/selist"

@@ -7,7 +7,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tv_cust_curr"
@@ -40,7 +40,8 @@
                 android:textAppearance="@android:style/TextAppearance.Medium"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:gravity="center" />
+                android:gravity="center"
+                android:background="@null" />
         </LinearLayout>
 
         <TextView

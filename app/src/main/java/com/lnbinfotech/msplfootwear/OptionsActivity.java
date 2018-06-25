@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.constant.Constant;
+import com.lnbinfotech.msplfootwear.constant.Utitlity;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.log.CopyLog;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
@@ -75,8 +76,10 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         tv_mobile1.setOnClickListener(this);
         tv_mobile2.setOnClickListener(this);
 
-        Intent intent1 = new Intent(getApplicationContext(),AutoSyncService.class);
-        startService(intent1);
+        //TODO: JobScheduled
+        Utitlity.scheduledJob(getApplicationContext());
+        /*Intent intent1 = new Intent(getApplicationContext(),AutoSyncService.class);
+        startService(intent1);*/
 
         setContactUs();
     }

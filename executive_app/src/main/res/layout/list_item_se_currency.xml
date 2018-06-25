@@ -7,7 +7,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tv_se_curr"
@@ -41,7 +41,8 @@
                 android:selectAllOnFocus="true"
                 android:inputType="number"
                 android:imeOptions="actionNext"
-                android:gravity="center" />
+                android:gravity="center"
+                android:background="@null" />
         </LinearLayout>
 
         <TextView

@@ -158,7 +158,13 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                     setrdoCash();
                 } else {
                     //showPopup(2);
-                    startCashActivity();
+                    if(!ed_amount.getText().toString().equals("") && !ed_amount.getText().toString().equals("0")) {
+                        startCashActivity();
+                    }else{
+                        rdo_cash.setChecked(false);
+                        toast.setText("Please Enter Proper Amount");
+                        toast.show();
+                    }
                 }
                 break;
             case R.id.rdo_cheque:
@@ -166,7 +172,13 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                     setrdoCheque();
                 } else {
                     //showPopup(3);
-                    startCheqActivity();
+                    if(!ed_amount.getText().toString().equals("") && !ed_amount.getText().toString().equals("0")) {
+                        startCheqActivity();
+                    }else{
+                        rdo_cheque.setChecked(false);
+                        toast.setText("Please Enter Proper Amount");
+                        toast.show();
+                    }
                 }
                 break;
             case R.id.rdo_other:
@@ -174,7 +186,13 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                     setrdoOther();
                 } else {
                     //showPopup(4);
-                    startOtherActivity();
+                    if(!ed_amount.getText().toString().equals("") && !ed_amount.getText().toString().equals("0")) {
+                        startOtherActivity();
+                    }else{
+                        rdo_other.setChecked(false);
+                        toast.setText("Please Enter Proper Amount");
+                        toast.show();
+                    }
                 }
                 break;
         }
@@ -828,9 +846,9 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         rdo_cash.setChecked(true);
         rdo_other.setChecked(false);
         Intent intent2 = new Intent(VisitPaymentFormActivity.this, CurrencyDetailsActivityChanged.class);
+        intent2.putExtra("total",ed_amount.getText().toString());
         startActivity(intent2);
         overridePendingTransition(R.anim.enter, R.anim.exit);
-        writeLog("goes to ChequeDetailsActivity");
     }
 
     private void startOtherActivity(){
@@ -840,7 +858,6 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         Intent intent1 = new Intent(VisitPaymentFormActivity.this, OtherDetailsActivity.class);
         startActivity(intent1);
         overridePendingTransition(R.anim.enter, R.anim.exit);
-        writeLog("goes to ChequeDetailsActivity");
     }
 
     private void writeLog(String _data) {
