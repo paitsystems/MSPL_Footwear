@@ -44,22 +44,23 @@ public class Constant {
     //TODO: Check Ip Address
     //public static final String ipaddress = "http://172.30.1.38/MSPLV5/service.svc";
     //public static final String ipaddress = "http://license.lnbinfotech.com/MSPLV2/service.svc";
-    public static final String ipaddress = "http://103.68.10.9:24086/MSPLV5/service.svc";
+    //public static final String ipaddress = "http://103.68.10.9:24086/MSPLV5/service.svc";
+    public static final String ipaddress = "http://103.109.13.200:24086/MSPLV5/service.svc";
 
     //TODO: Check Image Url
-    public static final String imgUrl = "http://103.68.10.9:24086/IMAGES/";
+    public static final String imgUrl = "http://103.109.13.200:24086/IMAGES/";
 
     //TODO: Check CustImage Url
-    public static final String custimgUrl = "http://103.68.10.9:24086/custImage/";
+    public static final String custimgUrl = "http://103.109.13.200:24086/custImage/";
 
-    //TODO: Check liveTestFlag 1-ScreenShotDisable, 0-ScreenShotwEnable
+    //TODO: Check liveTestFlag 1-ScreenShotDisable, 0-ScreenShotEnable
     public static int liveTestFlag = 1;
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
-    public static int showLogFlag = 0;
+    public static int showLogFlag = 1;
 
     public static int TIMEOUT_CON = 10*1000;
-    public static int TIMEOUT_SO = 70*1000;
+    public static int TIMEOUT_SO = 2*60*1000;
 
     private Activity activity;
     private Context context;

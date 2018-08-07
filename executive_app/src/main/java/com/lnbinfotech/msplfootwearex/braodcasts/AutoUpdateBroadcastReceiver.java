@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.constant.Utitlity;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.services.DataUpdateService;
 
@@ -16,9 +17,11 @@ public class AutoUpdateBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if(ConnectivityTest.getNetStat(context)){
-            context.startService(new Intent(context, DataUpdateService.class));
+            //context.startService(new Intent(context, DataUpdateService.class));
+            //writeLog(context,"AutoUpdateBroadcastReceiver_onReceive_Broadcast_Received");
             Constant.showLog("Broadcast Receiver");
-            writeLog(context,"AutoUpdateBroadcastReceiver_onReceive_Broadcast_Received");
+            Utitlity.scheduledJob(context);
+            writeLog(context,"onReceive_Job_Scheduled");
         }
     }
 

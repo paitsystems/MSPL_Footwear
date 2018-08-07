@@ -44,16 +44,16 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
                     tv_disc_per, tv_discamnt, tv_creaditlimit, tv_custname;
     private ListView lv_vOrder;
     private Button btn_proceed;
-    private String from, filter = "";
+    private String from, filter = "", titleStr = "";
     private DBHandler db;
     private List<CustomerOrderClass> list;
     private ImageView imgv_i;
     private RecyclerView rv_dispatchcenter;
     public static List<CompanyMasterClass> dispatchcenter_list;
     public static HashMap<Integer,Integer> cbMap;
-    private HashMap<Integer,Integer> dispatchCenterTotalMap;
+    private HashMap<Integer,Integer> dispatchCenterTotalMap, dispatchCenterNetAmtTotalMap;
     private List<String> workingDispatchCenter;
-    private int allBranch = 1;
+    private int allBranch = 1, flag = 0, dispatchCenterOrderLimit = 49000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +104,11 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_proceed:
-                checkLimit();
+                if(flag==0) {
+                    checkLimit();
+                }else{
+                    showDia(5);
+                }
                 break;
             case R.id.imgv_i:
                 //finish();
@@ -149,6 +153,8 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
     private void setDispatchCenterData(){
         dispatchcenter_list = new ArrayList<>();
         dispatchCenterTotalMap = new HashMap<>();
+        dispatchCenterNetAmtTotalMap = new HashMap<>();
+        dispatchCenterNetAmtTotalMap.clear();
         cbMap = new HashMap<>();
 
         Cursor res2 = db.getDispatchCenterWiseTotal();
@@ -156,7 +162,9 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
             do {
                 int id = res2.getInt(res2.getColumnIndex(DBHandler.CO_BranchId));
                 int total = res2.getInt(res2.getColumnIndex(DBHandler.CO_LooseQty));
+                int netAmtTotal = res2.getInt(res2.getColumnIndex(DBHandler.CO_NetAmt));
                 dispatchCenterTotalMap.put(id,total);
+                dispatchCenterNetAmtTotalMap.put(id,netAmtTotal);
             } while (res2.moveToNext());
         }
         res2.close();
@@ -169,7 +177,7 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
                 String id = res1.getString(res1.getColumnIndex(DBHandler.Company_Id));
                 String initial = res1.getString(res1.getColumnIndex(DBHandler.Company_Initial));
                 if(workingDispatchCenter.contains(initial)) {
-                    int total = 0;
+                    int total = 0, netAmtTot  = 0;
                     if (!dispatchCenterTotalMap.isEmpty()) {
                         if (dispatchCenterTotalMap.containsKey(Integer.parseInt(id))) {
                             total = dispatchCenterTotalMap.get(Integer.parseInt(id));
@@ -177,6 +185,15 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
                             total = 0;
                         }
                     }
+                    /*if (!dispatchCenterNetAmtTotalMap.isEmpty()) {
+                        if (dispatchCenterNetAmtTotalMap.containsKey(Integer.parseInt(id))) {
+                            netAmtTot = dispatchCenterNetAmtTotalMap.get(Integer.parseInt(id));
+                            if(netAmtTot>dispatchCenterOrderLimit){
+                                flag = 1;
+                                titleStr = titleStr + initial +" - "+ netAmtTot+"\n";
+                            }
+                        }
+                    }*/
                     initial = initial + " - " + total;
                     comClass.setCompanyId(id);
                     comClass.setCompanyInitial(initial);
@@ -408,6 +425,15 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
                 }
             });
             builder.setNeutralButton("Cancel",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 5) {
+            builder.setTitle("Dispatch Center Order Should be upto "+dispatchCenterOrderLimit);
+            builder.setMessage(titleStr);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

@@ -1239,7 +1239,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public Cursor getDispatchCenterWiseTotal() {
-        String str = "select "+CO_BranchId+",Sum("+CO_LooseQty+") "+CO_LooseQty+" from "+Table_CustomerOrder+" group by "+CO_BranchId;
+        String str = "select "+CO_BranchId+",Sum("+CO_LooseQty+") "+CO_LooseQty+",Sum("+CO_NetAmt+") "+CO_NetAmt+" from "+Table_CustomerOrder+" group by "+CO_BranchId;
         Constant.showLog("DispatchwiseTotal Center :- " + str);
         return getWritableDatabase().rawQuery(str, null);
     }
