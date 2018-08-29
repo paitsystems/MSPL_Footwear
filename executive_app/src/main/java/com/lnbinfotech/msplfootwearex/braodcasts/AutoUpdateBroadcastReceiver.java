@@ -6,9 +6,8 @@ import android.content.Intent;
 
 import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
-import com.lnbinfotech.msplfootwearex.constant.Utitlity;
+import com.lnbinfotech.msplfootwearex.constant.Utility;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
-import com.lnbinfotech.msplfootwearex.services.DataUpdateService;
 
 //Created by lnb on 8/23/2017.
 
@@ -20,7 +19,7 @@ public class AutoUpdateBroadcastReceiver extends BroadcastReceiver {
             //context.startService(new Intent(context, DataUpdateService.class));
             //writeLog(context,"AutoUpdateBroadcastReceiver_onReceive_Broadcast_Received");
             Constant.showLog("Broadcast Receiver");
-            Utitlity.scheduledJob(context);
+            Utility.scheduledJob(context);
             writeLog(context,"onReceive_Job_Scheduled");
         }
     }

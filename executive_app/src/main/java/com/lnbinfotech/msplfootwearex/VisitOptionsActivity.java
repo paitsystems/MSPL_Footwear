@@ -76,9 +76,9 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.card_take_order:
-                //showDia(1);
-                startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
-                overridePendingTransition(R.anim.enter, R.anim.exit);
+                showDia(1);
+                /*startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);*/
                 break;
             case R.id.card_payment:
                 //TODO: Check
@@ -196,19 +196,18 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
         }if (a == 1) {
             builder.setTitle("Take Order");
             builder.setMessage("How do you want to take order?");
-            builder.setPositiveButton("Imagewise", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("With Photos", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(getApplicationContext(),ImagewiseSetwiseOrderActivity.class));
+                    startActivity(new Intent(getApplicationContext(),MainImagewiseSetwiseOrderActivity.class));
                     overridePendingTransition(R.anim.enter,R.anim.exit);
                     dialog.dismiss();
                 }
             });
-            builder.setNegativeButton("Cutsize", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("Without Photos", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                   // startActivity(new Intent(getApplicationContext(),CutsizeSetwiseOrderActivity.class));
-                    startActivity(new Intent(getApplicationContext(),DisplayCustListAreawiseActivity.class));
+                    startActivity(new Intent(getApplicationContext(),CutsizeSetwiseOrderActivity.class));
                     overridePendingTransition(R.anim.enter,R.anim.exit);
                     dialog.dismiss();
                 }

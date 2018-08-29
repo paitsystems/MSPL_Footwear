@@ -28,6 +28,7 @@ import com.lnbinfotech.msplfootwearex.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.CompanyMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerOrderClass;
+import com.lnbinfotech.msplfootwearex.model.ImagewiseAddToCartClass;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
     private HashMap<Integer,Integer> dispatchCenterTotalMap, dispatchCenterNetAmtTotalMap;
     private List<String> workingDispatchCenter;
     private int allBranch = 1, flag = 0, dispatchCenterOrderLimit = 49000;
+    private String cat9 = "", cat2 = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,10 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         setContentView(R.layout.activity_view_customer_order);
 
         from = getIntent().getExtras().getString("from");
-
+        if(AddToCartActivity.activityToFrom==4){
+            cat9 = getIntent().getExtras().getString("cat9");
+            cat2 = getIntent().getExtras().getString("cat2");
+        }
         if (getSupportActionBar() != null) {
             assert from != null;
             if(from.equals("addtocard")){
@@ -352,9 +357,21 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    AddToCartActivity.activityToFrom = 2;
-                    new Constant(ViewCustomerOrderActiviy.this).doFinish();
                     dialog.dismiss();
+                    if(AddToCartActivity.activityToFrom==4){
+                        AddToCartActivity.activityToFrom = 2;
+                        Intent intent = new Intent(getApplicationContext(), AddToCartActivity.class);
+                        intent.putExtra("cat9",cat9);
+                        intent.putExtra("cat2",cat2);
+                        intent.putExtra("from", "prodsearch");
+                        finish();
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.left_to_right,R.anim.right_to_left);
+                    }else {
+                        AddToCartActivity.activityToFrom = 2;
+                        new Constant(ViewCustomerOrderActiviy.this).doFinish();
+                    }
+
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -466,6 +483,11 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
         }
         Constant.showLog(filter);
         setData();
+    }
+
+    @Override
+    public void onImageClick(ImagewiseAddToCartClass prod) {
+
     }
 
     private void loadOustandingdetail(){

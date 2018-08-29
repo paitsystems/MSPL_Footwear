@@ -116,13 +116,11 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
         editor.putInt(getString(R.string.pref_selcustid),custId);
         editor.putString(getString(R.string.pref_selcustname),select_item);
         editor.apply();
-        finish();
         if(from.equals("order")) {
-            startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
+            showDia(3);
         }else{
             startActivity(new Intent(getApplicationContext(), TrackOrderMasterActivity.class));
         }
-        overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
     @Override
@@ -226,6 +224,33 @@ public class DisplayCustListActivity extends AppCompatActivity implements View.O
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     saveNCountinue();
+                }
+            });
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 3) {
+            builder.setTitle("Take Order");
+            builder.setMessage("How do you want to take order?");
+            builder.setPositiveButton("With Photos", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), MainImagewiseSetwiseOrderActivity.class));
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("Without Photos", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                    dialog.dismiss();
                 }
             });
             builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {

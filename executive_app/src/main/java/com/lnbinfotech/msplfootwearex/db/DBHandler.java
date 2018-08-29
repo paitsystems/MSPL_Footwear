@@ -1177,10 +1177,18 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
-    public Cursor getDistinctColour(String sizegroup) {
-        String str = "select Distinct " + ARSD_Colour + "," + ARSD_HashCode + " from " + Table_AllRequiredSizesDesigns +
+    public Cursor getDistinctColour(String sizegroup, String type, int a) {
+        //TODO: Change For Version 1.3
+        String str;
+        if(type.equalsIgnoreCase("M")) {
+            str = "select Distinct " + ARSD_Colour + "," + ARSD_HashCode + " from " + Table_AllRequiredSizesDesigns +
+                    " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_InOutType + "='I' and " +
+                    ARSD_SizeGroup + " like '" + sizegroup + "' order by " + ARSD_Colour;
+        }else {
+            str = "select Distinct " + ARSD_Colour + "," + ARSD_HashCode + " from " + Table_AllRequiredSizesDesigns +
                 " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_InOutType + "='I' and " +
-                ARSD_SizeGroup + " like '" + sizegroup + "' order by " + ARSD_Colour;
+                ARSD_typ + " like 'D' order by " + ARSD_Colour;
+        }
         Constant.showLog("getDistinctColour :- " + str);
         return getWritableDatabase().rawQuery(str, null);
     }
@@ -1602,10 +1610,14 @@ public class DBHandler extends SQLiteOpenHelper {
     public Cursor getImageSubCategory1(String catName, String subCatName) {
         String str = "select "+Table_ProductMaster+"."+PM_ProductID+","+Table_ProductMaster+"."+PM_Cat2+","
                 +Table_ProductMaster+"."+PM_Finalprod+","+Table_ProductMaster+"."+PM_ProdId+","+Table_AllRequiredSizesDesigns+"."+
-                ARSD_ImageName+" from "+Table_ProductMaster+","+ Table_AllRequiredSizesDesigns+" where "+
+                ARSD_ImageName+","+Table_ProductMaster+"."+PM_MRPRate+","+Table_ProductMaster+"."+PM_MarkUp+","
+                +Table_ProductMaster+"."+PM_MarkDown+","+Table_ProductMaster+"."+PM_SRate+","+Table_ProductMaster+"."
+                +PM_Finalprod+","+Table_ProductMaster+"."+PM_HSNCode+","+Table_GSTMASTER+"."+GST_GSTPer+","+Table_GSTMASTER+"."+GST_GroupNm
+                +" from "+Table_ProductMaster+","+ Table_AllRequiredSizesDesigns+","+Table_GSTMASTER+" where "+
                 Table_ProductMaster+"."+PM_Cat9+"='"+catName+"' and "+Table_ProductMaster+"."+PM_Cat2+"='"+subCatName+"' and "
                 +Table_AllRequiredSizesDesigns+"."+ARSD_Productid+"="+
                 Table_ProductMaster+"."+PM_ProductID+" and "+Table_AllRequiredSizesDesigns+"."+ARSD_InOutType+"='I'" +
+                " and " + Table_ProductMaster+"."+PM_GSTGroup +"="+Table_GSTMASTER+"."+GST_GroupNm+
                 " group by "+Table_ProductMaster+"."+PM_Finalprod+" order by "+
                 Table_ProductMaster+"."+PM_Cat2;
         Constant.showLog("getImageSubCategory 1 :- "+str);
@@ -1732,6 +1744,19 @@ public class DBHandler extends SQLiteOpenHelper {
         res.close();
         return a;
     }
+
+    public Cursor getDistinctColourImageWise(int prodId) {
+        //TODO: Change For Version 1.3
+        /*String str = "select Distinct " + ARSD_Colour + "," + ARSD_HashCode + " from " + Table_AllRequiredSizesDesigns +
+                " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_InOutType + "='I' and " +
+                ARSD_SizeGroup + " like '" + sizegroup + "' order by " + ARSD_Colour;*/
+        String str = "select Distinct " + ARSD_Colour + "," + ARSD_HashCode + "," + ARSD_ImageName + " from " + Table_AllRequiredSizesDesigns +
+                " where " + ARSD_Productid + "=" + prodId + " and " + ARSD_InOutType + "='I' and " +
+                ARSD_typ + " like 'D' order by " + ARSD_Colour;
+        Constant.showLog("getDistinctColourImageWise :- " + str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
 }
 
 

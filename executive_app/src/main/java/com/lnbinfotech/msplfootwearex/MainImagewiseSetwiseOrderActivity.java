@@ -34,6 +34,11 @@ public class MainImagewiseSetwiseOrderActivity extends AppCompatActivity {
         setUpPager();
     }
 
+    @Override
+    public void onBackPressed() {
+        new Constant(MainImagewiseSetwiseOrderActivity.this).doFinish();
+    }
+
     private void setUpPager() {
         final ViewPagerClass adapter = new ViewPagerClass(getSupportFragmentManager());
         String arr[] = new String[]{"GENTS", "LADIES-N-BOYS", "HAWAI-N-EVA", "SCHOOL SHOES"};

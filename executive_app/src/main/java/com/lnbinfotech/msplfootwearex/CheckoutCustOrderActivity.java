@@ -607,6 +607,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
                 request.setEntity(entity);
 
                 // Send request to WCF service
+                //TODO : Check Timeout
                 DefaultHttpClient httpClient = new DefaultHttpClient();
                 HttpResponse response = httpClient.execute(request);
                 Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());

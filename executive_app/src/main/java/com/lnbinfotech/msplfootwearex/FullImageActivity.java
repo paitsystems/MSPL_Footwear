@@ -1,81 +1,61 @@
 package com.lnbinfotech.msplfootwearex;
 
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.RectF;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.WindowManager;
-import android.widget.TextView;
+import android.view.View;
 import android.widget.Toast;
 
+import com.lnbinfotech.msplfootwearex.adapters.CategoryWiseImageAdapter;
+import com.lnbinfotech.msplfootwearex.adapters.FullImageAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.GentsCategoryClass;
+import com.lnbinfotech.msplfootwearex.model.ImagewiseAddToCartClass;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
-public class FullImageActivity extends AppCompatActivity {
+//Created by Anup on 21-08-2018.
 
-    private TouchImageView imageView;
+public class FullImageActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private Constant constant, constant1;
     private Toast toast;
-    private TextView tv_catname, tv_prodname, tv_mrp, tv_margin;
+    private ViewPager pager;
+    private List<String> mImageList;
+    private FullImageAdapter adapter;
+    private ImagewiseAddToCartClass prod = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if(Constant.liveTestFlag==1) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-        }
-
-        setContentView(R.layout.activity_full_image);
+        setContentView(R.layout.activity_fullimage);
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
 
         init();
 
-        /*String imageName = getIntent().getExtras().getString("imagename");
-        Constant.checkFolder(Constant.folder_name);
-        File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + imageName);
-        if(f.length()!=0) {
-            String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + imageName);
-            imageView.setImageBitmap(scaleBitmap(_imagePath));
-        }else{
-            Toast toast = Toast.makeText(getApplicationContext(),"File Not Found",Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER,0,0);
-            toast.show();
-        }*/
+        try {
+            prod = (ImagewiseAddToCartClass) getIntent().getExtras().getSerializable("data");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-        GentsCategoryClass gentClass = (GentsCategoryClass) getIntent().getExtras().getSerializable("data");
-        //int id  = getIntent().getExtras().getInt("id");
-
-        //imageView.setImageResource(id);
-        tv_catname.setText(gentClass.getCategoryName());
-        tv_prodname.setText(gentClass.getProductName());
-        tv_mrp.setText(gentClass.getMrp());
-        tv_margin.setText(gentClass.getMargin());
+        setViewPager();
 
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                new Constant(FullImageActivity.this).doFinish();
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case 0:
                 break;
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -83,60 +63,50 @@ public class FullImageActivity extends AppCompatActivity {
         new Constant(FullImageActivity.this).doFinish();
     }
 
-    private void init(){
-        tv_catname = (TextView) findViewById(R.id.tv_catname);
-        tv_prodname = (TextView) findViewById(R.id.tv_prodname);
-        tv_mrp = (TextView) findViewById(R.id.tv_mrp);
-        tv_margin = (TextView) findViewById(R.id.tv_margin);
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
-        imageView = (TouchImageView) findViewById(R.id.touch_imageview);
-        toast = Toast.makeText(getApplicationContext(),"File Not Found",Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER,0,0);
-    }
-
-    private String getRealPathFromURI(String contentURI) {
-        Uri contentUri = Uri.parse(contentURI);
-        Cursor cursor = getContentResolver().query(contentUri, null, null, null, null);
-        if (cursor == null) {
-            return contentUri.getPath();
-        } else {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            String s = cursor.getString(idx);
-            cursor.close();
-            return s;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //showDia(0);
+                new Constant(FullImageActivity.this).doFinish();
+                break;
         }
+        return super.onOptionsItemSelected(item);
     }
 
-    public Bitmap scaleBitmap(String imagePath) {
-        Bitmap resizedBitmap = null;
-        try {
-            int inWidth, inHeight;
-            InputStream in;
-            in = new FileInputStream(imagePath);
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(in, null, options);
-            in.close();
-            //in = null;
-            inWidth = options.outWidth;
-            inHeight = options.outHeight;
-            in = new FileInputStream(imagePath);
-            options = new BitmapFactory.Options();
-            options.inSampleSize = Math.max(inWidth / 300, inHeight / 300);
-            Bitmap roughBitmap = BitmapFactory.decodeStream(in, null, options);
+    private void setViewPager() {
+        adapter = new FullImageAdapter(getSupportFragmentManager());
+        getImgTitleList();
+        adapter.getImageTitle(mImageList);
+        pager.setAdapter(adapter);
+    }
 
-            Matrix m = new Matrix();
-            RectF inRect = new RectF(0, 0, roughBitmap.getWidth(), roughBitmap.getHeight());
-            RectF outRect = new RectF(0, 0, roughBitmap.getWidth(), roughBitmap.getHeight());
-            m.setRectToRect(inRect, outRect, Matrix.ScaleToFit.CENTER);
-            float[] values = new float[9];
-            m.getValues(values);
-            resizedBitmap = Bitmap.createScaledBitmap(roughBitmap, (int) (roughBitmap.getWidth() * values[0]), (int) (roughBitmap.getHeight() * values[4]), true);
+    private void getImgTitleList() {
+        try {
+            String imageName = prod.getImageName();
+            String[] arr = imageName.split("\\,");
+            if (arr.length > 1) {
+                for (String img : arr) {
+                    if(!img.equals("NA")) {
+                        mImageList.add(img);
+                    }
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return resizedBitmap;
     }
 
+    private void init() {
+        mImageList = new ArrayList<>();
+        constant = new Constant(FullImageActivity.this);
+        constant1 = new Constant(getApplicationContext());
+        toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        pager = (ViewPager) findViewById(R.id.pager);
+    }
+
+    private void writeLog(String _data) {
+        new WriteLog().writeLog(getApplicationContext(), "FullImageActivity_" + _data);
+    }
 }

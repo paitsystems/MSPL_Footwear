@@ -22,12 +22,10 @@ public class GentsCategoryGridAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
     private List<GentsCategoryClass> gents;
-    private String[] drawId;
 
-    public GentsCategoryGridAdapter(Context _context,List<GentsCategoryClass> _gents,String[] _drawId ){
+    public GentsCategoryGridAdapter(Context _context,List<GentsCategoryClass> _gents){
         this.context = _context;
         this.gents = _gents;
-        this.drawId = _drawId;
         inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -53,6 +51,9 @@ public class GentsCategoryGridAdapter extends BaseAdapter {
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.grid_item_gents_category, viewGroup, false);
             holder.tv_catname = (TextView) view.findViewById(R.id.tv_catename);
+            holder.tv_mrp = (TextView) view.findViewById(R.id.tv_mrp);
+            holder.tv_markup = (TextView) view.findViewById(R.id.tv_markup);
+            holder.tv_markdown = (TextView) view.findViewById(R.id.tv_markdown);
             holder.img = (ImageView) view.findViewById(R.id.image);
             view.setTag(holder);
         } else {
@@ -60,17 +61,22 @@ public class GentsCategoryGridAdapter extends BaseAdapter {
         }
         GentsCategoryClass gentsClass = (GentsCategoryClass) getItem(i);
         holder.tv_catname.setText(gentsClass.getCategoryName());
+        holder.tv_mrp.setText(gentsClass.getMrp());
+        holder.tv_markup.setText(gentsClass.getMarkup());
+        holder.tv_markdown.setText(gentsClass.getMarkdown());
         //holder.img.setImageResource(drawId[i]);
         Glide.with(context).load(gentsClass.getImgName())
                 .thumbnail(0.5f)
                 .crossFade()
+                .placeholder(R.drawable.placehoder)
+                .error(R.drawable.placehoder)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.img);
         return view;
     }
 
     private class ViewHolder {
-        public TextView tv_catname;
+        public TextView tv_catname, tv_mrp, tv_markup, tv_markdown;
         public ImageView img;
     }
 

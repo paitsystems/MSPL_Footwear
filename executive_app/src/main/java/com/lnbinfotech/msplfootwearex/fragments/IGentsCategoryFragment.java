@@ -1,6 +1,5 @@
 package com.lnbinfotech.msplfootwearex.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -12,10 +11,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.lnbinfotech.msplfootwearex.FullImageActivity;
+import com.lnbinfotech.msplfootwearex.ImageWiseAddToCartActivity;
 import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.adapters.GentsCategoryGridAdapter;
-import com.lnbinfotech.msplfootwearex.adapters.GentsCategoryListAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.model.GentsCategoryClass;
@@ -30,12 +28,7 @@ public class IGentsCategoryFragment extends Fragment {
 
     private GridView gridView;
     private GentsCategoryGridAdapter adapter;
-    //private int[] drawId = {R.drawable.formal,
-    //R.drawable.simulus,R.drawable.paralite,R.drawable.acusole,R.drawable.casual};
     private String cat = "",subCat = "";
-    private Context context;
-
-    private String[] drawId = {"http://103.68.10.9:24086/IMAGES/66001_Vertex_Tan_P1.jpg", "http://103.68.10.9:24086/IMAGES/66115_Vertex_Brown_P2.jpg", "http://103.68.10.9:24086/IMAGES/6115V+_Vertex Plus_Brown_P2.jpg", "http://103.68.10.9:24086/IMAGES/9542_Max Premium_Tan_P3.jpg", "http://103.68.10.9:24086/IMAGES/1024S_Stimulus Chappals_Red_P1.jpg"};
 
     public static IGentsCategoryFragment newInstance(String _cat, String _subCat){
         IGentsCategoryFragment frag = new IGentsCategoryFragment();
@@ -49,10 +42,9 @@ public class IGentsCategoryFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Constant.showLog("onCreate()");
         cat = getArguments().getString("cat");
         subCat = getArguments().getString("subcat");
-        //Constant.showLog(cat+"-"+subCat);
+        Constant.showLog(cat+"-"+subCat);
     }
 
     @Nullable
@@ -67,9 +59,10 @@ public class IGentsCategoryFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 GentsCategoryClass gentClass = (GentsCategoryClass) adapterView.getItemAtPosition(i);
-                Intent intent = new Intent(getContext(), FullImageActivity.class);
+                Intent intent = new Intent(getContext(), ImageWiseAddToCartActivity.class);
                 intent.putExtra("data", gentClass);
-                //intent.putExtra("id", drawId[i]);
+                intent.putExtra("cat9", cat);
+                intent.putExtra("cat2", subCat);
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.enter, R.anim.exit);
             }
@@ -87,14 +80,23 @@ public class IGentsCategoryFragment extends Fragment {
                 do {
                     GentsCategoryClass gentsClass = new GentsCategoryClass();
                     gentsClass.setCategoryName(res.getString(res.getColumnIndex(DBHandler.PM_ProdId)));
+                    gentsClass.setMrp(res.getString(res.getColumnIndex(DBHandler.PM_MRPRate)));
+                    gentsClass.setMarkup(res.getString(res.getColumnIndex(DBHandler.PM_MarkUp)));
+                    gentsClass.setMarkdown(res.getString(res.getColumnIndex(DBHandler.PM_MarkDown)));
+                    gentsClass.setWsp(res.getString(res.getColumnIndex(DBHandler.PM_SRate)));
+                    gentsClass.setProductName(res.getString(res.getColumnIndex(DBHandler.PM_Finalprod)));
+                    gentsClass.setHsnCode(res.getString(res.getColumnIndex(DBHandler.PM_HSNCode)));
+                    gentsClass.setProdId(res.getInt(res.getColumnIndex(DBHandler.PM_ProductID)));
+                    gentsClass.setProductId(res.getString(res.getColumnIndex(DBHandler.PM_ProdId)));
+                    gentsClass.setGstPer(res.getString(res.getColumnIndex(DBHandler.GST_GSTPer)));
+                    gentsClass.setGstGroupName(res.getString(res.getColumnIndex(DBHandler.GST_GroupNm)));
+
                     String img = res.getString(res.getColumnIndex(DBHandler.ARSD_ImageName));
                     String imgArr[] = img.split("\\,");
                     img = Constant.imgUrl;
                     if (imgArr.length > 1) {
-                        //Constant.showLog(imgArr[0]);
                         String img1 = imgArr[0];
-                        img1 = URLEncoder.encode(img1, "UTF-8");
-                        //Constant.showLog(img1);
+                        //img1 = URLEncoder.encode(img1, "UTF-8");
                         img = img + img1;
                     }
                     img = img + ".jpg";
@@ -104,7 +106,7 @@ public class IGentsCategoryFragment extends Fragment {
                 } while (res.moveToNext());
             }
             res.close();
-            adapter = new GentsCategoryGridAdapter(getContext(), list, drawId);
+            adapter = new GentsCategoryGridAdapter(getContext(), list);
             gridView.setAdapter(adapter);
         }catch (Exception e){
             e.printStackTrace();

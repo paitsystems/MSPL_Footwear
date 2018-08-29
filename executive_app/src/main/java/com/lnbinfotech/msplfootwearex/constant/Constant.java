@@ -54,10 +54,10 @@ public class Constant {
     public static final String custimgUrl = "http://103.109.13.200:24086/custImage/";
 
     //TODO: Check liveTestFlag 1-ScreenShotDisable, 0-ScreenShotEnable
-    public static int liveTestFlag = 1;
+    public static int liveTestFlag = 0;
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
-    public static int showLogFlag = 1;
+    public static int showLogFlag = 0;
 
     public static int TIMEOUT_CON = 10*1000;
     public static int TIMEOUT_SO = 2*60*1000;

@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.lnbinfotech.msplfootwearex.AddToCartActivity;
 import com.lnbinfotech.msplfootwearex.R;
+import com.lnbinfotech.msplfootwearex.constant.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +24,13 @@ public class CustomerOrderUnpackGridAdpater extends BaseAdapter {
 
     private Context context;
     private List<String> sizeList;
-    private int requestFocus = 0;
+    private int requestFocus = 0, type = 0;
     private List<String> whiteHashCodeList = new ArrayList<>();
 
-    public CustomerOrderUnpackGridAdpater(Context _context, List<String> _sizeList){
+    public CustomerOrderUnpackGridAdpater(Context _context, List<String> _sizeList, int _type){
         this.context = _context;
         this.sizeList = _sizeList;
+        this.type = _type;
         addToList();
     }
 
@@ -57,18 +59,43 @@ public class CustomerOrderUnpackGridAdpater extends BaseAdapter {
         String[] colourHashCode = _colourHashCode.split("\\-");
         if(colourHashCode.length>1) {
             String hashCode = colourHashCode[1];
-            if (whiteHashCodeList.contains(hashCode)) {
-                tv.setTextColor(Color.parseColor("#000000"));
-                GradientDrawable background = (GradientDrawable) tv.getBackground();
-                background.setColor(Color.parseColor("#FFFFFF"));
-                tv.setBackground(background);
-            } else {
-                tv.setTextColor(Color.parseColor("#FFFFFF"));
-                GradientDrawable background = (GradientDrawable) tv.getBackground();
-                background.setColor(Color.parseColor(hashCode));
-                tv.setBackground(background);
+            if (type == 0) {
+                if (whiteHashCodeList.contains(hashCode)) {
+                    tv.setTextColor(Color.parseColor("#000000"));
+                    GradientDrawable background = (GradientDrawable) tv.getBackground();
+                    background.setColor(Color.parseColor("#FFFFFF"));
+                    tv.setBackground(background);
+                } else {
+                    tv.setTextColor(Color.parseColor("#FFFFFF"));
+                    GradientDrawable background = (GradientDrawable) tv.getBackground();
+                    background.setColor(Color.parseColor(hashCode));
+                    tv.setBackground(background);
+                }
+                tv.setText(colourHashCode[0]);
+            } else if (type == 1) {
+                String s[] = colourHashCode[0].split("\\^");
+                if (s.length > 1) {
+                    tv.setText(s[0]);
+                    String avail = s[2];
+                    if (avail.equals("Y")) {
+                        tv.setTextColor(Color.parseColor("#FFFFFF"));
+                        GradientDrawable background = (GradientDrawable) tv.getBackground();
+                        background.setColor(Color.parseColor("#00A933"));
+                        tv.setBackground(background);
+                    } else {
+                        tv.setTextColor(Color.parseColor("#FFFFFF"));
+                        GradientDrawable background = (GradientDrawable) tv.getBackground();
+                        background.setColor(Color.parseColor("#FF0000"));
+                        tv.setBackground(background);
+                    }
+                } else {
+                    tv.setText(colourHashCode[0]);
+                    tv.setTextColor(Color.parseColor("#FFFFFF"));
+                    GradientDrawable background = (GradientDrawable) tv.getBackground();
+                    background.setColor(Color.parseColor(hashCode));
+                    tv.setBackground(background);
+                }
             }
-            tv.setText(colourHashCode[0]);
             tv.setOnClickListener(null);
             tv.setFocusable(false);
             tv.addTextChangedListener(null);

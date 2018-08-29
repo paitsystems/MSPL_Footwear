@@ -1461,16 +1461,18 @@ public class RequestResponseClass {
 
     private void updateSharedPref(String prefname, String value){
         writeLog(prefname+"_"+value);
-        FirstActivity.pref = context.getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = FirstActivity.pref.edit();
-        String str = getDateTime()+"-"+value+"-"+getTime();
-        Constant.showLog(prefname+"-"+str);
-        if(!prefname.equals(context.getString(R.string.pref_lastSync))) {
-            editor.putString(prefname, str);
-        }else{
-            editor.putString(prefname, getTime());
+        if(value.equals("Y")) {
+            FirstActivity.pref = context.getSharedPreferences(FirstActivity.PREF_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = FirstActivity.pref.edit();
+            String str = getDateTime() + "-" + value + "-" + getTime();
+            Constant.showLog(prefname + "-" + str);
+            if (!prefname.equals(context.getString(R.string.pref_lastSync))) {
+                editor.putString(prefname, str);
+            } else {
+                editor.putString(prefname, getTime());
+            }
+            editor.apply();
         }
-        editor.apply();
     }
 
     public void getMaxAuto(final int type) {

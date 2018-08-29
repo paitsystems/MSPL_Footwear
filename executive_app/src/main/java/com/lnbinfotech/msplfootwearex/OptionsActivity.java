@@ -22,14 +22,13 @@ import android.widget.Toast;
 
 import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
-import com.lnbinfotech.msplfootwearex.constant.Utitlity;
+import com.lnbinfotech.msplfootwearex.constant.Utility;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.interfaces.DatabaseUpdateInterface;
 import com.lnbinfotech.msplfootwearex.log.CopyLog;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.mail.GMailSender;
 import com.lnbinfotech.msplfootwearex.model.NewCustomerEntryClass;
-import com.lnbinfotech.msplfootwearex.services.AutoSyncService;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -76,7 +75,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         tv_mobile2.setOnClickListener(this);
 
         //TODO: JobScheduled
-        Utitlity.scheduledJob(getApplicationContext());
+        Utility.scheduledJob(getApplicationContext());
         /*Intent intent1 = new Intent(getApplicationContext(),AutoSyncService.class);
         startService(intent1);*/
 
@@ -95,7 +94,6 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.card_take_order:
-                //showDia(1);
                 Intent in = new Intent(getApplicationContext(), DisplayCustListActivity.class);
                 in.putExtra("from","order");
                 startActivity(in);
@@ -256,7 +254,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         } else if (a == 1) {
             builder.setTitle("Take Order");
             builder.setMessage("How do you want to take order?");
-            builder.setPositiveButton("Imagewise", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("With Photos", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //startActivity(new Intent(getApplicationContext(), ImagewiseSetwiseOrderActivity.class));
@@ -266,7 +264,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                     dialog.dismiss();
                 }
             });
-            builder.setNegativeButton("Cutsize", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("Without Photos", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                    // startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));

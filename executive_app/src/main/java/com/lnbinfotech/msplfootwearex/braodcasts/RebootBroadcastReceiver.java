@@ -7,11 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.lnbinfotech.msplfootwearex.constant.Constant;
-import com.lnbinfotech.msplfootwearex.constant.Utitlity;
+import com.lnbinfotech.msplfootwearex.constant.Utility;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
-import com.lnbinfotech.msplfootwearex.services.AutoSyncService;
-import com.lnbinfotech.msplfootwearex.services.DataUpdateService;
 
 public class RebootBroadcastReceiver extends BroadcastReceiver {
 
@@ -21,7 +18,7 @@ public class RebootBroadcastReceiver extends BroadcastReceiver {
             if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
                 //new Constant(context).setRecurringAlarm();
                 //context.startService(new Intent(context, AutoSyncService.class));
-                Utitlity.scheduledJob(context);
+                Utility.scheduledJob(context);
                 new WriteLog().writeLog(context,"RebootBroadcastReceiver_onReceive_Job_Scheduled");
             }
         }else{

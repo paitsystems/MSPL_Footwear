@@ -31,6 +31,7 @@ import com.lnbinfotech.msplfootwearex.interfaces.RecyclerViewToActivityInterface
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.CompanyMasterClass;
+import com.lnbinfotech.msplfootwearex.model.ImagewiseAddToCartClass;
 import com.lnbinfotech.msplfootwearex.model.TrackOrderDetailChangedClass;
 import com.lnbinfotech.msplfootwearex.model.TrackOrderMasterClass;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
@@ -441,6 +442,11 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         }
         Constant.showLog(filter);
         setData();
+    }
+
+    @Override
+    public void onImageClick(ImagewiseAddToCartClass prod) {
+
     }
 
     private void loadOustandingdetail() {

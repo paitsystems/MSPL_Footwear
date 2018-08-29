@@ -43,6 +43,7 @@ import com.lnbinfotech.msplfootwearex.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.CheckAvailStockClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerOrderClass;
+import com.lnbinfotech.msplfootwearex.model.ImagewiseAddToCartClass;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
 import java.math.BigDecimal;
@@ -214,6 +215,18 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             tv_cancel_item.setVisibility(View.VISIBLE);
             tv_add_to_card.setText("Update");
             updateOrder();
+        } else if (activityToFrom == 3) {
+            rdo_pack.setClickable(false);
+            rdo_unpack.setClickable(false);
+            rdo_pack.setChecked(false);
+            rdo_unpack.setChecked(true);
+            lay_pack.setVisibility(View.GONE);
+            lay_comp_pack.setVisibility(View.GONE);
+            ed_prod_search.setText(selProd);
+            ed_prod_search.setClickable(false);
+            ed_prod_search.setEnabled(false);
+            gridView.setVisibility(View.VISIBLE);
+            setUnpackData();
         }
         constant = new Constant(AddToCartActivity.this);
     }
@@ -356,6 +369,15 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                 loadCustDiscLimit(7);
                             }
                         }
+                    }else if (activityToFrom == 3) {
+                        String str1 = "";
+                        for (String str : unpackSizeList) {
+                            str1 = str1 + str + "-";
+                        }
+                        Constant.showLog(str1);
+                        InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        mgr.hideSoftInputFromWindow(tv_add_to_card.getWindowToken(), 0);
+                        loadCustDiscLimit(4);
                     }
                 } else {
                     showToast("Please Select Product");
@@ -510,7 +532,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         map.clear();
         rv_color.setAdapter(null);
         rv_stockinfo.setAdapter(null);
-        Cursor res1 = db.getDistinctColour(size);
+        Cursor res1 = db.getDistinctColour(size,getPackUnPack(),1);
         if (res1.moveToFirst()) {
             do {
                 String colourHashcode = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour)) +
@@ -572,7 +594,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         if(a<0){
             a=0;
         }
-        Cursor res1 = db.getDistinctColour(sizeGroup_list.get(a));
+        Cursor res1 = db.getDistinctColour(sizeGroup_list.get(a),getPackUnPack(),1);
         if (res1.moveToFirst()) {
             do {
                 String colourHashcode = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour)) +
@@ -609,11 +631,11 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             unpackSizeList.add(sizeGroup_list.get(i));
             for (int j = 0; j < colour_list.size(); j++) {
                 unClickCount++;
-                unpackSizeList.add("0");
+                unpackSizeList.add("1");
             }
         }
         //gridView.setAdapter(new ArrayAdapter<>(getApplicationContext(),android.R.layout.test_list_item,unpackSizeList));
-        gridView.setAdapter(new CustomerOrderUnpackGridAdpater(getApplicationContext(), unpackSizeList));
+        gridView.setAdapter(new CustomerOrderUnpackGridAdpater(getApplicationContext(), unpackSizeList,0));
     }
 
     private boolean validateOrder() {
@@ -1256,7 +1278,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         isStockChecked = 0;
 
         int i = 0;
-        Cursor res1 = db.getDistinctColour(size);
+        Cursor res1 = db.getDistinctColour(size,getPackUnPack(),1);
         if (res1.moveToFirst()) {
             do {
                 String col = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour));
@@ -1360,7 +1382,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         if(a<0){
             a=0;
         }
-        Cursor res1 = db.getDistinctColour(sizeGroup_list.get(a));
+        Cursor res1 = db.getDistinctColour(sizeGroup_list.get(a),getPackUnPack(),1);
         if (res1.moveToFirst()) {
             do {
                 String str1 = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour));
@@ -1416,7 +1438,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             }
         }
         //gridView.setAdapter(new ArrayAdapter<>(getApplicationContext(),android.R.layout.test_list_item,unpackSizeList));
-        gridView.setAdapter(new CustomerOrderUnpackGridAdpater(getApplicationContext(), unpackSizeList));
+        gridView.setAdapter(new CustomerOrderUnpackGridAdpater(getApplicationContext(), unpackSizeList,0));
     }
 
     private void addToCardUnpackUpdate() {
@@ -2022,10 +2044,8 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    activityToFrom = 0;
-                    selProdId = 0;
-                    onResume();
                     dialog.dismiss();
+                    new Constant(AddToCartActivity.this).doFinish();
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -2371,7 +2391,6 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             }
         }
 
-
         //int unClickCount = -1;
         unpackSizeList.clear();
         unpackSizeList.add("+2");
@@ -2621,6 +2640,11 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         } else {
             showToast("No Colour Available");
         }
+    }
+
+    @Override
+    public void onImageClick(ImagewiseAddToCartClass prod) {
+
     }
 
     private void loadCustDiscLimit(final int a) {

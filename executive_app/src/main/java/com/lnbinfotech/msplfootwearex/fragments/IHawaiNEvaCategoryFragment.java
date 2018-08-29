@@ -11,10 +11,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.lnbinfotech.msplfootwearex.FullImageActivity;
+import com.lnbinfotech.msplfootwearex.ImageWiseAddToCartActivity;
 import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.adapters.HawaiNEvaCategoryGridAdapter;
-import com.lnbinfotech.msplfootwearex.adapters.LadiesNBoysCategoryGridAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.model.GentsCategoryClass;
@@ -45,7 +44,7 @@ public class IHawaiNEvaCategoryFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 GentsCategoryClass gentClass = (GentsCategoryClass) adapterView.getItemAtPosition(i);
-                Intent intent = new Intent(getContext(), FullImageActivity.class);
+                Intent intent = new Intent(getContext(), ImageWiseAddToCartActivity.class);
                 intent.putExtra("data",gentClass);
                 //intent.putExtra("id",drawId[i]);
                 startActivity(intent);
