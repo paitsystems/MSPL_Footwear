@@ -43,13 +43,16 @@ public class Constant {
     //TODO: Check Ip Address
     //public static final String ipaddress = "http://172.30.1.38/MSPLV5/service.svc";
     //public static final String ipaddress = "http://license.lnbinfotech.com/MSPLV2/service.svc";
-    public static final String ipaddress = "http://219.91.211.9:24086/MSPLC5/service.svc";
+    //public static final String ipaddress = "http://219.91.211.9:24086/MSPLC5/service.svc";
+    public static final String ipaddress = "http://43.239.147.103:24086/MSPLC5/service.svc";
 
     //TODO: Check Image Url
-    public static final String imgUrl = "http://219.91.211.9:24086/IMAGES/";
+    //public static final String imgUrl = "http://219.91.211.9:24086/IMAGES/";
+    public static final String imgUrl = "http://43.239.147.103:24086/IMAGES/";
 
     //TODO: Check CustImage Url
-    public static final String custimgUrl = "http://219.91.211.9:24086/custImage/";
+    //public static final String custimgUrl = "http://219.91.211.9:24086/custImage/";
+    public static final String custimgUrl = "http://43.239.147.103:24086/custImage/";
 
     //TODO: Check liveTestFlag 1-ScreenShotDisable, 0-ScreenShotEnable
     public static int liveTestFlag = 1;

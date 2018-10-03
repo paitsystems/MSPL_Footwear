@@ -14,6 +14,7 @@ import com.lnbinfotech.msplfootwearex.adapters.CategoryWiseImageAdapter;
 import com.lnbinfotech.msplfootwearex.adapters.GentsCategoryGridAdapter;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
+import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.GentsCategoryClass;
 import com.lnbinfotech.msplfootwearex.model.ImagewiseAddToCartClass;
 
@@ -48,6 +49,7 @@ public class CategoryWiseImageActivity extends AppCompatActivity {
             prod = (ImagewiseAddToCartClass) getIntent().getExtras().getSerializable("data");
         }catch (Exception e){
             e.printStackTrace();
+            writeLog("onCreate_"+e.getMessage());
         }
 
         setData();
@@ -90,6 +92,13 @@ public class CategoryWiseImageActivity extends AppCompatActivity {
             gridView.setAdapter(adapter);
         } catch (Exception e) {
             e.printStackTrace();
+            writeLog("setData_"+e.getMessage());
         }
     }
+
+
+    private void writeLog(String _data) {
+        new WriteLog().writeLog(getApplicationContext(), "CategoryWiseImageActivity_" + _data);
+    }
+
 }

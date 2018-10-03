@@ -101,7 +101,13 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         try {
             constant.showPD();
             final String mobNo = ed_mobNo.getText().toString();
-            final String imeino = new Constant(getApplicationContext()).getIMEINo1();
+            String __imeino = "";
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                __imeino = new Constant(getApplicationContext()).getIMEINo1();
+            }else{
+                __imeino = new Constant(getApplicationContext()).getIMEINo();
+            }
+            final String imeino = __imeino;
             String _mobNo = URLEncoder.encode(mobNo, "UTF-8");
             String _imeino = URLEncoder.encode(imeino, "UTF-8");
             String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"&IMEINo="+_imeino+"&type=E";

@@ -1,4 +1,4 @@
-package com.lnbinfotech.msplfootwearex.services;
+package com.lnbinfotech.msplfootwearex.braodcasts;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,14 +9,19 @@ import android.util.Log;
 import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
+import com.lnbinfotech.msplfootwearex.services.UploadImageService;
 
 import java.io.File;
 
 //Created by SNEHA on 12-10-2017.
 
 public class ImageUplaodBroadcastReceiver extends BroadcastReceiver {
+
+    private Context context;
+
     @Override
     public void onReceive(Context context, Intent intent) {
+        this.context = context;
         String action = intent.getAction();
         try {
             if (action.equals("android.net.conn.CONNECTIVITY_CHANGE") || action.equals("test")) {
@@ -41,7 +46,12 @@ public class ImageUplaodBroadcastReceiver extends BroadcastReceiver {
             }
         }catch (Exception e){
             e.printStackTrace();
-            new WriteLog().writeLog(context,"ImageUplaodBroadcastReceiver_"+e.getMessage());
+            writeLog("onReceive_"+e.getMessage());
         }
     }
+
+    private void writeLog(String _data) {
+        new WriteLog().writeLog(this.context, "ImageUplaodBroadcastReceiver__" + _data);
+    }
+
 }

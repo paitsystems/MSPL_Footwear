@@ -302,7 +302,13 @@ public class CustomerDetailsActivity extends AppCompatActivity
         constant = new Constant(CustomerDetailsActivity.this);
         if(ConnectivityTest.getNetStat(getApplicationContext())) {
             int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
-            String imeino = new Constant(getApplicationContext()).getIMEINo1();
+            String __imeino = "";
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                __imeino = new Constant(getApplicationContext()).getIMEINo1();
+            }else{
+                __imeino = new Constant(getApplicationContext()).getIMEINo();
+            }
+            final String imeino = __imeino;
             String url = Constant.ipaddress + "/GetActiveStatusV5?id=" + id + "&type=E&imeino="+imeino;
             Constant.showLog(url);
             writeLog("checkIsActive_" + url);
@@ -397,7 +403,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
             Constant.showLog("handleNewLocation");
             final double lat = location.getLatitude();
             final double lon = location.getLongitude();
-            Constant.showLog(lat + "-" + lon);
+            //Constant.showLog(lat + "-" + lon);
             toast.setText(lat + "-" + lon);
             //toast.show();
             /*Geocoder geocoder;
@@ -411,7 +417,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
             String postalCode = addresses.get(0).getPostalCode();
             String knownName = addresses.get(0).getFeatureName();
             Constant.showLog(address+"-"+city+"-"+state+"-"+country+"-"+postalCode+"-"+knownName);*/
-            Constant.showLog(address);
+            Constant.showLog("CustomerDetailsActivity_"+address);
         }catch (Exception e){
             e.printStackTrace();
         }

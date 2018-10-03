@@ -10,6 +10,7 @@ import android.util.Log;
 import com.lnbinfotech.msplfootwearex.FirstActivity;
 import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
+import com.lnbinfotech.msplfootwearex.log.WriteLog;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -20,7 +21,6 @@ import java.io.FileInputStream;
 // Created by SNEHA on 12-10-2017.
 
 public class UploadImageService extends IntentService {
-    public static final String BROADCAST = "imageUploadBroadcast";//android.net.conn.CONNECTIVITY_CHANGE
 
     public UploadImageService() {
         super(UploadImageService.class.getName());
@@ -30,43 +30,44 @@ public class UploadImageService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         try {
             Constant.showLog("Service started..");
-            FirstActivity.pref =  getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
-            String ftpaddress = FirstActivity.pref.getString(getString(R.string.pref_FTPLocation), "");
-            String ftpuser = FirstActivity.pref.getString(getString(R.string.pref_FTPUser), "");
-            String ftppass = FirstActivity.pref.getString(getString(R.string.pref_FTPPass), "");
-            String ftpfolder = FirstActivity.pref.getString(getString(R.string.pref_FTPImgFolder), "");
-
-            String filename = intent.getStringExtra("filename");
-            File f;
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
-            } else {
-                f = new File(getFilesDir(), filename);
-            }
             FTPClient client = new FTPClient();
-            client.connect(ftpaddress, 21);
-            client.login(ftpuser, ftppass);
+            client.connect(Constant.ftp_adress, 21);
+            client.login(Constant.ftp_username, Constant.ftp_password);
             client.setFileType(FTP.BINARY_FILE_TYPE);
             client.enterLocalPassiveMode();
+            File f;
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name);
+            } else {
+                f = getApplicationContext().getFilesDir();
+            }
             if (f != null) {
-                FileInputStream ifile = new FileInputStream(f);
-                client.cwd(ftpfolder);
-                //client.cwd("CLR");
-                if (client.storeFile(filename, ifile)) {
-                    f.delete();
-                    Constant.showLog("Image deleted..");
-                } else {
-                    Log.d("Log", "Log");
+                if (f.exists()) {
+                    Constant.showLog(f.getPath());
+                    for (File file : f.listFiles()) {
+                        if (file != null) {
+                            FileInputStream ifile = new FileInputStream(file);
+                            client.cwd(Constant.ftp_directory);
+                            if (client.storeFile(file.getName(), ifile)) {
+                                file.delete();
+                                Constant.showLog("Image deleted.."+file.getName());
+                            } else {
+                                writeLog("onHandleIntent_Error_While_Storing_File");
+                            }
+                        }
+                    }
                 }
             }
             client.disconnect();
             Constant.showLog("disconnected..");
-            // f.delete();
-
         } catch (Exception e) {
             e.printStackTrace();
+            writeLog("onHandleIntent_"+e.getMessage());
         }
-
-
     }
+
+    private void writeLog(String _data) {
+        new WriteLog().writeLog(getApplicationContext(), "UploadImageService_" + _data);
+    }
+
 }

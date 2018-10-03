@@ -481,6 +481,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         }
         super.onDestroy();
     }
+
     private void doFinish(){
         if(countDown!=null) {
             countDown.cancel();
@@ -592,18 +593,18 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             if(bundle != null){
                 final Object[] pdusobj = (Object[]) bundle.get("pdus");
                 assert pdusobj != null;
-                for (int i = 0; i <= pdusobj.length-1; i++){
-                    if(smsListener!=null) {
+                for (int i = 0; i <= pdusobj.length-1; i++) {
+                    if (smsListener != null) {
                         SmsMessage current_msg = SmsMessage.createFromPdu((byte[]) pdusobj[i]);
 
-                    String cmp_name = current_msg.getDisplayOriginatingAddress();
-                    Constant.showLog("mob_no"+cmp_name);
+                        String cmp_name = current_msg.getDisplayOriginatingAddress();
+                        Constant.showLog("mob_no" + cmp_name);
 
-                    String service_center = current_msg.getServiceCenterAddress();
-                    Constant.showLog("service_cebter"+service_center);
+                        String service_center = current_msg.getServiceCenterAddress();
+                        Constant.showLog("service_cebter" + service_center);
 
-                    //String sender_no = cmp_name;
-                    // if(cmp_name.equals("MD-LNBTCH") && service_center.equals("+919868191090")) {
+                        //String sender_no = cmp_name;
+                        // if(cmp_name.equals("MD-LNBTCH") && service_center.equals("+919868191090")) {
 
                         String message = current_msg.getDisplayMessageBody();
                         text = message.replaceAll("[^0-9]", "");
@@ -614,7 +615,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                             smsListener.onReceivedMessage(text);
                         }
                         Constant.showLog("ReadSMS_onReceive_Called");
-                    }else{
+                    } else {
                         Constant.showLog("NULL");
                     }
                     //writeLog("ReadSMS_onReceive_Called");

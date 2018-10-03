@@ -10,4 +10,5 @@ public interface TestInterface {
 
     void onPauseFragment(String data1, String data2, Context context);
 
+    void onAmountChange(int amnt);
 }

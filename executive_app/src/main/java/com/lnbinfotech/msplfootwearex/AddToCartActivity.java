@@ -458,6 +458,44 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onItemClick(String size) {
+        Constant.showLog(size);
+        if (!size.equalsIgnoreCase("NA")) {
+            if(activityToFrom==1) {
+                selQtyLocal = Integer.parseInt(size);
+                setColour(selSizeGroup);
+                if (selQtyLocal != compPackQty) {
+                    lay_comp_pack.setVisibility(View.GONE);
+                } else {
+                    lay_comp_pack.setVisibility(View.VISIBLE);
+                    setAdapter();
+                }
+            }else{
+                selQtyLocal = Integer.parseInt(size);
+                setUpdateColour(selSizeGroup);
+                if (selQtyLocal != compPackQty) {
+                    lay_comp_pack.setVisibility(View.GONE);
+                } else {
+                    lay_comp_pack.setVisibility(View.VISIBLE);
+                    setUpdateAdapter();
+                }
+            }
+        } else {
+            showToast("No Colour Available");
+        }
+    }
+
+    @Override
+    public void onImageClick(ImagewiseAddToCartClass prod) {
+
+    }
+
+    @Override
+    public void onSizeGroupClick(String sizeGroup) {
+
+    }
+
     private String getPackUnPack() {
         String packUnpackType;
         if (rdo_pack.isChecked()) {
@@ -631,7 +669,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             unpackSizeList.add(sizeGroup_list.get(i));
             for (int j = 0; j < colour_list.size(); j++) {
                 unClickCount++;
-                unpackSizeList.add("1");
+                unpackSizeList.add("0");
             }
         }
         //gridView.setAdapter(new ArrayAdapter<>(getApplicationContext(),android.R.layout.test_list_item,unpackSizeList));
@@ -2247,6 +2285,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             }
         }catch (Exception e){
             e.printStackTrace();
+            writeLog("checkLooseStock_"+e.getMessage());
         }
     }
 
@@ -2612,39 +2651,6 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             }
         }
         totalCalculations();
-    }
-
-    @Override
-    public void onItemClick(String size) {
-        Constant.showLog(size);
-        if (!size.equalsIgnoreCase("NA")) {
-            if(activityToFrom==1) {
-                selQtyLocal = Integer.parseInt(size);
-                setColour(selSizeGroup);
-                if (selQtyLocal != compPackQty) {
-                    lay_comp_pack.setVisibility(View.GONE);
-                } else {
-                    lay_comp_pack.setVisibility(View.VISIBLE);
-                    setAdapter();
-                }
-            }else{
-                selQtyLocal = Integer.parseInt(size);
-                setUpdateColour(selSizeGroup);
-                if (selQtyLocal != compPackQty) {
-                    lay_comp_pack.setVisibility(View.GONE);
-                } else {
-                    lay_comp_pack.setVisibility(View.VISIBLE);
-                    setUpdateAdapter();
-                }
-            }
-        } else {
-            showToast("No Colour Available");
-        }
-    }
-
-    @Override
-    public void onImageClick(ImagewiseAddToCartClass prod) {
-
     }
 
     private void loadCustDiscLimit(final int a) {

@@ -25,6 +25,8 @@ import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.CurrencyMasterClass;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 public class CurrencyDetailsActivityChanged extends AppCompatActivity implements View.OnClickListener,CurrencyInterface {
 
@@ -38,6 +40,7 @@ public class CurrencyDetailsActivityChanged extends AppCompatActivity implements
     private Button btn_cust, btn_se, btn_submit;
     private LinearLayout cust_lay, se_lay;
     private TextView tv_custTotal, tv_retTotal, tv_total;
+    private HashMap<Integer,Integer> custCurrencyMap, seCurrencyMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,12 +109,14 @@ public class CurrencyDetailsActivityChanged extends AppCompatActivity implements
     public void custCurrency(String value) {
         tv_custTotal.setText("0");
         int custTotal = 0;
+        custCurrencyMap.clear();
         for(CurrencyMasterClass currClass : custCurrencyList){
             int curr = Integer.parseInt(currClass.getCurrency());
             int val = Integer.parseInt(currClass.getValue());
-            curr = curr * val;
-            custTotal = custTotal + curr;
+            int _curr = curr * val;
+            custTotal = custTotal + _curr;
             Constant.showLog("custCurrency "+custTotal);
+            custCurrencyMap.put(curr,val);
         }
         tv_custTotal.setText(String.valueOf(custTotal));
         setTotal();
@@ -121,12 +126,14 @@ public class CurrencyDetailsActivityChanged extends AppCompatActivity implements
     public void seCurrency(String value) {
         tv_retTotal.setText("0");
         int retTotal = 0;
+        seCurrencyMap.clear();
         for(CurrencyMasterClass currClass : seCurrencyList){
             int curr = Integer.parseInt(currClass.getCurrency());
             int val = Integer.parseInt(currClass.getValue());
-            curr = curr * val;
-            retTotal = retTotal + curr;
+            int _curr = curr * val;
+            retTotal = retTotal + _curr;
             Constant.showLog("seCurrency "+retTotal);
+            seCurrencyMap.put(curr,val);
         }
         tv_retTotal.setText(String.valueOf(retTotal));
         setTotal();
@@ -151,6 +158,10 @@ public class CurrencyDetailsActivityChanged extends AppCompatActivity implements
         tv_custTotal = (TextView) findViewById(R.id.tv_custTotal);
         tv_retTotal = (TextView) findViewById(R.id.tv_retTotal);
         tv_total = (TextView) findViewById(R.id.tv_total);
+        custCurrencyMap = new HashMap<>();
+        seCurrencyMap = new HashMap<>();
+        VisitPaymentFormActivity.custCurrencyStr = "";
+        VisitPaymentFormActivity.seCurrencyStr = "";
 
         btn_cust.setOnClickListener(this);
         btn_se.setOnClickListener(this);
@@ -186,6 +197,24 @@ public class CurrencyDetailsActivityChanged extends AppCompatActivity implements
                                 ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(tv_total.getWindowToken(),0);
                                 VisitPaymentFormActivity.total = Integer.parseInt(tv_total.getText().toString());
                                 VisitPaymentFormActivity.isCurrencyDataSaved = 1;
+                                Set<Integer> cset = custCurrencyMap.keySet();
+                                for(int curr : cset) {
+                                    int value = custCurrencyMap.get(curr);
+                                    if(value!=0){
+                                        VisitPaymentFormActivity.custCurrencyStr =
+                                                VisitPaymentFormActivity.custCurrencyStr + curr+"-"+value+",";
+                                    }
+                                }
+                                Set<Integer> sset = seCurrencyMap.keySet();
+                                for(int curr : sset) {
+                                    int value = seCurrencyMap.get(curr);
+                                    if(value!=0){
+                                        VisitPaymentFormActivity.seCurrencyStr =
+                                                VisitPaymentFormActivity.seCurrencyStr + curr+"-"+value+",";
+                                    }
+                                }
+                                Constant.showLog(VisitPaymentFormActivity.custCurrencyStr);
+                                Constant.showLog(VisitPaymentFormActivity.seCurrencyStr);
                                 new Constant(CurrencyDetailsActivityChanged.this).doFinish();
                             }else{
                                 toast.setText("Paid-Return Does Not Match With Total");
@@ -223,6 +252,8 @@ public class CurrencyDetailsActivityChanged extends AppCompatActivity implements
                     tv_retTotal.setText("0");
                     //tv_total.setText("0");
                     dialog.dismiss();
+                    VisitPaymentFormActivity.custCurrencyStr = "";
+                    VisitPaymentFormActivity.seCurrencyStr = "";
                     loadCustCurrencyMaster();
                     loadSECurrencyMaster();
                 }

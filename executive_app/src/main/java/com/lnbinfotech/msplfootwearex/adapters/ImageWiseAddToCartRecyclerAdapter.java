@@ -20,6 +20,7 @@ import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.interfaces.RecyclerViewToActivityInterface;
 import com.lnbinfotech.msplfootwearex.model.ImagewiseAddToCartClass;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +67,7 @@ public class ImageWiseAddToCartRecyclerAdapter extends RecyclerView.Adapter<Imag
         if (arr.length > 1) {
             imageName = arr[0];
         }
+        imageName = imageName.replace(" ", "%20");
         imageName = Constant.imgUrl + imageName + ".jpg";
         Constant.showLog(imageName);
         Glide.with(context).load(imageName)

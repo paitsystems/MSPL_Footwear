@@ -73,7 +73,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
     private int counter = 0;
     private String from, gstPer, address = "", remark = "";
     private LocationProvider provider;
-    double lat = 0, lon = 0;
+    private double lat = 0, lon = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -543,7 +543,6 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
                     Constant.showLog(url);
                     //urlList.add(url);
                     //constant.showPD();
-                    writeLog("getSaveOrderData_" + url);
                     new saveOrderAsyncTask(branchId).execute(url);
                 } else {
                     toast.setText("Something Went Wrong");
@@ -602,13 +601,17 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
             request.setHeader("Content-type", "application/json");
             try {
                 JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(url[0]).endObject().endObject();
-
                 StringEntity entity = new StringEntity(vehicle.toString());
+                Constant.showLog(vehicle.toString());
+                writeLog("getSaveOrderData_" + vehicle.toString());
                 request.setEntity(entity);
-
                 // Send request to WCF service
                 //TODO : Check Timeout
-                DefaultHttpClient httpClient = new DefaultHttpClient();
+                HttpParams httpParams = new BasicHttpParams();
+                HttpConnectionParams.setConnectionTimeout(httpParams,Constant.TIMEOUT_CON);
+                HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);
+                DefaultHttpClient httpClient = new DefaultHttpClient(httpParams);
+                //DefaultHttpClient httpClient = new DefaultHttpClient();
                 HttpResponse response = httpClient.execute(request);
                 Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
                 value = new BasicResponseHandler().handleResponse(response);

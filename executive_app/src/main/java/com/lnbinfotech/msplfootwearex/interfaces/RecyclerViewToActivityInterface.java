@@ -8,4 +8,5 @@ public interface RecyclerViewToActivityInterface {
 
     void onItemClick(String size);
     void onImageClick(ImagewiseAddToCartClass prod);
+    void onSizeGroupClick(String sizeGroup);
 }

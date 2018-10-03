@@ -245,6 +245,30 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Size Group"
+                style="@style/textViewMob" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_sizegroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:divider="@null"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                app:reverseLayout="true" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -252,7 +276,8 @@
                 android:layout_weight="0.6"
                 android:background="@drawable/sizegroup_spinner_draw"
                 android:orientation="vertical"
-                android:padding="@dimen/mobpadding2">
+                android:padding="@dimen/mobpadding2"
+                android:visibility="gone">
 
                 <Spinner
                     android:id="@+id/sp_sizegroup"
@@ -264,6 +289,13 @@
                     android:spinnerMode="dropdown"
                     android:textStyle="bold" />
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Assortment"
+                style="@style/textViewMob" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_size"

@@ -90,6 +90,7 @@ public class IGentsCategoryFragment extends Fragment {
                     gentsClass.setProductId(res.getString(res.getColumnIndex(DBHandler.PM_ProdId)));
                     gentsClass.setGstPer(res.getString(res.getColumnIndex(DBHandler.GST_GSTPer)));
                     gentsClass.setGstGroupName(res.getString(res.getColumnIndex(DBHandler.GST_GroupNm)));
+                    gentsClass.setCat3(res.getString(res.getColumnIndex(DBHandler.PM_Cat3)));
 
                     String img = res.getString(res.getColumnIndex(DBHandler.ARSD_ImageName));
                     String imgArr[] = img.split("\\,");
@@ -97,6 +98,7 @@ public class IGentsCategoryFragment extends Fragment {
                     if (imgArr.length > 1) {
                         String img1 = imgArr[0];
                         //img1 = URLEncoder.encode(img1, "UTF-8");
+                        img1 = img1.replace(" ", "%20");
                         img = img + img1;
                     }
                     img = img + ".jpg";

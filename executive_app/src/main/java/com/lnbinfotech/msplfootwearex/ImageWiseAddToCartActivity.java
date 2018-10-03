@@ -19,7 +19,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -29,11 +28,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lnbinfotech.msplfootwearex.adapters.CheckAvailStockAdapter;
 import com.lnbinfotech.msplfootwearex.adapters.CustomerOrderUnpackGridAdpater;
 import com.lnbinfotech.msplfootwearex.adapters.ImageWiseAddToCartRecyclerAdapter;
+import com.lnbinfotech.msplfootwearex.adapters.SizeGroupRecyclerAdapter;
 import com.lnbinfotech.msplfootwearex.adapters.SizeGroupWiseQtyAdapter;
-import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.interfaces.RecyclerViewToActivityInterface;
@@ -44,15 +42,17 @@ import com.lnbinfotech.msplfootwearex.model.CheckAvailStockClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerOrderClass;
 import com.lnbinfotech.msplfootwearex.model.GentsCategoryClass;
 import com.lnbinfotech.msplfootwearex.model.ImagewiseAddToCartClass;
-import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class ImageWiseAddToCartActivity extends AppCompatActivity implements View.OnClickListener, RecyclerViewToActivityInterface {
 
@@ -60,7 +60,7 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
     private TextView tv_prodname, tv_wsp, tv_mrp, tv_hsncode, tv_gstper,tv_gstprint,tv_marginup,tv_margindown,
             tv_totqty, tv_totamnt, tv_totset, tv_totnetamt, actionbar_noti_tv;
     private Button btn_addToCart, btn_looseOrder, btn_newCat, btn_checkstock;
-    private RecyclerView rv_images, rv_size;
+    private RecyclerView rv_images, rv_size, rv_sizegroup;
     private DBHandler db;
     private GentsCategoryClass gentClass;
     private Spinner sp_sizeGroup;
@@ -119,13 +119,15 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
             writeLog("onCreate()_"+e.getMessage());
         }
 
-        sp_sizeGroup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        /*sp_sizeGroup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selSizeGroup = (String) adapterView.getItemAtPosition(i);
                 Constant.showLog(selSizeGroup);
                 lay_comp_pack.setVisibility(View.GONE);
                 gridView.setVisibility(View.VISIBLE);
+
+                setSizeGroupWiseImage(selSizeGroup);
                 setSizeData(selSizeGroup);
             }
 
@@ -134,7 +136,7 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
                 lay_comp_pack.setVisibility(View.GONE);
                 gridView.setVisibility(View.VISIBLE);
             }
-        });
+        });*/
 
         auto_set.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -153,29 +155,31 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
         rv_images.setLayoutManager(mLayoutManager1);
         rv_images.setItemAnimator(new DefaultItemAnimator());
 
+        RecyclerView.LayoutManager mLayoutManager3 =
+                new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        rv_sizegroup.setLayoutManager(mLayoutManager3);
+        rv_sizegroup.setItemAnimator(new DefaultItemAnimator());
+
         RecyclerView.LayoutManager mLayoutManager2 =
                 new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         rv_size.setLayoutManager(mLayoutManager2);
         rv_size.setItemAnimator(new DefaultItemAnimator());
 
-        setData();
-
         if(mMenu!=null){
             onCreateOptionsMenu(mMenu);
         }
+        setData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        constant = new Constant(ImageWiseAddToCartActivity.this);
+        //constant = new Constant(ImageWiseAddToCartActivity.this);
         totalCalculations();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        /*getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
-        return true;*/
         mMenu = menu;
         getMenuInflater().inflate(R.menu.addtocard_menu, menu);
         menu.clear();
@@ -206,7 +210,6 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                //showDia(0);
                 new Constant(ImageWiseAddToCartActivity.this).doFinish();
                 break;
             case R.id.cart:
@@ -297,6 +300,13 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
         overridePendingTransition(R.anim.enter,R.anim.exit);
     }
 
+    @Override
+    public void onSizeGroupClick(String sizeGroup) {
+        selSizeGroup = sizeGroup;
+        setSizeGroupWiseImage(sizeGroup);
+        setSizeData(sizeGroup);
+    }
+
     private void init(){
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         toast = Toast.makeText(getApplicationContext(),"File Not Found",Toast.LENGTH_LONG);
@@ -322,6 +332,7 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
         btn_checkstock = (Button) findViewById(R.id.btn_checkstock);
         rv_images = (RecyclerView) findViewById(R.id.rv_images);
         rv_size = (RecyclerView) findViewById(R.id.rv_size);
+        rv_sizegroup = (RecyclerView) findViewById(R.id.rv_sizegroup);
         sp_sizeGroup = (Spinner) findViewById(R.id.sp_sizegroup);
         gridView = (GridView) findViewById(R.id.gridView);
         sizeGroup_list = new ArrayList<>();
@@ -351,21 +362,39 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
         AddToCartActivity.allSizeChangeList.clear();
         map.clear();
 
-        //sizeGroup_list.add("Select SizeGroup");
+        int parentSizeGroup = -1, _flag = 1;
         Cursor res2 = db.getDistinctSizeGroup("M");
         if (res2.moveToFirst()) {
             do {
-                sizeGroup_list.add(res2.getString(res2.getColumnIndex(DBHandler.ARSD_SizeGroup)));
+                String _sizeGroup = res2.getString(res2.getColumnIndex(DBHandler.ARSD_SizeGroup));
+                if(_flag==1){
+                    parentSizeGroup++;
+                }
+                if(_sizeGroup.equals(gentClass.getCat3())){
+                   _flag = 0;
+                    selSizeGroup = gentClass.getCat3();
+                }
+                sizeGroup_list.add(_sizeGroup);
             } while (res2.moveToNext());
         } else {
             sizeGroup_list.add("NA");
         }
         res2.close();
-        sp_sizeGroup.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.sizegroup_spinner_row, sizeGroup_list));
-        setSizeData((String)sp_sizeGroup.getItemAtPosition(0));
+        SizeGroupRecyclerAdapter adapter = new SizeGroupRecyclerAdapter(sizeGroup_list, getApplicationContext(), "U", parentSizeGroup);
+        adapter.setOnClickListener1(this);
+        rv_sizegroup.setAdapter(adapter);
+        setSizeGroupWiseImage(gentClass.getCat3());
+        setSizeData(gentClass.getCat3());
 
+    }
+
+    private void setSizeGroupWiseImage(String selSizeGroup){
+        colour_list.clear();
+        AddToCartActivity.unClickablePositionsList.clear();
+        AddToCartActivity.allSizeChangeList.clear();
+        map.clear();
         int pos = 0;
-        Cursor res1 = db.getDistinctColour(sp_sizeGroup.getItemAtPosition(0).toString(),"M",1);
+        Cursor res1 = db.getDistinctColour(selSizeGroup,"M",1);
         if (res1.moveToFirst()) {
             do {
                 String colourHashcode = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour)) +
@@ -380,6 +409,7 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
         }
         res1.close();
 
+        rv_images.setAdapter(null);
         List<ImagewiseAddToCartClass> prodList = new ArrayList<>();
         Cursor res = db.getDistinctColourImageWise(gentClass.getProdId());
         if(res.moveToFirst()){
@@ -391,6 +421,7 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
                 prodList.add(image);
             }while (res.moveToNext());
         }
+        res.close();
         ImageWiseAddToCartRecyclerAdapter adapter = new ImageWiseAddToCartRecyclerAdapter(getApplicationContext(), prodList);
         adapter.setOnClickListener1(this);
         rv_images.setAdapter(adapter);
@@ -431,7 +462,6 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
         auto_set.setAdapter(adapter);
         auto_set.setSingleLine();
         auto_set.setText(arr[0]);
-        //selQtyLocal = Integer.parseInt(auto_set.getText().toString());
         auto_set.setSelection(auto_set.getText().length());
     }
 
@@ -447,7 +477,8 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
                 type = "M";
             } else {
                 type = "C";
-                sizegroup = sizeGroup_list.get(sp_sizeGroup.getSelectedItemPosition());
+                //sizegroup = sizeGroup_list.get(sp_sizeGroup.getSelectedItemPosition());
+                sizegroup = selSizeGroup;
             }
             if (validateOrder()) {
                 flag = 1;
@@ -493,6 +524,7 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
         String url = Constant.ipaddress+"/CheckLooseStock?data="+data;
         Constant.showLog(url);
         writeLog("checkLooseStock_" + url);
+        constant = new Constant(ImageWiseAddToCartActivity.this);
         constant.showPD();
         stockList.clear();
         VolleyRequests requests = new VolleyRequests(ImageWiseAddToCartActivity.this);
@@ -501,10 +533,17 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
             public void onSuccess(Object result) {
                 constant.showPD();
                 stockList = (List<CheckAvailStockClass>) result;
-                convertPackToLoose(stockList);
+                if(!stockList.isEmpty()) {
+                    convertPackToLoose(stockList);
+                }else{
+                    toast.setText("No Record Available");
+                    toast.show();
+                }
             }
             @Override
             public void onFailure(Object result) {
+                toast.setText("No Record Available");
+                toast.show();
                 constant.showPD();
                 colorListUpdated.clear();
                 unpackSizeList.clear();
@@ -537,7 +576,9 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
             List<String> sizeQtyList = db.getSizeDetails(selSizeGroup, designNo, part);
 
             List<String> qtyList = new ArrayList<>();
+            List<String> sizeList = new ArrayList<>();
             HashMap<String, String> sizeQtyMap = new HashMap<>();
+            HashMap<String, List<String>> sizeColorMap = new HashMap<>();
             HashMap<String, List<String>> sizeQtyHashMap = new HashMap<>();
             List<String> sizeGroupList = new ArrayList<>();
             List<String> sizeGroupListAvail = new ArrayList<>();
@@ -570,11 +611,37 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
                 }
             }
 
+            sizeColorMap.clear();
+            sizeList.clear();
+            for (int i = 0; i < sizeQtyList.size(); i++) {
+                String sizeQty = sizeQtyList.get(i);
+                String sizeQtyArr[] = sizeQty.split("\\^");
+                size = sizeQtyArr[0];
+                if(!sizeList.contains(size)){
+                    sizeList.add(size);
+                }
+                for(String col : colorList){
+                    if (sizeColorMap.isEmpty()) {
+                        List<String> list = new ArrayList<>();
+                        list.add(col);
+                        sizeColorMap.put(size, list);
+                    } else if (sizeColorMap.containsKey(size)) {
+                        List<String> list = sizeColorMap.get(size);
+                        list.add(col);
+                        sizeColorMap.put(size, list);
+                    } else {
+                        List<String> list = new ArrayList<>();
+                        list.add(col);
+                        sizeColorMap.put(size, list);
+                    }
+                }
+            }
+
+
             qtyList.clear();
             for (int i = 0; i < stockList.size(); i++) {
                 CheckAvailStockClass stock = stockList.get(i);
                 String colCode = stock.getColor() + "-" + stock.getHashcode();
-                //if(colorList.contains(colCode)) {
                 for (String col : colorList) {
                     if (col.equalsIgnoreCase(colCode)) {
                         String availSize = stock.getSizegroup();
@@ -643,6 +710,8 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
             }
 
             Set<String> keySet = sizeQtyHashMap.keySet();
+            /*List<String> sortedList = new ArrayList(keySet);
+            Collections.sort(sortedList);*/
             for (String size1 : keySet) {
                 unpackSizeList.add(size1);
                 List<String> list = sizeQtyHashMap.get(size1);
@@ -652,7 +721,41 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
                 if (list.size() < colorListSize) {
                     dataset = 1;
                 }
+                List<String> _colList = new ArrayList<>();
+                List<String> _addedColList = new ArrayList<>();
                 for (int j = 0; j < list.size(); j++) {
+                    String scolor = list.get(j);
+                    String scolArr[] = scolor.split("\\^");
+                    String col = scolArr[1];
+                    _colList.add(col);
+                }
+                for (String _col : colorListUpdated) {
+                    String[] _colArr = _col.split("\\-");
+                    if (!_colList.contains(_colArr[0])) {
+                        String put = 0 + "^" + _colArr[0] + "^N-" + _colArr[1];
+                        unpackSizeList.add(put);
+                    }else{
+                        for (int j = 0; j < list.size(); j++) {
+                            String scolor = list.get(j);
+                            String scolArr[] = scolor.split("\\^");
+                            color = scolArr[1];
+                            if(!_addedColList.contains(color)) {
+                                if (_colList.contains(color)) {
+                                    unpackSizeList.add(list.get(j));
+                                    _addedColList.add(color);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                /*if (dataset == 1) {
+                    int a = colorListSize - list.size();
+                    for (int b = 0; b < a; b++) {
+                        unpackSizeList.add("0^" + color+"^N-#000000");
+                    }
+                }*/
+                /*for (int j = 0; j < list.size(); j++) {
                     String scolor = list.get(j);
                     String scolArr[] = scolor.split("\\^");
                     color = scolArr[1];
@@ -663,7 +766,7 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
                     for (int b = 0; b < a; b++) {
                         unpackSizeList.add("0^" + color+"^N-#000000");
                     }
-                }
+                }*/
             }
             gridView.setAdapter(new CustomerOrderUnpackGridAdpater(getApplicationContext(), unpackSizeList, 1));
         }catch (Exception e){
@@ -944,7 +1047,8 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
                     prodCol = DBHandler.PM_HANR;
                 }
                 int branchId = db.getDispatchCenter(prodCol);
-                String sizeGroup = sizeGroup_list.get(sp_sizeGroup.getSelectedItemPosition());
+                //String sizeGroup = sizeGroup_list.get(sp_sizeGroup.getSelectedItemPosition());
+                String sizeGroup = selSizeGroup;
 
                 Set<Integer> set = map.keySet();
                 for (Integer pos : set) {
@@ -1089,7 +1193,7 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    new Constant(ImageWiseAddToCartActivity.this).doFinish();
+                    dialog.dismiss();
                 }
             });
         }

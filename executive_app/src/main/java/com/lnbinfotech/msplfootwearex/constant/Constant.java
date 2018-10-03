@@ -35,17 +35,17 @@ public class Constant {
             autoamilPass = "auto#456",
             mail_subject = "Log File",
             mail_body = "Find the Attached Log File",
-            mailReceipient = "anup.p@paitsystems.com";
-            //ftp_adress = "ftp.lnbinfotech.com"
-            //ftp_username = "supportftp@lnbinfotech.com",
-            //ftp_password = "support$456",
-            //ftp_directory = "SMVisit_Indus",
+            mailReceipient = "anup.p@paitsystems.com",
+            ftp_adress = "ftp.lnbinfotech.com",
+            ftp_username = "supportftp@lnbinfotech.com",
+            ftp_password = "support$456",
+            //ftp_directory = "Receipt Details";
+            ftp_directory = "Test";
 
     //TODO: Check Ip Address
     //public static final String ipaddress = "http://172.30.1.38/MSPLV5/service.svc";
-    //public static final String ipaddress = "http://license.lnbinfotech.com/MSPLV2/service.svc";
-    //public static final String ipaddress = "http://103.68.10.9:24086/MSPLV5/service.svc";
-    public static final String ipaddress = "http://103.109.13.200:24086/MSPLV5/service.svc";
+    public static final String ipaddress = "http://license.lnbinfotech.com/MSPLV5/service.svc";
+    //public static final String ipaddress = "http://103.109.13.200:24086/MSPLV5/service.svc";
 
     //TODO: Check Image Url
     public static final String imgUrl = "http://103.109.13.200:24086/IMAGES/";
@@ -54,7 +54,7 @@ public class Constant {
     public static final String custimgUrl = "http://103.109.13.200:24086/custImage/";
 
     //TODO: Check liveTestFlag 1-ScreenShotDisable, 0-ScreenShotEnable
-    public static int liveTestFlag = 0;
+    public static int liveTestFlag = 1;
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
     public static int showLogFlag = 0;
@@ -165,6 +165,16 @@ public class Constant {
             writeLog("getIMEINo1_"+e.getMessage());
         }
         return imeino;
+    }
+
+    public String getDate() {
+        String str = "";
+        try {
+            str = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH).format(new Date());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return str;
     }
 
     private void writeLog(String _data) {

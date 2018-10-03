@@ -3,6 +3,7 @@ package com.lnbinfotech.msplfootwearex.adapters;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,6 +27,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.lnbinfotech.msplfootwearex.ChequeDetailsActivity;
+import com.lnbinfotech.msplfootwearex.ChequeDetailsActivityChanged;
 import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.interfaces.TestInterface;
@@ -103,7 +106,8 @@ public class ChequeDetailChangedAdapter extends BaseAdapter implements TestInter
                 @Override
                 public void onClick(View view) {
                     dtPos = position;
-                    testInterface.onPauseFragment("","",context);
+                    ChequeDetailsClass cd = getItem(position);
+                    testInterface.onPauseFragment(cd.getChq_det_number(),"",context);
                 }
             });
             v.setTag(holder);
@@ -122,7 +126,7 @@ public class ChequeDetailChangedAdapter extends BaseAdapter implements TestInter
         Glide.with(context).load(imageUri)
                 .thumbnail(0.5f)
                 .crossFade()
-                .placeholder(R.drawable.user32)
+                .placeholder(R.drawable.ic_party_mode_black_24dp)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.img_chq);
 
@@ -190,11 +194,45 @@ public class ChequeDetailChangedAdapter extends BaseAdapter implements TestInter
                     cheque.setChq_det_number(str);
                     cheque_list.set(pos,cheque);
                     Constant.showLog(str);
+                    ChequeDetailsActivityChanged.chequeNo = str;
+                    /*if(pos==0){
+                        for(int i=0;i<cheque_list.size();i++){
+                            ChequeDetailsClass cheque = cheque_list.get(i);
+                            if(i==0){
+                                cheque.setChq_det_number(str);
+                                cheque_list.set(i,cheque);
+                            }else{
+                                if(!str.equals("")) {
+                                    int _str = Integer.parseInt(str);
+                                    _str = _str + 1;
+                                    str = String.valueOf(_str);
+                                    cheque.setChq_det_number(String.valueOf(_str));
+                                    cheque_list.set(i,cheque);
+                                }
+                            }
+                        }
+                        notifyDataSetChanged();
+                    }else{
+                        ChequeDetailsClass cheque = cheque_list.get(pos);
+                        cheque.setChq_det_number(str);
+                        cheque_list.set(pos,cheque);
+                    }
+                    Constant.showLog(str);
+                    ChequeDetailsActivityChanged.chequeNo = str;*/
                     break;
                 case R.id.ed_amnt:
                     ChequeDetailsClass cheque1 = cheque_list.get(pos);
+                    if(str.equals("")) {
+                       str = "0";
+                    }
                     cheque1.setChq_det_amt(str);
                     cheque_list.set(pos,cheque1);
+                    int amnt = 0;
+                    for(int i=0;i<cheque_list.size();i++) {
+                        ChequeDetailsClass cheque2 = cheque_list.get(i);
+                        amnt = amnt + Integer.parseInt(cheque2.getChq_det_amt());
+                    }
+                    testInterface.onAmountChange(amnt);
                     Constant.showLog(str);
                     break;
             }

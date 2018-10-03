@@ -2,12 +2,15 @@ package com.lnbinfotech.msplfootwearex;
 
 //Created by ANUP on 3/5/2018.
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.lnbinfotech.msplfootwearex.constant.Constant;
@@ -37,6 +40,32 @@ public class MainImagewiseSetwiseOrderActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         new Constant(MainImagewiseSetwiseOrderActivity.this).doFinish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.cutsize_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //showDia(0);
+                new Constant(MainImagewiseSetwiseOrderActivity.this).doFinish();
+                break;
+            case R.id.prod_search:
+                Intent intent = new Intent(getApplicationContext(), ProductSearchActivity.class);
+                intent.putExtra("cat9", "0");
+                intent.putExtra("cat2", "0");
+                intent.putExtra("from", "imagewisesize");
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setUpPager() {

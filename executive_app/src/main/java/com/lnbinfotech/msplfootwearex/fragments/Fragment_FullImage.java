@@ -52,6 +52,7 @@ public class Fragment_FullImage extends Fragment {
     }
 
     private void saveImagesToInternal() {
+        img_name = img_name.replace(" ", "%20");
         url = Constant.imgUrl+img_name+".jpg";
         Constant.showLog(url);
         Glide.with(getContext()).load(url)

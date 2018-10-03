@@ -449,6 +449,11 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
 
     }
 
+    @Override
+    public void onSizeGroupClick(String sizeGroup) {
+
+    }
+
     private void loadOustandingdetail() {
         int cust_id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
         String url = Constant.ipaddress + "/GetCustOutstanding?Id=" + cust_id;

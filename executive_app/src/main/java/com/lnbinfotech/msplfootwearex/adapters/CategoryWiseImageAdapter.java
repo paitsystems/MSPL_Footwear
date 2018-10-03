@@ -57,7 +57,9 @@ public class CategoryWiseImageAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         GentsCategoryClass gentsClass = (GentsCategoryClass) getItem(i);
-        String imageName = Constant.imgUrl+gentsClass.getImgName()+".jpg";
+        String imageName = gentsClass.getImgName();
+        imageName = imageName.replace(" ", "%20");
+        imageName = Constant.imgUrl+imageName+".jpg";
         Constant.showLog(imageName);
         Glide.with(context).load(imageName)
                 .thumbnail(0.5f)

@@ -44,6 +44,7 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
             prod = (ImagewiseAddToCartClass) getIntent().getExtras().getSerializable("data");
         }catch (Exception e){
             e.printStackTrace();
+            writeLog("onCreate_"+e.getMessage());
         }
 
         setViewPager();
@@ -94,6 +95,7 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
             }
         } catch (Exception e) {
             e.printStackTrace();
+            writeLog("getImgTitleList_"+e.getMessage());
         }
     }
 

@@ -341,7 +341,8 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void setContactUs(){
-        int hocode = FirstActivity.pref.getInt(getString(R.string.pref_branchid),0);
+        //int hocode = FirstActivity.pref.getInt(getString(R.string.pref_branchid),0);
+        int hocode = FirstActivity.pref.getInt(getString(R.string.pref_hocode),0);
         Cursor res = db.getContactUsData(hocode);
         if(res.moveToFirst()){
             do{

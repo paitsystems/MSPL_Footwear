@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class GentsCategoryClass implements Serializable {
 
     private String categoryName, imgName, mrp, productName, margin, markup, markdown, wsp,
-            hsnCode, productId, gstPer, gstGroupName;
+            hsnCode, productId, gstPer, gstGroupName, cat3;
     private int prodId;
 
     public String getCategoryName() {
@@ -112,5 +112,13 @@ public class GentsCategoryClass implements Serializable {
 
     public void setGstGroupName(String gstGroupName) {
         this.gstGroupName = gstGroupName;
+    }
+
+    public String getCat3() {
+        return cat3;
+    }
+
+    public void setCat3(String cat3) {
+        this.cat3 = cat3;
     }
 }

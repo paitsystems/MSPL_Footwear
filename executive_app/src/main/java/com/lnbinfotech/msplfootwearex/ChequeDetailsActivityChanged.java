@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Gravity;
 
@@ -44,6 +45,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -51,16 +53,18 @@ import java.util.Locale;
 public class ChequeDetailsActivityChanged extends AppCompatActivity implements View.OnClickListener, TestInterface{
 
     private ListView listView;
-    private EditText ed_branch, ed_bank, ed_chq_no;
+    private EditText ed_branch, ed_bank, ed_chq_no, ed_chq_serial;
     private AppCompatButton btn_submit;
     private Toast toast;
-    private String auto_type,imagePath;
+    private String auto_type,imagePath,custId = "";
     private Menu menu;
     public static SelectAutoItemClass selectAuto;
     private List<ChequeDetailsClass> list;
     private ChequeDetailChangedAdapter adapter;
-    private int requestCode = 0;
+    private int requestCode = 0, mYear, mMonth, mDay;
     public ChequeDetailsClass chequeDetails;
+    public static String chequeNo = "0";
+    private TextView tv_amntTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +83,18 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
             getSupportActionBar().setTitle(R.string.payment);
         }
 
+        try {
+            custId = getIntent().getExtras().getString("custid");
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("onCreate_" + e.getMessage());
+        }
+
+        Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
         ed_bank.setOnClickListener(this);
         ed_branch.setOnClickListener(this);
         btn_submit.setOnClickListener(this);
@@ -95,12 +111,18 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String str = ed_chq_no.getText().toString();
-                if(!str.equals("")){
-                    setData();
+                String str1 = ed_chq_serial.getText().toString();
+                if(!str1.equals("")) {
+                    String str = ed_chq_no.getText().toString();
+                    if (!str.equals("")) {
+                        setData();
+                    } else {
+                        list.clear();
+                        listView.setAdapter(null);
+                    }
                 }else{
-                    list.clear();
-                    listView.setAdapter(null);
+                    toast.setText("First Enter Cheque Serial Number");
+                    toast.show();
                 }
             }
         });
@@ -169,6 +191,82 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onResumeFragment(String data1, String data2, Context context) {
+        ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(btn_submit.getWindowToken(),0);
+        new DatePickerDialog(ChequeDetailsActivityChanged.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH);
+                    Date select_date = sdf.parse(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                    String dt = sdf1.format(select_date);
+                    Constant.showLog(dt);
+                    adapter.returnDate(dt);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, mYear, mMonth, mDay).show();
+    }
+
+    @Override
+    public void onPauseFragment(String data1, String data2, Context context) {
+        chequeNo = data1;
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File f = Constant.checkFolder(Constant.folder_name);
+        f = new File(f.getAbsolutePath(), "temp.jpg");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+        startActivityForResult(intent, requestCode);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
+    }
+
+    @Override
+    public void onAmountChange(int amnt) {
+        tv_amntTotal.setText(String.valueOf(amnt));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (this.requestCode == requestCode && resultCode == RESULT_OK) {
+            try {
+                long datetime = System.currentTimeMillis();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
+                Date resultdate = new Date(datetime);
+                imagePath = "C_" + custId + "_Cheque_" + chequeNo + "_" + sdf.format(resultdate) + ".jpg";
+                Constant.showLog(imagePath);
+                File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name);
+                for (File temp : f.listFiles()) {
+                    if (temp.getName().equals("temp.jpg")) {
+                        f = temp;
+                        break;
+                    }
+                }
+                OutputStream outFile;
+                Bitmap bitmap;
+                BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+                bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
+
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name, imagePath);
+                try {
+                    outFile = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 15, outFile);
+                    outFile.flush();
+                    outFile.close();
+                    adapter.returnImage(imagePath);
+                } catch (Exception e) {
+                    writeLog("onActivityResult():FileNotFoundException:" + e);
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                writeLog("onActivityResult():Exception:" + e);
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void init() {
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
@@ -178,6 +276,8 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
         ed_chq_no = (EditText) findViewById(R.id.ed_total_chq);
         btn_submit = (AppCompatButton) findViewById(R.id.btn_submt);
         listView = (ListView) findViewById(R.id.listView);
+        tv_amntTotal = (TextView) findViewById(R.id.tv_amntTotal);
+        ed_chq_serial = (EditText) findViewById(R.id.ed_chqSerial);
         list = new ArrayList<>();
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
@@ -196,12 +296,18 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
         list.clear();
         listView.setAdapter(null);
         int tot = Integer.parseInt(ed_chq_no.getText().toString());
+        String str = ed_chq_serial.getText().toString();
+        if(str.equals("")){
+           str = "0";
+        }
+        int chqNo = Integer.parseInt(str);
         for(int i=1;i<=tot;i++){
             ChequeDetailsClass cheque = new ChequeDetailsClass();
             cheque.setSrNo(i);
             cheque.setChq_det_amt("0");
-            cheque.setChq_det_number("0");
-            cheque.setChq_det_date("27/Mar/2018");
+            cheque.setChq_det_number(String.valueOf(chqNo));
+            chqNo = chqNo + 1;
+            cheque.setChq_det_date(new Constant(getApplicationContext()).getDate());
             list.add(cheque);
         }
         adapter = new ChequeDetailChangedAdapter(getApplicationContext(), list);
@@ -312,74 +418,4 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "ChequeDetailsActivityChanged_" + _data);
     }
-
-    @Override
-    public void onResumeFragment(String data1, String data2, Context context) {
-        ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(btn_submit.getWindowToken(),0);
-        new DatePickerDialog(ChequeDetailsActivityChanged.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                try {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-                    SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH);
-                    Date select_date = sdf.parse(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                    String dt = sdf1.format(select_date);
-                    Constant.showLog(dt);
-                    adapter.returnDate(dt);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }, 2018, 2, 30).show();
-    }
-
-    @Override
-    public void onPauseFragment(String data1, String data2, Context context) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File f = Constant.checkFolder(Constant.folder_name);
-        f = new File(f.getAbsolutePath(), "temp.jpg");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-        startActivityForResult(intent, requestCode);
-        overridePendingTransition(R.anim.enter, R.anim.exit);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
-        if (this.requestCode == requestCode && resultCode == RESULT_OK) {
-            try {
-                long datetime = System.currentTimeMillis();
-                SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
-                Date resultdate = new Date(datetime);
-                imagePath = "Cheque_Img_" + sdf.format(resultdate) + ".jpg";
-                File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name);
-                for (File temp : f.listFiles()) {
-                    if (temp.getName().equals("temp.jpg")) {
-                        f = temp;
-                        break;
-                    }
-                }
-                OutputStream outFile;
-                Bitmap bitmap;
-                BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-                bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
-
-                File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name, imagePath);
-                try {
-                    outFile = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 15, outFile);
-                    outFile.flush();
-                    outFile.close();
-                    adapter.returnImage(imagePath);
-                } catch (Exception e) {
-                    writeLog("onActivityResult():FileNotFoundException:" + e);
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                writeLog("onActivityResult():Exception:" + e);
-                e.printStackTrace();
-            }
-        }
-    }
-
 }

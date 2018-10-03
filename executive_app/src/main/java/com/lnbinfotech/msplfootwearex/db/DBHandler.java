@@ -1612,7 +1612,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 +Table_ProductMaster+"."+PM_Finalprod+","+Table_ProductMaster+"."+PM_ProdId+","+Table_AllRequiredSizesDesigns+"."+
                 ARSD_ImageName+","+Table_ProductMaster+"."+PM_MRPRate+","+Table_ProductMaster+"."+PM_MarkUp+","
                 +Table_ProductMaster+"."+PM_MarkDown+","+Table_ProductMaster+"."+PM_SRate+","+Table_ProductMaster+"."
-                +PM_Finalprod+","+Table_ProductMaster+"."+PM_HSNCode+","+Table_GSTMASTER+"."+GST_GSTPer+","+Table_GSTMASTER+"."+GST_GroupNm
+                +PM_Finalprod+","+Table_ProductMaster+"."+PM_HSNCode+","+Table_GSTMASTER+"."+GST_GSTPer
+                +","+Table_GSTMASTER+"."+GST_GroupNm+","+Table_ProductMaster+"."+PM_Cat3
                 +" from "+Table_ProductMaster+","+ Table_AllRequiredSizesDesigns+","+Table_GSTMASTER+" where "+
                 Table_ProductMaster+"."+PM_Cat9+"='"+catName+"' and "+Table_ProductMaster+"."+PM_Cat2+"='"+subCatName+"' and "
                 +Table_AllRequiredSizesDesigns+"."+ARSD_Productid+"="+
@@ -1757,6 +1758,22 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
+    public Cursor getImageSubCategory2(String catName, String subCatName) {
+        String str = "select "+Table_ProductMaster+"."+PM_ProductID+","+Table_ProductMaster+"."+PM_Cat2+","
+                +Table_ProductMaster+"."+PM_Finalprod+","+Table_ProductMaster+"."+PM_ProdId+","+
+                Table_ProductMaster+"."+PM_MRPRate+","+Table_ProductMaster+"."+PM_MarkUp+","
+                +Table_ProductMaster+"."+PM_MarkDown+","+Table_ProductMaster+"."+PM_SRate+","+Table_ProductMaster+"."
+                +PM_Finalprod+","+Table_ProductMaster+"."+PM_HSNCode+","+Table_GSTMASTER+"."+GST_GSTPer
+                +","+Table_GSTMASTER+"."+GST_GroupNm+","+Table_ProductMaster+"."+PM_Cat3
+                +" from "+Table_ProductMaster+","+ Table_GSTMASTER+" where "+
+                Table_ProductMaster+"."+PM_Cat9+"='"+catName+"' and "+Table_ProductMaster+"."+PM_Cat2+"='"+subCatName+
+                "' and " + Table_ProductMaster+"."+PM_GSTGroup +"="+Table_GSTMASTER+"."+GST_GroupNm+
+                " and "+ Table_ProductMaster + "." + PM_ProductID + "=" + AddToCartActivity.selProdId +
+                " group by "+Table_ProductMaster+"."+PM_Finalprod+" order by "+
+                Table_ProductMaster+"."+PM_Cat2;
+        Constant.showLog("getImageSubCategory 1 :- "+str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
 }
 
 

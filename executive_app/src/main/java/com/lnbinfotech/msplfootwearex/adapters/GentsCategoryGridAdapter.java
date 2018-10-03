@@ -65,6 +65,7 @@ public class GentsCategoryGridAdapter extends BaseAdapter {
         holder.tv_markup.setText(gentsClass.getMarkup());
         holder.tv_markdown.setText(gentsClass.getMarkdown());
         //holder.img.setImageResource(drawId[i]);
+
         Glide.with(context).load(gentsClass.getImgName())
                 .thumbnail(0.5f)
                 .crossFade()

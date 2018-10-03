@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lnbinfotech.msplfootwearex.R;
@@ -68,6 +69,7 @@ public class InvoiceDetailForPaymentAdapter extends BaseAdapter{
             holder.tv_paidAmnt = (TextView) convertview.findViewById(R.id.tv_paidamnt);
             holder.tv_outstdAmnt = (TextView) convertview.findViewById(R.id.tv_outstndamnt);
             holder.cb = (CheckBox) convertview.findViewById(R.id.cb);
+            holder.lay = (LinearLayout) convertview.findViewById(R.id.lay);
             convertview.setTag(holder);
         } else {
             holder = (ViewHolder) convertview.getTag();
@@ -79,6 +81,11 @@ public class InvoiceDetailForPaymentAdapter extends BaseAdapter{
         holder.tv_total.setText(flt_price.format(outClass.getTotal()));
         holder.tv_paidAmnt.setText(flt_price.format(outClass.getPaidAmnt()));
         holder.tv_outstdAmnt.setText(flt_price.format(outClass.getOutAmnt()));
+        if(outClass.isChecked()){
+            holder.lay.setBackgroundColor(context.getResources().getColor(R.color.blue));
+        }else{
+            holder.lay.setBackgroundColor(context.getResources().getColor(R.color.white));
+        }
         holder.cb.setOnCheckedChangeListener(null);
         holder.cb.setChecked(outClass.isChecked());
         holder.cb.setTag(position);
@@ -151,6 +158,7 @@ public class InvoiceDetailForPaymentAdapter extends BaseAdapter{
     private class ViewHolder {
         private TextView tv_date,tv_type,tv_dcno,tv_total,tv_paidAmnt,tv_outstdAmnt;
         private CheckBox cb;
+        private LinearLayout lay;
     }
 
     public void initInterface(PaymentTotalInterface _paymentInt){

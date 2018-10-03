@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -30,6 +31,7 @@ import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.ChequeDetailsClass;
 import com.lnbinfotech.msplfootwearex.model.OuststandingReportClass;
 import com.lnbinfotech.msplfootwearex.model.VisitPaymentFormClass;
+import com.lnbinfotech.msplfootwearex.services.UploadImageService;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
 import org.apache.http.HttpResponse;
@@ -37,6 +39,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
@@ -52,7 +57,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
     private String auto_type;
     private AppCompatButton btn_save, btn_showBill;
     public static VisitPaymentFormClass visit;
-    private int total_amt = 0;
+    private int total_amt = 0, count;
     private Toast toast;
     private String custName = "", custId = "0";
     private ListView lv_out;
@@ -61,6 +66,8 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
     private TextView tv_temant, tv_tbal, tv_paid, tv_talloc;
     private List<OuststandingReportClass> invlist, orgList;
     public static List<ChequeDetailsClass> ls;
+    private InvoiceDetailForPaymentAdapter adapter;
+    public static String custCurrencyStr = "", seCurrencyStr = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +101,23 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
             toast.setText("You Are Offline");
             toast.show();
         }
+
+        lv_out.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                OuststandingReportClass out = invlist.get(i);
+                if(out.isChecked()){
+                    out.setChecked(false);
+                    totPaid = (int) (totPaid - out.getTotal());
+                }else{
+                    out.setChecked(true);
+                    totPaid = (int) (totPaid + out.getTotal());
+                }
+                tv_paid.setText(String.valueOf(totPaid));
+                adapter.notifyDataSetChanged();
+                Constant.showLog(""+out.getTotal());
+            }
+        });
     }
 
     @Override
@@ -158,13 +182,15 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                     setrdoCash();
                 } else {
                     //showPopup(2);
-                    if(!ed_amount.getText().toString().equals("") && !ed_amount.getText().toString().equals("0")) {
+                    /*if(!ed_amount.getText().toString().equals("") && !ed_amount.getText().toString().equals("0")) {
                         startCashActivity();
                     }else{
                         rdo_cash.setChecked(false);
                         toast.setText("Please Enter Proper Amount");
                         toast.show();
-                    }
+                    }*/
+                    startCashActivity();
+
                 }
                 break;
             case R.id.rdo_cheque:
@@ -172,13 +198,15 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                     setrdoCheque();
                 } else {
                     //showPopup(3);
-                    if(!ed_amount.getText().toString().equals("") && !ed_amount.getText().toString().equals("0")) {
+                   /* if(!ed_amount.getText().toString().equals("") && !ed_amount.getText().toString().equals("0")) {
                         startCheqActivity();
                     }else{
                         rdo_cheque.setChecked(false);
                         toast.setText("Please Enter Proper Amount");
                         toast.show();
-                    }
+                    }*/
+                    startCheqActivity();
+
                 }
                 break;
             case R.id.rdo_other:
@@ -186,13 +214,15 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                     setrdoOther();
                 } else {
                     //showPopup(4);
-                    if(!ed_amount.getText().toString().equals("") && !ed_amount.getText().toString().equals("0")) {
+                    /*if(!ed_amount.getText().toString().equals("") && !ed_amount.getText().toString().equals("0")) {
                         startOtherActivity();
                     }else{
                         rdo_other.setChecked(false);
                         toast.setText("Please Enter Proper Amount");
                         toast.show();
-                    }
+                    }*/
+                    startOtherActivity();
+
                 }
                 break;
         }
@@ -516,7 +546,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                         invlist = (List<OuststandingReportClass>) result;
                         orgList = invlist;
                         if (invlist.size() != 0) {
-                            InvoiceDetailForPaymentAdapter adapter = new InvoiceDetailForPaymentAdapter(invlist, getApplicationContext());
+                            adapter = new InvoiceDetailForPaymentAdapter(invlist, getApplicationContext());
                             adapter.initInterface(VisitPaymentFormActivity.this);
                             lv_out.setAdapter(adapter);
                             tv_tbal.setText(String.valueOf(totBal));
@@ -594,6 +624,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
     }
 
     private void savePaymentCash() {
+        count = 1;
         int branch = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
         int createdby = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
 
@@ -603,7 +634,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
 
         String status = "A", accNo = "NA", chqMode = "NA", CBankid = "NA", CBranch = "NA", chequeClear = "Y",
                 chequeMode = "NA", ref = "NA", modeType = "NA", taxInvNo = "", det = "", chequDate = "24/Jan/2018",
-                remark = "NA", chequeNo = "0", chqImg = "NA", custCurrDet = "NA", custRetDet = "NA", otherBank = "NA",
+                remark = "NA", chequeNo = "0", chqImg = "NA", custCurrDet = custCurrencyStr, custRetDet = seCurrencyStr, otherBank = "NA",
                 otherBranch = "NA", otherPaymentMode = "NA", otherRemark = "NA", otherImg = "NA";
 
         for (OuststandingReportClass out : invlist) {
@@ -628,6 +659,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
             new SavePayment(1).execute(data);
             JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(data).endObject().endObject();
             Constant.showLog(vehicle.toString());
+            writeLog("savePaymentCash_"+vehicle.toString());
         } catch (Exception e) {
             e.printStackTrace();
             writeLog("savePaymentCash_" + e.getMessage());
@@ -636,6 +668,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
 
     private void savePaymentCheque() {
         if(ls.size()!=0) {
+            count = ls.size();
             for(ChequeDetailsClass chqClass : ls) {
                 int branch = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
                 int createdby = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
@@ -674,6 +707,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
 
                     JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(data).endObject().endObject();
                     Constant.showLog(vehicle.toString());
+                    writeLog("savePaymentCheque_"+vehicle.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                     writeLog("savePaymentCheque_" + e.getMessage());
@@ -687,6 +721,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
 
     private void savePaymentOther() {
         if (ls.size() != 0) {
+            count = ls.size();
             for (ChequeDetailsClass chqClass : ls) {
                 int branch = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
                 int createdby = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
@@ -726,6 +761,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
 
                     JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(data).endObject().endObject();
                     Constant.showLog(vehicle.toString());
+                    writeLog("savePaymentOther_"+vehicle.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                     writeLog("savePaymentOther_" + e.getMessage());
@@ -762,11 +798,15 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
             try {
 
                 JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(url[0]).endObject().endObject();
-
+                writeLog(vehicle.toString());
                 StringEntity entity = new StringEntity(vehicle.toString());
                 request.setEntity(entity);
+                //DefaultHttpClient httpClient = new DefaultHttpClient();
+                HttpParams httpParams = new BasicHttpParams();
+                HttpConnectionParams.setConnectionTimeout(httpParams,Constant.TIMEOUT_CON);
+                HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);
+                DefaultHttpClient httpClient = new DefaultHttpClient(httpParams);
 
-                DefaultHttpClient httpClient = new DefaultHttpClient();
                 HttpResponse response = httpClient.execute(request);
                 Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
                 value = new BasicResponseHandler().handleResponse(response);
@@ -791,7 +831,13 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                 String[] retAutoBranchId = str.split("\\-");
                 if (retAutoBranchId.length > 1) {
                     if (!retAutoBranchId[0].equals("0") && !retAutoBranchId[0].equals("+2") && !retAutoBranchId[0].equals("+3")) {
-                        showPopup(6);
+                        count--;
+                        writeLog("savePaymentAsyncTask_result_" + count);
+                        if(count==0) {
+                            Intent intent = new Intent(VisitPaymentFormActivity.this, UploadImageService.class);
+                            startService(intent);
+                            showPopup(6);
+                        }
                     } else {
                         showPopup(7);
                     }
@@ -837,6 +883,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         rdo_cash.setChecked(false);
         rdo_other.setChecked(false);
         Intent intent3 = new Intent(VisitPaymentFormActivity.this, ChequeDetailsActivityChanged.class);
+        intent3.putExtra("custid",custId);
         startActivity(intent3);
         overridePendingTransition(R.anim.enter, R.anim.exit);
     }
@@ -856,6 +903,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         rdo_cash.setChecked(false);
         rdo_other.setChecked(true);
         Intent intent1 = new Intent(VisitPaymentFormActivity.this, OtherDetailsActivity.class);
+        intent1.putExtra("custid",custId);
         startActivity(intent1);
         overridePendingTransition(R.anim.enter, R.anim.exit);
     }

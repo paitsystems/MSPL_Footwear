@@ -11,9 +11,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +40,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,10 +57,10 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
     private AppCompatButton btn_submit;
     private TextView tv_chq_date, tv_total;
     private ImageView imageView_cheque_img;
-    private String auto_type, imagePath;
+    private String auto_type, imagePath, custId = "0";
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
     private Calendar cal = Calendar.getInstance();
-    private final int requestCode = 21;
+    private final int requestCode = 21, REQUEST_IMAGE_PICK_UP = 2;
     public ChequeDetailsClass chequeDetails;
     private Date today_date = Calendar.getInstance().getTime();
     private int day, month, year;
@@ -83,6 +86,12 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        try {
+            custId = getIntent().getExtras().getString("custid");
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("onCreate_" + e.getMessage());
+        }
     }
 
     protected void onResume() {
@@ -99,13 +108,7 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
                 validations();
                 break;
             case R.id.lay_img:
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File f = Constant.checkFolder(Constant.folder_name);
-                f = new File(f.getAbsolutePath(), "temp.jpg");
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                startActivityForResult(intent, requestCode);
-                overridePendingTransition(R.anim.enter, R.anim.exit);
-                //capture_image();
+                showDia(1);
                 break;
             case R.id.tv_chq_date:
                 showDialog(1);
@@ -160,7 +163,8 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
                 long datetime = System.currentTimeMillis();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
                 Date resultdate = new Date(datetime);
-                imagePath = "Other_Img_" + sdf.format(resultdate) + ".jpg";
+                String type = list.get(sp_sizeGroup.getSelectedItemPosition());
+                imagePath = "C_"+custId+"_Other_"+type+"_" + sdf.format(resultdate) + ".jpg";
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name);
                 for (File temp : f.listFiles()) {
                     if (temp.getName().equals("temp.jpg")) {
@@ -186,6 +190,34 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
             } catch (Exception e) {
                 writeLog("onActivityResult():Exception:" + e);
                 e.printStackTrace();
+            }
+        }else if (requestCode == REQUEST_IMAGE_PICK_UP && resultCode == RESULT_OK && data!=null) {
+            try {
+                Uri selectedImage = data.getData();
+                String[] filepathcoloum = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContentResolver().query(selectedImage, filepathcoloum, null, null, null);
+                if(cursor!=null) {
+                    if (cursor.moveToFirst()) {
+                        int columnindex = cursor.getColumnIndex(filepathcoloum[0]);
+                        String imgDecodedString = cursor.getString(columnindex);
+                        long datetime = System.currentTimeMillis();
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
+                        Date resultdate = new Date(datetime);
+                        String fname = "S_" + sdf.format(resultdate);
+                        File sourcefile = new File(imgDecodedString);
+                        File destinationfile = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + "/" + fname + ".jpg");
+                        copyImage(sourcefile, destinationfile);
+                        cursor.close();
+                    }
+                }else{
+                    toast.setText("Please Try Again");
+                    toast.show();
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                writeLog("onActivityResult_REQUEST_IMAGE_PICK_UP_"+e.getMessage());
+                toast.setText("Something Went Wrong");
+                toast.show();
             }
         }
     }
@@ -247,8 +279,107 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
                     dialog.dismiss();
                 }
             });
+        }else if(a==1) {
+            builder.setMessage("Select Attachment From...");
+            builder.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    openGallery();
+                }
+            });
+            builder.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    takeimage();
+                }
+            });
+            builder.setNeutralButton("Cancel",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
         }
         builder.create().show();
+    }
+
+    private void takeimage(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File f = Constant.checkFolder(Constant.folder_name);
+        f = new File(f.getAbsolutePath(), "temp.jpg");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+        startActivityForResult(intent, requestCode);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
+    }
+
+    private void openGallery(){
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(gallery,REQUEST_IMAGE_PICK_UP);
+    }
+
+    private void copyImage(File source, File destination){
+        try {
+            FileChannel sourcechannel, destinationchannel;
+            sourcechannel = new FileInputStream(source).getChannel();
+            destinationchannel = new FileOutputStream(destination).getChannel();
+            if(sourcechannel!=null){
+                destinationchannel.transferFrom(sourcechannel,0,sourcechannel.size());
+            }
+            if(sourcechannel!=null){
+                sourcechannel.close();
+            }
+            destinationchannel.close();
+            setImage(destination, 0);
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("copyImage_"+e.getMessage());
+        }
+    }
+
+    private void setImage(File f, int i){
+        OutputStream outFile;
+        try {
+            imageView_cheque_img.setVisibility(View.VISIBLE);
+            Bitmap bitmap;
+            BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+            bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
+            Bitmap bmp = scaleBitmap(f.getAbsolutePath());
+            imageView_cheque_img.setImageBitmap(bmp);
+            File file;
+            if(i == 0) {
+                String OImgPath = Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name+"/";
+                if (f.delete()) {
+                   Constant.showLog("Delete");
+                }
+                long datetime = System.currentTimeMillis();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
+                Date resultdate = new Date(datetime);
+                String type = list.get(sp_sizeGroup.getSelectedItemPosition());
+                imagePath = "C_"+custId+"_Other_"+type+"_" + sdf.format(resultdate) + ".jpg";
+                file = new File(OImgPath, "/" +imagePath);
+                //String fname = "IMG_" + sdf.format(resultdate);
+                //file = new File( fname + ".jpg");
+                //imagePath = fname + ".jpg";
+            }else{
+                file = f;
+                imagePath = f.getAbsolutePath();
+                imagePath = f.getName();
+            }
+            try {
+                outFile = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 15, outFile);
+                outFile.flush();
+                outFile.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                writeLog("setImage_1_"+e.getMessage());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("setImage_2_"+e.getMessage());
+        }
     }
 
     private void validations() {

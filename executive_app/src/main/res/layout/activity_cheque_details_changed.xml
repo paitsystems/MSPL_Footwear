@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/mobmargin5">
+            android:layout_margin="@dimen/mobmargin2">
 
             <EditText
                 android:id="@+id/ed_bank"
@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/mobmargin5">
+            android:layout_margin="@dimen/mobmargin2">
 
             <EditText
                 android:id="@+id/ed_branch"
@@ -48,10 +48,30 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_margin="@dimen/mobmargin2"
             android:orientation="horizontal"
             android:visibility="visible">
+
+            <TextView
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                android:gravity="center_vertical"
+                android:text="Chq Serial"
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+            <EditText
+                android:id="@+id/ed_chqSerial"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                android:ems="10"
+                android:inputType="number"
+                android:padding="5sp"
+                android:visibility="visible"
+                android:gravity="center" />
 
             <TextView
                 style="@style/textViewMob"
@@ -67,11 +87,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.4"
-                android:drawableRight="@drawable/cheque_number"
                 android:ems="10"
                 android:inputType="number"
                 android:padding="5sp"
-                android:visibility="visible"/>
+                android:visibility="visible"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/mobmargin2"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <TextView
+                style="@style/textViewMob"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                android:gravity="center_vertical"
+                android:text="Total Amount"
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+            <TextView
+                android:id="@+id/tv_amntTotal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                android:ems="10"
+                android:padding="5sp"
+                android:visibility="visible"
+                style="@style/textViewMob"
+                android:text="0" />
 
         </LinearLayout>
 
@@ -102,7 +151,7 @@
                 style="@style/textViewMobAddToCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"
+                android:layout_weight="0.4"
                 android:background="@drawable/line_top_right_bottom_draw"
                 android:gravity="center"
                 android:text="Cheque No" />
@@ -111,7 +160,7 @@
                 style="@style/textViewMobAddToCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"
+                android:layout_weight="0.4"
                 android:background="@drawable/line_top_right_bottom_draw"
                 android:gravity="center"
                 android:text="Amount" />
@@ -120,10 +169,10 @@
                 style="@style/textViewMobAddToCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.4"
+                android:layout_weight="0.5"
                 android:background="@drawable/line_top_right_bottom_draw"
                 android:gravity="center"
-                android:text="Image"
+                android:text="Img"
                 android:visibility="visible" />
 
             <TextView

@@ -109,8 +109,6 @@ public class SelectAutoItemActivity extends AppCompatActivity implements View.On
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 adapter.getFilter().filter(charSequence.toString());
                 lv_cus.setAdapter(adapter);
-                //String str = ed_cus_name.getText().toString().toLowerCase(Locale.getDefault());
-                //adapter.getFilter().filter(str);
             }
 
             @Override
@@ -159,49 +157,25 @@ public class SelectAutoItemActivity extends AppCompatActivity implements View.On
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
                 if (get_type.equals("cus")) {
-                    // String select_item = cus_list.get(position);
                     String select_item = (String) parent.getItemAtPosition(position);
                     VisitPaymentFormActivity.visit.setCustomer_name(select_item);
-                    ed_cus_name.setText(select_item);
-                    Constant.showLog("selcteditem: " + select_item);
-                    writeLog("setOnItemClickListener():list item selected:" + select_item);
-                    //finish();
+                    //ed_cus_name.setText(select_item);
                     new Constant(SelectAutoItemActivity.this).doFinish();
                 } else if (get_type.equals("bank")) {
-                    //String select_item = bank_list.get(position);
                     String select_item = (String) parent.getItemAtPosition(position);
                     ChequeDetailsActivityChanged.selectAuto.setChq_auto_bank(select_item);
-                    ed_bank.setText(select_item);
-                    Constant.showLog("selcted_item: " + select_item);
-                    writeLog("setOnItemClickListener():list item selected:" + select_item);
-                    //finish();
                     new Constant(SelectAutoItemActivity.this).doFinish();
                 } else if (get_type.equals("branch")) {
-                    //String select_item = branch_list.get(position);
                     String select_item = (String) parent.getItemAtPosition(position);
                     ChequeDetailsActivityChanged.selectAuto.setChq_auto_branch(select_item);
-                    ed_branch.setText(select_item);
-                    Constant.showLog("selcted_item: " + select_item);
-                    writeLog("setOnItemClickListener():list item selected:" + select_item);
-                    //finish();
                     new Constant(SelectAutoItemActivity.this).doFinish();
                 }else if (get_type.equals("bank1")) {
-                    //String select_item = bank_list.get(position);
                     String select_item = (String) parent.getItemAtPosition(position);
                     ChequeDetailsActivityChanged.selectAuto.setChq_auto_bank(select_item);
-                    ed_bank.setText(select_item);
-                    Constant.showLog("selcted_item: " + select_item);
-                    writeLog("setOnItemClickListener():list item selected:" + select_item);
-                    //finish();
                     new Constant(SelectAutoItemActivity.this).doFinish();
                 } else if (get_type.equals("branch1")) {
-                    //String select_item = branch_list.get(position);
                     String select_item = (String) parent.getItemAtPosition(position);
                     ChequeDetailsActivityChanged.selectAuto.setChq_auto_branch(select_item);
-                    ed_branch.setText(select_item);
-                    Constant.showLog("selcted_item: " + select_item);
-                    writeLog("setOnItemClickListener():list item selected:" + select_item);
-                    //finish();
                     new Constant(SelectAutoItemActivity.this).doFinish();
                 }
             }

@@ -190,7 +190,7 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
                             total = 0;
                         }
                     }
-                    /*if (!dispatchCenterNetAmtTotalMap.isEmpty()) {
+                    if (!dispatchCenterNetAmtTotalMap.isEmpty()) {
                         if (dispatchCenterNetAmtTotalMap.containsKey(Integer.parseInt(id))) {
                             netAmtTot = dispatchCenterNetAmtTotalMap.get(Integer.parseInt(id));
                             if(netAmtTot>dispatchCenterOrderLimit){
@@ -198,7 +198,7 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
                                 titleStr = titleStr + initial +" - "+ netAmtTot+"\n";
                             }
                         }
-                    }*/
+                    }
                     initial = initial + " - " + total;
                     comClass.setCompanyId(id);
                     comClass.setCompanyInitial(initial);
@@ -487,6 +487,11 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
 
     @Override
     public void onImageClick(ImagewiseAddToCartClass prod) {
+
+    }
+
+    @Override
+    public void onSizeGroupClick(String sizeGroup) {
 
     }
 
