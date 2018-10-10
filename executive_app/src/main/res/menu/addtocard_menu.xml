@@ -9,4 +9,11 @@
         android:icon="@drawable/cart24"
         app:showAsAction="always"/>
 
+    <item
+        android:title="Image"
+        android:id="@+id/img"
+        android:actionLayout="@layout/actionbaar_badge_layout"
+        android:icon="@drawable/ic_collections_black_24dp"
+        app:showAsAction="always"/>
+
 </menu>

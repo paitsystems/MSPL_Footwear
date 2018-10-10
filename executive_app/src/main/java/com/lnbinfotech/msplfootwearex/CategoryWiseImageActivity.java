@@ -59,6 +59,7 @@ public class CategoryWiseImageActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), FullImageActivity.class);
                 intent.putExtra("data", prod);
+                intent.putExtra("pos", String.valueOf(i));
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
             }
@@ -95,7 +96,6 @@ public class CategoryWiseImageActivity extends AppCompatActivity {
             writeLog("setData_"+e.getMessage());
         }
     }
-
 
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "CategoryWiseImageActivity_" + _data);

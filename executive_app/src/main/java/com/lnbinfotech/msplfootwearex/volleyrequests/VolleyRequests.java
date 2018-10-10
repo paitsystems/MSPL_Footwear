@@ -1076,4 +1076,28 @@ public class VolleyRequests {
         );
         AppSingleton.getInstance(context).addToRequestQueue(request, "AREA");
     }
+
+    public void updateIMEINo(String url, final ServerCallback callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\", "");
+                        response = response.replace("\"", "");
+                        callback.onSuccess(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("updateIMEINo_VolleyError_"+error.getMessage());
+                        Constant.showLog(error.getMessage());
+                        writeLog("updateIMEINo_" + error.getMessage());
+                    }
+                }
+        );
+        AppSingleton.getInstance(context).addToRequestQueue(request, "IMEINo");
+    }
+
 }

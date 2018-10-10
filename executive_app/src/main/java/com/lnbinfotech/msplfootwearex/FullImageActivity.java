@@ -28,6 +28,7 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
     private List<String> mImageList;
     private FullImageAdapter adapter;
     private ImagewiseAddToCartClass prod = null;
+    private int pos = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
 
         try {
             prod = (ImagewiseAddToCartClass) getIntent().getExtras().getSerializable("data");
+            pos = Integer.parseInt(getIntent().getExtras().getString("pos"));
         }catch (Exception e){
             e.printStackTrace();
             writeLog("onCreate_"+e.getMessage());
@@ -80,6 +82,7 @@ public class FullImageActivity extends AppCompatActivity implements View.OnClick
         getImgTitleList();
         adapter.getImageTitle(mImageList);
         pager.setAdapter(adapter);
+        pager.setCurrentItem(pos);
     }
 
     private void getImgTitleList() {

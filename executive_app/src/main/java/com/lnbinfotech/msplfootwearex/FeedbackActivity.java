@@ -498,6 +498,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
+                    new Constant();
                     saveFeedbackdetail();
                 }
             });

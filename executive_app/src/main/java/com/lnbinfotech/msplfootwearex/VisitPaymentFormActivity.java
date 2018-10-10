@@ -454,6 +454,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    new Constant();
                     if(rdo_cash.isChecked()){
                         savePaymentCash();
                     }else if(rdo_cheque.isChecked()){
@@ -642,12 +643,15 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                 //billAmt-PreviuosPaid-Balance-ManualDr-ManualCr-GoodsRet-Advance-Disc-TotBal-Rec-Outstnd-ManualDlrlds-
                 // ManualDrAmt-ManualCrlds-ManualCrAmt-GoodsRetIds-GoodsRetAmts-AdvancePayIds-AdvancePayAmnts-Type-ToBranchIds
                 taxInvNo = taxInvNo + out.getDcno() + ",";
+                //9045.0^0.0^9045.0^0^0^0^0^0^9045.0^0.0^9045.0^0^0^0^0^0^0^0^0^0^0^UGNT/1819/9712,
                 det = det + out.getNetAmt() + "^" + out.getRecAmnt() + "^" + out.getTotal() + "^0^0^0^0^0^" + out.getTotal() + "^" + out.getPaidAmnt() + "^" + out.getOutAmnt() + "^0^0^0^0^0^0^0^0^0^0^" + out.getDcno() + ",";
             }
         }
         try {
             //taxInvNo = taxInvNo.substring(0, taxInvNo.length() - 1);
             //det = det.substring(0, det.length() - 1);
+
+            //"1|400|0|0|0|0|0|0|0|24\/Jan\/2018|0|0|0|0|0|0|106|NA|0|0|NA|UGNT\/1819\/9712,|NA|NA|NA|Y|NA|0|NA|NA|NA|||NA|NA|NA|NA|NA|0|A|"}}
 
             String data = branch + "|" + custId + "|" + siteid + "|" + totalPaidAmt + "|" + cashAmt + "|" + cardAmt + "|" + chequeAmt + "|" + cardNo + "|" + chequeNo + "|" +
                     chequDate + "|" + totalRecpt + "|" + totalDisc + "|" + totalMDRNote + "|" + totalMCRNote + "|" + totalGoodsRet + "|" + totalAdvance + "|" +
@@ -875,6 +879,8 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
         totPaid = 0;
         totAlloc = 0;
         isChequeDataSaved = 0;
+        custCurrencyStr = "";
+        seCurrencyStr = "";
         new Constant(VisitPaymentFormActivity.this).doFinish();
     }
 

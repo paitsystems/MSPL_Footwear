@@ -703,6 +703,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    new Constant();
                     checkStock();
                     dialog.dismiss();
                 }
@@ -732,6 +733,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //saveCustOrder();
+                    new Constant();
                     getSaveOrderData();
                     dialog.dismiss();
                 }

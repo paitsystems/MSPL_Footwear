@@ -36,14 +36,14 @@ public class ScheduledJobServicePL extends JobService {
             getApplicationContext().startService(service);
         }*/
         //TODO : Set Time Limit
-        //if(hour<13||hour>20) {
-        if(ConnectivityTest.getNetStat(getApplicationContext())) {
-            startSync();
-            writeLog("onStartJob_"+hour+"_Online");
-        }else {
-            writeLog("onStartJob_"+hour+"_Offline");
+        if(hour<13||hour>20) {
+            if (ConnectivityTest.getNetStat(getApplicationContext())) {
+                startSync();
+                writeLog("onStartJob_" + hour + "_Online");
+            } else {
+                writeLog("onStartJob_" + hour + "_Offline");
+            }
         }
-        //}
 
         return false;
     }

@@ -226,6 +226,7 @@ public class DisplayCustOutstandingActivity extends AppCompatActivity implements
             builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    new Constant();
                     loadOustandingdetail();
                 }
             });

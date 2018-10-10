@@ -54,7 +54,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-public class ImageWiseAddToCartActivity extends AppCompatActivity implements View.OnClickListener, RecyclerViewToActivityInterface {
+public class ImageWiseAddToCartActivity extends AppCompatActivity implements View.OnClickListener,
+        RecyclerViewToActivityInterface {
 
     private Toast toast;
     private TextView tv_prodname, tv_wsp, tv_mrp, tv_hsncode, tv_gstper,tv_gstprint,tv_marginup,tv_margindown,
@@ -415,7 +416,18 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
         if(res.moveToFirst()){
             do{
                 ImagewiseAddToCartClass image = new ImagewiseAddToCartClass();
-                image.setImageName(res.getString(res.getColumnIndex(DBHandler.ARSD_ImageName)));
+                //image.setImageName(res.getString(res.getColumnIndex(DBHandler.ARSD_ImageName)));
+                String imageName = gentClass.getProductId()+"_"+cat2+"_"
+                        +res.getString(res.getColumnIndex(DBHandler.ARSD_Colour))+"_P1"+","+
+                        gentClass.getProductId()+"_"+cat2+"_"
+                        +res.getString(res.getColumnIndex(DBHandler.ARSD_Colour))+"_P2"+","+
+                        gentClass.getProductId()+"_"+cat2+"_"
+                        +res.getString(res.getColumnIndex(DBHandler.ARSD_Colour))+"_P3"+","+
+                        gentClass.getProductId()+"_"+cat2+"_"
+                        +res.getString(res.getColumnIndex(DBHandler.ARSD_Colour))+"_P4"+",NA";
+                imageName = imageName.replace(" ", "%20");
+                imageName = imageName.replace("+", "_Pls");
+                image.setImageName(imageName);
                 image.setColour(res.getString(res.getColumnIndex(DBHandler.ARSD_Colour)));
                 image.setHashCode(res.getString(res.getColumnIndex(DBHandler.ARSD_HashCode)));
                 prodList.add(image);

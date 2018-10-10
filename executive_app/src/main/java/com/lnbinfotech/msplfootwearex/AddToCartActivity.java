@@ -454,6 +454,20 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             case R.id.cart:
                 startViewCustOrderActivity();
                 break;
+            case R.id.img:
+                if (selProdId != 0) {
+                    Intent intent = new Intent(getApplicationContext(), ProductWiseImageActivity.class);
+                    intent.putExtra("cat9",cat9);
+                    intent.putExtra("cat2",cat2);
+                    intent.putExtra("prodIdStr",prodIdStr);
+                    intent.putExtra("from", "addtocart");
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                }else{
+                    toast.setText("Please Select Product First");
+                    toast.show();
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -2119,6 +2133,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    new Constant();
                     dialog.dismiss();
                 }
             });
@@ -2314,6 +2329,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onFailure(Object result) {
                 constant.showPD();
+                new Constant();
             }
         });
     }
@@ -2696,6 +2712,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onFailure(String result) {
                 constant.showPD();
+                new Constant();
                 toast.setText("Please Try Again...");
                 toast.show();
             }

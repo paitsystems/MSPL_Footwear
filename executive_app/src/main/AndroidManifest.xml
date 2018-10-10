@@ -47,6 +47,7 @@
         <service
             android:name=".services.ScheduledJobServicePL"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <receiver android:name=".braodcasts.AutoUpdateBroadcastReceiver" />
         <receiver
             android:name=".braodcasts.RebootBroadcastReceiver"
@@ -61,7 +62,8 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".CheckOTPActivity$MySMSReceiver"
+        <receiver
+            android:name=".CheckOTPActivity$MySMSReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -76,7 +78,7 @@
         <activity
             android:name=".CheckOTPActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".CustomerDetailsActivity"
             android:screenOrientation="portrait"
@@ -94,8 +96,8 @@
         <activity
             android:name=".OptionsActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/NewAppTheme"/>
+            android:theme="@style/NewAppTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".VisitPaymentFormActivity"
             android:screenOrientation="portrait"
@@ -250,6 +252,7 @@
             android:name=".FullImageActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
+
         <service
             android:name=".services.LocationUpdateJobService"
             android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
@@ -261,8 +264,12 @@
             android:name=".services.LocationUpdateJobServicePL"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
-        android:name=".services.LocationServicePRM"
-        android:enabled="true" />
+            android:name=".services.LocationServicePRM"
+            android:enabled="true" />
+
+        <activity android:name=".ProductWiseImageActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>

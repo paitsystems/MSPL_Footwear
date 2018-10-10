@@ -293,6 +293,7 @@ public class ArealinewiseAreaSelectionActivity extends AppCompatActivity impleme
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    new Constant();
                     getTodaysVisit();
                 }
             });

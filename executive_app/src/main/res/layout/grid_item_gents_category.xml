@@ -32,7 +32,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.5"
                 android:text="50000"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 

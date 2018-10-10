@@ -52,7 +52,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     private int time = 0;
     private TextView tv_timecount,tv_text1, tv_otp;
     private CountDownTimer countDown;
-    private String mobNo,imeiNo;
+    private String mobNo,imeiNo, imeino1, imeino2;
     private  String response_value;
     //private ReadSms receiver;
     private MySMSReceiver receiver;
@@ -72,6 +72,8 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         tv_otp.setText(response_value);
         mobNo = otpClass.getMobileno();
         imeiNo = otpClass.getImeino();
+        imeino1 = otpClass.getImeino1();
+        imeino2 = otpClass.getImeino2();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -395,8 +397,12 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             constant.showPD();
             String _mobNo = URLEncoder.encode(mobNo,"UTF-8");
             String _imeiNo = URLEncoder.encode(imeiNo,"UTF-8");
+            String _imeiNo1 = URLEncoder.encode(imeino1,"UTF-8");
+            String _imeiNo2 = URLEncoder.encode(imeino2,"UTF-8");
 
-            String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"&IMEINo="+_imeiNo+"&type=E";
+            //String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"&IMEINo="+_imeiNo+"&type=E";
+            String url = Constant.ipaddress + "/GetOTPCodeV6?mobileno="+_mobNo+"&IMEINo1="
+                    +_imeiNo1+"&IMEINo2="+_imeiNo2+"&type=E";
             Constant.showLog(url);
             writeLog("requestOTP_" + url);
             VolleyRequests requests = new VolleyRequests(CheckOTPActivity.this);
@@ -447,7 +453,10 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
 
     private void getUserInfo(){
         constant = new Constant(CheckOTPActivity.this);
-        String url = Constant.ipaddress+"/GetUserDetail?mobileno="+otpClass.getMobileno()+"&IMEINo="+otpClass.getImeino()+"&type=E";
+        //String url = Constant.ipaddress+"/GetUserDetail?mobileno="+otpClass.getMobileno()+"&IMEINo="+otpClass.getImeino()+"&type=E";
+        String url = Constant.ipaddress+"/GetUserDetailV6?mobileno="+otpClass.getMobileno()+"&IMEINo1="+otpClass.getImeino1()
+                +"&IMEINo2="+otpClass.getImeino2()+"&type=E";
+
         Constant.showLog(url);
         writeLog("getUserInfo_" + url);
         constant.showPD();
@@ -488,6 +497,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         }
         SharedPreferences.Editor editor = FirstActivity.pref.edit();
         editor.putBoolean(getString(R.string.pref_isRegistered),true);
+        editor.putBoolean(getString(R.string.pref_imeino2),true);
         editor.apply();
         finish();
         Intent intent = new Intent(getApplicationContext(), CustomerDetailsActivity.class);

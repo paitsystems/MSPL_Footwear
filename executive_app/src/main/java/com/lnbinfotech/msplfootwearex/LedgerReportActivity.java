@@ -393,6 +393,7 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
             builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    new Constant();
                     showLedgerReport();
 
                 }

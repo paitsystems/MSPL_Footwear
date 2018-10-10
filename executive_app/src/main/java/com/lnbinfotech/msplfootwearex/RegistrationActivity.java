@@ -101,16 +101,30 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         try {
             constant.showPD();
             final String mobNo = ed_mobNo.getText().toString();
-            String __imeino = "";
+            String __imeino = "",__imeino1 = "",__imeino2 = "";
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 __imeino = new Constant(getApplicationContext()).getIMEINo1();
+                String[] arr = __imeino.split("\\^");
+                if(arr.length>1) {
+                    __imeino1 = arr[0];
+                    __imeino2 = arr[1];
+                }else{
+                    __imeino1 = __imeino;
+                    __imeino2 = __imeino;
+                }
             }else{
                 __imeino = new Constant(getApplicationContext()).getIMEINo();
+                __imeino1 = __imeino;
+                __imeino2 = __imeino;
             }
-            final String imeino = __imeino;
+            final String imeino = __imeino,imeino1 = __imeino1,imeino2 = __imeino2;
             String _mobNo = URLEncoder.encode(mobNo, "UTF-8");
             String _imeino = URLEncoder.encode(imeino, "UTF-8");
-            String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"&IMEINo="+_imeino+"&type=E";
+            __imeino1 = URLEncoder.encode(imeino1, "UTF-8");
+            __imeino2 = URLEncoder.encode(imeino2, "UTF-8");
+            //String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"&IMEINo="+_imeino+"&type=E";
+            String url = Constant.ipaddress + "/GetOTPCodeV6?mobileno="+_mobNo+"&IMEINo1="
+                    +__imeino1+"&IMEINo2="+__imeino2+"&type=E";
             Constant.showLog(url);
             writeLog("requestOTP_" + url);
 
@@ -121,7 +135,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                     constant.showPD();
                     if (!response.equals("0") && !response.equals("-1") && !response.equals("-2")) {
                         //On Success
-                        doThis(response,mobNo,imeino);
+                        doThis(response,mobNo,imeino,imeino1,imeino2);
                         writeLog("requestOTP_Success_" + response);
                     } else if (!response.equals("0") && response.equals("-1") && !response.equals("-2")) {
                         //Already Registered
@@ -147,7 +161,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private void doThis(String response, String mobNo, String imeino){
+    private void doThis(String response, String mobNo, String imeino,String imeino1, String imeino2){
         String arr[] = response.split("-");
         if (arr.length > 1) {
             writeLog("requestOTP_Success_" + response);
@@ -156,6 +170,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             otp.setOtp(arr[1]);
             otp.setMobileno(mobNo);
             otp.setImeino(imeino);
+            otp.setImeino1(imeino1);
+            otp.setImeino2(imeino2);
             finish();
             //toast.setText(arr[1]);
             //toast.show();
@@ -251,6 +267,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if(ConnectivityTest.getNetStat(getApplicationContext())) {
+                        new Constant();
                         requestOTP();
                     }else{
                         toast.setText(getString(R.string.you_are_offline));

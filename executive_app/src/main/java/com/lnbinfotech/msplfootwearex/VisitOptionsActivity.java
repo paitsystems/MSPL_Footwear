@@ -1,14 +1,18 @@
 package com.lnbinfotech.msplfootwearex;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -16,6 +20,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
+import com.lnbinfotech.msplfootwearex.location.LocationProvider;
+import com.lnbinfotech.msplfootwearex.log.WriteLog;
+import com.lnbinfotech.msplfootwearex.model.ChequeDetailsClass;
+import com.lnbinfotech.msplfootwearex.model.OuststandingReportClass;
+import com.lnbinfotech.msplfootwearex.services.UploadImageService;
 
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -23,7 +32,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Gravity;
 
-public class VisitOptionsActivity extends AppCompatActivity implements View.OnClickListener {
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONStringer;
+
+public class VisitOptionsActivity extends AppCompatActivity implements
+        View.OnClickListener,LocationProvider.LocationCallback1 {
 
     private Constant constant;
     private Toast toast;
@@ -32,6 +54,7 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
     private int custId = 0;
     private String custName = "", imgName= "NA.jpg";
     private ImageView img;
+    private LocationProvider provider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,18 +96,26 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            if (provider != null) {
+                provider.disconnect();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("onPause_"+e.getMessage());
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.card_take_order:
                 showDia(1);
-                /*startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
-                overridePendingTransition(R.anim.enter, R.anim.exit);*/
                 break;
             case R.id.card_payment:
-                //TODO: Check
-                /*toast.setText("Under Development");
-                toast.show();*/
-               Intent intent = new Intent(getApplicationContext(), VisitPaymentFormActivity.class);
+                Intent intent = new Intent(getApplicationContext(), VisitPaymentFormActivity.class);
                 intent.putExtra("cust_id", String.valueOf(custId));
                 intent.putExtra("child_selected", custName);
                 startActivity(intent);
@@ -122,16 +153,23 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onBackPressed() {
-        //showDia(0);
         new Constant(VisitOptionsActivity.this).doFinish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.visitoptionactivity_menu,menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                //showDia(0);
                 new Constant(VisitOptionsActivity.this).doFinish();
+                break;
+            case R.id.custLoc:
+                showDia(4);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -156,6 +194,19 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
         res.close();
     }
 
+    private void catchCustLoc(){
+        try {
+            constant = new Constant(VisitOptionsActivity.this);
+            constant.showPD();
+            provider.connect();
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("catchCustLoc_"+e.getMessage());
+            toast.setText("Please Try Again...");
+            toast.show();
+        }
+    }
+
     private void init() {
         tv_shopname_display = (TextView) findViewById(R.id.tv_shopname_display);
         tv_arealine = (TextView) findViewById(R.id.tv_arealine);
@@ -173,6 +224,7 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
         tv_custname_display = (TextView) findViewById(R.id.tv_custname_display);
         tv_area = (TextView) findViewById(R.id.tv_area);
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+        provider = new LocationProvider(VisitOptionsActivity.this,VisitOptionsActivity.this,VisitOptionsActivity.this);
     }
 
     private void showDia(int a) {
@@ -193,7 +245,7 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
                     dialog.dismiss();
                 }
             });
-        }if (a == 1) {
+        }else if (a == 1) {
             builder.setTitle("Take Order");
             builder.setMessage("How do you want to take order?");
             builder.setPositiveButton("With Photos", new DialogInterface.OnClickListener() {
@@ -218,7 +270,137 @@ public class VisitOptionsActivity extends AppCompatActivity implements View.OnCl
                     dialog.dismiss();
                 }
             });
+        }else if (a == 2) {
+            builder.setMessage("Location Updated Successfully");
+            builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 3) {
+            builder.setMessage("Error While Updating Customer Location");
+            builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    new Constant();
+                    catchCustLoc();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 4) {
+            builder.setMessage("Do You Want To Update Customer Location?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    catchCustLoc();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
         }
         builder.create().show();
+    }
+
+    private void writeLog(String _data){
+        new WriteLog().writeLog(getApplicationContext(),"VisitOptionsActivity_"+_data);
+    }
+
+    @Override
+    public void handleNewLocation(Location location, String address) {
+        constant.showPD();
+        try {
+            provider.disconnect();
+            double lat = location.getLatitude();
+            double lon = location.getLongitude();
+            String data = custId + "|" + lat + "|" + lon + "|" + address + "|" + "C";
+            new updateCustLoc().execute(data);
+        }catch (Exception e){
+            e.printStackTrace();
+            toast.setText("Please Try Again...");
+            toast.show();
+        }
+    }
+
+    private class updateCustLoc extends AsyncTask<String, Void, String> {
+
+        private ProgressDialog pd;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(VisitOptionsActivity.this);
+            pd.setMessage("Please Wait...");
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+        @Override
+        protected String doInBackground(String... url) {
+            String value = "";
+            HttpPost request = new HttpPost(Constant.ipaddress + "/SaveCustomerLoc");
+            request.setHeader("Accept", "application/json");
+            request.setHeader("Content-type", "application/json");
+            try {
+
+                JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(url[0]).endObject().endObject();
+                Constant.showLog(vehicle.toString());
+                writeLog("updateCustLoc_"+vehicle.toString());
+                StringEntity entity = new StringEntity(vehicle.toString());
+                request.setEntity(entity);
+                HttpParams httpParams = new BasicHttpParams();
+                HttpConnectionParams.setConnectionTimeout(httpParams,Constant.TIMEOUT_CON);
+                HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);
+                DefaultHttpClient httpClient = new DefaultHttpClient(httpParams);
+
+                HttpResponse response = httpClient.execute(request);
+                Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
+                value = new BasicResponseHandler().handleResponse(response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                writeLog("updateCustLoc_result_" + e.getMessage());
+            }
+            return value;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            try {
+                Constant.showLog(result);
+                String str = new JSONObject(result).getString("SaveCustomerLocResult");
+                str = str.replace("\"", "");
+                Constant.showLog(str);
+                pd.dismiss();
+                writeLog("updateCustLoc_result_" + str + "_" + result);
+                if (!str.equals("0")) {
+                    writeLog("updateCustLoc_result_" + str);
+                    showDia(2);
+                } else {
+                    showDia(3);
+                }
+            } catch (Exception e) {
+                writeLog("updateCustLoc_" + e.getMessage());
+                e.printStackTrace();
+                showDia(3);
+                pd.dismiss();
+            }
+        }
+    }
+
+    @Override
+    public void locationAvailable() {
+
     }
 }

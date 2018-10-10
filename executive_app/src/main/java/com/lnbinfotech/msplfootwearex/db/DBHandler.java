@@ -1613,12 +1613,15 @@ public class DBHandler extends SQLiteOpenHelper {
                 ARSD_ImageName+","+Table_ProductMaster+"."+PM_MRPRate+","+Table_ProductMaster+"."+PM_MarkUp+","
                 +Table_ProductMaster+"."+PM_MarkDown+","+Table_ProductMaster+"."+PM_SRate+","+Table_ProductMaster+"."
                 +PM_Finalprod+","+Table_ProductMaster+"."+PM_HSNCode+","+Table_GSTMASTER+"."+GST_GSTPer
-                +","+Table_GSTMASTER+"."+GST_GroupNm+","+Table_ProductMaster+"."+PM_Cat3
+                +","+Table_GSTMASTER+"."+GST_GroupNm+","+Table_ProductMaster+"."+PM_Cat3+","+
+                Table_ProductMaster+"."+PM_ProdId+","+Table_ProductMaster+"."+PM_Cat2+",group_concat(DISTINCT "+
+                Table_AllRequiredSizesDesigns+"."+ARSD_Colour+") "+ARSD_Colour
                 +" from "+Table_ProductMaster+","+ Table_AllRequiredSizesDesigns+","+Table_GSTMASTER+" where "+
                 Table_ProductMaster+"."+PM_Cat9+"='"+catName+"' and "+Table_ProductMaster+"."+PM_Cat2+"='"+subCatName+"' and "
                 +Table_AllRequiredSizesDesigns+"."+ARSD_Productid+"="+
                 Table_ProductMaster+"."+PM_ProductID+" and "+Table_AllRequiredSizesDesigns+"."+ARSD_InOutType+"='I'" +
                 " and " + Table_ProductMaster+"."+PM_GSTGroup +"="+Table_GSTMASTER+"."+GST_GroupNm+
+                " and "+Table_AllRequiredSizesDesigns+"."+ARSD_typ+"='D'"+
                 " group by "+Table_ProductMaster+"."+PM_Finalprod+" order by "+
                 Table_ProductMaster+"."+PM_Cat2;
         Constant.showLog("getImageSubCategory 1 :- "+str);
@@ -1772,6 +1775,21 @@ public class DBHandler extends SQLiteOpenHelper {
                 " group by "+Table_ProductMaster+"."+PM_Finalprod+" order by "+
                 Table_ProductMaster+"."+PM_Cat2;
         Constant.showLog("getImageSubCategory 1 :- "+str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public Cursor getImageSubCategory3(String catName, String subCatName, String productId) {
+        String str = "select "+Table_ProductMaster+"."+PM_ProductID+","+Table_ProductMaster+"."+PM_ProdId+","+
+                Table_ProductMaster+"."+PM_Cat2+","+Table_AllRequiredSizesDesigns+"."+ARSD_Colour+
+                " from "+Table_ProductMaster+","+ Table_AllRequiredSizesDesigns+","+Table_GSTMASTER+" where "+
+                Table_ProductMaster+"."+PM_Cat9+"='"+catName+"' and "+Table_ProductMaster+"."+PM_Cat2+"='"+subCatName+"' and "+
+                Table_AllRequiredSizesDesigns+"."+ARSD_Productid+"="+Table_ProductMaster+"."+
+                PM_ProductID+" and "+Table_AllRequiredSizesDesigns+"."+ARSD_InOutType+"='I'" +
+                " and "+Table_AllRequiredSizesDesigns+"."+ARSD_typ+"='D'"+
+                " and "+Table_ProductMaster+"."+PM_ProdId+"='"+productId+
+                "' group by "+Table_ProductMaster+"."+PM_Finalprod +","+Table_AllRequiredSizesDesigns+"."+ARSD_Colour +
+                " order by "+Table_ProductMaster+"."+PM_Cat2;
+        Constant.showLog("getImageSubCategory 3 :- "+str);
         return getWritableDatabase().rawQuery(str, null);
     }
 }

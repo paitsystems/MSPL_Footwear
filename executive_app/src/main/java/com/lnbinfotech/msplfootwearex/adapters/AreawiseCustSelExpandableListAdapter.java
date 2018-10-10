@@ -53,10 +53,10 @@ public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdap
         String s = String.valueOf(area_map.get(group));
         return s;*/
 
-        Constant.showLog("getgroup:"+area_map.get(areaid_list.get(group_position)));
+        //Constant.showLog("getgroup:"+area_map.get(areaid_list.get(group_position)));
         String a = String.valueOf(area_map.get(areaid_list.get(group_position)));
         String fin = a.replace("[","").replace("]","");
-        Constant.showLog("fin:"+fin);
+        //Constant.showLog("fin:"+fin);
         return fin;
 
     }
@@ -89,7 +89,7 @@ public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdap
         String count = "["+String.valueOf(areaid_partyId_map.get(areaid_list.get(group_position)).size())+"]";
         tv_area_name.setText(String.valueOf(getGroup(group_position)));
         tv_child_count.setText(count);
-        Constant.showLog("group name:"+String.valueOf(getGroup(group_position)));
+        //Constant.showLog("group name:"+String.valueOf(getGroup(group_position)));
         return view;
     }
 
@@ -101,7 +101,7 @@ public class AreawiseCustSelExpandableListAdapter extends BaseExpandableListAdap
 
     @Override
     public Object getChild(int group_position, int child_position) {
-        Constant.showLog("mp:"+party_map.get(areaid_partyId_map.get(areaid_list.get(group_position)).get(child_position)));
+        //Constant.showLog("mp:"+party_map.get(areaid_partyId_map.get(areaid_list.get(group_position)).get(child_position)));
         return party_map.get(areaid_partyId_map.get(areaid_list.get(group_position)).get(child_position));
     }
 

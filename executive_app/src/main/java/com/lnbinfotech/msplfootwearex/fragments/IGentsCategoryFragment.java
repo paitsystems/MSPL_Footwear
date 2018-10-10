@@ -92,7 +92,21 @@ public class IGentsCategoryFragment extends Fragment {
                     gentsClass.setGstGroupName(res.getString(res.getColumnIndex(DBHandler.GST_GroupNm)));
                     gentsClass.setCat3(res.getString(res.getColumnIndex(DBHandler.PM_Cat3)));
 
-                    String img = res.getString(res.getColumnIndex(DBHandler.ARSD_ImageName));
+                    String prodId = res.getString(res.getColumnIndex(DBHandler.PM_ProdId));
+                    String cat2 = res.getString(res.getColumnIndex(DBHandler.PM_Cat2));
+                    String colour = res.getString(res.getColumnIndex(DBHandler.ARSD_Colour));
+                    String arr[] = colour.split("\\,");
+                    String img = "";
+                    if(arr.length>1) {
+                        for (String str : arr) {
+                            String _img = prodId + "_" + cat2 + "_" + str + "_P1";
+                            img = img + Constant.imgUrl + _img + ".jpg"+",";
+                        }
+                    }else{
+                        String _img = prodId + "_" + cat2 + "_" + colour + "_P1";
+                        img = img + Constant.imgUrl + _img + ".jpg"+",";
+                    }
+                    /*String img = res.getString(res.getColumnIndex(DBHandler.ARSD_ImageName));
                     String imgArr[] = img.split("\\,");
                     img = Constant.imgUrl;
                     if (imgArr.length > 1) {
@@ -102,6 +116,20 @@ public class IGentsCategoryFragment extends Fragment {
                         img = img + img1;
                     }
                     img = img + ".jpg";
+                    Constant.showLog(img);*/
+                    /*String img = "";
+                    Cursor res1 = db.getImageSubCategory3(cat, subCat, prodId);
+                    if (res1.moveToFirst()) {
+                        do {
+                            String _img = prodId + "_" + res1.getString(res1.getColumnIndex(DBHandler.PM_Cat2)) + "_" +
+                                    res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour))+ "_P1";
+                            img = img + Constant.imgUrl + _img + ".jpg"+",";
+                        }while (res1.moveToNext());
+                    }
+                    res1.close();*/
+                    img = img.replace(" ", "%20");
+                    img = img.replace("+", "_Pls");
+                    img = img.substring(0,img.length()-1);
                     Constant.showLog(img);
                     gentsClass.setImgName(img);
                     list.add(gentsClass);

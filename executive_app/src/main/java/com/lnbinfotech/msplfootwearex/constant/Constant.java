@@ -43,8 +43,9 @@ public class Constant {
             ftp_directory = "Test";
 
     //TODO: Check Ip Address
-    //public static final String ipaddress = "http://172.30.1.38/MSPLV5/service.svc";
-    public static final String ipaddress = "http://license.lnbinfotech.com/MSPLV5/service.svc";
+    //public static String ipaddress;
+    public static String ipaddress = "http://172.30.1.209/MSPLV6/service.svc";
+    //public static final String ipaddress = "http://license.lnbinfotech.com/MSPLV5/service.svc";
     //public static final String ipaddress = "http://103.109.13.200:24086/MSPLV5/service.svc";
 
     //TODO: Check Image Url
@@ -58,6 +59,8 @@ public class Constant {
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
     public static int showLogFlag = 0;
+
+    public static int connectionFlag = 0;
 
     public static int TIMEOUT_CON = 10*1000;
     public static int TIMEOUT_SO = 2*60*1000;
@@ -82,6 +85,17 @@ public class Constant {
 
     public Constant(Context context) {
         this.context = context;
+    }
+
+    public Constant() {
+        //TODO: Change Image Ip Also
+        if(connectionFlag == 0) {
+            ipaddress = "http://license.lnbinfotech.com/MSPLV5/service.svc";
+            connectionFlag = 1;
+        }else {
+            ipaddress = "http://172.30.1.209/MSPLV6/service.svc";
+            connectionFlag = 0;
+        }
     }
 
     public void showPD() {
@@ -159,7 +173,7 @@ public class Constant {
             obParameter[0] = 1;
             String second = (String) getFirstMethod.invoke(telephony, obParameter);
             Log.d("Log", "SECOND :" + second);
-            imeino = first;
+            imeino = first+"^"+second;
         } catch (Exception e) {
             e.printStackTrace();
             writeLog("getIMEINo1_"+e.getMessage());

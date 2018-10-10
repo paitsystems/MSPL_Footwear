@@ -405,6 +405,7 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    new Constant();
                     loadOustandingdetail();
                     dialog.dismiss();
                 }

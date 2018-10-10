@@ -281,6 +281,7 @@
     <string name="pref_mob">mobno</string>
     <string name="pref_selcustid">custid</string>
     <string name="pref_selcustname">custname</string>
+    <string name="pref_imeino2">imeino2</string>
 
     <string name="pref_autoArealine">Arealine</string>
     <string name="pref_autoArea">Area</string>

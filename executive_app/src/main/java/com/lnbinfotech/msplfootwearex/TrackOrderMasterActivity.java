@@ -164,11 +164,12 @@ public class TrackOrderMasterActivity extends AppCompatActivity implements View.
                 }
             });
         } else if (id == 3) {
-            builder.setMessage("Error While Loading Data?");
+            builder.setMessage("Error While Loading Data");
             builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    new Constant();
                     loadOrderDetails();
                 }
             });
