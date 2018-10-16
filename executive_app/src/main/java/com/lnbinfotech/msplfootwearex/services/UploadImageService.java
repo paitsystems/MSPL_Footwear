@@ -1,14 +1,9 @@
 package com.lnbinfotech.msplfootwearex.services;
 
 import android.app.IntentService;
-
-
 import android.content.Intent;
 import android.os.Environment;
-import android.util.Log;
 
-import com.lnbinfotech.msplfootwearex.FirstActivity;
-import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 

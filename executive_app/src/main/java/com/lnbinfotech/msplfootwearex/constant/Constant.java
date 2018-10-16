@@ -40,27 +40,28 @@ public class Constant {
             ftp_username = "supportftp@lnbinfotech.com",
             ftp_password = "support$456",
             //ftp_directory = "Receipt Details";
-            ftp_directory = "Test";
+            ftp_directory = "Test",
+            zip_file = "SmartGST.zip";
 
     //TODO: Check Ip Address
     //public static String ipaddress;
-    public static String ipaddress = "http://172.30.1.209/MSPLV6/service.svc";
-    //public static final String ipaddress = "http://license.lnbinfotech.com/MSPLV5/service.svc";
-    //public static final String ipaddress = "http://103.109.13.200:24086/MSPLV5/service.svc";
+    //public static String ipaddress = "http://172.30.1.209/MSPLV6/service.svc";
+    //public static String ipaddress = "http://license.lnbinfotech.com/MSPLV6/service.svc";
+    public static String ipaddress = "http://103.109.13.200:24086/MSPLV6/service.svc";
 
     //TODO: Check Image Url
-    public static final String imgUrl = "http://103.109.13.200:24086/IMAGES/";
+    public static String imgUrl = "http://103.109.13.200:24086/IMAGES/";
 
     //TODO: Check CustImage Url
-    public static final String custimgUrl = "http://103.109.13.200:24086/custImage/";
+    public static String custimgUrl = "http://103.109.13.200:24086/custImage/";
 
     //TODO: Check liveTestFlag 1-ScreenShotDisable, 0-ScreenShotEnable
     public static int liveTestFlag = 1;
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
-    public static int showLogFlag = 0;
+    public static int showLogFlag = 1;
 
-    public static int connectionFlag = 0;
+    public static int connectionFlag = 1;
 
     public static int TIMEOUT_CON = 10*1000;
     public static int TIMEOUT_SO = 2*60*1000;
@@ -89,11 +90,15 @@ public class Constant {
 
     public Constant() {
         //TODO: Change Image Ip Also
-        if(connectionFlag == 0) {
-            ipaddress = "http://license.lnbinfotech.com/MSPLV5/service.svc";
+        if (connectionFlag == 0) {
+            ipaddress = "http://43.239.147.103:24086/MSPLV6/service.svc";
+            imgUrl = "http://43.239.147.103:24086/IMAGES/";
+            custimgUrl = "http://43.239.147.103:24086/custImage/";
             connectionFlag = 1;
-        }else {
-            ipaddress = "http://172.30.1.209/MSPLV6/service.svc";
+        } else {
+            ipaddress = "http://103.109.13.200:24086/MSPLV6/service.svc";
+            imgUrl = "http://103.109.13.200:24086/IMAGES/";
+            custimgUrl = "http://103.109.13.200:24086/custImage/";
             connectionFlag = 0;
         }
     }

@@ -861,8 +861,8 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(UM_IMEINo, user.getIMEINo());
         cv.put(UM_isRegistered, user.getIsRegistered());
         cv.put(UM_AadhaarNo, user.getAadharNo());
-        cv.put(UM_PIN, "-1");
-        cv.put(UM_PINText, "-1");
+        cv.put(UM_PIN, user.getPIN());
+        cv.put(UM_PINText, user.getPintext());
         getWritableDatabase().insert(Table_Usermaster, null, cv);
     }
 
@@ -928,6 +928,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 userClass.setIMEINo(res.getString(res.getColumnIndex(UM_IMEINo)));
                 userClass.setIsRegistered(res.getString(res.getColumnIndex(UM_isRegistered)));
                 userClass.setAadharNo(res.getString(res.getColumnIndex(UM_AadhaarNo)));
+                userClass.setPIN(res.getString(res.getColumnIndex(UM_PIN)));
+                userClass.setPintext(res.getString(res.getColumnIndex(UM_PINText)));
                 list.add(userClass);
             } while (res.moveToNext());
         }
@@ -1791,6 +1793,53 @@ public class DBHandler extends SQLiteOpenHelper {
                 " order by "+Table_ProductMaster+"."+PM_Cat2;
         Constant.showLog("getImageSubCategory 3 :- "+str);
         return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public ArrayList<CustomerOrderClass> getCustOrder(){
+        String str = "select * from "+Table_CustomerOrder;
+        Cursor res = getWritableDatabase().rawQuery(str,null);
+        ArrayList<CustomerOrderClass> custList = new ArrayList<>();
+        if(res.moveToFirst()){
+            do {
+                CustomerOrderClass custOrder = new CustomerOrderClass();
+                custOrder.setAuto(res.getInt(res.getColumnIndex(CO_Auto)));
+                custOrder.setBranchId(res.getInt(res.getColumnIndex(CO_BranchId)));
+                custOrder.setProductid(res.getInt(res.getColumnIndex(CO_Productid)));
+                custOrder.setSizeGroup(res.getString(res.getColumnIndex(CO_SizeGroup)));
+                custOrder.setRequiredSize(res.getString(res.getColumnIndex(CO_RequiredSize)));
+                custOrder.setPerPackQty(res.getInt(res.getColumnIndex(CO_PerPackQty)));
+                custOrder.setColor(res.getString(res.getColumnIndex(CO_Color)));
+                custOrder.setHashCode(res.getString(res.getColumnIndex(CO_HashCode)));
+                custOrder.setRate(res.getString(res.getColumnIndex(CO_Rate)));
+                custOrder.setMrp(res.getString(res.getColumnIndex(CO_MRP)));
+                custOrder.setQty(res.getInt(res.getColumnIndex(CO_Qty)));
+                custOrder.setLooseQty(res.getInt(res.getColumnIndex(CO_LooseQty)));
+                custOrder.setActLooseQty(res.getInt(res.getColumnIndex(CO_ActLooseQty)));
+                custOrder.setAmount(res.getString(res.getColumnIndex(CO_Amount)));
+                custOrder.setLoosePackTyp(res.getString(res.getColumnIndex(CO_LoosePackTyp)));
+                custOrder.setPendingLooseQty(res.getInt(res.getColumnIndex(CO_PendingLooseQty)));
+                custOrder.setTotalamt(res.getString(res.getColumnIndex(CO_TotalAmt)));
+                custOrder.setNetamnt(res.getString(res.getColumnIndex(CO_NetAmt)));
+                custOrder.setAmtAfterDisc(res.getString(res.getColumnIndex(CO_AmtAfterDisc)));
+                custOrder.setGstper(res.getString(res.getColumnIndex(CO_GSTPer)));
+                custOrder.setGstAmt(res.getString(res.getColumnIndex(CO_GSTAmt)));
+                custOrder.setCgstamt(res.getString(res.getColumnIndex(CO_CGSTAmt)));
+                custOrder.setSgstamt(res.getString(res.getColumnIndex(CO_SGSTAmt)));
+                custOrder.setIgstamt(res.getString(res.getColumnIndex(CO_IGSTAmt)));
+                custOrder.setCgstper(res.getString(res.getColumnIndex(CO_CGSTPer)));
+                custOrder.setSgstper(res.getString(res.getColumnIndex(CO_SGSTPer)));
+                custOrder.setCessper(res.getString(res.getColumnIndex(CO_CESSPer)));
+                custOrder.setCessamt(res.getString(res.getColumnIndex(CO_CESSAmt)));
+                custOrder.setDiscamnt(res.getString(res.getColumnIndex(CO_DiscAmt)));
+                custOrder.setDiscPer(res.getString(res.getColumnIndex(CO_DiscPer)));
+                custOrder.setOrderType(res.getString(res.getColumnIndex(CO_OrderType)));
+                custOrder.setAvailQty(res.getInt(res.getColumnIndex(CO_AvailQty)));
+                custOrder.setProdId(res.getString(res.getColumnIndex(CO_Prodid)));
+                custList.add(custOrder);
+            }while (res.moveToNext());
+        }
+        res.close();
+        return custList;
     }
 }
 

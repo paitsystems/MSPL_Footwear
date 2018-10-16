@@ -186,7 +186,7 @@ public class ImageWiseAddToCartActivity extends AppCompatActivity implements Vie
         menu.clear();
 
         getMenuInflater().inflate(R.menu.addtocard_menu, menu);
-
+        menu.findItem(R.id.img).setVisible(false);
         final MenuItem item = menu.findItem(R.id.cart);
         MenuItemCompat.setActionView(item, R.layout.actionbaar_badge_layout);
         View view = MenuItemCompat.getActionView(item);

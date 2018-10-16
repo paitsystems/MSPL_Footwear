@@ -37,6 +37,8 @@
         <service android:name=".services.AutoSyncService" />
         <service android:name=".services.DataUpdateService" />
         <service android:name=".services.UploadImageService" />
+        <service android:name=".services.UploadDBService" />
+        <service android:name=".services.DownloadDBService" />
         <service
             android:name=".services.ScheduledJobService"
             android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">

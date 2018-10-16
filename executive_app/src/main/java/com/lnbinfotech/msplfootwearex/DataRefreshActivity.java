@@ -3,13 +3,17 @@ package com.lnbinfotech.msplfootwearex;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -25,25 +29,51 @@ import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.BankBranchMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
+import com.lnbinfotech.msplfootwearex.model.CustomerOrderClass;
 import com.lnbinfotech.msplfootwearex.model.SizeDesignMastDetClass;
 import com.lnbinfotech.msplfootwearex.model.SizeNDesignClass;
 import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
+import com.lnbinfotech.msplfootwearex.model.UserClass;
 import com.lnbinfotech.msplfootwearex.post.Post;
+import com.lnbinfotech.msplfootwearex.services.DownloadDBService;
+import com.lnbinfotech.msplfootwearex.services.UploadDBService;
+import com.lnbinfotech.msplfootwearex.services.UploadImageService;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.InputStreamEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.channels.FileChannel;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 public class DataRefreshActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -60,6 +90,13 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                             docMaster = "Document Master", empMaster = "Employee Master", hoMaster = "HOMaster Master",
                             prodMaster = "Product Master", sizenDesignMaster = "SizeAndDesign Master", stockMaster = "Stock Master",
                             gstMaster = "GST Master", sdmdMaster = "SizeDetail Master";
+
+    private ProgressDialog pDialog;
+    public static final int progress_bar_type = 0;
+    private String file_url = Constant.imgUrl+Constant.zip_file;
+
+    private ArrayList<UserClass> userList;
+    private ArrayList<CustomerOrderClass> custList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,11 +179,27 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        /*getMenuInflater().inflate(R.menu.datarefreshactivity_menu,menu);
+        int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
+        //TODO : Check id is 8 or not
+        if(id!=194){
+            menu.findItem(R.id.db).setVisible(false);
+        }*/
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                //showDia(0);
                 new Constant(DataRefreshActivity.this).doFinish();
+                break;
+            case R.id.db:
+                showDia(3);
+                break;
+            case R.id.dwnlddb:
+                showDia(4);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -602,7 +655,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    updateSharedPref(prefname,"Y");
+                    updateSharedPref(prefname, "Y");
                     dialog.dismiss();
                 }
             });
@@ -611,10 +664,48 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if(sndpd!=null){
+                    if (sndpd != null) {
                         sndpd.dismiss();
                     }
                     new Constant();
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 3) {
+            builder.setMessage("Do You Want Upload Database File?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    uploadDB();
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 4) {
+            builder.setMessage("Do You Want Update All Database?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    downloadDB();
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 5) {
+            builder.setMessage("File Uploaded Successfully");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                 }
             });
@@ -1921,6 +2012,411 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         });
+    }
+
+    private void uploadDB(){
+        try {
+            Constant.showLog("uploadDB");
+            CopyDBToSD();
+            String[] s = new String[1];
+            String currentDBPath = android.os.Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name;
+            s[0] = currentDBPath + "/" + DBHandler.Database_Name;
+            File f = new File(currentDBPath + "/" + Constant.zip_file);
+            if(f.exists()){
+                f.delete();
+                Constant.showLog("uploadDB "+f.getName()+" Deleted");
+                f.createNewFile();
+                Constant.showLog("uploadDB "+f.getName()+" Created");
+            }
+            zip(s, currentDBPath + "/" + Constant.zip_file);
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("uploadDB_"+e.getMessage());
+        }
+    }
+
+    private void CopyDBToSD() throws IOException {
+        try {
+            Constant.showLog("CopyDBToSD");
+            String currentDBPath = android.os.Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name;
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            String backupDBPath = pInfo.applicationInfo.dataDir + "/databases";
+            File currentDB = new File(backupDBPath, DBHandler.Database_Name);
+            File backupDB = new File(currentDBPath, DBHandler.Database_Name);
+            if(backupDB.exists()){
+                backupDB.delete();
+                Constant.showLog("CopyDBToSD "+backupDB.getName()+" Deleted");
+                backupDB.createNewFile();
+                Constant.showLog("CopyDBToSD "+backupDB.getName()+" Created");
+            }
+            Constant.showLog(currentDB.getAbsolutePath());
+            Constant.showLog(backupDB.getAbsolutePath());
+            FileChannel source = new FileInputStream(currentDB).getChannel();
+            FileChannel destination = new FileOutputStream(backupDB).getChannel();
+            destination.transferFrom(source, 0, source.size());
+            source.close();
+            destination.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("CopyDBToSD_"+e.getMessage());
+        }
+    }
+
+    public void zip(String[] _files, String zipFileName) {
+        int BUFFER = 1024;
+        try {
+            Constant.showLog("zip");
+            BufferedInputStream origin = null;
+            FileOutputStream dest = new FileOutputStream(zipFileName);
+            ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
+            byte data[] = new byte[BUFFER];
+            for (String _file : _files) {
+                Constant.showLog("Adding: " + _file);
+                FileInputStream fi = new FileInputStream(_file);
+                origin = new BufferedInputStream(fi, BUFFER);
+
+                ZipEntry entry = new ZipEntry(_file.substring(_file.lastIndexOf("/") + 1));
+                out.putNextEntry(entry);
+                int count;
+
+                while ((count = origin.read(data, 0, BUFFER)) != -1) {
+                    out.write(data, 0, count);
+                }
+                origin.close();
+            }
+            /*Intent intent = new Intent(DataRefreshActivity.this, UploadDBService.class);
+            startService(intent);*/
+            out.close();
+            new UpploadFileToFTP().execute(file_url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("zip_"+e.getMessage());
+        }
+    }
+
+    private class UpploadFileToFTP extends AsyncTask<String, String, String> {
+        File fName = null;
+        HttpURLConnection conn = null;
+        DataOutputStream dos = null;
+        String lineEnd = "\r\n";
+        String twoHyphens = "--";
+        String boundary = "*****";
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1 * 1024 * 1024;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(DataRefreshActivity.this);
+            pDialog.setMessage("Uploading file. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setMax(100);
+            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... f_url) {
+            FTPClient client = null;
+            try {
+                Constant.showLog("UpploadFileToFTP");
+                client = new FTPClient();
+                client.connect(Constant.ftp_adress, 21);
+                client.login(Constant.ftp_username, Constant.ftp_password);
+                client.setFileType(FTP.BINARY_FILE_TYPE);
+                client.enterLocalPassiveMode();
+                String dbPath = android.os.Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name;
+                Constant.showLog(dbPath + "/" + Constant.zip_file);
+                File f = new File(dbPath);
+                for (File file : f.listFiles()) {
+                    if (file != null) {
+                        Constant.showLog("File Name " + file.getName());
+                        if (file.getName().equals(Constant.zip_file)) {
+                            FileInputStream iFile = new FileInputStream(file);
+                            client.cwd(Constant.ftp_directory);
+                            if (client.storeFile(file.getName(), iFile)) {
+                                writeLog("onHandleIntent_File_Store_Successfully");
+                                Constant.showLog("File Stored " + file.getName());
+                            } else {
+                                writeLog("onHandleIntent_Error_While_Storing_File");
+                            }
+                        }
+                    }
+                }
+                client.disconnect();
+                Constant.showLog("disconnected..");
+            } catch (Exception e) {
+                e.printStackTrace();
+                writeLog("onHandleIntent_"+e.getMessage());
+            }finally {
+                try {
+                    if (client != null) {
+                        client.disconnect();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    writeLog("finally_"+e.getMessage());
+                }
+            }
+            pDialog.dismiss();
+            return "0";
+        }
+
+        protected void onProgressUpdate(String... progress) {
+            pDialog.setProgress(Integer.parseInt(progress[0]));
+        }
+
+        @Override
+        protected void onPostExecute(String file_url) {
+            pDialog.dismiss();
+            showDia(5);
+        }
+    }
+
+    private class UpploadFileFromURL extends AsyncTask<String, String, String> {
+        File fName = null;
+        HttpURLConnection conn = null;
+        DataOutputStream dos = null;
+        String lineEnd = "\r\n";
+        String twoHyphens = "--";
+        String boundary = "*****";
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1 * 1024 * 1024;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(DataRefreshActivity.this);
+            pDialog.setMessage("Uploading file. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setMax(100);
+            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+            String url1 = "http://103.109.13.200:24086/MSPLV6/UploadToServer.php";
+            String currentDBPath = android.os.Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name;
+            File file = new File(currentDBPath, "SmartGST.zip");
+            Constant.showLog(file.getPath());
+            try {
+
+                // open a URL connection to the Servlet
+                FileInputStream fileInputStream = new FileInputStream(file);
+                URL url = new URL(url1);
+
+                // Open a HTTP  connection to  the URL
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setDoInput(true); // Allow Inputs
+                conn.setDoOutput(true); // Allow Outputs
+                conn.setUseCaches(false); // Don't use a Cached Copy
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Connection", "Keep-Alive");
+                conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+                conn.setRequestProperty("uploaded_file", currentDBPath + "/" + "SmartGST.zip");
+
+                dos = new DataOutputStream(conn.getOutputStream());
+
+                dos.writeBytes(twoHyphens + boundary + lineEnd);
+                dos.writeBytes("Content-Disposition: form-data; name=" + currentDBPath + "/" + "SmartGST.zip" + ";filename=" + file.getName() + "" + lineEnd);
+                dos.writeBytes(lineEnd);
+
+                // create a buffer of  maximum size
+                bytesAvailable = fileInputStream.available();
+
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                buffer = new byte[bufferSize];
+
+                // read file and write it into form...
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+                while (bytesRead > 0) {
+                    dos.write(buffer, 0, bufferSize);
+                    bytesAvailable = fileInputStream.available();
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+                }
+                dos.writeBytes(lineEnd);
+                dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+                int serverResponseCode = conn.getResponseCode();
+                String serverResponseMessage = conn.getResponseMessage();
+                Constant.showLog("HTTP Response is : "
+                        + serverResponseMessage + ": " + serverResponseCode);
+                fileInputStream.close();
+                dos.flush();
+                dos.close();
+            } catch (Exception e) {
+                pDialog.dismiss();
+                e.printStackTrace();
+            }
+            pDialog.dismiss();
+            return "0";
+        }
+
+        protected void onProgressUpdate(String... progress) {
+            pDialog.setProgress(Integer.parseInt(progress[0]));
+        }
+
+        @Override
+        protected void onPostExecute(String file_url) {
+            pDialog.dismiss();
+        }
+    }
+
+    private void downloadDB(){
+        /*Intent intent = new Intent(DataRefreshActivity.this, DownloadDBService.class);
+        startService(intent);*/
+        Constant.showLog("downloadDB");
+        new DownloadFileFromURL().execute(file_url);
+    }
+
+    private class DownloadFileFromURL extends AsyncTask<String, String, String> {
+
+       private File fName = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(DataRefreshActivity.this);
+            pDialog.setMessage("Downloading file. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setMax(100);
+            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+            try {
+                Constant.showLog("DownloadFileFromURL");
+                URL url = new URL(f_url[0]);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+                int lenghtOfFile = connection.getContentLength();
+                fName = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name, Constant.zip_file);
+                InputStream input = new BufferedInputStream(url.openStream(), 8192);
+                OutputStream output = new FileOutputStream(fName);
+                byte data[] = new byte[1024];
+                long total = 0;
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+                    output.write(data, 0, count);
+                }
+                output.flush();
+                output.close();
+                input.close();
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+                writeLog("DownloadFileFromURL_"+e.getMessage());
+            }
+            return null;
+        }
+
+        protected void onProgressUpdate(String... progress) {
+            pDialog.setProgress(Integer.parseInt(progress[0]));
+        }
+
+        @Override
+        protected void onPostExecute(String file_url) {
+            pDialog.dismiss();
+            unzip();
+        }
+    }
+
+    public void unzip() {
+        try {
+            Constant.showLog("unZip File");
+            String _zipFile = Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + Constant.zip_file;
+            String _targetLocation = android.os.Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name;
+            FileInputStream fin = new FileInputStream(_zipFile);
+            ZipInputStream zin = new ZipInputStream(fin);
+            ZipEntry ze = null;
+            while ((ze = zin.getNextEntry()) != null) {
+                FileOutputStream fout = new FileOutputStream(_targetLocation + "/" + ze.getName());
+                BufferedInputStream in = new BufferedInputStream(zin);
+                BufferedOutputStream out = new BufferedOutputStream(fout);
+                byte b[] = new byte[1024];
+                int n;
+                while ((n = in.read(b, 0, 1024)) >= 0) {
+                    out.write(b, 0, n);
+                    Constant.showLog("n "+n);
+                }
+                Constant.showLog("Write Complete");
+                fout.close();
+                File f = new File(_targetLocation,_zipFile);
+                if (f.exists()) {
+                    f.delete();
+                    Constant.showLog("unzip "+f.getName()+" Deleted");
+                }
+                getData();
+                CopySDTODB();
+                putData();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("unzip_"+e.getMessage());
+        }
+    }
+
+    private void getData() {
+        Constant.showLog("getData");
+        DBHandler db = new DBHandler(getApplicationContext());
+        userList = db.getUserDetail();
+        custList = db.getCustOrder();
+        Constant.showLog("userList-"+userList.size()+"-custList-"+custList.size());
+    }
+
+    private void CopySDTODB() throws IOException {
+        try {
+            Constant.showLog("CopySDTODB");
+            String currentDBPath = android.os.Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name;
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            String backupDBPath = pInfo.applicationInfo.dataDir + "/databases";
+            File currentDB = new File(currentDBPath, DBHandler.Database_Name);
+            File backupDB = new File(backupDBPath, DBHandler.Database_Name);
+            Constant.showLog(currentDB.getAbsolutePath());
+            Constant.showLog(backupDB.getAbsolutePath());
+            FileChannel source = new FileInputStream(currentDB).getChannel();
+            FileChannel destination = new FileOutputStream(backupDB).getChannel();
+            destination.transferFrom(source, 0, source.size());
+            source.close();
+            destination.close();
+            SharedPreferences.Editor editor = FirstActivity.pref.edit();
+            String str = getTime();
+            Constant.showLog("Last Sync - " + str);
+            writeLog("CopySDTODB_Last Sync_" + str);
+            editor.putString(getString(R.string.pref_lastSync), str);
+            editor.apply();
+            DBHandler db = new DBHandler(getApplicationContext());
+            db.deleteTable(DBHandler.Table_CustomerOrder);
+            db.deleteTable(DBHandler.Table_Usermaster);
+            putData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("CopySDTODB_"+e.getMessage());
+        }
+    }
+
+    private void putData() {
+        Constant.showLog("putData");
+        DBHandler db = new DBHandler(getApplicationContext());
+        for(int i=0;i<userList.size();i++) {
+            db.addUserDetail(userList.get(i));
+        }
+        for(int i=0;i<custList.size();i++) {
+            db.addCustomerOrder(custList.get(i));
+        }
+        Constant.showLog("userList-"+userList.size()+"-custList-"+custList.size());
     }
 
 }

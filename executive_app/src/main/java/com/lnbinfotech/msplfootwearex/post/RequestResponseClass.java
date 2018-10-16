@@ -737,7 +737,7 @@ public class RequestResponseClass {
     }
 
     private void loadCustomerMaster(int from, int to) {
-        String url = Constant.ipaddress + "/GetCustomerMasterV5?from="+from+"&to="+to+"&type=E";
+        String url = Constant.ipaddress + "/GetCustomerMaster?from="+from+"&to="+to+"&type=E";
         Constant.showLog(url);
         writeLog("loadCustomerMaster_" + url);
         new getCustomerMaster(from, to).execute(url);

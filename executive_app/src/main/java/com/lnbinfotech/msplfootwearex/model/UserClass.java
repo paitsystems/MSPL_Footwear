@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class UserClass implements Serializable {
 
     private String name,address,mobile,PANno,GSTNo,ImagePath, email,status,district,taluka,
-            IMEINo,isRegistered,AadharNo,PIN, partyName;
+            IMEINo,isRegistered,AadharNo,PIN, partyName, pintext;
     private int custID,branchId,cityId,areaId, HOCode;
 
     public String getName() {
@@ -168,5 +168,13 @@ public class UserClass implements Serializable {
 
     public void setPartyName(String partyName) {
         this.partyName = partyName;
+    }
+
+    public String getPintext() {
+        return pintext;
+    }
+
+    public void setPintext(String pintext) {
+        this.pintext = pintext;
     }
 }
