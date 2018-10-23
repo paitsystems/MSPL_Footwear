@@ -380,6 +380,11 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                         loadProductMaster(from, _to);
                     }
                 }catch (Exception e){
+                    if(sndpd!=null){
+                        sndpd.dismiss();
+                    }
+                    toast.setText("Connection Timeout...Please Try After Sometime");
+                    toast.show();
                     e.printStackTrace();
                     writeLog("loadProductMaster_"+e.getMessage());
                     showDia(2);
@@ -387,7 +392,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             }
             @Override
             public void onFailure(String result) {
-                constant.showPD();
+                //constant.showPD();
                 showDia(2);
             }
         },from,to);
@@ -572,6 +577,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     if(sndpd!=null){
                         sndpd.dismiss();
                     }
+                    new Constant();
                     dialog.dismiss();
                 }
             });
@@ -703,6 +709,11 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 response = response.substring(1, response.length() - 1);
                 new readJSON(response, "SizeNDesign", to).execute();
             }else{
+                if(sndpd!=null){
+                    sndpd.dismiss();
+                }
+                toast.setText("Connection Timeout...Please Tyr After Sometime");
+                toast.show();
                 writeLog("getSizeNDesignMaster_response_null");
             }
         }
@@ -1539,6 +1550,11 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 response = response.substring(1, response.length() - 1);
                 new readJSONSDMD(response, "SDMD", to).execute();
             }else{
+                if(sndpd!=null){
+                    sndpd.dismiss();
+                }
+                toast.setText("Connection Timeout...Please Tyr After Sometime");
+                toast.show();
                 writeLog("getSizeDesignMastDet_response_null");
             }
 

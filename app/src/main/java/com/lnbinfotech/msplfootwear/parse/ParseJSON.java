@@ -47,7 +47,6 @@ public class ParseJSON {
     private Context context;
     private DBHandler db;
 
-
     public ParseJSON(String _json){
         this.json = _json;
     }
@@ -85,6 +84,8 @@ public class ParseJSON {
                     userClass.setIMEINo(jsonArray.getJSONObject(i).getString("IMEINo"));
                     userClass.setIsRegistered(jsonArray.getJSONObject(i).getString("isRegistered"));
                     userClass.setAadharNo(jsonArray.getJSONObject(i).getString("AadharNo"));
+                    userClass.setPIN("-1");
+                    userClass.setPintext("-1");
 
                     SharedPreferences.Editor editor = FirstActivity.pref.edit();
                     editor.putInt(context.getString(R.string.pref_branchid),userClass.getBranchId());

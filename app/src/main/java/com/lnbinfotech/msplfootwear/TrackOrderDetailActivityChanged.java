@@ -31,6 +31,7 @@ import com.lnbinfotech.msplfootwear.interfaces.RecyclerViewToActivityInterface;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.CompanyMasterClass;
+import com.lnbinfotech.msplfootwear.model.ImagewiseAddToCartClass;
 import com.lnbinfotech.msplfootwear.model.TrackOrderDetailChangedClass;
 import com.lnbinfotech.msplfootwear.model.TrackOrderMasterClass;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
@@ -40,7 +41,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public class TrackOrderDetailActivityChanged extends AppCompatActivity implements View.OnClickListener,RecyclerViewToActivityInterface {
+public class TrackOrderDetailActivityChanged extends AppCompatActivity
+        implements View.OnClickListener,RecyclerViewToActivityInterface {
 
     private Constant constant, constant1;
     private Toast toast;
@@ -439,6 +441,16 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         }
         Constant.showLog(filter);
         setData();
+    }
+
+    @Override
+    public void onImageClick(ImagewiseAddToCartClass prod) {
+
+    }
+
+    @Override
+    public void onSizeGroupClick(String sizeGroup) {
+
     }
 
     private void loadOustandingdetail() {

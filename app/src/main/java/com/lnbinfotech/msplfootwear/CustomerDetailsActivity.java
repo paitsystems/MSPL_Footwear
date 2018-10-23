@@ -55,7 +55,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
     private DBHandler db;
     private Toast toast;
     private Constant constant;
-    private String version = "";
+    private String version = "", mobNo = "", id = "0";
     private TextView tv_version;
     private LocationProvider provider;
 
@@ -77,7 +77,17 @@ public class CustomerDetailsActivity extends AppCompatActivity
 
         provider = new LocationProvider(CustomerDetailsActivity.this,CustomerDetailsActivity.this,CustomerDetailsActivity.this);
 
-        checkIsActive();
+        if(FirstActivity.pref.contains(getString(R.string.pref_imeino2))) {
+            checkIsActive();
+        }else{
+            ArrayList<UserClass> userList = db.getUserDetail();
+            if(!userList.isEmpty()){
+                UserClass user = userList.get(0);
+                mobNo = user.getMobile();
+                id = String.valueOf(user.getCustID());
+            }
+            registerIMEINo2();
+        }
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -168,13 +178,13 @@ public class CustomerDetailsActivity extends AppCompatActivity
     }
 
     private void init() {
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         listView = (ListView) findViewById(R.id.listView);
         db = new DBHandler(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         constant = new Constant(CustomerDetailsActivity.this);
         tv_version = (TextView) findViewById(R.id.tv_version);
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     private void showDia(int a) {
@@ -212,6 +222,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    new Constant();
                     checkIsActive();
                 }
             });
@@ -267,7 +278,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
             });
         }else if(a==8) {
             builder.setTitle("Update App");
-            builder.setMessage("Smart Ticket New Version Is Available");
+            builder.setMessage("MSPL Customer New Version Is Available");
             builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -288,16 +299,104 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     dialog.dismiss();
                 }
             });*/
+        }else if (a == 9) {
+            builder.setMessage("Please Try Again");
+            builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    new Constant();
+                    registerIMEINo2();
+                }
+            });
+            builder.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    toast.cancel();
+                    new Constant(CustomerDetailsActivity.this).doFinish();
+                }
+            });
         }
         builder.create().show();
+    }
+
+    private void registerIMEINo2(){
+        constant = new Constant(CustomerDetailsActivity.this);
+        if(ConnectivityTest.getNetStat(getApplicationContext())) {
+            int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
+            String __imeino = "",__imeino1 = "",__imeino2 = "";
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                __imeino = new Constant(getApplicationContext()).getIMEINo1();
+                String[] arr = __imeino.split("\\^");
+                if(arr.length>1) {
+                    __imeino1 = arr[0];
+                    __imeino2 = arr[1];
+                }else{
+                    __imeino1 = __imeino;
+                    __imeino2 = __imeino;
+                }
+            }else{
+                __imeino = new Constant(getApplicationContext()).getIMEINo();
+                __imeino1 = __imeino;
+                __imeino2 = __imeino;
+            }
+            final String imeino = __imeino;
+            String url = Constant.ipaddress + "/UpdateIMEINo?mobileno="+mobNo+"&IMEINo1="
+                    +__imeino1+"&IMEINo2="+__imeino2+"&type=C&id="+id;
+            Constant.showLog(url);
+            writeLog("registerIMEINo2_" + url);
+            constant.showPD();
+            VolleyRequests requests = new VolleyRequests(CustomerDetailsActivity.this);
+            requests.updateIMEINo(url, new ServerCallback() {
+                @Override
+                public void onSuccess(String response) {
+                    constant.showPD();
+                    if (!response.equals("0") && !response.equals("-1") && !response.equals("-2")) {
+                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                        editor.putBoolean(getString(R.string.pref_imeino2),true);
+                        editor.apply();
+                        checkIsActive();
+                        writeLog("registerIMEINo2_Success_" + response);
+                    } else  {
+                        showDia(9);
+                    }
+                }
+                @Override
+                public void onFailure(String result) {
+                    constant.showPD();
+                    showDia(9);
+                }
+            });
+        }else{
+            showDia(3);
+        }
     }
 
     private void checkIsActive() {
         constant = new Constant(CustomerDetailsActivity.this);
         if (ConnectivityTest.getNetStat(getApplicationContext())) {
             int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
-            String imeino = new Constant(getApplicationContext()).getIMEINo1();
-            String url = Constant.ipaddress + "/GetActiveStatusV5?id=" + id + "&type=C&imeino="+imeino;
+            String __imeino = "",__imeino1 = "",__imeino2 = "";
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                __imeino = new Constant(getApplicationContext()).getIMEINo1();
+                String[] arr = __imeino.split("\\^");
+                if(arr.length>1) {
+                    __imeino1 = arr[0];
+                    __imeino2 = arr[1];
+                }else{
+                    __imeino1 = __imeino;
+                    __imeino2 = __imeino;
+                }
+            }else{
+                __imeino = new Constant(getApplicationContext()).getIMEINo();
+                __imeino1 = __imeino;
+                __imeino2 = __imeino;
+            }
+            final String imeino = __imeino,imeino1 = __imeino1,imeino2 = __imeino2;
+            //String url = Constant.ipaddress + "/GetActiveStatusV5?id=" + id + "&type=E&imeino="+imeino;
+            String url = Constant.ipaddress + "/GetActiveStatusV6?id=" + id + "&type=C&IMEINo1="+imeino1
+                    +"&IMEINo2="+imeino2;
             Constant.showLog(url);
             writeLog("checkIsActive_" + url);
             constant.showPD();
@@ -327,6 +426,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
     }
 
     private void checkVersion(){
+        constant = new Constant(CustomerDetailsActivity.this);
         constant.showPD();
         String url1 = Constant.ipaddress+"/GetVersionV5?type=C";
         Constant.showLog(url1);
@@ -388,23 +488,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
     public void handleNewLocation(Location location,String address) {
         try {
             Constant.showLog("handleNewLocation");
-            final double lat = location.getLatitude();
-            final double lon = location.getLongitude();
-            Constant.showLog(lat + "-" + lon);
-            toast.setText(lat + "-" + lon);
-            //toast.show();
-            /*Geocoder geocoder;
-            List<Address> addresses;
-            geocoder = new Geocoder(this, Locale.getDefault());
-            addresses = geocoder.getFromLocation(lat, lon, 1);
-            String address = addresses.get(0).getAddressLine(0);
-            String city = addresses.get(0).getLocality();
-            String state = addresses.get(0).getAdminArea();
-            String country = addresses.get(0).getCountryName();
-            String postalCode = addresses.get(0).getPostalCode();
-            String knownName = addresses.get(0).getFeatureName();
-            Constant.showLog(address+"-"+city+"-"+state+"-"+country+"-"+postalCode+"-"+knownName);*/
-            Constant.showLog(address);
+            Constant.showLog("CustomerDetailsActivity_"+address);
         }catch (Exception e){
             e.printStackTrace();
         }

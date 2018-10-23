@@ -317,6 +317,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
         @Override
         protected String doInBackground(String... url) {
             String value = "";
+            DefaultHttpClient httpClient = null;
             HttpPost request = new HttpPost(Constant.ipaddress + "/json/checkStock");
             request.setHeader("Accept", "application/json");
             request.setHeader("Content-type", "application/json");
@@ -330,7 +331,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
                 HttpParams httpParams = new BasicHttpParams();
                 HttpConnectionParams.setConnectionTimeout(httpParams,Constant.TIMEOUT_CON);
                 HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);
-                DefaultHttpClient httpClient = new DefaultHttpClient(httpParams);
+                httpClient = new DefaultHttpClient(httpParams);
                 HttpResponse response = httpClient.execute(request);
                 Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
                 value = new BasicResponseHandler().handleResponse(response);
@@ -338,6 +339,16 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
             } catch (Exception e) {
                 e.printStackTrace();
                 writeLog("showCheckoutOrderDetailsClass_result_" + e.getMessage());
+            }
+            finally {
+                try{
+                    if(httpClient!=null) {
+                        httpClient.getConnectionManager().shutdown();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    writeLog("showCheckoutOrderDetailsClass_finally_"+e.getMessage());
+                }
             }
             return value;
         }
@@ -596,6 +607,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
         @Override
         protected String doInBackground(String... url) {
             String value = "";
+            DefaultHttpClient httpClient = null;
             HttpPost request = new HttpPost(Constant.ipaddress + "/json/saveOrder");
             request.setHeader("Accept", "application/json");
             request.setHeader("Content-type", "application/json");
@@ -610,7 +622,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
                 HttpParams httpParams = new BasicHttpParams();
                 HttpConnectionParams.setConnectionTimeout(httpParams,Constant.TIMEOUT_CON);
                 HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);
-                DefaultHttpClient httpClient = new DefaultHttpClient(httpParams);
+                httpClient = new DefaultHttpClient(httpParams);
                 //DefaultHttpClient httpClient = new DefaultHttpClient();
                 HttpResponse response = httpClient.execute(request);
                 Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
@@ -619,6 +631,16 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
             } catch (Exception e) {
                 e.printStackTrace();
                 writeLog("saveOrderAsyncTask_result_" + e.getMessage());
+            }
+            finally {
+                try{
+                    if(httpClient!=null) {
+                        httpClient.getConnectionManager().shutdown();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    writeLog("showCheckoutOrderDetailsClass_finally_"+e.getMessage());
+                }
             }
             return value;
         }

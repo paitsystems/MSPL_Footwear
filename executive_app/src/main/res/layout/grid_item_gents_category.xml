@@ -52,21 +52,22 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="MRP "
-                    android:layout_weight="0.3"
+                    android:layout_weight="0.6"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="275"
-                    android:layout_weight="0.7"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="1100.00"
+                    android:layout_weight="0.6"
                     android:textColor="@color/darkgreen"
                     android:id="@+id/tv_mrp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:gravity="right" />
 
             </LinearLayout>
 
@@ -79,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="0.3"
+                    android:layout_weight="0.6"
                     android:text="MarkUp% "
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/black"
@@ -90,10 +91,11 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:id="@+id/tv_markup"
-                    android:layout_weight="0.7"
+                    android:layout_weight="0.6"
                     android:text="42.74"
                     android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:gravity="right" />
 
             </LinearLayout>
 
@@ -106,7 +108,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="0.3"
+                    android:layout_weight="0.6"
                     android:text="MarkDown% "
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/black"
@@ -117,10 +119,11 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="29.94"
-                    android:layout_weight="0.7"
+                    android:layout_weight="0.6"
                     android:textColor="@color/black"
                     android:id="@+id/tv_markdown"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:gravity="right" />
 
             </LinearLayout>
 

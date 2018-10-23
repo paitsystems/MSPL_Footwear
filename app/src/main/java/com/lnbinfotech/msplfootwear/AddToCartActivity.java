@@ -43,6 +43,7 @@ import com.lnbinfotech.msplfootwear.interfaces.ServerCallbackList;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.CheckAvailStockClass;
 import com.lnbinfotech.msplfootwear.model.CustomerOrderClass;
+import com.lnbinfotech.msplfootwear.model.ImagewiseAddToCartClass;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
 
 import java.math.BigDecimal;
@@ -52,7 +53,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public class AddToCartActivity extends AppCompatActivity implements View.OnClickListener, RecyclerViewToActivityInterface {
+public class AddToCartActivity extends AppCompatActivity implements
+        View.OnClickListener, RecyclerViewToActivityInterface {
 
     private Constant constant, constant1;
     private Toast toast;
@@ -214,6 +216,18 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             tv_cancel_item.setVisibility(View.VISIBLE);
             tv_add_to_card.setText("Update");
             updateOrder();
+        } else if (activityToFrom == 3) {
+            rdo_pack.setClickable(false);
+            rdo_unpack.setClickable(false);
+            rdo_pack.setChecked(false);
+            rdo_unpack.setChecked(true);
+            lay_pack.setVisibility(View.GONE);
+            lay_comp_pack.setVisibility(View.GONE);
+            ed_prod_search.setText(selProd);
+            ed_prod_search.setClickable(false);
+            ed_prod_search.setEnabled(false);
+            gridView.setVisibility(View.VISIBLE);
+            setUnpackData();
         }
         constant = new Constant(AddToCartActivity.this);
     }
@@ -356,6 +370,15 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                                 loadCustDiscLimit(7);
                             }
                         }
+                    }else if (activityToFrom == 3) {
+                        String str1 = "";
+                        for (String str : unpackSizeList) {
+                            str1 = str1 + str + "-";
+                        }
+                        Constant.showLog(str1);
+                        InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        mgr.hideSoftInputFromWindow(tv_add_to_card.getWindowToken(), 0);
+                        loadCustDiscLimit(4);
                     }
                 } else {
                     showToast("Please Select Product");
@@ -432,8 +455,60 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             case R.id.cart:
                 startViewCustOrderActivity();
                 break;
+            case R.id.img:
+                if (selProdId != 0) {
+                    Intent intent = new Intent(getApplicationContext(), ProductWiseImageActivity.class);
+                    intent.putExtra("cat9",cat9);
+                    intent.putExtra("cat2",cat2);
+                    intent.putExtra("prodIdStr",prodIdStr);
+                    intent.putExtra("from", "addtocart");
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                }else{
+                    toast.setText("Please Select Product First");
+                    toast.show();
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(String size) {
+        Constant.showLog(size);
+        if (!size.equalsIgnoreCase("NA")) {
+            if(activityToFrom==1) {
+                selQtyLocal = Integer.parseInt(size);
+                setColour(selSizeGroup);
+                if (selQtyLocal != compPackQty) {
+                    lay_comp_pack.setVisibility(View.GONE);
+                } else {
+                    lay_comp_pack.setVisibility(View.VISIBLE);
+                    setAdapter();
+                }
+            }else{
+                selQtyLocal = Integer.parseInt(size);
+                setUpdateColour(selSizeGroup);
+                if (selQtyLocal != compPackQty) {
+                    lay_comp_pack.setVisibility(View.GONE);
+                } else {
+                    lay_comp_pack.setVisibility(View.VISIBLE);
+                    setUpdateAdapter();
+                }
+            }
+        } else {
+            showToast("No Colour Available");
+        }
+    }
+
+    @Override
+    public void onImageClick(ImagewiseAddToCartClass prod) {
+
+    }
+
+    @Override
+    public void onSizeGroupClick(String sizeGroup) {
+
     }
 
     private String getPackUnPack() {
@@ -510,7 +585,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         map.clear();
         rv_color.setAdapter(null);
         rv_stockinfo.setAdapter(null);
-        Cursor res1 = db.getDistinctColour(size);
+        Cursor res1 = db.getDistinctColour(size,getPackUnPack(),1);
         if (res1.moveToFirst()) {
             do {
                 String colourHashcode = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour)) +
@@ -572,7 +647,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         if(a<0){
             a=0;
         }
-        Cursor res1 = db.getDistinctColour(sizeGroup_list.get(a));
+        Cursor res1 = db.getDistinctColour(sizeGroup_list.get(a),getPackUnPack(),1);
         if (res1.moveToFirst()) {
             do {
                 String colourHashcode = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour)) +
@@ -613,7 +688,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             }
         }
         //gridView.setAdapter(new ArrayAdapter<>(getApplicationContext(),android.R.layout.test_list_item,unpackSizeList));
-        gridView.setAdapter(new CustomerOrderUnpackGridAdpater(getApplicationContext(), unpackSizeList));
+        gridView.setAdapter(new CustomerOrderUnpackGridAdpater(getApplicationContext(), unpackSizeList,0));
     }
 
     private boolean validateOrder() {
@@ -1260,7 +1335,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         isStockChecked = 0;
 
         int i = 0;
-        Cursor res1 = db.getDistinctColour(size);
+        Cursor res1 = db.getDistinctColour(size,getPackUnPack(),1);
         if (res1.moveToFirst()) {
             do {
                 String col = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour));
@@ -1364,7 +1439,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         if(a<0){
             a=0;
         }
-        Cursor res1 = db.getDistinctColour(sizeGroup_list.get(a));
+        Cursor res1 = db.getDistinctColour(sizeGroup_list.get(a),getPackUnPack(),1);
         if (res1.moveToFirst()) {
             do {
                 String str1 = res1.getString(res1.getColumnIndex(DBHandler.ARSD_Colour));
@@ -1420,7 +1495,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             }
         }
         //gridView.setAdapter(new ArrayAdapter<>(getApplicationContext(),android.R.layout.test_list_item,unpackSizeList));
-        gridView.setAdapter(new CustomerOrderUnpackGridAdpater(getApplicationContext(), unpackSizeList));
+        gridView.setAdapter(new CustomerOrderUnpackGridAdpater(getApplicationContext(), unpackSizeList,0));
     }
 
     private void addToCardUnpackUpdate() {
@@ -1944,6 +2019,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void init() {
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         constant = new Constant(AddToCartActivity.this);
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
@@ -1951,7 +2027,6 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         ed_prod_search = (EditText) findViewById(R.id.ed_prod_search);
         rdo_pack = (RadioButton) findViewById(R.id.rdo_pack);
         rdo_unpack = (RadioButton) findViewById(R.id.rdo_unpack);
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         tv_wsp = (TextView) findViewById(R.id.tv_wsp);
         tv_mrp = (TextView) findViewById(R.id.tv_mrp);
         tv_hsncode = (TextView) findViewById(R.id.tv_hsncode);
@@ -2060,6 +2135,21 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                     selProdId = 0;
                     dialog.dismiss();
                     startViewCustOrderActivity();
+                }
+            });
+        }else if (a == 3) {
+            builder.setMessage("Please Try Again");
+            builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new Constant();
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
                 }
             });
         }
@@ -2219,6 +2309,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             }
         }catch (Exception e){
             e.printStackTrace();
+            writeLog("checkLooseStock_"+e.getMessage());
         }
     }
 
@@ -2247,6 +2338,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onFailure(Object result) {
                 constant.showPD();
+                new Constant();
             }
         });
     }
@@ -2428,7 +2520,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                     output.put(unpackSizeList.get(counter), list);
                 } else {
                     getColour++;
-                    String colour = colourList.get(getColour);
+                    //String colour = colourList.get(getColour);
                     /*String qty = unpackSizeList.get(counter);
                     if (qty.equals("")) {
                         qty = "0";
@@ -2589,34 +2681,6 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
         totalCalculations();
     }
 
-    @Override
-    public void onItemClick(String size) {
-        Constant.showLog(size);
-        if (!size.equalsIgnoreCase("NA")) {
-            if(activityToFrom==1) {
-                selQtyLocal = Integer.parseInt(size);
-                setColour(selSizeGroup);
-                if (selQtyLocal != compPackQty) {
-                    lay_comp_pack.setVisibility(View.GONE);
-                } else {
-                    lay_comp_pack.setVisibility(View.VISIBLE);
-                    setAdapter();
-                }
-            }else{
-                selQtyLocal = Integer.parseInt(size);
-                setUpdateColour(selSizeGroup);
-                if (selQtyLocal != compPackQty) {
-                    lay_comp_pack.setVisibility(View.GONE);
-                } else {
-                    lay_comp_pack.setVisibility(View.VISIBLE);
-                    setUpdateAdapter();
-                }
-            }
-        } else {
-            showToast("No Colour Available");
-        }
-    }
-
     private void loadCustDiscLimit(final int a) {
         //int custId = FirstActivity.pref.getInt(getString(R.string.pref_selcustid), 0);
         int custId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
@@ -2661,6 +2725,7 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onFailure(String result) {
                 constant.showPD();
+                new Constant();
                 toast.setText("Please Try Again...");
                 toast.show();
             }

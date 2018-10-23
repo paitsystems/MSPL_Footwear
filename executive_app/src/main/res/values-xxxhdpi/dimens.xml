@@ -90,4 +90,9 @@
     <dimen name="list_item_sizegrp_height25">25dp</dimen>
     <dimen name="list_item_sizegrp_height40">40dp</dimen>
 
+    <dimen name="gstreport_date_110">110dp</dimen>
+    <dimen name="gstreport_date_90">90dp</dimen>
+    <dimen name="gstreport_invno">160dp</dimen>
+    <dimen name="gstreport_tax">70dp</dimen>
+    <dimen name="gstreport_amnt">90dp</dimen>
 </resources>

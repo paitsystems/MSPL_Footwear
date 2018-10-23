@@ -28,6 +28,7 @@ public class Constant {
     //TODO: Check VersionCode and Version Name
 
     public static String folder_name = "MSPL Footwear",
+            gstFolderName = "GSTReport",
             image_folder = "Caputured_img",
             captured_images_folder = "MSPL_CapturedImages",
             log_file_name = "MSPL_Footwear_Ex",
@@ -47,21 +48,21 @@ public class Constant {
     //public static String ipaddress;
     //public static String ipaddress = "http://172.30.1.209/MSPLV6/service.svc";
     //public static String ipaddress = "http://license.lnbinfotech.com/MSPLV6/service.svc";
-    public static String ipaddress = "http://103.109.13.200:24086/MSPLV6/service.svc";
+    public static String ipaddress = "http://43.239.147.103:24085/MSPLV6/service.svc";
 
     //TODO: Check Image Url
-    public static String imgUrl = "http://103.109.13.200:24086/IMAGES/";
+    public static String imgUrl = "http://43.239.147.103:24085/IMAGES/";
 
     //TODO: Check CustImage Url
-    public static String custimgUrl = "http://103.109.13.200:24086/custImage/";
+    public static String custimgUrl = "http://43.239.147.103:24085/custImage/";
+
+    private static int connectionFlag = 0;
 
     //TODO: Check liveTestFlag 1-ScreenShotDisable, 0-ScreenShotEnable
     public static int liveTestFlag = 1;
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
-    public static int showLogFlag = 1;
-
-    public static int connectionFlag = 1;
+    private static int showLogFlag = 1;
 
     public static int TIMEOUT_CON = 10*1000;
     public static int TIMEOUT_SO = 2*60*1000;
@@ -90,15 +91,15 @@ public class Constant {
 
     public Constant() {
         //TODO: Change Image Ip Also
-        if (connectionFlag == 0) {
-            ipaddress = "http://43.239.147.103:24086/MSPLV6/service.svc";
-            imgUrl = "http://43.239.147.103:24086/IMAGES/";
-            custimgUrl = "http://43.239.147.103:24086/custImage/";
-            connectionFlag = 1;
-        } else {
+        if(connectionFlag == 0) {
             ipaddress = "http://103.109.13.200:24086/MSPLV6/service.svc";
             imgUrl = "http://103.109.13.200:24086/IMAGES/";
             custimgUrl = "http://103.109.13.200:24086/custImage/";
+            connectionFlag = 1;
+        }else {
+            ipaddress = "http://43.239.147.103:24085/MSPLV6/service.svc";
+            imgUrl = "http://43.239.147.103:24085/IMAGES/";
+            custimgUrl = "http://43.239.147.103:24085/custImage/";
             connectionFlag = 0;
         }
     }

@@ -1,4 +1,4 @@
-package com.lnbinfotech.msplfootwear.services;
+package com.lnbinfotech.msplfootwear.braodcasts;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,16 +8,16 @@ import android.util.Log;
 
 import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.constant.Constant;
+import com.lnbinfotech.msplfootwear.services.UploadImageService;
 
 import java.io.File;
 
-/**
- * Created by SNEHA on 10/25/2017.
- */
+//Created by SNEHA on 10/25/2017.
+
 public class ImageUplaodBroadcastReceiver extends BroadcastReceiver {
+
     @Override
     public void onReceive(Context context, Intent intent) {
-
             String action = intent.getAction();
             if (action.equals("android.net.conn.CONNECTIVITY_CHANGE") || action.equals("test")) {
                 File f = null;

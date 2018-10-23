@@ -40,7 +40,7 @@ public class UploadImageService extends IntentService {
                 if (f.exists()) {
                     Constant.showLog(f.getPath());
                     for (File file : f.listFiles()) {
-                        if (file != null) {
+                        if (file != null && !file.isDirectory()) {
                             FileInputStream ifile = new FileInputStream(file);
                             client.cwd(Constant.ftp_directory);
                             if (client.storeFile(file.getName(), ifile)) {

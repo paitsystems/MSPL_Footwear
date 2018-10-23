@@ -54,8 +54,10 @@ public class CustomerAccountActivity extends AppCompatActivity implements View.O
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case  R.id.card_gst:
-                toast.setText("Under Development");
-                toast.show();
+                /*toast.setText("Under Development");
+                toast.show();*/
+                startActivity(new Intent(getApplicationContext(), GSTReportActivity.class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
         }
     }
@@ -78,6 +80,7 @@ public class CustomerAccountActivity extends AppCompatActivity implements View.O
     }
 
     private void init() {
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         constant = new Constant(CustomerAccountActivity.this);
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
@@ -86,7 +89,6 @@ public class CustomerAccountActivity extends AppCompatActivity implements View.O
         card_gst= (CardView) findViewById(R.id.card_gst);
         card_ledger = (CardView) findViewById(R.id.card_ledger);
         card_out = (CardView) findViewById(R.id.card_out);
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     private void showDia(int a) {

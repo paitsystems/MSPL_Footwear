@@ -1,6 +1,510 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="From Date"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="To Date"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="All"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_fdate"
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:background="@drawable/textview_back"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="01/Oct/2018"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/tv_tdate"
+            style="@style/textViewMob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:background="@drawable/textview_back"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="17/Oct2018"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+
+            <CheckBox
+                android:id="@+id/cb_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_show"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Show"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/i_orange" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/lgblue"
+                android:orientation="horizontal"
+                android:padding="@dimen/mobpadding5"
+                android:weightSum="1">
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_date_110"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center"
+                    android:text="InvDate"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_invno"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center"
+                    android:text="InvNo"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_invno"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center"
+                    android:text="Shop Name"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_amnt"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="GSTNo"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_tax"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="HSNCode"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_tax"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="Tax%"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_tax"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="Qty"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_tax"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="center"
+                    android:text="UOM"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_date_110"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="Assesible Value"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_amnt"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="CGSTAmnt"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_amnt"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="SGSTAmt"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_amnt"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="IGSTAmnt"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_amnt"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="RoundOff"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_date_110"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="Net Sale"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_tax"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="center"
+                    android:text="Type"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_invno"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center"
+                    android:gravity="left"
+                    android:text="Invoice No"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_date_90"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="Invoice Date"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/lv_gstdetail"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/lgblue"
+                android:orientation="horizontal"
+                android:padding="@dimen/mobpadding5"
+                android:weightSum="1">
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_date_110"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_invno"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_invno"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_amnt"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_tax"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_tax"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_totQty"
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_tax"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_tax"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_totAssValue"
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_date_110"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_totCGSTAmnt"
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_amnt"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_totSGSTAmnt"
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_amnt"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_totIGSTAmnt"
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_amnt"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_totRoundOff"
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_amnt"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_totNetSale"
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_date_110"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_tax"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_invno"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center"
+                    android:gravity="right"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="@dimen/gstreport_date_90"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:gravity="right"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <TextView
+        style="@style/footerstyleMob"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

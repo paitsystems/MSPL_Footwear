@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class CheckOtpClass implements Serializable {
 
-    public String custId, otp, mobileno, imeino;
+    public String custId, otp, mobileno, imeino, imeino1, imeino2;
 
     public String getCustId() {
         return custId;
@@ -39,4 +39,21 @@ public class CheckOtpClass implements Serializable {
     public void setImeino(String imeino) {
         this.imeino = imeino;
     }
+
+    public String getImeino1() {
+        return imeino1;
+    }
+
+    public void setImeino1(String imeino1) {
+        this.imeino1 = imeino1;
+    }
+
+    public String getImeino2() {
+        return imeino2;
+    }
+
+    public void setImeino2(String imeino2) {
+        this.imeino2 = imeino2;
+    }
+
 }

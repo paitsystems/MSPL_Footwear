@@ -202,7 +202,6 @@ public class LedgerReportActivity extends AppCompatActivity implements View.OnCl
                 Constant.showLog("id" + id);
 
                 String url = Constant.ipaddress + "/GetLedgerReport?custid=" + id + "&fdate=" + _fromdate + "&tdate=" + _todate + "&all=" + _all;
-                //  String url = Constant.ipaddress + "/GetLedgerReport?custid=100&fdate=1-Aug-2017&tdate=1-Dec-2017&all=N";
                 Constant.showLog(url);
                 writeLog("showLedgerReport_" + url);
                 constant.showPD();

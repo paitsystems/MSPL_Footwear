@@ -282,7 +282,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
             });
         }else if(a==8) {
             builder.setTitle("Update App");
-            builder.setMessage("Smart Ticket New Version Is Available");
+            builder.setMessage("MSPL Executive New Version Is Available");
             builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -489,6 +489,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
             Constant.showLog("CustomerDetailsActivity_"+address);
         }catch (Exception e){
             e.printStackTrace();
+            writeLog("handleNewLocation_"+e.getMessage());
         }
     }
 

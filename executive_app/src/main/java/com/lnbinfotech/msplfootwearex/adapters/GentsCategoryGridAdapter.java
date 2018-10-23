@@ -67,8 +67,9 @@ public class GentsCategoryGridAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         GentsCategoryClass gentsClass = (GentsCategoryClass) getItem(i);
-        holder.tv_catname.setText(gentsClass.getCategoryName());
-        holder.tv_mrp.setText(gentsClass.getMrp());
+        String artSize = gentsClass.getCategoryName() +" - " + gentsClass.getCat3();
+        holder.tv_catname.setText(artSize);
+        holder.tv_mrp.setText(roundDecimals(gentsClass.getMrp()));
         holder.tv_markup.setText(gentsClass.getMarkup());
         holder.tv_markdown.setText(gentsClass.getMarkdown());
         //holder.img.setImageResource(drawId[i]);
@@ -113,6 +114,10 @@ public class GentsCategoryGridAdapter extends BaseAdapter {
                     }
                 })
                 .into(holder.img);
+    }
+
+    private String roundDecimals(String d) {
+        return String.format("%.2f", Double.parseDouble(d));
     }
 }
 

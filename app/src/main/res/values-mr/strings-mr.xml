@@ -245,5 +245,6 @@
     <string name="pref_autoCurrency">Currency</string>
     <string name="pref_lastSync">LastSync</string>
     <string name="pref_version">version</string>
+    <string name="pref_imeino2">imeino2</string>
 
 </resources>

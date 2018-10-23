@@ -213,6 +213,7 @@ public class ArealinewiseAreaSelectionActivity extends AppCompatActivity impleme
         @Override
         protected String doInBackground(String... url) {
             String value = "";
+            DefaultHttpClient httpClient = null;
             String con = Constant.ipaddress + "/GetTodaysVisitDet";
             Constant.showLog(con);
             HttpPost request = new HttpPost(con);
@@ -223,13 +224,23 @@ public class ArealinewiseAreaSelectionActivity extends AppCompatActivity impleme
                 Constant.showLog(vehicle.toString());
                 StringEntity entity = new StringEntity(vehicle.toString());
                 request.setEntity(entity);
-                DefaultHttpClient httpClient = new DefaultHttpClient();
+                httpClient = new DefaultHttpClient();
                 HttpResponse response = httpClient.execute(request);
                 Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
                 value = new BasicResponseHandler().handleResponse(response);
             } catch (Exception e) {
                 e.printStackTrace();
                 writeLog("getTodaysVisit_result_" + e.getMessage());
+            }
+            finally {
+                try{
+                    if(httpClient!=null) {
+                        httpClient.getConnectionManager().shutdown();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    writeLog("getTodaysVisit_finally_"+e.getMessage());
+                }
             }
             return value;
         }

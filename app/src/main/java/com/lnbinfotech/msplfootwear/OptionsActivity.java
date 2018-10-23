@@ -96,19 +96,15 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.card_give_order:
-                //showDia(1);
-                //int custId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
-                //custDisc = new DBHandler(getApplicationContext()).getCustDiscount(custId);
-                startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
-                overridePendingTransition(R.anim.enter, R.anim.exit);
+                showDia(3);
+                /*startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
+                overridePendingTransition(R.anim.enter, R.anim.exit);*/
                 break;
             case R.id.card_account:
                 startActivity(new Intent(getApplicationContext(), CustomerAccountActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_track_order:
-                //toast.setText("Under Development");
-                //toast.show();
                 startActivity(new Intent(getApplicationContext(), TrackOrderMasterActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
@@ -121,8 +117,12 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 toast.show();
                 break;
             case R.id.card_whatsnew:
-                toast.setText("Under Development");
-                toast.show();
+               /* toast.setText("Under Development");
+                toast.show();*/
+                Intent intent = new Intent(getApplicationContext(), MainImagewiseSetwiseOrderActivity.class);
+                intent.putExtra("from","WhatsNew");
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_feedback:
                 startActivity(new Intent(getApplicationContext(), FeedbackActivity.class));
@@ -292,6 +292,33 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else if (a == 3) {
+            builder.setTitle("Take Order");
+            builder.setMessage("How do you want to take order?");
+            builder.setPositiveButton("With Photos", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(getApplicationContext(), MainImagewiseSetwiseOrderActivity.class);
+                    intent.putExtra("from","Option");
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("Without Photos", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                    dialog.dismiss();
+                }
+            });
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

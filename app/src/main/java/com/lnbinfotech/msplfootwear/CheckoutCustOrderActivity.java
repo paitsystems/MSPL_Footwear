@@ -204,6 +204,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
     }
 
     private void init() {
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         constant = new Constant(CheckoutCustOrderActivity.this);
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
@@ -215,7 +216,6 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
         list = new ArrayList<>();
         urlList = new ArrayList<>();
         db = new DBHandler(getApplicationContext());
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     private void checkStock(){
@@ -306,6 +306,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
         @Override
         protected String doInBackground(String... url) {
             String value = "";
+            DefaultHttpClient httpClient = null;
             HttpPost request = new HttpPost(Constant.ipaddress + "/json/checkStock");
             request.setHeader("Accept", "application/json");
             request.setHeader("Content-type", "application/json");
@@ -315,12 +316,11 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
 
                 StringEntity entity = new StringEntity(vehicle.toString());
                 request.setEntity(entity);
-
                 // Send request to WCF service
                 HttpParams httpParams = new BasicHttpParams();
                 HttpConnectionParams.setConnectionTimeout(httpParams,Constant.TIMEOUT_CON);
                 HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);
-                DefaultHttpClient httpClient = new DefaultHttpClient(httpParams);
+                httpClient = new DefaultHttpClient(httpParams);
                 HttpResponse response = httpClient.execute(request);
                 Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
                 value = new BasicResponseHandler().handleResponse(response);
@@ -328,6 +328,16 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
             } catch (Exception e) {
                 e.printStackTrace();
                 writeLog("showCheckoutOrderDetailsClass_result_" + e.getMessage());
+            }
+            finally {
+                try{
+                    if(httpClient!=null) {
+                        httpClient.getConnectionManager().shutdown();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    writeLog("showCheckoutOrderDetailsClass_finally_"+e.getMessage());
+                }
             }
             return value;
         }
@@ -586,6 +596,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
         @Override
         protected String doInBackground(String... url) {
             String value = "";
+            DefaultHttpClient httpClient = null;
             HttpPost request = new HttpPost(Constant.ipaddress + "/json/saveOrder");
             request.setHeader("Accept", "application/json");
             request.setHeader("Content-type", "application/json");
@@ -610,7 +621,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
                 request.setEntity(entity);
 
                 // Send request to WCF service
-                DefaultHttpClient httpClient = new DefaultHttpClient();
+                httpClient = new DefaultHttpClient();
                 HttpResponse response = httpClient.execute(request);
                 Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
                 value = new BasicResponseHandler().handleResponse(response);
@@ -618,6 +629,16 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
             } catch (Exception e) {
                 e.printStackTrace();
                 writeLog("saveOrderAsyncTask_result_" + e.getMessage());
+            }
+            finally {
+                try{
+                    if(httpClient!=null) {
+                        httpClient.getConnectionManager().shutdown();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    writeLog("saveOrderAsyncTask_finally_"+e.getMessage());
+                }
             }
             return value;
         }

@@ -22,6 +22,7 @@ import com.lnbinfotech.msplfootwear.adapters.ProductSearchAdapter;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
+import com.lnbinfotech.msplfootwear.model.GentsCategoryClass;
 import com.lnbinfotech.msplfootwear.model.ProductMasterClass;
 
 import java.util.ArrayList;
@@ -98,6 +99,36 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
                     finish();
                     startActivity(intent);
                     overridePendingTransition(R.anim.left_to_right,R.anim.right_to_left);
+                }else if(from.equals("imagewisesize")) {
+                    GentsCategoryClass gentsClass = new GentsCategoryClass();
+                    Cursor res = db.getImageSubCategory2(prodClass.getCat9(), prodClass.getCat2());
+                    if (res.moveToFirst()) {
+                        do {
+                            gentsClass.setCategoryName(res.getString(res.getColumnIndex(DBHandler.PM_ProdId)));
+                            gentsClass.setMrp(res.getString(res.getColumnIndex(DBHandler.PM_MRPRate)));
+                            gentsClass.setMarkup(res.getString(res.getColumnIndex(DBHandler.PM_MarkUp)));
+                            gentsClass.setMarkdown(res.getString(res.getColumnIndex(DBHandler.PM_MarkDown)));
+                            gentsClass.setWsp(res.getString(res.getColumnIndex(DBHandler.PM_SRate)));
+                            gentsClass.setProductName(res.getString(res.getColumnIndex(DBHandler.PM_Finalprod)));
+                            gentsClass.setHsnCode(res.getString(res.getColumnIndex(DBHandler.PM_HSNCode)));
+                            gentsClass.setProdId(res.getInt(res.getColumnIndex(DBHandler.PM_ProductID)));
+                            gentsClass.setProductId(res.getString(res.getColumnIndex(DBHandler.PM_ProdId)));
+                            gentsClass.setGstPer(res.getString(res.getColumnIndex(DBHandler.GST_GSTPer)));
+                            gentsClass.setGstGroupName(res.getString(res.getColumnIndex(DBHandler.GST_GroupNm)));
+                            gentsClass.setCat3(res.getString(res.getColumnIndex(DBHandler.PM_Cat3)));
+                            String img = Constant.imgUrl + "NA.jpg";
+                            Constant.showLog(img);
+                            gentsClass.setImgName(img);
+                        } while (res.moveToNext());
+                    }
+                    res.close();
+                    Intent intent = new Intent(getApplicationContext(), ImageWiseAddToCartActivity.class);
+                    intent.putExtra("data", gentsClass);
+                    intent.putExtra("cat9",prodClass.getCat9());
+                    intent.putExtra("cat2",prodClass.getCat2());
+                    finish();
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
                 }else{
                     new Constant(ProductSearchActivity.this).doFinish();
                 }

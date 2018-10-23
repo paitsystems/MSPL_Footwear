@@ -110,7 +110,7 @@ public class FirstActivity extends AppCompatActivity {
         } else {
             startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
         }
-        if (!pref.contains(getString(R.string.pref_FTPLocation))) {
+        /*if (!pref.contains(getString(R.string.pref_FTPLocation))) {
             SharedPreferences.Editor editor = pref.edit();
             editor.putString(getString(R.string.pref_FTPLocation),"ftp.lnbinfotech.com");
             editor.putString(getString(R.string.pref_FTPUser),"supportftp@lnbinfotech.com");
@@ -118,7 +118,7 @@ public class FirstActivity extends AppCompatActivity {
             editor.putString(getString(R.string.pref_FTPImgFolder),"Test");
             editor.apply();
            // editor.commit();
-        }
+        }*/
         overridePendingTransition(R.anim.enter,R.anim.exit);
         doFinish();
     }

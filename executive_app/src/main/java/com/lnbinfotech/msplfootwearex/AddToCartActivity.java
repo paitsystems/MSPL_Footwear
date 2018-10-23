@@ -781,7 +781,11 @@ public class AddToCartActivity extends AppCompatActivity implements View.OnClick
                             String colourStr = qtyColour[1];
                             String colourhashCode[] = colourStr.split("\\-");
                             String colour = colourhashCode[0];
-                            String hashCode = colourhashCode[1];
+                            //String hashCode = colourhashCode[1];
+                            String hashCode = "#FFFFFF";
+                            if(colourhashCode.length>1) {
+                                hashCode = colourhashCode[1];
+                            }
                             if (looseQty != 0) {
                                 if (isDataInserted == 0) {
                                     isDataInserted = 1;

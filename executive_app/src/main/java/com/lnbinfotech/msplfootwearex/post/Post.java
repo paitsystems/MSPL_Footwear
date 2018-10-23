@@ -24,17 +24,27 @@ public class Post {
 
     static public String POST(String url) {
         String responseBody = null;
+        DefaultHttpClient httpClient = null;
         try{
             HttpParams httpParams = new BasicHttpParams();
             HttpConnectionParams.setConnectionTimeout(httpParams,Constant.TIMEOUT_CON);
             HttpConnectionParams.setSoTimeout(httpParams,Constant.TIMEOUT_SO);
-            HttpClient httpclient = new DefaultHttpClient(httpParams);
+            httpClient = new DefaultHttpClient(httpParams);
             HttpGet httpget = new HttpGet(url);
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
-            responseBody = httpclient.execute(httpget, responseHandler);
+            responseBody = httpClient.execute(httpget, responseHandler);
         }catch (Exception e){
             e.printStackTrace();
             Constant.showLog("POST - Timeout-"+url);
+        }finally {
+            try{
+                if(httpClient!=null) {
+                    httpClient.getConnectionManager().shutdown();
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                //writeLog("showCheckoutOrderDetailsClass_finally_"+e.getMessage());
+            }
         }
         return responseBody;
 
