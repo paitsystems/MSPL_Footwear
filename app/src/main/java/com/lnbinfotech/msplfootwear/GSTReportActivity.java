@@ -3,12 +3,19 @@ package com.lnbinfotech.msplfootwear;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -491,39 +498,25 @@ public class GSTReportActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void shareFile() {
-        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-        String myFilePath = Constant.checkFolder(Constant.folder_name).getAbsolutePath() + File.separator +
-                Constant.gstFolderName + File.separator + exportFileName;
-        Constant.showLog("file path:" + myFilePath);
+        try {
+            Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+            String myFilePath = Constant.checkFolder(Constant.folder_name).getAbsolutePath() + File.separator +
+                    Constant.gstFolderName + File.separator + exportFileName;
+            Constant.showLog("file path:" + myFilePath);
 
-        /*intentShareFile.setType("application/xls");
-        intentShareFile.setType("text/plain");
-
-        <intent - filter >
-        <action android:name = "android.intent.action.SEND" / >
-        <category android:name = "android.intent.category.DEFAULT" / >
-        <data android:mimeType = "audio" / >
-        <data android:mimeType = "video" / >
-        <data android:mimeType = "image" / >
-        <data android:mimeType = "text/plain" / >
-        <data android:mimeType = "text/x-vcard" / >
-        <data android:mimeType = "application/pdf" / >
-        <data android:
-        mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document" / >
-        <data android:
-        mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" / >
-        <data android:
-        mimeType = "application/vnd.openxmlformats-officedocument.presentationml.presentation" / >
-        <data android:mimeType = "application/msword" / >
-        <data android:mimeType = "application/vnd.ms-excel" / >
-        <data android:mimeType = "application/vnd.ms-powerpoint" / >
-        </intent - filter >*/
-
-        intentShareFile.setType("application/vnd.ms-excel");
-        intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + myFilePath));
-        intentShareFile.putExtra(Intent.EXTRA_SUBJECT,partyName + " - " + fromdate +" - "+ todate + " GST Report");
-        //intentShareFile.putExtra(Intent.EXTRA_TEXT, "GST Report");
-        startActivity(Intent.createChooser(intentShareFile, "Share File"));
+            File f = new File(myFilePath);
+            Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                    + ".provider", f);
+            intentShareFile.setType("application/vnd.ms-excel");
+            intentShareFile.putExtra(Intent.EXTRA_STREAM, photoURI);
+            intentShareFile.putExtra(Intent.EXTRA_SUBJECT, partyName + " - " + fromdate + " - " + todate + " GST Report");
+            startActivity(Intent.createChooser(intentShareFile, "Share File"));
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("shareFile_"+e.getMessage());
+            toast.setText("Something Went Wrong");
+            toast.show();
+        }
     }
 
     private void exportGSTReport(Workbook wb, CellStyle cs){

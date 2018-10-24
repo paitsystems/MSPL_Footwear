@@ -18,6 +18,7 @@ public class ImageUplaodBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        try {
             String action = intent.getAction();
             if (action.equals("android.net.conn.CONNECTIVITY_CHANGE") || action.equals("test")) {
                 File f = null;
@@ -39,6 +40,9 @@ public class ImageUplaodBroadcastReceiver extends BroadcastReceiver {
                     }
                 }
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
+}
 
