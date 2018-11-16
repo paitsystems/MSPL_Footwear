@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--TODO: Check App Name-->
-    <string name="app_name">MSPL Customer</string>
-    <string name="title_activity_login">MSPL Customer</string>
+    <string name="app_name">PAIT Customer</string>
+    <string name="title_activity_login">PAIT Customer</string>
 
     <string name="error_invalid_password">This field is required</string>
     <string name="error_field_required">This field is required</string>

@@ -8,6 +8,50 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:6002174091:android:7fd27fdf7cdaebe3",
+        "android_client_info": {
+          "package_name": "com.lnbinfotech.msplfootwear"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "6002174091-0ne4i5vmukvu7sqpg61ql0o33q2r453o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lnbinfotech.msplfootwear",
+            "certificate_hash": "95a24eed912ffe45f0e0d1c736b46423fabbc2e5"
+          }
+        },
+        {
+          "client_id": "6002174091-o26ggbjkur05ef877t29jqgtdrg64ssv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKCrCsowAHOE7lJq3psb5F5T5Aky-WjlI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "6002174091-o26ggbjkur05ef877t29jqgtdrg64ssv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:6002174091:android:4276a27235efe2a8",
         "android_client_info": {
           "package_name": "com.lnbinfotech.msplfootwearex"
@@ -20,6 +64,94 @@
           "android_info": {
             "package_name": "com.lnbinfotech.msplfootwearex",
             "certificate_hash": "246f950e9bd3935736fb3591181aa600d6eea631"
+          }
+        },
+        {
+          "client_id": "6002174091-o26ggbjkur05ef877t29jqgtdrg64ssv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKCrCsowAHOE7lJq3psb5F5T5Aky-WjlI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "6002174091-o26ggbjkur05ef877t29jqgtdrg64ssv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6002174091:android:c0e71c860de54ecd",
+        "android_client_info": {
+          "package_name": "com.pait.cust"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "6002174091-rcldhp3hu7mc6mthipa5uoudkqkeoso9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pait.cust",
+            "certificate_hash": "a0edf064ffe068d86b8ea342185871f2cd1addde"
+          }
+        },
+        {
+          "client_id": "6002174091-o26ggbjkur05ef877t29jqgtdrg64ssv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKCrCsowAHOE7lJq3psb5F5T5Aky-WjlI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "6002174091-o26ggbjkur05ef877t29jqgtdrg64ssv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6002174091:android:1d61cb874befc45d",
+        "android_client_info": {
+          "package_name": "com.pait.exec"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "6002174091-7mtdaq4ao2t788gqrms4eq4if3lcgusu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pait.exec",
+            "certificate_hash": "a0edf064ffe068d86b8ea342185871f2cd1addde"
           }
         },
         {

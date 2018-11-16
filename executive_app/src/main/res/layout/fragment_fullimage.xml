@@ -24,7 +24,7 @@
         android:padding="5dp"
         android:visibility="gone">
 
-        <com.lnbinfotech.msplfootwearex.TouchImageView
+        <com.pait.exec.TouchImageView
             android:id="@+id/touch_imageview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -28,7 +28,8 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/mobpadding5"
                     android:id="@+id/imgv_img1"
-                    android:src="@drawable/madhur160" />
+                    android:src="@drawable/madhur160"
+                    android:visibility="invisible" />
 
                 <ImageView
                     android:padding="@dimen/mobpadding5"

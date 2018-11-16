@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lnbinfotech.msplfootwear">
+    package="com.pait.cust">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -30,7 +30,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <activity android:name=".FirstActivity">
+        <activity android:name="com.pait.cust.FirstActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,40 +38,40 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ImageWiseAddToCartActivity"
+            android:name="com.pait.cust.ImageWiseAddToCartActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
-        <service android:name=".services.AutoSyncService" />
-        <service android:name=".services.DataUpdateService" />
-        <service android:name=".services.UploadImageService" />
+        <service android:name="com.pait.cust.services.AutoSyncService" />
+        <service android:name="com.pait.cust.services.DataUpdateService" />
+        <service android:name="com.pait.cust.services.UploadImageService" />
         <service
-            android:name=".services.ScheduledJobService"
+            android:name="com.pait.cust.services.ScheduledJobService"
             android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
             <intent-filter>
                 <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" />
             </intent-filter>
         </service>
         <service
-            android:name=".services.ScheduledJobServicePL"
+            android:name="com.pait.cust.services.ScheduledJobServicePL"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <receiver android:name=".braodcasts.AutoUpdateBroadcastReceiver" />
+        <receiver android:name="com.pait.cust.braodcasts.AutoUpdateBroadcastReceiver" />
         <receiver
-            android:name=".braodcasts.RebootBroadcastReceiver"
+            android:name="com.pait.cust.braodcasts.RebootBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".braodcasts.ImageUplaodBroadcastReceiver">
+        <receiver android:name="com.pait.cust.braodcasts.ImageUplaodBroadcastReceiver">
             <intent-filter>
                 <action android:name="test" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".CheckOTPActivity$MySMSReceiver"
+            android:name="com.pait.cust.CheckOTPActivity$MySMSReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -80,129 +80,129 @@
         </receiver>
 
         <activity
-            android:name=".RegistrationActivity"
+            android:name="com.pait.cust.RegistrationActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".CheckOTPActivity"
+            android:name="com.pait.cust.CheckOTPActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".CustomerDetailsActivity"
+            android:name="com.pait.cust.CustomerDetailsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".CustomerLoginActivity"
+            android:name="com.pait.cust.CustomerLoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".OptionsActivity"
+            android:name="com.pait.cust.OptionsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NewAppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ImagewiseSetwiseOrderActivity"
+            android:name="com.pait.cust.ImagewiseSetwiseOrderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".CutsizeSetwiseOrderActivity"
+            android:name="com.pait.cust.CutsizeSetwiseOrderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".TrackOrderMasterActivity"
+            android:name="com.pait.cust.TrackOrderMasterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".CustomerAccountActivity"
+            android:name="com.pait.cust.CustomerAccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".FeedbackActivity"
+            android:name="com.pait.cust.FeedbackActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ProfileViewActivity"
+            android:name="com.pait.cust.ProfileViewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ProfileDataUpdateActivity"
+            android:name="com.pait.cust.ProfileDataUpdateActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".DataRefreshActivity"
+            android:name="com.pait.cust.DataRefreshActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".TrackOrderDetailActivity"
+            android:name="com.pait.cust.TrackOrderDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".AddToCartActivity"
+            android:name="com.pait.cust.AddToCartActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ProductSearchActivity"
+            android:name="com.pait.cust.ProductSearchActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ViewCustomerOrderActiviy"
+            android:name="com.pait.cust.ViewCustomerOrderActiviy"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".CheckoutCustOrderActivity"
+            android:name="com.pait.cust.CheckoutCustOrderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".DisplayCustOutstandingActivity"
+            android:name="com.pait.cust.DisplayCustOutstandingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".LedgerReportActivity"
+            android:name="com.pait.cust.LedgerReportActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".OutstandingBillReportActivity"
+            android:name="com.pait.cust.OutstandingBillReportActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".OurBankDetailsActivity"
+            android:name="com.pait.cust.OurBankDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".TrackOrderDetailActivityChanged"
+            android:name="com.pait.cust.TrackOrderDetailActivityChanged"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".MainImagewiseSetwiseOrderActivity"
+            android:name="com.pait.cust.MainImagewiseSetwiseOrderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"  />
-        <activity android:name=".CategoryWiseImageActivity"
+        <activity android:name="com.pait.cust.CategoryWiseImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"  />
-        <activity android:name=".ProductWiseImageActivity"
+        <activity android:name="com.pait.cust.ProductWiseImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".FullImageActivity"
+            android:name="com.pait.cust.FullImageActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".GSTReportActivity"
+            android:name="com.pait.cust.GSTReportActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />

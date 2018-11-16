@@ -8,7 +8,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.lnbinfotech.msplfootwearex"
+        applicationId "com.pait.exec"
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 11

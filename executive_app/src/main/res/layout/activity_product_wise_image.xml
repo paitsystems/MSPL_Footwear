@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.lnbinfotech.msplfootwearex.ProductWiseImageActivity">
+    tools:context="com.pait.exec.ProductWiseImageActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

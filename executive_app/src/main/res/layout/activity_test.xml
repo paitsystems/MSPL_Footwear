@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lnbinfotech.msplfootwearex.Test">
+    tools:context="com.pait.exec.Test">
 
     <HorizontalScrollView
         android:layout_width="match_parent"

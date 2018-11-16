@@ -22,7 +22,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <com.lnbinfotech.msplfootwearex.NonScrollableVP
+    <com.pait.exec.NonScrollableVP
         android:id="@+id/pagerMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
