@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_margin="10dp"
-                                        android:elevation="5dp"
-                                        card_view:cardCornerRadius="4dp"
-                                        card_view:cardElevation="5dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:elevation="5dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,7 +45,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:src="@drawable/user32"/>
+                            android:src="@drawable/user32" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -62,7 +62,7 @@
                         android:layout_height="wrap_content"
                         android:text="Name"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/tv_custaddress"
@@ -70,7 +70,7 @@
                         android:layout_height="wrap_content"
                         android:text="Address"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/tv_custmobile"
@@ -78,7 +78,7 @@
                         android:layout_height="wrap_content"
                         android:text="MobileNo"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/tv_custemail"
@@ -86,7 +86,7 @@
                         android:layout_height="wrap_content"
                         android:text="EmailId"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
