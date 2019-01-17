@@ -1,10 +1,25 @@
 package com.lnbinfotech.msplfootwearex.model;
 
-/**
- * Created by SNEHA on 11-10-2017.
- */
+//Created by SNEHA on 11-10-2017.
+
+import com.google.gson.annotations.SerializedName;
+
 public class BankBranchMasterClass {
-    public String autoid,branch,id,custid,accountNo,cBankid,cBranch;
+
+    @SerializedName("Autoid")
+    public String autoid;
+    @SerializedName("Branch")
+    public String branch;
+    @SerializedName("id")
+    public String id;
+    @SerializedName("Custid")
+    public String custid;
+    @SerializedName("AccountNo")
+    public String accountNo;
+    @SerializedName("CBankid")
+    public String cBankid;
+    @SerializedName("CBranch")
+    public String cBranch;
 
     public String getAutoid() {
         return autoid;

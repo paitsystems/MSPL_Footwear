@@ -75,7 +75,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         tv_mobile2.setOnClickListener(this);
 
         //TODO: JobScheduled
-        //Utility.scheduledJob(getApplicationContext());
+        Utility.scheduledJob(getApplicationContext());
         /*Intent intent1 = new Intent(getApplicationContext(),AutoSyncService.class);
         startService(intent1);*/
 

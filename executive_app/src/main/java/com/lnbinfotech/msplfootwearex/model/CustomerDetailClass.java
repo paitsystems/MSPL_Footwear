@@ -2,13 +2,53 @@ package com.lnbinfotech.msplfootwearex.model;
 
 //Created by lnb on 9/15/2017.
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class CustomerDetailClass implements Serializable{
 
-    private  String name,address,mobile,PANno,GSTNo,ImagePath, email,status,district,taluka,
-            IMEINo,isRegistered,AadharNo,PIN, partyName;
-    private int custID,branchId,cityId,areaId, HOCode;
+    @SerializedName("name")
+    private  String name;
+    @SerializedName("address")
+    private  String address;
+    @SerializedName("mobile")
+    private  String mobile;
+    @SerializedName("Panno")
+    private  String PANno;
+    @SerializedName("GSTNo")
+    private  String GSTNo;
+    @SerializedName("ImagePath")
+    private  String ImagePath;
+    @SerializedName("email")
+    private  String email;
+    @SerializedName("status")
+    private  String status;
+    @SerializedName("District")
+    private  String district;
+    @SerializedName("Taluka")
+    private  String taluka;
+    @SerializedName("IMEINo")
+    private  String IMEINo;
+    @SerializedName("isRegistered")
+    private  String isRegistered;
+    @SerializedName("AadharNo")
+    private  String AadharNo;
+    @SerializedName("PIN")
+    private  String PIN;
+    @SerializedName("PartyName")
+    private  String partyName;
+    @SerializedName("retailCustID")
+    private int custID;
+    @SerializedName("branchId")
+    private int branchId;
+    @SerializedName("cityId")
+    private int cityId;
+    @SerializedName("areaId")
+    private int areaId;
+    @SerializedName("HoCode")
+    private int HOCode;
+    @SerializedName("Discount")
     private float discount;
 
     public String getName() {

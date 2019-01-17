@@ -2,10 +2,30 @@ package com.lnbinfotech.msplfootwearex.model;
 
 //Created by ANUP on 12/29/2017.
 
+import com.google.gson.annotations.SerializedName;
+
 public class SizeDesignMastDetClass {
 
-    private int auto, productid, sizeGroupFrom, sizeGroupTo, total, size, qty;
-    private String designNo, sizeGroup, colour;
+    @SerializedName("Auto")
+    private int auto;
+    @SerializedName("Productid")
+    private int productid;
+    @SerializedName("SizeGroupFrom")
+    private int sizeGroupFrom;
+    @SerializedName("SizeGroupTo")
+    private int sizeGroupTo;
+    @SerializedName("Total")
+    private int total;
+    @SerializedName("Size")
+    private int size;
+    @SerializedName("Qty")
+    private int qty;
+    @SerializedName("DesignNo")
+    private String designNo;
+    @SerializedName("SizeGroup")
+    private String sizeGroup;
+    @SerializedName("Colour")
+    private String colour;
 
     public int getAuto() {
         return auto;
