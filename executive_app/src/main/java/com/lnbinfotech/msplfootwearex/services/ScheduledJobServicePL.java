@@ -48,20 +48,15 @@ public class ScheduledJobServicePL extends JobService {
         Constant.showLog("onStartJob");
         int hour = Integer.parseInt(getTime());
         Constant.showLog("AutoSync_"+hour);
-        /*if(hour<13||hour>20) {
-            Intent service = new Intent(getApplicationContext(), DataUpdateService.class);
-            getApplicationContext().startService(service);
-        }*/
         //TODO : Set Time Limit
-        //if(hour<13||hour>20) {
+        if(hour<13||hour>20) {
             if (ConnectivityTest.getNetStat(getApplicationContext())) {
                 startSync();
                 writeLog("onStartJob_" + hour + "_Online");
             } else {
                 writeLog("onStartJob_" + hour + "_Offline");
             }
-        //}
-
+        }
         return false;
     }
 
@@ -109,7 +104,9 @@ public class ScheduledJobServicePL extends JobService {
             }
         }*/
 
-        getBankBranchMasterV6();
+        if(isSynced(getString(R.string.pref_autoBankBranch))) {
+            getBankBranchMasterV6();
+        }
 
         if (getDateDifference(getString(R.string.pref_autoCity))) {
             reqResp.loadCityMaster();
@@ -141,7 +138,10 @@ public class ScheduledJobServicePL extends JobService {
             }
         }*/
 
-        getCustomerMasterV6();
+        if (isSynced(getString(R.string.pref_autoCustomer))) {
+            getCustomerMasterV6();
+        }
+
 
         if (getDateDifference(getString(R.string.pref_autoCurrency))) {
             reqResp.loadCurrencyMaster();
@@ -203,11 +203,9 @@ public class ScheduledJobServicePL extends JobService {
             }
         }*/
 
-        /*if(isSynced(getString(R.string.pref_autoProduct))) {
+        if(isSynced(getString(R.string.pref_autoProduct))) {
             getProductMasterV6();
-        }*/
-
-        getProductMasterV6();
+        }
     }
 
     private boolean isSynced(String prefName){
@@ -354,13 +352,7 @@ public class ScheduledJobServicePL extends JobService {
                         }
                         db.addProductMaster(list);
                         Constant.showLog(list.size() + "_getProductMasterV6");
-                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                        String str = getDateTime()+"-"+"True"+"-"+getTime1();
-                        Constant.showLog(getString(R.string.pref_autoProduct)+"-"+str);
-                        editor.putString(getString(R.string.pref_autoProduct), getTime1());
-                        editor.apply();
-                        writeLog("getProductMasterV6_onResponse_" + list.size() + "_" + str);
+                        writeLog("getProductMasterV6_onResponse_" + list.size());
                         getAllSizeDesignMastDetV6();
                     } else {
                         Constant.showLog("onResponse_list_null");
@@ -467,12 +459,21 @@ public class ScheduledJobServicePL extends JobService {
                         db.addSizeDesignMastDet(list);
                         Constant.showLog(list.size() + "_getSizeDesignMastDetV6");
                         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor1 = FirstActivity.pref.edit();
+                        String str1 = getDateTime()+"-"+"True"+"-"+getTime1();
+                        Constant.showLog(getString(R.string.pref_autoSizeDetail)+"-"+str1);
+                        editor1.putString(getString(R.string.pref_autoSizeDetail), getTime1());
+                        editor1.apply();
+                        writeLog("getSizeDesignMastDetV6_onResponse_" + list.size() + "_" + str1);
+
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = FirstActivity.pref.edit();
                         String str = getDateTime()+"-"+"True"+"-"+getTime1();
-                        Constant.showLog(getString(R.string.pref_autoSizeDetail)+"-"+str);
-                        editor.putString(getString(R.string.pref_autoSizeDetail), getTime1());
+                        Constant.showLog(getString(R.string.pref_autoProduct)+"-"+str);
+                        editor.putString(getString(R.string.pref_autoProduct), getTime1());
                         editor.apply();
-                        writeLog("getSizeDesignMastDetV6_onResponse_" + list.size() + "_" + str);
+                        writeLog("getProductMasterV6_onResponse_" + str);
+
                     } else {
                         Constant.showLog("onResponse_list_null");
                         writeLog("getSizeDesignMastDetV6_onResponse_list_null");
@@ -579,8 +580,8 @@ public class ScheduledJobServicePL extends JobService {
                         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = FirstActivity.pref.edit();
                         String str = getDateTime()+"-"+"True"+"-"+getTime1();
-                        Constant.showLog(getString(R.string.pref_autoBankBranch)+"-"+str);
-                        editor.putString(getString(R.string.pref_autoBankBranch), getTime1());
+                        Constant.showLog(getString(R.string.pref_autoCustomer)+"-"+str);
+                        editor.putString(getString(R.string.pref_autoCustomer), getTime1());
                         editor.apply();
                         writeLog("getCustomerMasterV6_onResponse_" + list.size() + "_" + str);
                     } else {

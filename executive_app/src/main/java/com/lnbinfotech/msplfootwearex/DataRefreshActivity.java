@@ -25,11 +25,13 @@ import android.widget.Toast;
 import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
+import com.lnbinfotech.msplfootwearex.interfaces.RetrofitApiInterface;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.BankBranchMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerOrderClass;
+import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwearex.model.SizeDesignMastDetClass;
 import com.lnbinfotech.msplfootwearex.model.SizeNDesignClass;
 import com.lnbinfotech.msplfootwearex.model.StockInfoMasterClass;
@@ -38,6 +40,7 @@ import com.lnbinfotech.msplfootwearex.post.Post;
 import com.lnbinfotech.msplfootwearex.services.DownloadDBService;
 import com.lnbinfotech.msplfootwearex.services.UploadDBService;
 import com.lnbinfotech.msplfootwearex.services.UploadImageService;
+import com.lnbinfotech.msplfootwearex.utility.RetrofitApiBuilder;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
 import org.apache.commons.net.ftp.FTP;
@@ -50,6 +53,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -74,6 +78,11 @@ import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DataRefreshActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -709,6 +718,14 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     dialog.dismiss();
                 }
             });
+        } else if (a == 6) {
+            builder.setMessage("Data Refreshed Successfully");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
         }
         builder.create().show();
     }
@@ -749,13 +766,15 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 } else if (a == 1) {
                     loadBankMaster();
                 } else if (a == 2) {
-                    getMaxAuto(3);
+                    //getMaxAuto(3);
+                    getBankBranchMasterV6();
                 } else if (a == 3) {
                     loadCityMaster();
                 } else if (a == 4) {
                     loadCompanyMaster();
                 } else if (a == 5) {
-                    getMaxAuto(2);
+                    //getMaxAuto(2);
+                    getCustomerMasterV6();
                 } else if (a == 6) {
                     loadDocumentMaster();
                 } else if (a == 7) {
@@ -763,22 +782,24 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 } else if (a == 8) {
                     loadHOMaster();
                 } else if (a == 9) {
-                    getMaxAuto(1);
+                    //getMaxAuto(1);
+                    getProductMasterV6();
                 } else if (a == 10) {
-                    maxProdId = db.getMaxProdId();
+                    /*maxProdId = db.getMaxProdId();
                     if (maxProdId != 0) {
                         db.deleteTable(DBHandler.Table_AllRequiredSizesDesigns);
                         loadSizeNDesignMaster(0, 100);
                     } else {
                         toast.setText("Please Update ProductMaster First");
                         toast.show();
-                    }
+                    }*/
+                    getAllSizeDesignMastDetV6();
                 } else if (a == 11) {
                     //loadStockInfo();
                 } else if (a == 12) {
                     loadGSTMaster();
                 }else if (a == 13) {
-                    maxSDMDAuto = db.getMaxProdId();
+                   /* maxSDMDAuto = db.getMaxProdId();
                     if (maxSDMDAuto != 0) {
                         Constant.showLog("maxSDMDAuto :- "+maxSDMDAuto);
                         db.deleteTable(DBHandler.Table_SizeDesignMastDet);
@@ -786,7 +807,8 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                         toast.setText("Please Update ProductMaster First");
                         toast.show();
                     }
-                    loadSDMD(0,100);
+                    loadSDMD(0,100);*/
+                    getSizeDesignMastDetV6();
                 }else if(a==14){
                     loadArealineMaster();
                 }else if(a==15){
@@ -2417,6 +2439,316 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             db.addCustomerOrder(custList.get(i));
         }
         Constant.showLog("userList-"+userList.size()+"-custList-"+custList.size());
+    }
+
+    private void getProductMasterV6() {
+        constant = new Constant(DataRefreshActivity.this);
+        constant.showPD();
+        try {
+            final DBHandler db = new DBHandler(getApplicationContext());
+            String url = 0 + "|" + 10000 + "|" + "E";
+            writeLog("getProductMasterV6_"+url);
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("details", url);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.
+                    parse("application/json; charset=utf-8"), (jsonBody).toString());
+            Constant.showLog(jsonBody.toString());
+
+            Call<List<ProductMasterClass>> call = new RetrofitApiBuilder().getApiBuilder().
+                    create(RetrofitApiInterface.class).
+                    getProductMasterV6(body);
+            call.enqueue(new Callback<List<ProductMasterClass>>() {
+                @Override
+                public void onResponse(Call<List<ProductMasterClass>> call, Response<List<ProductMasterClass>> response) {
+                    Constant.showLog("onResponse");
+                    List<ProductMasterClass> list = response.body();
+                    if (list != null) {
+                        if (list.size()!=0) {
+                            db.deleteTable(DBHandler.Table_ProductMaster);
+                        }
+                        db.addProductMaster(list);
+                        Constant.showLog(list.size() + "_getProductMasterV6");
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                        String str = getDateTime()+"-"+"True"+"-"+getTime();
+                        Constant.showLog(getString(R.string.pref_autoProduct)+"-"+str);
+                        editor.putString(getString(R.string.pref_autoProduct), getTime());
+                        editor.apply();
+                        writeLog("getProductMasterV6_onResponse_" + list.size() + "_" + str);
+                    } else {
+                        Constant.showLog("onResponse_list_null");
+                        writeLog("getProductMasterV6_onResponse_list_null");
+                    }
+                    constant.showPD();
+                    showDia(6);
+                }
+
+                @Override
+                public void onFailure(Call<List<ProductMasterClass>> call, Throwable t) {
+                    Constant.showLog("onFailure");
+                    if (!call.isCanceled()) {
+                        call.cancel();
+                    }
+                    t.printStackTrace();
+                    writeLog("getProductMasterV6_onFailure_" + t.getMessage());
+                    constant.showPD();
+                    showDia(2);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getProductMasterV6_" + e.getMessage());
+            constant.showPD();
+            showDia(2);
+        }
+    }
+
+    private void getAllSizeDesignMastDetV6() {
+        constant = new Constant(DataRefreshActivity.this);
+        constant.showPD();
+        try {
+            final DBHandler db = new DBHandler(getApplicationContext());
+            String url = 0 + "|" + 10000;
+            writeLog("getAllSizeDesignMastDetV6_"+url);
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("details", url);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.
+                    parse("application/json; charset=utf-8"), (jsonBody).toString());
+            Constant.showLog(jsonBody.toString());
+
+            Call<List<SizeNDesignClass>> call = new RetrofitApiBuilder().getApiBuilder().
+                    create(RetrofitApiInterface.class).
+                    getAllSizeDesignMastDetV6(body);
+            call.enqueue(new Callback<List<SizeNDesignClass>>() {
+                @Override
+                public void onResponse(Call<List<SizeNDesignClass>> call, Response<List<SizeNDesignClass>> response) {
+                    Constant.showLog("onResponse");
+                    List<SizeNDesignClass> list = response.body();
+                    if (list != null) {
+                        if (list.size()!=0) {
+                            db.deleteTable(DBHandler.Table_AllRequiredSizesDesigns);
+                        }
+                        db.addSizeNDesignMaster(list);
+                        Constant.showLog(list.size() + "_getAllSizeDesignMastDetV6");
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                        String str = getDateTime()+"-"+"True"+"-"+getTime();
+                        Constant.showLog(getString(R.string.pref_autoSizeNDesign)+"-"+str);
+                        editor.putString(getString(R.string.pref_autoSizeNDesign), getTime());
+                        editor.apply();
+                        writeLog("getAllSizeDesignMastDetV6_onResponse_" + list.size() + "_" + str);
+                    } else {
+                        Constant.showLog("onResponse_list_null");
+                        writeLog("getAllSizeDesignMastDetV6_onResponse_list_null");
+                    }
+                    constant.showPD();
+                    showDia(6);
+                }
+
+                @Override
+                public void onFailure(Call<List<SizeNDesignClass>> call, Throwable t) {
+                    Constant.showLog("onFailure");
+                    if (!call.isCanceled()) {
+                        call.cancel();
+                    }
+                    t.printStackTrace();
+                    writeLog("getAllSizeDesignMastDetV6_onFailure_" + t.getMessage());
+                    constant.showPD();
+                    showDia(2);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getAllSizeDesignMastDetV6_" + e.getMessage());
+            constant.showPD();
+            showDia(2);
+        }
+    }
+
+    private void getSizeDesignMastDetV6() {
+        constant = new Constant(DataRefreshActivity.this);
+        constant.showPD();
+        try {
+            final DBHandler db = new DBHandler(getApplicationContext());
+            String url = 0 + "|" + 10000;
+            writeLog("getSizeDesignMastDetV6_"+url);
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("details", url);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.
+                    parse("application/json; charset=utf-8"), (jsonBody).toString());
+            Constant.showLog(jsonBody.toString());
+
+            Call<List<SizeDesignMastDetClass>> call = new RetrofitApiBuilder().getApiBuilder().
+                    create(RetrofitApiInterface.class).
+                    getSizeDesignMastDetV6(body);
+            call.enqueue(new Callback<List<SizeDesignMastDetClass>>() {
+                @Override
+                public void onResponse(Call<List<SizeDesignMastDetClass>> call, Response<List<SizeDesignMastDetClass>> response) {
+                    Constant.showLog("onResponse");
+                    List<SizeDesignMastDetClass> list = response.body();
+                    if (list != null) {
+                        if (list.size()!=0) {
+                            db.deleteTable(DBHandler.Table_SizeDesignMastDet);
+                        }
+                        db.addSizeDesignMastDet(list);
+                        Constant.showLog(list.size() + "_getSizeDesignMastDetV6");
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                        String str = getDateTime()+"-"+"True"+"-"+getTime();
+                        Constant.showLog(getString(R.string.pref_autoSizeDetail)+"-"+str);
+                        editor.putString(getString(R.string.pref_autoSizeDetail), getTime());
+                        editor.apply();
+                        writeLog("getSizeDesignMastDetV6_onResponse_" + list.size() + "_" + str);
+                    } else {
+                        Constant.showLog("onResponse_list_null");
+                        writeLog("getSizeDesignMastDetV6_onResponse_list_null");
+                    }
+                    constant.showPD();
+                    showDia(6);
+                }
+
+                @Override
+                public void onFailure(Call<List<SizeDesignMastDetClass>> call, Throwable t) {
+                    Constant.showLog("onFailure");
+                    if (!call.isCanceled()) {
+                        call.cancel();
+                    }
+                    t.printStackTrace();
+                    writeLog("getSizeDesignMastDetV6_onFailure_" + t.getMessage());
+                    constant.showPD();
+                    showDia(2);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getSizeDesignMastDetV6_" + e.getMessage());
+            constant.showPD();
+            showDia(2);
+        }
+    }
+
+    private void getBankBranchMasterV6() {
+        constant = new Constant(DataRefreshActivity.this);
+        constant.showPD();
+        try {
+            final DBHandler db = new DBHandler(getApplicationContext());
+            String url = 0 + "|" + 10000 + "|E";
+            writeLog("getBankBranchMasterV6_"+url);
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("details", url);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.
+                    parse("application/json; charset=utf-8"), (jsonBody).toString());
+            Constant.showLog(jsonBody.toString());
+
+            Call<List<BankBranchMasterClass>> call = new RetrofitApiBuilder().getApiBuilder().
+                    create(RetrofitApiInterface.class).
+                    getBankBrnachMasterV6(body);
+            call.enqueue(new Callback<List<BankBranchMasterClass>>() {
+                @Override
+                public void onResponse(Call<List<BankBranchMasterClass>> call, Response<List<BankBranchMasterClass>> response) {
+                    Constant.showLog("onResponse");
+                    List<BankBranchMasterClass> list = response.body();
+                    if (list != null) {
+                        if (list.size()!=0) {
+                            db.deleteTable(DBHandler.Table_BankBranchMaster);
+                        }
+                        db.addBankBranchMaster(list);
+                        Constant.showLog(list.size() + "_getBankBranchMasterV6");
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                        String str = getDateTime()+"-"+"True"+"-"+getTime();
+                        Constant.showLog(getString(R.string.pref_autoBankBranch)+"-"+str);
+                        editor.putString(getString(R.string.pref_autoBankBranch), getTime());
+                        editor.apply();
+                        writeLog("getBankBranchMasterV6_onResponse_" + list.size() + "_" + str);
+                    } else {
+                        Constant.showLog("onResponse_list_null");
+                        writeLog("getBankBranchMasterV6_onResponse_list_null");
+                    }
+                    constant.showPD();
+                    showDia(6);
+                }
+
+                @Override
+                public void onFailure(Call<List<BankBranchMasterClass>> call, Throwable t) {
+                    Constant.showLog("onFailure");
+                    if (!call.isCanceled()) {
+                        call.cancel();
+                    }
+                    t.printStackTrace();
+                    writeLog("getBankBranchMasterV6_onFailure_" + t.getMessage());
+                    constant.showPD();
+                    showDia(2);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getBankBranchMasterV6_" + e.getMessage());
+            constant.showPD();
+            showDia(2);
+        }
+    }
+
+    private void getCustomerMasterV6() {
+        constant = new Constant(DataRefreshActivity.this);
+        constant.showPD();
+        try {
+            final DBHandler db = new DBHandler(getApplicationContext());
+            String url = 0 + "|" + 10000 + "|E";
+            writeLog("getCustomerMasterV6_"+url);
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("details", url);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.
+                    parse("application/json; charset=utf-8"), (jsonBody).toString());
+            Constant.showLog(jsonBody.toString());
+
+            Call<List<CustomerDetailClass>> call = new RetrofitApiBuilder().getApiBuilder().
+                    create(RetrofitApiInterface.class).
+                    getCustomerMasterV6(body);
+            call.enqueue(new Callback<List<CustomerDetailClass>>() {
+                @Override
+                public void onResponse(Call<List<CustomerDetailClass>> call, Response<List<CustomerDetailClass>> response) {
+                    Constant.showLog("onResponse");
+                    List<CustomerDetailClass> list = response.body();
+                    if (list != null) {
+                        if (list.size()!=0) {
+                            db.deleteTable(DBHandler.Table_Customermaster);
+                        }
+                        db.addCustomerDetail(new ArrayList<>(list));
+                        Constant.showLog(list.size() + "_getCustomerMasterV6");
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                        String str = getDateTime()+"-"+"True"+"-"+getTime();
+                        Constant.showLog(getString(R.string.pref_autoCustomer)+"-"+str);
+                        editor.putString(getString(R.string.pref_autoCustomer), getTime());
+                        editor.apply();
+                        writeLog("getCustomerMasterV6_onResponse_" + list.size() + "_" + str);
+                    } else {
+                        Constant.showLog("onResponse_list_null");
+                        writeLog("getCustomerMasterV6_onResponse_list_null");
+                    }
+                    constant.showPD();
+                    showDia(6);
+                }
+
+                @Override
+                public void onFailure(Call<List<CustomerDetailClass>> call, Throwable t) {
+                    Constant.showLog("onFailure");
+                    if (!call.isCanceled()) {
+                        call.cancel();
+                    }
+                    t.printStackTrace();
+                    writeLog("getCustomerMasterV6_onFailure_" + t.getMessage());
+                    constant.showPD();
+                    showDia(2);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getCustomerMasterV6_" + e.getMessage());
+            constant.showPD();
+            showDia(2);
+        }
     }
 
 }

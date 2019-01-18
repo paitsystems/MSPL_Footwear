@@ -45,10 +45,9 @@ public class Constant {
             zip_file = "SmartGST.zip";
 
     //TODO: Check Ip Address
-    //public static String ipaddress;
     public static String ipaddress = "http://172.30.1.209/MSPLV7/service.svc";
     //public static String ipaddress = "http://license.lnbinfotech.com/MSPLV6/service.svc";
-    //public static String ipaddress = "http://43.239.147.103:24085/MSPLV6/service.svc";
+    //public static String ipaddress = "http://43.239.147.103:24086/MSPLV7/service.svc";
 
     //TODO: Check Image Url
     public static String imgUrl = "http://43.239.147.103:24085/IMAGES/";
