@@ -49,14 +49,14 @@ public class ScheduledJobServicePL extends JobService {
         int hour = Integer.parseInt(getTime());
         Constant.showLog("AutoSync_"+hour);
         //TODO : Set Time Limit
-        if(hour<13||hour>20) {
+        //if(hour<13||hour>20) {
             if (ConnectivityTest.getNetStat(getApplicationContext())) {
                 startSync();
                 writeLog("onStartJob_" + hour + "_Online");
             } else {
                 writeLog("onStartJob_" + hour + "_Offline");
             }
-        }
+        //}
         return false;
     }
 
@@ -473,6 +473,13 @@ public class ScheduledJobServicePL extends JobService {
                         editor.putString(getString(R.string.pref_autoProduct), getTime1());
                         editor.apply();
                         writeLog("getProductMasterV6_onResponse_" + str);
+
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor2 = FirstActivity.pref.edit();
+                        String str2 = getDateTime()+"-"+"True"+"-"+getTime1();
+                        Constant.showLog(getString(R.string.pref_lastSync)+"-"+str2);
+                        editor2.putString(getString(R.string.pref_lastSync), getTime1());
+                        editor2.apply();
 
                     } else {
                         Constant.showLog("onResponse_list_null");
