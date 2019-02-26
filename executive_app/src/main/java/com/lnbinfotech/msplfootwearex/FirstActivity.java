@@ -76,13 +76,13 @@ public class FirstActivity extends AppCompatActivity {
             permission.requestReadPhoneStatPermission(getApplicationContext(),FirstActivity.this);//4
         }else if(!permission.checkRebootPermission(getApplicationContext())){
             permission.requestRebootPermission(getApplicationContext(),FirstActivity.this);//7
-        }else if(!permission.checkReceiveSMSPermission(getApplicationContext())){
+        }/*else if(!permission.checkReceiveSMSPermission(getApplicationContext())){
             permission.requestReceiveSMSPermission(getApplicationContext(),FirstActivity.this);//9
         }else if(!permission.checkReadSMSPermission(getApplicationContext())){
             permission.requestReadSMSPermission(getApplicationContext(),FirstActivity.this);//10
         }else if(!permission.checkSendSMSPermission(getApplicationContext())){
             permission.requestSendSMSPermission(getApplicationContext(),FirstActivity.this);//11
-        }else if(!permission.checkCoarseLocationPermission(getApplicationContext())){
+        }*/else if(!permission.checkCoarseLocationPermission(getApplicationContext())){
             permission.requestCoarseLocationPermission(getApplicationContext(),FirstActivity.this);//6
         }else if(!permission.checkFineLocationPermission(getApplicationContext())){
             permission.requestFineLocationPermission(getApplicationContext(),FirstActivity.this);//5
