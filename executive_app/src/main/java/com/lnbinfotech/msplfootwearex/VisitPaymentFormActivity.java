@@ -118,6 +118,8 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
                 Constant.showLog(""+out.getTotal());
             }
         });
+
+        ls.clear();
     }
 
     @Override
@@ -869,7 +871,7 @@ public class VisitPaymentFormActivity extends AppCompatActivity implements View.
 
     private void setDefault() {
         if (ls != null) {
-            //ls.clear();
+            ls.clear();
         }
         invlist.clear();
         orgList.clear();
