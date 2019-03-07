@@ -323,7 +323,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
             request.setHeader("Content-type", "application/json");
             try {
                 JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(url[0]).endObject().endObject();
-
+                Constant.showLog(vehicle.toString());
                 StringEntity entity = new StringEntity(vehicle.toString());
                 request.setEntity(entity);
 

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -91,8 +92,8 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private Toast toast;
     private ListView listView;
     private List<String> refreshList;
-    private String writeFilename = "Write.txt", prefname = "", SDPathName, DBPathName;
-    private File SDFileName;//, DBFileName;
+    private String writeFilename = "Write.txt", prefname = "";//, SDPathName, DBPathName;
+    //private File SDFileName;//, DBFileName;
     private DBHandler db;
     private int maxProdId = 0, maxSDMDAuto = 0, syncAllFlag = 0;
     private ProgressDialog sndpd;
@@ -108,10 +109,10 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
 
     private ArrayList<UserClass> userList;
     private ArrayList<CustomerOrderClass> custList;
-    private File DBFileName,DBSDFileName,DBSDZipFileName;
+    private File DBFileName,DBSDFileName;
     private String DBFilePath, DBSDFilePath, DBSDZipFilePath;
     private File SDDBZipFileName, SDDBUnzipFileName, SDDBFileName;
-    private String SDDBZipFilePath,  SDDBUnzipFilePath,  SDDBFilePath;
+    private String SDDBZipFilePath, SDDBUnzipFilePath, SDDBFilePath;
 
 
     @Override
@@ -872,7 +873,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                         CopyDBToSD();
                     }
                     syncAllFlag = 0;
-
                 }
 
                 @Override
@@ -2510,33 +2510,33 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private void CopyDBToSD() {
         try {
             Constant.showLog("------ In CopyDBToSD ------");
-            SDPathName = android.os.Environment.getExternalStorageDirectory() + File.separator +
+            DBSDFilePath = android.os.Environment.getExternalStorageDirectory() + File.separator +
                     Constant.folder_name + File.separator + Constant.zipFolderName;
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            //String backupDBPath = pInfo.applicationInfo.dataDir + "/databases";
-            DBPathName = "/data/data/"+pInfo.packageName+"/databases/";
-            Constant.showLog(SDPathName);
-            Constant.showLog(DBPathName);
-            DBFileName = new File(DBPathName, DBHandler.Database_Name);
-            SDFileName = new File(SDPathName, DBHandler.Database_Name);
-            if(SDFileName.exists()){
-                SDFileName.delete();
-                Constant.showLog("CopyDBToSD "+SDFileName.getName()+" Deleted");
-                SDFileName.createNewFile();
-                Constant.showLog("CopyDBToSD "+SDFileName.getName()+" Created");
+            //DBFilePath = "/data/data/"+pInfo.packageName+"/databases/";
+            DBFilePath = pInfo.applicationInfo.dataDir+"/databases";
+            Constant.showLog("DBSDFilePath -"+DBSDFilePath +"\n"+
+                    "DBFilePath - "+DBFilePath);
+            DBFileName = new File(DBFilePath, DBHandler.Database_Name);
+            DBSDFileName = new File(DBSDFilePath, DBHandler.Database_Name);
+            if(DBSDFileName.exists()){
+                DBSDFileName.delete();
+                Constant.showLog("CopyDBToSD "+DBSDFileName.getName()+" Deleted");
+                DBSDFileName.createNewFile();
+                Constant.showLog("CopyDBToSD "+DBSDFileName.getName()+" Created");
             }
             Constant.showLog(DBFileName.getAbsolutePath());
-            Constant.showLog(SDFileName.getAbsolutePath());
+            Constant.showLog(DBSDFileName.getAbsolutePath());
             FileChannel source = new FileInputStream(DBFileName).getChannel();
-            FileChannel destination = new FileOutputStream(SDFileName).getChannel();
+            FileChannel destination = new FileOutputStream(DBSDFileName).getChannel();
             destination.transferFrom(source, 0, source.size());
             source.close();
             destination.close();
-            //uploadDB();
+            DBSDZipFilePath = DBSDFilePath + "/" + DBHandler.Database_Name;
             String[] s = new String[1];
-            s[0] = SDPathName + "/" + DBHandler.Database_Name;
+            s[0] = DBSDZipFilePath;
             Constant.showLog("------ End CopyDBToSD ------");
-            zip(s, SDPathName + "/" + Constant.zip_file);
+            zip(s, DBSDFilePath + "/" + Constant.zip_file);
         } catch (Exception e) {
             e.printStackTrace();
             writeLog("CopyDBToSD_"+e.getMessage());
@@ -2565,8 +2565,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 }
                 origin.close();
             }
-            /*Intent intent = new Intent(DataRefreshActivity.this, UploadDBService.class);
-            startService(intent);*/
             out.close();
             Constant.showLog("----- End Zip -----");
             new UploadFileToFTP().execute(file_url);
@@ -2577,24 +2575,12 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     }
 
     private class UploadFileToFTP extends AsyncTask<String, String, String> {
-        File fName = null;
-        HttpURLConnection conn = null;
-        DataOutputStream dos = null;
-        String lineEnd = "\r\n";
-        String twoHyphens = "--";
-        String boundary = "*****";
-        int bytesRead, bytesAvailable, bufferSize;
-        byte[] buffer;
-        int maxBufferSize = 1 * 1024 * 1024;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog = new ProgressDialog(DataRefreshActivity.this);
             pDialog.setMessage("Uploading file. Please wait...");
-//            pDialog.setIndeterminate(false);
-//            pDialog.setMax(100);
-//            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -2610,10 +2596,8 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 client.login(Constant.ftp_username, Constant.ftp_password);
                 client.setFileType(FTP.BINARY_FILE_TYPE);
                 client.enterLocalPassiveMode();
-                String dbPath = android.os.Environment.getExternalStorageDirectory() + File.separator
-                        + Constant.folder_name + File.separator + Constant.zipFolderName;
-                Constant.showLog(dbPath + "/" + Constant.zip_file);
-                File f = new File(SDPathName);
+
+                File f = new File(DBSDFilePath);
                 for (File file : f.listFiles()) {
                     if (file != null) {
                         Constant.showLog("File Name " + file.getName());
@@ -2621,14 +2605,14 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                             FileInputStream iFile = new FileInputStream(file);
                             client.cwd(Constant.ftp_directory);
                             if (client.storeFile(file.getName(), iFile)) {
-                                f.delete();
+                                file.delete();
                                 writeLog("onHandleIntent_File_Store_Successfully");
                                 Constant.showLog("File Stored " + file.getName());
                             } else {
                                 writeLog("onHandleIntent_Error_While_Storing_File");
                             }
                         } else {
-                            f.delete();
+                            file.delete();
                         }
                     }
                 }
@@ -2655,10 +2639,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             return ret;
         }
 
-        /*protected void onProgressUpdate(String... progress) {
-            pDialog.setProgress(Integer.parseInt(progress[0]));
-        }*/
-
         @Override
         protected void onPostExecute(String file_url) {
             pDialog.dismiss();
@@ -2671,114 +2651,15 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private class UpploadFileFromURL extends AsyncTask<String, String, String> {
-        File fName = null;
-        HttpURLConnection conn = null;
-        DataOutputStream dos = null;
-        String lineEnd = "\r\n";
-        String twoHyphens = "--";
-        String boundary = "*****";
-        int bytesRead, bytesAvailable, bufferSize;
-        byte[] buffer;
-        int maxBufferSize = 1 * 1024 * 1024;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(DataRefreshActivity.this);
-            pDialog.setMessage("Uploading file. Please wait...");
-            pDialog.setIndeterminate(false);
-            pDialog.setMax(100);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            pDialog.setCancelable(true);
-            pDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... f_url) {
-            int count;
-            String url1 = "http://103.109.13.200:24086/MSPLV6/UploadToServer.php";
-            String currentDBPath = android.os.Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name;
-            File file = new File(currentDBPath, "SmartGST.zip");
-            Constant.showLog(file.getPath());
-            try {
-
-                // open a URL connection to the Servlet
-                FileInputStream fileInputStream = new FileInputStream(file);
-                URL url = new URL(url1);
-
-                // Open a HTTP  connection to  the URL
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setDoInput(true); // Allow Inputs
-                conn.setDoOutput(true); // Allow Outputs
-                conn.setUseCaches(false); // Don't use a Cached Copy
-                conn.setRequestMethod("POST");
-                conn.setRequestProperty("Connection", "Keep-Alive");
-                conn.setRequestProperty("ENCTYPE", "multipart/form-data");
-                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-                conn.setRequestProperty("uploaded_file", currentDBPath + "/" + "SmartGST.zip");
-
-                dos = new DataOutputStream(conn.getOutputStream());
-
-                dos.writeBytes(twoHyphens + boundary + lineEnd);
-                dos.writeBytes("Content-Disposition: form-data; name=" + currentDBPath + "/" + "SmartGST.zip" + ";filename=" + file.getName() + "" + lineEnd);
-                dos.writeBytes(lineEnd);
-
-                // create a buffer of  maximum size
-                bytesAvailable = fileInputStream.available();
-
-                bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                buffer = new byte[bufferSize];
-
-                // read file and write it into form...
-                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-
-                while (bytesRead > 0) {
-                    dos.write(buffer, 0, bufferSize);
-                    bytesAvailable = fileInputStream.available();
-                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-                }
-                dos.writeBytes(lineEnd);
-                dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-                int serverResponseCode = conn.getResponseCode();
-                String serverResponseMessage = conn.getResponseMessage();
-                Constant.showLog("HTTP Response is : "
-                        + serverResponseMessage + ": " + serverResponseCode);
-                fileInputStream.close();
-                dos.flush();
-                dos.close();
-            } catch (Exception e) {
-                pDialog.dismiss();
-                e.printStackTrace();
-            }
-            pDialog.dismiss();
-            return "0";
-        }
-
-        protected void onProgressUpdate(String... progress) {
-            pDialog.setProgress(Integer.parseInt(progress[0]));
-        }
-
-        @Override
-        protected void onPostExecute(String file_url) {
-            pDialog.dismiss();
-        }
-    }
-
     private void downloadDB(){
-        /*Intent intent = new Intent(DataRefreshActivity.this, DownloadDBService.class);
-        startService(intent);*/
         Constant.showLog("----- In downloadDB -----");
         file_url = Constant.imgUrl+Constant.zip_file;
         Constant.showLog(file_url);
         new DownloadFileFromURL().execute(file_url);
-        //CopySDTODB();
     }
 
     private class DownloadFileFromURL extends AsyncTask<String, String, String> {
 
-       private File fName = null;
         private FTPClient client = null;
 
         @Override
@@ -2795,31 +2676,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
 
         @Override
         protected String doInBackground(String... f_url) {
-            int count;
-            /*try {
-                Constant.showLog("DownloadFileFromURL");
-                URL url = new URL(f_url[0]);
-                URLConnection connection = url.openConnection();
-                connection.connect();
-                int lenghtOfFile = connection.getContentLength();
-                fName = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name, Constant.zip_file);
-                InputStream input = new BufferedInputStream(url.openStream(), 8192);
-                OutputStream output = new FileOutputStream(fName);
-                byte data[] = new byte[1024];
-                long total = 0;
-                while ((count = input.read(data)) != -1) {
-                    total += count;
-                    //publishProgress("" + (int) ((total * 100) / lenghtOfFile));
-                    output.write(data, 0, count);
-                }
-                output.flush();
-                output.close();
-                input.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e("Error: ", e.getMessage());
-                writeLog("DownloadFileFromURL_"+e.getMessage());
-            }*/
             try {
                 Constant.showLog("----- In DownloadFileFromURL ------");
                 client = new FTPClient();
@@ -2832,8 +2688,8 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                             + Constant.folder_name  + File.separator + Constant.unzipFolderName;
                     SDDBZipFileName = new File(SDDBZipFilePath, Constant.zip_file);
 
-                    Constant.showLog("SDDBZipFilePath - "+SDDBZipFilePath);
-                    Constant.showLog("SDDBZipFileName - "+SDDBZipFileName.getAbsolutePath());
+                    Constant.showLog("SDDBZipFilePath - "+SDDBZipFilePath +"\n" +
+                            "SDDBZipFileName - "+SDDBZipFileName.getAbsolutePath());
                     OutputStream outstream = new BufferedOutputStream(new FileOutputStream(SDDBZipFileName));
                     client.retrieveFile(Constant.zip_file, outstream);
                     outstream.close();
@@ -2851,10 +2707,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             return null;
         }
 
-        /*protected void onProgressUpdate(String... progress) {
-            pDialog.setProgress(Integer.parseInt(progress[0]));
-        }*/
-
         @Override
         protected void onPostExecute(String file_url) {
             pDialog.dismiss();
@@ -2869,13 +2721,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
 
     public void unzip() {
         try {
-            /*SDFileName = new File(Environment.getExternalStorageDirectory() + File.separator
-                    + Constant.folder_name  + File.separator
-                    + Constant.unzipFolderName, Constant.zip_file);*/
-
             Constant.showLog("----- In unZip File ------");
-            String _zipFile = Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name +
-                    File.separator + Constant.unzipFolderName  + File.separator + Constant.zip_file;
 
             SDDBUnzipFilePath = android.os.Environment.getExternalStorageDirectory() + File.separator +
                     Constant.folder_name + File.separator + Constant.unzipFolderName;
@@ -2902,13 +2748,12 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 }
                 Constant.showLog("Write Complete");
                 File f = new File(SDDBUnzipFilePath,Constant.zip_file);
-                /*if (f.exists()) {
+                if (f.exists()) {
                     f.delete();
                     Constant.showLog("Zip "+f.getName()+" Deleted");
-                }*/
+                }
                 Constant.showLog("----- End unZip File ------");
-                //getData();
-                //putData();
+                getData();
             }
             if(out!=null)
                 out.close();
@@ -2936,13 +2781,9 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private void CopySDTODB() {
         try {
             Constant.showLog("----- In CopySDTODB ------");
-
-            //String currentDBPath = android.os.Environment.getExternalStorageDirectory() + File.separator +
-            //        Constant.folder_name + File.separator + Constant.unzipFolderName;
-
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            //String backupDBPath = pInfo.applicationInfo.dataDir + "/databases";
-            SDDBFilePath = "/data/data/"+pInfo.packageName+"/databases/";
+            SDDBFilePath = pInfo.applicationInfo.dataDir+"/databases";
+            //SDDBFilePath = "/data/data/"+pInfo.packageName+"/databases/";
 
             SDDBUnzipFilePath = SDDBUnzipFileName.getAbsolutePath();
 
@@ -2952,10 +2793,10 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 backupDB.delete();
                 Constant.showLog(backupDB.getAbsolutePath()+" deleted");
             }
-            Constant.showLog("SDDBUnzipFilePath - "+SDDBUnzipFilePath);
-            Constant.showLog("SDDBFilePath - "+SDDBFilePath);
-            Constant.showLog("currentDB - "+currentDB.getAbsolutePath());
-            Constant.showLog("backupDB - "+backupDB.getAbsolutePath());
+            Constant.showLog("SDDBUnzipFilePath - "+SDDBUnzipFilePath +"\n" +
+                    "SDDBFilePath - "+SDDBFilePath +"\n" +
+                    "currentDB - "+currentDB.getAbsolutePath()+"\n" +
+                    "backupDB - "+backupDB.getAbsolutePath());
             FileChannel source = new FileInputStream(currentDB).getChannel();
             FileChannel destination = new FileOutputStream(backupDB).getChannel();
             destination.transferFrom(source, 0, source.size());
@@ -2967,15 +2808,16 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             writeLog("CopySDTODB_Last Sync_" + str);
             editor.putString(getString(R.string.pref_lastSync), str);
             editor.apply();
-            /*DBHandler db = new DBHandler(getApplicationContext());
+            DBHandler db = new DBHandler(getApplicationContext());
             db.deleteTable(DBHandler.Table_CustomerOrder);
             db.deleteTable(DBHandler.Table_Usermaster);
-            db.close();*/
-            /*if(currentDB.exists()){
+            db.deleteTable(DBHandler.Table_TrackCustomerOrder);
+            db.close();
+            if(currentDB.exists()){
                 currentDB.delete();
-            }*/
+            }
             Constant.showLog("----- End CopySDTODB ------");
-            //putData();
+            putData();
         } catch (Exception e) {
             e.printStackTrace();
             writeLog("CopySDTODB_"+e.getMessage());
@@ -2999,6 +2841,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         }
         Constant.showLog(count+"");
         Constant.showLog("userList-"+userList.size()+"-custList-"+custList.size());
+        db.onUpgrade(db.getWritableDatabase(),DBHandler.Database_Version,DBHandler.Database_Version+1);
         db.close();
         Constant.showLog("----- End putData -----");
         showDia(7);

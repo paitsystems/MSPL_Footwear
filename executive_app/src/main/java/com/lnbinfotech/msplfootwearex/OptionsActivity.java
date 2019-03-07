@@ -236,7 +236,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                     dialog.dismiss();
                 }
             });
-        }else if (a == 0) {
+        } else if (a == 0) {
             builder.setMessage("Do You Want To Exit App?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -267,9 +267,9 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             builder.setNegativeButton("Without Photos", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                   // startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
+                    // startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
                     Intent in = new Intent(getApplicationContext(), DisplayCustListActivity.class);
-                    in.putExtra("from","order");
+                    in.putExtra("from", "order");
                     startActivity(in);
                     overridePendingTransition(R.anim.enter, R.anim.exit);
                     dialog.dismiss();
@@ -281,7 +281,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                     dialog.dismiss();
                 }
             });
-        }else if (a == 2) {
+        } else if (a == 2) {
             builder.setMessage("Do You Want To Logout From App?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -316,13 +316,13 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                     dialog.dismiss();
                 }
             });
-        }else if (a == 7) {
+        } else if (a == 7) {
             builder.setMessage("Do You Want To Clear Saved Order?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     db.deleteTable(DBHandler.Table_CustomerOrder);
-                    if(mMenu!=null){
+                    if (mMenu != null) {
                         onCreateOptionsMenu(mMenu);
                     }
                     toast.setText("Order Cleared");

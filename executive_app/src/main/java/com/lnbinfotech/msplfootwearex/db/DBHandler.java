@@ -486,6 +486,7 @@ public class DBHandler extends SQLiteOpenHelper {
             str = "alter table "+Table_CompanyMaster+" add "+Company_Mobileno2 + " text";
             db.execSQL(str);
         }
+        Constant.showLog("----- In onUpgrade -----");
         //dbInterface.dbUpdated();
     }
 
@@ -1324,7 +1325,8 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(CO_AmtAfterDisc, custOrder.getAmtAfterDisc());
         cv.put(CO_OrderType, custOrder.getOrderType());
         cv.put(CO_Prodid, custOrder.getProdId());
-        db.insert(Table_CustomerOrder, null, cv);
+        long a = db.insert(Table_CustomerOrder, null, cv);
+        Constant.showLog("addCustomerOrder : "+a);
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();
@@ -1470,9 +1472,10 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         for (CheckoutCustOrderClass custOrder : custOrderList) {
             cv.put(CO_AvailQty, custOrder.getAvailableQty());
-            db.update(Table_CustomerOrder, cv,
+            int a = db.update(Table_CustomerOrder, cv,
                     CO_BranchId + "=? and " + CO_Productid + "=? and " + CO_SizeGroup + "=? and " + CO_Color + "=? and " + CO_MRP + "=? and " + CO_LooseQty + "=?",
                     new String[]{custOrder.getBranchId(), custOrder.getProductId(), custOrder.getSizeGroup(), custOrder.getColor(), custOrder.getRate(), custOrder.getEnterQty()});
+            Constant.showLog("updateAvailQty : "+a);
         }
         db.setTransactionSuccessful();
         db.endTransaction();
