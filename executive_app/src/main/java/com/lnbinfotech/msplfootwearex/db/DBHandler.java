@@ -1071,7 +1071,9 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public void deleteTable(String tableName) {
-        getWritableDatabase().execSQL("delete from " + tableName);
+        Constant.showLog(tableName);
+        getWritableDatabase().delete(tableName,null,null);
+        //getWritableDatabase().execSQL("delete from " + tableName);
     }
 
     public Cursor getFinalProduct(String cat2, String cat9) {

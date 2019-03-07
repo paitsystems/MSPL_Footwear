@@ -29,6 +29,8 @@ public class Constant {
 
     public static String folder_name = "MSPL Footwear",
             gstFolderName = "GSTReport",
+            zipFolderName = "Zip",
+            unzipFolderName = "UnZip",
             image_folder = "Caputured_img",
             captured_images_folder = "MSPL_CapturedImages",
             log_file_name = "MSPL_Footwear_Ex",

@@ -73,7 +73,7 @@ public class VolleyRequests {
                     }
                 }
         );
-        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
+        AppSingleton.getInstance(context).addToRequestQueue1(request, "OTP");
     }
 
     public void getUserDetail(String url, final ServerCallback callback) {
@@ -1020,7 +1020,7 @@ public class VolleyRequests {
                     }
                 }
         );
-        AppSingleton.getInstance(context).addToRequestQueue(request, "AREA");
+        AppSingleton.getInstance(context).addToRequestQueue1(request, "AREA");
     }
 
     public void getCustDiscLimit(String url, final ServerCallback callback) {

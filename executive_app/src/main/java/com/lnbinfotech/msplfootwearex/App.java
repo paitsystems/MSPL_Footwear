@@ -14,7 +14,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Constant.showLog("App_onCreate()");
     }
 
     @Override

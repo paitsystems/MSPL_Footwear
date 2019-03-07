@@ -262,7 +262,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 }
             });
         }else if (a == 4) {
-            builder.setTitle(R.string.somethingwentwrong);
+            builder.setMessage(R.string.somethingwentwrong);
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

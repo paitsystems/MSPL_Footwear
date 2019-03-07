@@ -45,6 +45,7 @@ import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -90,9 +91,10 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private Toast toast;
     private ListView listView;
     private List<String> refreshList;
-    private String writeFilename = "Write.txt", prefname = "";
+    private String writeFilename = "Write.txt", prefname = "", SDPathName, DBPathName;
+    private File SDFileName;//, DBFileName;
     private DBHandler db;
-    private int maxProdId = 0, maxSDMDAuto = 0;
+    private int maxProdId = 0, maxSDMDAuto = 0, syncAllFlag = 0;
     private ProgressDialog sndpd;
     private String arealineMaster = "AreaLine Master",areaMaster = "Area Master", bankMaster = "Bank Master", bankBrancMaster = "Bank's Branch Master",
                             cityMaster = "City Master", companyMaster = "Company Master", custMaster = "Customer Master", currencyMaster = "Currency Master",
@@ -102,10 +104,15 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
 
     private ProgressDialog pDialog;
     public static final int progress_bar_type = 0;
-    private String file_url = Constant.imgUrl+Constant.zip_file;
+    private String file_url;
 
     private ArrayList<UserClass> userList;
     private ArrayList<CustomerOrderClass> custList;
+    private File DBFileName,DBSDFileName,DBSDZipFileName;
+    private String DBFilePath, DBSDFilePath, DBSDZipFilePath;
+    private File SDDBZipFileName, SDDBUnzipFileName, SDDBFileName;
+    private String SDDBZipFilePath,  SDDBUnzipFilePath,  SDDBFilePath;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,12 +196,12 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        /*getMenuInflater().inflate(R.menu.datarefreshactivity_menu,menu);
+        getMenuInflater().inflate(R.menu.datarefreshactivity_menu,menu);
         int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
         //TODO : Check id is 8 or not
         if(id!=194){
             menu.findItem(R.id.db).setVisible(false);
-        }*/
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -279,6 +286,33 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         return savedDate;
     }
 
+    private void loadAreaLineMaster() {
+        String url = Constant.ipaddress + "/GetArealineMaster?Id=0";
+        Constant.showLog(url);
+        writeLog("loadArealineMaster_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
+        requests.refreshArealineMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                prefname = getString(R.string.pref_autoArealine);
+                if (syncAllFlag == 0) {
+                    showDia(1);
+                } else {
+                    loadAreaMaster();
+                }
+            }
+
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                showDia(2);
+                syncAllFlag = 0;
+            }
+        },0);
+    }
+
     private void loadAreaMaster() {
         String url = Constant.ipaddress + "/GetAreaMaster?Id=0";
         Constant.showLog(url);
@@ -290,35 +324,45 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             public void onSuccess(String result) {
                 constant.showPD();
                 prefname = getString(R.string.pref_autoArea);
-                showDia(1);
+                if (syncAllFlag == 0) {
+                    showDia(1);
+                } else {
+                    loadBankMaster();
+                }
             }
 
             @Override
             public void onFailure(String result) {
                 constant.showPD();
                 showDia(2);
+                syncAllFlag = 0;
             }
         },0);
     }
 
-    private void loadArealineMaster() {
-        String url = Constant.ipaddress + "/GetArealineMaster?Id=0";
+    private void loadBankMaster() {
+        String url = Constant.ipaddress + "/GetBankMaster?Id=0";
         Constant.showLog(url);
-        writeLog("loadArealineMaster_" + url);
+        writeLog("loadBankMaster_" + url);
         constant.showPD();
         VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
-        requests.refreshArealineMaster(url, new ServerCallback() {
+        requests.refreshBankMaster(url, new ServerCallback() {
             @Override
             public void onSuccess(String result) {
                 constant.showPD();
-                prefname = getString(R.string.pref_autoArealine);
-                showDia(1);
+                prefname = getString(R.string.pref_autoBank);
+                if (syncAllFlag == 0) {
+                    showDia(1);
+                } else {
+                    loadCityMaster();
+                }
             }
 
             @Override
             public void onFailure(String result) {
                 constant.showPD();
                 showDia(2);
+                syncAllFlag = 0;
             }
         },0);
     }
@@ -334,35 +378,99 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             public void onSuccess(String result) {
                 constant.showPD();
                 prefname = getString(R.string.pref_autoCity);
-                showDia(1);
+                if (syncAllFlag == 0) {
+                    showDia(1);
+                } else {
+                    loadCompanyMaster();
+                }
             }
 
             @Override
             public void onFailure(String result) {
                 constant.showPD();
                 showDia(2);
+                syncAllFlag = 0;
             }
         },0);
     }
 
-    private void loadHOMaster() {
-        String url = Constant.ipaddress + "/GetHOMaster?Id=0";
+    private void loadCompanyMaster() {
+        String url = Constant.ipaddress + "/GetCompanyMaster?Id=0";
         Constant.showLog(url);
-        writeLog("loadHOMaster_" + url);
+        writeLog("loadCompanyMaster_" + url);
         constant.showPD();
         VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
-        requests.refreshHOMaster(url, new ServerCallback() {
+        requests.refreshCompanyMaster(url, new ServerCallback() {
             @Override
             public void onSuccess(String result) {
                 constant.showPD();
-                prefname = getString(R.string.pref_autoHO);
-                showDia(1);
+                prefname = getString(R.string.pref_autoCompany);
+                if (syncAllFlag == 0) {
+                    showDia(1);
+                } else {
+                    loadCurrencyMaster();
+                }
             }
 
             @Override
             public void onFailure(String result) {
                 constant.showPD();
                 showDia(2);
+                syncAllFlag = 0;
+            }
+        },0);
+    }
+
+    private void loadCurrencyMaster(){
+        String url = Constant.ipaddress + "/GetCurrencyMaster?Id=0";
+        Constant.showLog(url);
+        writeLog("loadCurrencyMaster_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
+        requests.getCurrencyMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                prefname = getString(R.string.pref_autoCurrency);
+                if (syncAllFlag == 0) {
+                    showDia(1);
+                } else {
+                    loadDocumentMaster();
+                }
+            }
+
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                showDia(2);
+                syncAllFlag = 0;
+            }
+        },0);
+    }
+
+    private void loadDocumentMaster() {
+        String url = Constant.ipaddress + "/GetDocumentMaster?Id=0";
+        Constant.showLog(url);
+        writeLog("loadDocumentMaster_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
+        requests.refreshDocumentMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                prefname = getString(R.string.pref_autoDocument);
+                if (syncAllFlag == 0) {
+                    showDia(1);
+                } else {
+                    loadEmployeeMaster();
+                }
+            }
+
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                showDia(2);
+                syncAllFlag = 0;
             }
         },0);
     }
@@ -378,15 +486,415 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             public void onSuccess(String result) {
                 constant.showPD();
                 prefname = getString(R.string.pref_autoEmployee);
-                showDia(1);
+                if (syncAllFlag == 0) {
+                    showDia(1);
+                } else {
+                    loadGSTMaster();
+                }
             }
 
             @Override
             public void onFailure(String result) {
                 constant.showPD();
                 showDia(2);
+                syncAllFlag = 0;
             }
         },0);
+    }
+
+    private void loadGSTMaster() {
+        String url = Constant.ipaddress + "/GetGSTMaster?Id=0";
+        Constant.showLog(url);
+        writeLog("loadGSTMaster_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
+        requests.refreshGSTMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                prefname = getString(R.string.pref_autoGST);
+                if (syncAllFlag == 0) {
+                    showDia(1);
+                } else {
+                    loadHOMaster();
+                }
+            }
+
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                showDia(2);
+                syncAllFlag = 0;
+            }
+        },0);
+    }
+
+    private void loadHOMaster() {
+        String url = Constant.ipaddress + "/GetHOMaster?Id=0";
+        Constant.showLog(url);
+        writeLog("loadHOMaster_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
+        requests.refreshHOMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                prefname = getString(R.string.pref_autoHO);
+                if (syncAllFlag == 0) {
+                    showDia(1);
+                } else {
+                    getBankBranchMasterV6();
+                }
+            }
+
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                showDia(2);
+                syncAllFlag = 0;
+            }
+        },0);
+    }
+
+    private void getBankBranchMasterV6() {
+        constant = new Constant(DataRefreshActivity.this);
+        constant.showPD();
+        try {
+            final DBHandler db = new DBHandler(getApplicationContext());
+            String url = 0 + "|" + 10000 + "|E";
+            writeLog("getBankBranchMasterV6_"+url);
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("details", url);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.
+                    parse("application/json; charset=utf-8"), (jsonBody).toString());
+            Constant.showLog(jsonBody.toString());
+
+            Call<List<BankBranchMasterClass>> call = new RetrofitApiBuilder().getApiBuilder().
+                    create(RetrofitApiInterface.class).
+                    getBankBrnachMasterV6(body);
+            call.enqueue(new Callback<List<BankBranchMasterClass>>() {
+                @Override
+                public void onResponse(Call<List<BankBranchMasterClass>> call, Response<List<BankBranchMasterClass>> response) {
+                    Constant.showLog("onResponse");
+                    List<BankBranchMasterClass> list = response.body();
+                    if (list != null) {
+                        if (list.size()!=0) {
+                            db.deleteTable(DBHandler.Table_BankBranchMaster);
+                        }
+                        db.addBankBranchMaster(list);
+                        Constant.showLog(list.size() + "_getBankBranchMasterV6");
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                        String str = getDateTime()+"-"+"True"+"-"+getTime();
+                        Constant.showLog(getString(R.string.pref_autoBankBranch)+"-"+str);
+                        editor.putString(getString(R.string.pref_autoBankBranch), getTime());
+                        editor.apply();
+                        writeLog("getBankBranchMasterV6_onResponse_" + list.size() + "_" + str);
+                    } else {
+                        Constant.showLog("onResponse_list_null");
+                        writeLog("getBankBranchMasterV6_onResponse_list_null");
+                    }
+                    constant.showPD();
+                    if (syncAllFlag == 0) {
+                        showDia(6);
+                    } else {
+                        getCustomerMasterV6();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<BankBranchMasterClass>> call, Throwable t) {
+                    Constant.showLog("onFailure");
+                    if (!call.isCanceled()) {
+                        call.cancel();
+                    }
+                    t.printStackTrace();
+                    writeLog("getBankBranchMasterV6_onFailure_" + t.getMessage());
+                    constant.showPD();
+                    showDia(2);
+                    syncAllFlag = 0;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getBankBranchMasterV6_" + e.getMessage());
+            constant.showPD();
+            showDia(2);
+            syncAllFlag = 0;
+        }
+    }
+
+    private void getCustomerMasterV6() {
+        constant = new Constant(DataRefreshActivity.this);
+        constant.showPD();
+        try {
+            final DBHandler db = new DBHandler(getApplicationContext());
+            String url = 0 + "|" + 10000 + "|E";
+            writeLog("getCustomerMasterV6_"+url);
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("details", url);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.
+                    parse("application/json; charset=utf-8"), (jsonBody).toString());
+            Constant.showLog(jsonBody.toString());
+
+            Call<List<CustomerDetailClass>> call = new RetrofitApiBuilder().getApiBuilder().
+                    create(RetrofitApiInterface.class).
+                    getCustomerMasterV6(body);
+            call.enqueue(new Callback<List<CustomerDetailClass>>() {
+                @Override
+                public void onResponse(Call<List<CustomerDetailClass>> call, Response<List<CustomerDetailClass>> response) {
+                    Constant.showLog("onResponse");
+                    List<CustomerDetailClass> list = response.body();
+                    if (list != null) {
+                        if (list.size()!=0) {
+                            db.deleteTable(DBHandler.Table_Customermaster);
+                        }
+                        db.addCustomerDetail(new ArrayList<>(list));
+                        Constant.showLog(list.size() + "_getCustomerMasterV6");
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                        String str = getDateTime()+"-"+"True"+"-"+getTime();
+                        Constant.showLog(getString(R.string.pref_autoCustomer)+"-"+str);
+                        editor.putString(getString(R.string.pref_autoCustomer), getTime());
+                        editor.apply();
+                        writeLog("getCustomerMasterV6_onResponse_" + list.size() + "_" + str);
+                    } else {
+                        Constant.showLog("onResponse_list_null");
+                        writeLog("getCustomerMasterV6_onResponse_list_null");
+                    }
+                    constant.showPD();
+                    if (syncAllFlag == 0) {
+                        showDia(6);
+                    } else {
+                        getProductMasterV6();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<CustomerDetailClass>> call, Throwable t) {
+                    Constant.showLog("onFailure");
+                    if (!call.isCanceled()) {
+                        call.cancel();
+                    }
+                    t.printStackTrace();
+                    writeLog("getCustomerMasterV6_onFailure_" + t.getMessage());
+                    constant.showPD();
+                    showDia(2);
+                    syncAllFlag = 0;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getCustomerMasterV6_" + e.getMessage());
+            constant.showPD();
+            showDia(2);
+            syncAllFlag = 0;
+        }
+    }
+
+    private void getProductMasterV6() {
+        constant = new Constant(DataRefreshActivity.this);
+        constant.showPD();
+        try {
+            final DBHandler db = new DBHandler(getApplicationContext());
+            String url = 0 + "|" + 10000 + "|" + "E";
+            writeLog("getProductMasterV6_"+url);
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("details", url);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.
+                    parse("application/json; charset=utf-8"), (jsonBody).toString());
+            Constant.showLog(jsonBody.toString());
+
+            Call<List<ProductMasterClass>> call = new RetrofitApiBuilder().getApiBuilder().
+                    create(RetrofitApiInterface.class).
+                    getProductMasterV6(body);
+            call.enqueue(new Callback<List<ProductMasterClass>>() {
+                @Override
+                public void onResponse(Call<List<ProductMasterClass>> call, Response<List<ProductMasterClass>> response) {
+                    Constant.showLog("onResponse");
+                    List<ProductMasterClass> list = response.body();
+                    if (list != null) {
+                        if (list.size()!=0) {
+                            db.deleteTable(DBHandler.Table_ProductMaster);
+                        }
+                        db.addProductMaster(list);
+                        Constant.showLog(list.size() + "_getProductMasterV6");
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                        String str = getDateTime()+"-"+"True"+"-"+getTime();
+                        Constant.showLog(getString(R.string.pref_autoProduct)+"-"+str);
+                        editor.putString(getString(R.string.pref_autoProduct), getTime());
+                        editor.apply();
+                        writeLog("getProductMasterV6_onResponse_" + list.size() + "_" + str);
+                    } else {
+                        Constant.showLog("onResponse_list_null");
+                        writeLog("getProductMasterV6_onResponse_list_null");
+                    }
+                    constant.showPD();
+                    if (syncAllFlag == 0) {
+                        showDia(6);
+                    } else {
+                        getAllSizeDesignMastDetV6();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<ProductMasterClass>> call, Throwable t) {
+                    Constant.showLog("onFailure");
+                    if (!call.isCanceled()) {
+                        call.cancel();
+                    }
+                    t.printStackTrace();
+                    writeLog("getProductMasterV6_onFailure_" + t.getMessage());
+                    constant.showPD();
+                    showDia(2);
+                    syncAllFlag = 0;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getProductMasterV6_" + e.getMessage());
+            constant.showPD();
+            showDia(2);
+            syncAllFlag = 0;
+        }
+    }
+
+    private void getAllSizeDesignMastDetV6() {
+        constant = new Constant(DataRefreshActivity.this);
+        constant.showPD();
+        try {
+            final DBHandler db = new DBHandler(getApplicationContext());
+            String url = 0 + "|" + 10000;
+            writeLog("getAllSizeDesignMastDetV6_"+url);
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("details", url);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.
+                    parse("application/json; charset=utf-8"), (jsonBody).toString());
+            Constant.showLog(jsonBody.toString());
+
+            Call<List<SizeNDesignClass>> call = new RetrofitApiBuilder().getApiBuilder().
+                    create(RetrofitApiInterface.class).
+                    getAllSizeDesignMastDetV6(body);
+            call.enqueue(new Callback<List<SizeNDesignClass>>() {
+                @Override
+                public void onResponse(Call<List<SizeNDesignClass>> call, Response<List<SizeNDesignClass>> response) {
+                    Constant.showLog("onResponse");
+                    List<SizeNDesignClass> list = response.body();
+                    if (list != null) {
+                        if (list.size()!=0) {
+                            db.deleteTable(DBHandler.Table_AllRequiredSizesDesigns);
+                        }
+                        db.addSizeNDesignMaster(list);
+                        Constant.showLog(list.size() + "_getAllSizeDesignMastDetV6");
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                        String str = getDateTime()+"-"+"True"+"-"+getTime();
+                        Constant.showLog(getString(R.string.pref_autoSizeNDesign)+"-"+str);
+                        editor.putString(getString(R.string.pref_autoSizeNDesign), getTime());
+                        editor.apply();
+                        writeLog("getAllSizeDesignMastDetV6_onResponse_" + list.size() + "_" + str);
+                    } else {
+                        Constant.showLog("onResponse_list_null");
+                        writeLog("getAllSizeDesignMastDetV6_onResponse_list_null");
+                    }
+                    constant.showPD();
+                    if (syncAllFlag == 0) {
+                        showDia(6);
+                    } else {
+                        getSizeDesignMastDetV6();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<SizeNDesignClass>> call, Throwable t) {
+                    Constant.showLog("onFailure");
+                    if (!call.isCanceled()) {
+                        call.cancel();
+                    }
+                    t.printStackTrace();
+                    writeLog("getAllSizeDesignMastDetV6_onFailure_" + t.getMessage());
+                    constant.showPD();
+                    showDia(2);
+                    syncAllFlag = 0;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getAllSizeDesignMastDetV6_" + e.getMessage());
+            constant.showPD();
+            showDia(2);
+            syncAllFlag = 0;
+        }
+    }
+
+    private void getSizeDesignMastDetV6() {
+        constant = new Constant(DataRefreshActivity.this);
+        constant.showPD();
+        try {
+            final DBHandler db = new DBHandler(getApplicationContext());
+            String url = 0 + "|" + 10000;
+            writeLog("getSizeDesignMastDetV6_"+url);
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("details", url);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.
+                    parse("application/json; charset=utf-8"), (jsonBody).toString());
+            Constant.showLog(jsonBody.toString());
+
+            Call<List<SizeDesignMastDetClass>> call = new RetrofitApiBuilder().getApiBuilder().
+                    create(RetrofitApiInterface.class).
+                    getSizeDesignMastDetV6(body);
+            call.enqueue(new Callback<List<SizeDesignMastDetClass>>() {
+                @Override
+                public void onResponse(Call<List<SizeDesignMastDetClass>> call, Response<List<SizeDesignMastDetClass>> response) {
+                    Constant.showLog("onResponse");
+                    List<SizeDesignMastDetClass> list = response.body();
+                    if (list != null) {
+                        if (list.size()!=0) {
+                            db.deleteTable(DBHandler.Table_SizeDesignMastDet);
+                        }
+                        db.addSizeDesignMastDet(list);
+                        Constant.showLog(list.size() + "_getSizeDesignMastDetV6");
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                        String str = getDateTime()+"-"+"True"+"-"+getTime();
+                        Constant.showLog(getString(R.string.pref_autoSizeDetail)+"-"+str);
+                        editor.putString(getString(R.string.pref_autoSizeDetail), getTime());
+                        editor.apply();
+                        writeLog("getSizeDesignMastDetV6_onResponse_" + list.size() + "_" + str);
+                    } else {
+                        Constant.showLog("onResponse_list_null");
+                        writeLog("getSizeDesignMastDetV6_onResponse_list_null");
+                    }
+                    constant.showPD();
+                    showDia(6);
+                    if (syncAllFlag == 1) {
+                        CopyDBToSD();
+                    }
+                    syncAllFlag = 0;
+
+                }
+
+                @Override
+                public void onFailure(Call<List<SizeDesignMastDetClass>> call, Throwable t) {
+                    Constant.showLog("onFailure");
+                    if (!call.isCanceled()) {
+                        call.cancel();
+                    }
+                    t.printStackTrace();
+                    writeLog("getSizeDesignMastDetV6_onFailure_" + t.getMessage());
+                    constant.showPD();
+                    showDia(2);
+                    syncAllFlag = 0;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getSizeDesignMastDetV6_" + e.getMessage());
+            constant.showPD();
+            showDia(2);
+            syncAllFlag = 0;
+        }
     }
 
     private void loadStockInfo() {
@@ -511,50 +1019,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         new getCustomerMaster(from, to).execute(url);
     }
 
-    private void loadCompanyMaster() {
-        String url = Constant.ipaddress + "/GetCompanyMaster?Id=0";
-        Constant.showLog(url);
-        writeLog("loadCompanyMaster_" + url);
-        constant.showPD();
-        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
-        requests.refreshCompanyMaster(url, new ServerCallback() {
-            @Override
-            public void onSuccess(String result) {
-                constant.showPD();
-                prefname = getString(R.string.pref_autoCompany);
-                showDia(1);
-            }
-
-            @Override
-            public void onFailure(String result) {
-                constant.showPD();
-                showDia(2);
-            }
-        },0);
-    }
-
-    private void loadBankMaster() {
-        String url = Constant.ipaddress + "/GetBankMaster?Id=0";
-        Constant.showLog(url);
-        writeLog("loadBankMaster_" + url);
-        constant.showPD();
-        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
-        requests.refreshBankMaster(url, new ServerCallback() {
-            @Override
-            public void onSuccess(String result) {
-                constant.showPD();
-                prefname = getString(R.string.pref_autoBank);
-                showDia(1);
-            }
-
-            @Override
-            public void onFailure(String result) {
-                constant.showPD();
-                showDia(2);
-            }
-        },0);
-    }
-
     private void loadBankBranchMaster(int from, int to) {
         String url = Constant.ipaddress + "/GetBankBranchMasterV5?from="+from+"&to="+to+"&type=E";
         Constant.showLog(url);
@@ -576,50 +1040,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         new getBankBranchMaster(from, to).execute(url);
     }
 
-    private void loadDocumentMaster() {
-        String url = Constant.ipaddress + "/GetDocumentMaster?Id=0";
-        Constant.showLog(url);
-        writeLog("loadDocumentMaster_" + url);
-        constant.showPD();
-        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
-        requests.refreshDocumentMaster(url, new ServerCallback() {
-            @Override
-            public void onSuccess(String result) {
-                constant.showPD();
-                prefname = getString(R.string.pref_autoDocument);
-                showDia(1);
-            }
-
-            @Override
-            public void onFailure(String result) {
-                constant.showPD();
-                showDia(2);
-            }
-        },0);
-    }
-
-    private void loadGSTMaster() {
-        String url = Constant.ipaddress + "/GetGSTMaster?Id=0";
-        Constant.showLog(url);
-        writeLog("loadGSTMaster_" + url);
-        constant.showPD();
-        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
-        requests.refreshGSTMaster(url, new ServerCallback() {
-            @Override
-            public void onSuccess(String result) {
-                constant.showPD();
-                prefname = getString(R.string.pref_autoGST);
-                showDia(1);
-            }
-
-            @Override
-            public void onFailure(String result) {
-                constant.showPD();
-                showDia(2);
-            }
-        },0);
-    }
-
     private void init() {
         db = new DBHandler(DataRefreshActivity.this);
         constant = new Constant(DataRefreshActivity.this);
@@ -630,6 +1050,8 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         refreshList = new ArrayList<>();
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         setList();
+        Constant.checkFolder(Constant.folder_name+"/"+Constant.zipFolderName);
+        Constant.checkFolder(Constant.folder_name+"/"+Constant.unzipFolderName);
     }
 
     private void showDia(int a) {
@@ -681,15 +1103,25 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 }
             });
         } else if (a == 3) {
-            builder.setMessage("Do You Want Upload Database File?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            builder.setMessage("What Do You Want To Do?");
+            builder.setPositiveButton("Sync N Upload", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    uploadDB();
                     dialog.dismiss();
+                    syncAllFlag = 1;
+                    loadAreaLineMaster();
                 }
             });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("Upload File", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    syncAllFlag = 0;
+                    CopyDBToSD();
+
+                }
+            });
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -724,6 +1156,43 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                }
+            });
+        } else if (a == 7) {
+            builder.setMessage("Data Refreshed Successfully");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 8) {
+            builder.setMessage("Error While Data Update");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new Constant();
+                    dialog.dismiss();
+
+                }
+            });
+        } else if (a == 9) {
+            builder.setMessage("Data Uploaded Successfully");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+
+                }
+            });
+        } else if (a == 10) {
+            builder.setMessage("Error While Data Uploading");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    new Constant();
+
                 }
             });
         }
@@ -810,7 +1279,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     loadSDMD(0,100);*/
                     getSizeDesignMastDetV6();
                 }else if(a==14){
-                    loadArealineMaster();
+                    loadAreaLineMaster();
                 }else if(a==15){
                     loadCurrencyMaster();
                 }
@@ -1936,28 +2405,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private void loadCurrencyMaster(){
-        String url = Constant.ipaddress + "/GetCurrencyMaster?Id=0";
-        Constant.showLog(url);
-        writeLog("loadCurrencyMaster_" + url);
-        constant.showPD();
-        VolleyRequests requests = new VolleyRequests(DataRefreshActivity.this);
-        requests.getCurrencyMaster(url, new ServerCallback() {
-            @Override
-            public void onSuccess(String result) {
-                constant.showPD();
-                prefname = getString(R.string.pref_autoCurrency);
-                showDia(1);
-            }
-
-            @Override
-            public void onFailure(String result) {
-                constant.showPD();
-                showDia(2);
-            }
-        },0);
-    }
-
     private void updateSharedPref(String prefname, String value){
         writeLog(prefname+"_"+value);
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
@@ -2036,48 +2483,60 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-    private void uploadDB(){
+    private void uploadDB() {
         try {
-            Constant.showLog("uploadDB");
-            CopyDBToSD();
+            Constant.showLog("----- In uploadDB -----");
+            //CopyDBToSD();
             String[] s = new String[1];
             String currentDBPath = android.os.Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name;
             s[0] = currentDBPath + "/" + DBHandler.Database_Name;
             File f = new File(currentDBPath + "/" + Constant.zip_file);
-            if(f.exists()){
+            Constant.showLog(currentDBPath);
+            Constant.showLog(f.getAbsolutePath());
+            if (f.exists()) {
                 f.delete();
-                Constant.showLog("uploadDB "+f.getName()+" Deleted");
+                Constant.showLog("uploadDB " + f.getName() + " Deleted");
                 f.createNewFile();
-                Constant.showLog("uploadDB "+f.getName()+" Created");
+                Constant.showLog("uploadDB " + f.getName() + " Created");
             }
+            Constant.showLog("----- End uploadDB -----");
             zip(s, currentDBPath + "/" + Constant.zip_file);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("uploadDB_"+e.getMessage());
+            writeLog("uploadDB_" + e.getMessage());
         }
     }
 
-    private void CopyDBToSD() throws IOException {
+    private void CopyDBToSD() {
         try {
-            Constant.showLog("CopyDBToSD");
-            String currentDBPath = android.os.Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name;
+            Constant.showLog("------ In CopyDBToSD ------");
+            SDPathName = android.os.Environment.getExternalStorageDirectory() + File.separator +
+                    Constant.folder_name + File.separator + Constant.zipFolderName;
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            String backupDBPath = pInfo.applicationInfo.dataDir + "/databases";
-            File currentDB = new File(backupDBPath, DBHandler.Database_Name);
-            File backupDB = new File(currentDBPath, DBHandler.Database_Name);
-            if(backupDB.exists()){
-                backupDB.delete();
-                Constant.showLog("CopyDBToSD "+backupDB.getName()+" Deleted");
-                backupDB.createNewFile();
-                Constant.showLog("CopyDBToSD "+backupDB.getName()+" Created");
+            //String backupDBPath = pInfo.applicationInfo.dataDir + "/databases";
+            DBPathName = "/data/data/"+pInfo.packageName+"/databases/";
+            Constant.showLog(SDPathName);
+            Constant.showLog(DBPathName);
+            DBFileName = new File(DBPathName, DBHandler.Database_Name);
+            SDFileName = new File(SDPathName, DBHandler.Database_Name);
+            if(SDFileName.exists()){
+                SDFileName.delete();
+                Constant.showLog("CopyDBToSD "+SDFileName.getName()+" Deleted");
+                SDFileName.createNewFile();
+                Constant.showLog("CopyDBToSD "+SDFileName.getName()+" Created");
             }
-            Constant.showLog(currentDB.getAbsolutePath());
-            Constant.showLog(backupDB.getAbsolutePath());
-            FileChannel source = new FileInputStream(currentDB).getChannel();
-            FileChannel destination = new FileOutputStream(backupDB).getChannel();
+            Constant.showLog(DBFileName.getAbsolutePath());
+            Constant.showLog(SDFileName.getAbsolutePath());
+            FileChannel source = new FileInputStream(DBFileName).getChannel();
+            FileChannel destination = new FileOutputStream(SDFileName).getChannel();
             destination.transferFrom(source, 0, source.size());
             source.close();
             destination.close();
+            //uploadDB();
+            String[] s = new String[1];
+            s[0] = SDPathName + "/" + DBHandler.Database_Name;
+            Constant.showLog("------ End CopyDBToSD ------");
+            zip(s, SDPathName + "/" + Constant.zip_file);
         } catch (Exception e) {
             e.printStackTrace();
             writeLog("CopyDBToSD_"+e.getMessage());
@@ -2087,7 +2546,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     public void zip(String[] _files, String zipFileName) {
         int BUFFER = 1024;
         try {
-            Constant.showLog("zip");
+            Constant.showLog("----- In Zip -----");
             BufferedInputStream origin = null;
             FileOutputStream dest = new FileOutputStream(zipFileName);
             ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
@@ -2109,14 +2568,15 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             /*Intent intent = new Intent(DataRefreshActivity.this, UploadDBService.class);
             startService(intent);*/
             out.close();
-            new UpploadFileToFTP().execute(file_url);
+            Constant.showLog("----- End Zip -----");
+            new UploadFileToFTP().execute(file_url);
         } catch (Exception e) {
             e.printStackTrace();
             writeLog("zip_"+e.getMessage());
         }
     }
 
-    private class UpploadFileToFTP extends AsyncTask<String, String, String> {
+    private class UploadFileToFTP extends AsyncTask<String, String, String> {
         File fName = null;
         HttpURLConnection conn = null;
         DataOutputStream dos = null;
@@ -2132,26 +2592,28 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             super.onPreExecute();
             pDialog = new ProgressDialog(DataRefreshActivity.this);
             pDialog.setMessage("Uploading file. Please wait...");
-            pDialog.setIndeterminate(false);
-            pDialog.setMax(100);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            pDialog.setCancelable(true);
+//            pDialog.setIndeterminate(false);
+//            pDialog.setMax(100);
+//            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            pDialog.setCancelable(false);
             pDialog.show();
         }
 
         @Override
         protected String doInBackground(String... f_url) {
             FTPClient client = null;
+            String ret = "0";
             try {
-                Constant.showLog("UpploadFileToFTP");
+                Constant.showLog("----- In UpploadFileToFTP ------");
                 client = new FTPClient();
                 client.connect(Constant.ftp_adress, 21);
                 client.login(Constant.ftp_username, Constant.ftp_password);
                 client.setFileType(FTP.BINARY_FILE_TYPE);
                 client.enterLocalPassiveMode();
-                String dbPath = android.os.Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name;
+                String dbPath = android.os.Environment.getExternalStorageDirectory() + File.separator
+                        + Constant.folder_name + File.separator + Constant.zipFolderName;
                 Constant.showLog(dbPath + "/" + Constant.zip_file);
-                File f = new File(dbPath);
+                File f = new File(SDPathName);
                 for (File file : f.listFiles()) {
                     if (file != null) {
                         Constant.showLog("File Name " + file.getName());
@@ -2159,41 +2621,53 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                             FileInputStream iFile = new FileInputStream(file);
                             client.cwd(Constant.ftp_directory);
                             if (client.storeFile(file.getName(), iFile)) {
+                                f.delete();
                                 writeLog("onHandleIntent_File_Store_Successfully");
                                 Constant.showLog("File Stored " + file.getName());
                             } else {
                                 writeLog("onHandleIntent_Error_While_Storing_File");
                             }
+                        } else {
+                            f.delete();
                         }
                     }
                 }
                 client.disconnect();
                 Constant.showLog("disconnected..");
+                ret = "1";
             } catch (Exception e) {
                 e.printStackTrace();
-                writeLog("onHandleIntent_"+e.getMessage());
-            }finally {
+                writeLog("onHandleIntent_" + e.getMessage());
+                ret = "0";
+            } finally {
                 try {
                     if (client != null) {
                         client.disconnect();
                     }
-                }catch (Exception e){
+                    ret = "1";
+                } catch (Exception e) {
                     e.printStackTrace();
-                    writeLog("finally_"+e.getMessage());
+                    writeLog("finally_" + e.getMessage());
+                    ret = "0";
                 }
             }
             pDialog.dismiss();
-            return "0";
+            return ret;
         }
 
-        protected void onProgressUpdate(String... progress) {
+        /*protected void onProgressUpdate(String... progress) {
             pDialog.setProgress(Integer.parseInt(progress[0]));
-        }
+        }*/
 
         @Override
         protected void onPostExecute(String file_url) {
             pDialog.dismiss();
-            showDia(5);
+            Constant.showLog("----- End UpploadFileToFTP ------");
+            if (file_url.equals("1")) {
+                showDia(9);
+            } else {
+                showDia(10);
+            }
         }
     }
 
@@ -2295,30 +2769,34 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private void downloadDB(){
         /*Intent intent = new Intent(DataRefreshActivity.this, DownloadDBService.class);
         startService(intent);*/
-        Constant.showLog("downloadDB");
+        Constant.showLog("----- In downloadDB -----");
+        file_url = Constant.imgUrl+Constant.zip_file;
+        Constant.showLog(file_url);
         new DownloadFileFromURL().execute(file_url);
+        //CopySDTODB();
     }
 
     private class DownloadFileFromURL extends AsyncTask<String, String, String> {
 
        private File fName = null;
+        private FTPClient client = null;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog = new ProgressDialog(DataRefreshActivity.this);
             pDialog.setMessage("Downloading file. Please wait...");
-            pDialog.setIndeterminate(false);
-            pDialog.setMax(100);
-            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            pDialog.setCancelable(true);
+//            pDialog.setIndeterminate(false);
+//            pDialog.setMax(100);
+//            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            pDialog.setCancelable(false);
             pDialog.show();
         }
 
         @Override
         protected String doInBackground(String... f_url) {
             int count;
-            try {
+            /*try {
                 Constant.showLog("DownloadFileFromURL");
                 URL url = new URL(f_url[0]);
                 URLConnection connection = url.openConnection();
@@ -2331,42 +2809,91 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 long total = 0;
                 while ((count = input.read(data)) != -1) {
                     total += count;
-                    publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+                    //publishProgress("" + (int) ((total * 100) / lenghtOfFile));
                     output.write(data, 0, count);
                 }
                 output.flush();
                 output.close();
                 input.close();
             } catch (Exception e) {
+                e.printStackTrace();
                 Log.e("Error: ", e.getMessage());
                 writeLog("DownloadFileFromURL_"+e.getMessage());
+            }*/
+            try {
+                Constant.showLog("----- In DownloadFileFromURL ------");
+                client = new FTPClient();
+                client.connect(Constant.ftp_adress, 21);
+                client.login(Constant.ftp_username, Constant.ftp_password);
+                client.setFileType(FTP.BINARY_FILE_TYPE);
+                client.enterLocalPassiveMode();
+                if (client.changeWorkingDirectory(Constant.ftp_directory)) {
+                    SDDBZipFilePath = Environment.getExternalStorageDirectory() + File.separator
+                            + Constant.folder_name  + File.separator + Constant.unzipFolderName;
+                    SDDBZipFileName = new File(SDDBZipFilePath, Constant.zip_file);
+
+                    Constant.showLog("SDDBZipFilePath - "+SDDBZipFilePath);
+                    Constant.showLog("SDDBZipFileName - "+SDDBZipFileName.getAbsolutePath());
+                    OutputStream outstream = new BufferedOutputStream(new FileOutputStream(SDDBZipFileName));
+                    client.retrieveFile(Constant.zip_file, outstream);
+                    outstream.close();
+                    client.logout();
+                    client.disconnect();
+                    writeLog("DownloadImageService_onHandleIntent_broadcastSend");
+                } else {
+                    writeLog("DownloadImageService_onHandleIntent_changeWorkingDirectory");
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                writeLog("DownloadImageService_onHandleIntent_"+e.getMessage());
             }
             return null;
         }
 
-        protected void onProgressUpdate(String... progress) {
+        /*protected void onProgressUpdate(String... progress) {
             pDialog.setProgress(Integer.parseInt(progress[0]));
-        }
+        }*/
 
         @Override
         protected void onPostExecute(String file_url) {
             pDialog.dismiss();
-            unzip();
+            Constant.showLog("----- End DownloadFileFromURL ------");
+            if (SDDBZipFilePath != null) {
+                unzip();
+            } else {
+                showDia(8);
+            }
         }
     }
 
     public void unzip() {
         try {
-            Constant.showLog("unZip File");
-            String _zipFile = Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + Constant.zip_file;
-            String _targetLocation = android.os.Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name;
-            FileInputStream fin = new FileInputStream(_zipFile);
+            /*SDFileName = new File(Environment.getExternalStorageDirectory() + File.separator
+                    + Constant.folder_name  + File.separator
+                    + Constant.unzipFolderName, Constant.zip_file);*/
+
+            Constant.showLog("----- In unZip File ------");
+            String _zipFile = Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name +
+                    File.separator + Constant.unzipFolderName  + File.separator + Constant.zip_file;
+
+            SDDBUnzipFilePath = android.os.Environment.getExternalStorageDirectory() + File.separator +
+                    Constant.folder_name + File.separator + Constant.unzipFolderName;
+
+            Constant.showLog("SDDBUnzipFilePath - "+SDDBUnzipFilePath);
+
+            FileInputStream fin = new FileInputStream(SDDBZipFileName);
             ZipInputStream zin = new ZipInputStream(fin);
             ZipEntry ze = null;
+            FileOutputStream fout = null;
+            BufferedInputStream in = null;
+            BufferedOutputStream out = null;
             while ((ze = zin.getNextEntry()) != null) {
-                FileOutputStream fout = new FileOutputStream(_targetLocation + "/" + ze.getName());
-                BufferedInputStream in = new BufferedInputStream(zin);
-                BufferedOutputStream out = new BufferedOutputStream(fout);
+                SDDBUnzipFileName = new File(SDDBUnzipFilePath + "/" + ze.getName());
+                Constant.showLog("SDDBUnzipFileName - "+SDDBUnzipFileName.getAbsolutePath());
+                fout = new FileOutputStream(SDDBUnzipFileName);
+                in = new BufferedInputStream(zin);
+                out = new BufferedOutputStream(fout);
                 byte b[] = new byte[1024];
                 int n;
                 while ((n = in.read(b, 0, 1024)) >= 0) {
@@ -2374,16 +2901,22 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     Constant.showLog("n "+n);
                 }
                 Constant.showLog("Write Complete");
-                fout.close();
-                File f = new File(_targetLocation,_zipFile);
-                if (f.exists()) {
+                File f = new File(SDDBUnzipFilePath,Constant.zip_file);
+                /*if (f.exists()) {
                     f.delete();
-                    Constant.showLog("unzip "+f.getName()+" Deleted");
-                }
-                getData();
-                CopySDTODB();
-                putData();
+                    Constant.showLog("Zip "+f.getName()+" Deleted");
+                }*/
+                Constant.showLog("----- End unZip File ------");
+                //getData();
+                //putData();
             }
+            if(out!=null)
+                out.close();
+            if(fout!=null)
+                fout.close();
+            if(in!=null)
+                in.close();
+            CopySDTODB();
         } catch (Exception e) {
             e.printStackTrace();
             writeLog("unzip_"+e.getMessage());
@@ -2391,364 +2924,84 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void getData() {
-        Constant.showLog("getData");
+        Constant.showLog("----- In getData ------");
         DBHandler db = new DBHandler(getApplicationContext());
         userList = db.getUserDetail();
         custList = db.getCustOrder();
+        db.close();
         Constant.showLog("userList-"+userList.size()+"-custList-"+custList.size());
+        Constant.showLog("----- End getData ------");
     }
 
-    private void CopySDTODB() throws IOException {
+    private void CopySDTODB() {
         try {
-            Constant.showLog("CopySDTODB");
-            String currentDBPath = android.os.Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name;
+            Constant.showLog("----- In CopySDTODB ------");
+
+            //String currentDBPath = android.os.Environment.getExternalStorageDirectory() + File.separator +
+            //        Constant.folder_name + File.separator + Constant.unzipFolderName;
+
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            String backupDBPath = pInfo.applicationInfo.dataDir + "/databases";
-            File currentDB = new File(currentDBPath, DBHandler.Database_Name);
-            File backupDB = new File(backupDBPath, DBHandler.Database_Name);
-            Constant.showLog(currentDB.getAbsolutePath());
-            Constant.showLog(backupDB.getAbsolutePath());
+            //String backupDBPath = pInfo.applicationInfo.dataDir + "/databases";
+            SDDBFilePath = "/data/data/"+pInfo.packageName+"/databases/";
+
+            SDDBUnzipFilePath = SDDBUnzipFileName.getAbsolutePath();
+
+            File currentDB = new File(SDDBUnzipFilePath);
+            File backupDB = new File(SDDBFilePath, DBHandler.Database_Name);
+            if(backupDB.exists()){
+                backupDB.delete();
+                Constant.showLog(backupDB.getAbsolutePath()+" deleted");
+            }
+            Constant.showLog("SDDBUnzipFilePath - "+SDDBUnzipFilePath);
+            Constant.showLog("SDDBFilePath - "+SDDBFilePath);
+            Constant.showLog("currentDB - "+currentDB.getAbsolutePath());
+            Constant.showLog("backupDB - "+backupDB.getAbsolutePath());
             FileChannel source = new FileInputStream(currentDB).getChannel();
             FileChannel destination = new FileOutputStream(backupDB).getChannel();
             destination.transferFrom(source, 0, source.size());
-            source.close();
             destination.close();
+            source.close();
             SharedPreferences.Editor editor = FirstActivity.pref.edit();
             String str = getTime();
             Constant.showLog("Last Sync - " + str);
             writeLog("CopySDTODB_Last Sync_" + str);
             editor.putString(getString(R.string.pref_lastSync), str);
             editor.apply();
-            DBHandler db = new DBHandler(getApplicationContext());
+            /*DBHandler db = new DBHandler(getApplicationContext());
             db.deleteTable(DBHandler.Table_CustomerOrder);
             db.deleteTable(DBHandler.Table_Usermaster);
-            putData();
+            db.close();*/
+            /*if(currentDB.exists()){
+                currentDB.delete();
+            }*/
+            Constant.showLog("----- End CopySDTODB ------");
+            //putData();
         } catch (Exception e) {
             e.printStackTrace();
             writeLog("CopySDTODB_"+e.getMessage());
+            showDia(8);
         }
     }
 
     private void putData() {
-        Constant.showLog("putData");
+        Constant.showLog("----- In putData -----");
+        int count = 0;
         DBHandler db = new DBHandler(getApplicationContext());
         for(int i=0;i<userList.size();i++) {
+            count++;
             db.addUserDetail(userList.get(i));
         }
+        Constant.showLog(count+"");
+        count=0;
         for(int i=0;i<custList.size();i++) {
+            count++;
             db.addCustomerOrder(custList.get(i));
         }
+        Constant.showLog(count+"");
         Constant.showLog("userList-"+userList.size()+"-custList-"+custList.size());
-    }
-
-    private void getProductMasterV6() {
-        constant = new Constant(DataRefreshActivity.this);
-        constant.showPD();
-        try {
-            final DBHandler db = new DBHandler(getApplicationContext());
-            String url = 0 + "|" + 10000 + "|" + "E";
-            writeLog("getProductMasterV6_"+url);
-            final JSONObject jsonBody = new JSONObject();
-            jsonBody.put("details", url);
-            RequestBody body = RequestBody.create(okhttp3.MediaType.
-                    parse("application/json; charset=utf-8"), (jsonBody).toString());
-            Constant.showLog(jsonBody.toString());
-
-            Call<List<ProductMasterClass>> call = new RetrofitApiBuilder().getApiBuilder().
-                    create(RetrofitApiInterface.class).
-                    getProductMasterV6(body);
-            call.enqueue(new Callback<List<ProductMasterClass>>() {
-                @Override
-                public void onResponse(Call<List<ProductMasterClass>> call, Response<List<ProductMasterClass>> response) {
-                    Constant.showLog("onResponse");
-                    List<ProductMasterClass> list = response.body();
-                    if (list != null) {
-                        if (list.size()!=0) {
-                            db.deleteTable(DBHandler.Table_ProductMaster);
-                        }
-                        db.addProductMaster(list);
-                        Constant.showLog(list.size() + "_getProductMasterV6");
-                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                        String str = getDateTime()+"-"+"True"+"-"+getTime();
-                        Constant.showLog(getString(R.string.pref_autoProduct)+"-"+str);
-                        editor.putString(getString(R.string.pref_autoProduct), getTime());
-                        editor.apply();
-                        writeLog("getProductMasterV6_onResponse_" + list.size() + "_" + str);
-                    } else {
-                        Constant.showLog("onResponse_list_null");
-                        writeLog("getProductMasterV6_onResponse_list_null");
-                    }
-                    constant.showPD();
-                    showDia(6);
-                }
-
-                @Override
-                public void onFailure(Call<List<ProductMasterClass>> call, Throwable t) {
-                    Constant.showLog("onFailure");
-                    if (!call.isCanceled()) {
-                        call.cancel();
-                    }
-                    t.printStackTrace();
-                    writeLog("getProductMasterV6_onFailure_" + t.getMessage());
-                    constant.showPD();
-                    showDia(2);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            writeLog("getProductMasterV6_" + e.getMessage());
-            constant.showPD();
-            showDia(2);
-        }
-    }
-
-    private void getAllSizeDesignMastDetV6() {
-        constant = new Constant(DataRefreshActivity.this);
-        constant.showPD();
-        try {
-            final DBHandler db = new DBHandler(getApplicationContext());
-            String url = 0 + "|" + 10000;
-            writeLog("getAllSizeDesignMastDetV6_"+url);
-            final JSONObject jsonBody = new JSONObject();
-            jsonBody.put("details", url);
-            RequestBody body = RequestBody.create(okhttp3.MediaType.
-                    parse("application/json; charset=utf-8"), (jsonBody).toString());
-            Constant.showLog(jsonBody.toString());
-
-            Call<List<SizeNDesignClass>> call = new RetrofitApiBuilder().getApiBuilder().
-                    create(RetrofitApiInterface.class).
-                    getAllSizeDesignMastDetV6(body);
-            call.enqueue(new Callback<List<SizeNDesignClass>>() {
-                @Override
-                public void onResponse(Call<List<SizeNDesignClass>> call, Response<List<SizeNDesignClass>> response) {
-                    Constant.showLog("onResponse");
-                    List<SizeNDesignClass> list = response.body();
-                    if (list != null) {
-                        if (list.size()!=0) {
-                            db.deleteTable(DBHandler.Table_AllRequiredSizesDesigns);
-                        }
-                        db.addSizeNDesignMaster(list);
-                        Constant.showLog(list.size() + "_getAllSizeDesignMastDetV6");
-                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                        String str = getDateTime()+"-"+"True"+"-"+getTime();
-                        Constant.showLog(getString(R.string.pref_autoSizeNDesign)+"-"+str);
-                        editor.putString(getString(R.string.pref_autoSizeNDesign), getTime());
-                        editor.apply();
-                        writeLog("getAllSizeDesignMastDetV6_onResponse_" + list.size() + "_" + str);
-                    } else {
-                        Constant.showLog("onResponse_list_null");
-                        writeLog("getAllSizeDesignMastDetV6_onResponse_list_null");
-                    }
-                    constant.showPD();
-                    showDia(6);
-                }
-
-                @Override
-                public void onFailure(Call<List<SizeNDesignClass>> call, Throwable t) {
-                    Constant.showLog("onFailure");
-                    if (!call.isCanceled()) {
-                        call.cancel();
-                    }
-                    t.printStackTrace();
-                    writeLog("getAllSizeDesignMastDetV6_onFailure_" + t.getMessage());
-                    constant.showPD();
-                    showDia(2);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            writeLog("getAllSizeDesignMastDetV6_" + e.getMessage());
-            constant.showPD();
-            showDia(2);
-        }
-    }
-
-    private void getSizeDesignMastDetV6() {
-        constant = new Constant(DataRefreshActivity.this);
-        constant.showPD();
-        try {
-            final DBHandler db = new DBHandler(getApplicationContext());
-            String url = 0 + "|" + 10000;
-            writeLog("getSizeDesignMastDetV6_"+url);
-            final JSONObject jsonBody = new JSONObject();
-            jsonBody.put("details", url);
-            RequestBody body = RequestBody.create(okhttp3.MediaType.
-                    parse("application/json; charset=utf-8"), (jsonBody).toString());
-            Constant.showLog(jsonBody.toString());
-
-            Call<List<SizeDesignMastDetClass>> call = new RetrofitApiBuilder().getApiBuilder().
-                    create(RetrofitApiInterface.class).
-                    getSizeDesignMastDetV6(body);
-            call.enqueue(new Callback<List<SizeDesignMastDetClass>>() {
-                @Override
-                public void onResponse(Call<List<SizeDesignMastDetClass>> call, Response<List<SizeDesignMastDetClass>> response) {
-                    Constant.showLog("onResponse");
-                    List<SizeDesignMastDetClass> list = response.body();
-                    if (list != null) {
-                        if (list.size()!=0) {
-                            db.deleteTable(DBHandler.Table_SizeDesignMastDet);
-                        }
-                        db.addSizeDesignMastDet(list);
-                        Constant.showLog(list.size() + "_getSizeDesignMastDetV6");
-                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                        String str = getDateTime()+"-"+"True"+"-"+getTime();
-                        Constant.showLog(getString(R.string.pref_autoSizeDetail)+"-"+str);
-                        editor.putString(getString(R.string.pref_autoSizeDetail), getTime());
-                        editor.apply();
-                        writeLog("getSizeDesignMastDetV6_onResponse_" + list.size() + "_" + str);
-                    } else {
-                        Constant.showLog("onResponse_list_null");
-                        writeLog("getSizeDesignMastDetV6_onResponse_list_null");
-                    }
-                    constant.showPD();
-                    showDia(6);
-                }
-
-                @Override
-                public void onFailure(Call<List<SizeDesignMastDetClass>> call, Throwable t) {
-                    Constant.showLog("onFailure");
-                    if (!call.isCanceled()) {
-                        call.cancel();
-                    }
-                    t.printStackTrace();
-                    writeLog("getSizeDesignMastDetV6_onFailure_" + t.getMessage());
-                    constant.showPD();
-                    showDia(2);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            writeLog("getSizeDesignMastDetV6_" + e.getMessage());
-            constant.showPD();
-            showDia(2);
-        }
-    }
-
-    private void getBankBranchMasterV6() {
-        constant = new Constant(DataRefreshActivity.this);
-        constant.showPD();
-        try {
-            final DBHandler db = new DBHandler(getApplicationContext());
-            String url = 0 + "|" + 10000 + "|E";
-            writeLog("getBankBranchMasterV6_"+url);
-            final JSONObject jsonBody = new JSONObject();
-            jsonBody.put("details", url);
-            RequestBody body = RequestBody.create(okhttp3.MediaType.
-                    parse("application/json; charset=utf-8"), (jsonBody).toString());
-            Constant.showLog(jsonBody.toString());
-
-            Call<List<BankBranchMasterClass>> call = new RetrofitApiBuilder().getApiBuilder().
-                    create(RetrofitApiInterface.class).
-                    getBankBrnachMasterV6(body);
-            call.enqueue(new Callback<List<BankBranchMasterClass>>() {
-                @Override
-                public void onResponse(Call<List<BankBranchMasterClass>> call, Response<List<BankBranchMasterClass>> response) {
-                    Constant.showLog("onResponse");
-                    List<BankBranchMasterClass> list = response.body();
-                    if (list != null) {
-                        if (list.size()!=0) {
-                            db.deleteTable(DBHandler.Table_BankBranchMaster);
-                        }
-                        db.addBankBranchMaster(list);
-                        Constant.showLog(list.size() + "_getBankBranchMasterV6");
-                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                        String str = getDateTime()+"-"+"True"+"-"+getTime();
-                        Constant.showLog(getString(R.string.pref_autoBankBranch)+"-"+str);
-                        editor.putString(getString(R.string.pref_autoBankBranch), getTime());
-                        editor.apply();
-                        writeLog("getBankBranchMasterV6_onResponse_" + list.size() + "_" + str);
-                    } else {
-                        Constant.showLog("onResponse_list_null");
-                        writeLog("getBankBranchMasterV6_onResponse_list_null");
-                    }
-                    constant.showPD();
-                    showDia(6);
-                }
-
-                @Override
-                public void onFailure(Call<List<BankBranchMasterClass>> call, Throwable t) {
-                    Constant.showLog("onFailure");
-                    if (!call.isCanceled()) {
-                        call.cancel();
-                    }
-                    t.printStackTrace();
-                    writeLog("getBankBranchMasterV6_onFailure_" + t.getMessage());
-                    constant.showPD();
-                    showDia(2);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            writeLog("getBankBranchMasterV6_" + e.getMessage());
-            constant.showPD();
-            showDia(2);
-        }
-    }
-
-    private void getCustomerMasterV6() {
-        constant = new Constant(DataRefreshActivity.this);
-        constant.showPD();
-        try {
-            final DBHandler db = new DBHandler(getApplicationContext());
-            String url = 0 + "|" + 10000 + "|E";
-            writeLog("getCustomerMasterV6_"+url);
-            final JSONObject jsonBody = new JSONObject();
-            jsonBody.put("details", url);
-            RequestBody body = RequestBody.create(okhttp3.MediaType.
-                    parse("application/json; charset=utf-8"), (jsonBody).toString());
-            Constant.showLog(jsonBody.toString());
-
-            Call<List<CustomerDetailClass>> call = new RetrofitApiBuilder().getApiBuilder().
-                    create(RetrofitApiInterface.class).
-                    getCustomerMasterV6(body);
-            call.enqueue(new Callback<List<CustomerDetailClass>>() {
-                @Override
-                public void onResponse(Call<List<CustomerDetailClass>> call, Response<List<CustomerDetailClass>> response) {
-                    Constant.showLog("onResponse");
-                    List<CustomerDetailClass> list = response.body();
-                    if (list != null) {
-                        if (list.size()!=0) {
-                            db.deleteTable(DBHandler.Table_Customermaster);
-                        }
-                        db.addCustomerDetail(new ArrayList<>(list));
-                        Constant.showLog(list.size() + "_getCustomerMasterV6");
-                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                        String str = getDateTime()+"-"+"True"+"-"+getTime();
-                        Constant.showLog(getString(R.string.pref_autoCustomer)+"-"+str);
-                        editor.putString(getString(R.string.pref_autoCustomer), getTime());
-                        editor.apply();
-                        writeLog("getCustomerMasterV6_onResponse_" + list.size() + "_" + str);
-                    } else {
-                        Constant.showLog("onResponse_list_null");
-                        writeLog("getCustomerMasterV6_onResponse_list_null");
-                    }
-                    constant.showPD();
-                    showDia(6);
-                }
-
-                @Override
-                public void onFailure(Call<List<CustomerDetailClass>> call, Throwable t) {
-                    Constant.showLog("onFailure");
-                    if (!call.isCanceled()) {
-                        call.cancel();
-                    }
-                    t.printStackTrace();
-                    writeLog("getCustomerMasterV6_onFailure_" + t.getMessage());
-                    constant.showPD();
-                    showDia(2);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            writeLog("getCustomerMasterV6_" + e.getMessage());
-            constant.showPD();
-            showDia(2);
-        }
+        db.close();
+        Constant.showLog("----- End putData -----");
+        showDia(7);
     }
 
 }
