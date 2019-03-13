@@ -352,7 +352,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
               long millis = millisUntilFinished;
                 String ms = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
                 tv_timecount.setText(ms);
-                Constant.showLog("count:"+ms);
+                //Constant.showLog("count:"+ms);
             }
 
             @Override
@@ -534,6 +534,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    new Constant();
                     dialog.dismiss();
                 }
             });

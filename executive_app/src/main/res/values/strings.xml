@@ -308,4 +308,5 @@
     <string name="showbill">View Bills</string>
     <string name="pref_version">version</string>
     <string name="pref_design">design</string>
+    <string name="pref_newDB">newDB</string>
 </resources>

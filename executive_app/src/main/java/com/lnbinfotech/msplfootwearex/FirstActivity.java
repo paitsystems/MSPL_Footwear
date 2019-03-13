@@ -1,5 +1,6 @@
 package com.lnbinfotech.msplfootwearex;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,10 +25,12 @@ import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.permission.GetPermission;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -65,31 +68,34 @@ public class FirstActivity extends AppCompatActivity {
         checkpermmission();
     }
 
-    private void checkpermmission(){
-        if(!permission.checkCameraPermission(getApplicationContext())){
-            permission.requestCameraPermission(getApplicationContext(),FirstActivity.this);//1
-        }else if(!permission.checkReadExternalStoragePermission(getApplicationContext())){
-            permission.requestReadExternalPermission(getApplicationContext(),FirstActivity.this);//2
-        }else if(!permission.checkWriteExternalStoragePermission(getApplicationContext())){
-            permission.requestWriteExternalPermission(getApplicationContext(),FirstActivity.this);//3
-        }else if(!permission.checkReadPhoneStatePermission(getApplicationContext())){
-            permission.requestReadPhoneStatPermission(getApplicationContext(),FirstActivity.this);//4
-        }else if(!permission.checkRebootPermission(getApplicationContext())){
-            permission.requestRebootPermission(getApplicationContext(),FirstActivity.this);//7
+    private void checkpermmission() {
+        if (!permission.checkCameraPermission(getApplicationContext())) {
+            permission.requestCameraPermission(getApplicationContext(), FirstActivity.this);//1
+        } else if (!permission.checkReadExternalStoragePermission(getApplicationContext())) {
+            permission.requestReadExternalPermission(getApplicationContext(), FirstActivity.this);//2
+        } else if (!permission.checkWriteExternalStoragePermission(getApplicationContext())) {
+            permission.requestWriteExternalPermission(getApplicationContext(), FirstActivity.this);//3
+        } else if (!permission.checkReadPhoneStatePermission(getApplicationContext())) {
+            permission.requestReadPhoneStatPermission(getApplicationContext(), FirstActivity.this);//4
+        } else if (!permission.checkRebootPermission(getApplicationContext())) {
+            permission.requestRebootPermission(getApplicationContext(), FirstActivity.this);//7
         }/*else if(!permission.checkReceiveSMSPermission(getApplicationContext())){
             permission.requestReceiveSMSPermission(getApplicationContext(),FirstActivity.this);//9
         }else if(!permission.checkReadSMSPermission(getApplicationContext())){
             permission.requestReadSMSPermission(getApplicationContext(),FirstActivity.this);//10
         }else if(!permission.checkSendSMSPermission(getApplicationContext())){
             permission.requestSendSMSPermission(getApplicationContext(),FirstActivity.this);//11
-        }*/else if(!permission.checkCoarseLocationPermission(getApplicationContext())){
-            permission.requestCoarseLocationPermission(getApplicationContext(),FirstActivity.this);//6
-        }else if(!permission.checkFineLocationPermission(getApplicationContext())){
-            permission.requestFineLocationPermission(getApplicationContext(),FirstActivity.this);//5
-        }else {
-            if(ConnectivityTest.getNetStat(getApplicationContext())) {
+        }*/ else if (!permission.checkCoarseLocationPermission(getApplicationContext())) {
+            permission.requestCoarseLocationPermission(getApplicationContext(), FirstActivity.this);//6
+        } else if (!permission.checkFineLocationPermission(getApplicationContext())) {
+            permission.requestFineLocationPermission(getApplicationContext(), FirstActivity.this);//5
+        } else {
+            Constant.checkFolder(Constant.folder_name);
+            Constant.checkFolder(Constant.folder_name + "/" + Constant.zipFolderName);
+            Constant.checkFolder(Constant.folder_name + "/" + Constant.unzipFolderName);
+            if (ConnectivityTest.getNetStat(getApplicationContext())) {
                 doThis();
-            }else{
+            } else {
                 showDia(1);
             }
         }
@@ -105,11 +111,34 @@ public class FirstActivity extends AppCompatActivity {
             e.printStackTrace();
             writeLog("doThis_"+e.getMessage());
         }
-        if (pref.contains(getString(R.string.pref_isRegistered))) {
+
+        if(pref.contains(getString(R.string.pref_newDB))){
+            if(pref.getBoolean(getString(R.string.pref_newDB),false)){
+                CopySDTODB();
+            } else {
+                if (pref.contains(getString(R.string.pref_isRegistered))) {
+                    startActivity(new Intent(getApplicationContext(), CustomerDetailsActivity.class));
+                } else {
+                    startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
+                }
+                overridePendingTransition(R.anim.enter,R.anim.exit);
+                doFinish();
+            }
+        } else {
+            if (pref.contains(getString(R.string.pref_isRegistered))) {
+                startActivity(new Intent(getApplicationContext(), CustomerDetailsActivity.class));
+            } else {
+                startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
+            }
+            overridePendingTransition(R.anim.enter,R.anim.exit);
+            doFinish();
+        }
+
+        /*if (pref.contains(getString(R.string.pref_isRegistered))) {
             startActivity(new Intent(getApplicationContext(), CustomerDetailsActivity.class));
         } else {
             startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
-        }
+        }*/
         /*if (!pref.contains(getString(R.string.pref_FTPLocation))) {
             SharedPreferences.Editor editor = pref.edit();
             editor.putString(getString(R.string.pref_FTPLocation),"ftp.lnbinfotech.com");
@@ -119,8 +148,8 @@ public class FirstActivity extends AppCompatActivity {
             editor.apply();
            // editor.commit();
         }*/
-        overridePendingTransition(R.anim.enter,R.anim.exit);
-        doFinish();
+        /*overridePendingTransition(R.anim.enter,R.anim.exit);
+        doFinish();*/
     }
 
     private void CopyDb() throws IOException {
@@ -208,13 +237,12 @@ public class FirstActivity extends AppCompatActivity {
     private void doFinish(){
         finish();
         //toast.cancel();
-        overridePendingTransition(R.anim.enter,R.anim.exit);
     }
 
     private String getTime() {
         String str = "";
         try{
-            str = new SimpleDateFormat("dd/MMM/yyyy HH:mm", Locale.ENGLISH).format(new Date());
+            str = new SimpleDateFormat("dd/MMM/yyyy-HH:mm", Locale.ENGLISH).format(new Date());
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -247,6 +275,112 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void writeLog(String _data){
-        new WriteLog().writeLog(getApplicationContext(),"FirstAcitivity_"+_data);
+        new WriteLog().writeLog(getApplicationContext(),"FirstActivity_"+_data);
     }
+
+    private void CopySDTODB() {
+        ProgressDialog pDialog = new ProgressDialog(FirstActivity.this);
+        try {
+            pDialog.setMessage("Please Wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+            writeLog("----- In CopySDTODB ------");
+            Constant.showLog("----- In CopySDTODB ------");
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            //String SDDBFilePath = pInfo.applicationInfo.dataDir+"/databases/";
+            String SDDBFilePath = "/data/data/"+pInfo.packageName+"/databases/";
+
+            String SDDBUnzipFilePath = android.os.Environment.getExternalStorageDirectory() + File.separator +
+                    Constant.folder_name + File.separator + Constant.unzipFolderName;
+
+            File SDDBUnzipFileName = new File(SDDBUnzipFilePath + "/" + DBHandler.Database_Name);
+
+            File currentDB = new File(SDDBUnzipFilePath);
+            File backupDB = new File(SDDBFilePath, DBHandler.Database_Name);
+
+            /*FileChannel source = new FileInputStream(SDDBUnzipFileName).getChannel();
+            FileChannel destination = new FileOutputStream(backupDB).getChannel();
+            destination.transferFrom(source, 0, source.size());
+            destination.close();
+            source.close();*/
+
+            InputStream mInput = new FileInputStream(SDDBUnzipFileName);
+            String outFileName = SDDBFilePath + DBHandler.Database_Name;
+            Constant.showLog("outFileName - "+outFileName);
+            OutputStream mOutput = new FileOutputStream(outFileName);
+            byte[] mBuffer = new byte[1024];
+            int mLength;
+            while ((mLength = mInput.read(mBuffer))>0) {
+                //Constant.showLog("mLength "+mLength);
+                mOutput.write(mBuffer, 0, mLength);
+            }
+            mOutput.flush();
+            mOutput.close();
+            mInput.close();
+            writeLog("outFileName - "+outFileName+" wrote ");
+
+            SharedPreferences.Editor editor = pref.edit();
+            String str = getTime();
+            Constant.showLog("Last Sync - " + str);
+            writeLog("CopySDTODB_Last Sync_" + str);
+            editor.putString(getString(R.string.pref_lastSync), str);
+            editor.putBoolean(getString(R.string.pref_newDB),false);
+            editor.apply();
+
+            String arr[] = {getString(R.string.pref_autoArealine),getString(R.string.pref_autoArea),
+                    getString(R.string.pref_autoBank), getString(R.string.pref_autoBankBranch),
+                    getString(R.string.pref_autoCity), getString(R.string.pref_autoCompany),
+                    getString(R.string.pref_autoCustomer), getString(R.string.pref_autoCurrency),
+                    getString(R.string.pref_autoDocument), getString(R.string.pref_autoEmployee),
+                    getString(R.string.pref_autoGST), getString(R.string.pref_autoHO),
+                    getString(R.string.pref_autoProduct), getString(R.string.pref_autoSizeNDesign),
+                    getString(R.string.pref_autoSizeDetail)};
+
+            for(String pref : arr) {
+                updateSharedPref(pref,"Y");
+            }
+
+            Constant.showLog("----- End CopySDTODB ------");
+            writeLog("----- End CopySDTODB ------");
+
+            if(SDDBUnzipFileName.exists()) {
+                SDDBUnzipFileName.delete();
+            }
+            if (pref.contains(getString(R.string.pref_isRegistered))) {
+                startActivity(new Intent(getApplicationContext(), CustomerDetailsActivity.class));
+            } else {
+                startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
+            }
+            pDialog.dismiss();
+            overridePendingTransition(R.anim.enter,R.anim.exit);
+            doFinish();
+        } catch (Exception e) {
+            pDialog.dismiss();
+            e.printStackTrace();
+            writeLog("CopySDTODB_"+e.getMessage());
+        }
+    }
+
+    private void updateSharedPref(String prefName, String value){
+        writeLog(prefName+"_"+value);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+        String str = getDateTime()+"-"+value+"-"+getTime();
+        Constant.showLog(prefName+"-"+str);
+        editor.putString(prefName, getTime());
+        editor.apply();
+        //setSyncDate();
+        //setList();
+    }
+
+    private String getDateTime() {
+        String str = "";
+        try{
+            str = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH).format(new Date());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return str;
+    }
+
 }

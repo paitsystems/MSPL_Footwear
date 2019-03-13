@@ -332,6 +332,10 @@ public class DBHandler extends SQLiteOpenHelper {
         super(context, Database_Name, null, Database_Version);
     }
 
+    public DBHandler(Context context, String path) {
+        super(context, path, null, Database_Version);
+    }
+
     private String create_cust_master = "create table if not exists " + Table_Customermaster + "(" +
             CM_RetailCustID + " int," + CM_Name + " text," + CM_Address + " text," + CM_MobileNo + " text," + CM_Status + " text," +
             CM_BranchId + " int," + CM_Email + " text," + CM_District + " text," + CM_Taluka + " text," + CM_CityId + " int," +
@@ -1472,10 +1476,23 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         for (CheckoutCustOrderClass custOrder : custOrderList) {
             cv.put(CO_AvailQty, custOrder.getAvailableQty());
-            int a = db.update(Table_CustomerOrder, cv,
-                    CO_BranchId + "=? and " + CO_Productid + "=? and " + CO_SizeGroup + "=? and " + CO_Color + "=? and " + CO_MRP + "=? and " + CO_LooseQty + "=?",
-                    new String[]{custOrder.getBranchId(), custOrder.getProductId(), custOrder.getSizeGroup(), custOrder.getColor(), custOrder.getRate(), custOrder.getEnterQty()});
-            Constant.showLog("updateAvailQty : "+a);
+            String str = "update "+Table_CustomerOrder + " set "+
+                    CO_AvailQty+"="+custOrder.getAvailableQty() + " where "+
+                    CO_BranchId + "=" + custOrder.getBranchId() +" and " +
+                    CO_Productid  + "=" + custOrder.getProductId() + " and "+
+                    CO_SizeGroup + "="+ custOrder.getSizeGroup() + " and " +
+                    CO_Color + "='"+ custOrder.getColor() +"' and " +
+                    CO_MRP + " like '%"+ custOrder.getRate() +"%' and " +
+                    CO_LooseQty + "=" + custOrder.getEnterQty();
+            Constant.showLog(str);
+            db.execSQL(str);
+
+            /*int a = db.update(Table_CustomerOrder, cv,
+                    CO_BranchId + "=? and " + CO_Productid + "=? and " + CO_SizeGroup + "=? and " +
+                            CO_Color + "=? and " + CO_MRP + "=? and " + CO_LooseQty + "=?",
+                    new String[]{custOrder.getBranchId(), custOrder.getProductId(), custOrder.getSizeGroup(),
+                            custOrder.getColor(), custOrder.getRate(), custOrder.getEnterQty()});
+            Constant.showLog("updateAvailQty : "+a);*/
         }
         db.setTransactionSuccessful();
         db.endTransaction();

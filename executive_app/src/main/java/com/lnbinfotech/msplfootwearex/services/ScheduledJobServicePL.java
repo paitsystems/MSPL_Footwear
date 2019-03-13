@@ -1,12 +1,16 @@
 package com.lnbinfotech.msplfootwearex.services;
 
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
+import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Environment;
 
 import com.lnbinfotech.msplfootwearex.FirstActivity;
 import com.lnbinfotech.msplfootwearex.R;
@@ -17,19 +21,32 @@ import com.lnbinfotech.msplfootwearex.interfaces.RetrofitApiInterface;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.BankBranchMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
+import com.lnbinfotech.msplfootwearex.model.CustomerOrderClass;
 import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwearex.model.SizeDesignMastDetClass;
 import com.lnbinfotech.msplfootwearex.model.SizeNDesignClass;
+import com.lnbinfotech.msplfootwearex.model.UserClass;
 import com.lnbinfotech.msplfootwearex.post.RequestResponseClass;
 import com.lnbinfotech.msplfootwearex.utility.RetrofitApiBuilder;
 
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -42,20 +59,40 @@ import retrofit2.Response;
 public class ScheduledJobServicePL extends JobService {
 
     private DBHandler db;
+    private ArrayList<UserClass> userList;
+    private ArrayList<CustomerOrderClass> custList;
+    private File DBFileName,DBSDFileName;
+    private String DBFilePath, DBSDFilePath, DBSDZipFilePath;
+    private File SDDBZipFileName, SDDBUnzipFileName, SDDBFileName;
+    private String SDDBZipFilePath, SDDBUnzipFilePath, SDDBFilePath;
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         Constant.showLog("onStartJob");
         int hour = Integer.parseInt(getTime());
-        Constant.showLog("AutoSync_"+hour);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
+        Constant.showLog("AutoSync_" + hour);
         //TODO : Set Time Limit
         //if(hour<13||hour>20) {
-            if (ConnectivityTest.getNetStat(getApplicationContext())) {
-                startSync();
-                writeLog("onStartJob_" + hour + "_Online");
+        if (ConnectivityTest.getNetStat(getApplicationContext())) {
+            //startSync();
+            if (isAppIsInBackground(getApplicationContext())) {
+                Constant.showLog("App_IS_InBackground");
+                writeLog("onStartJob_" + hour + "App_IS_InBackground");
+                if (isSynced(getString(R.string.pref_lastSync)) || !FirstActivity.pref.contains(getString(R.string.pref_newDB))) {
+                    downloadDB();
+                    writeLog("onStartJob_" + hour + "_Online_Started");
+                } else {
+                    Constant.showLog("App_IS_InBackground");
+                    writeLog("onStartJob_" + hour + "App_IS_InBackground");
+                }
             } else {
-                writeLog("onStartJob_" + hour + "_Offline");
+                Constant.showLog("App_IS_NOT_InBackground");
+                writeLog("onStartJob_" + hour + "App_IS_NOT_InBackground");
             }
+        } else {
+            writeLog("onStartJob_" + hour + "_Offline");
+        }
         //}
         return false;
     }
@@ -613,6 +650,258 @@ public class ScheduledJobServicePL extends JobService {
             writeLog("getCustomerMasterV6_" + e.getMessage());
         }
     }
+
+    private void downloadDB(){
+        getData();
+        writeLog("----- In downloadDB -----");
+        Constant.showLog("----- In downloadDB -----");
+        String file_url = Constant.imgUrl+Constant.zip_file;
+        Constant.showLog(file_url);
+        new DownloadFileFromURL().execute(file_url);
+        writeLog("----- End downloadDB -----");
+    }
+
+    private void getData() {
+        Constant.showLog("----- In getData ------");
+        writeLog("----- In getData ------");
+        DBHandler db = new DBHandler(getApplicationContext());
+        userList = db.getUserDetail();
+        custList = db.getCustOrder();
+        Constant.showLog("userList-"+userList.size()+"-custList-"+custList.size());
+        writeLog("userList-"+userList.size()+"-custList-"+custList.size());
+        Constant.showLog("----- End getData ------");
+        writeLog("----- End getData ------");
+        db.close();
+    }
+
+    private class DownloadFileFromURL extends AsyncTask<String, String, String> {
+
+        private FTPClient client = null;
+
+        @Override
+        protected String doInBackground(String... f_url) {
+            try {
+                writeLog("----- In DownloadFileFromURL ------");
+                Constant.showLog("----- In DownloadFileFromURL ------");
+                client = new FTPClient();
+                client.connect(Constant.ftp_adress, 21);
+                client.login(Constant.ftp_username, Constant.ftp_password);
+                client.setFileType(FTP.BINARY_FILE_TYPE);
+                client.enterLocalPassiveMode();
+                if (client.changeWorkingDirectory(Constant.ftp_directory)) {
+                    SDDBZipFilePath = Environment.getExternalStorageDirectory() + File.separator
+                            + Constant.folder_name  + File.separator + Constant.unzipFolderName;
+                    SDDBZipFileName = new File(SDDBZipFilePath, Constant.zip_file);
+                    if(SDDBZipFileName.exists()){
+                        SDDBZipFileName.delete();
+                        Constant.showLog(SDDBZipFileName.getAbsolutePath() + " Deleted ");
+                        writeLog(SDDBZipFileName.getAbsolutePath() + " Deleted ");
+                    }
+                    Constant.showLog("SDDBZipFilePath - "+SDDBZipFilePath +"\n" +
+                            "SDDBZipFileName - "+SDDBZipFileName.getAbsolutePath());
+                    OutputStream outstream = new BufferedOutputStream(new FileOutputStream(SDDBZipFileName));
+                    client.retrieveFile(Constant.zip_file, outstream);
+                    outstream.close();
+                    client.logout();
+                    client.disconnect();
+                    writeLog("File Downloaded Successfully");
+                } else {
+                    writeLog("Error While changeWorkingDirectory");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                writeLog("Exception "+e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String file_url) {
+            Constant.showLog("----- End DownloadFileFromURL ------");
+            writeLog("----- End DownloadFileFromURL ------");
+            if (SDDBZipFilePath != null) {
+                unzip();
+            }
+        }
+    }
+
+    public void unzip() {
+        try {
+            Constant.showLog("----- In unZip File ------");
+            writeLog("----- In unZip File ------");
+
+            SDDBUnzipFilePath = android.os.Environment.getExternalStorageDirectory() + File.separator +
+                    Constant.folder_name + File.separator + Constant.unzipFolderName;
+
+            Constant.showLog("SDDBUnzipFilePath - "+SDDBUnzipFilePath);
+
+            FileInputStream fin = new FileInputStream(SDDBZipFileName);
+            ZipInputStream zin = new ZipInputStream(fin);
+            ZipEntry ze = null;
+            FileOutputStream fout = null;
+            BufferedInputStream in = null;
+            BufferedOutputStream out = null;
+            while ((ze = zin.getNextEntry()) != null) {
+                SDDBUnzipFileName = new File(SDDBUnzipFilePath + "/" + ze.getName());
+                if(SDDBUnzipFileName.exists()){
+                    SDDBUnzipFileName.delete();
+                    Constant.showLog(SDDBUnzipFileName.getAbsolutePath() + " Deleted ");
+                    writeLog(SDDBUnzipFileName.getAbsolutePath() + " Deleted ");
+                }
+                Constant.showLog("SDDBUnzipFileName - "+SDDBUnzipFileName.getAbsolutePath());
+                fout = new FileOutputStream(SDDBUnzipFileName);
+                in = new BufferedInputStream(zin);
+                out = new BufferedOutputStream(fout);
+                byte b[] = new byte[1024];
+                int n;
+                while ((n = in.read(b, 0, 1024)) >= 0) {
+                    out.write(b, 0, n);
+                    //Constant.showLog("n "+n);
+                }
+                if(SDDBZipFileName.exists()) {
+                    SDDBZipFileName.delete();
+                }
+                Constant.showLog("Write Complete");
+                Constant.showLog("----- End unZip File ------");
+                writeLog("----- End unZip File ------");
+            }
+            if(out!=null) {
+                out.close();
+            }
+            if(fout!=null) {
+                fout.close();
+            }
+            if(in!=null)
+                in.close();
+
+            CopySDTODB();
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("unzip_"+e.getMessage());
+        }
+    }
+
+    private void CopySDTODB() {
+        try {
+            Constant.showLog("----- In CopySDTODB ------");
+            writeLog("----- In CopySDTODB ------");
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            //SDDBFilePath = pInfo.applicationInfo.dataDir+"/databases/";
+            SDDBFilePath = "/data/data/"+pInfo.packageName+"/databases/";
+
+            SDDBUnzipFilePath = SDDBUnzipFileName.getAbsolutePath();
+
+            File currentDB = new File(SDDBUnzipFilePath);
+            File backupDB = new File(SDDBFilePath, DBHandler.Database_Name);
+            if(backupDB.exists()){
+                backupDB.delete();
+                Constant.showLog(backupDB.getAbsolutePath()+" deleted");
+                writeLog(backupDB.getAbsolutePath()+" deleted");
+            }
+            Constant.showLog("SDDBUnzipFileName - "+SDDBUnzipFileName +"\n" +
+                    "SDDBUnzipFilePath - "+SDDBUnzipFilePath +"\n" +
+                    "SDDBFilePath - "+SDDBFilePath +"\n" +
+                    "currentDB - "+"\n" +
+                    "backupDB - ");
+
+            /*FileChannel source = new FileInputStream(SDDBUnzipFileName).getChannel();
+            FileChannel destination = new FileOutputStream(backupDB).getChannel();
+            destination.transferFrom(source, 0, source.size());
+            destination.close();
+            source.close();*/
+
+            DBHandler db = new DBHandler(getApplicationContext(),SDDBUnzipFilePath);
+            db.deleteTable(DBHandler.Table_CustomerOrder);
+            db.deleteTable(DBHandler.Table_Usermaster);
+            db.deleteTable(DBHandler.Table_TrackCustomerOrder);
+            int count = 0;
+            for(int i=0;i<userList.size();i++) {
+                count++;
+                db.addUserDetail(userList.get(i));
+            }
+            Constant.showLog(count+"");
+            writeLog("userList "+count+" Added");
+            count=0;
+            for(int i=0;i<custList.size();i++) {
+                count++;
+                db.addCustomerOrder(custList.get(i));
+            }
+            Constant.showLog(count+"");
+            writeLog("custList "+count+" Added");
+
+            InputStream mInput = new FileInputStream(SDDBUnzipFileName);
+            String outFileName = SDDBFilePath + DBHandler.Database_Name;
+            Constant.showLog("outFileName - "+outFileName);
+            OutputStream mOutput = new FileOutputStream(outFileName);
+            byte[] mBuffer = new byte[1024];
+            int mLength;
+            while ((mLength = mInput.read(mBuffer))>0) {
+                //Constant.showLog("mLength "+mLength);
+                mOutput.write(mBuffer, 0, mLength);
+            }
+            mOutput.flush();
+            mOutput.close();
+            mInput.close();
+            writeLog("outFileName - "+outFileName+" wrote ");
+
+            db = new DBHandler(getApplicationContext());
+            db.deleteTable(DBHandler.Table_TrackCustomerOrder);
+
+            SharedPreferences.Editor editor = FirstActivity.pref.edit();
+            String str = getTime1();
+            Constant.showLog("Last Sync - " + str);
+            writeLog("CopySDTODB_Last Sync_" + str);
+            editor.putString(getString(R.string.pref_lastSync), str);
+            editor.putBoolean(getString(R.string.pref_newDB),true);
+            editor.apply();
+
+            Constant.showLog("----- End CopySDTODB ------");
+            writeLog("----- End CopySDTODB ------");
+            new DBHandler(getApplicationContext(),SDDBUnzipFilePath).deleteTable(DBHandler.Table_TrackCustomerOrder);
+
+            /*String arr[] = {getString(R.string.pref_autoArealine),getString(R.string.pref_autoArea),
+                    getString(R.string.pref_autoBank), getString(R.string.pref_autoBankBranch),
+                    getString(R.string.pref_autoCity), getString(R.string.pref_autoCompany),
+                    getString(R.string.pref_autoCustomer), getString(R.string.pref_autoCurrency),
+                    getString(R.string.pref_autoDocument), getString(R.string.pref_autoEmployee),
+                    getString(R.string.pref_autoGST), getString(R.string.pref_autoHO),
+                    getString(R.string.pref_autoProduct), getString(R.string.pref_autoSizeNDesign),
+                    getString(R.string.pref_autoSizeDetail),getString(R.string.pref_lastSync)};
+
+            for(String pref : arr) {
+                updateSharedPref(pref,"Y");
+            }*/
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("CopySDTODB_"+e.getMessage());
+        }
+    }
+
+    private boolean isAppIsInBackground(Context context) {
+        boolean isInBackground = true;
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
+            List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
+            for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
+                if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    for (String activeProcess : processInfo.pkgList) {
+                        if (activeProcess.equals(context.getPackageName())) {
+                            isInBackground = false;
+                        }
+                    }
+                }
+            }
+        } else {
+            List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+            ComponentName componentInfo = taskInfo.get(0).topActivity;
+            if (componentInfo.getPackageName().equals(context.getPackageName())) {
+                isInBackground = false;
+            }
+        }
+        return isInBackground;
+    }
+
 
 }
 

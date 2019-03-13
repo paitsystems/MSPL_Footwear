@@ -75,9 +75,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         tv_mobile2.setOnClickListener(this);
 
         //TODO: JobScheduled
-        //Utility.scheduledJob(getApplicationContext());
-        /*Intent intent1 = new Intent(getApplicationContext(),AutoSyncService.class);
-        startService(intent1);*/
+        Utility.scheduledJob(getApplicationContext());
 
         setContactUs();
     }
@@ -85,9 +83,29 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
+        db = new DBHandler(getApplicationContext());
         if(mMenu!=null){
             onCreateOptionsMenu(mMenu);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Constant.showLog("onPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Constant.showLog("onStop");
+        db.close();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Constant.showLog("onDestroy");
     }
 
     @Override

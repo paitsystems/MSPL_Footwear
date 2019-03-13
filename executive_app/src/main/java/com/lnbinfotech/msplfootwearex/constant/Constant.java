@@ -15,6 +15,7 @@ import android.util.Log;
 
 import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.braodcasts.AutoUpdateBroadcastReceiver;
+import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 
 import java.io.File;

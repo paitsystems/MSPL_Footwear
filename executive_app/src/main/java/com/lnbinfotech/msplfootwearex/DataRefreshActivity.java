@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -92,8 +93,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private Toast toast;
     private ListView listView;
     private List<String> refreshList;
-    private String writeFilename = "Write.txt", prefname = "";//, SDPathName, DBPathName;
-    //private File SDFileName;//, DBFileName;
+    private String writeFilename = "Write.txt", prefname = "";
     private DBHandler db;
     private int maxProdId = 0, maxSDMDAuto = 0, syncAllFlag = 0;
     private ProgressDialog sndpd;
@@ -113,7 +113,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private String DBFilePath, DBSDFilePath, DBSDZipFilePath;
     private File SDDBZipFileName, SDDBUnzipFileName, SDDBFileName;
     private String SDDBZipFilePath, SDDBUnzipFilePath, SDDBFilePath;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,11 +196,14 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.datarefreshactivity_menu,menu);
-        int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
+        getMenuInflater().inflate(R.menu.datarefreshactivity_menu, menu);
+        int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
         //TODO : Check id is 8 or not
-        if(id!=194){
+        if (id != 194 && id != 8) {
             menu.findItem(R.id.db).setVisible(false);
+        }
+        if (id == 8) {
+            menu.findItem(R.id.dwnlddb).setVisible(false);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -1050,6 +1052,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         refreshList = new ArrayList<>();
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         setList();
+        Constant.checkFolder(Constant.folder_name);
         Constant.checkFolder(Constant.folder_name+"/"+Constant.zipFolderName);
         Constant.checkFolder(Constant.folder_name+"/"+Constant.unzipFolderName);
     }
@@ -1128,7 +1131,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 }
             });
         } else if (a == 4) {
-            builder.setMessage("Do You Want Update All Database?");
+            builder.setMessage("Do You Want Update Database?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -1164,6 +1167,11 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+                    SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                    editor.putBoolean(getString(R.string.pref_newDB),true);
+                    editor.apply();
+                    finish();
                 }
             });
         } else if (a == 8) {
@@ -1193,6 +1201,42 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     dialog.dismiss();
                     new Constant();
 
+                }
+            });
+        } else if (a == 11) {
+            builder.setMessage("File Downloaded Successfully");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    putData();
+
+                }
+            });
+        } else if (a == 12) {
+            builder.setMessage("Error While Downloading File");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 13) {
+            builder.setMessage("App Need For Re-Login");
+            builder.setPositiveButton("Re-Login", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+
+                    FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+                    SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                    editor.putBoolean(getString(R.string.pref_newDB),true);
+                    editor.apply();
+                    Intent intent = new Intent(getApplicationContext(), FirstActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("EXIT", true);
+                    startActivity(intent);
+                    finish();
                 }
             });
         }
@@ -2430,7 +2474,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private String getTime() {
         String str = "";
         try{
-            str = new SimpleDateFormat("dd/MMM/yyyy HH:mm", Locale.ENGLISH).format(new Date());
+            str = new SimpleDateFormat("dd/MMM/yyyy-HH:mm", Locale.ENGLISH).format(new Date());
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -2513,8 +2557,8 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             DBSDFilePath = android.os.Environment.getExternalStorageDirectory() + File.separator +
                     Constant.folder_name + File.separator + Constant.zipFolderName;
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            //DBFilePath = "/data/data/"+pInfo.packageName+"/databases/";
-            DBFilePath = pInfo.applicationInfo.dataDir+"/databases";
+            DBFilePath = "/data/data/"+pInfo.packageName+"/databases/";
+            //DBFilePath = pInfo.applicationInfo.dataDir+"/databases";
             Constant.showLog("DBSDFilePath -"+DBSDFilePath +"\n"+
                     "DBFilePath - "+DBFilePath);
             DBFileName = new File(DBFilePath, DBHandler.Database_Name);
@@ -2652,10 +2696,26 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void downloadDB(){
+        getData();
+        writeLog("----- In downloadDB -----");
         Constant.showLog("----- In downloadDB -----");
         file_url = Constant.imgUrl+Constant.zip_file;
         Constant.showLog(file_url);
         new DownloadFileFromURL().execute(file_url);
+        writeLog("----- End downloadDB -----");
+    }
+
+    private void getData() {
+        Constant.showLog("----- In getData ------");
+        writeLog("----- In getData ------");
+        DBHandler db = new DBHandler(getApplicationContext());
+        userList = db.getUserDetail();
+        custList = db.getCustOrder();
+        Constant.showLog("userList-"+userList.size()+"-custList-"+custList.size());
+        writeLog("userList-"+userList.size()+"-custList-"+custList.size());
+        Constant.showLog("----- End getData ------");
+        writeLog("----- End getData ------");
+        db.close();
     }
 
     private class DownloadFileFromURL extends AsyncTask<String, String, String> {
@@ -2666,10 +2726,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog = new ProgressDialog(DataRefreshActivity.this);
-            pDialog.setMessage("Downloading file. Please wait...");
-//            pDialog.setIndeterminate(false);
-//            pDialog.setMax(100);
-//            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            pDialog.setMessage("Downloading file...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -2677,6 +2734,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected String doInBackground(String... f_url) {
             try {
+                writeLog("----- In DownloadFileFromURL ------");
                 Constant.showLog("----- In DownloadFileFromURL ------");
                 client = new FTPClient();
                 client.connect(Constant.ftp_adress, 21);
@@ -2687,7 +2745,11 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     SDDBZipFilePath = Environment.getExternalStorageDirectory() + File.separator
                             + Constant.folder_name  + File.separator + Constant.unzipFolderName;
                     SDDBZipFileName = new File(SDDBZipFilePath, Constant.zip_file);
-
+                    if(SDDBZipFileName.exists()){
+                        SDDBZipFileName.delete();
+                        Constant.showLog(SDDBZipFileName.getAbsolutePath() + " Deleted ");
+                        writeLog(SDDBZipFileName.getAbsolutePath() + " Deleted ");
+                    }
                     Constant.showLog("SDDBZipFilePath - "+SDDBZipFilePath +"\n" +
                             "SDDBZipFileName - "+SDDBZipFileName.getAbsolutePath());
                     OutputStream outstream = new BufferedOutputStream(new FileOutputStream(SDDBZipFileName));
@@ -2695,14 +2757,15 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     outstream.close();
                     client.logout();
                     client.disconnect();
-                    writeLog("DownloadImageService_onHandleIntent_broadcastSend");
+                    writeLog("File Downloaded Successfully");
                 } else {
-                    writeLog("DownloadImageService_onHandleIntent_changeWorkingDirectory");
+                    writeLog("Error While changeWorkingDirectory");
+                    showDia(12);
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
-                writeLog("DownloadImageService_onHandleIntent_"+e.getMessage());
+                writeLog("Exception "+e.getMessage());
+                showDia(12);
             }
             return null;
         }
@@ -2711,17 +2774,23 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         protected void onPostExecute(String file_url) {
             pDialog.dismiss();
             Constant.showLog("----- End DownloadFileFromURL ------");
+            writeLog("----- End DownloadFileFromURL ------");
             if (SDDBZipFilePath != null) {
                 unzip();
             } else {
-                showDia(8);
+                showDia(12);
             }
         }
     }
 
     public void unzip() {
         try {
+            pDialog = new ProgressDialog(DataRefreshActivity.this);
+            pDialog.setMessage("Unzipping file...");
+            pDialog.setCancelable(false);
+            pDialog.show();
             Constant.showLog("----- In unZip File ------");
+            writeLog("----- In unZip File ------");
 
             SDDBUnzipFilePath = android.os.Environment.getExternalStorageDirectory() + File.separator +
                     Constant.folder_name + File.separator + Constant.unzipFolderName;
@@ -2736,6 +2805,11 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             BufferedOutputStream out = null;
             while ((ze = zin.getNextEntry()) != null) {
                 SDDBUnzipFileName = new File(SDDBUnzipFilePath + "/" + ze.getName());
+                if(SDDBUnzipFileName.exists()){
+                    SDDBUnzipFileName.delete();
+                    Constant.showLog(SDDBUnzipFileName.getAbsolutePath() + " Deleted ");
+                    writeLog(SDDBUnzipFileName.getAbsolutePath() + " Deleted ");
+                }
                 Constant.showLog("SDDBUnzipFileName - "+SDDBUnzipFileName.getAbsolutePath());
                 fout = new FileOutputStream(SDDBUnzipFileName);
                 in = new BufferedInputStream(zin);
@@ -2744,46 +2818,44 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 int n;
                 while ((n = in.read(b, 0, 1024)) >= 0) {
                     out.write(b, 0, n);
-                    Constant.showLog("n "+n);
+                    //Constant.showLog("n "+n);
+                }
+                if(SDDBZipFileName.exists()) {
+                    SDDBZipFileName.delete();
                 }
                 Constant.showLog("Write Complete");
-                File f = new File(SDDBUnzipFilePath,Constant.zip_file);
-                if (f.exists()) {
-                    f.delete();
-                    Constant.showLog("Zip "+f.getName()+" Deleted");
-                }
                 Constant.showLog("----- End unZip File ------");
-                getData();
+                writeLog("----- End unZip File ------");
             }
-            if(out!=null)
+            if(out!=null) {
                 out.close();
-            if(fout!=null)
+            }
+            if(fout!=null) {
                 fout.close();
+            }
             if(in!=null)
                 in.close();
+            pDialog.dismiss();
             CopySDTODB();
         } catch (Exception e) {
+            pDialog.dismiss();
             e.printStackTrace();
             writeLog("unzip_"+e.getMessage());
+            showDia(12);
         }
-    }
-
-    private void getData() {
-        Constant.showLog("----- In getData ------");
-        DBHandler db = new DBHandler(getApplicationContext());
-        userList = db.getUserDetail();
-        custList = db.getCustOrder();
-        db.close();
-        Constant.showLog("userList-"+userList.size()+"-custList-"+custList.size());
-        Constant.showLog("----- End getData ------");
     }
 
     private void CopySDTODB() {
         try {
+            pDialog = new ProgressDialog(DataRefreshActivity.this);
+            pDialog.setMessage("Copying file...");
+            pDialog.setCancelable(false);
+            pDialog.show();
             Constant.showLog("----- In CopySDTODB ------");
+            writeLog("----- In CopySDTODB ------");
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            SDDBFilePath = pInfo.applicationInfo.dataDir+"/databases";
-            //SDDBFilePath = "/data/data/"+pInfo.packageName+"/databases/";
+            //SDDBFilePath = pInfo.applicationInfo.dataDir+"/databases/";
+            SDDBFilePath = "/data/data/"+pInfo.packageName+"/databases/";
 
             SDDBUnzipFilePath = SDDBUnzipFileName.getAbsolutePath();
 
@@ -2792,36 +2864,87 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             if(backupDB.exists()){
                 backupDB.delete();
                 Constant.showLog(backupDB.getAbsolutePath()+" deleted");
+                writeLog(backupDB.getAbsolutePath()+" deleted");
             }
-            Constant.showLog("SDDBUnzipFilePath - "+SDDBUnzipFilePath +"\n" +
+            Constant.showLog("SDDBUnzipFileName - "+SDDBUnzipFileName +"\n" +
+                    "SDDBUnzipFilePath - "+SDDBUnzipFilePath +"\n" +
                     "SDDBFilePath - "+SDDBFilePath +"\n" +
-                    "currentDB - "+currentDB.getAbsolutePath()+"\n" +
-                    "backupDB - "+backupDB.getAbsolutePath());
-            FileChannel source = new FileInputStream(currentDB).getChannel();
+                    "currentDB - "+"\n" +
+                    "backupDB - ");
+
+            /*FileChannel source = new FileInputStream(SDDBUnzipFileName).getChannel();
             FileChannel destination = new FileOutputStream(backupDB).getChannel();
             destination.transferFrom(source, 0, source.size());
             destination.close();
-            source.close();
+            source.close();*/
+
+            DBHandler db = new DBHandler(getApplicationContext(),SDDBUnzipFilePath);
+            db.deleteTable(DBHandler.Table_CustomerOrder);
+            db.deleteTable(DBHandler.Table_Usermaster);
+            db.deleteTable(DBHandler.Table_TrackCustomerOrder);
+            int count = 0;
+            for(int i=0;i<userList.size();i++) {
+                count++;
+                db.addUserDetail(userList.get(i));
+            }
+            Constant.showLog(count+"");
+            writeLog("userList "+count+" Added");
+            count=0;
+            for(int i=0;i<custList.size();i++) {
+                count++;
+                db.addCustomerOrder(custList.get(i));
+            }
+            Constant.showLog(count+"");
+            writeLog("custList "+count+" Added");
+
+            InputStream mInput = new FileInputStream(SDDBUnzipFileName);
+            String outFileName = SDDBFilePath + DBHandler.Database_Name;
+            Constant.showLog("outFileName - "+outFileName);
+            OutputStream mOutput = new FileOutputStream(outFileName);
+            byte[] mBuffer = new byte[1024];
+            int mLength;
+            while ((mLength = mInput.read(mBuffer))>0) {
+                //Constant.showLog("mLength "+mLength);
+                mOutput.write(mBuffer, 0, mLength);
+            }
+            mOutput.flush();
+            mOutput.close();
+            mInput.close();
+            writeLog("outFileName - "+outFileName+" wrote ");
+
+            db = new DBHandler(getApplicationContext());
+            db.deleteTable(DBHandler.Table_TrackCustomerOrder);
+
             SharedPreferences.Editor editor = FirstActivity.pref.edit();
             String str = getTime();
             Constant.showLog("Last Sync - " + str);
             writeLog("CopySDTODB_Last Sync_" + str);
             editor.putString(getString(R.string.pref_lastSync), str);
             editor.apply();
-            DBHandler db = new DBHandler(getApplicationContext());
-            db.deleteTable(DBHandler.Table_CustomerOrder);
-            db.deleteTable(DBHandler.Table_Usermaster);
-            db.deleteTable(DBHandler.Table_TrackCustomerOrder);
-            db.close();
-            if(currentDB.exists()){
-                currentDB.delete();
-            }
+
             Constant.showLog("----- End CopySDTODB ------");
-            putData();
+            writeLog("----- End CopySDTODB ------");
+            new DBHandler(getApplicationContext(),SDDBUnzipFilePath).deleteTable(DBHandler.Table_TrackCustomerOrder);
+
+            /*String arr[] = {getString(R.string.pref_autoArealine),getString(R.string.pref_autoArea),
+                    getString(R.string.pref_autoBank), getString(R.string.pref_autoBankBranch),
+                    getString(R.string.pref_autoCity), getString(R.string.pref_autoCompany),
+                    getString(R.string.pref_autoCustomer), getString(R.string.pref_autoCurrency),
+                    getString(R.string.pref_autoDocument), getString(R.string.pref_autoEmployee),
+                    getString(R.string.pref_autoGST), getString(R.string.pref_autoHO),
+                    getString(R.string.pref_autoProduct), getString(R.string.pref_autoSizeNDesign),
+                    getString(R.string.pref_autoSizeDetail),getString(R.string.pref_lastSync)};
+
+            for(String pref : arr) {
+                updateSharedPref(pref,"Y");
+            }*/
+            showDia(13);
+            pDialog.dismiss();
         } catch (Exception e) {
+            pDialog.dismiss();
             e.printStackTrace();
             writeLog("CopySDTODB_"+e.getMessage());
-            showDia(8);
+            showDia(12);
         }
     }
 
@@ -2829,6 +2952,9 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         Constant.showLog("----- In putData -----");
         int count = 0;
         DBHandler db = new DBHandler(getApplicationContext());
+        db.deleteTable(DBHandler.Table_CustomerOrder);
+        db.deleteTable(DBHandler.Table_Usermaster);
+        db.deleteTable(DBHandler.Table_TrackCustomerOrder);
         for(int i=0;i<userList.size();i++) {
             count++;
             db.addUserDetail(userList.get(i));
@@ -2841,7 +2967,6 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         }
         Constant.showLog(count+"");
         Constant.showLog("userList-"+userList.size()+"-custList-"+custList.size());
-        db.onUpgrade(db.getWritableDatabase(),DBHandler.Database_Version,DBHandler.Database_Version+1);
         db.close();
         Constant.showLog("----- End putData -----");
         showDia(7);
