@@ -206,7 +206,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                     dialog.dismiss();
                 }
             });
-        }else if (a == 0) {
+        } else if (a == 0) {
             builder.setMessage(R.string.doyouwanttoexitfromapp);
             builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
@@ -228,9 +228,27 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
             builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if(ConnectivityTest.getNetStat(getApplicationContext())) {
-                        requestOTP();
-                    }else{
+                    if (ConnectivityTest.getNetStat(getApplicationContext())) {
+                        //requestOTP();
+                        String mobNo, imeino, imeino1, imeino2;
+                        mobNo = ed_mobNo.getText().toString();
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                            imeino = new Constant(getApplicationContext()).getIMEINo1();
+                            String[] arr = imeino.split("\\^");
+                            if (arr.length > 1) {
+                                imeino1 = arr[0];
+                                imeino2 = arr[1];
+                            } else {
+                                imeino1 = imeino;
+                                imeino2 = imeino;
+                            }
+                        } else {
+                            imeino = new Constant(getApplicationContext()).getIMEINo();
+                            imeino1 = imeino;
+                            imeino2 = imeino;
+                        }
+                        doThis("0-0", mobNo, imeino, imeino1, imeino2);
+                    } else {
                         toast.setText(getString(R.string.you_are_offline));
                         toast.show();
                     }
@@ -243,7 +261,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                     dialog.dismiss();
                 }
             });
-        }else if (a == 2) {
+        } else if (a == 2) {
             builder.setTitle(R.string.numbernotmatch);
             builder.setMessage(R.string.pleaseenterregisteredmobilenumber);
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -252,7 +270,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                     dialog.dismiss();
                 }
             });
-        }else if (a == 3) {
+        } else if (a == 3) {
             builder.setTitle(R.string.alreadyregistered);
             builder.setMessage(R.string.pleasecontactyouradministrator);
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -261,15 +279,15 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                     dialog.dismiss();
                 }
             });
-        }else if (a == 4) {
+        } else if (a == 4) {
             builder.setMessage(R.string.somethingwentwrong);
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if(ConnectivityTest.getNetStat(getApplicationContext())) {
+                    if (ConnectivityTest.getNetStat(getApplicationContext())) {
                         new Constant();
                         requestOTP();
-                    }else{
+                    } else {
                         toast.setText(getString(R.string.you_are_offline));
                         toast.show();
                     }

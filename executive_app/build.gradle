@@ -11,8 +11,9 @@ android {
         applicationId "com.lnbinfotech.msplfootwearex"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 12
+        versionCode 13
         versionName "1.6"
+        multiDexEnabled true
 
     }
     buildTypes {
@@ -47,6 +48,7 @@ ext {
 
     googlePlayServicesDepends = [
             location    : "com.google.android.gms:play-services-location:${googlePlayServicesVersion}",
+            auth    : "com.google.android.gms:play-services-auth:16.0.1",
             maps        : "com.google.android.gms:play-services-maps:${googlePlayServicesVersion}",
             crash       : "com.google.firebase:firebase-crash:${googlePlayServicesVersion}",
             core        : "com.google.firebase:firebase-core:${googlePlayServicesVersion}"
@@ -91,6 +93,8 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile "com.google.android.gms:play-services-auth-api-phone:11.2.0"
+    compile 'com.android.support:multidex:1.0.1'
 
 }
 apply plugin: 'com.google.gms.google-services'

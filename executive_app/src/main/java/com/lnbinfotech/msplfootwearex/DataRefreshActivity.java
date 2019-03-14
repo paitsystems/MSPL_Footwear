@@ -2461,6 +2461,18 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         //setList();
     }
 
+    private void updateUPSharedPref(String prefname, String value){
+        writeLog(prefname+"_"+value);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+        String str = getDateTime()+"-"+value+"-"+getTime();
+        Constant.showLog(prefname+"-"+str);
+        editor.putString(prefname, str);
+        editor.apply();
+        //setSyncDate();
+        //setList();
+    }
+
     private String getDateTime() {
         String str = "";
         try{
@@ -2634,7 +2646,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             FTPClient client = null;
             String ret = "0";
             try {
-                Constant.showLog("----- In UpploadFileToFTP ------");
+                Constant.showLog("----- In UploadFileToFTP ------");
                 client = new FTPClient();
                 client.connect(Constant.ftp_adress, 21);
                 client.login(Constant.ftp_username, Constant.ftp_password);
@@ -2686,8 +2698,29 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(String file_url) {
             pDialog.dismiss();
-            Constant.showLog("----- End UpploadFileToFTP ------");
+            Constant.showLog("----- End UploadFileToFTP ------");
             if (file_url.equals("1")) {
+
+                SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                String str = getTime();
+                Constant.showLog("Last Sync - " + str);
+                writeLog("CopyDBTOSD_Last Sync_" + str);
+                editor.putString(getString(R.string.pref_lastSync), str);
+                editor.putBoolean(getString(R.string.pref_newDB), false);
+                editor.apply();
+
+                String arr[] = {getString(R.string.pref_autoArealine),getString(R.string.pref_autoArea),
+                        getString(R.string.pref_autoBank), getString(R.string.pref_autoBankBranch),
+                        getString(R.string.pref_autoCity), getString(R.string.pref_autoCompany),
+                        getString(R.string.pref_autoCustomer), getString(R.string.pref_autoCurrency),
+                        getString(R.string.pref_autoDocument), getString(R.string.pref_autoEmployee),
+                        getString(R.string.pref_autoGST), getString(R.string.pref_autoHO),
+                        getString(R.string.pref_autoProduct), getString(R.string.pref_autoSizeNDesign),
+                        getString(R.string.pref_autoSizeDetail)};
+
+                for(String pref : arr) {
+                    updateUPSharedPref(pref,"Y");
+                }
                 showDia(9);
             } else {
                 showDia(10);
@@ -2926,18 +2959,18 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             writeLog("----- End CopySDTODB ------");
             new DBHandler(getApplicationContext(),SDDBUnzipFilePath).deleteTable(DBHandler.Table_TrackCustomerOrder);
 
-            /*String arr[] = {getString(R.string.pref_autoArealine),getString(R.string.pref_autoArea),
+            String arr[] = {getString(R.string.pref_autoArealine),getString(R.string.pref_autoArea),
                     getString(R.string.pref_autoBank), getString(R.string.pref_autoBankBranch),
                     getString(R.string.pref_autoCity), getString(R.string.pref_autoCompany),
                     getString(R.string.pref_autoCustomer), getString(R.string.pref_autoCurrency),
                     getString(R.string.pref_autoDocument), getString(R.string.pref_autoEmployee),
                     getString(R.string.pref_autoGST), getString(R.string.pref_autoHO),
                     getString(R.string.pref_autoProduct), getString(R.string.pref_autoSizeNDesign),
-                    getString(R.string.pref_autoSizeDetail),getString(R.string.pref_lastSync)};
+                    getString(R.string.pref_autoSizeDetail)};
 
             for(String pref : arr) {
                 updateSharedPref(pref,"Y");
-            }*/
+            }
             showDia(13);
             pDialog.dismiss();
         } catch (Exception e) {
