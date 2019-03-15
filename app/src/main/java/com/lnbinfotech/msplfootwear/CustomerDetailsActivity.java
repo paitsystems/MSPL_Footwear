@@ -206,7 +206,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     dialog.dismiss();
                 }
             });
-        }else if (a == 1) {
+        } else if (a == 1) {
             builder.setMessage("You Are Not An Active Customer?");
             builder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
                 @Override
@@ -216,7 +216,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     new Constant(CustomerDetailsActivity.this).doFinish();
                 }
             });
-        }else if (a == 2) {
+        } else if (a == 2) {
             builder.setMessage("Please Try Again");
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                 @Override
@@ -234,7 +234,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     new Constant(CustomerDetailsActivity.this).doFinish();
                 }
             });
-        }else if (a == 3) {
+        } else if (a == 3) {
             builder.setTitle("You Are Offline");
             builder.setMessage("Please Connect To Network?");
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
@@ -252,7 +252,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
 
                 }
             });
-        }else if(a==4) {
+        } else if (a == 4) {
             builder.setMessage("Error While Loading Data");
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                 @Override
@@ -267,7 +267,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     dialog.dismiss();
                 }
             });
-        }else if(a==5) {
+        } else if (a == 5) {
             builder.setMessage("This Device Is Not Registered");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
@@ -276,7 +276,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     new Constant(CustomerDetailsActivity.this).doFinish();
                 }
             });
-        }else if(a==8) {
+        } else if (a == 8) {
             builder.setTitle("Update App");
             builder.setMessage("MSPL Customer New Version Is Available");
             builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
@@ -286,8 +286,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
                     try {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-                    }
-                    catch (android.content.ActivityNotFoundException anfe) {
+                    } catch (android.content.ActivityNotFoundException anfe) {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
                     }
                     dialog.dismiss();
@@ -299,7 +298,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     dialog.dismiss();
                 }
             });*/
-        }else if (a == 9) {
+        } else if (a == 9) {
             builder.setMessage("Please Try Again");
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                 @Override

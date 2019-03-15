@@ -25,10 +25,12 @@ import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.constant.Utitlity;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
+import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwear.log.CopyLog;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.mail.GMailSender;
 import com.lnbinfotech.msplfootwear.services.AutoSyncService;
+import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
 
 import java.io.File;
 import java.util.Locale;
@@ -255,7 +257,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                     dialog.dismiss();
                 }
             });
-        }else if (a == 1) {
+        } else if (a == 1) {
             builder.setTitle("Take Order");
             builder.setMessage("How do you want to take order?");
             builder.setPositiveButton("Imagewise", new DialogInterface.OnClickListener() {
@@ -269,7 +271,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             builder.setNegativeButton("Cutsize", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    int custId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
+                    int custId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
                     custDisc = new DBHandler(getApplicationContext()).getCustDiscount(custId);
                     startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
                     overridePendingTransition(R.anim.enter, R.anim.exit);
@@ -282,7 +284,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                     dialog.dismiss();
                 }
             });
-        }else if (a == 2) {
+        } else if (a == 2) {
             builder.setMessage("Do You Want To Logout From App?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -297,14 +299,14 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                     dialog.dismiss();
                 }
             });
-        }else if (a == 3) {
+        } else if (a == 3) {
             builder.setTitle("Take Order");
             builder.setMessage("How do you want to take order?");
             builder.setPositiveButton("With Photos", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(getApplicationContext(), MainImagewiseSetwiseOrderActivity.class);
-                    intent.putExtra("from","Option");
+                    intent.putExtra("from", "Option");
                     startActivity(intent);
                     overridePendingTransition(R.anim.enter, R.anim.exit);
                     dialog.dismiss();
@@ -344,13 +346,13 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                     dialog.dismiss();
                 }
             });
-        }else if (a == 7) {
+        } else if (a == 7) {
             builder.setMessage("Do You Want To Clear Saved Order?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     db.deleteTable(DBHandler.Table_CustomerOrder);
-                    if(mMenu!=null){
+                    if (mMenu != null) {
                         onCreateOptionsMenu(mMenu);
                     }
                     toast.setText("Order Cleared");
@@ -364,6 +366,16 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                     dialog.dismiss();
                 }
             });
+        } else if (a == 8) {
+            builder.setMessage("Please Try Again");
+            builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    new Constant();
+                    checkIsActive();
+                }
+            });
         }
         builder.create().show();
     }
@@ -375,6 +387,36 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         Locale.setDefault(locale);
         configuration.locale = locale;
         Constant.showLog("locale:"+locale);
+    }
+
+    private void checkIsActive() {
+        final Constant constant = new Constant(OptionsActivity.this);
+        if (ConnectivityTest.getNetStat(getApplicationContext())) {
+            int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
+            String url = Constant.ipaddress + "/GetSalesExe?id=" + id + "&type=C&IMEINo1=0&IMEINo2=0";
+            Constant.showLog(url);
+            writeLog("checkIsActive_" + url);
+            constant.showPD();
+            VolleyRequests requests = new VolleyRequests(OptionsActivity.this);
+            requests.getActiveStatus(url, new ServerCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    constant.showPD();
+                    String arr[] = result.split("\\^");
+                    if(arr.length>1){
+
+                    }
+                }
+
+                @Override
+                public void onFailure(String result) {
+                    constant.showPD();
+                    showDia(8);
+                }
+            });
+        } else {
+            showDia(3);
+        }
     }
 
     private void setContactUs(){

@@ -22,7 +22,7 @@ import com.lnbinfotech.msplfootwear.services.ScheduledJobServicePL;
 public class Utitlity {
 
     public static void scheduledJob(Context context){
-        long period = 60*60*1000;
+        long period = 15*60*1000;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             ComponentName component = new ComponentName(context, ScheduledJobServicePL.class);
             JobInfo.Builder builder = new JobInfo.Builder(0, component);
@@ -40,7 +40,7 @@ public class Utitlity {
                     .setService(ScheduledJobService.class)
                     .setRecurring(true)
                     .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
-                    .setTrigger(Trigger.executionWindow(3600,3700))
+                    .setTrigger(Trigger.executionWindow(15*60,20*60))
                     .build();
             dispatcher.mustSchedule(job);
         }

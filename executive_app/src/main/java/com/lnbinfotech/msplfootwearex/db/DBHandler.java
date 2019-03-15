@@ -494,6 +494,12 @@ public class DBHandler extends SQLiteOpenHelper {
         //dbInterface.dbUpdated();
     }
 
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+        super.onConfigure(db);
+        db.disableWriteAheadLogging();
+    }
+
     public void addCustomerDetail(ArrayList<CustomerDetailClass> custList) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -1482,7 +1488,7 @@ public class DBHandler extends SQLiteOpenHelper {
                     CO_Productid  + "=" + custOrder.getProductId() + " and "+
                     CO_SizeGroup + "="+ custOrder.getSizeGroup() + " and " +
                     CO_Color + "='"+ custOrder.getColor() +"' and " +
-                    CO_MRP + " like '%"+ custOrder.getRate() +"%' and " +
+                    //CO_MRP + " like '%"+ custOrder.getRate() +"%' and " +
                     CO_LooseQty + "=" + custOrder.getEnterQty();
             Constant.showLog(str);
             db.execSQL(str);

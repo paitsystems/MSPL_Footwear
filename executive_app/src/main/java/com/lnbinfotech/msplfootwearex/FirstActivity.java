@@ -367,7 +367,7 @@ public class FirstActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = FirstActivity.pref.edit();
         String str = getDateTime()+"-"+value+"-"+getTime();
         Constant.showLog(prefName+"-"+str);
-        editor.putString(prefName, getTime());
+        editor.putString(prefName, str);
         editor.apply();
         //setSyncDate();
         //setList();

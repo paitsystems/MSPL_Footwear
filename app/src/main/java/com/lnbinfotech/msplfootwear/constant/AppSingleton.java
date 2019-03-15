@@ -60,6 +60,13 @@ public class AppSingleton {
         getRequestQueue().add(request);
     }
 
+    public <T> void addToRequestQueue1(Request<T> request, String tag){
+        request.setShouldCache(false);
+        request.setRetryPolicy(new DefaultRetryPolicy(10*1000,0,0));
+        request.setTag(tag);
+        getRequestQueue().add(request);
+    }
+
     public ImageLoader getImageLoader(){
         return mImageLoader;
     }

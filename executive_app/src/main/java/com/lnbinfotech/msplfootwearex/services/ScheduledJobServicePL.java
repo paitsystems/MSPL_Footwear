@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -793,11 +794,11 @@ public class ScheduledJobServicePL extends JobService {
 
             File currentDB = new File(SDDBUnzipFilePath);
             File backupDB = new File(SDDBFilePath, DBHandler.Database_Name);
-            if(backupDB.exists()){
+            /*if(backupDB.exists()){
                 backupDB.delete();
                 Constant.showLog(backupDB.getAbsolutePath()+" deleted");
                 writeLog(backupDB.getAbsolutePath()+" deleted");
-            }
+            }*/
             Constant.showLog("SDDBUnzipFileName - "+SDDBUnzipFileName +"\n" +
                     "SDDBUnzipFilePath - "+SDDBUnzipFilePath +"\n" +
                     "SDDBFilePath - "+SDDBFilePath +"\n" +

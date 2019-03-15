@@ -619,6 +619,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
                     try {
                         if (receiver != null) {
                             //receiver.bindListener(null);
@@ -633,7 +634,6 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                     }
                     new Constant(CheckOTPActivity.this).doFinish();
                     toast.cancel();
-                    dialog.dismiss();
                 }
             });
             builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

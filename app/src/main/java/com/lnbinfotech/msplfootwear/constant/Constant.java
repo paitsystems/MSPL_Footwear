@@ -28,6 +28,8 @@ public class Constant {
     //TODO: Check VersionCode and Version Name
 
     public static String folder_name = "MSPL Footwear",
+            zipFolderName = "Zip",
+            unzipFolderName = "UnZip",
             gstFolderName = "GSTReport",
             image_folder = "Caputured_img",
             captured_images_folder = "MSPL_CapturedImages",
@@ -40,13 +42,14 @@ public class Constant {
             ftp_adress = "ftp.lnbinfotech.com",
             ftp_username = "supportftp@lnbinfotech.com",
             ftp_password = "support$456",
-            ftp_directory = "SMVisit_Indus";
+            ftp_directory = "Test",
+            zip_file = "SmartGST.zip";
 
     //TODO: Check Ip Address
     //public static String ipaddress = "http://172.30.1.209/MSPLC6/service.svc";
     //public static String ipaddress = "http://license.lnbinfotech.com/MSPLC6/service.svc";
     //public static String ipaddress = "http://219.91.211.9:24086/MSPLC6/service.svc";
-    public static String ipaddress = "http://43.239.147.103:24085/MSPLC6/service.svc";
+    public static String ipaddress = "http://43.239.147.103:24085/MSPLV7/service.svc";
 
     //TODO: Check Image Url
     //public static final String imgUrl = "http://219.91.211.9:24086/IMAGES/";
@@ -62,7 +65,7 @@ public class Constant {
     public static int liveTestFlag = 1;
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
-    private static int showLogFlag = 1;
+    public static int showLogFlag = 0;
 
     public static int TIMEOUT_CON = 10*1000;
     public static int TIMEOUT_SO = 2*60*1000;

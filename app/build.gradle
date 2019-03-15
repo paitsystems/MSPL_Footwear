@@ -15,8 +15,9 @@ android {
         applicationId "com.lnbinfotech.msplfootwear"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 10
-        versionName "1.4"
+        versionCode 11
+        versionName "1.5"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -66,5 +67,11 @@ dependencies {
     compile 'com.firebase:firebase-jobdispatcher-with-gcm-dep:0.8.5'
     compile files('libs/poi-3.8-20120326.jar')
     compile files('libs/jackson-all-1.9.0.jar')
+
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile "com.google.android.gms:play-services-auth-api-phone:11.2.0"
+    compile 'com.android.support:multidex:1.0.1'
 }
 apply plugin: 'com.google.gms.google-services'

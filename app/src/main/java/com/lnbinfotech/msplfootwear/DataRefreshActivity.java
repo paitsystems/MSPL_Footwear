@@ -3,13 +3,17 @@ package com.lnbinfotech.msplfootwear;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -21,31 +25,50 @@ import android.widget.Toast;
 import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
+import com.lnbinfotech.msplfootwear.interfaces.RetrofitApiInterface;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.BankBranchMasterClass;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
+import com.lnbinfotech.msplfootwear.model.CustomerOrderClass;
+import com.lnbinfotech.msplfootwear.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwear.model.SizeDesignMastDetClass;
 import com.lnbinfotech.msplfootwear.model.SizeNDesignClass;
 import com.lnbinfotech.msplfootwear.model.StockInfoMasterClass;
+import com.lnbinfotech.msplfootwear.model.UserClass;
 import com.lnbinfotech.msplfootwear.post.Post;
+import com.lnbinfotech.msplfootwear.utility.RetrofitApiBuilder;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
 
-import junit.framework.Test;
-
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
+import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DataRefreshActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,16 +76,27 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private Toast toast;
     private ListView listView;
     private List<String> refreshList;
-    private String writeFilename = "Write.txt", prefname = "";;
+    private String writeFilename = "Write.txt", prefname = "";
     private DBHandler db;
     private ProgressDialog pd1;
-    private int maxProdId = 0, maxSDMDAuto = 0;
+    private int maxProdId = 0, maxSDMDAuto = 0, syncAllFlag = 0;
     private ProgressDialog sndpd;
     private String areaMaster = "Area Master", bankMaster = "Bank Master", bankBrancMaster = "Bank's Branch Master",
                             cityMaster = "City Master", companyMaster = "Company Master", custMaster = "Customer Master",
                             docMaster = "Document Master", empMaster = "Employee Master", hoMaster = "HOMaster Master",
                             prodMaster = "Product Master", sizenDesignMaster = "SizeAndDesign Master", stockMaster = "Stock Master",
                             gstMaster = "GST Master", sdmdMaster = "SizeDetail Master";
+
+    private ProgressDialog pDialog;
+    public static final int progress_bar_type = 0;
+    private String file_url;
+
+    private ArrayList<UserClass> userList;
+    private ArrayList<CustomerOrderClass> custList;
+    private File DBFileName,DBSDFileName;
+    private String DBFilePath, DBSDFilePath, DBSDZipFilePath;
+    private File SDDBZipFileName, SDDBUnzipFileName, SDDBFileName;
+    private String SDDBZipFilePath, SDDBUnzipFilePath, SDDBFilePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,11 +177,30 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.datarefreshactivity_menu, menu);
+        int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
+        //TODO : Check id is 1176 or not
+        menu.findItem(R.id.db).setVisible(false);
+        menu.findItem(R.id.dwnlddb).setVisible(true);
+        if (id == 1176) {
+            menu.findItem(R.id.db).setVisible(true);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 //showDia(0);
                 new Constant(DataRefreshActivity.this).doFinish();
+                break;
+            case R.id.db:
+                showDia(3);
+                break;
+            case R.id.dwnlddb:
+                showDia(4);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -507,6 +560,207 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         },0);
     }
 
+    private void getProductMasterV6() {
+        constant = new Constant(DataRefreshActivity.this);
+        constant.showPD();
+        try {
+            final DBHandler db = new DBHandler(getApplicationContext());
+            String url = 0 + "|" + 10000 + "|" + "E";
+            writeLog("getProductMasterV6_"+url);
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("details", url);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.
+                    parse("application/json; charset=utf-8"), (jsonBody).toString());
+            Constant.showLog(jsonBody.toString());
+
+            Call<List<ProductMasterClass>> call = new RetrofitApiBuilder().getApiBuilder().
+                    create(RetrofitApiInterface.class).
+                    getProductMasterV6(body);
+            call.enqueue(new Callback<List<ProductMasterClass>>() {
+                @Override
+                public void onResponse(Call<List<ProductMasterClass>> call, Response<List<ProductMasterClass>> response) {
+                    Constant.showLog("onResponse");
+                    List<ProductMasterClass> list = response.body();
+                    if (list != null) {
+                        if (list.size()!=0) {
+                            db.deleteTable(DBHandler.Table_ProductMaster);
+                        }
+                        db.addProductMaster(list);
+                        Constant.showLog(list.size() + "_getProductMasterV6");
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                        String str = getDateTime()+"-"+"True"+"-"+getTime();
+                        Constant.showLog(getString(R.string.pref_autoProduct)+"-"+str);
+                        editor.putString(getString(R.string.pref_autoProduct), getTime());
+                        editor.apply();
+                        writeLog("getProductMasterV6_onResponse_" + list.size() + "_" + str);
+                    } else {
+                        Constant.showLog("onResponse_list_null");
+                        writeLog("getProductMasterV6_onResponse_list_null");
+                    }
+                    constant.showPD();
+                    if (syncAllFlag == 0) {
+                        showDia(6);
+                    } else {
+                        getAllSizeDesignMastDetV6();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<ProductMasterClass>> call, Throwable t) {
+                    Constant.showLog("onFailure");
+                    if (!call.isCanceled()) {
+                        call.cancel();
+                    }
+                    t.printStackTrace();
+                    writeLog("getProductMasterV6_onFailure_" + t.getMessage());
+                    constant.showPD();
+                    showDia(2);
+                    syncAllFlag = 0;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getProductMasterV6_" + e.getMessage());
+            constant.showPD();
+            showDia(2);
+            syncAllFlag = 0;
+        }
+    }
+
+    private void getAllSizeDesignMastDetV6() {
+        constant = new Constant(DataRefreshActivity.this);
+        constant.showPD();
+        try {
+            final DBHandler db = new DBHandler(getApplicationContext());
+            String url = 0 + "|" + 10000;
+            writeLog("getAllSizeDesignMastDetV6_"+url);
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("details", url);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.
+                    parse("application/json; charset=utf-8"), (jsonBody).toString());
+            Constant.showLog(jsonBody.toString());
+
+            Call<List<SizeNDesignClass>> call = new RetrofitApiBuilder().getApiBuilder().
+                    create(RetrofitApiInterface.class).
+                    getAllSizeDesignMastDetV6(body);
+            call.enqueue(new Callback<List<SizeNDesignClass>>() {
+                @Override
+                public void onResponse(Call<List<SizeNDesignClass>> call, Response<List<SizeNDesignClass>> response) {
+                    Constant.showLog("onResponse");
+                    List<SizeNDesignClass> list = response.body();
+                    if (list != null) {
+                        if (list.size()!=0) {
+                            db.deleteTable(DBHandler.Table_AllRequiredSizesDesigns);
+                        }
+                        db.addSizeNDesignMaster(list);
+                        Constant.showLog(list.size() + "_getAllSizeDesignMastDetV6");
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                        String str = getDateTime()+"-"+"True"+"-"+getTime();
+                        Constant.showLog(getString(R.string.pref_autoSizeNDesign)+"-"+str);
+                        editor.putString(getString(R.string.pref_autoSizeNDesign), getTime());
+                        editor.apply();
+                        writeLog("getAllSizeDesignMastDetV6_onResponse_" + list.size() + "_" + str);
+                    } else {
+                        Constant.showLog("onResponse_list_null");
+                        writeLog("getAllSizeDesignMastDetV6_onResponse_list_null");
+                    }
+                    constant.showPD();
+                    if (syncAllFlag == 0) {
+                        showDia(6);
+                    } else {
+                        getSizeDesignMastDetV6();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<SizeNDesignClass>> call, Throwable t) {
+                    Constant.showLog("onFailure");
+                    if (!call.isCanceled()) {
+                        call.cancel();
+                    }
+                    t.printStackTrace();
+                    writeLog("getAllSizeDesignMastDetV6_onFailure_" + t.getMessage());
+                    constant.showPD();
+                    showDia(2);
+                    syncAllFlag = 0;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getAllSizeDesignMastDetV6_" + e.getMessage());
+            constant.showPD();
+            showDia(2);
+            syncAllFlag = 0;
+        }
+    }
+
+    private void getSizeDesignMastDetV6() {
+        constant = new Constant(DataRefreshActivity.this);
+        constant.showPD();
+        try {
+            final DBHandler db = new DBHandler(getApplicationContext());
+            String url = 0 + "|" + 10000;
+            writeLog("getSizeDesignMastDetV6_"+url);
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("details", url);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.
+                    parse("application/json; charset=utf-8"), (jsonBody).toString());
+            Constant.showLog(jsonBody.toString());
+
+            Call<List<SizeDesignMastDetClass>> call = new RetrofitApiBuilder().getApiBuilder().
+                    create(RetrofitApiInterface.class).
+                    getSizeDesignMastDetV6(body);
+            call.enqueue(new Callback<List<SizeDesignMastDetClass>>() {
+                @Override
+                public void onResponse(Call<List<SizeDesignMastDetClass>> call, Response<List<SizeDesignMastDetClass>> response) {
+                    Constant.showLog("onResponse");
+                    List<SizeDesignMastDetClass> list = response.body();
+                    if (list != null) {
+                        if (list.size()!=0) {
+                            db.deleteTable(DBHandler.Table_SizeDesignMastDet);
+                        }
+                        db.addSizeDesignMastDet(list);
+                        Constant.showLog(list.size() + "_getSizeDesignMastDetV6");
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                        String str = getDateTime()+"-"+"True"+"-"+getTime();
+                        Constant.showLog(getString(R.string.pref_autoSizeDetail)+"-"+str);
+                        editor.putString(getString(R.string.pref_autoSizeDetail), getTime());
+                        editor.apply();
+                        writeLog("getSizeDesignMastDetV6_onResponse_" + list.size() + "_" + str);
+                    } else {
+                        Constant.showLog("onResponse_list_null");
+                        writeLog("getSizeDesignMastDetV6_onResponse_list_null");
+                    }
+                    constant.showPD();
+                    showDia(6);
+                    syncAllFlag = 0;
+                }
+
+                @Override
+                public void onFailure(Call<List<SizeDesignMastDetClass>> call, Throwable t) {
+                    Constant.showLog("onFailure");
+                    if (!call.isCanceled()) {
+                        call.cancel();
+                    }
+                    t.printStackTrace();
+                    writeLog("getSizeDesignMastDetV6_onFailure_" + t.getMessage());
+                    constant.showPD();
+                    showDia(2);
+                    syncAllFlag = 0;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getSizeDesignMastDetV6_" + e.getMessage());
+            constant.showPD();
+            showDia(2);
+            syncAllFlag = 0;
+        }
+    }
+
     private void init() {
         db = new DBHandler(DataRefreshActivity.this);
         constant = new Constant(DataRefreshActivity.this);
@@ -581,6 +835,140 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                     dialog.dismiss();
                 }
             });
+        } else if (a == 3) {
+            builder.setMessage("What Do You Want To Do?");
+            builder.setPositiveButton("Sync N Upload", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    syncAllFlag = 1;
+                    //loadAreaLineMaster();
+                }
+            });
+            builder.setNegativeButton("Upload File", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    syncAllFlag = 0;
+                    //CopyDBToSD();
+
+                }
+            });
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 4) {
+            builder.setMessage("Do You Want Update Database?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    downloadDB();
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 5) {
+            builder.setMessage("File Uploaded Successfully");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 6) {
+            builder.setMessage("Data Refreshed Successfully");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 7) {
+            builder.setMessage("Data Refreshed Successfully");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+                    SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                    editor.putBoolean(getString(R.string.pref_newDB),true);
+                    editor.apply();
+                    finish();
+                }
+            });
+        } else if (a == 8) {
+            builder.setMessage("Error While Data Update");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new Constant();
+                    dialog.dismiss();
+
+                }
+            });
+        } else if (a == 9) {
+            builder.setMessage("Data Uploaded Successfully");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+
+                }
+            });
+        } else if (a == 10) {
+            builder.setMessage("Error While Data Uploading");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    new Constant();
+
+                }
+            });
+        } else if (a == 11) {
+            builder.setMessage("File Downloaded Successfully");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    putData();
+
+                }
+            });
+        } else if (a == 12) {
+            builder.setMessage("Error While Downloading File");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 13) {
+            builder.setMessage("App Need For Re-Login");
+            builder.setPositiveButton("Re-Login", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+
+                    FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+                    SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                    editor.putBoolean(getString(R.string.pref_newDB),true);
+                    editor.apply();
+                    Intent intent = new Intent(getApplicationContext(), FirstActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("EXIT", true);
+                    startActivity(intent);
+                    finish();
+                }
+            });
         }
         builder.create().show();
     }
@@ -611,22 +999,24 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 } else if (a == 8) {
                     loadHOMaster();
                 } else if (a == 9) {
-                    getMaxAuto(1);
+                    //getMaxAuto(1);
+                    getProductMasterV6();
                 } else if (a == 10) {
-                    maxProdId = db.getMaxProdId();
+                    /*maxProdId = db.getMaxProdId();
                     if (maxProdId != 0) {
                         db.deleteTable(DBHandler.Table_AllRequiredSizesDesigns);
                         loadSizeNDesignMaster(0, 100);
                     } else {
                         toast.setText("Please Update ProductMaster First");
                         toast.show();
-                    }
+                    }*/
+                    getAllSizeDesignMastDetV6();
                 } else if (a == 11) {
                     //loadStockInfo();
                 } else if (a == 12) {
                     loadGSTMaster();
                 }else if (a == 13) {
-                    maxSDMDAuto = db.getMaxProdId();
+                    /*maxSDMDAuto = db.getMaxProdId();
                     if (maxSDMDAuto != 0) {
                         Constant.showLog("maxSDMDAuto :- "+maxSDMDAuto);
                         db.deleteTable(DBHandler.Table_SizeDesignMastDet);
@@ -634,7 +1024,8 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                         toast.setText("Please Update ProductMaster First");
                         toast.show();
                     }
-                    loadSDMD(0,100);
+                    loadSDMD(0,100);*/
+                    getSizeDesignMastDetV6();
                 }
             }
         });
@@ -1832,4 +2223,282 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "DataRefreshActivity_" + _data);
     }
+
+    private void downloadDB(){
+        getData();
+        writeLog("----- In downloadDB -----");
+        Constant.showLog("----- In downloadDB -----");
+        String file_url = Constant.imgUrl+Constant.zip_file;
+        Constant.showLog(file_url);
+        new DownloadFileFromURL().execute(file_url);
+        writeLog("----- End downloadDB -----");
+    }
+
+    private void getData() {
+        Constant.showLog("----- In getData ------");
+        writeLog("----- In getData ------");
+        DBHandler db = new DBHandler(getApplicationContext());
+        userList = db.getUserDetail();
+        custList = db.getCustOrder();
+        Constant.showLog("userList-"+userList.size()+"-custList-"+custList.size());
+        writeLog("userList-"+userList.size()+"-custList-"+custList.size());
+        Constant.showLog("----- End getData ------");
+        writeLog("----- End getData ------");
+        db.close();
+    }
+
+    private class DownloadFileFromURL extends AsyncTask<String, String, String> {
+
+        private FTPClient client = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(DataRefreshActivity.this);
+            pDialog.setMessage("Downloading file...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... f_url) {
+            try {
+                writeLog("----- In DownloadFileFromURL ------");
+                Constant.showLog("----- In DownloadFileFromURL ------");
+                client = new FTPClient();
+                client.connect(Constant.ftp_adress, 21);
+                client.login(Constant.ftp_username, Constant.ftp_password);
+                client.setFileType(FTP.BINARY_FILE_TYPE);
+                client.enterLocalPassiveMode();
+                if (client.changeWorkingDirectory(Constant.ftp_directory)) {
+                    SDDBZipFilePath = Environment.getExternalStorageDirectory() + File.separator
+                            + Constant.folder_name  + File.separator + Constant.unzipFolderName;
+                    SDDBZipFileName = new File(SDDBZipFilePath, Constant.zip_file);
+                    if(SDDBZipFileName.exists()){
+                        SDDBZipFileName.delete();
+                        Constant.showLog(SDDBZipFileName.getAbsolutePath() + " Deleted ");
+                        writeLog(SDDBZipFileName.getAbsolutePath() + " Deleted ");
+                    }
+                    Constant.showLog("SDDBZipFilePath - "+SDDBZipFilePath +"\n" +
+                            "SDDBZipFileName - "+SDDBZipFileName.getAbsolutePath());
+                    OutputStream outstream = new BufferedOutputStream(new FileOutputStream(SDDBZipFileName));
+                    client.retrieveFile(Constant.zip_file, outstream);
+                    outstream.close();
+                    client.logout();
+                    client.disconnect();
+                    writeLog("File Downloaded Successfully");
+                } else {
+                    writeLog("Error While changeWorkingDirectory");
+                    showDia(12);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                writeLog("Exception "+e.getMessage());
+                showDia(12);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String file_url) {
+            pDialog.dismiss();
+            Constant.showLog("----- End DownloadFileFromURL ------");
+            writeLog("----- End DownloadFileFromURL ------");
+            if (SDDBZipFilePath != null) {
+                unzip();
+            } else {
+                showDia(12);
+            }
+        }
+    }
+
+    public void unzip() {
+        try {
+            pDialog = new ProgressDialog(DataRefreshActivity.this);
+            pDialog.setMessage("Unzipping file...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+            Constant.showLog("----- In unZip File ------");
+            writeLog("----- In unZip File ------");
+
+            SDDBUnzipFilePath = android.os.Environment.getExternalStorageDirectory() + File.separator +
+                    Constant.folder_name + File.separator + Constant.unzipFolderName;
+
+            Constant.showLog("SDDBUnzipFilePath - "+SDDBUnzipFilePath);
+
+            FileInputStream fin = new FileInputStream(SDDBZipFileName);
+            ZipInputStream zin = new ZipInputStream(fin);
+            ZipEntry ze = null;
+            FileOutputStream fout = null;
+            BufferedInputStream in = null;
+            BufferedOutputStream out = null;
+            while ((ze = zin.getNextEntry()) != null) {
+                SDDBUnzipFileName = new File(SDDBUnzipFilePath + "/" + ze.getName());
+                if(SDDBUnzipFileName.exists()){
+                    SDDBUnzipFileName.delete();
+                    Constant.showLog(SDDBUnzipFileName.getAbsolutePath() + " Deleted ");
+                    writeLog(SDDBUnzipFileName.getAbsolutePath() + " Deleted ");
+                }
+                Constant.showLog("SDDBUnzipFileName - "+SDDBUnzipFileName.getAbsolutePath());
+                fout = new FileOutputStream(SDDBUnzipFileName);
+                in = new BufferedInputStream(zin);
+                out = new BufferedOutputStream(fout);
+                byte b[] = new byte[1024];
+                int n;
+                while ((n = in.read(b, 0, 1024)) >= 0) {
+                    out.write(b, 0, n);
+                    //Constant.showLog("n "+n);
+                }
+                if(SDDBZipFileName.exists()) {
+                    SDDBZipFileName.delete();
+                }
+                Constant.showLog("Write Complete");
+                Constant.showLog("----- End unZip File ------");
+                writeLog("----- End unZip File ------");
+            }
+            if(out!=null) {
+                out.close();
+            }
+            if(fout!=null) {
+                fout.close();
+            }
+            if(in!=null)
+                in.close();
+            pDialog.dismiss();
+            CopySDTODB();
+        } catch (Exception e) {
+            pDialog.dismiss();
+            e.printStackTrace();
+            writeLog("unzip_"+e.getMessage());
+            showDia(12);
+        }
+    }
+
+    private void CopySDTODB() {
+        try {
+            pDialog = new ProgressDialog(DataRefreshActivity.this);
+            pDialog.setMessage("Copying file...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+            Constant.showLog("----- In CopySDTODB ------");
+            writeLog("----- In CopySDTODB ------");
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            //SDDBFilePath = pInfo.applicationInfo.dataDir+"/databases/";
+            SDDBFilePath = "/data/data/"+pInfo.packageName+"/databases/";
+
+            SDDBUnzipFilePath = SDDBUnzipFileName.getAbsolutePath();
+
+            File currentDB = new File(SDDBUnzipFilePath);
+            File backupDB = new File(SDDBFilePath, DBHandler.Database_Name);
+            /*if(backupDB.exists()){
+                backupDB.delete();
+                Constant.showLog(backupDB.getAbsolutePath()+" deleted");
+                writeLog(backupDB.getAbsolutePath()+" deleted");
+            }*/
+            Constant.showLog("SDDBUnzipFileName - "+SDDBUnzipFileName +"\n" +
+                    "SDDBUnzipFilePath - "+SDDBUnzipFilePath +"\n" +
+                    "SDDBFilePath - "+SDDBFilePath +"\n" +
+                    "currentDB - "+"\n" +
+                    "backupDB - ");
+
+            /*FileChannel source = new FileInputStream(SDDBUnzipFileName).getChannel();
+            FileChannel destination = new FileOutputStream(backupDB).getChannel();
+            destination.transferFrom(source, 0, source.size());
+            destination.close();
+            source.close();*/
+
+            DBHandler db = new DBHandler(getApplicationContext(),SDDBUnzipFilePath);
+            db.deleteTable(DBHandler.Table_CustomerOrder);
+            db.deleteTable(DBHandler.Table_Usermaster);
+            db.deleteTable(DBHandler.Table_TrackCustomerOrder);
+            int count = 0;
+            for(int i=0;i<userList.size();i++) {
+                count++;
+                db.addUserDetail(userList.get(i));
+            }
+            Constant.showLog(count+"");
+            writeLog("userList "+count+" Added");
+            count=0;
+            for(int i=0;i<custList.size();i++) {
+                count++;
+                db.addCustomerOrder(custList.get(i));
+            }
+            Constant.showLog(count+"");
+            writeLog("custList "+count+" Added");
+
+            InputStream mInput = new FileInputStream(SDDBUnzipFileName);
+            String outFileName = SDDBFilePath + DBHandler.Database_Name;
+            Constant.showLog("outFileName - "+outFileName);
+            OutputStream mOutput = new FileOutputStream(outFileName);
+            byte[] mBuffer = new byte[1024];
+            int mLength;
+            while ((mLength = mInput.read(mBuffer))>0) {
+                //Constant.showLog("mLength "+mLength);
+                mOutput.write(mBuffer, 0, mLength);
+            }
+            mOutput.flush();
+            mOutput.close();
+            mInput.close();
+            writeLog("outFileName - "+outFileName+" wrote ");
+
+            db = new DBHandler(getApplicationContext());
+            db.deleteTable(DBHandler.Table_TrackCustomerOrder);
+
+            SharedPreferences.Editor editor = FirstActivity.pref.edit();
+            String str = getTime();
+            Constant.showLog("Last Sync - " + str);
+            writeLog("CopySDTODB_Last Sync_" + str);
+            editor.putString(getString(R.string.pref_lastSync), str);
+            editor.apply();
+
+            Constant.showLog("----- End CopySDTODB ------");
+            writeLog("----- End CopySDTODB ------");
+            new DBHandler(getApplicationContext(),SDDBUnzipFilePath).deleteTable(DBHandler.Table_TrackCustomerOrder);
+
+            String arr[] = {getString(R.string.pref_autoArealine),getString(R.string.pref_autoArea),
+                    getString(R.string.pref_autoBank), getString(R.string.pref_autoBankBranch),
+                    getString(R.string.pref_autoCity), getString(R.string.pref_autoCompany),
+                    getString(R.string.pref_autoCustomer), getString(R.string.pref_autoCurrency),
+                    getString(R.string.pref_autoDocument), getString(R.string.pref_autoEmployee),
+                    getString(R.string.pref_autoGST), getString(R.string.pref_autoHO),
+                    getString(R.string.pref_autoProduct), getString(R.string.pref_autoSizeNDesign),
+                    getString(R.string.pref_autoSizeDetail)};
+
+            for(String pref : arr) {
+                updateSharedPref(pref,"Y");
+            }
+            showDia(13);
+            pDialog.dismiss();
+        } catch (Exception e) {
+            pDialog.dismiss();
+            e.printStackTrace();
+            writeLog("CopySDTODB_"+e.getMessage());
+            showDia(12);
+        }
+    }
+
+    private void putData() {
+        Constant.showLog("----- In putData -----");
+        int count = 0;
+        DBHandler db = new DBHandler(getApplicationContext());
+        db.deleteTable(DBHandler.Table_CustomerOrder);
+        db.deleteTable(DBHandler.Table_Usermaster);
+        db.deleteTable(DBHandler.Table_TrackCustomerOrder);
+        for(int i=0;i<userList.size();i++) {
+            count++;
+            db.addUserDetail(userList.get(i));
+        }
+        Constant.showLog(count+"");
+        count=0;
+        for(int i=0;i<custList.size();i++) {
+            count++;
+            db.addCustomerOrder(custList.get(i));
+        }
+        Constant.showLog(count+"");
+        Constant.showLog("userList-"+userList.size()+"-custList-"+custList.size());
+        db.close();
+        Constant.showLog("----- End putData -----");
+        showDia(7);
+    }
+
 }

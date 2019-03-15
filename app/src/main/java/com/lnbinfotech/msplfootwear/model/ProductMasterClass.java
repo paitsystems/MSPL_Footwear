@@ -2,10 +2,70 @@ package com.lnbinfotech.msplfootwear.model;
 
 //Created by lnb on 10/4/2017.
 
+import com.google.gson.annotations.SerializedName;
+
 public class ProductMasterClass {
 
-    private String Cat1,Cat2,Cat3,Cat4,Cat5,Cat6,Final_prod,Uom,Srate,Prate,Status,MRPRate,ProductId,Cat7,Cat8,MinStkQty,MaxStkQty,GSTGroup,HSNCode,Cat9,Cat10, markUp, MarkDown;
-    private int Product_id,Branchid,NoOfPices,Company_Id, HKHO,HKRD,HANR;
+    @SerializedName("Cat1")
+    private String Cat1;
+    @SerializedName("Cat2")
+    private String Cat2;
+    @SerializedName("Cat3")
+    private String Cat3;
+    @SerializedName("Cat4")
+    private String Cat4;
+    @SerializedName("Cat5")
+    private String Cat5;
+    @SerializedName("Cat6")
+    private String Cat6;
+    @SerializedName("Final_prod")
+    private String Final_prod;
+    @SerializedName("Uom")
+    private String Uom;
+    @SerializedName("Srate")
+    private String Srate;
+    @SerializedName("Prate")
+    private String Prate;
+    @SerializedName("Status")
+    private String Status;
+    @SerializedName("MRPRate")
+    private String MRPRate;
+    @SerializedName("ProductId")
+    private String ProductId;
+    @SerializedName("Cat7")
+    private String Cat7;
+    @SerializedName("Cat8")
+    private String Cat8;
+    @SerializedName("MinStkQty")
+    private String MinStkQty;
+    @SerializedName("MaxStkQty")
+    private String MaxStkQty;
+    @SerializedName("GSTGroup")
+    private String GSTGroup;
+    @SerializedName("HSNCode")
+    private String HSNCode;
+    @SerializedName("Cat9")
+    private String Cat9;
+    @SerializedName("Cat10")
+    private String Cat10;
+    @SerializedName("markUp")
+    private String markUp;
+    @SerializedName("MarkDown")
+    private String MarkDown;
+    @SerializedName("Product_id")
+    private int Product_id;
+    @SerializedName("Branchid")
+    private int Branchid;
+    @SerializedName("NoOfPices")
+    private int NoOfPices;
+    @SerializedName("Company_Id")
+    private int Company_Id;
+    @SerializedName("HKHO")
+    private int HKHO;
+    @SerializedName("HKRD")
+    private int HKRD;
+    @SerializedName("HANR")
+    private int HANR;
 
     public String getCat1() {
         return Cat1;

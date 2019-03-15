@@ -24,20 +24,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
+import com.lnbinfotech.msplfootwear.braodcasts.MySMSBroadcastReceiver;
 import com.lnbinfotech.msplfootwear.braodcasts.ReadSms;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwear.interfaces.SmsListener;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.CheckOtpClass;
+import com.lnbinfotech.msplfootwear.utility.AppSignatureHelper;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-public class CheckOTPActivity extends AppCompatActivity implements View.OnClickListener {
+public class CheckOTPActivity extends AppCompatActivity implements View.OnClickListener,
+             MySMSBroadcastReceiver.OTPReceiveListener  {
 
     private EditText ed1,ed2,ed3,ed4,ed5,ed6;
     private AppCompatButton btn_verifyotp,btn_resendotp;
@@ -51,7 +57,9 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     private String mobNo,imeiNo, imeino1, imeino2;
     private  String response_value;
     //private ReadSms receiver;
-    private MySMSReceiver receiver;
+    //private MySMSReceiver receiver;
+    private MySMSBroadcastReceiver receiver;
+    private SmsRetrieverClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +88,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         //autoOTP();
         //receiver = new ReadSms();
 
-        IntentFilter filter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+        /*IntentFilter filter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
         //filter.addAction(getPackageName() + "android.provider.Telephony.SMS_RECEIVED");
         receiver = new MySMSReceiver();
 
@@ -107,7 +115,32 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        registerReceiver(receiver, filter);
+        registerReceiver(receiver, filter);*/
+
+        if(Constant.showLogFlag==0) {
+            ArrayList<String> appCodes = new ArrayList<>();
+            AppSignatureHelper hash = new AppSignatureHelper(getApplicationContext());
+            appCodes = hash.getAppSignatures();
+            String yourhash = appCodes.get(0);
+            Constant.showLog("yourhash-" + yourhash);
+        }
+
+        //client = SmsRetriever.getClient(this);
+        receiver = new MySMSBroadcastReceiver();
+        receiver.initOTPListener(this);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
+        getApplicationContext().registerReceiver(receiver, filter);
+        //startSMSListener();
+
+        resendOTP();
+
+        if (countDown == null) {
+            tv_text1.setText("Your OTP will get within 5 min..");
+            int minutes = 5 * 60 * 1000;
+            startTimerCount(minutes);
+        }
+
         /*IntentFilter filter = new IntentFilter();
         filter.addAction(getPackageName() + "android.provider.Telephony.SMS_RECEIVED");
 
@@ -138,8 +171,8 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         });*/
 
         if(countDown == null) {
-            tv_text1.setText("Your OTP will get within 3 min..");
-            int minutes = 3 * 60 * 1000;
+            tv_text1.setText("Your OTP will get within 5 min..");
+            int minutes = 5 * 60 * 1000;
             startTimerCount(minutes);
         }
         //timerCount();
@@ -265,8 +298,8 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),R.color.lightgray));
                 resendOTP();
                 //autoOTP();
-                tv_text1.setText("Your OTP will get within 3 min..");
-                int minutes = 3 * 60 * 1000;
+                tv_text1.setText("Your OTP will get within 5 min..");
+                int minutes = 5 * 60 * 1000;
                 startTimerCount(minutes);
                 break;
         }
@@ -291,7 +324,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     protected void onDestroy() {
         try {
             if(receiver!=null) {
-                receiver.bindListener(null);
+                //receiver.bindListener(null);
                 unregisterReceiver(receiver);
                 receiver = null;
             }
@@ -300,6 +333,28 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             writeLog("onDestroy_"+e.getMessage());
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onOTPReceived(String message) {
+        Constant.showLog("message:" + message);
+        ed1.setText(message.substring(0, 1));
+        ed2.setText(message.substring(1, 2));
+        ed3.setText(message.substring(2, 3));
+        ed4.setText(message.substring(3, 4));
+        ed5.setText(message.substring(4, 5));
+        ed6.setText(message.substring(5, 6));
+        timer.cancel();
+        countDown.cancel();
+        tv_text1.setText("OTP get successfully");
+        Constant.showLog("CheckOTPActivity_onReceivedMessage_Called");
+
+    }
+
+    @Override
+    public void onOTPTimeOut() {
+        btn_verifyotp.setEnabled(false);
+        btn_resendotp.setEnabled(true);
     }
 
     private void verifyOTP(){
@@ -355,7 +410,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 long millis = millisUntilFinished;
                 String ms = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
                 tv_timecount.setText(ms);
-                Constant.showLog("count:"+ms);
+                //Constant.showLog("count:"+ms);
             }
 
             @Override
@@ -530,13 +585,21 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    unregisterReceiver(receiver);
+                    dialog.dismiss();
+                    try {
+                        if (receiver != null) {
+                            //receiver.bindListener(null);
+                            unregisterReceiver(receiver);
+                            receiver = null;
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                     if(countDown!=null) {
                         countDown.cancel();
                     }
                     new Constant(CheckOTPActivity.this).doFinish();
                     toast.cancel();
-                    dialog.dismiss();
                 }
             });
             builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

@@ -229,7 +229,25 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if(ConnectivityTest.getNetStat(getApplicationContext())) {
-                        requestOTP();
+                        //requestOTP();
+                        String mobNo, imeino, imeino1, imeino2;
+                        mobNo = ed_mobNo.getText().toString();
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                            imeino = new Constant(getApplicationContext()).getIMEINo1();
+                            String[] arr = imeino.split("\\^");
+                            if (arr.length > 1) {
+                                imeino1 = arr[0];
+                                imeino2 = arr[1];
+                            } else {
+                                imeino1 = imeino;
+                                imeino2 = imeino;
+                            }
+                        } else {
+                            imeino = new Constant(getApplicationContext()).getIMEINo();
+                            imeino1 = imeino;
+                            imeino2 = imeino;
+                        }
+                        doThis("0-0", mobNo, imeino, imeino1, imeino2);
                     }else{
                         toast.setText(getString(R.string.you_are_offline));
                         toast.show();
