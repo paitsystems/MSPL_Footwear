@@ -58,12 +58,12 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(Constant.liveTestFlag==1) {
+        if (Constant.liveTestFlag == 1) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
 
         setContentView(R.layout.activity_areawise_customer_selection);
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
 
         init();
 
@@ -75,7 +75,7 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
         try {
             areaLineClass = (ArealineMasterClass) getIntent().getSerializableExtra("arealine");
             tv_arealine.setText(areaLineClass.getArea());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             toast.setText("Something Went Wrong");
             toast.show();
@@ -121,28 +121,28 @@ public class AreawiseCustomerSelectionActivity extends AppCompatActivity impleme
             public boolean onChildClick(ExpandableListView expandableListView, View view, int group_postion, int child_position, long l) {
                 //String sel_child = (String) adapter1.getChild(group_postion,child_position);
                 String a = String.valueOf(area_map.get(areaid_list.get(group_postion)));
-                area_name = a.replace("[","").replace("]","");
+                area_name = a.replace("[", "").replace("]", "");
                 //Constant.showLog("area_name:"+area_name);
 
-                child_sel =  party_map.get(areaid_partyId_map.get(areaid_list.get(group_postion)).get(child_position));
+                child_sel = party_map.get(areaid_partyId_map.get(areaid_list.get(group_postion)).get(child_position));
                 //Constant.showLog("child_selected:"+child_sel);
 
-                cust_id =  db.getCustid(child_sel);
+                cust_id = db.getCustid(child_sel);
                 //Constant.showLog("cust_id:"+cust_id);
 
                 int selCustId = FirstActivity.pref.getInt(getString(R.string.pref_selcustid), 0);
-                if(selCustId!=0){
-                    if(selCustId!=cust_id){
+                if (selCustId != 0) {
+                    if (selCustId != cust_id) {
                         int count = db.getCustOrderDetail();
-                        if(count!=0) {
+                        if (count != 0) {
                             showDia(1);
-                        }else{
+                        } else {
                             saveNCountinue();
                         }
-                    }else{
+                    } else {
                         saveNCountinue();
                     }
-                }else{
+                } else {
                     saveNCountinue();
                 }
                 return true;

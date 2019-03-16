@@ -33,7 +33,29 @@
                     android:layout_height="match_parent"
                     android:clickable="true"
                     android:focusable="true"
-                    android:hint="@string/enetrcustomername"/>
+                    android:hint="@string/enetrcustomername"
+                    android:inputType="textCapWords"
+                    android:maxLines="1"
+                    android:singleLine="true"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5sp">
+
+                <EditText
+                    android:id="@+id/ed_shop_name"
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:hint="@string/enetrshopname"
+                    android:inputType="textCapWords"
+                    android:maxLines="1"
+                    android:singleLine="true"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -51,7 +73,9 @@
                     android:focusable="true"
                     android:hint="@string/mobile_no"
                     android:inputType="number"
-                    android:maxLength="10"/>
+                    android:maxLength="10"
+                    android:maxLines="1"
+                    android:singleLine="true"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -67,7 +91,10 @@
                     android:layout_height="match_parent"
                     android:clickable="true"
                     android:focusable="true"
-                    android:hint="@string/email_id"/>
+                    android:hint="@string/email_id"
+                    android:inputType="textWebEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -81,9 +108,11 @@
                     style="@style/textViewMob"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:drawableLeft="@drawable/ic_room_black_24dp"
                     android:ems="10"
                     android:gravity="top"
                     android:hint="@string/address"
+                    android:inputType="textCapSentences"
                     android:lines="2"/>
             </android.support.design.widget.TextInputLayout>
 
@@ -101,7 +130,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:drawableRight="@drawable/next16"
+                    android:drawableRight="@drawable/ic_chevron_right_black_24dp"
                     android:text="@string/next"
                     android:textColor="@color/white"
                     app:backgroundTint="@color/buttoncolor"/>
@@ -121,7 +150,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="0.2"
-                    android:drawableLeft="@drawable/update"
+                    android:drawableLeft="@drawable/ic_autorenew_black_24dp1"
                     android:text="@string/update"
                     android:textColor="@color/white"
                     app:backgroundTint="@color/buttoncolor"/>
@@ -132,7 +161,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="0.2"
-                    android:drawableLeft="@drawable/cancel"
+                    android:drawableLeft="@drawable/ic_cancel_black_24dp"
                     android:text="@string/cancel"
                     android:textColor="@color/white"
                     app:backgroundTint="@color/buttoncolor"/>

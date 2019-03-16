@@ -79,17 +79,17 @@ public class ScheduledJobServicePL extends JobService {
             //startSync();
             if (isAppIsInBackground(getApplicationContext())) {
                 Constant.showLog("App_IS_InBackground");
-                writeLog("onStartJob_" + hour + "App_IS_InBackground");
+                writeLog("onStartJob_" + hour + "_App_IS_InBackground");
                 if (isSynced(getString(R.string.pref_lastSync)) || !FirstActivity.pref.contains(getString(R.string.pref_newDB))) {
                     downloadDB();
                     writeLog("onStartJob_" + hour + "_Online_Started");
                 } else {
                     Constant.showLog("App_IS_InBackground");
-                    writeLog("onStartJob_" + hour + "App_IS_InBackground");
+                    writeLog("onStartJob_" + hour + "_App_IS_InBackground");
                 }
             } else {
                 Constant.showLog("App_IS_NOT_InBackground");
-                writeLog("onStartJob_" + hour + "App_IS_NOT_InBackground");
+                writeLog("onStartJob_" + hour + "_App_IS_NOT_InBackground");
             }
         } else {
             writeLog("onStartJob_" + hour + "_Offline");

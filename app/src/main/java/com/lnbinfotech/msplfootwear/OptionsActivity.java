@@ -373,7 +373,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     new Constant();
-                    checkIsActive();
+                    getSaleExe();
                 }
             });
         }
@@ -389,13 +389,13 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         Constant.showLog("locale:"+locale);
     }
 
-    private void checkIsActive() {
+    private void getSaleExe() {
         final Constant constant = new Constant(OptionsActivity.this);
         if (ConnectivityTest.getNetStat(getApplicationContext())) {
             int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
             String url = Constant.ipaddress + "/GetSalesExe?id=" + id + "&type=C&IMEINo1=0&IMEINo2=0";
             Constant.showLog(url);
-            writeLog("checkIsActive_" + url);
+            writeLog("getSaleExe_" + url);
             constant.showPD();
             VolleyRequests requests = new VolleyRequests(OptionsActivity.this);
             requests.getActiveStatus(url, new ServerCallback() {

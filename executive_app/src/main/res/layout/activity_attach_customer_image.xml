@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:drawableLeft="@drawable/next"
+            android:drawableLeft="@drawable/ic_chevron_right_black_24dp"
             android:text="@string/next"
             android:textColor="@color/white"
             app:backgroundTint="@color/buttoncolor" />
@@ -87,7 +87,7 @@
             android:layout_gravity="center"
             android:layout_margin="@dimen/mobmargin5"
             android:layout_weight="0.2"
-            android:drawableLeft="@drawable/update"
+            android:drawableLeft="@drawable/ic_autorenew_black_24dp1"
             android:text="@string/update"
             android:textColor="@color/white"
             app:backgroundTint="@color/buttoncolor" />
@@ -99,7 +99,7 @@
             android:layout_gravity="center"
             android:layout_margin="@dimen/mobmargin5"
             android:layout_weight="0.2"
-            android:drawableLeft="@drawable/cancel"
+            android:drawableLeft="@drawable/ic_cancel_black_24dp"
             android:text="@string/cancel"
             android:textColor="@color/white"
             app:backgroundTint="@color/buttoncolor" />

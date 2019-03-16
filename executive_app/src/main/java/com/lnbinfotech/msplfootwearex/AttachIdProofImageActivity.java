@@ -8,21 +8,19 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -34,9 +32,7 @@ import com.lnbinfotech.msplfootwearex.log.WriteLog;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -131,7 +127,6 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
                     Intent i = new Intent(AttachIdProofImageActivity.this, AttachGSTnoPANnoImageActivity.class);
                     startActivity(i);
                     overridePendingTransition(R.anim.enter, R.anim.exit);
-                    writeLog("Next button of onclick():data saved and goes to DetailFormActivity ");
                     finish();
                 }
                 break;
@@ -146,22 +141,30 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
                 Intent i = new Intent(AttachIdProofImageActivity.this, NewCustomerEntryDetailFormActivity.class);
                 startActivity(i);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
-                writeLog("Update button of onclick():data updated and goes to DetailFormActivity ");
                 finish();
                 break;
             case R.id.btn_cancel:
                 Intent j = new Intent(AttachIdProofImageActivity.this, NewCustomerEntryDetailFormActivity.class);
                 startActivity(j);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
-                writeLog("Cancel button of onclick():data canceled and goes to DetailFormActivity ");
                 finish();
                 break;
             case R.id.imageView_idproof:
-                Intent intent_ = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                /*Intent intent_ = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 File f = Constant.checkFolder(Constant.folder_name);
                 f = new File(f.getAbsolutePath(), "temp.jpg");
                 intent_.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                startActivityForResult(intent_, requestCode);
+                startActivityForResult(intent_, requestCode);*/
+
+                Intent intent_ = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File f = Constant.checkFolder(Constant.folder_name);
+                f = new File(f.getAbsolutePath(),"temp.jpg");
+                Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                        + ".provider", f);
+                intent_.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                intent_.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivityForResult(intent_,requestCode);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
         }
     }
@@ -225,13 +228,11 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
                     outFile.flush();
                     outFile.close();
                 } catch (Exception e) {
-                    writeLog("onActivityResult():FileNotFoundException:" + e);
-                    //writeLog("AddNewTicketActivity_onActivityResult_outFile_"+e.getMessage());
+                    writeLog("Exception1_" + e.getMessage());
                     e.printStackTrace();
                 }
             } catch (Exception e) {
-                writeLog("onActivityResult():Exception:" + e);
-                //writeLog("AddNewTicketActivity_onActivityResult_"+e.getMessage());
+                writeLog("Exception_" + e.getMessage());
                 e.printStackTrace();
             }
         }

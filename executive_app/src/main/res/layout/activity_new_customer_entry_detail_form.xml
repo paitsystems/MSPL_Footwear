@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.lnbinfotech.msplfootwearex.NewCustomerEntryActivity">
-
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.lnbinfotech.msplfootwearex.NewCustomerEntryActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,7 +39,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="right"
                             android:padding="4sp"
-                            android:src="@drawable/edit_user" />
+                            android:src="@drawable/ic_mode_edit_black_24dp1"/>
 
 
                         <TextView
@@ -48,7 +47,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/customername"
-                            android:textAppearance="?android:attr/textAppearanceSmall" />
+                            android:textAppearance="?android:attr/textAppearanceSmall"/>
 
 
                         <LinearLayout
@@ -65,7 +64,32 @@
                                 android:clickable="false"
                                 android:ems="10"
                                 android:focusable="false"
-                                android:visibility="visible" />
+                                android:visibility="visible"/>
+                        </LinearLayout>
+
+                        <TextView
+                            style="@style/textViewMob"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/shopname"
+                            android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="visible">
+
+                            <EditText
+                                android:id="@+id/ed_shop_name"
+                                style="@style/textViewMob"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="false"
+                                android:ems="10"
+                                android:focusable="false"
+                                android:visibility="visible"/>
                         </LinearLayout>
 
                         <TextView
@@ -73,7 +97,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/mobile_no"
-                            android:textAppearance="?android:attr/textAppearanceSmall" />
+                            android:textAppearance="?android:attr/textAppearanceSmall"/>
 
 
                         <LinearLayout
@@ -93,14 +117,14 @@
                             android:clickable="false"
                             android:ems="10"
                             android:focusable="false"
-                            android:visibility="visible" />
+                            android:visibility="visible"/>
 
                         <TextView
                             style="@style/textViewMob"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/email_id"
-                            android:textAppearance="?android:attr/textAppearanceSmall" />
+                            android:textAppearance="?android:attr/textAppearanceSmall"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -116,7 +140,7 @@
                                 android:clickable="false"
                                 android:ems="10"
                                 android:focusable="false"
-                                android:visibility="visible" />
+                                android:visibility="visible"/>
                         </LinearLayout>
 
                         <TextView
@@ -124,7 +148,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/address"
-                            android:textAppearance="?android:attr/textAppearanceSmall" />
+                            android:textAppearance="?android:attr/textAppearanceSmall"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -143,7 +167,7 @@
                                 android:focusable="false"
                                 android:gravity="top"
                                 android:lines="2"
-                                android:visibility="visible" />
+                                android:visibility="visible"/>
                         </LinearLayout>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
@@ -165,14 +189,14 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="right"
                             android:padding="4sp"
-                            android:src="@drawable/edit_user" />
+                            android:src="@drawable/ic_mode_edit_black_24dp1"/>
 
                         <TextView
                             style="@style/textViewMob"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/_customerimage"
-                            android:textAppearance="?android:attr/textAppearanceSmall" />
+                            android:textAppearance="?android:attr/textAppearanceSmall"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -197,7 +221,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:src="@drawable/camera"
-                                    android:visibility="visible" />
+                                    android:visibility="visible"/>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -220,7 +244,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="right"
                             android:padding="4sp"
-                            android:src="@drawable/edit_user" />
+                            android:src="@drawable/ic_mode_edit_black_24dp1"/>
 
 
                         <TextView
@@ -228,7 +252,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/_selectaddressproof"
-                            android:textAppearance="?android:attr/textAppearanceSmall" />
+                            android:textAppearance="?android:attr/textAppearanceSmall"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -255,7 +279,7 @@
                                     android:layout_weight="0.5"
                                     android:clickable="false"
                                     android:focusable="false"
-                                    android:visibility="visible" />
+                                    android:visibility="visible"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -281,7 +305,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:src="@drawable/camera"
-                                        android:visibility="visible" />
+                                        android:visibility="visible"/>
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -305,7 +329,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="right"
                             android:padding="4sp"
-                            android:src="@drawable/edit_user" />
+                            android:src="@drawable/ic_mode_edit_black_24dp1"/>
 
                         <TextView
                             style="@style/textViewMob"
@@ -313,7 +337,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="2sp"
                             android:text="@string/_selectidproof"
-                            android:textAppearance="?android:attr/textAppearanceSmall" />
+                            android:textAppearance="?android:attr/textAppearanceSmall"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -336,7 +360,7 @@
                                     android:id="@+id/spinner_idproof"
                                     android:layout_width="match_parent"
                                     android:layout_height="50dp"
-                                    android:visibility="visible" />
+                                    android:visibility="visible"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -362,7 +386,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:src="@drawable/camera"
-                                        android:visibility="visible" />
+                                        android:visibility="visible"/>
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -373,7 +397,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/_idproofimage"
                             android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
@@ -395,7 +419,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="right"
                             android:padding="4sp"
-                            android:src="@drawable/edit_user" />
+                            android:src="@drawable/ic_mode_edit_black_24dp1"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -410,7 +434,7 @@
                                 android:layout_weight="0.5"
                                 android:checked="true"
                                 android:clickable="false"
-                                android:text="@string/gstno" />
+                                android:text="@string/gstno"/>
 
                             <RadioButton
                                 android:id="@+id/rdo_panno"
@@ -420,7 +444,7 @@
                                 android:layout_weight="0.5"
                                 android:checked="false"
                                 android:clickable="false"
-                                android:text="@string/panno" />
+                                android:text="@string/panno"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -438,7 +462,7 @@
                                 android:clickable="false"
                                 android:ems="10"
                                 android:focusable="false"
-                                android:visibility="visible" />
+                                android:visibility="visible"/>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -451,7 +475,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/_gstnoimage"
-                                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                                    android:textAppearance="?android:attr/textAppearanceSmall"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -476,7 +500,7 @@
                                         android:id="@+id/imageView_gst_img"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:src="@drawable/camera" />
+                                        android:src="@drawable/camera"/>
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -498,7 +522,7 @@
                                 android:clickable="false"
                                 android:ems="10"
                                 android:focusable="false"
-                                android:visibility="visible" />
+                                android:visibility="visible"/>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -510,7 +534,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/_pannoimage"
-                                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                                    android:textAppearance="?android:attr/textAppearanceSmall"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -523,7 +547,7 @@
                                     android:id="@+id/imageView_pan_img"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:src="@drawable/camera" />
+                                    android:src="@drawable/camera"/>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -544,16 +568,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:drawableLeft="@drawable/save"
+                        android:drawableLeft="@drawable/ic_near_me_black_24dp"
                         android:text="@string/save"
                         android:textColor="@color/white"
-                        app:backgroundTint="@color/buttoncolor" />
+                        app:backgroundTint="@color/buttoncolor"/>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
+
     <TextView
         style="@style/footerstyleMob"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 </LinearLayout>

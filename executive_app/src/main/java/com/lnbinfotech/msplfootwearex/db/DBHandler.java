@@ -824,7 +824,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(CM_Name, OptionsActivity.new_cus.getCust_name());
         cv.put(CM_Address, OptionsActivity.new_cus.getAddress());
         cv.put(CM_MobileNo, OptionsActivity.new_cus.getMobile_no());
-        cv.put(CM_Status, OptionsActivity.new_cus.getStatus());
+        cv.put(CM_Status, "A");
         cv.put(CM_BranchId, OptionsActivity.new_cus.getBranchId());
         cv.put(CM_Email, OptionsActivity.new_cus.getEmail_id());
         cv.put(CM_District, OptionsActivity.new_cus.getDistrict());
@@ -835,10 +835,12 @@ public class DBHandler extends SQLiteOpenHelper {
         // cv.put(CM_ImagePath, OptionsActivity.new_cus.getImagePath());
         cv.put(CM_HOCode, OptionsActivity.new_cus.getHOCode());
         //  cv.put(CM_GSTNo, OptionsActivity.new_cus.getGSTNo());
-        cv.put(CM_IMEINo, OptionsActivity.new_cus.getIMEINo());
+        //cv.put(CM_IMEINo, OptionsActivity.new_cus.getIMEINo());
         cv.put(CM_isRegistered, OptionsActivity.new_cus.getIsReg());
         // cv.put(CM_AadhaarNo, OptionsActivity.new_cus.getAadharNo());
         cv.put(CM_PIN, OptionsActivity.new_cus.getPin());
+        cv.put(CM_PartyName, OptionsActivity.new_cus.getPartyName());
+        cv.put(CM_Discount, "0");
         getWritableDatabase().insert(Table_Customermaster, null, cv);
     }
 

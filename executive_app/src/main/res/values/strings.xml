@@ -139,6 +139,7 @@
     <string name="all_dates">All Dates</string>
     <string name="show">Show</string>
     <string name="customername">Customer Name</string>
+    <string name="shopname">Shop Name</string>
     <string name="enternewcustomername">Enter New Customer Name</string>
     <string name="mobileno">Mobile Number</string>
     <string name="emailid">Email Id</string>
@@ -146,7 +147,8 @@
     <string name="cheque">Cheque</string>
     <string name="enteramount">Enter Amount</string>
     <string name="selectcustomername">Select Customer Name</string>
-    <string name="enetrcustomername">Enter Customer Name</string>
+    <string name="enetrcustomername">Customer Name</string>
+    <string name="enetrshopname">Shop Name</string>
     <string name="selectbranch">Select Branch Name</string>
     <string name="selectbank">Select Bank Name</string>
     <string name="selectaddressproof">Select Address Proof</string>
@@ -229,7 +231,7 @@
     <string name="title_activity_main">MainActivity</string>
     <!--sneha string name-->
 
-    <string name="newcustomerentry">New Customer Entry</string>
+    <string name="newcustomerentry">New Customer</string>
     <string name="custimage">Attach Customer Image</string>
     <string name="addressproof">Attach Address Proof</string>
     <string name="idproof">Attach Id Proof</string>
