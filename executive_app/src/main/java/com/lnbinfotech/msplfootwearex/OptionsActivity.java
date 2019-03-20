@@ -181,7 +181,8 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         TextView actionbar_noti_tv = (TextView)view.findViewById(R.id.actionbar_noti_tv);
         actionbar_noti_tv.setText("0");
 
-        int count = new DBHandler(getApplicationContext()).getCartCount();
+        //int count = new DBHandler(getApplicationContext()).getCartCount();
+        int count = db.getCartCount();
         Constant.showLog("cart_count:"+count);
         actionbar_noti_tv.setText(String.valueOf(count));
 
@@ -225,7 +226,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     private void init() {
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
-        db = new DBHandler(this);
+        db = new DBHandler(getApplicationContext());
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         //db.initInterface(OptionsActivity.this);
         new_cus = new NewCustomerEntryClass();

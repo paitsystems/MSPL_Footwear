@@ -10,6 +10,7 @@ import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -42,6 +43,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     private int setEnterPINFlag = -1;
     private String PIN = null;
     private DBHandler db;
+    private EditText[] editTexts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,18 +55,18 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
         setContentView(R.layout.activity_customer_login);
 
+        userClass = (UserClass) getIntent().getExtras().get("cust");
         init();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        userClass = (UserClass) getIntent().getExtras().get("cust");
         setData();
 
         btn_save.setOnClickListener(this);
 
-        ed1.addTextChangedListener(new TextWatcher() {
+        /*ed1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -77,6 +79,8 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             public void afterTextChanged(Editable editable) {
                 if(ed1.getText().toString().length()==1){
                     ed2.requestFocus();
+                } else {
+                    ed1.requestFocus();
                 }
             }
         });
@@ -94,6 +98,8 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             public void afterTextChanged(Editable editable) {
                 if(ed2.getText().toString().length()==1){
                     ed3.requestFocus();
+                } else {
+                    ed1.requestFocus();
                 }
             }
         });
@@ -111,6 +117,8 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             public void afterTextChanged(Editable editable) {
                 if(ed3.getText().toString().length()==1){
                     ed4.requestFocus();
+                } else {
+                    ed2.requestFocus();
                 }
             }
         });
@@ -128,6 +136,8 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             public void afterTextChanged(Editable editable) {
                 if(ed4.getText().toString().length()==1){
                     ed5.requestFocus();
+                } else {
+                    ed3.requestFocus();
                 }
             }
         });
@@ -145,6 +155,8 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             public void afterTextChanged(Editable editable) {
                 if(ed5.getText().toString().length()==1){
                     ed6.requestFocus();
+                } else {
+                    ed4.requestFocus();
                 }
             }
         });
@@ -162,6 +174,8 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             public void afterTextChanged(Editable editable) {
                 if(ed6.getText().toString().length()==1){
                     ed7.requestFocus();
+                } else {
+                    ed5.requestFocus();
                 }
             }
         });
@@ -179,6 +193,8 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             public void afterTextChanged(Editable editable) {
                 if(ed7.getText().toString().length()==1){
                     ed8.requestFocus();
+                } else {
+                    ed6.requestFocus();
                 }
             }
         });
@@ -196,6 +212,8 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             public void afterTextChanged(Editable editable) {
                 if(ed8.getText().toString().length()==1){
                     ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(ed6.getWindowToken(),0);
+                } else {
+                    ed7.requestFocus();
                 }
             }
         });
@@ -213,6 +231,8 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             public void afterTextChanged(Editable editable) {
                 if(ed9.getText().toString().length()==1){
                     ed10.requestFocus();
+                } else {
+                    ed8.requestFocus();
                 }
             }
         });
@@ -230,6 +250,8 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             public void afterTextChanged(Editable editable) {
                 if(ed10.getText().toString().length()==1){
                     ed11.requestFocus();
+                } else {
+                    ed9.requestFocus();
                 }
             }
         });
@@ -247,6 +269,8 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             public void afterTextChanged(Editable editable) {
                 if(ed11.getText().toString().length()==1){
                     ed12.requestFocus();
+                } else {
+                    ed10.requestFocus();
                 }
             }
         });
@@ -264,9 +288,11 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             public void afterTextChanged(Editable editable) {
                 if(ed12.getText().toString().length()==1){
                     ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(ed6.getWindowToken(),0);
+                } else {
+                    ed11.requestFocus();
                 }
             }
-        });
+        });*/
 
         Glide.with(getApplicationContext()).load(Constant.custimgUrl+userClass.getImagePath())
                 .thumbnail(0.5f)
@@ -306,7 +332,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         return super.onOptionsItemSelected(item);
     }
 
-    private void setData(){
+    private void setData() {
         tv_custname.setText(userClass.getName());
         tv_custaddress.setText(userClass.getAddress());
         tv_custmobile.setText(userClass.getMobile());
@@ -315,12 +341,12 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         String custid = String.valueOf(userClass.getCustID());
         PIN = db.getCustPIN(custid);
 
-        if(PIN.equals("-1")) {
+        if (PIN.equals("-1")) {
             setEnterPINFlag = 0;
             btn_save.setText("SAVE");
             lay_setpin.setVisibility(View.VISIBLE);
             lay_enterpin.setVisibility(View.GONE);
-        }else {
+        } else {
             setEnterPINFlag = 1;
             btn_save.setText("LOGIN");
             lay_setpin.setVisibility(View.GONE);
@@ -432,8 +458,47 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         btn_save = (Button) findViewById(R.id.btn_save);
         db = new DBHandler(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
         toast.setGravity(Gravity.CENTER, 0, 0);
+
+        String custid = String.valueOf(userClass.getCustID());
+        String PIN = db.getCustPIN(custid);
+
+        if (PIN.equals("-1")) {
+            editTexts = new EditText[]{ed1, ed2, ed3, ed4, ed5, ed6, ed7, ed8};
+        } else {
+            editTexts = new EditText[]{ed9, ed10, ed11, ed12};
+        }
+
+        ed1.addTextChangedListener(new PinTextWatcher(0));
+        ed2.addTextChangedListener(new PinTextWatcher(1));
+        ed3.addTextChangedListener(new PinTextWatcher(2));
+        ed4.addTextChangedListener(new PinTextWatcher(3));
+
+        ed5.addTextChangedListener(new PinTextWatcher(4));
+        ed6.addTextChangedListener(new PinTextWatcher(5));
+        ed7.addTextChangedListener(new PinTextWatcher(6));
+        ed8.addTextChangedListener(new PinTextWatcher(7));
+
+        ed9.addTextChangedListener(new PinTextWatcher(0));
+        ed10.addTextChangedListener(new PinTextWatcher(1));
+        ed11.addTextChangedListener(new PinTextWatcher(2));
+        ed12.addTextChangedListener(new PinTextWatcher(3));
+
+        ed1.setOnKeyListener(new PinOnKeyListener(0));
+        ed2.setOnKeyListener(new PinOnKeyListener(1));
+        ed3.setOnKeyListener(new PinOnKeyListener(2));
+        ed4.setOnKeyListener(new PinOnKeyListener(3));
+
+        ed5.setOnKeyListener(new PinOnKeyListener(4));
+        ed6.setOnKeyListener(new PinOnKeyListener(5));
+        ed7.setOnKeyListener(new PinOnKeyListener(6));
+        ed8.setOnKeyListener(new PinOnKeyListener(7));
+
+        ed9.setOnKeyListener(new PinOnKeyListener(0));
+        ed10.setOnKeyListener(new PinOnKeyListener(1));
+        ed11.setOnKeyListener(new PinOnKeyListener(2));
+        ed12.setOnKeyListener(new PinOnKeyListener(3));
     }
 
     private void showDia(int a) {
@@ -454,7 +519,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                     dialog.dismiss();
                 }
             });
-        }else if (a == 1) {
+        } else if (a == 1) {
             builder.setMessage("Do You Want Set PIN To Other Details?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -470,7 +535,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                     dialog.dismiss();
                 }
             });
-        }else if (a == 2) {
+        } else if (a == 2) {
             builder.setMessage("Login Successfull");
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
@@ -479,21 +544,21 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                     dialog.dismiss();
                 }
             });
-        }else if (a == 3) {
+        } else if (a == 3) {
             builder.setMessage("PIN Set Successfully");
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     List<String> _list = db.checkPINUnsetID();
-                    if(_list.size()!=0){
+                    if (_list.size() != 0) {
                         showDia(1);
-                    }else{
+                    } else {
                         showDia(6);
                     }
                 }
             });
-        }else if (a == 4) {
+        } else if (a == 4) {
             builder.setMessage("Invalid PIN");
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
@@ -502,7 +567,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                     dialog.dismiss();
                 }
             });
-        }else if (a == 5) {
+        } else if (a == 5) {
             builder.setMessage("PIN Not Matched");
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
@@ -511,7 +576,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                     dialog.dismiss();
                 }
             });
-        }else if (a == 6) {
+        } else if (a == 6) {
             builder.setMessage("Do you want to continue with this login?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -529,6 +594,101 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             });
         }
         builder.create().show();
+    }
+
+    public class PinTextWatcher implements TextWatcher {
+
+        private int currentIndex;
+        private boolean isFirst = false, isLast = false;
+        private String newTypedString = "";
+
+        PinTextWatcher(int currentIndex) {
+            this.currentIndex = currentIndex;
+
+            if (currentIndex == 0)
+                this.isFirst = true;
+            else if (currentIndex == editTexts.length - 1)
+                this.isLast = true;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            newTypedString = s.subSequence(start, start + count).toString().trim();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+            String text = newTypedString;
+
+            /* Detect paste event and set first char */
+            if (text.length() > 1)
+                text = String.valueOf(text.charAt(0));
+
+            editTexts[currentIndex].removeTextChangedListener(this);
+            editTexts[currentIndex].setText(text);
+            editTexts[currentIndex].setSelection(text.length());
+            editTexts[currentIndex].addTextChangedListener(this);
+
+            if (text.length() == 1)
+                moveToNext();
+            else if (text.length() == 0)
+                moveToPrevious();
+        }
+
+        private void moveToNext() {
+            if (!isLast)
+                editTexts[currentIndex + 1].requestFocus();
+
+            if (isAllEditTextsFilled() && isLast) { // isLast is optional
+                editTexts[currentIndex].clearFocus();
+                hideKeyboard();
+            }
+        }
+
+        private void moveToPrevious() {
+            if (!isFirst)
+                editTexts[currentIndex - 1].requestFocus();
+        }
+
+        private boolean isAllEditTextsFilled() {
+            for (EditText editText : editTexts)
+                if (editText.getText().toString().trim().length() == 0)
+                    return false;
+            return true;
+        }
+
+        private void hideKeyboard() {
+            if (getCurrentFocus() != null) {
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            }
+        }
+
+    }
+
+    public class PinOnKeyListener implements View.OnKeyListener {
+
+        private int currentIndex;
+
+        PinOnKeyListener(int currentIndex) {
+            this.currentIndex = currentIndex;
+        }
+
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
+                if (editTexts[currentIndex].getText().toString().isEmpty() && currentIndex != 0)
+                    editTexts[currentIndex - 1].requestFocus();
+            }
+            return false;
+        }
+
     }
 
     private void writeLog(String _data){

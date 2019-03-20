@@ -220,9 +220,10 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
 
     private void checkStock(){
         String data = "";
-        Cursor res = new DBHandler(getApplicationContext()).getDataToCheck();
-        if(res.moveToFirst()){
-            do{
+        //Cursor res = new DBHandler(getApplicationContext()).getDataToCheck();
+        Cursor res = db.getDataToCheck();
+        if (res.moveToFirst()) {
+            do {
                 int branchId = res.getInt(res.getColumnIndex(DBHandler.CO_BranchId));
                 int prodId = res.getInt(res.getColumnIndex(DBHandler.CO_Productid));
                 String size = res.getString(res.getColumnIndex(DBHandler.CO_SizeGroup));

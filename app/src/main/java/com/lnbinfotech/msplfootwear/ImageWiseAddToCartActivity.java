@@ -190,7 +190,8 @@ public class ImageWiseAddToCartActivity  extends AppCompatActivity implements Vi
         actionbar_noti_tv = (TextView)view.findViewById(R.id.actionbar_noti_tv);
         actionbar_noti_tv.setText("0");
 
-        int count = new DBHandler(getApplicationContext()).getCartCount();
+        //int count = new DBHandler(getApplicationContext()).getCartCount();
+        int count = db.getCartCount();
         Constant.showLog("cart_count:"+count);
         actionbar_noti_tv.setText(String.valueOf(count));
 

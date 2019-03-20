@@ -67,7 +67,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(Constant.liveTestFlag==1) {
+        if (Constant.liveTestFlag == 1) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
 
@@ -78,13 +78,13 @@ public class CustomerDetailsActivity extends AppCompatActivity
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
-        provider = new LocationProvider(CustomerDetailsActivity.this,CustomerDetailsActivity.this,CustomerDetailsActivity.this);
+        provider = new LocationProvider(CustomerDetailsActivity.this, CustomerDetailsActivity.this, CustomerDetailsActivity.this);
 
-        if(FirstActivity.pref.contains(getString(R.string.pref_imeino2))) {
+        if (FirstActivity.pref.contains(getString(R.string.pref_imeino2))) {
             checkIsActive();
-        }else{
+        } else {
             ArrayList<UserClass> userList = db.getUserDetail();
-            if(!userList.isEmpty()){
+            if (!userList.isEmpty()) {
                 UserClass user = userList.get(0);
                 mobNo = user.getMobile();
                 id = String.valueOf(user.getCustID());
@@ -96,22 +96,22 @@ public class CustomerDetailsActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 UserClass custClass = (UserClass) listView.getAdapter().getItem(i);
-                Intent intent = new Intent(getApplicationContext(),CustomerLoginActivity.class);
-                intent.putExtra("cust",custClass);
+                Intent intent = new Intent(getApplicationContext(), CustomerLoginActivity.class);
+                intent.putExtra("cust", custClass);
                 startActivity(intent);
-                overridePendingTransition(R.anim.enter,R.anim.exit);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
             }
         });
 
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            version = pInfo.versionCode+"."+pInfo.versionName;
-            tv_version.setText("Version : "+pInfo.versionName);
+            version = pInfo.versionCode + "." + pInfo.versionName;
+            tv_version.setText("Version : " + pInfo.versionName);
             Constant.showLog("App Version " + version);
-            writeLog("MainActivity_Version_"+version);
+            writeLog("MainActivity_Version_" + version);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
-            writeLog("MainActivity_"+e.getMessage());
+            writeLog("MainActivity_" + e.getMessage());
         }
 
         /*Button crashButton = new Button(this);
@@ -209,7 +209,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     dialog.dismiss();
                 }
             });
-        }else if (a == 1) {
+        } else if (a == 1) {
             builder.setMessage("You Are Not An Active Employee?");
             builder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
                 @Override
@@ -219,7 +219,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     new Constant(CustomerDetailsActivity.this).doFinish();
                 }
             });
-        }else if (a == 2) {
+        } else if (a == 2) {
             builder.setMessage("Please Try Again");
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                 @Override
@@ -237,7 +237,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     new Constant(CustomerDetailsActivity.this).doFinish();
                 }
             });
-        }else if (a == 3) {
+        } else if (a == 3) {
             builder.setTitle("You Are Offline");
             builder.setMessage("Please Connect To Network?");
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
@@ -255,7 +255,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
 
                 }
             });
-        }else if(a==4) {
+        } else if (a == 4) {
             builder.setMessage("Error While Loading Data");
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                 @Override
@@ -271,7 +271,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     dialog.dismiss();
                 }
             });
-        }else if(a==5) {
+        } else if (a == 5) {
             builder.setMessage("This Device Is Not Registered");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
@@ -280,7 +280,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     new Constant(CustomerDetailsActivity.this).doFinish();
                 }
             });
-        }else if(a==8) {
+        } else if (a == 8) {
             builder.setTitle("Update App");
             builder.setMessage("MSPL Executive New Version Is Available");
             builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
@@ -290,14 +290,13 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
                     try {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-                    }
-                    catch (android.content.ActivityNotFoundException anfe) {
+                    } catch (android.content.ActivityNotFoundException anfe) {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
                     }
                     dialog.dismiss();
                 }
             });
-        }else if (a == 9) {
+        } else if (a == 9) {
             builder.setMessage("Please Try Again");
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                 @Override

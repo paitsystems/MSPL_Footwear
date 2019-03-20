@@ -50,6 +50,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class FeedbackActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+
     private Spinner fedback_spinner;
     //private String imagePath;
     private ArrayAdapter<String> feedbk_type;

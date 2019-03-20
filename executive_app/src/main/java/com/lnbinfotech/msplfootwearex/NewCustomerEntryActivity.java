@@ -22,15 +22,13 @@ import com.lnbinfotech.msplfootwearex.location.LocationProvider;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 
 public class NewCustomerEntryActivity extends AppCompatActivity
-        implements View.OnClickListener,LocationProvider.LocationCallback1  {
+        implements View.OnClickListener {
 
     private EditText ed_cus_name, ed_mobile_no, ed_email_id, ed_address, ed_shop_name;
     private Button bt_next, bt_update, bt_cancel;
     private LinearLayout save_lay, update_lay;
     public static int flag = 1;
     private Toast toast;
-    private Constant constant;
-    private LocationProvider provider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,19 +44,6 @@ public class NewCustomerEntryActivity extends AppCompatActivity
             getSupportActionBar().setTitle(R.string.newcustomerentry);
         }
         init();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        try {
-            if (provider != null) {
-                provider.disconnect();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            writeLog("onPause_"+e.getMessage());
-        }
     }
 
     private void init() {
@@ -78,21 +63,6 @@ public class NewCustomerEntryActivity extends AppCompatActivity
         save_lay.setVisibility(View.VISIBLE);
         update_lay.setVisibility(View.GONE);
 
-        ed_address.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                final int DRAWABLE_LEFT = 0;
-                final int DRAWABLE_TOP = 1, DRAWABLE_RIGHT = 2, DRAWABLE_BOTTOM = 3;
-
-                if(event.getRawX() <= (ed_address.getCompoundDrawables()[DRAWABLE_LEFT].getBounds().width())) {
-                    Constant.showLog("Left Click");
-                    catchCustLoc();
-                    return true;
-                }
-                return false;
-            }
-        });
-
         if (flag == 0) {
             save_lay.setVisibility(View.GONE);
             update_lay.setVisibility(View.VISIBLE);
@@ -105,7 +75,6 @@ public class NewCustomerEntryActivity extends AppCompatActivity
             update_lay.setVisibility(View.GONE);
         }
         bt_next.setOnClickListener(this);
-        provider = new LocationProvider(NewCustomerEntryActivity.this,NewCustomerEntryActivity.this,NewCustomerEntryActivity.this);
 
     }
 
@@ -157,28 +126,6 @@ public class NewCustomerEntryActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void handleNewLocation(Location location, String address) {
-        //constant.showPD();
-        try {
-            provider.disconnect();
-            double lat = location.getLatitude();
-            double lon = location.getLongitude();
-            String data = lat + "|" + lon + "|" + address + "|" + "C";
-            ed_address.setText(address);
-            ed_address.setSelection(ed_address.getText().length());
-        } catch (Exception e) {
-            e.printStackTrace();
-            toast.setText("Please Try Again...");
-            toast.show();
-        }
-    }
-
-    @Override
-    public void locationAvailable() {
-
-    }
-
     private void add_value() {
         String cus = ed_cus_name.getText().toString();
         OptionsActivity.new_cus.setCust_name(cus);
@@ -223,19 +170,6 @@ public class NewCustomerEntryActivity extends AppCompatActivity
             startActivity(i);
             overridePendingTransition(R.anim.enter, R.anim.exit);
             finish();
-        }
-    }
-
-    private void catchCustLoc() {
-        try {
-            constant = new Constant(NewCustomerEntryActivity.this);
-            //constant.showPD();
-            provider.connect();
-        } catch (Exception e) {
-            e.printStackTrace();
-            writeLog("catchCustLoc_" + e.getMessage());
-            toast.setText("Please Try Again...");
-            toast.show();
         }
     }
 

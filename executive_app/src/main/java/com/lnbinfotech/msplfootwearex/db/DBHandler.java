@@ -1488,7 +1488,7 @@ public class DBHandler extends SQLiteOpenHelper {
                     CO_AvailQty+"="+custOrder.getAvailableQty() + " where "+
                     CO_BranchId + "=" + custOrder.getBranchId() +" and " +
                     CO_Productid  + "=" + custOrder.getProductId() + " and "+
-                    CO_SizeGroup + "="+ custOrder.getSizeGroup() + " and " +
+                    CO_SizeGroup + "='"+ custOrder.getSizeGroup() + "' and " +
                     CO_Color + "='"+ custOrder.getColor() +"' and " +
                     //CO_MRP + " like '%"+ custOrder.getRate() +"%' and " +
                     CO_LooseQty + "=" + custOrder.getEnterQty();

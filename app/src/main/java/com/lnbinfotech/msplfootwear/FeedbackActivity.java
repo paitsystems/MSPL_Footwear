@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -31,6 +34,7 @@ import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.FeedbackClass;
+import com.lnbinfotech.msplfootwear.services.UploadImageService;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
 
 import java.io.ByteArrayOutputStream;
@@ -38,6 +42,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
@@ -108,7 +113,6 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.bt_send:
                 setValue();
-
                 break;
         }
     }
@@ -168,7 +172,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         switch (requestCode) {
             case 1:
                 if (resultCode == RESULT_OK) {
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                    //Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                    String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + "temp.jpg");
+                    Bitmap bitmap = scaleBitmap(_imagePath);
                     Constant.checkFolder(Constant.image_folder);
                     String dateformat = currentDateFormat();
                     String file_name = "img_" + dateformat + ".jpg";
@@ -186,7 +192,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case 2:
                 if (resultCode == RESULT_OK) {
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                    //Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                    String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + "temp.jpg");
+                    Bitmap bitmap = scaleBitmap(_imagePath);
                     Constant.checkFolder(Constant.image_folder);
                     String dateformat = currentDateFormat();
                     String file_name = "img_" + dateformat + ".jpg";
@@ -204,7 +212,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
 
             case 3:
                 if (resultCode == RESULT_OK) {
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                    //Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                    String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + "temp.jpg");
+                    Bitmap bitmap = scaleBitmap(_imagePath);
                     Constant.checkFolder(Constant.image_folder);
                     String dateformat = currentDateFormat();
                     String file_name = "img_" + dateformat + ".jpg";
@@ -256,7 +266,6 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case 5:
                 if (data != null && resultCode == RESULT_OK) {
-
                     Uri selectedImage = data.getData();
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};
                     Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
@@ -382,8 +391,17 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     //show_popup(3);
+                    /*Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent1, 1);*/
                     Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent1, 1);
+                    File f = Constant.checkFolder(Constant.folder_name);
+                    f = new File(f.getAbsolutePath(),"temp.jpg");
+                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                            + ".provider", f);
+                    intent1.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivityForResult(intent1,1);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -397,9 +415,18 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                   // show_popup(4);
+                    // show_popup(4);
+                    /*Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent2, 2);*/
                     Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent2, 2);
+                    File f = Constant.checkFolder(Constant.folder_name);
+                    f = new File(f.getAbsolutePath(),"temp.jpg");
+                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                            + ".provider", f);
+                    intent2.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    intent2.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivityForResult(intent2,2);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -414,8 +441,18 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     //show_popup(5);
+                    /*Intent intent3 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent3, 3);*/
+
                     Intent intent3 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent3, 3);
+                    File f = Constant.checkFolder(Constant.folder_name);
+                    f = new File(f.getAbsolutePath(),"temp.jpg");
+                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                            + ".provider", f);
+                    intent3.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    intent3.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivityForResult(intent3,3);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -429,15 +466,34 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton("Camera", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
+                    /*Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent1, 1);*/
+
                     Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent1, 1);
+                    File f = Constant.checkFolder(Constant.folder_name);
+                    f = new File(f.getAbsolutePath(),"temp.jpg");
+                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                            + ".provider", f);
+                    intent1.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivityForResult(intent1,1);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
                 }
             });
             builder.setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent4 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent4, 4);
+                   /* Intent intent4 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent4, 4);*/
+                    Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    File f = Constant.checkFolder(Constant.folder_name);
+                    f = new File(f.getAbsolutePath(),"temp.jpg");
+                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                            + ".provider", f);
+                    intent1.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivityForResult(intent1,4);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
                 }
             });
         } else if (id == 4) {
@@ -445,15 +501,34 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton("Camera", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent2, 2);
+                    /*Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent2, 2);*/
+                    Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File f = Constant.checkFolder(Constant.folder_name);
+                    f = new File(f.getAbsolutePath(),"temp.jpg");
+                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                            + ".provider", f);
+                    intent1.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivityForResult(intent1,2);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
                 }
             });
             builder.setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent5 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent5, 5);
+                    /*Intent intent5 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent5, 5);*/
+
+                    Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    File f = Constant.checkFolder(Constant.folder_name);
+                    f = new File(f.getAbsolutePath(),"temp.jpg");
+                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                            + ".provider", f);
+                    intent1.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivityForResult(intent1,5);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
                 }
             });
         } else if (id == 5) {
@@ -461,15 +536,33 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton("Camera", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent3 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent3, 3);
+                    /*Intent intent3 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent3, 3);*/
+                    Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File f = Constant.checkFolder(Constant.folder_name);
+                    f = new File(f.getAbsolutePath(),"temp.jpg");
+                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                            + ".provider", f);
+                    intent1.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivityForResult(intent1,3);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
                 }
             });
             builder.setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent6 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent6, 6);
+                    /*Intent intent6 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent6, 6);*/
+                    Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    File f = Constant.checkFolder(Constant.folder_name);
+                    f = new File(f.getAbsolutePath(),"temp.jpg");
+                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                            + ".provider", f);
+                    intent1.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivityForResult(intent1,6);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
                 }
             });
         } else if (id == 6) {
@@ -492,8 +585,10 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent1 = new Intent("test");//UploadImageService.BROADCAST
-                    sendBroadcast(intent1);
+                    /*Intent intent1 = new Intent("test");//UploadImageService.BROADCAST
+                    sendBroadcast(intent1);*/
+                    Intent intent = new Intent(FeedbackActivity.this, UploadImageService.class);
+                    startService(intent);
                     writeLog("UploadImageService_onHandleIntent_broadcastSend");
                     new Constant(FeedbackActivity.this).doFinish();
                 }
@@ -515,6 +610,52 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         }
         builder.create().show();
     }
+
+    private String getRealPathFromURI(String contentURI) {
+        Uri contentUri = Uri.parse(contentURI);
+        Cursor cursor = getContentResolver().query(contentUri, null, null, null, null);
+        if (cursor == null) {
+            return contentUri.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            String s = cursor.getString(idx);
+            cursor.close();
+            return s;
+        }
+    }
+
+    private Bitmap scaleBitmap(String imagePath) {
+        Bitmap resizedBitmap = null;
+        try {
+            int inWidth, inHeight;
+            InputStream in = new FileInputStream(imagePath);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(in, null, options);
+            in.close();
+            //in = null;
+            inWidth = options.outWidth;
+            inHeight = options.outHeight;
+            in = new FileInputStream(imagePath);
+            options = new BitmapFactory.Options();
+            options.inSampleSize = Math.max(inWidth / 300, inHeight / 300);
+            Bitmap roughBitmap = BitmapFactory.decodeStream(in, null, options);
+
+            Matrix m = new Matrix();
+            RectF inRect = new RectF(0, 0, roughBitmap.getWidth(), roughBitmap.getHeight());
+            RectF outRect = new RectF(0, 0, roughBitmap.getWidth(), roughBitmap.getHeight());
+            m.setRectToRect(inRect, outRect, Matrix.ScaleToFit.CENTER);
+            float[] values = new float[9];
+            m.getValues(values);
+            resizedBitmap = Bitmap.createScaledBitmap(roughBitmap, (int) (roughBitmap.getWidth() * values[0]), (int) (roughBitmap.getHeight() * values[4]), true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("FileNotFoundException and IOException found:" + e);
+        }
+        return resizedBitmap;
+    }
+
 
     private String getPath(Uri uri) {
         String[] projection = {MediaStore.Images.Media.DATA};

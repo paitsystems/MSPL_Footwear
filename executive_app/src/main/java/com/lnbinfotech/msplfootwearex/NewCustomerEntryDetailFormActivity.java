@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.RectF;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,6 +32,7 @@ import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
+import com.lnbinfotech.msplfootwearex.location.LocationProvider;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.services.UploadImageService;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
@@ -42,7 +44,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implements View.OnClickListener {
+public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
+        implements View.OnClickListener,LocationProvider.LocationCallback1  {
 
     private EditText ed_cus_name, ed_mobile_no, ed_email_id, ed_address, ed_gstno, ed_panno, ed_shopname;
     private Spinner spinner_addproof, spinner_idproof;
@@ -51,11 +54,16 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
     private RadioButton rdo_gst, rdo_pan;
     private LinearLayout gst_lay, pan_lay;
     private AppCompatButton bt_save;
-    private ImageView imageView_edit, imageView_cus_edit, imageView_address_edit, imageView_id_edit, imageView_gstpan_edit, imageView_cus_image, imageView_addproof, imageView_idproof, imageView_pan_img, imageView_gst_img;
+    private ImageView imageView_edit, imageView_cus_edit, imageView_address_edit, imageView_id_edit,
+            imageView_gstpan_edit, imageView_cus_image, imageView_addproof, imageView_idproof,
+            imageView_pan_img, imageView_gst_img;
     private Constant constant;
     private DBHandler db;
     private Toast toast;
     private int cust_id;
+    private LocationProvider provider;
+    private double lat = 0, lon = 0;
+    private String loc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +88,40 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
         set_value_attachgstpan_no();
         //set_value_attachGstProofImage();
         //set_value_attachPanProofImage();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            if (provider != null) {
+                provider.disconnect();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("onPause_"+e.getMessage());
+        }
+    }
+
+    @Override
+    public void handleNewLocation(Location location, String address) {
+        //constant.showPD();
+        try {
+            provider.disconnect();
+            lat = location.getLatitude();
+            lon = location.getLongitude();
+            loc = address;
+            saveData();
+        } catch (Exception e) {
+            loc = "NA";
+            saveData();
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void locationAvailable() {
+
     }
 
     private void init() {
@@ -132,6 +174,9 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
         imageView_address_edit.setOnClickListener(this);
         imageView_id_edit.setOnClickListener(this);
         imageView_gstpan_edit.setOnClickListener(this);
+
+        provider = new LocationProvider(NewCustomerEntryDetailFormActivity.this,NewCustomerEntryDetailFormActivity.this,NewCustomerEntryDetailFormActivity.this);
+
     }
 
     @Override
@@ -226,7 +271,8 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
             for (File f : fileArray) {
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
-                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
+                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
+                                File.separator + Constant.folder_name + File.separator + filename);
                         imageView_cus_image.setImageBitmap(scaleBitmap(_imagePath));
                     }
                     break;
@@ -309,7 +355,8 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
             for (File f : fileArray) {
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
-                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
+                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
+                                File.separator + Constant.folder_name + File.separator + filename);
                         imageView_addproof.setImageBitmap(scaleBitmap(_imagePath));
                     }
                     break;
@@ -337,7 +384,8 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
             for (File f : fileArray) {
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
-                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
+                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
+                                File.separator + Constant.folder_name + File.separator + filename);
                         imageView_idproof.setImageBitmap(scaleBitmap(_imagePath));
                     }
                     break;
@@ -358,7 +406,8 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
             for (File f : fileArray) {
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
-                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
+                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
+                                File.separator + Constant.folder_name + File.separator + filename);
                         imageView_gst_img.setImageBitmap(scaleBitmap(_imagePath));
                     }
                     break;
@@ -379,7 +428,8 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
             for (File f : fileArray) {
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
-                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
+                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
+                                File.separator + Constant.folder_name + File.separator + filename);
                         imageView_pan_img.setImageBitmap(scaleBitmap(_imagePath));
                     }
                     break;
@@ -470,22 +520,21 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                 String _CityId = URLEncoder.encode(CityId, "UTF-8");
                 String _AreaId = URLEncoder.encode(AreaId, "UTF-8");
                 String _HOCode = URLEncoder.encode(HOCode, "UTF-8");
+                loc = URLEncoder.encode(loc, "UTF-8");
                 String data = OptionsActivity.new_cus.getId_addressproof() + "-" +
                         OptionsActivity.new_cus.getAddress_proof_image() + "," +
                         OptionsActivity.new_cus.getId_idproof() + "-" + OptionsActivity.new_cus.getId_proof_image() + "," + OptionsActivity.new_cus.getId_gstpan_proof() + "-" +
                         OptionsActivity.new_cus.getGstpan_img();
 
-            /*if(AttachGSTnoPANnoImageActivity.radio_flag == 1) {
-                url = Constant.ipaddress + "/SaveCustomerDetail?custname="+_cust_name+"&mobno="+_mob_no+"&email="+_email_id+"&address="+_address+"&custimg="+_cust_img+"&addressproof="+_address_proof+"&addressproofimg="+_address_proof_img+"&idproof="+_id_proof+"&idproofimg="+_id_proof_img+"&GSTINNo="+_gst_no+"&GSTINimg="+_gstno_img;
-                Constant.showLog(url);
-                writeLog("saveData():url called" + url);
-            }else if(AttachGSTnoPANnoImageActivity.radio_flag == 2) {
-                url = Constant.ipaddress + "/SaveCustomerDetail?custname="+_cust_name+"&mobno="+_mob_no+"&email="+_email_id+"&address="+_address+"&custimg="+_cust_img+"&addressproof="+_address_proof+"&addressproofimg="+_address_proof_img+"&idproof="+_id_proof+"&idproofimg="+_id_proof_img+"&PANNo="+_pan_no+"&PANimg="+_panno_img;
-                Constant.showLog(url);
-                writeLog("saveData():url called" + url);
-            }*/
-
-                url = Constant.ipaddress + "/SaveCustomerDetail?custname=" + _cust_name + "&mobno=" + _mob_no + "&email=" + _email_id + "&address=" + _address + "&custimg=" + _cust_img + "&addressproof=" + _address_proof + "&addressproofimg=" + _address_proof_img + "&idproof=" + _id_proof + "&idproofimg=" + _id_proof_img + "&GSTINNo=" + _gst_no + "&GSTINimg=" + _gstno_img + "&PANNo=" + _pan_no + "&PANimg=" + _panno_img + "&custid=" + _custId + "&Branchid=" + _BranchId + "&district=" + _District + "&taluka=" + _Taluka + "&cityid=" + _CityId + "&areaid=" + _AreaId + "&HOCode=" + _HOCode + "&partyName=" + partyName + "&data=" + data;
+                url = Constant.ipaddress + "/SaveCustomerDetail?custname=" + _cust_name + "&mobno=" + _mob_no +
+                        "&email=" + _email_id + "&address=" + _address + "&custimg=" + _cust_img +
+                        "&addressproof=" + _address_proof + "&addressproofimg=" + _address_proof_img +
+                        "&idproof=" + _id_proof + "&idproofimg=" + _id_proof_img + "&GSTINNo=" + _gst_no +
+                        "&GSTINimg=" + _gstno_img + "&PANNo=" + _pan_no + "&PANimg=" + _panno_img +
+                        "&custid=" + _custId + "&Branchid=" + _BranchId + "&district=" + _District +
+                        "&taluka=" + _Taluka + "&cityid=" + _CityId + "&areaid=" + _AreaId +
+                        "&HOCode=" + _HOCode + "&partyName=" + partyName + "&lat="+lat+"&lon="+lon+"&loc="+loc +
+                        "&data=" + data;
                 Constant.showLog(url);
                 writeLog("saveData_url_called_" + url);
 
@@ -522,6 +571,18 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
         }
     }
 
+    private void catchCustLoc() {
+        try {
+            constant = new Constant(NewCustomerEntryDetailFormActivity.this);
+            provider.connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("catchCustLoc_" + e.getMessage());
+            toast.setText("Please Try Again...");
+            toast.show();
+        }
+    }
+
     public void showPopup(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
@@ -530,15 +591,8 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    saveData();
-                    /*if(ConnectivityTest.getNetStat(NewCustomerEntryDetailFormActivity.this)) {
-                        dialogInterface.dismiss();
-                        saveData();
-                    }else {
-                        toast.setText("Sorry,No Internet Connection.");
-                        toast.show();
-                       //showPopup(4);
-                    }*/
+                    //saveData();
+                    catchCustLoc();
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -558,15 +612,11 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity implem
                     AttachIdProofImageActivity.flag = 4;
                     AttachGSTnoPANnoImageActivity.flag = 5;
 
-                    /*Intent intent1 = new Intent("test");//UploadImageService.BROADCAST
-                    sendBroadcast(intent1);
-                    writeLog("UploadImageService_onHandleIntent_broadcastSend");*/
-
                     Intent intent = new Intent(NewCustomerEntryDetailFormActivity.this, UploadImageService.class);
                     startService(intent);
 
                     constant.showPD();
-                    Constant.showLog("Volly request success");
+                    Constant.showLog("Volley request success");
 
                     db.addNewCustomer();
 

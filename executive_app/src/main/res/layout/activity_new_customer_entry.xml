@@ -108,7 +108,6 @@
                     style="@style/textViewMob"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:drawableLeft="@drawable/ic_room_black_24dp"
                     android:ems="10"
                     android:gravity="top"
                     android:hint="@string/address"
