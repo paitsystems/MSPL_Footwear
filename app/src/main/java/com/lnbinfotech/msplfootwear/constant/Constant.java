@@ -2,6 +2,7 @@ package com.lnbinfotech.msplfootwear.constant;
 
 //Created by lnb on 8/11/2017.
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -65,7 +66,7 @@ public class Constant {
     public static int liveTestFlag = 1;
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
-    public static int showLogFlag = 1;
+    public static int showLogFlag = 0;
 
     public static int TIMEOUT_CON = 10*1000;
     public static int TIMEOUT_SO = 2*60*1000;
@@ -153,6 +154,7 @@ public class Constant {
         }
     }
 
+    @SuppressLint("MissingPermission")
     public String getIMEINo() {
         String myAndroidDeviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);

@@ -33,6 +33,11 @@
                 android:text="Last Data Sync On -"
                 android:id="@+id/tv_lastSync"/>
 
+            <com.daimajia.slider.library.SliderLayout
+                android:id="@+id/slider"
+                android:layout_width="fill_parent"
+                android:layout_height="300dp"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

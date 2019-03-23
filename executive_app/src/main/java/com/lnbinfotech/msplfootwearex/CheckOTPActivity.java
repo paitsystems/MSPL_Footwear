@@ -75,7 +75,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(Constant.liveTestFlag==1) {
+        if (Constant.liveTestFlag == 1) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
 
@@ -94,23 +94,19 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             getSupportActionBar().setTitle(R.string.title_activity_login);
         }
 
-        //autoOTP();
-        //receiver = new ReadSms();
+        AppSignatureHelper hash = new AppSignatureHelper(getApplicationContext());
+        ArrayList<String> appCodes = hash.getAppSignatures();
+        String yourHash = appCodes.get(0);
+        Constant.showLog("yourHash-" + yourHash);
 
-        if(Constant.showLogFlag==0) {
-            AppSignatureHelper hash = new AppSignatureHelper(getApplicationContext());
-            ArrayList<String> appCodes = hash.getAppSignatures();
-            String yourHash = appCodes.get(0);
-            Constant.showLog("yourHash-" + yourHash);
-        }
 
-        //client = SmsRetriever.getClient(this);
+        client = SmsRetriever.getClient(this);
         receiver = new MySMSBroadcastReceiver();
         receiver.initOTPListener(this);
         IntentFilter filter = new IntentFilter();
         filter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
         getApplicationContext().registerReceiver(receiver, filter);
-        //startSMSListener();
+        startSMSListener();
 
         resendOTP();
 
@@ -120,189 +116,9 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             startTimerCount(minutes);
         }
 
-        /*IntentFilter filter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
-        //filter.addAction(getPackageName() + "android.provider.Telephony.SMS_RECEIVED");
-        receiver = new MySMSReceiver();
-
-        receiver.bindListener(new SmsListener() {
-            @Override
-            public void onReceivedMessage(String message) {
-                Constant.showLog("message:"+message);
-                ed1.setText(message.substring(0,1));
-                Constant.showLog("message:"+message.substring(0,1));
-                ed2.setText(message.substring(1,2));
-                Constant.showLog("message:"+message.substring(1,2));
-                ed3.setText(message.substring(2,3));
-                Constant.showLog("message:"+message.substring(2,3));
-                ed4.setText(message.substring(3,4));
-                Constant.showLog("message:"+message.substring(3,4));
-                ed5.setText(message.substring(4,5));
-                Constant.showLog("message:"+message.substring(4,5));
-                ed6.setText(message.substring(5,6));
-                Constant.showLog("message:"+message.substring(5,6));
-                timer.cancel();
-                countDown.cancel();
-                tv_text1.setText("OTP get successfully");
-                Constant.showLog("CheckOTPActivity_onReceivedMessage_Called");
-            }
-        });
-
-        registerReceiver(receiver, filter);*/
-        /*IntentFilter filter = new IntentFilter();
-        filter.addAction(getPackageName() + "android.provider.Telephony.SMS_RECEIVED");
-
-        receiver = new MySMSReceiver();
-        registerReceiver(receiver, filter);
-
-        receiver.bindListener(new SmsListener() {
-            @Override
-            public void onReceivedMessage(String message) {
-                Constant.showLog("message:"+message);
-                ed1.setText(message.substring(0,1));
-                Constant.showLog("message:"+message.substring(0,1));
-                ed2.setText(message.substring(1,2));
-                Constant.showLog("message:"+message.substring(1,2));
-                ed3.setText(message.substring(2,3));
-                Constant.showLog("message:"+message.substring(2,3));
-                ed4.setText(message.substring(3,4));
-                Constant.showLog("message:"+message.substring(3,4));
-                ed5.setText(message.substring(4,5));
-                Constant.showLog("message:"+message.substring(4,5));
-                ed6.setText(message.substring(5,6));
-                Constant.showLog("message:"+message.substring(5,6));
-                timer.cancel();
-                countDown.cancel();
-                tv_text1.setText("OTP get successfully");
-                Constant.showLog("CheckOTPActivity_onReceivedMessage_Called");
-            }
-        });
-
-        if(countDown == null) {
-            tv_text1.setText("Your OTP will get within 5 min..");
-            int minutes = 5 * 60 * 1000;
-            startTimerCount(minutes);
-        }*/
-        //timerCount();
-
         btn_verifyotp.setOnClickListener(this);
         btn_resendotp.setOnClickListener(this);
 
-        /*ed1.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(ed1.getText().toString().length()==1){
-                    ed2.requestFocus();
-                } else {
-                    ed1.setText("");
-                }
-            }
-        });
-
-        ed2.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(ed2.getText().toString().length()==1){
-                    ed3.requestFocus();
-                } else {
-                    ed1.requestFocus();
-                }
-            }
-        });
-
-        ed3.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(ed3.getText().toString().length()==1){
-                    ed4.requestFocus();
-                } else {
-                    ed2.requestFocus();
-                }
-            }
-        });
-
-        ed4.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(ed4.getText().toString().length()==1){
-                    ed5.requestFocus();
-                } else {
-                    ed3.requestFocus();
-                }
-            }
-        });
-
-        ed5.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(ed5.getText().toString().length()==1){
-                    ed6.requestFocus();
-                } else {
-                    ed4.requestFocus();
-                }
-            }
-        });
-
-        ed6.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(ed6.getText().toString().length()==1){
-                    ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(ed6.getWindowToken(),0);
-                    verifyOTP();
-                    btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),R.color.lightgray));
-                   // btn_resendotp.setBackgroundColor(getResources().getColor(R.color.lightgray));
-                } else {
-                    ed5.requestFocus();
-                }
-            }
-        });*/
     }
 
     @Override
@@ -420,15 +236,6 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-   /* public void onReceivedMessage(String message){
-        try {
-            ed1.setText(message);
-            Constant.showLog("message:"+message);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }*/
-
     private void timerCount(){
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -469,31 +276,6 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             }
         }.start();
     }
-
-    /*private void autoOTP(){
-        ReadSms.bindListener(new SmsListener() {
-            @Override
-            public void onReceivedMessage(String message) {
-                Constant.showLog("message:"+message);
-                ed1.setText(message.substring(0,1));
-                Constant.showLog("message:"+message.substring(0,1));
-                ed2.setText(message.substring(1,2));
-                Constant.showLog("message:"+message.substring(1,2));
-                ed3.setText(message.substring(2,3));
-                Constant.showLog("message:"+message.substring(2,3));
-                ed4.setText(message.substring(3,4));
-                Constant.showLog("message:"+message.substring(3,4));
-                ed5.setText(message.substring(4,5));
-                Constant.showLog("message:"+message.substring(4,5));
-                ed6.setText(message.substring(5,6));
-                Constant.showLog("message:"+message.substring(5,6));
-                timer.cancel();
-                countDown.cancel();
-                tv_text1.setText("OTP get successfully");
-
-            }
-        });
-    }*/
 
     private void resendOTP(){
         try {
@@ -596,19 +378,19 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void init() {
-        ed1 = (EditText) findViewById(R.id.ed1);
-        ed2 = (EditText) findViewById(R.id.ed2);
-        ed3 = (EditText) findViewById(R.id.ed3);
-        ed4 = (EditText) findViewById(R.id.ed4);
-        ed5 = (EditText) findViewById(R.id.ed5);
-        ed6 = (EditText) findViewById(R.id.ed6);
+        ed1 = findViewById(R.id.ed1);
+        ed2 = findViewById(R.id.ed2);
+        ed3 = findViewById(R.id.ed3);
+        ed4 = findViewById(R.id.ed4);
+        ed5 = findViewById(R.id.ed5);
+        ed6 = findViewById(R.id.ed6);
 
-        tv_otp = (TextView) findViewById(R.id.tv_otp);
-        tv_text1 = (TextView) findViewById(R.id.tv_text1);
-        tv_timecount = (TextView) findViewById(R.id.tv_timecount);
+        tv_otp =  findViewById(R.id.tv_otp);
+        tv_text1 = findViewById(R.id.tv_text1);
+        tv_timecount = findViewById(R.id.tv_timecount);
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
-        btn_verifyotp = (AppCompatButton) findViewById(R.id.btn_verifyotp);
-        btn_resendotp = (AppCompatButton) findViewById(R.id.btn_resendotp);
+        btn_verifyotp = findViewById(R.id.btn_verifyotp);
+        btn_resendotp = findViewById(R.id.btn_resendotp);
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         constant = new Constant(CheckOTPActivity.this);
@@ -741,7 +523,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                     dialog.dismiss();
                 }
             });
-        }else if (a == 0) {
+        } else if (a == 0) {
             builder.setMessage(R.string.doyouwanttoexitfromapp);
             builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
@@ -753,10 +535,10 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                             unregisterReceiver(receiver);
                             receiver = null;
                         }
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if(countDown!=null) {
+                    if (countDown != null) {
                         countDown.cancel();
                     }
                     new Constant(CheckOTPActivity.this).doFinish();
@@ -769,7 +551,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                     dialog.dismiss();
                 }
             });
-        }else if (a == 1) {
+        } else if (a == 1) {
             builder.setMessage(R.string.registrationdonesuccessfully);
             builder.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
                 @Override
@@ -778,7 +560,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                     getUserInfo();
                 }
             });
-        }else if (a == 2) {
+        } else if (a == 2) {
             builder.setTitle(R.string.numbernotmatch);
             builder.setMessage(R.string.pleaseenterregisteredmobilenumber);
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -787,7 +569,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                     dialog.dismiss();
                 }
             });
-        }else if (a == 3) {
+        } else if (a == 3) {
             builder.setTitle(R.string.alreadyregistered);
             builder.setMessage(R.string.pleasecontactyouradministrator);
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

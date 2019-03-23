@@ -21,6 +21,11 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.constant.Utitlity;
@@ -29,14 +34,16 @@ import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwear.log.CopyLog;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.mail.GMailSender;
-import com.lnbinfotech.msplfootwear.services.AutoSyncService;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class OptionsActivity extends AppCompatActivity implements View.OnClickListener {
+public class OptionsActivity extends AppCompatActivity implements View.OnClickListener,
+        BaseSliderView.OnSliderClickListener,
+        ViewPagerEx.OnPageChangeListener{
 
     private CardView card_bank_details,card_give_order, card_account, card_track_order, card_profile, card_scheme, card_whats_new, card_feedback;
     public static float custDisc = 0;
@@ -44,6 +51,8 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     private TextView actionbar_noti_tv, tv_address, tv_phone1,tv_phone2,tv_mobile1, tv_mobile2, tv_email, tv_lastSync;
     private DBHandler db;
     private Toast toast;
+    private SliderLayout sliderLayout;
+    HashMap<String, String> scImgHashMap ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,10 +89,28 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
 
         //TODO: JobScheduled
         Utitlity.scheduledJob(getApplicationContext());
-        /*Intent intent1 = new Intent(getApplicationContext(),AutoSyncService.class);
-        startService(intent1);*/
 
         setContactUs();
+
+        AddImagesUrlOnline();
+
+        for(String name : scImgHashMap.keySet()){
+            TextSliderView textSliderView = new TextSliderView(OptionsActivity.this);
+            textSliderView
+                    .description(name)
+                    .image(scImgHashMap.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                    .setOnSliderClickListener(this);
+
+            textSliderView.bundle(new Bundle());
+            textSliderView.getBundle().putString("extra",name);
+            sliderLayout.addSlider(textSliderView);
+        }
+        sliderLayout.setPresetTransformer(SliderLayout.Transformer.DepthPage);
+        sliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        sliderLayout.setCustomAnimation(new DescriptionAnimation());
+        sliderLayout.setDuration(3000);
+        sliderLayout.addOnPageChangeListener(OptionsActivity.this);
     }
 
     @Override
@@ -218,26 +245,49 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onSliderClick(BaseSliderView slider) {
+        Toast.makeText(this,slider.getBundle().get("extra") + "", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        Constant.showLog("Page Changed: " + position);
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
     private void init() {
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         db = new DBHandler(this);
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
-        card_give_order = (CardView) findViewById(R.id.card_give_order);
-        card_account = (CardView) findViewById(R.id.card_account);
-        card_track_order = (CardView) findViewById(R.id.card_track_order);
-        card_profile = (CardView) findViewById(R.id.card_profile);
-        card_scheme = (CardView) findViewById(R.id.card_scheme);
-        card_whats_new = (CardView) findViewById(R.id.card_whatsnew);
-        card_feedback = (CardView) findViewById(R.id.card_feedback);
-        card_bank_details = (CardView) findViewById(R.id.card_bank_details);
-        tv_address = (TextView) findViewById(R.id.tv_address);
-        tv_phone1 = (TextView) findViewById(R.id.tv_phone1);
-        tv_phone2 = (TextView) findViewById(R.id.tv_phone2);
-        tv_mobile1 = (TextView) findViewById(R.id.tv_mobile1);
-        tv_mobile2 = (TextView) findViewById(R.id.tv_mobile2);
-        tv_email = (TextView) findViewById(R.id.tv_email);
-        tv_lastSync = (TextView) findViewById(R.id.tv_lastSync);
+        card_give_order = findViewById(R.id.card_give_order);
+        card_account = findViewById(R.id.card_account);
+        card_track_order = findViewById(R.id.card_track_order);
+        card_profile = findViewById(R.id.card_profile);
+        card_scheme = findViewById(R.id.card_scheme);
+        card_whats_new = findViewById(R.id.card_whatsnew);
+        card_feedback = findViewById(R.id.card_feedback);
+        card_bank_details = findViewById(R.id.card_bank_details);
+        tv_address = findViewById(R.id.tv_address);
+        tv_phone1 = findViewById(R.id.tv_phone1);
+        tv_phone2 = findViewById(R.id.tv_phone2);
+        tv_mobile1 = findViewById(R.id.tv_mobile1);
+        tv_mobile2 = findViewById(R.id.tv_mobile2);
+        tv_email = findViewById(R.id.tv_email);
+        tv_lastSync = findViewById(R.id.tv_lastSync);
+
+        sliderLayout = findViewById(R.id.slider);
     }
 
     private void showDia(int a) {
@@ -381,13 +431,13 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         builder.create().show();
     }
 
-    private void test_t(){
-        Configuration configuration = getBaseContext().getResources().getConfiguration();
-        String lang = "mr";
-        Locale locale = new Locale(lang);
-        Locale.setDefault(locale);
-        configuration.locale = locale;
-        Constant.showLog("locale:"+locale);
+    public void AddImagesUrlOnline(){
+        scImgHashMap = new HashMap<>();
+        scImgHashMap.put("Scheme1", "http://103.109.13.200:24086/IMAGES/Scheme/SchoolShoes.jpg");
+        /*scImgHashMap.put("Donut", "http://103.109.13.200:24086/IMAGES/2702FC_Foo%20Kids_Red_P1.jpg");
+        scImgHashMap.put("Eclair", "http://103.109.13.200:24086/IMAGES/2901_Aaram_Black_P1.jpg");
+        scImgHashMap.put("Froyo", "http://103.109.13.200:24086/IMAGES/F196C_Foo%20Kids_Blue_P1.jpg");
+        scImgHashMap.put("GingerBread", "http://103.109.13.200:24086/IMAGES/2902_Aaram_Black_P1.jpg");*/
     }
 
     private void getSaleExe() {
