@@ -1,8 +1,10 @@
 package com.lnbinfotech.msplfootwear;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
@@ -30,16 +32,29 @@ import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.constant.Utitlity;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
+import com.lnbinfotech.msplfootwear.interfaces.RetrofitApiInterface;
 import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwear.log.CopyLog;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.mail.GMailSender;
+import com.lnbinfotech.msplfootwear.model.ImagewiseAddToCartClass;
+import com.lnbinfotech.msplfootwear.model.ProductMasterClass;
+import com.lnbinfotech.msplfootwear.model.SchemeMasterClass;
+import com.lnbinfotech.msplfootwear.utility.RetrofitApiBuilder;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OptionsActivity extends AppCompatActivity implements View.OnClickListener,
         BaseSliderView.OnSliderClickListener,
@@ -52,7 +67,8 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     private DBHandler db;
     private Toast toast;
     private SliderLayout sliderLayout;
-    HashMap<String, String> scImgHashMap ;
+    private HashMap<String, String> scImgHashMap ;
+    private Constant constant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,8 +158,13 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_scheme:
-                toast.setText("Under Development");
-                toast.show();
+                ImagewiseAddToCartClass prod = new ImagewiseAddToCartClass();
+                prod.setImageName("SchoolShoe,");
+                Intent sintent = new Intent(getApplicationContext(), SchemeFullImageActivity.class);
+                sintent.putExtra("data",prod);
+                sintent.putExtra("pos","0");
+                startActivity(sintent);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_whatsnew:
                /* toast.setText("Under Development");
@@ -248,6 +269,12 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onSliderClick(BaseSliderView slider) {
         Toast.makeText(this,slider.getBundle().get("extra") + "", Toast.LENGTH_SHORT).show();
+        ImagewiseAddToCartClass prod = new ImagewiseAddToCartClass();
+        prod.setImageName("SchoolShoe,");
+        Intent sintent = new Intent(getApplicationContext(), SchemeFullImageActivity.class);
+        sintent.putExtra("data",prod);
+        sintent.putExtra("pos","0");
+        startActivity(sintent);
     }
 
     @Override
@@ -438,6 +465,58 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         scImgHashMap.put("Eclair", "http://103.109.13.200:24086/IMAGES/2901_Aaram_Black_P1.jpg");
         scImgHashMap.put("Froyo", "http://103.109.13.200:24086/IMAGES/F196C_Foo%20Kids_Blue_P1.jpg");
         scImgHashMap.put("GingerBread", "http://103.109.13.200:24086/IMAGES/2902_Aaram_Black_P1.jpg");*/
+    }
+
+    private void getSchemeData() {
+        constant = new Constant(OptionsActivity.this);
+        constant.showPD();
+        try {
+            final DBHandler db = new DBHandler(getApplicationContext());
+            //CustId+"|"+HOCode+"|"+BranchId+"|"+ArealineId+"|"+AreaId+"|"+Cat
+            String url = 1176 + "|" + 1 + "|" + 1 +"|"+ 1 +"|" + 1 + "|" + "School";
+            writeLog("getSchemeData_"+url);
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("details", url);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.
+                    parse("application/json; charset=utf-8"), (jsonBody).toString());
+            Constant.showLog(jsonBody.toString());
+
+            Call<List<SchemeMasterClass>> call = new RetrofitApiBuilder().getApiBuilder().
+                    create(RetrofitApiInterface.class).
+                    getSchemeData(body);
+            call.enqueue(new Callback<List<SchemeMasterClass>>() {
+                @Override
+                public void onResponse(Call<List<SchemeMasterClass>> call, Response<List<SchemeMasterClass>> response) {
+                    Constant.showLog("onResponse");
+                    List<SchemeMasterClass> list = response.body();
+                    if (list != null) {
+                        if (list.size()!=0) {
+
+                        }
+                    } else {
+                        Constant.showLog("onResponse_list_null");
+                        writeLog("getSchemeData_onResponse_list_null");
+                    }
+                    constant.showPD();
+                }
+
+                @Override
+                public void onFailure(Call<List<SchemeMasterClass>> call, Throwable t) {
+                    Constant.showLog("onFailure");
+                    if (!call.isCanceled()) {
+                        call.cancel();
+                    }
+                    t.printStackTrace();
+                    writeLog("getSchemeData_onFailure_" + t.getMessage());
+                    constant.showPD();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getSchemeData_" + e.getMessage());
+            constant.showPD();
+            showDia(2);
+        }
     }
 
     private void getSaleExe() {
