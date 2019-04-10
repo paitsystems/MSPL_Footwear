@@ -223,7 +223,7 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
         overridePendingTransition(R.anim.enter, R.anim.exit);*/
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File f = Constant.checkFolder(Constant.folder_name);
+        File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
         f = new File(f.getAbsolutePath(),"temp.jpg");
         Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
                 + ".provider", f);
@@ -248,7 +248,8 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
                 Date resultdate = new Date(datetime);
                 imagePath = "C_" + custId + "_Cheque_" + chequeNo + "_" + sdf.format(resultdate) + ".jpg";
                 Constant.showLog(imagePath);
-                File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name);
+                File f = new File(Environment.getExternalStorageDirectory() + File.separator +
+                        Constant.folder_name + File.separator + Constant.image_folder);
                 for (File temp : f.listFiles()) {
                     if (temp.getName().equals("temp.jpg")) {
                         f = temp;
@@ -260,7 +261,8 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
                 BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
                 bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
 
-                File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name, imagePath);
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator +
+                        Constant.folder_name + File.separator + Constant.image_folder, imagePath);
                 try {
                     outFile = new FileOutputStream(file);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 15, outFile);
@@ -282,13 +284,13 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         selectAuto = new SelectAutoItemClass();
-        ed_bank = (EditText) findViewById(R.id.ed_bank);
-        ed_branch = (EditText) findViewById(R.id.ed_branch);
-        ed_chq_no = (EditText) findViewById(R.id.ed_total_chq);
-        btn_submit = (AppCompatButton) findViewById(R.id.btn_submt);
-        listView = (ListView) findViewById(R.id.listView);
-        tv_amntTotal = (TextView) findViewById(R.id.tv_amntTotal);
-        ed_chq_serial = (EditText) findViewById(R.id.ed_chqSerial);
+        ed_bank = findViewById(R.id.ed_bank);
+        ed_branch = findViewById(R.id.ed_branch);
+        ed_chq_no = findViewById(R.id.ed_total_chq);
+        btn_submit = findViewById(R.id.btn_submt);
+        listView = findViewById(R.id.listView);
+        tv_amntTotal = findViewById(R.id.tv_amntTotal);
+        ed_chq_serial = findViewById(R.id.ed_chqSerial);
         list = new ArrayList<>();
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }

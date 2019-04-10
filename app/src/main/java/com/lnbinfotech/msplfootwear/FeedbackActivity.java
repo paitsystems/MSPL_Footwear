@@ -173,9 +173,11 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             case 1:
                 if (resultCode == RESULT_OK) {
                     //Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + "temp.jpg");
+                    Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
+                    String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
+                            File.separator + Constant.folder_name + File.separator +
+                            Constant.image_folder + File.separator + "temp.jpg");
                     Bitmap bitmap = scaleBitmap(_imagePath);
-                    Constant.checkFolder(Constant.image_folder);
                     String dateformat = currentDateFormat();
                     String file_name = "img_" + dateformat + ".jpg";
                     store_CameraPhoto_InSdCard(bitmap, dateformat);
@@ -185,15 +187,17 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     //imgv_img2.setVisibility(View.VISIBLE);
                     lay_img2.setVisibility(View.VISIBLE);
                     feedbackClass.setFeed_img1(file_name);
-                    Constant.showLog("file_name"+file_name);
-                    Constant.showLog(""+mbitmap);
-                   // feedbackClass.setFeed_img1(String.valueOf(mbitmap));
+                    Constant.showLog("file_name" + file_name);
+                    Constant.showLog("" + mbitmap);
+                    // feedbackClass.setFeed_img1(String.valueOf(mbitmap));
                 }
                 break;
             case 2:
                 if (resultCode == RESULT_OK) {
                     //Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + "temp.jpg");
+                    String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
+                            File.separator + Constant.folder_name + File.separator +
+                            Constant.image_folder + File.separator + "temp.jpg");
                     Bitmap bitmap = scaleBitmap(_imagePath);
                     Constant.checkFolder(Constant.image_folder);
                     String dateformat = currentDateFormat();
@@ -204,7 +208,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     imgv_img2.setImageBitmap(mbitmap);
                     lay_img3.setVisibility(View.VISIBLE);
                     feedbackClass.setFeed_img2(file_name);
-                    Constant.showLog("file_name"+file_name);
+                    Constant.showLog("file_name" + file_name);
                     //feedbackClass.setFeed_img2(String.valueOf(mbitmap));
                     Log.d("Log", "imgename:" + mbitmap);
                 }
@@ -213,7 +217,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             case 3:
                 if (resultCode == RESULT_OK) {
                     //Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + "temp.jpg");
+                    String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
+                            File.separator + Constant.folder_name + File.separator +
+                            Constant.image_folder + File.separator + "temp.jpg");
                     Bitmap bitmap = scaleBitmap(_imagePath);
                     Constant.checkFolder(Constant.image_folder);
                     String dateformat = currentDateFormat();
@@ -223,7 +229,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     imgv_img3.setImageBitmap(mbitmap);
                     Log.d("Log", "imgename:" + mbitmap);
                     feedbackClass.setFeed_img3(file_name);
-                    Constant.showLog("file_name"+file_name);
+                    Constant.showLog("file_name" + file_name);
                     //feedbackClass.setFeed_img3(String.valueOf(mbitmap));
                 }
                 break;
@@ -256,10 +262,12 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     try {
                         String dateformat = currentDateFormat();
                         String file_name = "feedbkimg_" + dateformat + ".jpg";
-                        File destFile = new File((Environment.getExternalStorageDirectory() + File.separator + Constant.image_folder + File.separator + file_name));
+                        File destFile = new File((Environment.getExternalStorageDirectory() + File.separator +
+                                Constant.folder_name + File.separator +
+                                Constant.image_folder + File.separator + file_name));
                         copyFile(new File(getPath(data.getData())), destFile);
                     } catch (Exception e) {
-                      e.printStackTrace();
+                        e.printStackTrace();
                     }
                 }
 
@@ -278,8 +286,6 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                         bmp = null;
                     }
                     bmp = BitmapFactory.decodeFile(filePath);
-
-                    // imgv_img2.setBackgroundResource(0);
                     imgv_img2.setImageBitmap(bmp);
                     imgv_img3.setVisibility(View.VISIBLE);
                     feedbackClass.setFeed_img2(String.valueOf(bmp));
@@ -308,19 +314,6 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 }
                 break;
         }
-         /*File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.image_folder+File.separator + "img_"+currentDateFormat()+".png");
-            Log.d("Log","File path:"+file);
-            try {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArray);
-                //file.createNewFile();
-                FileOutputStream fos = new FileOutputStream(file);
-                fos.write(byteArray.toByteArray());
-                fos.close();
-            }catch (NullPointerException e){
-                e.printStackTrace();
-            }catch (IOException i){
-                i.printStackTrace();
-            }*/
     }
 
     private void init() {
@@ -329,27 +322,28 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         feedbackClass.setFeed_img1("NA");
         feedbackClass.setFeed_img2("NA");
         feedbackClass.setFeed_img3("NA");
-        fedback_spinner = (Spinner) findViewById(R.id.fedback_spinner);
-        ed_description = (EditText) findViewById(R.id.ed_description);
-        ed_article_no = (EditText) findViewById(R.id.ed_article_no);
-        ed_qty = (EditText) findViewById(R.id.ed_qty);
-        ed_salesman = (EditText) findViewById(R.id.ed_salesman);
-        ed_front_office = (EditText) findViewById(R.id.ed_frontoffice);
-        auto_invoice_no = (AutoCompleteTextView) findViewById(R.id.auto_invoice_no);
-        bt_send = (AppCompatButton) findViewById(R.id.bt_send);
-        imgv_img1 = (ImageView) findViewById(R.id.imgv_img1);
-        imgv_img2 = (ImageView) findViewById(R.id.imgv_img2);
-        imgv_img3 = (ImageView) findViewById(R.id.imgv_img3);
-        packing_order_inv_lay = (LinearLayout) findViewById(R.id.packing_order_inv_lay);
-        lay_img1 = (LinearLayout) findViewById(R.id.lay_img1);
-        lay_img2 = (LinearLayout) findViewById(R.id.lay_img2);
-        lay_img3 = (LinearLayout) findViewById(R.id.lay_img3);
-        damaged_goods_cardlay = (CardView) findViewById(R.id.damaged_goods_cardlay);
-        service_or_team_cardlay = (CardView) findViewById(R.id.service_or_team_cardlay);
+        fedback_spinner = findViewById(R.id.fedback_spinner);
+        ed_description = findViewById(R.id.ed_description);
+        ed_article_no = findViewById(R.id.ed_article_no);
+        ed_qty = findViewById(R.id.ed_qty);
+        ed_salesman = findViewById(R.id.ed_salesman);
+        ed_front_office = findViewById(R.id.ed_frontoffice);
+        auto_invoice_no = findViewById(R.id.auto_invoice_no);
+        bt_send = findViewById(R.id.bt_send);
+        imgv_img1 = findViewById(R.id.imgv_img1);
+        imgv_img2 = findViewById(R.id.imgv_img2);
+        imgv_img3 = findViewById(R.id.imgv_img3);
+        packing_order_inv_lay = findViewById(R.id.packing_order_inv_lay);
+        lay_img1 = findViewById(R.id.lay_img1);
+        lay_img2 = findViewById(R.id.lay_img2);
+        lay_img3 = findViewById(R.id.lay_img3);
+        damaged_goods_cardlay = findViewById(R.id.damaged_goods_cardlay);
+        service_or_team_cardlay = findViewById(R.id.service_or_team_cardlay);
         feedbk_type = new ArrayAdapter<>(this, R.layout.feedbk_type_list, arr);
         fedback_spinner.setAdapter(feedbk_type);
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
+        Constant.checkFolder(Constant.folder_name+ File.separator +Constant.image_folder);
     }
 
     private void setValue() {
@@ -394,7 +388,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     /*Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent1, 1);*/
                     Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File f = Constant.checkFolder(Constant.folder_name);
+                    File f = Constant.checkFolder(Constant.folder_name+ File.separator +Constant.image_folder);
                     f = new File(f.getAbsolutePath(),"temp.jpg");
                     Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
                             + ".provider", f);
@@ -419,7 +413,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     /*Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent2, 2);*/
                     Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File f = Constant.checkFolder(Constant.folder_name);
+                    File f = Constant.checkFolder(Constant.folder_name+ File.separator +Constant.image_folder);
                     f = new File(f.getAbsolutePath(),"temp.jpg");
                     Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
                             + ".provider", f);
@@ -445,7 +439,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     startActivityForResult(intent3, 3);*/
 
                     Intent intent3 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File f = Constant.checkFolder(Constant.folder_name);
+                    File f = Constant.checkFolder(Constant.folder_name+ File.separator +Constant.image_folder);
                     f = new File(f.getAbsolutePath(),"temp.jpg");
                     Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
                             + ".provider", f);
@@ -470,7 +464,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     startActivityForResult(intent1, 1);*/
 
                     Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File f = Constant.checkFolder(Constant.folder_name);
+                    File f = Constant.checkFolder(Constant.folder_name+ File.separator +Constant.image_folder);
                     f = new File(f.getAbsolutePath(),"temp.jpg");
                     Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
                             + ".provider", f);
@@ -486,7 +480,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                    /* Intent intent4 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(intent4, 4);*/
                     Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    File f = Constant.checkFolder(Constant.folder_name);
+                    File f = Constant.checkFolder(Constant.folder_name+ File.separator +Constant.image_folder);
                     f = new File(f.getAbsolutePath(),"temp.jpg");
                     Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
                             + ".provider", f);
@@ -504,7 +498,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     /*Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent2, 2);*/
                     Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File f = Constant.checkFolder(Constant.folder_name);
+                    File f = Constant.checkFolder(Constant.folder_name+ File.separator +Constant.image_folder);
                     f = new File(f.getAbsolutePath(),"temp.jpg");
                     Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
                             + ".provider", f);
@@ -521,7 +515,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     startActivityForResult(intent5, 5);*/
 
                     Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    File f = Constant.checkFolder(Constant.folder_name);
+                    File f = Constant.checkFolder(Constant.folder_name+ File.separator +Constant.image_folder);
                     f = new File(f.getAbsolutePath(),"temp.jpg");
                     Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
                             + ".provider", f);
@@ -539,7 +533,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     /*Intent intent3 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent3, 3);*/
                     Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File f = Constant.checkFolder(Constant.folder_name);
+                    File f = Constant.checkFolder(Constant.folder_name+ File.separator +Constant.image_folder);
                     f = new File(f.getAbsolutePath(),"temp.jpg");
                     Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
                             + ".provider", f);
@@ -555,7 +549,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     /*Intent intent6 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(intent6, 6);*/
                     Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    File f = Constant.checkFolder(Constant.folder_name);
+                    File f = Constant.checkFolder(Constant.folder_name+ File.separator +Constant.image_folder);
                     f = new File(f.getAbsolutePath(),"temp.jpg");
                     Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
                             + ".provider", f);
@@ -686,7 +680,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void store_CameraPhoto_InSdCard(Bitmap bitmap, String currentdate) {
-        File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.image_folder + File.separator + "img_" + currentdate + ".jpg");
+        File file = new File(Environment.getExternalStorageDirectory() + File.separator +
+                Constant.folder_name + File.separator +
+                Constant.image_folder + File.separator + "img_" + currentdate + ".jpg");
         Log.d("Log", "File path:" + file);
         try {
             FileOutputStream fos = new FileOutputStream(file);
@@ -700,7 +696,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
 
     private Bitmap get_Image_from_sd_card(String filename) {
         Bitmap bitmap = null;
-        File imgfile = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.image_folder + File.separator + filename);
+        File imgfile = new File(Environment.getExternalStorageDirectory() + File.separator +
+                Constant.folder_name + File.separator +
+                Constant.image_folder + File.separator + filename);
         try {
             FileInputStream fis = new FileInputStream(imgfile);
             bitmap = BitmapFactory.decodeStream(fis);

@@ -3,6 +3,7 @@ package com.lnbinfotech.msplfootwear.braodcasts;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Environment;
 import android.util.Log;
 
@@ -20,11 +21,12 @@ public class ImageUplaodBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         try {
             String action = intent.getAction();
-            if (action.equals("android.net.conn.CONNECTIVITY_CHANGE") || action.equals("test")) {
+            if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION) || action.equals("test")) {
                 File f = null;
                 if (ConnectivityTest.getNetStat(context)) {
                     if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                        f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name);
+                        f = new File(Environment.getExternalStorageDirectory() + File.separator +
+                                Constant.folder_name + File.separator + Constant.image_folder);
                     } else {
                         f = context.getFilesDir();
                     }

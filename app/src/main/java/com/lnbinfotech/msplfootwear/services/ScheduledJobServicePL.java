@@ -6,6 +6,7 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
@@ -69,6 +70,16 @@ public class ScheduledJobServicePL extends JobService {
         Constant.showLog("onStartJob");
         int hour = Integer.parseInt(getTime());
         Constant.showLog("AutoSync_"+hour);
+
+        //Intent intent2 = new Intent(getApplicationContext(), UploadImageService.class);
+        //getApplicationContext().startService(intent2);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getApplicationContext().startForegroundService(new Intent(getApplicationContext(), UploadImageService.class));
+        } else {
+            getApplicationContext().startService(new Intent(getApplicationContext(), UploadImageService.class));
+        }
+
         //TODO : Set Time Limit
         if (ConnectivityTest.getNetStat(getApplicationContext())) {
             //startSync();
@@ -706,6 +717,5 @@ public class ScheduledJobServicePL extends JobService {
         }
         return isInBackground;
     }
-
 
 }

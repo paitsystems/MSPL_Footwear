@@ -160,7 +160,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case LocationProvider.REQUEST_CHECK_SETTINGS:
@@ -175,16 +175,31 @@ public class CustomerDetailsActivity extends AppCompatActivity
                 }
                 break;
         }
+    }*/
+
+    @Override
+    public void handleNewLocation(Location location,String address) {
+        try {
+            Constant.showLog("handleNewLocation");
+            Constant.showLog("CustomerDetailsActivity_"+address);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void locationAvailable() {
+        Constant.showLog("Location Available");
     }
 
     private void init() {
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
-        listView = (ListView) findViewById(R.id.listView);
+        listView = findViewById(R.id.listView);
         db = new DBHandler(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         constant = new Constant(CustomerDetailsActivity.this);
-        tv_version = (TextView) findViewById(R.id.tv_version);
+        tv_version = findViewById(R.id.tv_version);
     }
 
     private void showDia(int a) {
@@ -481,21 +496,6 @@ public class CustomerDetailsActivity extends AppCompatActivity
 
     private void writeLog(String _data){
         new WriteLog().writeLog(getApplicationContext(),"CustomerDetailsActivity_"+_data);
-    }
-
-    @Override
-    public void handleNewLocation(Location location,String address) {
-        try {
-            Constant.showLog("handleNewLocation");
-            Constant.showLog("CustomerDetailsActivity_"+address);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void locationAvailable() {
-        Constant.showLog("Location Available");
     }
 
 }

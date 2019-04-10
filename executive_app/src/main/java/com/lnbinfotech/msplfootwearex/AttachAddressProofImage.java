@@ -158,7 +158,7 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
                 startActivityForResult(intent_, requestCode);*/
 
                 Intent intent_ = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File f = Constant.checkFolder(Constant.folder_name);
+                File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
                 f = new File(f.getAbsolutePath(),"temp.jpg");
                 Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
                         + ".provider", f);
@@ -202,7 +202,8 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
         if (this.requestCode == requestCode && resultCode == RESULT_OK) {
             try {
                 imageView_addproof.setVisibility(View.VISIBLE);
-                String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + "temp.jpg");
+                String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name
+                        + File.separator + Constant.image_folder + File.separator + "temp.jpg");
                 imageView_addproof.setImageBitmap(scaleBitmap(_imagePath));
                 long datetime = System.currentTimeMillis();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
@@ -210,7 +211,8 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
 
                 imagePath = "Address_Img_" + sdf.format(resultdate) + ".jpg";
 
-                File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name);
+                File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name
+                        + File.separator + Constant.image_folder);
                 for (File temp : f.listFiles()) {
                     if (temp.getName().equals("temp.jpg")) {
                         f = temp;
@@ -222,7 +224,8 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
                 Bitmap bitmap;
                 BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
                 bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
-                File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name, imagePath);
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name
+                        + File.separator + Constant.image_folder, imagePath);
                 try {
                     outFile = new FileOutputStream(file);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 15, outFile);
@@ -309,14 +312,15 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
     private void set_value_attachAddressProofImage() {
         String filename = OptionsActivity.new_cus.getAddress_proof_image();
         Log.d("Log", "filename: " + OptionsActivity.new_cus.getAddress_proof_image());
-        File file = Constant.checkFolder(Constant.folder_name);
+        File file = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
         File fileArray[] = file.listFiles();
 
         if (fileArray.length != 0) {
             for (File f : fileArray) {
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
-                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
+                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name
+                                + File.separator + Constant.image_folder + File.separator + filename);
                         imageView_addproof.setImageBitmap(scaleBitmap(_imagePath));
                         writeLog("set_value_attachCusImage():imageView_addproof is attched:");
                     }

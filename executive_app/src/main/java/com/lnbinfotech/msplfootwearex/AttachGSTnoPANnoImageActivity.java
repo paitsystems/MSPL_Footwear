@@ -108,19 +108,19 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
         db = new DBHandler(AttachGSTnoPANnoImageActivity.this);
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
-        rdo_gst = (RadioButton) findViewById(R.id.rdo_gstno);
-        rdo_pan = (RadioButton) findViewById(R.id.rdo_panno);
-        gst_lay = (LinearLayout) findViewById(R.id.gst_lay);
-        pan_lay = (LinearLayout) findViewById(R.id.pan_lay);
-        bt_next = (AppCompatButton) findViewById(R.id.btn_next);
-        ed_gstno = (EditText) findViewById(R.id.ed_gstno);
-        ed_panno = (EditText) findViewById(R.id.ed_panno);
-        bt_cancel = (AppCompatButton) findViewById(R.id.btn_cancel);
-        bt_update = (AppCompatButton) findViewById(R.id.btn_update);
-        save_lay = (LinearLayout) findViewById(R.id.save_lay);
-        update_lay = (LinearLayout) findViewById(R.id.update_lay);
-        imageView_gst_img = (ImageView) findViewById(R.id.imageView_gst_img);
-        imageView_pan_img = (ImageView) findViewById(R.id.imageView_pan_img);
+        rdo_gst = findViewById(R.id.rdo_gstno);
+        rdo_pan = findViewById(R.id.rdo_panno);
+        gst_lay = findViewById(R.id.gst_lay);
+        pan_lay = findViewById(R.id.pan_lay);
+        bt_next = findViewById(R.id.btn_next);
+        ed_gstno = findViewById(R.id.ed_gstno);
+        ed_panno = findViewById(R.id.ed_panno);
+        bt_cancel = findViewById(R.id.btn_cancel);
+        bt_update = findViewById(R.id.btn_update);
+        save_lay = findViewById(R.id.save_lay);
+        update_lay = findViewById(R.id.update_lay);
+        imageView_gst_img = findViewById(R.id.imageView_gst_img);
+        imageView_pan_img = findViewById(R.id.imageView_pan_img);
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
@@ -186,7 +186,7 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
                 startActivityForResult(intent_, requestCode);*/
 
                 Intent intent_ = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File f = Constant.checkFolder(Constant.folder_name);
+                File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
                 f = new File(f.getAbsolutePath(),"temp.jpg");
                 Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
                         + ".provider", f);
@@ -203,7 +203,7 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
                 startActivityForResult(in, requestCode);*/
 
                 Intent in = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File f1 = Constant.checkFolder(Constant.folder_name);
+                File f1 = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
                 f1 = new File(f1.getAbsolutePath(),"temp.jpg");
                 Uri photoURI1 = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
                         + ".provider", f1);
@@ -260,7 +260,9 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
         super.onActivityResult(requestCode, resultCode, data);
         if (this.requestCode == requestCode && resultCode == RESULT_OK) {
             try {
-                String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + "temp.jpg");
+                String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
+                        File.separator + Constant.folder_name + File.separator + Constant.image_folder + File.separator
+                        + "temp.jpg");
                 if (flag == 0) {
                     if (_flag == 1) {
                         imageView_gst_img.setVisibility(View.VISIBLE);
@@ -286,7 +288,8 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
 
                 imagePath = "GP_Img_" + sdf.format(resultdate) + ".jpg";
 
-                File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name);
+                File f = new File(Environment.getExternalStorageDirectory() + File.separator +
+                        Constant.folder_name + File.separator + Constant.image_folder);
                 for (File temp : f.listFiles()) {
                     if (temp.getName().equals("temp.jpg")) {
                         f = temp;
@@ -298,7 +301,8 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
                 Bitmap bitmap;
                 BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
                 bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
-                File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name, imagePath);
+                File file = new File(Environment.getExternalStorageDirectory()
+                        + File.separator + Constant.folder_name + File.separator + Constant.image_folder, imagePath);
                 try {
                     outFile = new FileOutputStream(file);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 15, outFile);
@@ -409,14 +413,15 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
         String filename = OptionsActivity.new_cus.getGst_no_image();
         Constant.showLog("filename: " + filename);
 
-        File file = Constant.checkFolder(Constant.folder_name);
+        File file = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
         File fileArray[] = file.listFiles();
 
         if (fileArray.length != 0) {
             for (File f : fileArray) {
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
-                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
+                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name
+                                + File.separator + Constant.image_folder+ File.separator + filename);
                         imageView_gst_img.setImageBitmap(scaleBitmap(_imagePath));
                     }
                     break;
@@ -430,14 +435,16 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
         String filename = OptionsActivity.new_cus.getPan_no_image();
         Constant.showLog("filename: " + filename);
 
-        File file = Constant.checkFolder(Constant.folder_name);
+        File file = Constant.checkFolder(Constant.folder_name +
+                File.separator + Constant.image_folder + File.separator + Constant.image_folder);
         File fileArray[] = file.listFiles();
 
         if (fileArray.length != 0) {
             for (File f : fileArray) {
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
-                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
+                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name
+                                + File.separator + Constant.image_folder+ File.separator + filename);
                         imageView_pan_img.setImageBitmap(scaleBitmap(_imagePath));
                     }
                     break;

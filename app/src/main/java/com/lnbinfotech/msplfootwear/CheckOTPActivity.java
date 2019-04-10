@@ -71,7 +71,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(Constant.liveTestFlag==1) {
+        if (Constant.liveTestFlag == 1) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
 
@@ -91,13 +91,12 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             getSupportActionBar().setTitle(R.string.title_activity_login);
         }
 
-        if(Constant.showLogFlag==0) {
-            ArrayList<String> appCodes = new ArrayList<>();
-            AppSignatureHelper hash = new AppSignatureHelper(getApplicationContext());
-            appCodes = hash.getAppSignatures();
-            String yourhash = appCodes.get(0);
-            Constant.showLog("yourhash-" + yourhash);
-        }
+        ArrayList<String> appCodes = new ArrayList<>();
+        AppSignatureHelper hash = new AppSignatureHelper(getApplicationContext());
+        appCodes = hash.getAppSignatures();
+        String yourhash = appCodes.get(0);
+        Constant.showLog("yourhash-" + yourhash);
+        writeLog("HashCode " + yourhash);
 
         client = SmsRetriever.getClient(this);
         receiver = new MySMSBroadcastReceiver();
@@ -115,7 +114,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             startTimerCount(minutes);
         }
 
-        if(countDown == null) {
+        if (countDown == null) {
             tv_text1.setText("Your OTP will get within 5 min..");
             int minutes = 5 * 60 * 1000;
             startTimerCount(minutes);
@@ -282,18 +281,18 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         }.start();
     }
 
-    private void resendOTP(){
+    private void resendOTP() {
         try {
             constant = new Constant(CheckOTPActivity.this);
             constant.showPD();
-            String _mobNo = URLEncoder.encode(mobNo,"UTF-8");
-            String _imeiNo = URLEncoder.encode(imeiNo,"UTF-8");
-            String _imeiNo1 = URLEncoder.encode(imeino1,"UTF-8");
-            String _imeiNo2 = URLEncoder.encode(imeino2,"UTF-8");
+            String _mobNo = URLEncoder.encode(mobNo, "UTF-8");
+            String _imeiNo = URLEncoder.encode(imeiNo, "UTF-8");
+            String _imeiNo1 = URLEncoder.encode(imeino1, "UTF-8");
+            String _imeiNo2 = URLEncoder.encode(imeino2, "UTF-8");
 
             //String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"&IMEINo="+_imeiNo+"&type=E";
-            String url = Constant.ipaddress + "/GetOTPCodeV6?mobileno="+_mobNo+"&IMEINo1="
-                    +_imeiNo1+"&IMEINo2="+_imeiNo2+"&type=C";
+            String url = Constant.ipaddress + "/GetOTPCodeV6?mobileno=" + _mobNo + "&IMEINo1="
+                    + _imeiNo1 + "&IMEINo2=" + _imeiNo2 + "&type=C";
             Constant.showLog(url);
             writeLog("requestOTP_" + url);
             VolleyRequests requests = new VolleyRequests(CheckOTPActivity.this);
@@ -303,7 +302,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                     constant.showPD();
                     if (!response.equals("0") && !response.equals("-1") && !response.equals("-2")) {
                         //On Success
-                        doThis(response,mobNo,imeiNo);
+                        doThis(response, mobNo, imeiNo);
                         writeLog("requestOTP_Success_" + response);
                     } else if (!response.equals("0") && response.equals("-1") && !response.equals("-2")) {
                         //Already Registered
@@ -315,17 +314,18 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                         writeLog("requestOTP_Fail_" + response);
                     }
                 }
+
                 @Override
                 public void onFailure(String result) {
                     constant.showPD();
-                    writeLog("requestOTP_VolleyError_"+result);
+                    showDia(4);
+                    writeLog("requestOTP_VolleyError_" + result);
                 }
             });
-
-
-        }catch (Exception e){
+        } catch (Exception e) {
+            constant.showPD();
             e.printStackTrace();
-            writeLog("requestOTP_catch_"+e.getMessage());
+            writeLog("requestOTP_catch_" + e.getMessage());
         }
     }
 
@@ -525,6 +525,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    finish();
                 }
             });
         } else if (a == 0) {
@@ -571,6 +572,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    finish();
                 }
             });
         } else if (a == 3) {
@@ -580,6 +582,18 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    finish();
+                }
+            });
+        } else if (a == 4) {
+            builder.setTitle(R.string.somethingwentwrong);
+            builder.setMessage("Try Again");
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    new Constant();
+                    resendOTP();
                 }
             });
         }

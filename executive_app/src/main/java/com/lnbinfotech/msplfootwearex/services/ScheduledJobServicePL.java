@@ -7,6 +7,7 @@ import android.app.job.JobService;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
@@ -62,8 +63,8 @@ public class ScheduledJobServicePL extends JobService {
     private DBHandler db;
     private ArrayList<UserClass> userList;
     private ArrayList<CustomerOrderClass> custList;
-    private File DBFileName,DBSDFileName;
-    private String DBFilePath, DBSDFilePath, DBSDZipFilePath;
+    //private File DBFileName,DBSDFileName;
+    //private String DBFilePath, DBSDFilePath, DBSDZipFilePath;
     private File SDDBZipFileName, SDDBUnzipFileName, SDDBFileName;
     private String SDDBZipFilePath, SDDBUnzipFilePath, SDDBFilePath;
 
@@ -73,6 +74,14 @@ public class ScheduledJobServicePL extends JobService {
         int hour = Integer.parseInt(getTime());
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
         Constant.showLog("AutoSync_" + hour);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getApplicationContext().startForegroundService(new Intent(getApplicationContext(), UploadImageService.class));
+        } else {
+            getApplicationContext().startService(new Intent(getApplicationContext(), UploadImageService.class));
+        }
+
         //TODO : Set Time Limit
         //if(hour<13||hour>20) {
         if (ConnectivityTest.getNetStat(getApplicationContext())) {
@@ -81,8 +90,8 @@ public class ScheduledJobServicePL extends JobService {
                 Constant.showLog("App_IS_InBackground");
                 writeLog("onStartJob_" + hour + "_App_IS_InBackground");
                 if (isSynced(getString(R.string.pref_lastSync)) || !FirstActivity.pref.contains(getString(R.string.pref_newDB))) {
-                    downloadDB();
                     writeLog("onStartJob_" + hour + "_Online_Started");
+                    downloadDB();
                 } else {
                     Constant.showLog("App_IS_InBackground");
                     writeLog("onStartJob_" + hour + "_App_IS_InBackground");
@@ -142,7 +151,7 @@ public class ScheduledJobServicePL extends JobService {
             }
         }*/
 
-        if(isSynced(getString(R.string.pref_autoBankBranch))) {
+        if (isSynced(getString(R.string.pref_autoBankBranch))) {
             getBankBranchMasterV6();
         }
 
@@ -241,12 +250,12 @@ public class ScheduledJobServicePL extends JobService {
             }
         }*/
 
-        if(isSynced(getString(R.string.pref_autoProduct))) {
+        if (isSynced(getString(R.string.pref_autoProduct))) {
             getProductMasterV6();
         }
     }
 
-    private boolean isSynced(String prefName){
+    private boolean isSynced(String prefName) {
         boolean ret = false;
         try {
             FirstActivity.pref = getApplicationContext().getSharedPreferences(FirstActivity.PREF_NAME, Context.MODE_PRIVATE);
@@ -255,32 +264,32 @@ public class ScheduledJobServicePL extends JobService {
             String savedDate = "";
             if (strArr.length > 1) {
                 savedDate = strArr[0];
-            }else{
+            } else {
                 savedDate = str;
             }
             String currDate = getDateTime();
-            Date sDate = new SimpleDateFormat("dd/MMM/yyyy",Locale.ENGLISH).parse(savedDate);
-            Date cDate = new SimpleDateFormat("dd/MMM/yyyy",Locale.ENGLISH).parse(currDate);
-            if(cDate.compareTo(sDate)!=0){
+            Date sDate = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH).parse(savedDate);
+            Date cDate = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH).parse(currDate);
+            if (cDate.compareTo(sDate) != 0) {
                 ret = true;
-                String str1 = prefName+"-"+savedDate+"-"+currDate+"-"+ret;
+                String str1 = prefName + "-" + savedDate + "-" + currDate + "-" + ret;
                 Constant.showLog(str1);
-                writeLog("isSynced_"+str1);
-            }else{
+                writeLog("isSynced_" + str1);
+            } else {
                 ret = false;
-                String str1 = prefName+"-"+savedDate+"-"+currDate+"-"+ret;
+                String str1 = prefName + "-" + savedDate + "-" + currDate + "-" + ret;
                 Constant.showLog(str1);
-                writeLog("isSynced_"+str1);
+                writeLog("isSynced_" + str1);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("isSynced_"+e.getMessage());
+            writeLog("isSynced_" + e.getMessage());
             ret = false;
         }
         return ret;
     }
 
-    private boolean getDateDifference(String prefName){
+    private boolean getDateDifference(String prefName) {
         long secondsInMilli = 1000;
         long minutesInMilli = secondsInMilli * 60;
         long hoursInMilli = minutesInMilli * 60;
@@ -294,30 +303,30 @@ public class ScheduledJobServicePL extends JobService {
             String savedDate = "";
             if (strArr.length > 1) {
                 savedDate = strArr[0];
-            }else{
+            } else {
                 savedDate = str;
             }
             String currDate = getDateTime();
-            Date sDate = new SimpleDateFormat("dd/MMM/yyyy",Locale.ENGLISH).parse(savedDate);
-            Date cDate = new SimpleDateFormat("dd/MMM/yyyy",Locale.ENGLISH).parse(currDate);
+            Date sDate = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH).parse(savedDate);
+            Date cDate = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH).parse(currDate);
 
             long different = cDate.getTime() - sDate.getTime();
             long elapsedDays = different / daysInMilli;
-            Constant.showLog("elapsedDays - "+elapsedDays);
-            if(elapsedDays>15){
+            Constant.showLog("elapsedDays - " + elapsedDays);
+            if (elapsedDays > 15) {
                 ret = true;
-                String str1 = prefName+"-"+savedDate+"-"+currDate+"-"+ret;
+                String str1 = prefName + "-" + savedDate + "-" + currDate + "-" + ret;
                 Constant.showLog(str1);
-                writeLog("ElapsedDays_"+elapsedDays+"_isSynced_"+str1);
-            }else{
+                writeLog("ElapsedDays_" + elapsedDays + "_isSynced_" + str1);
+            } else {
                 ret = false;
-                String str1 = prefName+"-"+savedDate+"-"+currDate+"-"+ret;
+                String str1 = prefName + "-" + savedDate + "-" + currDate + "-" + ret;
                 Constant.showLog(str1);
-                writeLog("ElapsedDays_"+elapsedDays+"_isSynced_"+str1);
+                writeLog("ElapsedDays_" + elapsedDays + "_isSynced_" + str1);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("isSynced_"+e.getMessage());
+            writeLog("isSynced_" + e.getMessage());
             ret = false;
         }
         return ret;
@@ -325,11 +334,11 @@ public class ScheduledJobServicePL extends JobService {
 
     private String getDateTime() {
         String str = "";
-        try{
+        try {
             str = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH).format(new Date());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("getDateTime_"+e.getMessage());
+            writeLog("getDateTime_" + e.getMessage());
         }
         return str;
     }
@@ -347,9 +356,9 @@ public class ScheduledJobServicePL extends JobService {
 
     private String getTime() {
         String str = "";
-        try{
+        try {
             str = new SimpleDateFormat("HH", Locale.ENGLISH).format(new Date());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return str;
@@ -357,9 +366,9 @@ public class ScheduledJobServicePL extends JobService {
 
     private String getTime1() {
         String str = "";
-        try{
+        try {
             str = new SimpleDateFormat("dd/MMM/yyyy HH:mm", Locale.ENGLISH).format(new Date());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return str;
@@ -369,7 +378,7 @@ public class ScheduledJobServicePL extends JobService {
         try {
             final DBHandler db = new DBHandler(getApplicationContext());
             String url = 0 + "|" + 10000 + "|" + "E";
-            writeLog("getProductMasterV6_"+url);
+            writeLog("getProductMasterV6_" + url);
             final JSONObject jsonBody = new JSONObject();
             jsonBody.put("details", url);
             RequestBody body = RequestBody.create(okhttp3.MediaType.
@@ -385,7 +394,7 @@ public class ScheduledJobServicePL extends JobService {
                     Constant.showLog("onResponse");
                     List<ProductMasterClass> list = response.body();
                     if (list != null) {
-                        if (list.size()!=0) {
+                        if (list.size() != 0) {
                             db.deleteTable(DBHandler.Table_ProductMaster);
                         }
                         db.addProductMaster(list);
@@ -419,7 +428,7 @@ public class ScheduledJobServicePL extends JobService {
         try {
             final DBHandler db = new DBHandler(getApplicationContext());
             String url = 0 + "|" + 10000;
-            writeLog("getAllSizeDesignMastDetV6_"+url);
+            writeLog("getAllSizeDesignMastDetV6_" + url);
             final JSONObject jsonBody = new JSONObject();
             jsonBody.put("details", url);
             RequestBody body = RequestBody.create(okhttp3.MediaType.
@@ -435,15 +444,15 @@ public class ScheduledJobServicePL extends JobService {
                     Constant.showLog("onResponse");
                     List<SizeNDesignClass> list = response.body();
                     if (list != null) {
-                        if (list.size()!=0) {
+                        if (list.size() != 0) {
                             db.deleteTable(DBHandler.Table_AllRequiredSizesDesigns);
                         }
                         db.addSizeNDesignMaster(list);
                         Constant.showLog(list.size() + "_getAllSizeDesignMastDetV6");
-                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                        String str = getDateTime()+"-"+"True"+"-"+getTime1();
-                        Constant.showLog(getString(R.string.pref_autoSizeNDesign)+"-"+str);
+                        String str = getDateTime() + "-" + "True" + "-" + getTime1();
+                        Constant.showLog(getString(R.string.pref_autoSizeNDesign) + "-" + str);
                         editor.putString(getString(R.string.pref_autoSizeNDesign), getTime1());
                         editor.apply();
                         writeLog("getAllSizeDesignMastDetV6_onResponse_" + list.size() + "_" + str);
@@ -475,7 +484,7 @@ public class ScheduledJobServicePL extends JobService {
         try {
             final DBHandler db = new DBHandler(getApplicationContext());
             String url = 0 + "|" + 10000;
-            writeLog("getSizeDesignMastDetV6_"+url);
+            writeLog("getSizeDesignMastDetV6_" + url);
             final JSONObject jsonBody = new JSONObject();
             jsonBody.put("details", url);
             RequestBody body = RequestBody.create(okhttp3.MediaType.
@@ -491,31 +500,31 @@ public class ScheduledJobServicePL extends JobService {
                     Constant.showLog("onResponse");
                     List<SizeDesignMastDetClass> list = response.body();
                     if (list != null) {
-                        if (list.size()!=0) {
+                        if (list.size() != 0) {
                             db.deleteTable(DBHandler.Table_SizeDesignMastDet);
                         }
                         db.addSizeDesignMastDet(list);
                         Constant.showLog(list.size() + "_getSizeDesignMastDetV6");
-                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor1 = FirstActivity.pref.edit();
-                        String str1 = getDateTime()+"-"+"True"+"-"+getTime1();
-                        Constant.showLog(getString(R.string.pref_autoSizeDetail)+"-"+str1);
+                        String str1 = getDateTime() + "-" + "True" + "-" + getTime1();
+                        Constant.showLog(getString(R.string.pref_autoSizeDetail) + "-" + str1);
                         editor1.putString(getString(R.string.pref_autoSizeDetail), getTime1());
                         editor1.apply();
                         writeLog("getSizeDesignMastDetV6_onResponse_" + list.size() + "_" + str1);
 
-                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                        String str = getDateTime()+"-"+"True"+"-"+getTime1();
-                        Constant.showLog(getString(R.string.pref_autoProduct)+"-"+str);
+                        String str = getDateTime() + "-" + "True" + "-" + getTime1();
+                        Constant.showLog(getString(R.string.pref_autoProduct) + "-" + str);
                         editor.putString(getString(R.string.pref_autoProduct), getTime1());
                         editor.apply();
                         writeLog("getProductMasterV6_onResponse_" + str);
 
-                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor2 = FirstActivity.pref.edit();
-                        String str2 = getDateTime()+"-"+"True"+"-"+getTime1();
-                        Constant.showLog(getString(R.string.pref_lastSync)+"-"+str2);
+                        String str2 = getDateTime() + "-" + "True" + "-" + getTime1();
+                        Constant.showLog(getString(R.string.pref_lastSync) + "-" + str2);
                         editor2.putString(getString(R.string.pref_lastSync), getTime1());
                         editor2.apply();
 
@@ -546,7 +555,7 @@ public class ScheduledJobServicePL extends JobService {
         try {
             final DBHandler db = new DBHandler(getApplicationContext());
             String url = 0 + "|" + 10000 + "|E";
-            writeLog("getBankBranchMasterV6_"+url);
+            writeLog("getBankBranchMasterV6_" + url);
             final JSONObject jsonBody = new JSONObject();
             jsonBody.put("details", url);
             RequestBody body = RequestBody.create(okhttp3.MediaType.
@@ -562,15 +571,15 @@ public class ScheduledJobServicePL extends JobService {
                     Constant.showLog("onResponse");
                     List<BankBranchMasterClass> list = response.body();
                     if (list != null) {
-                        if (list.size()!=0) {
+                        if (list.size() != 0) {
                             db.deleteTable(DBHandler.Table_BankBranchMaster);
                         }
                         db.addBankBranchMaster(list);
                         Constant.showLog(list.size() + "_getBankBranchMasterV6");
-                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                        String str = getDateTime()+"-"+"True"+"-"+getTime1();
-                        Constant.showLog(getString(R.string.pref_autoBankBranch)+"-"+str);
+                        String str = getDateTime() + "-" + "True" + "-" + getTime1();
+                        Constant.showLog(getString(R.string.pref_autoBankBranch) + "-" + str);
                         editor.putString(getString(R.string.pref_autoBankBranch), getTime1());
                         editor.apply();
                         writeLog("getBankBranchMasterV6_onResponse_" + list.size() + "_" + str);
@@ -601,7 +610,7 @@ public class ScheduledJobServicePL extends JobService {
         try {
             final DBHandler db = new DBHandler(getApplicationContext());
             String url = 0 + "|" + 10000 + "|E";
-            writeLog("getCustomerMasterV6_"+url);
+            writeLog("getCustomerMasterV6_" + url);
             final JSONObject jsonBody = new JSONObject();
             jsonBody.put("details", url);
             RequestBody body = RequestBody.create(okhttp3.MediaType.
@@ -617,15 +626,15 @@ public class ScheduledJobServicePL extends JobService {
                     Constant.showLog("onResponse");
                     List<CustomerDetailClass> list = response.body();
                     if (list != null) {
-                        if (list.size()!=0) {
+                        if (list.size() != 0) {
                             db.deleteTable(DBHandler.Table_Customermaster);
                         }
                         db.addCustomerDetail(new ArrayList<>(list));
                         Constant.showLog(list.size() + "_getCustomerMasterV6");
-                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,Context.MODE_PRIVATE);
+                        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                        String str = getDateTime()+"-"+"True"+"-"+getTime1();
-                        Constant.showLog(getString(R.string.pref_autoCustomer)+"-"+str);
+                        String str = getDateTime() + "-" + "True" + "-" + getTime1();
+                        Constant.showLog(getString(R.string.pref_autoCustomer) + "-" + str);
                         editor.putString(getString(R.string.pref_autoCustomer), getTime1());
                         editor.apply();
                         writeLog("getCustomerMasterV6_onResponse_" + list.size() + "_" + str);
@@ -652,13 +661,17 @@ public class ScheduledJobServicePL extends JobService {
         }
     }
 
-    private void downloadDB(){
-        getData();
+    private void downloadDB() {
         writeLog("----- In downloadDB -----");
-        Constant.showLog("----- In downloadDB -----");
-        String file_url = Constant.imgUrl+Constant.zip_file;
-        Constant.showLog(file_url);
-        new DownloadFileFromURL().execute(file_url);
+        if (isAppIsInBackground(getApplicationContext())) {
+            getData();
+            Constant.showLog("----- In downloadDB -----");
+            String file_url = Constant.imgUrl + Constant.zip_file;
+            Constant.showLog(file_url);
+            new DownloadFileFromURL().execute(file_url);
+        } else {
+            writeLog("----- App_IS_NOT_InBackground -----");
+        }
         writeLog("----- End downloadDB -----");
     }
 
@@ -668,8 +681,8 @@ public class ScheduledJobServicePL extends JobService {
         DBHandler db = new DBHandler(getApplicationContext());
         userList = db.getUserDetail();
         custList = db.getCustOrder();
-        Constant.showLog("userList-"+userList.size()+"-custList-"+custList.size());
-        writeLog("userList-"+userList.size()+"-custList-"+custList.size());
+        Constant.showLog("userList-" + userList.size() + "-custList-" + custList.size());
+        writeLog("userList-" + userList.size() + "-custList-" + custList.size());
         Constant.showLog("----- End getData ------");
         writeLog("----- End getData ------");
         db.close();
@@ -691,15 +704,15 @@ public class ScheduledJobServicePL extends JobService {
                 client.enterLocalPassiveMode();
                 if (client.changeWorkingDirectory(Constant.ftp_directory)) {
                     SDDBZipFilePath = Environment.getExternalStorageDirectory() + File.separator
-                            + Constant.folder_name  + File.separator + Constant.unzipFolderName;
+                            + Constant.folder_name + File.separator + Constant.unzipFolderName;
                     SDDBZipFileName = new File(SDDBZipFilePath, Constant.zip_file);
-                    if(SDDBZipFileName.exists()){
+                    if (SDDBZipFileName.exists()) {
                         SDDBZipFileName.delete();
                         Constant.showLog(SDDBZipFileName.getAbsolutePath() + " Deleted ");
                         writeLog(SDDBZipFileName.getAbsolutePath() + " Deleted ");
                     }
-                    Constant.showLog("SDDBZipFilePath - "+SDDBZipFilePath +"\n" +
-                            "SDDBZipFileName - "+SDDBZipFileName.getAbsolutePath());
+                    Constant.showLog("SDDBZipFilePath - " + SDDBZipFilePath + "\n" +
+                            "SDDBZipFileName - " + SDDBZipFileName.getAbsolutePath());
                     OutputStream outstream = new BufferedOutputStream(new FileOutputStream(SDDBZipFileName));
                     client.retrieveFile(Constant.zip_file, outstream);
                     outstream.close();
@@ -711,7 +724,7 @@ public class ScheduledJobServicePL extends JobService {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                writeLog("Exception "+e.getMessage());
+                writeLog("Exception " + e.getMessage());
             }
             return null;
         }
@@ -721,7 +734,11 @@ public class ScheduledJobServicePL extends JobService {
             Constant.showLog("----- End DownloadFileFromURL ------");
             writeLog("----- End DownloadFileFromURL ------");
             if (SDDBZipFilePath != null) {
-                unzip();
+                if (isAppIsInBackground(getApplicationContext())) {
+                    unzip();
+                } else {
+                    writeLog("----- App_IS_NOT_InBackground -----");
+                }
             }
         }
     }
@@ -734,7 +751,7 @@ public class ScheduledJobServicePL extends JobService {
             SDDBUnzipFilePath = android.os.Environment.getExternalStorageDirectory() + File.separator +
                     Constant.folder_name + File.separator + Constant.unzipFolderName;
 
-            Constant.showLog("SDDBUnzipFilePath - "+SDDBUnzipFilePath);
+            Constant.showLog("SDDBUnzipFilePath - " + SDDBUnzipFilePath);
 
             FileInputStream fin = new FileInputStream(SDDBZipFileName);
             ZipInputStream zin = new ZipInputStream(fin);
@@ -744,12 +761,12 @@ public class ScheduledJobServicePL extends JobService {
             BufferedOutputStream out = null;
             while ((ze = zin.getNextEntry()) != null) {
                 SDDBUnzipFileName = new File(SDDBUnzipFilePath + "/" + ze.getName());
-                if(SDDBUnzipFileName.exists()){
+                if (SDDBUnzipFileName.exists()) {
                     SDDBUnzipFileName.delete();
                     Constant.showLog(SDDBUnzipFileName.getAbsolutePath() + " Deleted ");
                     writeLog(SDDBUnzipFileName.getAbsolutePath() + " Deleted ");
                 }
-                Constant.showLog("SDDBUnzipFileName - "+SDDBUnzipFileName.getAbsolutePath());
+                Constant.showLog("SDDBUnzipFileName - " + SDDBUnzipFileName.getAbsolutePath());
                 fout = new FileOutputStream(SDDBUnzipFileName);
                 in = new BufferedInputStream(zin);
                 out = new BufferedOutputStream(fout);
@@ -759,26 +776,30 @@ public class ScheduledJobServicePL extends JobService {
                     out.write(b, 0, n);
                     //Constant.showLog("n "+n);
                 }
-                if(SDDBZipFileName.exists()) {
+                if (SDDBZipFileName.exists()) {
                     SDDBZipFileName.delete();
                 }
                 Constant.showLog("Write Complete");
                 Constant.showLog("----- End unZip File ------");
                 writeLog("----- End unZip File ------");
             }
-            if(out!=null) {
+            if (out != null) {
                 out.close();
             }
-            if(fout!=null) {
+            if (fout != null) {
                 fout.close();
             }
-            if(in!=null)
+            if (in != null)
                 in.close();
 
-            CopySDTODB();
+            if (isAppIsInBackground(getApplicationContext())) {
+                CopySDTODB();
+            } else {
+                writeLog("----- App_IS_NOT_InBackground -----");
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            writeLog("unzip_"+e.getMessage());
+            writeLog("unzip_" + e.getMessage());
         }
     }
 
@@ -788,7 +809,7 @@ public class ScheduledJobServicePL extends JobService {
             writeLog("----- In CopySDTODB ------");
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             //SDDBFilePath = pInfo.applicationInfo.dataDir+"/databases/";
-            SDDBFilePath = "/data/data/"+pInfo.packageName+"/databases/";
+            SDDBFilePath = "/data/data/" + pInfo.packageName + "/databases/";
 
             SDDBUnzipFilePath = SDDBUnzipFileName.getAbsolutePath();
 
@@ -799,10 +820,10 @@ public class ScheduledJobServicePL extends JobService {
                 Constant.showLog(backupDB.getAbsolutePath()+" deleted");
                 writeLog(backupDB.getAbsolutePath()+" deleted");
             }*/
-            Constant.showLog("SDDBUnzipFileName - "+SDDBUnzipFileName +"\n" +
-                    "SDDBUnzipFilePath - "+SDDBUnzipFilePath +"\n" +
-                    "SDDBFilePath - "+SDDBFilePath +"\n" +
-                    "currentDB - "+"\n" +
+            Constant.showLog("SDDBUnzipFileName - " + SDDBUnzipFileName + "\n" +
+                    "SDDBUnzipFilePath - " + SDDBUnzipFilePath + "\n" +
+                    "SDDBFilePath - " + SDDBFilePath + "\n" +
+                    "currentDB - " + "\n" +
                     "backupDB - ");
 
             /*FileChannel source = new FileInputStream(SDDBUnzipFileName).getChannel();
@@ -811,39 +832,39 @@ public class ScheduledJobServicePL extends JobService {
             destination.close();
             source.close();*/
 
-            DBHandler db = new DBHandler(getApplicationContext(),SDDBUnzipFilePath);
+            DBHandler db = new DBHandler(getApplicationContext(), SDDBUnzipFilePath);
             db.deleteTable(DBHandler.Table_CustomerOrder);
             db.deleteTable(DBHandler.Table_Usermaster);
             db.deleteTable(DBHandler.Table_TrackCustomerOrder);
             int count = 0;
-            for(int i=0;i<userList.size();i++) {
+            for (int i = 0; i < userList.size(); i++) {
                 count++;
                 db.addUserDetail(userList.get(i));
             }
-            Constant.showLog(count+"");
-            writeLog("userList "+count+" Added");
-            count=0;
-            for(int i=0;i<custList.size();i++) {
+            Constant.showLog(count + "");
+            writeLog("userList " + count + " Added");
+            count = 0;
+            for (int i = 0; i < custList.size(); i++) {
                 count++;
                 db.addCustomerOrder(custList.get(i));
             }
-            Constant.showLog(count+"");
-            writeLog("custList "+count+" Added");
+            Constant.showLog(count + "");
+            writeLog("custList " + count + " Added");
 
             InputStream mInput = new FileInputStream(SDDBUnzipFileName);
             String outFileName = SDDBFilePath + DBHandler.Database_Name;
-            Constant.showLog("outFileName - "+outFileName);
+            Constant.showLog("outFileName - " + outFileName);
             OutputStream mOutput = new FileOutputStream(outFileName);
             byte[] mBuffer = new byte[1024];
             int mLength;
-            while ((mLength = mInput.read(mBuffer))>0) {
+            while ((mLength = mInput.read(mBuffer)) > 0) {
                 //Constant.showLog("mLength "+mLength);
                 mOutput.write(mBuffer, 0, mLength);
             }
             mOutput.flush();
             mOutput.close();
             mInput.close();
-            writeLog("outFileName - "+outFileName+" wrote ");
+            writeLog("outFileName - " + outFileName + " wrote ");
 
             db = new DBHandler(getApplicationContext());
             db.deleteTable(DBHandler.Table_TrackCustomerOrder);
@@ -853,29 +874,16 @@ public class ScheduledJobServicePL extends JobService {
             Constant.showLog("Last Sync - " + str);
             writeLog("CopySDTODB_Last Sync_" + str);
             editor.putString(getString(R.string.pref_lastSync), str);
-            editor.putBoolean(getString(R.string.pref_newDB),true);
+            editor.putBoolean(getString(R.string.pref_newDB), true);
             editor.apply();
 
             Constant.showLog("----- End CopySDTODB ------");
             writeLog("----- End CopySDTODB ------");
-            new DBHandler(getApplicationContext(),SDDBUnzipFilePath).deleteTable(DBHandler.Table_TrackCustomerOrder);
-
-            /*String arr[] = {getString(R.string.pref_autoArealine),getString(R.string.pref_autoArea),
-                    getString(R.string.pref_autoBank), getString(R.string.pref_autoBankBranch),
-                    getString(R.string.pref_autoCity), getString(R.string.pref_autoCompany),
-                    getString(R.string.pref_autoCustomer), getString(R.string.pref_autoCurrency),
-                    getString(R.string.pref_autoDocument), getString(R.string.pref_autoEmployee),
-                    getString(R.string.pref_autoGST), getString(R.string.pref_autoHO),
-                    getString(R.string.pref_autoProduct), getString(R.string.pref_autoSizeNDesign),
-                    getString(R.string.pref_autoSizeDetail),getString(R.string.pref_lastSync)};
-
-            for(String pref : arr) {
-                updateSharedPref(pref,"Y");
-            }*/
+            new DBHandler(getApplicationContext(), SDDBUnzipFilePath).deleteTable(DBHandler.Table_TrackCustomerOrder);
 
         } catch (Exception e) {
             e.printStackTrace();
-            writeLog("CopySDTODB_"+e.getMessage());
+            writeLog("CopySDTODB_" + e.getMessage());
         }
     }
 

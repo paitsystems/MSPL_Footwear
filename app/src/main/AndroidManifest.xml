@@ -64,12 +64,12 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".braodcasts.ImageUplaodBroadcastReceiver">
+        <!--<receiver android:name=".braodcasts.ImageUplaodBroadcastReceiver">
             <intent-filter>
                 <action android:name="test" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
-        </receiver>
+        </receiver>-->
         <!--
         <receiver
             android:name=".CheckOTPActivity$MySMSReceiver"

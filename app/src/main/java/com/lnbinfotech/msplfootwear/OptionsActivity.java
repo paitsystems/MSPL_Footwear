@@ -67,7 +67,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     private DBHandler db;
     private Toast toast;
     private SliderLayout sliderLayout;
-    private HashMap<String, String> scImgHashMap ;
+    private HashMap<String, String> scImgHashMap;
     private Constant constant;
 
     @Override
@@ -284,8 +284,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onPageSelected(int position) {
-        Constant.showLog("Page Changed: " + position);
-
+       // Constant.showLog("Page Changed: " + position);
     }
 
     @Override
@@ -460,7 +459,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
 
     public void AddImagesUrlOnline(){
         scImgHashMap = new HashMap<>();
-        scImgHashMap.put("Scheme1", "http://103.109.13.200:24086/IMAGES/Scheme/SchoolShoes.jpg");
+        scImgHashMap.put("School Shoes", "http://103.109.13.200:24086/IMAGES/Scheme/SchoolShoes.jpg");
         /*scImgHashMap.put("Donut", "http://103.109.13.200:24086/IMAGES/2702FC_Foo%20Kids_Red_P1.jpg");
         scImgHashMap.put("Eclair", "http://103.109.13.200:24086/IMAGES/2901_Aaram_Black_P1.jpg");
         scImgHashMap.put("Froyo", "http://103.109.13.200:24086/IMAGES/F196C_Foo%20Kids_Blue_P1.jpg");

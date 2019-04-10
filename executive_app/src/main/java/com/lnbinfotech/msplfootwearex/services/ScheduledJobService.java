@@ -5,6 +5,7 @@ package com.lnbinfotech.msplfootwearex.services;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
@@ -59,8 +60,6 @@ public class ScheduledJobService extends JobService {
     private DBHandler db;
     private ArrayList<UserClass> userList;
     private ArrayList<CustomerOrderClass> custList;
-    private File DBFileName,DBSDFileName;
-    private String DBFilePath, DBSDFilePath, DBSDZipFilePath;
     private File SDDBZipFileName, SDDBUnzipFileName, SDDBFileName;
     private String SDDBZipFilePath, SDDBUnzipFilePath, SDDBFilePath;
 
@@ -70,6 +69,14 @@ public class ScheduledJobService extends JobService {
         int hour = Integer.parseInt(getTime());
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
         Constant.showLog("AutoSync_" + hour);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getApplicationContext().startForegroundService(new Intent(getApplicationContext(), UploadImageService.class));
+        } else {
+            getApplicationContext().startService(new Intent(getApplicationContext(), UploadImageService.class));
+        }
+
         //TODO : Set Time Limit
         //if(hour<13||hour>20) {
         if (ConnectivityTest.getNetStat(getApplicationContext())) {
@@ -644,13 +651,17 @@ public class ScheduledJobService extends JobService {
         return str;
     }
 
-    private void downloadDB(){
-        getData();
+    private void downloadDB() {
         writeLog("----- In downloadDB -----");
-        Constant.showLog("----- In downloadDB -----");
-        String file_url = Constant.imgUrl+Constant.zip_file;
-        Constant.showLog(file_url);
-        new DownloadFileFromURL().execute(file_url);
+        if (isAppIsInBackground(getApplicationContext())) {
+            getData();
+            Constant.showLog("----- In downloadDB -----");
+            String file_url = Constant.imgUrl + Constant.zip_file;
+            Constant.showLog(file_url);
+            new DownloadFileFromURL().execute(file_url);
+        } else {
+            writeLog("----- App_IS_NOT_InBackground -----");
+        }
         writeLog("----- End downloadDB -----");
     }
 
@@ -712,8 +723,14 @@ public class ScheduledJobService extends JobService {
         protected void onPostExecute(String file_url) {
             Constant.showLog("----- End DownloadFileFromURL ------");
             writeLog("----- End DownloadFileFromURL ------");
-            if (SDDBZipFilePath != null) {
-                unzip();
+            if (isAppIsInBackground(getApplicationContext())) {
+                if (SDDBZipFilePath != null) {
+                    if (isAppIsInBackground(getApplicationContext())) {
+                        unzip();
+                    } else {
+                        writeLog("----- App_IS_NOT_InBackground -----");
+                    }
+                }
             }
         }
     }
@@ -766,8 +783,11 @@ public class ScheduledJobService extends JobService {
             }
             if(in!=null)
                 in.close();
-
-            CopySDTODB();
+            if (isAppIsInBackground(getApplicationContext())) {
+                CopySDTODB();
+            } else {
+                writeLog("----- App_IS_NOT_InBackground -----");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             writeLog("unzip_"+e.getMessage());

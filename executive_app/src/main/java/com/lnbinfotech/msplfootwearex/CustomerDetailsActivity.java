@@ -164,6 +164,22 @@ public class CustomerDetailsActivity extends AppCompatActivity
     }
 
     @Override
+    public void handleNewLocation(Location location,String address) {
+        try {
+            Constant.showLog("handleNewLocation");
+            Constant.showLog("CustomerDetailsActivity_"+address);
+        }catch (Exception e){
+            e.printStackTrace();
+            writeLog("handleNewLocation_"+e.getMessage());
+        }
+    }
+
+    @Override
+    public void locationAvailable() {
+        Constant.showLog("Location Available");
+    }
+
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case LocationProvider.REQUEST_CHECK_SETTINGS:
@@ -178,7 +194,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                 }
                 break;
         }
-    }
+    }*/
 
     private void init() {
         listView = (ListView) findViewById(R.id.listView);
@@ -479,22 +495,6 @@ public class CustomerDetailsActivity extends AppCompatActivity
 
     private void writeLog(String _data){
         new WriteLog().writeLog(getApplicationContext(),"CustomerDetailsActivity_"+_data);
-    }
-
-    @Override
-    public void handleNewLocation(Location location,String address) {
-        try {
-            Constant.showLog("handleNewLocation");
-            Constant.showLog("CustomerDetailsActivity_"+address);
-        }catch (Exception e){
-            e.printStackTrace();
-            writeLog("handleNewLocation_"+e.getMessage());
-        }
-    }
-
-    @Override
-    public void locationAvailable() {
-        Constant.showLog("Location Available");
     }
 
 }

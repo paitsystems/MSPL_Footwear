@@ -129,33 +129,33 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
         toast.setGravity(Gravity.CENTER, 0, 0);
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         db = new DBHandler(NewCustomerEntryDetailFormActivity.this);
-        ed_cus_name = (EditText) findViewById(R.id.ed_cus_name);
-        ed_mobile_no = (EditText) findViewById(R.id.ed_mobile_no);
-        ed_email_id = (EditText) findViewById(R.id.ed_emailid);
-        ed_address = (EditText) findViewById(R.id.ed_address);
-        ed_gstno = (EditText) findViewById(R.id.ed_gstno);
-        ed_panno = (EditText) findViewById(R.id.ed_panno);
-        ed_shopname = (EditText) findViewById(R.id.ed_shop_name);
-        rdo_gst = (RadioButton) findViewById(R.id.rdo_gstno);
-        rdo_pan = (RadioButton) findViewById(R.id.rdo_panno);
+        ed_cus_name = findViewById(R.id.ed_cus_name);
+        ed_mobile_no = findViewById(R.id.ed_mobile_no);
+        ed_email_id = findViewById(R.id.ed_emailid);
+        ed_address = findViewById(R.id.ed_address);
+        ed_gstno = findViewById(R.id.ed_gstno);
+        ed_panno = findViewById(R.id.ed_panno);
+        ed_shopname = findViewById(R.id.ed_shop_name);
+        rdo_gst = findViewById(R.id.rdo_gstno);
+        rdo_pan = findViewById(R.id.rdo_panno);
 
-        gst_lay = (LinearLayout) findViewById(R.id.gst_lay);
-        pan_lay = (LinearLayout) findViewById(R.id.pan_lay);
-        bt_save = (AppCompatButton) findViewById(R.id.btn_save);
+        gst_lay = findViewById(R.id.gst_lay);
+        pan_lay = findViewById(R.id.pan_lay);
+        bt_save = findViewById(R.id.btn_save);
 
-        imageView_gstpan_edit = (ImageView) findViewById(R.id.imageView_gstpan_edit);
-        imageView_id_edit = (ImageView) findViewById(R.id.imageView_id_edit);
-        imageView_address_edit = (ImageView) findViewById(R.id.imageView_address_edit);
-        imageView_cus_edit = (ImageView) findViewById(R.id.imageView_cus_edit);
-        imageView_edit = (ImageView) findViewById(R.id.imageView_edit);
-        imageView_cus_image = (ImageView) findViewById(R.id.imageView_cus_image);
-        imageView_addproof = (ImageView) findViewById(R.id.imageView_addproof);
-        imageView_idproof = (ImageView) findViewById(R.id.imageView_idproof);
-        imageView_gst_img = (ImageView) findViewById(R.id.imageView_gst_img);
-        imageView_pan_img = (ImageView) findViewById(R.id.imageView_pan_img);
+        imageView_gstpan_edit = findViewById(R.id.imageView_gstpan_edit);
+        imageView_id_edit = findViewById(R.id.imageView_id_edit);
+        imageView_address_edit = findViewById(R.id.imageView_address_edit);
+        imageView_cus_edit = findViewById(R.id.imageView_cus_edit);
+        imageView_edit = findViewById(R.id.imageView_edit);
+        imageView_cus_image = findViewById(R.id.imageView_cus_image);
+        imageView_addproof = findViewById(R.id.imageView_addproof);
+        imageView_idproof = findViewById(R.id.imageView_idproof);
+        imageView_gst_img = findViewById(R.id.imageView_gst_img);
+        imageView_pan_img = findViewById(R.id.imageView_pan_img);
 
-        spinner_addproof = (Spinner) findViewById(R.id.spinner_addproof);
-        spinner_idproof = (Spinner) findViewById(R.id.spinner_idproof);
+        spinner_addproof = findViewById(R.id.spinner_addproof);
+        spinner_idproof = findViewById(R.id.spinner_idproof);
 
         add_proof = new ArrayList<>();
         setDocList();
@@ -264,7 +264,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
         String filename = OptionsActivity.new_cus.getCus_image();
         Constant.showLog("filename: " + OptionsActivity.new_cus.getCus_image());
 
-        File file = Constant.checkFolder(Constant.folder_name);
+        File file = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
         File fileArray[] = file.listFiles();
 
         if (fileArray.length != 0) {
@@ -272,7 +272,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
                         String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
-                                File.separator + Constant.folder_name + File.separator + filename);
+                                File.separator + Constant.folder_name + File.separator + Constant.image_folder + File.separator + filename);
                         imageView_cus_image.setImageBitmap(scaleBitmap(_imagePath));
                     }
                     break;
@@ -348,7 +348,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
         String filename = OptionsActivity.new_cus.getAddress_proof_image();
         Constant.showLog("filename: " + OptionsActivity.new_cus.getAddress_proof_image());
 
-        File file = Constant.checkFolder(Constant.folder_name);
+        File file = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
         File fileArray[] = file.listFiles();
 
         if (fileArray.length != 0) {
@@ -356,7 +356,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
                         String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
-                                File.separator + Constant.folder_name + File.separator + filename);
+                                File.separator + Constant.folder_name + File.separator + Constant.image_folder + File.separator + filename);
                         imageView_addproof.setImageBitmap(scaleBitmap(_imagePath));
                     }
                     break;
@@ -377,7 +377,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
         String filename = OptionsActivity.new_cus.getId_proof_image();
         Constant.showLog("filename: " + OptionsActivity.new_cus.getId_proof_image());
 
-        File file = Constant.checkFolder(Constant.folder_name);
+        File file = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
         File fileArray[] = file.listFiles();
 
         if (fileArray.length != 0) {
@@ -385,7 +385,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
                         String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
-                                File.separator + Constant.folder_name + File.separator + filename);
+                                File.separator + Constant.folder_name + File.separator + Constant.image_folder + File.separator + filename);
                         imageView_idproof.setImageBitmap(scaleBitmap(_imagePath));
                     }
                     break;
@@ -399,7 +399,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
         String filename = OptionsActivity.new_cus.getGst_no_image();
         Constant.showLog("filename: " + filename);
 
-        File file = Constant.checkFolder(Constant.folder_name);
+        File file = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
         File fileArray[] = file.listFiles();
 
         if (fileArray.length != 0) {
@@ -407,7 +407,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
                         String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
-                                File.separator + Constant.folder_name + File.separator + filename);
+                                File.separator + Constant.folder_name + File.separator + Constant.image_folder + File.separator + filename);
                         imageView_gst_img.setImageBitmap(scaleBitmap(_imagePath));
                     }
                     break;
@@ -421,7 +421,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
         String filename = OptionsActivity.new_cus.getPan_no_image();
         Constant.showLog("filename: " + filename);
 
-        File file = Constant.checkFolder(Constant.folder_name);
+        File file = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
         File fileArray[] = file.listFiles();
 
         if (fileArray.length != 0) {
@@ -429,7 +429,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
                         String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
-                                File.separator + Constant.folder_name + File.separator + filename);
+                                File.separator + Constant.folder_name + File.separator + Constant.image_folder + File.separator + filename);
                         imageView_pan_img.setImageBitmap(scaleBitmap(_imagePath));
                     }
                     break;
@@ -441,7 +441,6 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
     private void set_value_attachgstpan_no() {
         AttachGSTnoPANnoImageActivity.flag = 0;
         if (AttachGSTnoPANnoImageActivity.radio_flag == 1) {
-
             gst_lay.setVisibility(View.VISIBLE);
             pan_lay.setVisibility(View.GONE);
             rdo_gst.setChecked(true);
@@ -592,7 +591,10 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     //saveData();
-                    catchCustLoc();
+                    //catchCustLoc();
+                    Intent intent = new Intent(NewCustomerEntryDetailFormActivity.this, UploadImageService.class);
+                    startService(intent);
+
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {

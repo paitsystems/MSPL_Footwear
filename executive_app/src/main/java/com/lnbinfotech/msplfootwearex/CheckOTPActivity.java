@@ -1,5 +1,6 @@
 package com.lnbinfotech.msplfootwearex;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -52,18 +53,18 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class CheckOTPActivity extends AppCompatActivity implements View.OnClickListener,
-             MySMSBroadcastReceiver.OTPReceiveListener {
+        MySMSBroadcastReceiver.OTPReceiveListener {
 
-    private EditText ed1,ed2,ed3,ed4,ed5,ed6;
-    private AppCompatButton btn_verifyotp,btn_resendotp;
+    private EditText ed1, ed2, ed3, ed4, ed5, ed6;
+    private AppCompatButton btn_verifyotp, btn_resendotp;
     private Toast toast;
     private CheckOtpClass otpClass;
     private Constant constant;
     private final Timer timer = new Timer();
     private int time = 0;
-    private TextView tv_timecount,tv_text1, tv_otp;
+    private TextView tv_timecount, tv_text1, tv_otp;
     private CountDownTimer countDown;
-    private String mobNo,imeiNo, imeino1, imeino2;
+    private String mobNo, imeiNo, imeino1, imeino2;
     private String response_value;
     //private ReadSms receiver;
     //private MySMSReceiver receiver;
@@ -121,6 +122,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -130,7 +132,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             case R.id.btn_resendotp:
                 Constant.showLog("resend btn click!!");
                 btn_resendotp.setEnabled(false);
-                btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),R.color.lightgray));
+                btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.lightgray));
                 resendOTP();
                 //autoOTP();
                 tv_text1.setText("Your OTP will get within 5 min..");
@@ -164,6 +166,22 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         ed4.setText(message.substring(3, 4));
         ed5.setText(message.substring(4, 5));
         ed6.setText(message.substring(5, 6));
+
+        editTexts = new EditText[]{ed1, ed2, ed3, ed4, ed5, ed6};
+        ed1.addTextChangedListener(new PinTextWatcher(0));
+        ed2.addTextChangedListener(new PinTextWatcher(1));
+        ed3.addTextChangedListener(new PinTextWatcher(2));
+        ed4.addTextChangedListener(new PinTextWatcher(3));
+        ed5.addTextChangedListener(new PinTextWatcher(4));
+        ed6.addTextChangedListener(new PinTextWatcher(5));
+
+        ed1.setOnKeyListener(new PinOnKeyListener(0));
+        ed2.setOnKeyListener(new PinOnKeyListener(1));
+        ed3.setOnKeyListener(new PinOnKeyListener(2));
+        ed4.setOnKeyListener(new PinOnKeyListener(3));
+        ed5.setOnKeyListener(new PinOnKeyListener(4));
+        ed6.setOnKeyListener(new PinOnKeyListener(5));
+
         timer.cancel();
         countDown.cancel();
         tv_text1.setText("OTP get successfully");
@@ -180,14 +198,14 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onDestroy() {
         try {
-            if(receiver!=null) {
+            if (receiver != null) {
                 //receiver.bindListener(null);
                 unregisterReceiver(receiver);
                 receiver = null;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("onDestroy_"+e.getMessage());
+            writeLog("onDestroy_" + e.getMessage());
         }
         super.onDestroy();
     }
@@ -210,85 +228,86 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
-    private void verifyOTP(){
-        if(ed1.getText().toString().length()==1 && ed2.getText().toString().length()==1 &&
-                ed3.getText().toString().length()==1 && ed4.getText().toString().length()==1 &&
-                ed5.getText().toString().length()==1 && ed6.getText().toString().length()==1) {
-            String otp = ed1.getText().toString()+ed2.getText().toString()+
-                    ed3.getText().toString()+ed4.getText().toString()+
-                    ed5.getText().toString()+ed6.getText().toString();
+    private void verifyOTP() {
+        if (ed1.getText().toString().length() == 1 && ed2.getText().toString().length() == 1 &&
+                ed3.getText().toString().length() == 1 && ed4.getText().toString().length() == 1 &&
+                ed5.getText().toString().length() == 1 && ed6.getText().toString().length() == 1) {
+            String otp = ed1.getText().toString() + ed2.getText().toString() +
+                    ed3.getText().toString() + ed4.getText().toString() +
+                    ed5.getText().toString() + ed6.getText().toString();
             Constant.showLog(otp);
-            Log.d("Log","response_value:"+response_value);
-            writeLog("response_value:"+response_value);
-            if(otp.equals(response_value)) {
-                Constant.showLog("response_value:"+response_value);
+            Log.d("Log", "response_value:" + response_value);
+            writeLog("response_value:" + response_value);
+            if (otp.equals(response_value)) {
+                Constant.showLog("response_value:" + response_value);
                 writeLog("OTP_Matched");
                 showDia(1);
-            }else{
+            } else {
                 writeLog("Invalid_OTP");
                 toast.setText(R.string.invalid_otp);
                 toast.show();
             }
-        }else{
+        } else {
             writeLog("Enter_OTP");
             toast.setText(R.string.pleaseenterotp);
             toast.show();
         }
     }
 
-    private void timerCount(){
+    private void timerCount() {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-              runOnUiThread(new Runnable() {
-                  @Override
-                  public void run() {
-                      time++;
-                      Constant.showLog("Time"+time);
-                      if(time == 180){
-                          timer.cancel();
-                          btn_resendotp.setEnabled(true);
-                      }
-                  }
-              });
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        time++;
+                        Constant.showLog("Time" + time);
+                        if (time == 180) {
+                            timer.cancel();
+                            btn_resendotp.setEnabled(true);
+                        }
+                    }
+                });
             }
-        },0,1000);
+        }, 0, 1000);
 
     }
 
-    private void startTimerCount(int noOfMinutes){
-        countDown = new CountDownTimer(noOfMinutes,1000) {
+    private void startTimerCount(int noOfMinutes) {
+        countDown = new CountDownTimer(noOfMinutes, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-              long millis = millisUntilFinished;
+                long millis = millisUntilFinished;
                 String ms = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
                 tv_timecount.setText(ms);
                 //Constant.showLog("count:"+ms);
             }
 
+            @SuppressLint("RestrictedApi")
             @Override
             public void onFinish() {
                 tv_text1.setText("Time's up!!");
                 response_value = "0";
                 btn_resendotp.setEnabled(true);
-               // btn_resendotp.setBackgroundColor(getResources().getColor(R.color.maroon));
-                btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),R.color.maroon));
+                // btn_resendotp.setBackgroundColor(getResources().getColor(R.color.maroon));
+                btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.maroon));
             }
         }.start();
     }
 
-    private void resendOTP(){
+    private void resendOTP() {
         try {
             constant = new Constant(CheckOTPActivity.this);
             constant.showPD();
-            String _mobNo = URLEncoder.encode(mobNo,"UTF-8");
-            String _imeiNo = URLEncoder.encode(imeiNo,"UTF-8");
-            String _imeiNo1 = URLEncoder.encode(imeino1,"UTF-8");
-            String _imeiNo2 = URLEncoder.encode(imeino2,"UTF-8");
+            String _mobNo = URLEncoder.encode(mobNo, "UTF-8");
+            String _imeiNo = URLEncoder.encode(imeiNo, "UTF-8");
+            String _imeiNo1 = URLEncoder.encode(imeino1, "UTF-8");
+            String _imeiNo2 = URLEncoder.encode(imeino2, "UTF-8");
 
             //String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"&IMEINo="+_imeiNo+"&type=E";
-            String url = Constant.ipaddress + "/GetOTPCodeV6?mobileno="+_mobNo+"&IMEINo1="
-                    +_imeiNo1+"&IMEINo2="+_imeiNo2+"&type=E";
+            String url = Constant.ipaddress + "/GetOTPCodeV6?mobileno=" + _mobNo + "&IMEINo1="
+                    + _imeiNo1 + "&IMEINo2=" + _imeiNo2 + "&type=E";
             Constant.showLog(url);
             writeLog("requestOTP_" + url);
             VolleyRequests requests = new VolleyRequests(CheckOTPActivity.this);
@@ -298,7 +317,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                     constant.showPD();
                     if (!response.equals("0") && !response.equals("-1") && !response.equals("-2")) {
                         //On Success
-                        doThis(response,mobNo,imeiNo);
+                        doThis(response, mobNo, imeiNo);
                         writeLog("requestOTP_Success_" + response);
                     } else if (!response.equals("0") && response.equals("-1") && !response.equals("-2")) {
                         //Already Registered
@@ -310,26 +329,27 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                         writeLog("requestOTP_Fail_" + response);
                     }
                 }
+
                 @Override
                 public void onFailure(String result) {
                     constant.showPD();
-                    writeLog("requestOTP_VolleyError_"+result);
+                    showDia(4);
+                    writeLog("requestOTP_VolleyError_" + result);
                 }
             });
-
-
-        }catch (Exception e){
+        } catch (Exception e) {
+            showDia(4);
             e.printStackTrace();
-            writeLog("requestOTP_catch_"+e.getMessage());
+            writeLog("requestOTP_catch_" + e.getMessage());
         }
     }
 
-    private void doThis(String response, String _mobNo, String _imeino){
+    private void doThis(String response, String _mobNo, String _imeino) {
         String arr[] = response.split("-");
         if (arr.length > 1) {
             writeLog("requestOTP_Success_" + response);
-            response =  arr[1];
-            Constant.showLog("dothis:response"+response);
+            response = arr[1];
+            Constant.showLog("dothis:response" + response);
             response_value = response;
         } else {
             showDia(-1);
@@ -337,11 +357,11 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void getUserInfo(){
+    private void getUserInfo() {
         constant = new Constant(CheckOTPActivity.this);
         //String url = Constant.ipaddress+"/GetUserDetail?mobileno="+otpClass.getMobileno()+"&IMEINo="+otpClass.getImeino()+"&type=E";
-        String url = Constant.ipaddress+"/GetUserDetailV6?mobileno="+otpClass.getMobileno()+"&IMEINo1="+otpClass.getImeino1()
-                +"&IMEINo2="+otpClass.getImeino2()+"&type=E";
+        String url = Constant.ipaddress + "/GetUserDetailV6?mobileno=" + otpClass.getMobileno() + "&IMEINo1=" + otpClass.getImeino1()
+                + "&IMEINo2=" + otpClass.getImeino2() + "&type=E";
 
         Constant.showLog(url);
         writeLog("getUserInfo_" + url);
@@ -353,28 +373,29 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 constant.showPD();
                 doFinish();
             }
+
             @Override
             public void onFailure(String result) {
                 constant.showPD();
-                writeLog("getUserInfo_onFailure_"+result);
+                writeLog("getUserInfo_onFailure_" + result);
                 showDia(-1);
             }
         });
     }
 
-    private void doFinish(){
-        if(countDown!=null) {
+    private void doFinish() {
+        if (countDown != null) {
             countDown.cancel();
         }
         SharedPreferences.Editor editor = FirstActivity.pref.edit();
-        editor.putBoolean(getString(R.string.pref_isRegistered),true);
-        editor.putBoolean(getString(R.string.pref_imeino2),true);
+        editor.putBoolean(getString(R.string.pref_isRegistered), true);
+        editor.putBoolean(getString(R.string.pref_imeino2), true);
         editor.apply();
         finish();
         Intent intent = new Intent(getApplicationContext(), CustomerDetailsActivity.class);
-        intent.putExtra("otp",otpClass);
+        intent.putExtra("otp", otpClass);
         startActivity(intent);
-        overridePendingTransition(R.anim.enter,R.anim.exit);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
     private void init() {
@@ -385,7 +406,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         ed5 = findViewById(R.id.ed5);
         ed6 = findViewById(R.id.ed6);
 
-        tv_otp =  findViewById(R.id.tv_otp);
+        tv_otp = findViewById(R.id.tv_otp);
         tv_text1 = findViewById(R.id.tv_text1);
         tv_timecount = findViewById(R.id.tv_timecount);
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
@@ -457,6 +478,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 moveToPrevious();
         }
 
+        @SuppressLint("RestrictedApi")
         private void moveToNext() {
             if (!isLast)
                 editTexts[currentIndex + 1].requestFocus();
@@ -465,7 +487,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 editTexts[currentIndex].clearFocus();
                 hideKeyboard();
                 verifyOTP();
-                btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),R.color.lightgray));
+                btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.lightgray));
 
             }
         }
@@ -519,8 +541,8 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    new Constant();
                     dialog.dismiss();
+                    finish();
                 }
             });
         } else if (a == 0) {
@@ -567,6 +589,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    finish();
                 }
             });
         } else if (a == 3) {
@@ -576,28 +599,40 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    finish();
+                }
+            });
+        } else if (a == 4) {
+            builder.setTitle(R.string.somethingwentwrong);
+            builder.setMessage("Try Again");
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    new Constant();
+                    resendOTP();
                 }
             });
         }
         builder.create().show();
     }
 
-    private void writeLog(String _data){
-        new WriteLog().writeLog(getApplicationContext(),"RegistrationActivity_"+_data);
+    private void writeLog(String _data) {
+        new WriteLog().writeLog(getApplicationContext(), "RegistrationActivity_" + _data);
     }
 
-    public static class MySMSReceiver extends BroadcastReceiver{
-        private boolean b ;
+    public static class MySMSReceiver extends BroadcastReceiver {
+        private boolean b;
         private String text;
         private SmsListener smsListener;
 
         @Override
         public void onReceive(Context context, Intent intent) {
             final Bundle bundle = intent.getExtras();
-            if(bundle != null){
+            if (bundle != null) {
                 final Object[] pdusobj = (Object[]) bundle.get("pdus");
                 assert pdusobj != null;
-                for (int i = 0; i <= pdusobj.length-1; i++) {
+                for (int i = 0; i <= pdusobj.length - 1; i++) {
                     if (smsListener != null) {
                         SmsMessage current_msg = SmsMessage.createFromPdu((byte[]) pdusobj[i]);
 
@@ -632,6 +667,5 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             Constant.showLog("ReadSMS_bindListener_Called");
         }
     }
-
 
 }

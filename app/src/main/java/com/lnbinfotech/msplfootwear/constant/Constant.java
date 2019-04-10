@@ -32,7 +32,7 @@ public class Constant {
             zipFolderName = "Zip",
             unzipFolderName = "UnZip",
             gstFolderName = "GSTReport",
-            image_folder = "Caputured_img",
+            image_folder = "Images",
             captured_images_folder = "MSPL_CapturedImages",
             log_file_name = "MSPL_Footwear",
             automailID = "automail@lnbinfotech.com",
@@ -66,7 +66,7 @@ public class Constant {
     public static int liveTestFlag = 1;
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
-    public static int showLogFlag = 0;
+    public static int showLogFlag = 1;
 
     public static int TIMEOUT_CON = 10*1000;
     public static int TIMEOUT_SO = 2*60*1000;

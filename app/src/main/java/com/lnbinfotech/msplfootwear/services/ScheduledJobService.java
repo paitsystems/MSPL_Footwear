@@ -3,6 +3,7 @@ package com.lnbinfotech.msplfootwear.services;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
@@ -67,6 +68,17 @@ public class ScheduledJobService extends JobService {
         Constant.showLog("onStartJob");
         int hour = Integer.parseInt(getTime());
         Constant.showLog("AutoSync_"+hour);
+
+        //Intent intent2 = new Intent(getApplicationContext(), UploadImageService.class);
+        //getApplicationContext().startService(intent2);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getApplicationContext().startForegroundService(new Intent(getApplicationContext(), UploadImageService.class));
+        } else {
+            getApplicationContext().startService(new Intent(getApplicationContext(), UploadImageService.class));
+        }
+
         //TODO : Set Time Limit
         //if(hour<13||hour>20) {
         if (ConnectivityTest.getNetStat(getApplicationContext())) {

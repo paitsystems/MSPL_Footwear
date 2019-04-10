@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lnbinfotech.msplfootwear.R;
 import com.lnbinfotech.msplfootwear.TouchImageView;
 import com.lnbinfotech.msplfootwear.constant.Constant;
+import com.squareup.picasso.Picasso;
 
 public class Fragment_FullImage extends Fragment {
 
@@ -56,14 +57,19 @@ public class Fragment_FullImage extends Fragment {
         img_name = img_name.replace(" ", "%20");
         url = Constant.imgUrl+img_name+".jpg";
         Constant.showLog(url);
-        Glide.with(getContext()).load(url)
+        Picasso.with(getContext())
+                .load(url)
+                .placeholder(R.drawable.placehoder)
+                .error(R.drawable.placehoder)
+                .into(imgv_img);
+        /*Glide.with(getContext()).load(url)
                 .thumbnail(0.5f)
                 .placeholder(R.drawable.placehoder)
                 .error(R.drawable.placehoder)
                 .crossFade()
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(img);
+                .into(img);*/
 
     }
 }

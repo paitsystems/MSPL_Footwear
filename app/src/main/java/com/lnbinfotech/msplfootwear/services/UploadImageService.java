@@ -1,6 +1,7 @@
 package com.lnbinfotech.msplfootwear.services;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
@@ -25,15 +26,28 @@ public class UploadImageService extends IntentService {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        startForeground(1,new Notification());
+    }
+
+    @Override
     protected void onHandleIntent(Intent intent) {
         try{
             Constant.showLog("Service started..");
-            String filename = intent.getStringExtra("filename");
-            File f;
+            //String filename = intent.getStringExtra("filename");
+            File f;/*
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
+                f = new File(Environment.getExternalStorageDirectory() + File.separator +
+                        Constant.folder_name + File.separator + Constant.image_folder + File.separator + filename);
             } else {
                 f = new File(getFilesDir(), filename);
+            }*/
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                f = new File(Environment.getExternalStorageDirectory() + File.separator +
+                        Constant.folder_name + File.separator + Constant.image_folder);
+            } else {
+                f = getApplicationContext().getFilesDir();
             }
             FTPClient client = new FTPClient();
             client.connect(Constant.ftp_adress, 21);

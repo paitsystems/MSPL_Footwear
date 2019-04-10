@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class AttachIdProofImageActivity extends AppCompatActivity implements View.OnClickListener {
+
     private Spinner spinner_idproof;
     private ArrayAdapter<String> adapter_id;
     private ImageView imageView_idproof;
@@ -55,7 +56,6 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
     private final int requestCode = 1;
     private DBHandler db;
     private List<String> doc_list;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,13 +78,13 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
         db = new DBHandler(AttachIdProofImageActivity.this);
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
-        imageView_idproof = (ImageView) findViewById(R.id.imageView_idproof);
-        bt_next = (AppCompatButton) findViewById(R.id.btn_next);
-        bt_update = (AppCompatButton) findViewById(R.id.btn_update);
-        bt_cancel = (AppCompatButton) findViewById(R.id.btn_cancel);
-        save_lay = (LinearLayout) findViewById(R.id.save_lay);
-        update_lay = (LinearLayout) findViewById(R.id.update_lay);
-        spinner_idproof = (Spinner) findViewById(R.id.spinner_idproof);
+        imageView_idproof = findViewById(R.id.imageView_idproof);
+        bt_next = findViewById(R.id.btn_next);
+        bt_update = findViewById(R.id.btn_update);
+        bt_cancel = findViewById(R.id.btn_cancel);
+        save_lay = findViewById(R.id.save_lay);
+        update_lay = findViewById(R.id.update_lay);
+        spinner_idproof = findViewById(R.id.spinner_idproof);
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         setDocList();
         adapter_id = new ArrayAdapter<>(this, R.layout.id_list, doc_list);
@@ -157,7 +157,7 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
                 startActivityForResult(intent_, requestCode);*/
 
                 Intent intent_ = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File f = Constant.checkFolder(Constant.folder_name);
+                File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
                 f = new File(f.getAbsolutePath(),"temp.jpg");
                 Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
                         + ".provider", f);
@@ -201,7 +201,9 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
         if (this.requestCode == requestCode && resultCode == RESULT_OK) {
             try {
                 imageView_idproof.setVisibility(View.VISIBLE);
-                String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + "temp.jpg");
+                String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
+                        File.separator + Constant.folder_name + File.separator + Constant.image_folder + File.separator
+                        + "temp.jpg");
                 imageView_idproof.setImageBitmap(scaleBitmap(_imagePath));
                 long datetime = System.currentTimeMillis();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
@@ -209,7 +211,8 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
 
                 imagePath = "Id_Img_" + sdf.format(resultdate) + ".jpg";
 
-                File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name);
+                File f = new File(Environment.getExternalStorageDirectory() + File.separator +
+                        Constant.folder_name + File.separator + Constant.image_folder);
                 for (File temp : f.listFiles()) {
                     if (temp.getName().equals("temp.jpg")) {
                         f = temp;
@@ -221,7 +224,8 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
                 Bitmap bitmap;
                 BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
                 bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
-                File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name, imagePath);
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator +
+                        Constant.folder_name + File.separator + Constant.image_folder, imagePath);
                 try {
                     outFile = new FileOutputStream(file);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 15, outFile);
@@ -309,14 +313,15 @@ public class AttachIdProofImageActivity extends AppCompatActivity implements Vie
 
         String filename = OptionsActivity.new_cus.getId_proof_image();
         Constant.showLog("filename: " + OptionsActivity.new_cus.getId_proof_image());
-        File file = Constant.checkFolder(Constant.folder_name);
+        File file = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
         File fileArray[] = file.listFiles();
 
         if (fileArray.length != 0) {
             for (File f : fileArray) {
                 if (f.getName().equals(filename)) {
                     if (f.length() != 0) {
-                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + filename);
+                        String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator +
+                                Constant.folder_name + File.separator + Constant.image_folder + File.separator + filename);
                         imageView_idproof.setImageBitmap(scaleBitmap(_imagePath));
                         writeLog("imageView_idproof is display's to form activity:");
                     }

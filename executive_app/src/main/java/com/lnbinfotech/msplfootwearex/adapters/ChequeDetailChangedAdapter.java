@@ -120,7 +120,8 @@ public class ChequeDetailChangedAdapter extends BaseAdapter implements TestInter
         holder.ed_cqno.setText(cd.getChq_det_number());
         holder.ed_amnt.setText(cd.getChq_det_amt());
 
-        String completePath = Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + "/" + cd.getChq_det_image();
+        String completePath = Environment.getExternalStorageDirectory() + File.separator +
+                Constant.folder_name + File.separator + Constant.image_folder + File.separator + cd.getChq_det_image();
         File file = new File(completePath);
         Uri imageUri = Uri.fromFile(file);
         Glide.with(context).load(imageUri)

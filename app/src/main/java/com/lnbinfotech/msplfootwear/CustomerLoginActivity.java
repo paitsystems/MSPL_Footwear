@@ -66,210 +66,6 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
         btn_save.setOnClickListener(this);
 
-        /*ed1.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (ed1.getText().toString().length() == 1) {
-                    ed2.requestFocus();
-                }
-            }
-        });
-
-        ed2.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (ed2.getText().toString().length() == 1) {
-                    ed3.requestFocus();
-                }
-            }
-        });
-
-        ed3.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (ed3.getText().toString().length() == 1) {
-                    ed4.requestFocus();
-                }
-            }
-        });
-
-        ed4.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (ed4.getText().toString().length() == 1) {
-                    ed5.requestFocus();
-                }
-            }
-        });
-
-        ed5.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (ed5.getText().toString().length() == 1) {
-                    ed6.requestFocus();
-                }
-            }
-        });
-
-        ed6.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (ed6.getText().toString().length() == 1) {
-                    ed7.requestFocus();
-                }
-            }
-        });
-
-        ed7.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (ed7.getText().toString().length() == 1) {
-                    ed8.requestFocus();
-                }
-            }
-        });
-
-        ed8.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (ed8.getText().toString().length() == 1) {
-                    ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(ed6.getWindowToken(), 0);
-                }
-            }
-        });
-
-        ed9.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (ed9.getText().toString().length() == 1) {
-                    ed10.requestFocus();
-                }
-            }
-        });
-
-        ed10.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (ed10.getText().toString().length() == 1) {
-                    ed11.requestFocus();
-                }
-            }
-        });
-
-        ed11.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (ed11.getText().toString().length() == 1) {
-                    ed12.requestFocus();
-                }
-            }
-        });
-
-        ed12.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (ed12.getText().toString().length() == 1) {
-                    ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(ed6.getWindowToken(), 0);
-                }
-            }
-        });*/
-
         Glide.with(getApplicationContext()).load(Constant.custimgUrl+userClass.getImagePath())
                 .thumbnail(0.5f)
                 .crossFade()
@@ -421,26 +217,26 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     }
 
     private void init() {
-        tv_custname = (TextView) findViewById(R.id.tv_custname);
-        tv_custaddress = (TextView) findViewById(R.id.tv_custaddress);
-        tv_custmobile = (TextView) findViewById(R.id.tv_custmobile);
-        tv_custemail = (TextView) findViewById(R.id.tv_custemail);
-        img_cust = (ImageView) findViewById(R.id.img_cust);
-        ed1 = (EditText) findViewById(R.id.ed1);
-        ed2 = (EditText) findViewById(R.id.ed2);
-        ed3 = (EditText) findViewById(R.id.ed3);
-        ed4 = (EditText) findViewById(R.id.ed4);
-        ed5 = (EditText) findViewById(R.id.ed5);
-        ed6 = (EditText) findViewById(R.id.ed6);
-        ed7 = (EditText) findViewById(R.id.ed7);
-        ed8 = (EditText) findViewById(R.id.ed8);
-        ed9 = (EditText) findViewById(R.id.ed9);
-        ed10 = (EditText) findViewById(R.id.ed10);
-        ed11 = (EditText) findViewById(R.id.ed11);
-        ed12 = (EditText) findViewById(R.id.ed12);
-        lay_setpin = (CardView) findViewById(R.id.lay_setpin);
-        lay_enterpin = (CardView) findViewById(R.id.lay_enterpin);
-        btn_save = (Button) findViewById(R.id.btn_save);
+        tv_custname = findViewById(R.id.tv_custname);
+        tv_custaddress = findViewById(R.id.tv_custaddress);
+        tv_custmobile = findViewById(R.id.tv_custmobile);
+        tv_custemail = findViewById(R.id.tv_custemail);
+        img_cust = findViewById(R.id.img_cust);
+        ed1 = findViewById(R.id.ed1);
+        ed2 = findViewById(R.id.ed2);
+        ed3 = findViewById(R.id.ed3);
+        ed4 = findViewById(R.id.ed4);
+        ed5 = findViewById(R.id.ed5);
+        ed6 = findViewById(R.id.ed6);
+        ed7 = findViewById(R.id.ed7);
+        ed8 = findViewById(R.id.ed8);
+        ed9 = findViewById(R.id.ed9);
+        ed10 = findViewById(R.id.ed10);
+        ed11 = findViewById(R.id.ed11);
+        ed12 = findViewById(R.id.ed12);
+        lay_setpin = findViewById(R.id.lay_setpin);
+        lay_enterpin = findViewById(R.id.lay_enterpin);
+        btn_save = findViewById(R.id.btn_save);
         db = new DBHandler(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
@@ -653,7 +449,6 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                 inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
             }
         }
-
     }
 
     public class PinOnKeyListener implements View.OnKeyListener {

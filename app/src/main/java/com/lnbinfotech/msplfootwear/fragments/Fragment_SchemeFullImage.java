@@ -13,7 +13,7 @@ import com.lnbinfotech.msplfootwear.TouchImageView;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.squareup.picasso.Picasso;
 
-public class Fragment_SchemeFullImage  extends Fragment {
+public class Fragment_SchemeFullImage extends Fragment {
 
     private String img_name = "", url = "";
     private TouchImageView imgv_img;

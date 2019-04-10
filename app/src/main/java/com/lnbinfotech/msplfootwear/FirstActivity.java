@@ -86,6 +86,11 @@ public class FirstActivity extends AppCompatActivity {
         } else if (!permission.checkFineLocationPermission(getApplicationContext())) {
             permission.requestFineLocationPermission(getApplicationContext(), FirstActivity.this);//5
         } else {
+            Constant.checkFolder(Constant.folder_name);
+            Constant.checkFolder(Constant.folder_name + "/" + Constant.gstFolderName);
+            Constant.checkFolder(Constant.folder_name + "/" + Constant.image_folder);
+            Constant.checkFolder(Constant.folder_name + "/" + Constant.zipFolderName);
+            Constant.checkFolder(Constant.folder_name + "/" + Constant.unzipFolderName);
             if (ConnectivityTest.getNetStat(getApplicationContext())) {
                 doThis();
             } else {
@@ -289,10 +294,10 @@ public class FirstActivity extends AppCompatActivity {
 
             File SDDBUnzipFileName = new File(SDDBUnzipFilePath + "/" + DBHandler.Database_Name);
 
-            File currentDB = new File(SDDBUnzipFilePath);
+            /*File currentDB = new File(SDDBUnzipFilePath);
             File backupDB = new File(SDDBFilePath, DBHandler.Database_Name);
 
-            /*FileChannel source = new FileInputStream(SDDBUnzipFileName).getChannel();
+            FileChannel source = new FileInputStream(SDDBUnzipFileName).getChannel();
             FileChannel destination = new FileOutputStream(backupDB).getChannel();
             destination.transferFrom(source, 0, source.size());
             destination.close();

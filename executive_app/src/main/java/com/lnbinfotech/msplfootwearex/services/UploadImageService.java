@@ -1,6 +1,7 @@
 package com.lnbinfotech.msplfootwearex.services;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Environment;
 
@@ -17,6 +18,12 @@ import java.io.FileInputStream;
 
 public class UploadImageService extends IntentService {
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        startForeground(1,new Notification());
+    }
+
     public UploadImageService() {
         super(UploadImageService.class.getName());
     }
@@ -32,7 +39,8 @@ public class UploadImageService extends IntentService {
             client.enterLocalPassiveMode();
             File f;
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name);
+                f = new File(Environment.getExternalStorageDirectory() + File.separator +
+                        Constant.folder_name + File.separator + Constant.image_folder);
             } else {
                 f = getApplicationContext().getFilesDir();
             }

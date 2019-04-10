@@ -22,6 +22,8 @@ import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
+import com.lnbinfotech.msplfootwearex.model.CustomerOrderClass;
+import com.lnbinfotech.msplfootwearex.model.UserClass;
 import com.lnbinfotech.msplfootwearex.permission.GetPermission;
 
 import java.io.File;
@@ -32,6 +34,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -91,6 +94,7 @@ public class FirstActivity extends AppCompatActivity {
             permission.requestFineLocationPermission(getApplicationContext(), FirstActivity.this);//5
         } else {
             Constant.checkFolder(Constant.folder_name);
+            Constant.checkFolder(Constant.folder_name + "/" + Constant.image_folder);
             Constant.checkFolder(Constant.folder_name + "/" + Constant.zipFolderName);
             Constant.checkFolder(Constant.folder_name + "/" + Constant.unzipFolderName);
             if (ConnectivityTest.getNetStat(getApplicationContext())) {
@@ -260,7 +264,6 @@ public class FirstActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     checkpermmission();
-
                 }
             });
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -279,6 +282,39 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void CopySDTODB() {
+        Constant.showLog("----- In getData ------");
+        writeLog("----- In getData ------");
+        DBHandler db1 = new DBHandler(getApplicationContext());
+        ArrayList<UserClass> userList = db1.getUserDetail();
+        ArrayList<CustomerOrderClass> custList = db1.getCustOrder();
+        Constant.showLog("userList-" + userList.size() + "-custList-" + custList.size());
+        writeLog("userList-" + userList.size() + "-custList-" + custList.size());
+        Constant.showLog("----- End getData ------");
+        writeLog("----- End getData ------");
+        db1.close();
+
+        String SDDBUnzipFilePath1 = android.os.Environment.getExternalStorageDirectory() + File.separator +
+                Constant.folder_name + File.separator + Constant.unzipFolderName + File.separator + DBHandler.Database_Name;
+        DBHandler db = new DBHandler(getApplicationContext(), SDDBUnzipFilePath1);
+        db.deleteTable(DBHandler.Table_CustomerOrder);
+        db.deleteTable(DBHandler.Table_Usermaster);
+        db.deleteTable(DBHandler.Table_TrackCustomerOrder);
+        int count = 0;
+        for (int i = 0; i < userList.size(); i++) {
+            count++;
+            db.addUserDetail(userList.get(i));
+        }
+        Constant.showLog(count + "");
+        writeLog("userList " + count + " Added");
+        count = 0;
+        for (int i = 0; i < custList.size(); i++) {
+            count++;
+            db.addCustomerOrder(custList.get(i));
+        }
+        db.close();
+        Constant.showLog(count + "");
+        writeLog("custList " + count + " Added");
+
         ProgressDialog pDialog = new ProgressDialog(FirstActivity.this);
         try {
             pDialog.setMessage("Please Wait...");
@@ -288,17 +324,17 @@ public class FirstActivity extends AppCompatActivity {
             Constant.showLog("----- In CopySDTODB ------");
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             //String SDDBFilePath = pInfo.applicationInfo.dataDir+"/databases/";
-            String SDDBFilePath = "/data/data/"+pInfo.packageName+"/databases/";
+            String SDDBFilePath = "/data/data/" + pInfo.packageName + "/databases/";
 
             String SDDBUnzipFilePath = android.os.Environment.getExternalStorageDirectory() + File.separator +
                     Constant.folder_name + File.separator + Constant.unzipFolderName;
 
             File SDDBUnzipFileName = new File(SDDBUnzipFilePath + "/" + DBHandler.Database_Name);
 
-            File currentDB = new File(SDDBUnzipFilePath);
+            /*File currentDB = new File(SDDBUnzipFilePath);
             File backupDB = new File(SDDBFilePath, DBHandler.Database_Name);
 
-            /*FileChannel source = new FileInputStream(SDDBUnzipFileName).getChannel();
+            FileChannel source = new FileInputStream(SDDBUnzipFileName).getChannel();
             FileChannel destination = new FileOutputStream(backupDB).getChannel();
             destination.transferFrom(source, 0, source.size());
             destination.close();
@@ -306,28 +342,28 @@ public class FirstActivity extends AppCompatActivity {
 
             InputStream mInput = new FileInputStream(SDDBUnzipFileName);
             String outFileName = SDDBFilePath + DBHandler.Database_Name;
-            Constant.showLog("outFileName - "+outFileName);
+            Constant.showLog("outFileName - " + outFileName);
             OutputStream mOutput = new FileOutputStream(outFileName);
             byte[] mBuffer = new byte[1024];
             int mLength;
-            while ((mLength = mInput.read(mBuffer))>0) {
+            while ((mLength = mInput.read(mBuffer)) > 0) {
                 //Constant.showLog("mLength "+mLength);
                 mOutput.write(mBuffer, 0, mLength);
             }
             mOutput.flush();
             mOutput.close();
             mInput.close();
-            writeLog("outFileName - "+outFileName+" wrote ");
+            writeLog("outFileName - " + outFileName + " wrote ");
 
             SharedPreferences.Editor editor = pref.edit();
             String str = getTime();
             Constant.showLog("Last Sync - " + str);
             writeLog("CopySDTODB_Last Sync_" + str);
             editor.putString(getString(R.string.pref_lastSync), str);
-            editor.putBoolean(getString(R.string.pref_newDB),false);
+            editor.putBoolean(getString(R.string.pref_newDB), false);
             editor.apply();
 
-            String arr[] = {getString(R.string.pref_autoArealine),getString(R.string.pref_autoArea),
+            String arr[] = {getString(R.string.pref_autoArealine), getString(R.string.pref_autoArea),
                     getString(R.string.pref_autoBank), getString(R.string.pref_autoBankBranch),
                     getString(R.string.pref_autoCity), getString(R.string.pref_autoCompany),
                     getString(R.string.pref_autoCustomer), getString(R.string.pref_autoCurrency),
@@ -336,14 +372,14 @@ public class FirstActivity extends AppCompatActivity {
                     getString(R.string.pref_autoProduct), getString(R.string.pref_autoSizeNDesign),
                     getString(R.string.pref_autoSizeDetail)};
 
-            for(String pref : arr) {
-                updateSharedPref(pref,"Y");
+            for (String pref : arr) {
+                updateSharedPref(pref, "Y");
             }
 
             Constant.showLog("----- End CopySDTODB ------");
             writeLog("----- End CopySDTODB ------");
 
-            if(SDDBUnzipFileName.exists()) {
+            if (SDDBUnzipFileName.exists()) {
                 SDDBUnzipFileName.delete();
             }
             if (pref.contains(getString(R.string.pref_isRegistered))) {
@@ -352,12 +388,12 @@ public class FirstActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
             }
             pDialog.dismiss();
-            overridePendingTransition(R.anim.enter,R.anim.exit);
+            overridePendingTransition(R.anim.enter, R.anim.exit);
             doFinish();
         } catch (Exception e) {
             pDialog.dismiss();
             e.printStackTrace();
-            writeLog("CopySDTODB_"+e.getMessage());
+            writeLog("CopySDTODB_" + e.getMessage());
         }
     }
 
