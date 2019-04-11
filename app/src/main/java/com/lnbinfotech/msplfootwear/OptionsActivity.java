@@ -268,7 +268,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
-        Toast.makeText(this,slider.getBundle().get("extra") + "", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,slider.getBundle().get("extra") + "", Toast.LENGTH_SHORT).show();
         ImagewiseAddToCartClass prod = new ImagewiseAddToCartClass();
         prod.setImageName("SchoolShoe,");
         Intent sintent = new Intent(getApplicationContext(), SchemeFullImageActivity.class);
