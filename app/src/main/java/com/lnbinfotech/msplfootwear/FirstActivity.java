@@ -19,6 +19,8 @@ import com.lnbinfotech.msplfootwear.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
+import com.lnbinfotech.msplfootwear.model.CustomerOrderClass;
+import com.lnbinfotech.msplfootwear.model.UserClass;
 import com.lnbinfotech.msplfootwear.permission.GetPermission;
 
 import java.io.File;
@@ -28,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -278,6 +281,39 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void CopySDTODB() {
+        Constant.showLog("----- In getData ------");
+        writeLog("----- In getData ------");
+        DBHandler db1 = new DBHandler(getApplicationContext());
+        ArrayList<UserClass> userList = db1.getUserDetail();
+        ArrayList<CustomerOrderClass> custList = db1.getCustOrder();
+        Constant.showLog("userList-" + userList.size() + "-custList-" + custList.size());
+        writeLog("userList-" + userList.size() + "-custList-" + custList.size());
+        Constant.showLog("----- End getData ------");
+        writeLog("----- End getData ------");
+        db1.close();
+
+        String SDDBUnzipFilePath1 = android.os.Environment.getExternalStorageDirectory() + File.separator +
+                Constant.folder_name + File.separator + Constant.unzipFolderName + File.separator + DBHandler.Database_Name;
+        DBHandler db = new DBHandler(getApplicationContext(), SDDBUnzipFilePath1);
+        db.deleteTable(DBHandler.Table_CustomerOrder);
+        db.deleteTable(DBHandler.Table_Usermaster);
+        db.deleteTable(DBHandler.Table_TrackCustomerOrder);
+        int count = 0;
+        for (int i = 0; i < userList.size(); i++) {
+            count++;
+            db.addUserDetail(userList.get(i));
+        }
+        Constant.showLog(count + "");
+        writeLog("userList " + count + " Added");
+        count = 0;
+        for (int i = 0; i < custList.size(); i++) {
+            count++;
+            db.addCustomerOrder(custList.get(i));
+        }
+        db.close();
+        Constant.showLog(count + "");
+        writeLog("custList " + count + " Added");
+
         ProgressDialog pDialog = new ProgressDialog(FirstActivity.this);
         try {
             pDialog.setMessage("Please Wait...");

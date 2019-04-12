@@ -602,27 +602,18 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
             request.setHeader("Accept", "application/json");
             request.setHeader("Content-type", "application/json");
             try {
-                /*JSONStringer vehicle = new JSONStringer()
-                    .object()
-                    .key("rData")
-                    .object()
-                    .key("details").value("bar|bob|b@h.us|why")
-                    .endObject()
-                    .endObject();*/
-
-                JSONStringer vehicle = new JSONStringer()
-                        .object()
-                        .key("rData")
-                        .object()
-                        .key("details").value(url[0])
-                        .endObject()
-                        .endObject();
-
+                JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(url[0]).endObject().endObject();
                 StringEntity entity = new StringEntity(vehicle.toString());
+                Constant.showLog(vehicle.toString());
+                writeLog("getSaveOrderData_" + vehicle.toString());
                 request.setEntity(entity);
-
                 // Send request to WCF service
-                httpClient = new DefaultHttpClient();
+                //TODO : Check Timeout
+                HttpParams httpParams = new BasicHttpParams();
+                HttpConnectionParams.setConnectionTimeout(httpParams,Constant.TIMEOUT_CON);
+                HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);
+                httpClient = new DefaultHttpClient(httpParams);
+                //DefaultHttpClient httpClient = new DefaultHttpClient();
                 HttpResponse response = httpClient.execute(request);
                 Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
                 value = new BasicResponseHandler().handleResponse(response);

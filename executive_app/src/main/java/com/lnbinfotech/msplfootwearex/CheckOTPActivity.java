@@ -99,6 +99,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         ArrayList<String> appCodes = hash.getAppSignatures();
         String yourHash = appCodes.get(0);
         Constant.showLog("yourHash-" + yourHash);
+        writeLog("HashCode " + yourHash);
 
 
         client = SmsRetriever.getClient(this);
