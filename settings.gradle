@@ -1,1 +1,1 @@
-include ':app', ':executive_app'
+include ':app', ':executive_app', ':dispatch_app'

@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.7"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/mobmargin2">
+
+                    <EditText
+                        android:id="@+id/ed_custName"
+                        style="@style/textViewMob"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawableRight="@drawable/ic_search"
+                        android:focusable="false"
+                        android:hint="Select Customer Name" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/mobmargin2">
+
+                    <EditText
+                        android:id="@+id/ed_poNo"
+                        style="@style/textViewMob"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawableRight="@drawable/ic_search"
+                        android:focusable="false"
+                        android:hint="Search PO Number" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/mobmargin2"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <TextView
+                        style="@style/textViewMobW"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:background="@drawable/line_left_top_right_bottom_draw"
+                        android:gravity="center_vertical"
+                        android:text="PO Order Qty"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                    <TextView
+                        android:id="@+id/tv_poQty"
+                        style="@style/textViewMobW"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:background="@drawable/line_left_top_right_bottom_draw"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:padding="5sp"
+                        android:text="0"
+                        android:visibility="visible" />
+
+                    <TextView
+                        style="@style/textViewMobW"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:background="@drawable/line_left_top_right_bottom_draw"
+                        android:gravity="center"
+                        android:text="Packed Qty"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                    <TextView
+                        android:id="@+id/tv_qtyTotal"
+                        style="@style/textViewMobW"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:background="@drawable/line_left_top_right_bottom_draw"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:padding="5sp"
+                        android:text="0"
+                        android:visibility="visible" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/mobmargin2"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <TextView
+                        style="@style/textViewMobW"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.6"
+                        android:background="@drawable/line_top_right_bottom_draw"
+                        android:gravity="center_vertical"
+                        android:text="Transporter"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                    <TextView
+                        android:id="@+id/tv_transporter"
+                        style="@style/textViewMobW"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
+                        android:background="@drawable/line_left_top_right_bottom_draw"
+                        android:ems="10"
+                        android:padding="5sp"
+                        android:text="0"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/mobmargin2"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <TextView
+                        style="@style/textViewMob"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.7"
+                        android:gravity="center_vertical"
+                        android:text="Dispatch By"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/mobmargin2"
+                        android:layout_weight="0.3">
+
+                        <EditText
+                            android:id="@+id/ed_dispatchBy"
+                            style="@style/textViewMob"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:drawableRight="@drawable/ic_search"
+                            android:focusable="false"
+                            android:hint="Search Dispatch By" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/mobmargin2"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <TextView
+                        style="@style/textViewMob"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:gravity="center_vertical"
+                        android:text="Capture Packing Slip Image"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                    <ImageView
+                        android:id="@+id/img_slip"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.5"
+                        app:srcCompat="@drawable/camera" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_margin="@dimen/mobmargin2"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <TextView
+                        style="@style/textViewMob"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:gravity="center_vertical"
+                        android:text="Cartons"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                    <EditText
+                        android:id="@+id/ed_cartons"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:padding="5sp"
+                        android:selectAllOnFocus="true"
+                        android:singleLine="true"
+                        android:visibility="visible" />
+
+                    <TextView
+                        style="@style/textViewMob"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:gravity="center_vertical"
+                        android:text="No Of Pairs In Bundles"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                    <EditText
+                        android:id="@+id/ed_bundles"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:padding="5sp"
+                        android:selectAllOnFocus="true"
+                        android:singleLine="true"
+                        android:text="@string/_0"
+                        android:visibility="visible" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/textViewMobAddToCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/line_left_top_right_draw"
+                    android:gravity="center"
+                    android:text="Cartons Details" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/textViewMobAddToCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:background="@drawable/line_left_top_right_bottom_draw"
+                        android:gravity="center"
+                        android:text="SrNo" />
+
+                    <TextView
+                        style="@style/textViewMobAddToCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:background="@drawable/line_top_right_bottom_draw"
+                        android:gravity="center"
+                        android:text="CLB"
+                        android:visibility="visible" />
+
+                    <TextView
+                        style="@style/textViewMobAddToCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:background="@drawable/line_top_right_bottom_draw"
+                        android:gravity="center"
+                        android:text="No of Cartons" />
+
+                    <TextView
+                        style="@style/textViewMobAddToCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:background="@drawable/line_top_right_bottom_draw"
+                        android:gravity="center"
+                        android:text="Amount"
+                        android:visibility="gone" />
+
+                    <TextView
+                        style="@style/textViewMobAddToCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:background="@drawable/line_top_right_bottom_draw"
+                        android:gravity="center"
+                        android:text="Img"
+                        android:visibility="visible" />
+
+                    <TextView
+                        style="@style/textViewMobAddToCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:background="@drawable/line_top_right_bottom_draw"
+                        android:gravity="center"
+                        android:text="Mar.Down"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <!--<ListView
+                    android:id="@+id/listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />-->
+                <com.pait.dispatch_app.NonScrollListView
+                    android:id="@+id/listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableLeft="@drawable/save_button_back"
+                    android:text="@string/submit"
+                    android:textColor="@color/white"
+                    android:visibility="gone"
+                    app:backgroundTint="@color/maroon" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        style="@style/footerstyleMob"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

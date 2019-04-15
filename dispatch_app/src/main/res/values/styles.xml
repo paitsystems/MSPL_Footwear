@@ -1,0 +1,332 @@
+<resources>
+
+    <style name="AppBaseTheme" parent="android:Theme.Light"/>
+
+    <style name="NewAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryDark">@color/red</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryDark">@color/red</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+
+    <style name="btn_style" parent="android:Widget.Button">
+        <item name="android:color">@color/maroon</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/btn_draw</item>
+
+    </style>
+
+    <!---       MOBILE    -->
+
+    <style name="textViewMob" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textViewMobW" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textViewMobDG" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
+        <item name="android:textColor">@color/darkgreen</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textViewMobLDG" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
+        <item name="android:textColor">@color/darkgreen</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textViewMobLG" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
+        <item name="android:textColor">@color/lightgreen</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textViewMobR" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
+        <item name="android:textColor">@color/red</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textViewMobM" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
+        <item name="android:textColor">@color/maroon</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textViewMobLB" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textViewMobLO" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
+        <item name="android:textColor">@color/orange</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textViewMobLR" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
+        <item name="android:textColor">@color/red</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textViewMobLW" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="btnStyleMobW" parent="android:Widget.Button">
+        <item name="android:color">@color/maroon</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/btn_draw</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="btnStyleMobWcurve" parent="android:Widget.Button">
+        <item name="android:color">@color/maroon</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/btn_draw_maroon_curve</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="btnStyleMobWcur" parent="android:Widget.Button">
+        <item name="android:color">@color/lightpurple</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/btndraw_wblue_curv</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="btnStyleMob" parent="android:Widget.Button">
+        <item name="android:color">@color/maroon</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@drawable/btn_draw</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="menubtnStyleMob" parent="android:Widget.Button">
+        <item name="android:color">@color/maroon</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/option_btn_draw</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="footerstyleMob" parent="AppTheme">
+        <item name="android:text">@string/footer</item>
+        <item name="android:textSize">@dimen/footersizeMob</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@color/red</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="optionbuttonMob" parent="AppTheme">
+        <item name="android:background">@color/maroon</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:padding">@dimen/optionbtnpadding</item>
+        <item name="android:layout_margin">@dimen/optionbtnmargin</item>
+    </style>
+
+    <style name="optionbutton1Mob" parent="AppTheme">
+        <item name="android:background">@drawable/option1btn</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:padding">@dimen/optionbtnpadding</item>
+        <item name="android:layout_marginTop">@dimen/optionbtnmargintop</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+        <item name="android:gravity">left|center</item>
+    </style>
+
+    <style name="optionbutton2Mob" parent="AppTheme">
+        <item name="android:background">@drawable/option2btn</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:padding">@dimen/optionbtnpadding</item>
+        <item name="android:layout_marginTop">@dimen/optionbtnmargintop</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!---   TAB    -->
+
+    <style name="textViewTab" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textViewTabW" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textViewTabDG" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:textColor">@color/darkgreen</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textViewTabLG" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:textColor">@color/lightgreen</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="btnStyleTabW" parent="android:Widget.Button">
+        <item name="android:color">@color/maroon</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/btn_draw</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="btnStyleTabWcurve" parent="android:Widget.Button">
+        <item name="android:color">@color/maroon</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/btn_draw_green_curve</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="btnStyleTab" parent="android:Widget.Button">
+        <item name="android:color">@color/maroon</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@drawable/btn_draw</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="menubtnStyleTab" parent="android:Widget.Button">
+        <item name="android:color">@color/maroon</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/option_btn_draw</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="footerstyleTab" parent="AppTheme">
+        <item name="android:text">@string/footer</item>
+        <item name="android:textSize">@dimen/footersizeTab</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@color/red</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
+    <style name="optionbuttonTab" parent="AppTheme">
+        <item name="android:background">@color/maroon</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:padding">@dimen/optionbtnpadding</item>
+        <item name="android:layout_margin">@dimen/optionbtnmargin</item>
+    </style>
+
+    <style name="optionbutton1Tab" parent="AppTheme">
+        <item name="android:background">@drawable/option1btn</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:padding">@dimen/optionbtnpadding</item>
+        <item name="android:layout_marginTop">@dimen/optionbtnmargintop</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:gravity">left|center</item>
+    </style>
+
+    <style name="optionbutton2Tab" parent="AppTheme">
+        <item name="android:background">@drawable/option2btn</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:padding">@dimen/optionbtnpadding</item>
+        <item name="android:layout_marginTop">@dimen/optionbtnmargintop</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!--- SNEHA 28/10/2017 -->
+    <style name="AppThemeTakeOrder" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryDark">@color/red</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+    <style name="AppThemeVisit" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/yellogreen</item>
+        <item name="colorPrimaryDark">@color/yellogreen</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+    <style name="AppThemeReports" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/peachpink</item>
+        <item name="colorPrimaryDark">@color/peachpink</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+
+    <style name="AppThemeNewCustEntry" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/lightgreen</item>
+        <item name="colorPrimaryDark">@color/lightgreen</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+    <style name="AppThemePayment" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/lightpurple</item>
+        <item name="colorPrimaryDark">@color/lightpurple</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+    <style name="AppThemeLedgerReports" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/peachpink</item>
+        <item name="colorPrimaryDark">@color/peachpink</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+    <style name="AppThemeFeedback" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryDark">@color/blue</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+    <style name="AppThemeAddToCard" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryDark">@color/red</item>
+        <item name="colorAccent">@color/red</item>
+    </style>
+    <style name="textViewMobAddToCard" parent="AppTheme">
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:typeface">monospace</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="colorControlNormal">@color/black</item>
+        <item name="colorControlActivated">@color/black</item>
+        <item name="colorControlHighlight">@color/black</item>
+    </style>
+</resources>

@@ -10,6 +10,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/dispatch_app" />
             <option value="$PROJECT_DIR$/executive_app" />
           </set>
         </option>

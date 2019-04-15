@@ -13,6 +13,7 @@ import com.lnbinfotech.msplfootwear.log.WriteLog;
 //Created by SNEHA on 10/16/2017.
 
 public class ReadSms extends BroadcastReceiver {
+
     private boolean b;
     private String text;
     private static SmsListener smsListener;
