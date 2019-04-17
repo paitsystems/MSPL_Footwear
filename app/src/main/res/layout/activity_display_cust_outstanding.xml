@@ -83,7 +83,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.3"
                         android:background="@color/greend"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="invisible">
 
                         <ImageView
                             android:layout_width="match_parent"
@@ -113,7 +114,8 @@
                         android:layout_weight="0.4"
                         android:gravity="center"
                         android:text="0"
-                        android:textColor="@color/greend" />
+                        android:textColor="@color/greend"
+                        android:visibility="invisible" />
                 </LinearLayout>
 
             </LinearLayout>

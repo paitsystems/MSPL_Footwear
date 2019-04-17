@@ -168,6 +168,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
         provider.disconnect();
     }
 
+/*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -184,6 +185,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
                 break;
         }
     }
+*/
 
     @Override
     public void handleNewLocation(Location location, String _address) {

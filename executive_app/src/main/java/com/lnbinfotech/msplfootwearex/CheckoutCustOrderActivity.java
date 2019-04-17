@@ -175,7 +175,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
         provider.disconnect();
     }
 
-    @Override
+/*    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case LocationProvider.REQUEST_CHECK_SETTINGS:
@@ -190,7 +190,7 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
                 }
                 break;
         }
-    }
+    }*/
 
     @Override
     public void handleNewLocation(Location location,String _address) {

@@ -50,7 +50,7 @@ public class Constant {
     //public static String ipaddress = "http://172.30.1.209/MSPLC6/service.svc";
     //public static String ipaddress = "http://license.lnbinfotech.com/MSPLC6/service.svc";
     //public static String ipaddress = "http://219.91.211.9:24086/MSPLC6/service.svc";
-    public static String ipaddress = "http://43.239.147.103:24085/MSPLC7/service.svc";
+    public static String ipaddress = "http://43.239.147.103:24085/MSPLC8/service.svc";
 
     //TODO: Check Image Url
     //public static final String imgUrl = "http://219.91.211.9:24086/IMAGES/";
@@ -103,12 +103,12 @@ public class Constant {
 
     public Constant() {
         if(connectionFlag == 0) {
-            ipaddress = "http://103.109.13.200:24086/MSPLC7/service.svc";
+            ipaddress = "http://103.109.13.200:24086/MSPLC8/service.svc";
             imgUrl = "http://103.109.13.200:24086/IMAGES/";
             custimgUrl = "http://103.109.13.200:24086/custImage/";
             connectionFlag = 1;
         }else {
-            ipaddress = "http://43.239.147.103:24085/MSPLC7/service.svc";
+            ipaddress = "http://43.239.147.103:24085/MSPLC8/service.svc";
             imgUrl = "http://43.239.147.103:24085/IMAGES/";
             custimgUrl = "http://43.239.147.103:24085/custImage/";
             connectionFlag = 0;
