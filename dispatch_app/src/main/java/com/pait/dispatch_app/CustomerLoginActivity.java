@@ -3,6 +3,7 @@ package com.pait.dispatch_app;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,9 +16,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +33,8 @@ import com.pait.dispatch_app.db.DBHandler;
 import com.pait.dispatch_app.log.WriteLog;
 import com.pait.dispatch_app.parse.UserClass;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CustomerLoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -39,10 +46,14 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     private Toast toast;
     private UserClass userClass;
     private CardView lay_setpin, lay_enterpin;
+    private LinearLayout lay_spinner;
     private int setEnterPINFlag = -1;
     private String PIN = null;
     private DBHandler db;
     private EditText[] editTexts;
+    private Spinner sp_dpCenter;
+    private List<String> dpList;
+    private HashMap<String,Integer> dpMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +82,20 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                 .placeholder(R.drawable.user32)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(img_cust);
+
+        sp_dpCenter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String br = (String) adapterView.getItemAtPosition(i);
+                int id = dpMap.get(br);
+                userClass.setDpId(id);
+                Constant.showLog(br + " " + id);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
     }
 
     @Override
@@ -104,7 +129,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     }
 
     private void setData() {
-        tv_custname.setText(userClass.getPartyName());
+        tv_custname.setText(userClass.getName());
         tv_custaddress.setText(userClass.getAddress());
         tv_custmobile.setText(userClass.getMobile());
         tv_custemail.setText(userClass.getEmail());
@@ -117,12 +142,15 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             btn_save.setText("SAVE");
             lay_setpin.setVisibility(View.VISIBLE);
             lay_enterpin.setVisibility(View.GONE);
+            lay_spinner.setVisibility(View.GONE);
         } else {
             setEnterPINFlag = 1;
             btn_save.setText("LOGIN");
             lay_setpin.setVisibility(View.GONE);
             lay_enterpin.setVisibility(View.VISIBLE);
+            lay_spinner.setVisibility(View.VISIBLE);
         }
+        setDPCenter();
     }
 
     private void verifyPin() {
@@ -199,6 +227,12 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     }
 
     private void startNewActivity() {
+        if(FirstActivity.pref.contains(getString(R.string.pref_dpId))){
+            int prevId = FirstActivity.pref.getInt(getString(R.string.pref_dpId),0);
+            if(prevId!=userClass.getDpId()){
+                db.deleteTable(DBHandler.Table_DispatchMaster);
+            }
+        }
         String pin = userClass.getCustID() + "-" + PIN;
         SharedPreferences.Editor editor = FirstActivity.pref.edit();
         editor.putString(getString(R.string.pref_savedpin), pin);
@@ -207,6 +241,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         editor.putInt(getString(R.string.pref_cityid),userClass.getCityId());
         editor.putInt(getString(R.string.pref_hocode),userClass.getHOCode());
         editor.putString(getString(R.string.pref_mobno),userClass.getMobile());
+        editor.putInt(getString(R.string.pref_dpId),userClass.getDpId());
         editor.apply();
         finish();
         //TODO; Check
@@ -214,6 +249,22 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         overridePendingTransition(R.anim.enter, R.anim.exit);
+    }
+
+    private void setDPCenter(){
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+        int hoCode = FirstActivity.pref.getInt(getString(R.string.pref_branchid),0);
+        Cursor res = db.getDPCenter(hoCode);
+        if(res.moveToFirst()){
+            do{
+                dpList.add(res.getString(res.getColumnIndex(DBHandler.Company_DisplayCmp)));
+                dpMap.put(res.getString(res.getColumnIndex(DBHandler.Company_DisplayCmp)),
+                        res.getInt(res.getColumnIndex(DBHandler.Company_Id)));
+            }while (res.moveToNext());
+        }
+        res.close();
+        sp_dpCenter.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.sizegroup_spinner_row, dpList));
+
     }
 
     private void init() {
@@ -236,11 +287,15 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         ed12 = findViewById(R.id.ed12);
         lay_setpin = findViewById(R.id.lay_setpin);
         lay_enterpin = findViewById(R.id.lay_enterpin);
+        lay_spinner = findViewById(R.id.lay_spinner);
         btn_save = findViewById(R.id.btn_save);
+        sp_dpCenter = findViewById(R.id.sp_dpcenter);
+        dpList = new ArrayList<>();
+        dpMap = new HashMap<>();
         db = new DBHandler(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
-
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         String custid = String.valueOf(userClass.getCustID());
         String PIN = db.getCustPIN(custid);
 
@@ -334,7 +389,8 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                     if (_list.size() != 0) {
                         showDia(1);
                     } else {
-                        showDia(6);
+                        //showDia(6);
+                        setData();
                     }
                 }
             });

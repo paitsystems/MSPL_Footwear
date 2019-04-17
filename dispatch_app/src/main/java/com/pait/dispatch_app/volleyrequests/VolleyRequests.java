@@ -145,6 +145,65 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue1(request, "AREA");
     }
 
+    public void refreshEmployeeMaster(String url, final ServerCallback callback,final int max) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\", "");
+                        response = response.replace("''", "");
+                        response = response.substring(1, response.length() - 1);
+                        int ret = new ParseJSON(response, context).parseEmployeeMaster(max);
+                        if(ret == 1) {
+                            callback.onSuccess(response);
+                        }else{
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("refreshEmployeeMaster_" + error.getMessage());
+                        Constant.showLog(error.getMessage());
+                        writeLog("refreshEmployeeMaster_"+error.getMessage());
+                    }
+                }
+        );
+        AppSingleton.getInstance(context).addToRequestQueue(request, "CITY");
+    }
+
+    public void refreshCompanyMaster(String url, final ServerCallback callback,final int max) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\\\r\\\\n", "");
+                        response = response.replace("\\", "");
+                        response = response.replace("''", "");
+                        response = response.substring(1, response.length() - 1);
+                        int ret = new ParseJSON(response, context).parseCompanyMaster(max);
+                        if(ret == 1) {
+                            callback.onSuccess(response);
+                        }else{
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("refreshCompanyMaster_" + error.getMessage());
+                        Constant.showLog(error.getMessage());
+                        writeLog("refreshCompanyMaster_"+error.getMessage());
+                    }
+                }
+        );
+        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
+    }
+
     private void writeLog(String _data) {
         new WriteLog().writeLog(context, "VolleyRequest_" + _data);
     }

@@ -50,17 +50,17 @@ public class CustomerDetailListAdapter extends BaseAdapter {
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.list_item_customer_details, viewGroup,false);
-            holder.tv_custname = (TextView) view.findViewById(R.id.tv_custname);
-            holder.tv_custaddress = (TextView) view.findViewById(R.id.tv_custaddress);
-            holder.tv_custmobile = (TextView) view.findViewById(R.id.tv_custmobile);
-            holder.tv_custemail = (TextView) view.findViewById(R.id.tv_custemail);
-            holder.img_cust = (ImageView) view.findViewById(R.id.img_cust);
+            holder.tv_custname = view.findViewById(R.id.tv_custname);
+            holder.tv_custaddress = view.findViewById(R.id.tv_custaddress);
+            holder.tv_custmobile = view.findViewById(R.id.tv_custmobile);
+            holder.tv_custemail = view.findViewById(R.id.tv_custemail);
+            holder.img_cust = view.findViewById(R.id.img_cust);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
         UserClass userClass = (UserClass) getItem(i);
-        holder.tv_custname.setText(userClass.getPartyName());
+        holder.tv_custname.setText(userClass.getName());
         holder.tv_custaddress.setText(userClass.getAddress());
         holder.tv_custmobile.setText(userClass.getMobile());
         holder.tv_custemail.setText(userClass.getEmail());

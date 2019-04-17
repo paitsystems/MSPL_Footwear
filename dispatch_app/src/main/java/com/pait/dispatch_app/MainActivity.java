@@ -3,6 +3,7 @@ package com.pait.dispatch_app;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -27,9 +28,17 @@ import android.widget.Toast;
 
 import com.pait.dispatch_app.adapters.ChequeDetailChangedAdapter;
 import com.pait.dispatch_app.constant.Constant;
+import com.pait.dispatch_app.db.DBHandler;
+import com.pait.dispatch_app.interfaces.RetrofitApiInterface;
+import com.pait.dispatch_app.interfaces.ServerCallback;
 import com.pait.dispatch_app.interfaces.TestInterface;
 import com.pait.dispatch_app.log.WriteLog;
 import com.pait.dispatch_app.model.ChequeDetailsClass;
+import com.pait.dispatch_app.model.DispatchMasterClass;
+import com.pait.dispatch_app.utility.RetrofitApiBuilder;
+import com.pait.dispatch_app.volleyrequests.VolleyRequests;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,6 +48,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,TestInterface {
 
@@ -50,8 +64,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ChequeDetailChangedAdapter adapter;
     private Toast toast;
     private List<ChequeDetailsClass> list;
-    private int requestCode = 1, requestCode2 = 2;
+    private int requestCode = 1, requestCode2 = 2, edCustCode = 3, edPOCode = 4, edDPBy = 5, hoCode, dpID, empId;
     private String imagePath = "";
+    private DBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +79,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         init();
 
+
+        empId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
+        hoCode = FirstActivity.pref.getInt(getString(R.string.pref_hocode),0);
+        dpID = FirstActivity.pref.getInt(getString(R.string.pref_dpId),0);
+
         ed_custName.setOnClickListener(this);
         ed_poNo.setOnClickListener(this);
+        ed_dispatchBy.setOnClickListener(this);
         btn_submit.setOnClickListener(this);
         img_slip.setOnClickListener(this);
 
@@ -111,13 +132,65 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        loadEmployeeMaster();
+    }
+
+    @Override
+    public void onBackPressed() {
+        showDia(1);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.chequedetail_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.chq_save:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.img_slip:
                 takeImage(requestCode2);
+                break;
+            case R.id.ed_custName:
+                Intent intent1 = new Intent(getApplicationContext(), ProductSearchActivity.class);
+                intent1.putExtra("from","1");
+                intent1.putExtra("hoCode",String.valueOf(hoCode));
+                startActivityForResult(intent1, edCustCode);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                break;
+            case R.id.ed_poNo:
+                if (ProductSearchActivity.partyName != null) {
+                    Intent intent = new Intent(getApplicationContext(), ProductSearchActivity.class);
+                    intent.putExtra("from","2");
+                    intent.putExtra("hoCode",String.valueOf(hoCode));
+                    startActivityForResult(intent, edPOCode);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                } else {
+                    toast.setText("First Select PartyName");
+                    toast.show();
+                }
+                break;
+            case R.id.ed_dispatchBy:
+                if (ProductSearchActivity.partyName != null) {
+                    Intent intent = new Intent(getApplicationContext(), ProductSearchActivity.class);
+                    intent.putExtra("from","3");
+                    intent.putExtra("hoCode",String.valueOf(hoCode));
+                    startActivityForResult(intent, edDPBy);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                } else {
+                    toast.setText("First Select PartyName");
+                    toast.show();
+                }
                 break;
         }
     }
@@ -133,11 +206,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onAmountChange(int amnt) {
-
+        tv_qty_Total.setText(String.valueOf(amnt));
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (this.requestCode == requestCode && resultCode == RESULT_OK) {
             try {
@@ -213,31 +286,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 writeLog("onActivityResult():Exception:" + e);
                 e.printStackTrace();
             }
+        } else if (this.edCustCode == requestCode && resultCode == RESULT_OK) {
+            DispatchMasterClass dm = (DispatchMasterClass) data.getSerializableExtra("result");
+            ed_custName.setText(dm.getPartyName());
+            ed_poNo.setText(null);
+            tv_poQty.setText("0");
+            tv_transporter.setText("");
+            ed_dispatchBy.setText(null);
+        } else if (this.edPOCode == requestCode && resultCode == RESULT_OK) {
+            DispatchMasterClass dm = (DispatchMasterClass) data.getSerializableExtra("result");
+            ed_poNo.setText(dm.getPONO());
+            tv_poQty.setText(dm.getTotalQty());
+            tv_transporter.setText(dm.getTransporter());
+            ed_dispatchBy.setText(dm.getEmp_Name());
+        } else if (this.edDPBy == requestCode && resultCode == RESULT_OK) {
+            DispatchMasterClass dm = (DispatchMasterClass) data.getSerializableExtra("result");
+            ed_dispatchBy.setText(dm.getEmp_Name());
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        showDia(1);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.chequedetail_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.chq_save:
-                showDia(2);
-                break;
-            case R.id.chq_clear:
-                showDia(3);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void takeImage(int requestCode){
@@ -250,23 +315,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivityForResult(intent,requestCode);
         overridePendingTransition(R.anim.enter, R.anim.exit);
-    }
-
-    private void init(){
-        toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        ed_custName = findViewById(R.id.ed_custName);
-        ed_poNo = findViewById(R.id.ed_poNo);
-        ed_dispatchBy = findViewById(R.id.ed_dispatchBy);
-        ed_cartons = findViewById(R.id.ed_cartons);
-        ed_bundles = findViewById(R.id.ed_bundles);
-        tv_poQty = findViewById(R.id.tv_poQty);
-        tv_qty_Total = findViewById(R.id.tv_qtyTotal);
-        tv_transporter = findViewById(R.id.tv_transporter);
-        btn_submit = findViewById(R.id.btn_submit);
-        listView = findViewById(R.id.listView);
-        img_slip = findViewById(R.id.img_slip);
-        list = new ArrayList<>();
     }
 
     private void setData(){
@@ -309,6 +357,100 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listView.setAdapter(adapter);
     }
 
+    private void loadEmployeeMaster() {
+        int max = db.getMaxEmpId();
+        String url = Constant.ipaddress + "/GetEmployeeMaster?Id="+max;
+        Constant.showLog(url);
+        writeLog("loadEmployeeMaster_" + url);
+        final Constant constant = new Constant(MainActivity.this);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(MainActivity.this);
+        requests.refreshEmployeeMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                getDispatchMaster();
+            }
+
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                showDia(2);
+            }
+        },0);
+    }
+
+    private void getDispatchMaster() {
+        final Constant constant = new Constant(MainActivity.this);
+        constant.showPD();
+        try {
+            int maxAuto = db.getMaxAuto();
+            //Auto +"|"+ CustId +"|"+ HOCode +"|"+ discpatchId +"|"+ empId
+            String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId;
+            writeLog("getDispatchMaster_"+url);
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("details", url);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.
+                    parse("application/json; charset=utf-8"), (jsonBody).toString());
+            Constant.showLog(jsonBody.toString());
+
+            Call<List<DispatchMasterClass>> call = new RetrofitApiBuilder().getApiBuilder().
+                    create(RetrofitApiInterface.class).
+                    getDispatchMaster(body);
+            call.enqueue(new Callback<List<DispatchMasterClass>>() {
+                @Override
+                public void onResponse(Call<List<DispatchMasterClass>> call, Response<List<DispatchMasterClass>> response) {
+                    Constant.showLog("onResponse");
+                    List<DispatchMasterClass> list = response.body();
+                    if (list != null) {
+                        db.addDispatchMaster(list);
+                        Constant.showLog(list.size() + "_getDispatchMaster");
+                    } else {
+                        Constant.showLog("onResponse_list_null");
+                        writeLog("getDispatchMaster_onResponse_list_null");
+                    }
+                    constant.showPD();
+                }
+
+                @Override
+                public void onFailure(Call<List<DispatchMasterClass>> call, Throwable t) {
+                    Constant.showLog("onFailure");
+                    if (!call.isCanceled()) {
+                        call.cancel();
+                    }
+                    t.printStackTrace();
+                    writeLog("getDispatchMaster_onFailure_" + t.getMessage());
+                    constant.showPD();
+                    showDia(2);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getDispatchMaster_" + e.getMessage());
+            constant.showPD();
+            showDia(2);
+        }
+    }
+
+    private void init(){
+        toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        ed_custName = findViewById(R.id.ed_custName);
+        ed_poNo = findViewById(R.id.ed_poNo);
+        ed_dispatchBy = findViewById(R.id.ed_dispatchBy);
+        ed_cartons = findViewById(R.id.ed_cartons);
+        ed_bundles = findViewById(R.id.ed_bundles);
+        tv_poQty = findViewById(R.id.tv_poQty);
+        tv_qty_Total = findViewById(R.id.tv_qtyTotal);
+        tv_transporter = findViewById(R.id.tv_transporter);
+        btn_submit = findViewById(R.id.btn_submit);
+        listView = findViewById(R.id.listView);
+        img_slip = findViewById(R.id.img_slip);
+        list = new ArrayList<>();
+        db = new DBHandler(getApplicationContext());
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+    }
+
     private void showDia(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setCancelable(false);
@@ -324,6 +466,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.dismiss();
+                }
+            });
+        } else if (a == 2) {
+            builder.setMessage("Error While Loading Data");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new Constant();
+                    dialog.dismiss();
                 }
             });
         }

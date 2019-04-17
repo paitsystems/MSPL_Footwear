@@ -85,7 +85,6 @@ public class FirstActivity extends AppCompatActivity {
             permission.requestFineLocationPermission(getApplicationContext(), FirstActivity.this);//5
         } else {
             Constant.checkFolder(Constant.folder_name);
-            Constant.checkFolder(Constant.folder_name + "/" + Constant.gstFolderName);
             Constant.checkFolder(Constant.folder_name + "/" + Constant.image_folder);
             Constant.checkFolder(Constant.folder_name + "/" + Constant.zipFolderName);
             Constant.checkFolder(Constant.folder_name + "/" + Constant.unzipFolderName);
@@ -98,7 +97,7 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void doThis(){
-        try {
+        /*try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             dbpath = pInfo.applicationInfo.dataDir+"/databases";
             Constant.showLog(dbpath);
@@ -128,25 +127,13 @@ public class FirstActivity extends AppCompatActivity {
             }
             overridePendingTransition(R.anim.enter,R.anim.exit);
             doFinish();
-        }
+        }*/
 
-        /*if (pref.contains(getString(R.string.pref_isRegistered))) {
+        if (pref.contains(getString(R.string.pref_isRegistered))) {
             startActivity(new Intent(getApplicationContext(), CustomerDetailsActivity.class));
         } else {
             startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
-        }*/
-
-        /*if (!pref.contains(getString(R.string.pref_FTPLocation))) {
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putString(getString(R.string.pref_FTPLocation),"ftp.lnbinfotech.com");
-            editor.putString(getString(R.string.pref_FTPUser),"supportftp@lnbinfotech.com");
-            editor.putString(getString(R.string.pref_FTPPass),"support$456");
-            editor.putString(getString(R.string.pref_FTPImgFolder),"Test");
-            editor.apply();
-        }*/
-        DBHandler db = new DBHandler(getApplicationContext());
-        db.close();
-        overridePendingTransition(R.anim.enter,R.anim.exit);
+        }
         doFinish();
     }
 
@@ -233,6 +220,7 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     private void doFinish(){
+        overridePendingTransition(R.anim.enter,R.anim.exit);
         finish();
     }
 

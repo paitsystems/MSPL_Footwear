@@ -7,9 +7,9 @@
         android:id="@+id/chq_save"
         app:showAsAction="always"/>
 
-    <item
+    <!--<item
         android:title="CLEAR"
         android:id="@+id/chq_clear"
-        app:showAsAction="always"/>
+        app:showAsAction="always"/>-->
 
 </menu>

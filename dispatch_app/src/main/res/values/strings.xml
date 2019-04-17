@@ -17,6 +17,7 @@
     <string name="pref_isCategorySaved">isCategorySaved</string>
     <string name="pref_compName">compName</string>
     <string name="pref_address">address</string>
+    <string name="pref_dpId">DPID</string>
     <string name="pref_contactNo">contactNo</string>
     <string name="pref_expiryDate">expiryDate</string>
     <string name="pref_username">username</string>

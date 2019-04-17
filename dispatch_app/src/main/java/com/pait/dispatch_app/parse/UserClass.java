@@ -8,7 +8,7 @@ public class UserClass implements Serializable {
 
     private String name,address,mobile,PANno,GSTNo,ImagePath, email,status,district,taluka,
             IMEINo,isRegistered,AadharNo,PIN, partyName, pintext;
-    private int custID,branchId,cityId,areaId, HOCode;
+    private int custID,branchId,cityId,areaId, HOCode, dpId;
 
     public String getName() {
         return name;
@@ -176,5 +176,13 @@ public class UserClass implements Serializable {
 
     public void setPintext(String pintext) {
         this.pintext = pintext;
+    }
+
+    public int getDpId() {
+        return dpId;
+    }
+
+    public void setDpId(int dpId) {
+        this.dpId = dpId;
     }
 }

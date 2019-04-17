@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.pait.dispatch_app.constant.Constant;
+import com.pait.dispatch_app.model.CompanyMasterClass;
+import com.pait.dispatch_app.model.DispatchMasterClass;
+import com.pait.dispatch_app.model.EmployeeMasterClass;
 import com.pait.dispatch_app.parse.UserClass;
 
 import java.util.ArrayList;
@@ -18,7 +21,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
     //TODO: Check DB Version
-    public static final int Database_Version = 5;
+    public static final int Database_Version = 1;
 
     public static final String Table_Customermaster = "CustomerMaster";
     public static final String CM_RetailCustID = "CustID";
@@ -291,6 +294,22 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String SDMD_Size = "Size";
     public static final String SDMD_Qty = "Qty";
 
+    public static final String Table_DispatchMaster = "DispatchMaster";
+    public static final String DM_Auto = "Auto";
+    public static final String DM_DispatchBy = "DispatchBy";
+    public static final String DM_PONO = "PONO";
+    public static final String DM_TotalQty = "TotalQty";
+    public static final String DM_Emp_Id = "Emp_Id";
+    public static final String DM_Emp_Name = "Emp_Name";
+    public static final String DM_TransId = "TransId";
+    public static final String DM_Transporter = "Transporter";
+    public static final String DM_CustId = "CustId";
+    public static final String DM_PartyName = "PartyName";
+    public static final String DM_branchid = "branchid";
+    public static final String DM_DispatchCmp = "DispatchCmp";
+    public static final String DM_DispatchDate = "DispatchDate";
+
+
     public DBHandler(Context context) {
         super(context, Database_Name, null, Database_Version);
     }
@@ -377,66 +396,54 @@ public class DBHandler extends SQLiteOpenHelper {
     private String create_sizedesignmastdet_table = "create table if not exists "+Table_SizeDesignMastDet+"("+SDMD_Auto+" int,"+SDMD_ProductId+" int,"+SDMD_DesignNo+" text,"+SDMD_SizeGroupFrom+" int,"
             +SDMD_SizeGroupTo+" int,"+SDMD_Total+" int,"+SDMD_SizeGroup+" text,"+SDMD_Colour+" text,"+SDMD_Size+" int,"+SDMD_Qty+" int)";
 
+    private String create_dispatchmaster_table = "create table if not exists "+Table_DispatchMaster
+            +"("+ DM_Auto + " int,"+ DM_DispatchBy + " int," + DM_PONO + " text,"+ DM_TotalQty + " int,"+
+            DM_Emp_Id + " int,"+ DM_Emp_Name + " text," +DM_TransId + " int,"+ DM_Transporter + " text,"+ DM_CustId + " int,"+
+            DM_PartyName + " text,"+ DM_branchid + " int,"+ DM_DispatchCmp + " int," +
+            DM_DispatchDate + " text)";
+
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Constant.showLog(create_cust_master);
-        db.execSQL(create_cust_master);
-        Constant.showLog(create_prod_master);
-        db.execSQL(create_prod_master);
-        Constant.showLog(create_si_master);
-        db.execSQL(create_si_master);
+        //Constant.showLog(create_cust_master);
+        //db.execSQL(create_cust_master);
+        //Constant.showLog(create_prod_master);
+        //db.execSQL(create_prod_master);
+        //Constant.showLog(create_si_master);
+        //db.execSQL(create_si_master);
         Constant.showLog(create_emp_master);
         db.execSQL(create_emp_master);
         Constant.showLog(create_ho_master);
         db.execSQL(create_ho_master);
-        Constant.showLog(create_area_master);
-        db.execSQL(create_area_master);
-        Constant.showLog(create_city_master);
-        db.execSQL(create_city_master);
+        //Constant.showLog(create_area_master);
+        //db.execSQL(create_area_master);
+        //Constant.showLog(create_city_master);
+        //db.execSQL(create_city_master);
         Constant.showLog(create_company_master);
         db.execSQL(create_company_master);
-        Constant.showLog(create_bank_master);
-        db.execSQL(create_bank_master);
-        Constant.showLog(create_bank_branch_master);
-        db.execSQL(create_bank_branch_master);
-        Constant.showLog(create_document_master);
-        db.execSQL(create_document_master);
+        //Constant.showLog(create_bank_master);
+        //db.execSQL(create_bank_master);
+        //Constant.showLog(create_bank_branch_master);
+        //db.execSQL(create_bank_branch_master);
+        //Constant.showLog(create_document_master);
+        //db.execSQL(create_document_master);
         Constant.showLog(create_user_master);
         db.execSQL(create_user_master);
-        Constant.showLog(create_arsd_master);
-        db.execSQL(create_arsd_master);
-        Constant.showLog(create_custorder_table);
-        db.execSQL(create_custorder_table);
-        Constant.showLog(create_gstmaster_table);
-        db.execSQL(create_gstmaster_table);
-        Constant.showLog(create_trackcustomerorder_table);
-        db.execSQL(create_trackcustomerorder_table);
-        Constant.showLog(create_sizedesignmastdet_table);
-        db.execSQL(create_sizedesignmastdet_table);
+        //Constant.showLog(create_arsd_master);
+        //db.execSQL(create_arsd_master);
+        //Constant.showLog(create_custorder_table);
+        //db.execSQL(create_custorder_table);
+        //Constant.showLog(create_gstmaster_table);
+        //db.execSQL(create_gstmaster_table);
+        //Constant.showLog(create_trackcustomerorder_table);
+        //db.execSQL(create_trackcustomerorder_table);
+        //Constant.showLog(create_sizedesignmastdet_table);
+        //db.execSQL(create_sizedesignmastdet_table);
+        Constant.showLog(create_dispatchmaster_table);
+        db.execSQL(create_dispatchmaster_table);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if(oldVersion<4){
-            String str = "alter table "+Table_Usermaster+" add "+UM_PINText+" text";
-            db.execSQL(str);
-            str = "update "+Table_Usermaster+" set "+UM_PINText+"="+UM_PIN;
-            db.execSQL(str);
-        }
-        if(oldVersion<5){
-            String str = "alter table "+Table_CompanyMaster+" add "+Company_Company_Add + " text";
-            db.execSQL(str);
-            str = "alter table "+Table_CompanyMaster+" add "+Company_Company_Phno + " text";
-            db.execSQL(str);
-            str = "alter table "+Table_CompanyMaster+" add "+Company_Company_Email + " text";
-            db.execSQL(str);
-            str = "alter table "+Table_CompanyMaster+" add "+Company_MobileNo + " text";
-            db.execSQL(str);
-            str = "alter table "+Table_CompanyMaster+" add "+Company_Company_Phone2 + " text";
-            db.execSQL(str);
-            str = "alter table "+Table_CompanyMaster+" add "+Company_Mobileno2 + " text";
-            db.execSQL(str);
-        }
     }
 
     @Override
@@ -472,7 +479,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public void deleteTable(String tableName){
-
+        getWritableDatabase().delete(tableName,null,null);
     }
 
     public ArrayList<UserClass> getUserDetail() {
@@ -540,6 +547,130 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         res.close();
         return list;
+    }
+
+    public void addEmployeeMaster(List<EmployeeMasterClass> list ) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        for (EmployeeMasterClass empClass : list) {
+            ContentValues cv = new ContentValues();
+            cv.put(EMP_EmpId, empClass.getEmp_Id());
+            cv.put(EMP_Name, empClass.getName());
+            cv.put(EMP_MobNo, empClass.getMobno());
+            cv.put(EMP_Adress, empClass.getAdd());
+            cv.put(EMP_DesignId, empClass.getDesig_Id());
+            cv.put(EMP_BranchId, empClass.getBranch_Id());
+            cv.put(EMP_Status, empClass.getStatus());
+            cv.put(EMP_DesignName, empClass.getDesigName());
+            cv.put(EMP_CompName, empClass.getCompanyName());
+            cv.put(EMP_CompInit, empClass.getCompanyInit());
+            cv.put(EMP_HoCode, empClass.getHoCode());
+            cv.put(EMP_PIN, empClass.getPIN());
+            db.insert(Table_Employee, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+    }
+
+    public int getMaxEmpId() {
+        int a = 0;
+        String str = "select max(" + EMP_EmpId + ") from " + Table_Employee;
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if (res.moveToFirst()) {
+            a = res.getInt(0);
+        }
+        res.close();
+        return a;
+    }
+
+    public int getMaxCompId() {
+        int a = 0;
+        String str = "select max(" + Company_Id + ") from " + Table_CompanyMaster;
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if (res.moveToFirst()) {
+            a = res.getInt(0);
+        }
+        res.close();
+        return a;
+    }
+
+    public int getMaxAuto() {
+        int a = 0;
+        String str = "select max(" + DM_Auto+ ") from " + Table_DispatchMaster;
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if (res.moveToFirst()) {
+            a = res.getInt(0);
+        }
+        res.close();
+        return a;
+    }
+
+    public void addDispatchMaster(List<DispatchMasterClass> list ) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        for (DispatchMasterClass dm : list) {
+            ContentValues cv = new ContentValues();
+            cv.put(DM_Auto, dm.getAuto());
+            cv.put(DM_DispatchBy, dm.getDispatchBy());
+            cv.put(DM_PONO, dm.getPONO());
+            cv.put(DM_TotalQty, dm.getTotalQty());
+            cv.put(DM_Emp_Id, dm.getEmp_Id());
+            cv.put(DM_Emp_Name, dm.getEmp_Name());
+            cv.put(DM_TransId, dm.getTransId());
+            cv.put(DM_Transporter, dm.getTransporter());
+            cv.put(DM_CustId, dm.getCustId());
+            cv.put(DM_PartyName, dm.getPartyName());
+            cv.put(DM_branchid, dm.getBranchid());
+            cv.put(DM_DispatchCmp, dm.getDispatchCmp());
+            cv.put(DM_DispatchDate, dm.getDispatchDate());
+            db.insert(Table_DispatchMaster, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+    }
+
+    public void addCompanyMaster(CompanyMasterClass company) {
+        ContentValues cv = new ContentValues();
+        cv.put(Company_Id, company.getCompanyId());
+        cv.put(Company_Name, company.getCompanyName());
+        cv.put(Company_Initial, company.getCompanyInitial());
+        cv.put(Company_Pan, company.getCompanyPan());
+        cv.put(Company_DisplayCmp, company.getDisplayCmp());
+        cv.put(Company_GSTNo, company.getGSTNo());
+        cv.put(Company_HOCode, company.getHOCode());
+        cv.put(Company_Company_Add, company.getCompany_Add());
+        cv.put(Company_Company_Phno, company.getCompany_Phno());
+        cv.put(Company_Company_Email, company.getCompany_Email());
+        cv.put(Company_MobileNo, company.getMobileNo());
+        cv.put(Company_Company_Phone2, company.getCompany_Phone2());
+        cv.put(Company_Mobileno2, company.getMobileno2());
+        getWritableDatabase().insert(Table_CompanyMaster, null, cv);
+    }
+
+    public Cursor getDPCenter(int hoCode){
+        String str = "select * from "+Table_CompanyMaster + " where "+Company_HOCode+"="+hoCode +" order by "+Company_DisplayCmp;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
+    public Cursor getPartyName(){
+        String str = "select distinct "+ DM_PartyName+" from "+Table_DispatchMaster +" order by "+DM_PartyName;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
+    public Cursor getPONo(String partyName){
+        String str = "select * from "+Table_DispatchMaster + " where "+ DM_PartyName+"='"+partyName +"' order by "+DM_PONO;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str,null);
+    }
+
+    public Cursor getEmpName(int hoCode) {
+        String str = "select " + EMP_EmpId + "," + EMP_Name + " from " + Table_Employee + " where " + EMP_DesignId + " in (6,7) and " + EMP_HoCode + "=" + hoCode + " order by " + EMP_Name;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str, null);
     }
 
 }

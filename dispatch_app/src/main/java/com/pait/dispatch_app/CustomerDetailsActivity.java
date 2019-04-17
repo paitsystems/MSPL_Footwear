@@ -284,7 +284,8 @@ public class CustomerDetailsActivity extends AppCompatActivity
             });
         } else if (a == 8) {
             builder.setTitle("Update App");
-            builder.setMessage("MSPL Customer New Version Is Available");
+            //TODO: Check App Name
+            builder.setMessage("MSPL Executive New Version Is Available");
             builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -454,11 +455,10 @@ public class CustomerDetailsActivity extends AppCompatActivity
                                 SharedPreferences.Editor editor = FirstActivity.pref.edit();
                                 editor.putString(getString(R.string.pref_version), _data);
                                 editor.apply();
-                                loadData();
                             }else if (currVersion<dataVersion){
                                 showDia(8);
                             }else{
-                                loadData();
+                                loadCompanyMaster();
                             }
                         } else if (_data == null) {
                             showDia(4);
@@ -477,6 +477,28 @@ public class CustomerDetailsActivity extends AppCompatActivity
         );
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(versionRequest,"ABC");
 
+    }
+
+    private void loadCompanyMaster() {
+        int max = db.getMaxCompId();
+        String url = Constant.ipaddress + "/GetCompanyMaster?Id="+max;
+        Constant.showLog(url);
+        writeLog("loadCompanyMaster_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(CustomerDetailsActivity.this);
+        requests.refreshCompanyMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                loadData();
+            }
+
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                showDia(2);
+            }
+        },0);
     }
 
     private void loadData(){

@@ -46,9 +46,9 @@ public class Constant {
     // PORT : 24085 - GRAVITY_PC
     // PORT : 24086 - SERVER
 
-    //public static String ipaddress = "http://172.30.1.209/MSPLV7/service.svc";
-    public static String ipaddress = "http://license.lnbinfotech.com/MSPLV8/service.svc";
-    //public static String ipaddress = "http://43.239.147.103:24085/MSPLV8/service.svc";
+    public static String ipaddress = "http://172.30.1.209/MSPLD1/service.svc";
+    //public static String ipaddress = "http://license.lnbinfotech.com/MSPLD1/service.svc";
+    //public static String ipaddress = "http://43.239.147.103:24085/MSPLD1/service.svc";
 
     //TODO: Check Image Url
     public static String imgUrl = "http://43.239.147.103:24085/IMAGES/";
@@ -92,12 +92,12 @@ public class Constant {
     public Constant() {
         //TODO: Change Image Ip Also
         if (connectionFlag == 0) {
-            ipaddress = "http://103.109.13.200:24086/MSPLV8/service.svc";
+            ipaddress = "http://103.109.13.200:24086/MSPLD1/service.svc";
             imgUrl = "http://103.109.13.200:24086/IMAGES/";
             custimgUrl = "http://103.109.13.200:24086/custImage/";
             connectionFlag = 1;
         } else {
-            ipaddress = "http://43.239.147.103:24085/MSPLV8/service.svc";
+            ipaddress = "http://43.239.147.103:24085/MSPLD1/service.svc";
             imgUrl = "http://43.239.147.103:24085/IMAGES/";
             custimgUrl = "http://43.239.147.103:24085/custImage/";
             connectionFlag = 0;

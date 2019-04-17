@@ -84,6 +84,10 @@
         <activity
             android:name=".CustomerLoginActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ProductSearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible" />
 
 
     </application>

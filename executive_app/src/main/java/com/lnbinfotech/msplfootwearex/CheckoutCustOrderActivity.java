@@ -211,20 +211,20 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
     }
 
     private void init() {
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         constant = new Constant(CheckoutCustOrderActivity.this);
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
-        lv_check = (ListView) findViewById(R.id.lv_check);
-        tv_tot_looseQty = (TextView) findViewById(R.id.tv_tot_looseQty);
-        tv_tot_availQty = (TextView) findViewById(R.id.tv_tot_availQty);
-        tv_custname = (TextView) findViewById(R.id.tv_custname1);
+        lv_check = findViewById(R.id.lv_check);
+        tv_tot_looseQty = findViewById(R.id.tv_tot_looseQty);
+        tv_tot_availQty = findViewById(R.id.tv_tot_availQty);
+        tv_custname = findViewById(R.id.tv_custname1);
         tv_custname.setText(FirstActivity.pref.getString(getString(R.string.pref_selcustname), ""));
-        btn_save = (Button) findViewById(R.id.btn_save);
+        btn_save = findViewById(R.id.btn_save);
         list = new ArrayList<>();
         urlList = new ArrayList<>();
         db = new DBHandler(getApplicationContext());
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
     private void checkStock() {
