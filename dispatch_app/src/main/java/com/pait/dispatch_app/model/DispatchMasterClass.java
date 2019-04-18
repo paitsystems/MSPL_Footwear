@@ -32,6 +32,10 @@ public class DispatchMasterClass implements Serializable {
     public String DispatchCmp;
     @SerializedName("DispatchDate")
     public String DispatchDate;
+    @SerializedName("DcNo")
+    public String DcNo;
+    @SerializedName("DCdate")
+    public String DCdate;
 
     public String getAuto() {
         return Auto;
@@ -135,5 +139,21 @@ public class DispatchMasterClass implements Serializable {
 
     public void setDispatchDate(String dispatchDate) {
         DispatchDate = dispatchDate;
+    }
+
+    public String getDcNo() {
+        return DcNo;
+    }
+
+    public void setDcNo(String dcNo) {
+        DcNo = dcNo;
+    }
+
+    public String getDCdate() {
+        return DCdate;
+    }
+
+    public void setDCdate(String DCdate) {
+        this.DCdate = DCdate;
     }
 }

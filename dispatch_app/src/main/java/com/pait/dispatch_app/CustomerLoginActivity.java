@@ -247,6 +247,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         //TODO; Check
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("cust",userClass);
         startActivity(intent);
         overridePendingTransition(R.anim.enter, R.anim.exit);
     }

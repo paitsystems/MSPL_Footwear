@@ -24,6 +24,7 @@ import com.pait.dispatch_app.constant.Constant;
 import com.pait.dispatch_app.db.DBHandler;
 import com.pait.dispatch_app.log.WriteLog;
 import com.pait.dispatch_app.model.DispatchMasterClass;
+import com.pait.dispatch_app.model.EmployeeMasterClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,7 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(Constant.liveTestFlag==1) {
+        if (Constant.liveTestFlag == 1) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
 
@@ -60,11 +61,11 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
         from = getIntent().getExtras().getString("from");
         hoCode = getIntent().getExtras().getString("hoCode");
 
-        if(from.equals("1")){
+        if (from.equals("1")) {
             setPartyName();
-        } else if(from.equals("2")){
+        } else if (from.equals("2")) {
             setPONo();
-        } else if(from.equals("3")){
+        } else if (from.equals("3")) {
             setDPBy();
         }
 
@@ -77,7 +78,7 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String text = ed_search.getText().toString().toLowerCase(Locale.getDefault());
-                if(adapter!=null) {
+                if (adapter != null) {
                     adapter.filter(text);
                 }
             }
@@ -91,16 +92,22 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(listView.getWindowToken(),0);
-                DispatchMasterClass dm = (DispatchMasterClass) listView.getItemAtPosition(i);
-                Constant.showLog(dm.getPartyName());
-                if(from.equals("1") || from.equals("2")){
-                    partyName = dm.getPartyName();
-                }
+                ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(listView.getWindowToken(), 0);
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("result",dm);
-                setResult(Activity.RESULT_OK,returnIntent);
-                overridePendingTransition(R.anim.left_to_right,R.anim.right_to_left);
+                if (from.equals("1") || from.equals("2")) {
+                    DispatchMasterClass dm = (DispatchMasterClass) listView.getItemAtPosition(i);
+                    Constant.showLog(dm.getPartyName());
+                    partyName = dm.getPartyName();
+                    returnIntent.putExtra("result", dm);
+                } else if (from.equals("3")){
+                    DispatchMasterClass dm = (DispatchMasterClass) listView.getItemAtPosition(i);
+                    EmployeeMasterClass em = new EmployeeMasterClass();
+                    em.setEmp_Id(Integer.parseInt(dm.getEmp_Id()));
+                    em.setName(dm.getEmp_Name());
+                    returnIntent.putExtra("result", em);
+                }
+                setResult(Activity.RESULT_OK, returnIntent);
+                overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
                 finish();
             }
         });
@@ -147,6 +154,7 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
             do{
                 DispatchMasterClass dm = new DispatchMasterClass();
                 dm.setPartyName(res.getString(res.getColumnIndex(DBHandler.DM_PartyName)));
+                dm.setCustId(res.getString(res.getColumnIndex(DBHandler.DM_CustId)));
                 prodList.add(dm);
             }while(res.moveToNext());
         }
@@ -167,6 +175,8 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
                 dm.setEmp_Id(res.getString(res.getColumnIndex(DBHandler.DM_Emp_Id)));
                 dm.setTotalQty(res.getString(res.getColumnIndex(DBHandler.DM_TotalQty)));
                 dm.setTransporter(res.getString(res.getColumnIndex(DBHandler.DM_Transporter)));
+                dm.setDcNo(res.getString(res.getColumnIndex(DBHandler.DM_DCNo)));
+                dm.setDCdate(res.getString(res.getColumnIndex(DBHandler.DM_DCDate)));
                 prodList.add(dm);
             }while(res.moveToNext());
         }

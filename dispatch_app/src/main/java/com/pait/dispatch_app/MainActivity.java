@@ -1,12 +1,13 @@
 package com.pait.dispatch_app;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -26,19 +27,30 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pait.dispatch_app.adapters.ChequeDetailChangedAdapter;
+import com.pait.dispatch_app.adapters.DispatchDetailAdapter;
 import com.pait.dispatch_app.constant.Constant;
 import com.pait.dispatch_app.db.DBHandler;
 import com.pait.dispatch_app.interfaces.RetrofitApiInterface;
 import com.pait.dispatch_app.interfaces.ServerCallback;
 import com.pait.dispatch_app.interfaces.TestInterface;
 import com.pait.dispatch_app.log.WriteLog;
-import com.pait.dispatch_app.model.ChequeDetailsClass;
+import com.pait.dispatch_app.model.DispatchDetailClass;
 import com.pait.dispatch_app.model.DispatchMasterClass;
+import com.pait.dispatch_app.model.EmployeeMasterClass;
+import com.pait.dispatch_app.parse.UserClass;
 import com.pait.dispatch_app.utility.RetrofitApiBuilder;
 import com.pait.dispatch_app.volleyrequests.VolleyRequests;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -61,18 +73,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btn_submit;
     private NonScrollListView listView;
     private ImageView img_slip;
-    private ChequeDetailChangedAdapter adapter;
+    private DispatchDetailAdapter adapter;
     private Toast toast;
-    private List<ChequeDetailsClass> list;
-    private int requestCode = 1, requestCode2 = 2, edCustCode = 3, edPOCode = 4, edDPBy = 5, hoCode, dpID, empId;
-    private String imagePath = "";
+    private List<DispatchDetailClass> list;
+    private int requestCode = 1, requestCode2 = 2, edCustCode = 3, edPOCode = 4, edDPBy = 5, hoCode,
+            dpID, empId, custCode = 0;
+    private String imagePath = "", imgType, pono;
     private DBHandler db;
+    private DispatchMasterClass dm;
+    private EmployeeMasterClass em;
+    private UserClass userClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(Constant.liveTestFlag==1) {
+        if (Constant.liveTestFlag == 1) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
         setContentView(R.layout.activity_main);
@@ -80,9 +96,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         init();
 
 
-        empId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
-        hoCode = FirstActivity.pref.getInt(getString(R.string.pref_hocode),0);
-        dpID = FirstActivity.pref.getInt(getString(R.string.pref_dpId),0);
+        userClass = (UserClass) getIntent().getExtras().get("cust");
+
+        /*empId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
+        hoCode = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
+        dpID = FirstActivity.pref.getInt(getString(R.string.pref_dpId), 0);*/
+
+        empId = userClass.getCustID();
+        hoCode = userClass.getHOCode();
+        dpID = userClass.getDpId();
 
         ed_custName.setOnClickListener(this);
         ed_poNo.setOnClickListener(this);
@@ -150,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.chq_save:
+                validations();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -163,16 +186,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.ed_custName:
                 Intent intent1 = new Intent(getApplicationContext(), ProductSearchActivity.class);
-                intent1.putExtra("from","1");
-                intent1.putExtra("hoCode",String.valueOf(hoCode));
+                intent1.putExtra("from", "1");
+                intent1.putExtra("hoCode", String.valueOf(hoCode));
                 startActivityForResult(intent1, edCustCode);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.ed_poNo:
                 if (ProductSearchActivity.partyName != null) {
                     Intent intent = new Intent(getApplicationContext(), ProductSearchActivity.class);
-                    intent.putExtra("from","2");
-                    intent.putExtra("hoCode",String.valueOf(hoCode));
+                    intent.putExtra("from", "2");
+                    intent.putExtra("hoCode", String.valueOf(hoCode));
                     startActivityForResult(intent, edPOCode);
                     overridePendingTransition(R.anim.enter, R.anim.exit);
                 } else {
@@ -183,8 +206,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.ed_dispatchBy:
                 if (ProductSearchActivity.partyName != null) {
                     Intent intent = new Intent(getApplicationContext(), ProductSearchActivity.class);
-                    intent.putExtra("from","3");
-                    intent.putExtra("hoCode",String.valueOf(hoCode));
+                    intent.putExtra("from", "3");
+                    intent.putExtra("hoCode", String.valueOf(hoCode));
                     startActivityForResult(intent, edDPBy);
                     overridePendingTransition(R.anim.enter, R.anim.exit);
                 } else {
@@ -201,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onPauseFragment(String data1, String data2, Context context) {
+        imgType = data1;
         takeImage(requestCode);
     }
 
@@ -218,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
                 Date resultdate = new Date(datetime);
                 //imagePath = "C_" + custId + "_Cheque_" + chequeNo + "_" + sdf.format(resultdate) + ".jpg";
-                imagePath = "C_" + sdf.format(resultdate) + ".jpg";
+                imagePath = custCode + "_" + imgType + "_" + pono + "_" + sdf.format(resultdate) + ".jpg";
                 Constant.showLog(imagePath);
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator +
                         Constant.folder_name + File.separator + Constant.image_folder);
@@ -255,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
                 Date resultdate = new Date(datetime);
                 //imagePath = "C_" + custId + "_Cheque_" + chequeNo + "_" + sdf.format(resultdate) + ".jpg";
-                imagePath = "C_" + sdf.format(resultdate) + ".jpg";
+                imagePath = custCode + "_PS_" + pono + "_" + sdf.format(resultdate) + ".jpg";
                 Constant.showLog(imagePath);
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator +
                         Constant.folder_name + File.separator + Constant.image_folder);
@@ -288,78 +312,75 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } else if (this.edCustCode == requestCode && resultCode == RESULT_OK) {
             DispatchMasterClass dm = (DispatchMasterClass) data.getSerializableExtra("result");
+            custCode = Integer.parseInt(dm.getCustId());
             ed_custName.setText(dm.getPartyName());
             ed_poNo.setText(null);
             tv_poQty.setText("0");
+            tv_qty_Total.setText("0");
             tv_transporter.setText("");
             ed_dispatchBy.setText(null);
         } else if (this.edPOCode == requestCode && resultCode == RESULT_OK) {
-            DispatchMasterClass dm = (DispatchMasterClass) data.getSerializableExtra("result");
+            dm = (DispatchMasterClass) data.getSerializableExtra("result");
             ed_poNo.setText(dm.getPONO());
+            String[] arr = dm.getPONO().split("\\/");
+            pono = arr[0] + "_" + arr[2];
             tv_poQty.setText(dm.getTotalQty());
+            tv_qty_Total.setText("0");
             tv_transporter.setText(dm.getTransporter());
             ed_dispatchBy.setText(dm.getEmp_Name());
+            em = new EmployeeMasterClass();
+            em.setEmp_Id(Integer.parseInt(dm.getEmp_Id()));
+            em.setName(dm.getEmp_Name());
         } else if (this.edDPBy == requestCode && resultCode == RESULT_OK) {
-            DispatchMasterClass dm = (DispatchMasterClass) data.getSerializableExtra("result");
-            ed_dispatchBy.setText(dm.getEmp_Name());
+            em = (EmployeeMasterClass) data.getSerializableExtra("result");
+            ed_dispatchBy.setText(em.getName());
         }
     }
 
-    private void takeImage(int requestCode){
+    private void takeImage(int requestCode) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
-        f = new File(f.getAbsolutePath(),"temp.jpg");
+        f = new File(f.getAbsolutePath(), "temp.jpg");
         Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
                 + ".provider", f);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivityForResult(intent,requestCode);
+        startActivityForResult(intent, requestCode);
         overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
-    private void setData(){
+    private void setData() {
         list.clear();
         listView.setAdapter(null);
         int tot = Integer.parseInt(ed_cartons.getText().toString());
-        String str = "1";
-        int chqNo = Integer.parseInt(str);
-        for(int i=1;i<=tot;i++){
-            ChequeDetailsClass cheque = new ChequeDetailsClass();
+        for (int i = 1; i <= tot; i++) {
+            DispatchDetailClass cheque = new DispatchDetailClass();
             cheque.setSrNo(i);
             cheque.setCBL("C");
-            cheque.setChq_det_amt("0");
-            cheque.setChq_det_number(String.valueOf(chqNo));
-            chqNo = chqNo + 1;
-            cheque.setChq_det_date(new Constant(getApplicationContext()).getDate());
+            cheque.setNoOfCartons("0");
             list.add(cheque);
         }
-        ChequeDetailsClass cheque = new ChequeDetailsClass();
-        cheque.setSrNo(tot+1);
+        DispatchDetailClass cheque = new DispatchDetailClass();
+        cheque.setSrNo(tot + 1);
         cheque.setCBL("L");
-        cheque.setChq_det_amt("0");
-        cheque.setChq_det_number(String.valueOf(chqNo));
-        chqNo = chqNo + 1;
-        cheque.setChq_det_date(new Constant(getApplicationContext()).getDate());
+        cheque.setNoOfCartons("0");
         list.add(cheque);
         int tot1 = Integer.parseInt(ed_bundles.getText().toString());
-        if(tot1!=0){
-            cheque = new ChequeDetailsClass();
-            cheque.setSrNo(tot+2);
+        if (tot1 != 0) {
+            cheque = new DispatchDetailClass();
+            cheque.setSrNo(tot + 2);
             cheque.setCBL("B");
-            cheque.setChq_det_amt("0");
-            cheque.setChq_det_number(String.valueOf(chqNo));
-            chqNo = chqNo + 1;
-            cheque.setChq_det_date(new Constant(getApplicationContext()).getDate());
+            cheque.setNoOfCartons("0");
             list.add(cheque);
         }
-        adapter = new ChequeDetailChangedAdapter(getApplicationContext(), list);
+        adapter = new DispatchDetailAdapter(getApplicationContext(), list);
         adapter.initInterface(MainActivity.this);
         listView.setAdapter(adapter);
     }
 
     private void loadEmployeeMaster() {
         int max = db.getMaxEmpId();
-        String url = Constant.ipaddress + "/GetEmployeeMaster?Id="+max;
+        String url = Constant.ipaddress + "/GetEmployeeMaster?Id=" + max;
         Constant.showLog(url);
         writeLog("loadEmployeeMaster_" + url);
         final Constant constant = new Constant(MainActivity.this);
@@ -377,7 +398,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 constant.showPD();
                 showDia(2);
             }
-        },0);
+        }, 0);
     }
 
     private void getDispatchMaster() {
@@ -387,7 +408,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int maxAuto = db.getMaxAuto();
             //Auto +"|"+ CustId +"|"+ HOCode +"|"+ discpatchId +"|"+ empId
             String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId;
-            writeLog("getDispatchMaster_"+url);
+            writeLog("getDispatchMaster_" + url);
             final JSONObject jsonBody = new JSONObject();
             jsonBody.put("details", url);
             RequestBody body = RequestBody.create(okhttp3.MediaType.
@@ -432,7 +453,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void init(){
+    private void init() {
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         ed_custName = findViewById(R.id.ed_custName);
@@ -448,13 +469,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         img_slip = findViewById(R.id.img_slip);
         list = new ArrayList<>();
         db = new DBHandler(getApplicationContext());
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
     }
 
     private void showDia(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setCancelable(false);
-        if(a==1) {
+        if (a == 1) {
             builder.setMessage("Do You Want To Go Back ?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -489,12 +510,139 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             toast.setText("Please Select Branch Name");
             toast.show();
         } else {
-            get_data();
+            getData();
         }
     }
 
-    private void get_data(){
+    private void getData() {
+        String notOfCartoon = "", imageNames = "";
+        for (DispatchDetailClass cq : list) {
+            Constant.showLog(cq.getSrNo() + "\n" +
+                            cq.getCBL() + "\n" +
+                            cq.getNoOfCartons() + "\n" +
+                            cq.getImgName());
+            notOfCartoon = notOfCartoon + cq.getNoOfCartons() + ",";
+            imageNames = imageNames + cq.getImgName() + ",";
+        }
+        Constant.showLog(dm.getPartyName() + "\n" +
+                         dm.getPONO() + "\n" +
+                         dm.getDcNo() + "\n" +
+                         dm.getDCdate() + "\n" +
+                         dm.getTotalQty() + "\n" +
+                         dm.getTransporter());
 
+        Constant.showLog(em.getEmp_Id() + "\n" + em.getName());
+        notOfCartoon = notOfCartoon.substring(0,notOfCartoon.length()-1);
+        imageNames = imageNames.substring(0,imageNames.length()-1);
+        Constant.showLog(notOfCartoon);
+        Constant.showLog(imageNames);
+
+        //DCNO,PONO,DispatchBy,NoOfCartoon,DispatchPerson,CheckedPerson,Carton,Bundle,ImagePath,
+
+        String data = dm.getDcNo() + "|" + dm.getPONO() + "|" + dm.getEmp_Id()  + "|" + notOfCartoon + "|" +
+                        empId + "|" + empId + "|" + ed_cartons.getText().toString() + "|" + ed_bundles.getText().toString() + "|" +
+                        imageNames;
+
+        Constant.showLog(data);
+
+        new saveDispatchMaster(1).execute(data);
+    }
+
+    private class saveDispatchMaster extends AsyncTask<String, Void, String> {
+        private int branchId = 0;
+        private ProgressDialog pd;
+
+        private saveDispatchMaster(int _branchId) {
+            this.branchId = _branchId;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(MainActivity.this);
+            pd.setMessage("Please Wait...");
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+        @Override
+        protected String doInBackground(String... url) {
+            String value = "";
+            DefaultHttpClient httpClient = null;
+            HttpPost request = new HttpPost(Constant.ipaddress + "saveDispatchData");
+            request.setHeader("Accept", "application/json");
+            request.setHeader("Content-type", "application/json");
+            try {
+                JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(url[0]).endObject().endObject();
+                StringEntity entity = new StringEntity(vehicle.toString());
+                Constant.showLog(vehicle.toString());
+                writeLog("saveDispatchMaster_" + vehicle.toString());
+                request.setEntity(entity);
+                HttpParams httpParams = new BasicHttpParams();
+                HttpConnectionParams.setConnectionTimeout(httpParams,Constant.TIMEOUT_CON);
+                HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);
+                httpClient = new DefaultHttpClient(httpParams);
+                //DefaultHttpClient httpClient = new DefaultHttpClient();
+                HttpResponse response = httpClient.execute(request);
+                Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
+                value = new BasicResponseHandler().handleResponse(response);
+                //return Post.POST(url[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                writeLog("saveDispatchMaster_result_" + e.getMessage());
+            }
+            finally {
+                try{
+                    if(httpClient!=null) {
+                        httpClient.getConnectionManager().shutdown();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    writeLog("saveDispatchMaster_finally_"+e.getMessage());
+                }
+            }
+            return value;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            try {
+                Constant.showLog(result);
+                //String str = new JSONObject(result).getString("SaveCustOrderMasterResult");
+                String str = new JSONObject(result).getString("SaveDispatchDataResult");
+                str = str.replace("\"", "");
+                Constant.showLog(str);
+                pd.dismiss();
+                writeLog("saveDispatchMaster_result_" + str + "_" + result);
+                String[] retAutoBranchId = str.split("\\-");
+                if (retAutoBranchId.length > 1) {
+                    if (!retAutoBranchId[0].equals("0") && !retAutoBranchId[0].equals("+2") && !retAutoBranchId[0].equals("+3")) {
+                        if (retAutoBranchId[1].equals(String.valueOf(branchId))) {
+                           /* db.deleteOrderTableAfterSave(branchId, gstPer);
+                            if (counter == 1) {
+                                showDia(3);
+                            } else {
+                                saveDispatchMaster();
+                            }*/
+                        } else {
+                            showDia(4);
+                        }
+                    } else {
+                        showDia(4);
+                    }
+                } else {
+                    showDia(4);
+                }
+                //counter++;
+                //saveCustOrder();
+            } catch (Exception e) {
+                writeLog("saveDispatchMaster_" + e.getMessage());
+                e.printStackTrace();
+                showDia(4);
+                pd.dismiss();
+            }
+        }
     }
 
     private void writeLog(String _data) {

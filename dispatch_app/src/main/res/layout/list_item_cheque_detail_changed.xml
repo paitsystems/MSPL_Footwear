@@ -34,37 +34,9 @@
             android:textColor="@color/black"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tv_cqdate"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:background="@drawable/line_right_bottom_draw"
-            android:gravity="center"
-            android:text="0"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
 
         <EditText
-            android:id="@+id/ed_cqno"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.4"
-            android:background="@drawable/line_right_bottom_draw"
-            android:gravity="center"
-            android:inputType="number"
-            android:selectAllOnFocus="true"
-            android:text="0"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/ed_amnt"
+            android:id="@+id/ed_noOfCarton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
@@ -78,49 +50,12 @@
             android:textStyle="bold"
             android:visibility="visible" />
 
-        <TextView
-            android:id="@+id/tv_img"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="0.4"
-            android:background="@drawable/line_right_bottom_draw"
-            android:gravity="center"
-            android:text="0"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
         <ImageView
-            android:id="@+id/img_cq"
+            android:id="@+id/img_carton"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_weight="0.5"
             android:background="@drawable/line_right_bottom_draw" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.4"
-            android:background="@drawable/line_right_bottom_draw"
-            android:gravity="center"
-            android:text="0"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.4"
-            android:background="@drawable/line_right_bottom_draw"
-            android:gravity="center"
-            android:text="0"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:visibility="gone" />
 
     </LinearLayout>
 </LinearLayout>

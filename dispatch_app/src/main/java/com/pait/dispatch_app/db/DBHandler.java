@@ -308,6 +308,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String DM_branchid = "branchid";
     public static final String DM_DispatchCmp = "DispatchCmp";
     public static final String DM_DispatchDate = "DispatchDate";
+    public static final String DM_DCNo = "DCNo";
+    public static final String DM_DCDate = "DCDate";
 
 
     public DBHandler(Context context) {
@@ -400,7 +402,7 @@ public class DBHandler extends SQLiteOpenHelper {
             +"("+ DM_Auto + " int,"+ DM_DispatchBy + " int," + DM_PONO + " text,"+ DM_TotalQty + " int,"+
             DM_Emp_Id + " int,"+ DM_Emp_Name + " text," +DM_TransId + " int,"+ DM_Transporter + " text,"+ DM_CustId + " int,"+
             DM_PartyName + " text,"+ DM_branchid + " int,"+ DM_DispatchCmp + " int," +
-            DM_DispatchDate + " text)";
+            DM_DispatchDate + " text," + DM_DCNo + " text,"+ DM_DCDate +" text)";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -624,6 +626,8 @@ public class DBHandler extends SQLiteOpenHelper {
             cv.put(DM_branchid, dm.getBranchid());
             cv.put(DM_DispatchCmp, dm.getDispatchCmp());
             cv.put(DM_DispatchDate, dm.getDispatchDate());
+            cv.put(DM_DCNo, dm.getDcNo());
+            cv.put(DM_DCDate, dm.getDCdate());
             db.insert(Table_DispatchMaster, null, cv);
         }
         db.setTransactionSuccessful();
@@ -650,13 +654,13 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public Cursor getDPCenter(int hoCode){
-        String str = "select * from "+Table_CompanyMaster + " where "+Company_HOCode+"="+hoCode +" order by "+Company_DisplayCmp;
+        String str = "select * from "+Table_CompanyMaster + " where "+Company_HOCode+"="+hoCode +" and " + Company_DisplayCmp + " not like '%Damage%' order by "+Company_DisplayCmp;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str,null);
     }
 
     public Cursor getPartyName(){
-        String str = "select distinct "+ DM_PartyName+" from "+Table_DispatchMaster +" order by "+DM_PartyName;
+        String str = "select distinct "+ DM_PartyName+","+ DM_CustId +" from "+Table_DispatchMaster +" order by "+DM_PartyName;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str,null);
     }

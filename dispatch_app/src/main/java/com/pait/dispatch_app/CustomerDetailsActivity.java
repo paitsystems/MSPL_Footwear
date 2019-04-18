@@ -406,7 +406,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
             Constant.showLog(url);
             writeLog("checkIsActive_" + url);
             constant.showPD();
-            VolleyRequests requests = new VolleyRequests(CustomerDetailsActivity.this);
+            final VolleyRequests requests = new VolleyRequests(CustomerDetailsActivity.this);
             requests.getActiveStatus(url, new ServerCallback() {
                 @Override
                 public void onSuccess(String result) {
@@ -424,6 +424,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                 public void onFailure(String result) {
                     constant.showPD();
                     showDia(2);
+
                 }
             });
         } else {
@@ -431,10 +432,10 @@ public class CustomerDetailsActivity extends AppCompatActivity
         }
     }
 
-    private void checkVersion(){
+    private void checkVersion() {
         constant = new Constant(CustomerDetailsActivity.this);
         constant.showPD();
-        String url1 = Constant.ipaddress+"/GetVersionV5?type=E";
+        String url1 = Constant.ipaddress + "/GetVersionV5?type=E";
         Constant.showLog(url1);
         StringRequest versionRequest = new StringRequest(url1,
                 new Response.Listener<String>() {
@@ -451,13 +452,14 @@ public class CustomerDetailsActivity extends AppCompatActivity
                             String dataArr[] = _data.split("\\.");
                             int currVersion = Integer.parseInt(versionArr[0]);
                             int dataVersion = Integer.parseInt(dataArr[0]);
-                            if (currVersion>dataVersion) {
+                            if (currVersion > dataVersion) {
                                 SharedPreferences.Editor editor = FirstActivity.pref.edit();
                                 editor.putString(getString(R.string.pref_version), _data);
                                 editor.apply();
-                            }else if (currVersion<dataVersion){
+                                loadCompanyMaster();
+                            } else if (currVersion < dataVersion) {
                                 showDia(8);
-                            }else{
+                            } else {
                                 loadCompanyMaster();
                             }
                         } else if (_data == null) {
@@ -468,14 +470,14 @@ public class CustomerDetailsActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        writeLog("MainActivity_loadData_versionRequest_"+ error.getMessage());
-                        FirebaseCrash.log("MainActivity_loadData_versionRequest_"+ error.getMessage());
+                        writeLog("MainActivity_loadData_versionRequest_" + error.getMessage());
+                        FirebaseCrash.log("MainActivity_loadData_versionRequest_" + error.getMessage());
                         constant.showPD();
                         showDia(4);
                     }
                 }
         );
-        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(versionRequest,"ABC");
+        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(versionRequest, "ABC");
 
     }
 

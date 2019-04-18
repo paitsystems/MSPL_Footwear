@@ -56,7 +56,7 @@ public class Constant {
     //TODO: Check CustImage Url
     public static String custimgUrl = "http://43.239.147.103:24085/custImage/";
 
-    private static int connectionFlag = 0;
+    private static int connectionFlag = 2;
 
     //TODO: Check liveTestFlag 1-ScreenShotDisable, 0-ScreenShotEnable
     public static int liveTestFlag = 1;
@@ -96,7 +96,7 @@ public class Constant {
             imgUrl = "http://103.109.13.200:24086/IMAGES/";
             custimgUrl = "http://103.109.13.200:24086/custImage/";
             connectionFlag = 1;
-        } else {
+        } else if (connectionFlag == 1) {
             ipaddress = "http://43.239.147.103:24085/MSPLD1/service.svc";
             imgUrl = "http://43.239.147.103:24085/IMAGES/";
             custimgUrl = "http://43.239.147.103:24085/custImage/";

@@ -2,7 +2,9 @@ package com.pait.dispatch_app.model;
 
 //Created by lnb on 10/4/2017.
 
-public class EmployeeMasterClass {
+import java.io.Serializable;
+
+public class EmployeeMasterClass implements Serializable{
 
     public String Name,Mobno,Add,Status,DesigName,CompanyName,CompanyInit;
     public int Emp_Id,Desig_Id,Branch_Id,HoCode, PIN;
