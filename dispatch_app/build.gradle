@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 27
@@ -14,12 +15,22 @@ android {
         multiDexEnabled true
 
     }
-
     buildTypes {
         release {
-            minifyEnabled false
+            debuggable false
+            //minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            debuggable true
+            //minifyEnabled true
+            //shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
 }
@@ -52,3 +63,4 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
 }
+apply plugin: 'com.google.gms.google-services'

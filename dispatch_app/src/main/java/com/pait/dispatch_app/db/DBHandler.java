@@ -677,6 +677,10 @@ public class DBHandler extends SQLiteOpenHelper {
         return getWritableDatabase().rawQuery(str, null);
     }
 
+    public void deleteOrderTableAfterSave(String pono) {
+        getWritableDatabase().execSQL("delete from " + Table_DispatchMaster + " where " + DM_PONO + "='" + pono+"'");
+    }
+
 }
 
 

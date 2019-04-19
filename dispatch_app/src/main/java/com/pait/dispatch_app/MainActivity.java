@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -28,12 +29,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pait.dispatch_app.adapters.DispatchDetailAdapter;
+import com.pait.dispatch_app.connectivity.ConnectivityTest;
 import com.pait.dispatch_app.constant.Constant;
 import com.pait.dispatch_app.db.DBHandler;
 import com.pait.dispatch_app.interfaces.RetrofitApiInterface;
 import com.pait.dispatch_app.interfaces.ServerCallback;
 import com.pait.dispatch_app.interfaces.TestInterface;
+import com.pait.dispatch_app.log.CopyLog;
 import com.pait.dispatch_app.log.WriteLog;
+import com.pait.dispatch_app.mail.GMailSender;
 import com.pait.dispatch_app.model.DispatchDetailClass;
 import com.pait.dispatch_app.model.DispatchMasterClass;
 import com.pait.dispatch_app.model.EmployeeMasterClass;
@@ -60,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -95,8 +100,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         init();
 
-
         userClass = (UserClass) getIntent().getExtras().get("cust");
+
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setTitle(userClass.getName());
+        }
 
         /*empId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
         hoCode = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
@@ -171,8 +179,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.chq_save:
+            case R.id.dm_save:
                 validations();
+                break;
+            case R.id.refresh:
+                showDia(5);
+                break;
+            case R.id.report:
+                break;
+            case R.id.report_error:
+                showDia(6);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -319,6 +335,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             tv_qty_Total.setText("0");
             tv_transporter.setText("");
             ed_dispatchBy.setText(null);
+            list.clear();
+            listView.setAdapter(null);
         } else if (this.edPOCode == requestCode && resultCode == RESULT_OK) {
             dm = (DispatchMasterClass) data.getSerializableExtra("result");
             ed_poNo.setText(dm.getPONO());
@@ -331,6 +349,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             em = new EmployeeMasterClass();
             em.setEmp_Id(Integer.parseInt(dm.getEmp_Id()));
             em.setName(dm.getEmp_Name());
+            list.clear();
+            listView.setAdapter(null);
         } else if (this.edDPBy == requestCode && resultCode == RESULT_OK) {
             em = (EmployeeMasterClass) data.getSerializableExtra("result");
             ed_dispatchBy.setText(em.getName());
@@ -376,6 +396,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         adapter = new DispatchDetailAdapter(getApplicationContext(), list);
         adapter.initInterface(MainActivity.this);
         listView.setAdapter(adapter);
+    }
+
+    private void clearFields(){
+        list.clear();
+        listView.setAdapter(null);
+        ed_custName.setText(null);
+        ed_poNo.setText(null);
+        tv_poQty.setText("0");
+        tv_qty_Total.setText("0");
+        tv_transporter.setText("");
+        ed_dispatchBy.setText(null);
+        img_slip.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.camera));
+
     }
 
     private void loadEmployeeMaster() {
@@ -453,6 +486,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void loadCompanyMaster() {
+        int max = db.getMaxCompId();
+        String url = Constant.ipaddress + "/GetCompanyMaster?Id="+max;
+        Constant.showLog(url);
+        writeLog("loadCompanyMaster_" + url);
+        final Constant constant = new Constant(MainActivity.this);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(MainActivity.this);
+        requests.refreshCompanyMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                loadEmployeeMaster();
+            }
+
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                showDia(2);
+            }
+        },0);
+    }
+
     private void init() {
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
@@ -498,19 +554,97 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     dialog.dismiss();
                 }
             });
+        } else if (a == 3) {
+            builder.setMessage("Data Saved Successfully");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    clearFields();
+                    getDispatchMaster();
+                }
+            });
+        } else if (a == 4) {
+            builder.setMessage("Error While Saving Order");
+            builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new Constant();
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }  else if (a == 5) {
+            builder.setMessage("Do You Want To Refresh Data?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    db.deleteTable(DBHandler.Table_Employee);
+                    db.deleteTable(DBHandler.Table_CompanyMaster);
+                    db.deleteTable(DBHandler.Table_DispatchMaster);
+                    loadCompanyMaster();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 6) {
+            builder.setMessage("Do You Want To Report An Issue?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (ConnectivityTest.getNetStat(getApplicationContext())) {
+                        exportfile();
+                    } else {
+                        toast.setText("You Are Offline");
+                        toast.show();
+                    }
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }  else if (a == 7) {
+            builder.setMessage("Do You Want To Save Data?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    getData();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
         }
         builder.create().show();
     }
 
     private void validations() {
         if (ed_custName.getText().toString().equals("")) {
-            toast.setText("Please Select Bank Name");
+            toast.setText("Please Select Party Name");
             toast.show();
         } else if (ed_poNo.getText().toString().equals("")) {
-            toast.setText("Please Select Branch Name");
+            toast.setText("Please Select PO Number");
             toast.show();
         } else {
-            getData();
+            showDia(7);
         }
     }
 
@@ -545,15 +679,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Constant.showLog(data);
 
-        new saveDispatchMaster(1).execute(data);
+        new saveDispatchMaster(dm.getPONO()).execute(data);
     }
 
     private class saveDispatchMaster extends AsyncTask<String, Void, String> {
-        private int branchId = 0;
+        private String pono = "";
         private ProgressDialog pd;
 
-        private saveDispatchMaster(int _branchId) {
-            this.branchId = _branchId;
+        private saveDispatchMaster(String _pono) {
+            this.pono = _pono;
         }
 
         @Override
@@ -569,7 +703,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         protected String doInBackground(String... url) {
             String value = "";
             DefaultHttpClient httpClient = null;
-            HttpPost request = new HttpPost(Constant.ipaddress + "saveDispatchData");
+            HttpPost request = new HttpPost(Constant.ipaddress + "/saveDispatchData");
             request.setHeader("Accept", "application/json");
             request.setHeader("Content-type", "application/json");
             try {
@@ -618,13 +752,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String[] retAutoBranchId = str.split("\\-");
                 if (retAutoBranchId.length > 1) {
                     if (!retAutoBranchId[0].equals("0") && !retAutoBranchId[0].equals("+2") && !retAutoBranchId[0].equals("+3")) {
-                        if (retAutoBranchId[1].equals(String.valueOf(branchId))) {
-                           /* db.deleteOrderTableAfterSave(branchId, gstPer);
-                            if (counter == 1) {
-                                showDia(3);
-                            } else {
-                                saveDispatchMaster();
-                            }*/
+                        if (retAutoBranchId[1].equals(String.valueOf(pono))) {
+                            db.deleteOrderTableAfterSave(pono);
+                            showDia(3);
                         } else {
                             showDia(4);
                         }
@@ -640,6 +770,102 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 writeLog("saveDispatchMaster_" + e.getMessage());
                 e.printStackTrace();
                 showDia(4);
+                pd.dismiss();
+            }
+        }
+    }
+
+    private void exportfile() {
+        if (new CopyLog().copyLog(getApplicationContext())) {
+            writeLog("MainActivity_exportfile_Log_File_Exported");
+            sendMail1();
+        } else {
+            writeLog("MainActivity_exportfile_Error_While_Log_File_Exporting");
+        }
+    }
+
+    private void sendMail1() {
+        try {
+            File sdFile = Constant.checkFolder(Constant.folder_name);
+            File writeFile = new File(sdFile, Constant.log_file_name);
+            GMailSender sender = new GMailSender(Constant.automailID, Constant.autoamilPass);
+            Constant.showLog("Attached Log File :- " + writeFile.getAbsolutePath());
+            sender.addAttachment(sdFile.getAbsolutePath() + File.separator + Constant.log_file_name, Constant.log_file_name, Constant.mail_body);
+            String resp[] = {Constant.mailReceipient};
+            AtomicInteger workCounter = new AtomicInteger(resp.length);
+            for (String aResp : resp) {
+                if (!aResp.equals("")) {
+                    Constant.showLog("send Mail Recp :- " + aResp);
+                    new sendMail(workCounter, aResp, sender).execute("");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private class sendMail extends AsyncTask<String, Void, String> {
+        private final AtomicInteger workCounter;
+
+        ProgressDialog pd;
+        String respMailId;
+        GMailSender sender;
+
+        sendMail(AtomicInteger workCounter, String _respMailId, GMailSender _sender) {
+            respMailId = _respMailId;
+            sender = _sender;
+            this.workCounter = workCounter;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(MainActivity.this);
+            pd.setCancelable(false);
+            pd.setMessage("Please Wait...");
+            pd.show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                String res = respMailId;
+                String mob = FirstActivity.pref.getString(getString(R.string.pref_mobno),"0");
+                String subject = Constant.mail_subject+"_"+mob;
+                sender.sendMail(subject, Constant.mail_body, Constant.automailID, res);
+                return "1";
+            } catch (Exception e) {
+                writeLog("MainActivity_sendMailClass_" + e.getMessage());
+                e.printStackTrace();
+                return "0";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            try {
+                int tasksLeft = this.workCounter.decrementAndGet();
+                Constant.showLog("sendMail Work Counter " + tasksLeft);
+                if (result.equals("1")) {
+                    if (tasksLeft == 0) {
+                        writeLog("MainActivity_sendMailClass_Mail_Send_Successfully");
+                        Constant.showLog("sendMail END MULTI THREAD");
+                        Constant.showLog("sendMail Work Counter END " + tasksLeft);
+                        toast.setText("File Exported Successfully");
+                    } else {
+                        writeLog("MainActivity_sendMailClass_Mail_Send_UnSuccessfull1");
+                        toast.setText("Error While Sending Mail");
+                    }
+                } else {
+                    toast.setText("Error While Exporting Log File");
+                    writeLog("MainActivity_sendMailClass_Mail_Send_UnSuccessfull");
+                }
+                toast.show();
+                pd.dismiss();
+            } catch (Exception e) {
+                writeLog("MainActivity_sendMailClass_" + e.getMessage());
+                e.printStackTrace();
                 pd.dismiss();
             }
         }

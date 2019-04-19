@@ -4,12 +4,36 @@
 
     <item
         android:title="SAVE"
-        android:id="@+id/chq_save"
+        android:id="@+id/dm_save"
         app:showAsAction="always"/>
 
-    <!--<item
-        android:title="CLEAR"
-        android:id="@+id/chq_clear"
-        app:showAsAction="always"/>-->
+    <item
+        android:id="@+id/action_notification1"
+        android:icon="@drawable/ic_more_vert_black_24dp"
+        android:title=""
+        app:showAsAction="always">
+        <menu>
+
+            <item
+                android:id="@+id/refresh"
+                android:icon="@drawable/ic_autorenew_black_24dp"
+                android:title="@string/refresh"/>
+
+            <item
+                android:id="@+id/report"
+                android:icon="@drawable/ic_markunread_black_24dp"
+                android:title="@string/report_send" />
+
+            <!--<item
+                android:id="@+id/clear"
+                android:icon="@drawable/ic_delete_black_24dp"
+                android:title="@string/clear" />-->
+
+            <item
+                android:id="@+id/report_error"
+                android:title="@string/report_error"
+                android:icon="@drawable/ic_error_outline_black_24dp" />
+        </menu>
+    </item>
 
 </menu>
