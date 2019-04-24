@@ -14,8 +14,6 @@ import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
-import com.lnbinfotech.msplfootwearex.services.LocationUpdateJobService;
-import com.lnbinfotech.msplfootwearex.services.LocationUpdateJobServicePL;
 import com.lnbinfotech.msplfootwearex.services.ScheduledJobService;
 import com.lnbinfotech.msplfootwearex.services.ScheduledJobServicePL;
 

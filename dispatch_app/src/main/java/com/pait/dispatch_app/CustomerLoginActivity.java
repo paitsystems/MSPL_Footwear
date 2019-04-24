@@ -66,6 +66,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_customer_login);
 
         userClass = (UserClass) getIntent().getExtras().get("cust");
+
         init();
 
         if (getSupportActionBar() != null) {

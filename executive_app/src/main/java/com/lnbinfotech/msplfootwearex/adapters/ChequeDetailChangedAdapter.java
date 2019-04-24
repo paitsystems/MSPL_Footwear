@@ -84,12 +84,12 @@ public class ChequeDetailChangedAdapter extends BaseAdapter implements TestInter
         if (convertView == null) {
             v = inflater.inflate(R.layout.list_item_cheque_detail_changed, null);
             holder = new ViewHolder();
-            holder.tv_srno = (TextView) v.findViewById(R.id.tv_srno);
-            holder.tv_cqdate = (TextView) v.findViewById(R.id.tv_cqdate);
-            holder.ed_cqno = (EditText) v.findViewById(R.id.ed_cqno);
-            holder.ed_amnt = (EditText) v.findViewById(R.id.ed_amnt);
-            holder.tv_img = (TextView) v.findViewById(R.id.tv_img);
-            holder.img_chq = (ImageView) v.findViewById(R.id.img_cq);
+            holder.tv_srno = v.findViewById(R.id.tv_srno);
+            holder.tv_cqdate = v.findViewById(R.id.tv_cqdate);
+            holder.ed_cqno = v.findViewById(R.id.ed_cqno);
+            holder.ed_amnt = v.findViewById(R.id.ed_amnt);
+            holder.tv_img = v.findViewById(R.id.tv_img);
+            holder.img_chq = v.findViewById(R.id.img_cq);
 
             holder.ed_cqno.addTextChangedListener(new GenericTextWatcher(holder.ed_cqno,position));
             holder.ed_amnt.addTextChangedListener(new GenericTextWatcher(holder.ed_amnt,position));

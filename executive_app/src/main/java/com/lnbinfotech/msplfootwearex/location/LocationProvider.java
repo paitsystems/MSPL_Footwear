@@ -126,12 +126,16 @@ public class LocationProvider implements
                         writeLog("checkLocationAvailability_" + LocationSettingsStatusCodes.RESOLUTION_REQUIRED);
                         try {
                             Constant.showLog("LocationSettingsStatusCodes.RESOLUTION_REQUIRED");
-                            if(activity!=null) {
+                            writeLog("LocationSettingsStatusCodes.RESOLUTION_REQUIRED");
+                            if (activity != null) {
                                 status.startResolutionForResult(activity, 1000);
+                                writeLog("LocationSettingsStatusCodes.RESOLUTION_REQUIRED_activity!=null");
+                            } else {
+                                writeLog("LocationSettingsStatusCodes.RESOLUTION_REQUIRED_activity==null");
                             }
                         } catch (IntentSender.SendIntentException e) {
                             e.printStackTrace();
-                            writeLog("checkLocationAvailability_" + e.getMessage());
+                            writeLog("checkLocationAvailability_1_" + e.getMessage());
                         }
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
@@ -156,20 +160,23 @@ public class LocationProvider implements
                 new GetPermission().checkFineLocationPermission(context)) {
             Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             if (location == null) {
+                writeLog("onConnected_location == null");
                 LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
             } else {
+                writeLog("onConnected_location != null");
                 getAddress(location);
                 //TODO : Uncomment when get Interval location
                 //startLocationUpdates();
             }
-        }else{
+        } else {
+            writeLog("onConnected_No Permission");
             Constant.showLog("No Permission");
         }
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        writeLog("onConnectionSuspended_"+i);
     }
 
     @Override
@@ -178,13 +185,17 @@ public class LocationProvider implements
         if (connectionResult.hasResolution() && context instanceof Activity) {
             try {
                 //Activity activity = (Activity) context;
-                if(activity!=null) {
+                if (activity != null) {
                     connectionResult.startResolutionForResult(activity, 9000);
+                    writeLog("onConnectionFailed_startResolutionForResult");
                 }
             } catch (IntentSender.SendIntentException e) {
                 e.printStackTrace();
+                writeLog("onConnectionFailed_"+e.getMessage());
+
             }
         } else {
+            writeLog("onConnectionFailed_Location_services_connection_failed_with_code"+connectionResult.getErrorCode());
             Constant.showLog("Location services connection failed with code " + connectionResult.getErrorCode());
         }
     }
@@ -198,7 +209,7 @@ public class LocationProvider implements
         Constant.showLog("Location update started ..............: ");
     }
 
-    private void getAddress(Location location){
+    private void getAddress(Location location) {
         String str = null;
         try {
             final double lat = location.getLatitude();
@@ -213,17 +224,17 @@ public class LocationProvider implements
             String country = addresses.get(0).getCountryName();
             String postalCode = addresses.get(0).getPostalCode();
             String knownName = addresses.get(0).getFeatureName();
-            Constant.showLog("LocationProvider_"+address + "-" + city + "-" + state + "-" + country + "-" + postalCode + "-" + knownName);
+            Constant.showLog("LocationProvider_" + address + "-" + city + "-" + state + "-" + country + "-" + postalCode + "-" + knownName);
             str = address;
-            locationCallback.handleNewLocation(location,str);
-        }catch (Exception e){
-            locationCallback.handleNewLocation(location,"NA");
+            locationCallback.handleNewLocation(location, str);
+        } catch (Exception e) {
+            locationCallback.handleNewLocation(location, "NA");
             e.printStackTrace();
-            writeLog("getAddress_"+e.getMessage());
+            writeLog("getAddress_" + e.getMessage());
         }
     }
 
-    private void writeLog(String _data){
-        new WriteLog().writeLog(context,"LocationProvider_"+_data);
+    private void writeLog(String _data) {
+        new WriteLog().writeLog(context, "LocationProvider_" + _data);
     }
 }

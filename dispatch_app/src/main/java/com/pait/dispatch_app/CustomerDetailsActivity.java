@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,7 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,25 +40,33 @@ import com.pait.dispatch_app.parse.UserClass;
 import com.pait.dispatch_app.volleyrequests.VolleyRequests;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class CustomerDetailsActivity extends AppCompatActivity
         implements View.OnClickListener,
-        LocationProvider.LocationCallback1{
+        LocationProvider.LocationCallback1 {
 
     private ListView listView;
     private CustomerDetailListAdapter adapter;
     private DBHandler db;
     private Toast toast;
     private Constant constant;
+    private Button btn_save;
     private String version = "", mobNo = "", id = "0";
     private TextView tv_version;
     private LocationProvider provider;
+    private Spinner sp_dpCenter;
+    private List<String> dpList;
+    private HashMap<String, Integer> dpMap;
+    private UserClass userClass;
+    private int dpId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(Constant.liveTestFlag==1) {
+        if (Constant.liveTestFlag == 1) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
 
@@ -66,13 +78,13 @@ public class CustomerDetailsActivity extends AppCompatActivity
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
 
-        provider = new LocationProvider(CustomerDetailsActivity.this,CustomerDetailsActivity.this,CustomerDetailsActivity.this);
+        provider = new LocationProvider(CustomerDetailsActivity.this, CustomerDetailsActivity.this, CustomerDetailsActivity.this);
 
-        if(FirstActivity.pref.contains(getString(R.string.pref_imeino2))) {
+        if (FirstActivity.pref.contains(getString(R.string.pref_imeino2))) {
             checkIsActive();
-        }else{
+        } else {
             ArrayList<UserClass> userList = db.getUserDetail();
-            if(!userList.isEmpty()){
+            if (!userList.isEmpty()) {
                 UserClass user = userList.get(0);
                 mobNo = user.getMobile();
                 id = String.valueOf(user.getCustID());
@@ -80,38 +92,41 @@ public class CustomerDetailsActivity extends AppCompatActivity
             registerIMEINo2();
         }
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                UserClass custClass = (UserClass) listView.getAdapter().getItem(i);
+                userClass = (UserClass) listView.getAdapter().getItem(i);
                 Intent intent = new Intent(getApplicationContext(),CustomerLoginActivity.class);
-                intent.putExtra("cust",custClass);
+                intent.putExtra("cust",userClass);
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter,R.anim.exit);
+            }
+        });*/
+
+        sp_dpCenter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String br = (String) adapterView.getItemAtPosition(i);
+                dpId = dpMap.get(br);
+                //userClass.setDpId(id);
+                Constant.showLog(br + " " + dpId);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
 
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            version = pInfo.versionCode+"."+pInfo.versionName;
-            tv_version.setText("Version : "+pInfo.versionName);
+            version = pInfo.versionCode + "." + pInfo.versionName;
+            tv_version.setText("Version : " + pInfo.versionName);
             Constant.showLog("App Version " + version);
-            writeLog("MainActivity_Version_"+version);
+            writeLog("MainActivity_Version_" + version);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
-            writeLog("MainActivity_"+e.getMessage());
+            writeLog("MainActivity_" + e.getMessage());
         }
-
-        /*Button crashButton = new Button(this);
-        crashButton.setText("Crash!");
-        crashButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Crashlytics.getInstance().crash(); // Force a crash
-            }
-        });
-        addContentView(crashButton,
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT));*/
     }
 
     @Override
@@ -131,7 +146,8 @@ public class CustomerDetailsActivity extends AppCompatActivity
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case 0:
+            case R.id.btn_save:
+                startNewActivity();
                 break;
         }
     }
@@ -169,11 +185,11 @@ public class CustomerDetailsActivity extends AppCompatActivity
     }*/
 
     @Override
-    public void handleNewLocation(Location location,String address) {
+    public void handleNewLocation(Location location, String address) {
         try {
             Constant.showLog("handleNewLocation");
-            Constant.showLog("CustomerDetailsActivity_"+address);
-        }catch (Exception e){
+            Constant.showLog("CustomerDetailsActivity_" + address);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -184,13 +200,18 @@ public class CustomerDetailsActivity extends AppCompatActivity
     }
 
     private void init() {
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
         listView = findViewById(R.id.listView);
         db = new DBHandler(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         constant = new Constant(CustomerDetailsActivity.this);
         tv_version = findViewById(R.id.tv_version);
+        sp_dpCenter = findViewById(R.id.sp_dpcenter);
+        dpList = new ArrayList<>();
+        dpMap = new HashMap<>();
+        btn_save = findViewById(R.id.btn_save);
+        btn_save.setOnClickListener(this);
     }
 
     private void showDia(int a) {
@@ -299,12 +320,6 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     dialog.dismiss();
                 }
             });
-            /*builder.setNegativeButton("Later", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });*/
         } else if (a == 9) {
             builder.setMessage("Please Try Again");
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
@@ -327,29 +342,29 @@ public class CustomerDetailsActivity extends AppCompatActivity
         builder.create().show();
     }
 
-    private void registerIMEINo2(){
+    private void registerIMEINo2() {
         constant = new Constant(CustomerDetailsActivity.this);
-        if(ConnectivityTest.getNetStat(getApplicationContext())) {
+        if (ConnectivityTest.getNetStat(getApplicationContext())) {
             int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
-            String __imeino = "",__imeino1 = "",__imeino2 = "";
+            String __imeino = "", __imeino1 = "", __imeino2 = "";
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 __imeino = new Constant(getApplicationContext()).getIMEINo1();
                 String[] arr = __imeino.split("\\^");
-                if(arr.length>1) {
+                if (arr.length > 1) {
                     __imeino1 = arr[0];
                     __imeino2 = arr[1];
-                }else{
+                } else {
                     __imeino1 = __imeino;
                     __imeino2 = __imeino;
                 }
-            }else{
+            } else {
                 __imeino = new Constant(getApplicationContext()).getIMEINo();
                 __imeino1 = __imeino;
                 __imeino2 = __imeino;
             }
             final String imeino = __imeino;
-            String url = Constant.ipaddress + "/UpdateIMEINo?mobileno="+mobNo+"&IMEINo1="
-                    +__imeino1+"&IMEINo2="+__imeino2+"&type=E&id="+id;
+            String url = Constant.ipaddress + "/UpdateIMEINo?mobileno=" + mobNo + "&IMEINo1="
+                    + __imeino1 + "&IMEINo2=" + __imeino2 + "&type=E&id=" + id;
             Constant.showLog(url);
             writeLog("registerIMEINo2_" + url);
             constant.showPD();
@@ -360,21 +375,22 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     constant.showPD();
                     if (!response.equals("0") && !response.equals("-1") && !response.equals("-2")) {
                         SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                        editor.putBoolean(getString(R.string.pref_imeino2),true);
+                        editor.putBoolean(getString(R.string.pref_imeino2), true);
                         editor.apply();
                         checkIsActive();
                         writeLog("registerIMEINo2_Success_" + response);
-                    } else  {
+                    } else {
                         showDia(9);
                     }
                 }
+
                 @Override
                 public void onFailure(String result) {
                     constant.showPD();
                     showDia(9);
                 }
             });
-        }else{
+        } else {
             showDia(3);
         }
     }
@@ -383,26 +399,26 @@ public class CustomerDetailsActivity extends AppCompatActivity
         constant = new Constant(CustomerDetailsActivity.this);
         if (ConnectivityTest.getNetStat(getApplicationContext())) {
             int id = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId), 0);
-            String __imeino = "",__imeino1 = "",__imeino2 = "";
+            String __imeino = "", __imeino1 = "", __imeino2 = "";
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 __imeino = new Constant(getApplicationContext()).getIMEINo1();
                 String[] arr = __imeino.split("\\^");
-                if(arr.length>1) {
+                if (arr.length > 1) {
                     __imeino1 = arr[0];
                     __imeino2 = arr[1];
-                }else{
+                } else {
                     __imeino1 = __imeino;
                     __imeino2 = __imeino;
                 }
-            }else{
+            } else {
                 __imeino = new Constant(getApplicationContext()).getIMEINo();
                 __imeino1 = __imeino;
                 __imeino2 = __imeino;
             }
-            final String imeino = __imeino,imeino1 = __imeino1,imeino2 = __imeino2;
+            final String imeino = __imeino, imeino1 = __imeino1, imeino2 = __imeino2;
             //String url = Constant.ipaddress + "/GetActiveStatusV5?id=" + id + "&type=E&imeino="+imeino;
-            String url = Constant.ipaddress + "/GetActiveStatusV6?id=" + id + "&type=E&IMEINo1="+imeino1
-                    +"&IMEINo2="+imeino2;
+            String url = Constant.ipaddress + "/GetActiveStatusV6?id=" + id + "&type=E&IMEINo1=" + imeino1
+                    + "&IMEINo2=" + imeino2;
             Constant.showLog(url);
             writeLog("checkIsActive_" + url);
             constant.showPD();
@@ -415,7 +431,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                         checkVersion();
                     } else if (result.equals("I")) {
                         showDia(5);
-                    }else {
+                    } else {
                         showDia(1);
                     }
                 }
@@ -483,7 +499,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
 
     private void loadCompanyMaster() {
         int max = db.getMaxCompId();
-        String url = Constant.ipaddress + "/GetCompanyMaster?Id="+max;
+        String url = Constant.ipaddress + "/GetCompanyMaster?Id=" + max;
         Constant.showLog(url);
         writeLog("loadCompanyMaster_" + url);
         constant.showPD();
@@ -500,17 +516,63 @@ public class CustomerDetailsActivity extends AppCompatActivity
                 constant.showPD();
                 showDia(2);
             }
-        },0);
+        }, 0);
     }
 
-    private void loadData(){
+    private void loadData() {
         ArrayList<UserClass> list = db.getUserDetail();
-        adapter = new CustomerDetailListAdapter(CustomerDetailsActivity.this,list);
+        adapter = new CustomerDetailListAdapter(CustomerDetailsActivity.this, list);
         listView.setAdapter(adapter);
+        setDPCenter();
     }
 
-    private void writeLog(String _data){
-        new WriteLog().writeLog(getApplicationContext(),"CustomerDetailsActivity_"+_data);
+    private void setDPCenter() {
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
+        int hoCode = FirstActivity.pref.getInt(getString(R.string.pref_branchid), 0);
+        Cursor res = db.getDPCenter(hoCode);
+        if (res.moveToFirst()) {
+            do {
+                dpList.add(res.getString(res.getColumnIndex(DBHandler.Company_DisplayCmp)));
+                dpMap.put(res.getString(res.getColumnIndex(DBHandler.Company_DisplayCmp)),
+                        res.getInt(res.getColumnIndex(DBHandler.Company_Id)));
+            } while (res.moveToNext());
+        }
+        res.close();
+        sp_dpCenter.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.sizegroup_spinner_row, dpList));
+
+    }
+
+    private void startNewActivity() {
+        userClass = (UserClass) listView.getAdapter().getItem(0);
+        userClass.setDpId(dpId);
+        if (FirstActivity.pref.contains(getString(R.string.pref_dpId))) {
+            int prevId = FirstActivity.pref.getInt(getString(R.string.pref_dpId), 0);
+            if (prevId != userClass.getDpId()) {
+                db.deleteTable(DBHandler.Table_DispatchMaster);
+            }
+        }
+        String pin = userClass.getCustID() + "-" + "1234";
+        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+        editor.putString(getString(R.string.pref_savedpin), pin);
+        editor.putInt(getString(R.string.pref_retailCustId), userClass.getCustID());
+        editor.putInt(getString(R.string.pref_branchid), userClass.getBranchId());
+        editor.putInt(getString(R.string.pref_cityid), userClass.getCityId());
+        editor.putInt(getString(R.string.pref_hocode), userClass.getHOCode());
+        editor.putString(getString(R.string.pref_mobno), userClass.getMobile());
+        editor.putInt(getString(R.string.pref_dpId), userClass.getDpId());
+        editor.apply();
+        finish();
+        //TODO; Check
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("cust", userClass);
+        startActivity(intent);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
+    }
+
+
+    private void writeLog(String _data) {
+        new WriteLog().writeLog(getApplicationContext(), "CustomerDetailsActivity_" + _data);
     }
 
 }

@@ -3,8 +3,8 @@
 
     <!--TODO: Check App Name-->
 
-    <string name="app_name">MSPL Executive</string>
-    <string name="title_activity_login">MSPL Executive</string>
+    <string name="app_name">MSPL Dispatch</string>
+    <string name="title_activity_login">MSPL Dispatch</string>
     <string name="error_invalid_password">This field is required</string>
     <string name="error_field_required">This field is required</string>
     <string name="footer2">© Copyright 2018 PAIT BSPL All Rights Reserved.</string>

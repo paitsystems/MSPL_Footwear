@@ -63,9 +63,18 @@ public class DispatchDetailAdapter extends BaseAdapter
     public View getView(final int position, View convertView, final ViewGroup viewGroup) {
         View v = convertView;
         final ViewHolder holder;
+
+        DispatchDetailClass cd1 = getItem(position);
+
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            v = inflater.inflate(R.layout.list_item_cheque_detail_changed, null);
+            if(cd1.getCBL().equals("C")) {
+                v = inflater.inflate(R.layout.list_item_cheque_detail_changed, null);
+            } else if(cd1.getCBL().equals("L")) {
+                v = inflater.inflate(R.layout.list_item_cheque_detail_changed_l, null);
+            } else {
+                v = inflater.inflate(R.layout.list_item_cheque_detail_changed_b, null);
+            }
             holder = new ViewHolder();
             holder.tv_srno = v.findViewById(R.id.tv_srno);
             holder.tv_cbl = v.findViewById(R.id.tv_cbl);

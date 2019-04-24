@@ -2,9 +2,17 @@ package com.lnbinfotech.msplfootwearex.services;
 
 import android.app.IntentService;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.NotificationCompat;
 
+import com.lnbinfotech.msplfootwearex.R;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 
@@ -21,7 +29,31 @@ public class UploadImageService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        startForeground(1,new Notification());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            startMyOwnForeground();
+        else
+            startForeground(1, new Notification());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void startMyOwnForeground(){
+        String NOTIFICATION_CHANNEL_ID = "com.example.simpleapp";
+        String channelName = "My Background Service";
+        NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
+        chan.setLightColor(Color.BLUE);
+        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        assert manager != null;
+        manager.createNotificationChannel(chan);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+        Notification notification = notificationBuilder.setOngoing(true)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("App is running in background")
+                .setPriority(NotificationManager.IMPORTANCE_MIN)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .build();
+        startForeground(2, notification);
     }
 
     public UploadImageService() {

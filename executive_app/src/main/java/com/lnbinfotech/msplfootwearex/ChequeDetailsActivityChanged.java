@@ -51,13 +51,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class ChequeDetailsActivityChanged extends AppCompatActivity implements View.OnClickListener, TestInterface{
+public class ChequeDetailsActivityChanged extends AppCompatActivity implements View.OnClickListener, TestInterface {
 
     private ListView listView;
     private EditText ed_branch, ed_bank, ed_chq_no, ed_chq_serial;
     private AppCompatButton btn_submit;
     private Toast toast;
-    private String auto_type,imagePath,custId = "";
+    private String auto_type, imagePath = "NA", custId = "";
     private Menu menu;
     public static SelectAutoItemClass selectAuto;
     private List<ChequeDetailsClass> list;
@@ -71,7 +71,7 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(Constant.liveTestFlag==1) {
+        if (Constant.liveTestFlag == 1) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
 
@@ -113,7 +113,7 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
             @Override
             public void afterTextChanged(Editable editable) {
                 String str1 = ed_chq_serial.getText().toString();
-                if(!str1.equals("")) {
+                if (!str1.equals("")) {
                     String str = ed_chq_no.getText().toString();
                     if (!str.equals("")) {
                         setData();
@@ -121,7 +121,7 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
                         list.clear();
                         listView.setAdapter(null);
                     }
-                }else{
+                } else {
                     toast.setText("First Enter Cheque Serial Number");
                     toast.show();
                 }
@@ -169,7 +169,7 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
-        if(VisitPaymentFormActivity.ls.size()>=1) {
+        if (VisitPaymentFormActivity.ls.size() >= 1) {
             getMenuInflater().inflate(R.menu.chequedetail_menu, menu);
         }
         return true;
@@ -194,7 +194,7 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
 
     @Override
     public void onResumeFragment(String data1, String data2, Context context) {
-        ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(btn_submit.getWindowToken(),0);
+        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(btn_submit.getWindowToken(), 0);
         new DatePickerDialog(ChequeDetailsActivityChanged.this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
@@ -224,12 +224,12 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
-        f = new File(f.getAbsolutePath(),"temp.jpg");
+        f = new File(f.getAbsolutePath(), "temp.jpg");
         Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
                 + ".provider", f);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivityForResult(intent,requestCode);
+        startActivityForResult(intent, requestCode);
         overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
@@ -239,7 +239,7 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (this.requestCode == requestCode && resultCode == RESULT_OK) {
             try {
@@ -292,7 +292,7 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
         tv_amntTotal = findViewById(R.id.tv_amntTotal);
         ed_chq_serial = findViewById(R.id.ed_chqSerial);
         list = new ArrayList<>();
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
     }
 
     private void get_auto_banklist() {
@@ -305,22 +305,23 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
         Constant.showLog("ed_branch: " + selectAuto.getChq_auto_branch());
     }
 
-    private void setData(){
+    private void setData() {
         list.clear();
         listView.setAdapter(null);
         int tot = Integer.parseInt(ed_chq_no.getText().toString());
         String str = ed_chq_serial.getText().toString();
-        if(str.equals("")){
-           str = "0";
+        if (str.equals("")) {
+            str = "0";
         }
         int chqNo = Integer.parseInt(str);
-        for(int i=1;i<=tot;i++){
+        for (int i = 1; i <= tot; i++) {
             ChequeDetailsClass cheque = new ChequeDetailsClass();
             cheque.setSrNo(i);
             cheque.setChq_det_amt("0");
             cheque.setChq_det_number(String.valueOf(chqNo));
             chqNo = chqNo + 1;
             cheque.setChq_det_date(new Constant(getApplicationContext()).getDate());
+            cheque.setChq_det_image("NA");
             list.add(cheque);
         }
         adapter = new ChequeDetailChangedAdapter(getApplicationContext(), list);
@@ -331,7 +332,7 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
     private void showDia(int a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(ChequeDetailsActivityChanged.this);
         builder.setCancelable(false);
-        if(a==1) {
+        if (a == 1) {
             builder.setMessage("Do You Want To Go Back ?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -346,7 +347,7 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
                     dialogInterface.dismiss();
                 }
             });
-        }else if(a==2){
+        } else if (a == 2) {
             builder.setMessage("Save Cheque Details ?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -361,7 +362,7 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
                     dialogInterface.dismiss();
                 }
             });
-        }else if(a==3){
+        } else if (a == 3) {
             builder.setMessage("Do You Want To Clear All Cheque Details ?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -394,33 +395,43 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
     }
 
     private void get_data() {
+        int flag = 0;
         try {
-            for(int i=0;i<list.size();i++) {
+            for (int i = 0; i < list.size(); i++) {
                 chequeDetails = (ChequeDetailsClass) listView.getItemAtPosition(i);
+                if(chequeDetails.getChq_det_image().equals("NA")) {
+                    flag = 1;
+                    break;
+                } else {
+                    String bank = ed_bank.getText().toString();
+                    chequeDetails.setChq_det_bank(bank);
 
-                String bank = ed_bank.getText().toString();
-                chequeDetails.setChq_det_bank(bank);
+                    String branch = ed_branch.getText().toString();
+                    chequeDetails.setChq_det_branch(branch);
 
-                String branch = ed_branch.getText().toString();
-                chequeDetails.setChq_det_branch(branch);
+                    String bankName = ed_bank.getText().toString();
+                    String bankBranch = ed_branch.getText().toString();
+                    chequeDetails.setCustBankName(bankName);
+                    chequeDetails.setCustBankBranch(bankBranch);
 
-                String bankName = ed_bank.getText().toString();
-                String bankBranch = ed_branch.getText().toString();
-                chequeDetails.setCustBankName(bankName);
-                chequeDetails.setCustBankBranch(bankBranch);
+                    String amount = chequeDetails.getChq_det_amt();
+                    int tot = Integer.parseInt(amount);
+                    VisitPaymentFormActivity.total = VisitPaymentFormActivity.total + tot;
 
-                String amount = chequeDetails.getChq_det_amt();
-                int tot = Integer.parseInt(amount);
-                VisitPaymentFormActivity.total = VisitPaymentFormActivity.total + tot;
-
-                VisitPaymentFormActivity.ls.add(chequeDetails);
+                    VisitPaymentFormActivity.ls.add(chequeDetails);
+                }
             }
-            Constant.showLog(""+VisitPaymentFormActivity.total);
-            VisitPaymentFormActivity.isChequeDataSaved = 1;
-            new Constant(ChequeDetailsActivityChanged.this).doFinish();
-        }catch (Exception e){
+            if(flag == 0) {
+                Constant.showLog("" + VisitPaymentFormActivity.total);
+                VisitPaymentFormActivity.isChequeDataSaved = 1;
+                new Constant(ChequeDetailsActivityChanged.this).doFinish();
+            } else {
+                toast.setText("Please Capture All Images");
+                toast.show();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("ChequeDetailsActivity_get_Data_"+e.getMessage());
+            writeLog("ChequeDetailsActivity_get_Data_" + e.getMessage());
             toast.setText("Something went wrong");
             toast.show();
         }

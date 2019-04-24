@@ -42,6 +42,7 @@ import com.pait.dispatch_app.model.DispatchDetailClass;
 import com.pait.dispatch_app.model.DispatchMasterClass;
 import com.pait.dispatch_app.model.EmployeeMasterClass;
 import com.pait.dispatch_app.parse.UserClass;
+import com.pait.dispatch_app.services.UploadImageService;
 import com.pait.dispatch_app.utility.RetrofitApiBuilder;
 import com.pait.dispatch_app.volleyrequests.VolleyRequests;
 
@@ -53,6 +54,16 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
@@ -81,9 +92,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DispatchDetailAdapter adapter;
     private Toast toast;
     private List<DispatchDetailClass> list;
+    private List<DispatchMasterClass> exportList;
     private int requestCode = 1, requestCode2 = 2, edCustCode = 3, edPOCode = 4, edDPBy = 5, hoCode,
-            dpID, empId, custCode = 0;
-    private String imagePath = "", imgType, pono;
+            dpID, empId, custCode = 0, totQty = 0, flag = 0;
+    private String imagePath = "NA", psImagePath = "", imgType, pono, exportFileName;
     private DBHandler db;
     private DispatchMasterClass dm;
     private EmployeeMasterClass em;
@@ -102,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         userClass = (UserClass) getIntent().getExtras().get("cust");
 
-        if(getSupportActionBar()!=null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(userClass.getName());
         }
 
@@ -185,10 +197,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.refresh:
                 showDia(5);
                 break;
-            case R.id.report:
-                break;
             case R.id.report_error:
                 showDia(6);
+                break;
+            case R.id.report:
+                showDia(8);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -257,7 +270,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 long datetime = System.currentTimeMillis();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
                 Date resultdate = new Date(datetime);
-                //imagePath = "C_" + custId + "_Cheque_" + chequeNo + "_" + sdf.format(resultdate) + ".jpg";
                 imagePath = custCode + "_" + imgType + "_" + pono + "_" + sdf.format(resultdate) + ".jpg";
                 Constant.showLog(imagePath);
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator +
@@ -281,6 +293,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     outFile.flush();
                     outFile.close();
                     adapter.returnImage(imagePath);
+                    imagePath = "NA";
                 } catch (Exception e) {
                     writeLog("onActivityResult():FileNotFoundException:" + e);
                     e.printStackTrace();
@@ -294,9 +307,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 long datetime = System.currentTimeMillis();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
                 Date resultdate = new Date(datetime);
-                //imagePath = "C_" + custId + "_Cheque_" + chequeNo + "_" + sdf.format(resultdate) + ".jpg";
-                imagePath = custCode + "_PS_" + pono + "_" + sdf.format(resultdate) + ".jpg";
-                Constant.showLog(imagePath);
+                psImagePath = custCode + "_PS_" + pono + "_" + sdf.format(resultdate) + ".jpg";
+                Constant.showLog(psImagePath);
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator +
                         Constant.folder_name + File.separator + Constant.image_folder);
                 for (File temp : f.listFiles()) {
@@ -311,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
 
                 File file = new File(Environment.getExternalStorageDirectory() + File.separator +
-                        Constant.folder_name + File.separator + Constant.image_folder, imagePath);
+                        Constant.folder_name + File.separator + Constant.image_folder, psImagePath);
                 try {
                     outFile = new FileOutputStream(file);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 15, outFile);
@@ -372,33 +384,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setData() {
         list.clear();
         listView.setAdapter(null);
-        int tot = Integer.parseInt(ed_cartons.getText().toString());
+        String str1 = ed_cartons.getText().toString();
+        if (str1.equals("")) {
+            str1 = "0";
+        }
+        int tot = Integer.parseInt(str1);
         for (int i = 1; i <= tot; i++) {
             DispatchDetailClass cheque = new DispatchDetailClass();
             cheque.setSrNo(i);
             cheque.setCBL("C");
             cheque.setNoOfCartons("0");
+            cheque.setImgName("NA");
             list.add(cheque);
         }
-        DispatchDetailClass cheque = new DispatchDetailClass();
-        cheque.setSrNo(tot + 1);
-        cheque.setCBL("L");
-        cheque.setNoOfCartons("0");
-        list.add(cheque);
-        int tot1 = Integer.parseInt(ed_bundles.getText().toString());
+        if (!str1.equals("0")) {
+            DispatchDetailClass cheque = new DispatchDetailClass();
+            cheque.setSrNo(++tot);
+            cheque.setCBL("L");
+            cheque.setNoOfCartons("0");
+            cheque.setImgName("NA");
+            list.add(cheque);
+        }
+        String str = ed_bundles.getText().toString();
+        if (str.equals("")) {
+            str = "0";
+        }
+        int tot1 = Integer.parseInt(str);
         if (tot1 != 0) {
-            cheque = new DispatchDetailClass();
-            cheque.setSrNo(tot + 2);
+            DispatchDetailClass cheque = new DispatchDetailClass();
+            cheque.setSrNo(++tot);
             cheque.setCBL("B");
             cheque.setNoOfCartons("0");
+            cheque.setImgName("NA");
             list.add(cheque);
         }
-        adapter = new DispatchDetailAdapter(getApplicationContext(), list);
-        adapter.initInterface(MainActivity.this);
-        listView.setAdapter(adapter);
+        if (!list.isEmpty()) {
+            adapter = new DispatchDetailAdapter(getApplicationContext(), list);
+            adapter.initInterface(MainActivity.this);
+            listView.setAdapter(adapter);
+        }
     }
 
-    private void clearFields(){
+    private void clearFields() {
         list.clear();
         listView.setAdapter(null);
         ed_custName.setText(null);
@@ -407,8 +434,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_qty_Total.setText("0");
         tv_transporter.setText("");
         ed_dispatchBy.setText(null);
-        img_slip.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.camera));
-
+        ed_bundles.setText("0");
+        ed_cartons.setText("0");
+        ed_cartons.setSelected(true);
+        ed_cartons.requestFocus();
+        img_slip.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.camera));
+        psImagePath = "";
+        flag = 0;
+        imagePath = "NA";
     }
 
     private void loadEmployeeMaster() {
@@ -423,7 +456,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onSuccess(String result) {
                 constant.showPD();
-                getDispatchMaster();
+                flag = 0;
+                getDispatchMaster(1);
             }
 
             @Override
@@ -434,13 +468,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }, 0);
     }
 
-    private void getDispatchMaster() {
+    private void getDispatchMaster(int type) {
         final Constant constant = new Constant(MainActivity.this);
         constant.showPD();
         try {
             int maxAuto = db.getMaxAuto();
-            //Auto +"|"+ CustId +"|"+ HOCode +"|"+ discpatchId +"|"+ empId
-            String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId;
+            //Auto + "|"+ CustId + "|"+ HOCode + "|"+ dispatchId + "|"+ empId + "|"+ type
+            String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId + "|" + type;
             writeLog("getDispatchMaster_" + url);
             final JSONObject jsonBody = new JSONObject();
             jsonBody.put("details", url);
@@ -457,8 +491,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Constant.showLog("onResponse");
                     List<DispatchMasterClass> list = response.body();
                     if (list != null) {
-                        db.addDispatchMaster(list);
-                        Constant.showLog(list.size() + "_getDispatchMaster");
+                        if (flag == 0) {
+                            db.addDispatchMaster(list);
+                            Constant.showLog(list.size() + "_getDispatchMaster");
+                        } else if (flag == 1) {
+                            exportList = response.body();
+                            exportToExcel();
+                        }
                     } else {
                         Constant.showLog("onResponse_list_null");
                         writeLog("getDispatchMaster_onResponse_list_null");
@@ -488,7 +527,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void loadCompanyMaster() {
         int max = db.getMaxCompId();
-        String url = Constant.ipaddress + "/GetCompanyMaster?Id="+max;
+        String url = Constant.ipaddress + "/GetCompanyMaster?Id=" + max;
         Constant.showLog(url);
         writeLog("loadCompanyMaster_" + url);
         final Constant constant = new Constant(MainActivity.this);
@@ -506,7 +545,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 constant.showPD();
                 showDia(2);
             }
-        },0);
+        }, 0);
     }
 
     private void init() {
@@ -561,7 +600,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     clearFields();
-                    getDispatchMaster();
+                    flag = 0;
+                    Intent intent = new Intent(MainActivity.this, UploadImageService.class);
+                    startService(intent);
+                    writeLog("UploadImageService_onHandleIntent_broadcastSend");
+                    getDispatchMaster(1);
                 }
             });
         } else if (a == 4) {
@@ -579,7 +622,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     dialog.dismiss();
                 }
             });
-        }  else if (a == 5) {
+        } else if (a == 5) {
             builder.setMessage("Do You Want To Refresh Data?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -588,6 +631,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     db.deleteTable(DBHandler.Table_Employee);
                     db.deleteTable(DBHandler.Table_CompanyMaster);
                     db.deleteTable(DBHandler.Table_DispatchMaster);
+                    flag = 0;
                     loadCompanyMaster();
                 }
             });
@@ -603,7 +647,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (ConnectivityTest.getNetStat(getApplicationContext())) {
-                        exportfile();
+                        exportFile();
                     } else {
                         toast.setText("You Are Offline");
                         toast.show();
@@ -617,13 +661,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     dialog.dismiss();
                 }
             });
-        }  else if (a == 7) {
+        } else if (a == 7) {
             builder.setMessage("Do You Want To Save Data?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     getData();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 8) {
+            builder.setMessage("Do You Want To Send Report?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    flag = 1;
+                    getDispatchMaster(2);
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -643,43 +703,71 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (ed_poNo.getText().toString().equals("")) {
             toast.setText("Please Select PO Number");
             toast.show();
+        } else if (psImagePath.equals("")) {
+            toast.setText("Please Capture Packing Slip Image");
+            toast.show();
         } else {
             showDia(7);
         }
     }
 
     private void getData() {
+        int _flag = 0;
+        String str1 = ed_cartons.getText().toString();
+        if (str1.equals(""))
+            str1 = "0";
+
+        String str = ed_bundles.getText().toString();
+        if (str.equals(""))
+            str = "0";
+
         String notOfCartoon = "", imageNames = "";
         for (DispatchDetailClass cq : list) {
             Constant.showLog(cq.getSrNo() + "\n" +
-                            cq.getCBL() + "\n" +
-                            cq.getNoOfCartons() + "\n" +
-                            cq.getImgName());
+                    cq.getCBL() + "\n" +
+                    cq.getNoOfCartons() + "\n" +
+                    cq.getImgName());
             notOfCartoon = notOfCartoon + cq.getNoOfCartons() + ",";
             imageNames = imageNames + cq.getImgName() + ",";
+
+            if (cq.getCBL().equals("L") || cq.getCBL().equals("B")) {
+                if (!cq.getNoOfCartons().equals("") || !cq.getNoOfCartons().equals("0")) {
+                    if (cq.getImgName().equals("NA")) {
+                        _flag = 1;
+                        break;
+                    }
+                }
+            } else if (cq.getImgName().equals("NA")) {
+                _flag = 1;
+                break;
+            }
         }
+        imageNames = imageNames + psImagePath;
         Constant.showLog(dm.getPartyName() + "\n" +
-                         dm.getPONO() + "\n" +
-                         dm.getDcNo() + "\n" +
-                         dm.getDCdate() + "\n" +
-                         dm.getTotalQty() + "\n" +
-                         dm.getTransporter());
+                dm.getPONO() + "\n" +
+                dm.getDcNo() + "\n" +
+                dm.getDCdate() + "\n" +
+                dm.getTotalQty() + "\n" +
+                dm.getTransporter());
 
         Constant.showLog(em.getEmp_Id() + "\n" + em.getName());
-        notOfCartoon = notOfCartoon.substring(0,notOfCartoon.length()-1);
-        imageNames = imageNames.substring(0,imageNames.length()-1);
+        notOfCartoon = notOfCartoon.substring(0, notOfCartoon.length() - 1);
         Constant.showLog(notOfCartoon);
         Constant.showLog(imageNames);
 
         //DCNO,PONO,DispatchBy,NoOfCartoon,DispatchPerson,CheckedPerson,Carton,Bundle,ImagePath,
 
-        String data = dm.getDcNo() + "|" + dm.getPONO() + "|" + dm.getEmp_Id()  + "|" + notOfCartoon + "|" +
-                        empId + "|" + empId + "|" + ed_cartons.getText().toString() + "|" + ed_bundles.getText().toString() + "|" +
-                        imageNames;
+        String data = dm.getDcNo() + "|" + dm.getPONO() + "|" + dm.getEmp_Id() + "|" + notOfCartoon + "|" +
+                empId + "|" + empId + "|" + str1 + "|" + str + "|" + imageNames;
 
         Constant.showLog(data);
 
-        new saveDispatchMaster(dm.getPONO()).execute(data);
+        if (_flag == 0) {
+            new saveDispatchMaster(dm.getPONO()).execute(data);
+        } else {
+            toast.setText("Please Capture All Images");
+            toast.show();
+        }
     }
 
     private class saveDispatchMaster extends AsyncTask<String, Void, String> {
@@ -713,7 +801,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 writeLog("saveDispatchMaster_" + vehicle.toString());
                 request.setEntity(entity);
                 HttpParams httpParams = new BasicHttpParams();
-                HttpConnectionParams.setConnectionTimeout(httpParams,Constant.TIMEOUT_CON);
+                HttpConnectionParams.setConnectionTimeout(httpParams, Constant.TIMEOUT_CON);
                 HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);
                 httpClient = new DefaultHttpClient(httpParams);
                 //DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -724,15 +812,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } catch (Exception e) {
                 e.printStackTrace();
                 writeLog("saveDispatchMaster_result_" + e.getMessage());
-            }
-            finally {
-                try{
-                    if(httpClient!=null) {
+            } finally {
+                try {
+                    if (httpClient != null) {
                         httpClient.getConnectionManager().shutdown();
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
-                    writeLog("saveDispatchMaster_finally_"+e.getMessage());
+                    writeLog("saveDispatchMaster_finally_" + e.getMessage());
                 }
             }
             return value;
@@ -775,7 +862,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void exportfile() {
+    private void exportFile() {
         if (new CopyLog().copyLog(getApplicationContext())) {
             writeLog("MainActivity_exportfile_Log_File_Exported");
             sendMail1();
@@ -830,8 +917,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         protected String doInBackground(String... strings) {
             try {
                 String res = respMailId;
-                String mob = FirstActivity.pref.getString(getString(R.string.pref_mobno),"0");
-                String subject = Constant.mail_subject+"_"+mob;
+                String mob = FirstActivity.pref.getString(getString(R.string.pref_mobno), "0");
+                String subject = Constant.mail_subject + "_" + mob;
                 sender.sendMail(subject, Constant.mail_body, Constant.automailID, res);
                 return "1";
             } catch (Exception e) {
@@ -869,6 +956,202 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 pd.dismiss();
             }
         }
+    }
+
+    private void exportToExcel() {
+        long datetime = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_hh_mm_ss", Locale.ENGLISH);
+        Date resultdate = new Date(datetime);
+        String cur_date = sdf.format(resultdate);
+        exportFileName = "Dispatch_Allotment_Report_" + cur_date + ".xls";
+        writeLog("exportToExcel_" + exportFileName);
+        new writeFile().execute(exportFileName);
+    }
+
+    private class writeFile extends AsyncTask<String, Void, String> {
+
+        private ProgressDialog pd1;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd1 = new ProgressDialog(MainActivity.this);
+            pd1.setMessage("Exporting Data Please Wait...");
+            pd1.setCancelable(false);
+            pd1.show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String status = "";
+            try {
+                File directory = Constant.checkFolder(Constant.folder_name + "/" + Constant.gstFolderName);
+                if (!directory.exists()) {
+                    if (directory.mkdirs()) {
+                        Constant.showLog("TAG");
+                    }
+                }
+                File outputFile = new File(directory, strings[0]);
+                Workbook wb = new HSSFWorkbook();
+                CellStyle cs = wb.createCellStyle();
+                Font font = wb.createFont();
+                font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+                cs.setFont(font);
+                writeLog("writeFile_exportReport_called");
+                exportGSTReport(wb, cs);
+                FileOutputStream os = new FileOutputStream(outputFile);
+                wb.write(os);
+                os.close();
+                writeLog("writeFile_Success");
+            } catch (Exception e) {
+                status = null;
+                e.printStackTrace();
+                writeLog("writeFile_" + e.getMessage());
+            }
+            return status;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            pd1.dismiss();
+            if (result != null) {
+                shareFile();
+                flag = 0;
+                Constant.showLog("Report Exported Successfully");
+                toast.setText("Report Exported Successfully");
+                toast.show();
+            } else {
+                writeLog("Error_While_Exporting_Data");
+                toast.setText("Error While Exporting Data. Please Try Again");
+                toast.show();
+            }
+        }
+    }
+
+    private void shareFile() {
+        try {
+            Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+            String myFilePath = Constant.checkFolder(Constant.folder_name).getAbsolutePath() + File.separator +
+                    Constant.gstFolderName + File.separator + exportFileName;
+            Constant.showLog("file path:" + myFilePath);
+
+            File f = new File(myFilePath);
+            Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                    + ".provider", f);
+            intentShareFile.setType("application/vnd.ms-excel");
+            intentShareFile.putExtra(Intent.EXTRA_STREAM, photoURI);
+            //intentShareFile.putExtra(Intent.EXTRA_SUBJECT, partyName + " - " + fromdate + " - " + todate + " GST Report");
+            intentShareFile.putExtra(Intent.EXTRA_SUBJECT, " Order Dispatch Allotment Report");
+            startActivity(Intent.createChooser(intentShareFile, "Share File"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("shareFile_" + e.getMessage());
+            toast.setText("Something Went Wrong");
+            toast.show();
+        }
+    }
+
+    private void exportGSTReport(Workbook wb, CellStyle cs) {
+
+        Constant.showLog("exportGSTReport");
+        Sheet sheet = wb.createSheet("Order Dispatch Allotment Report");
+
+        String arr[] = new String[]{"PartyName", "Order No", "Dispatch Date", "Order Qty", "Transporter", "Dispatch By",};
+
+        String compName = "";
+        int hocode = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
+        if (hocode == 1) {
+            compName = "MADHUR SALES PRIVATE LIMITED - PUNE DIVISION";
+        } else if (hocode == 12) {
+            compName = "MADHUR SALES PRIVATE LIMITED - KARAD DIVISION";
+        } else if (hocode == 13) {
+            compName = "MADHUR SALES PRIVATE LIMITED - AHMEDNAGAR DIVISION";
+        }
+
+        CellStyle style = wb.createCellStyle();
+        Font font = wb.createFont();
+        font.setColor(HSSFColor.BLUE.index);
+        style.setFont(font);
+
+        Row rowHeader = sheet.createRow(0);
+        Cell cellHeader = rowHeader.createCell(1);
+        cellHeader.setCellValue(compName);
+        cellHeader.setCellStyle(style);
+
+        /*sheet.addMergedRegion(new CellRangeAddress(
+                0, //first row (0-based)
+                0, //last row  (0-based)
+                1, //first column (0-based)
+                6  //last column  (0-based)
+        ));
+
+        cellHeader = rowHeader.createCell(8);
+        cellHeader.setCellValue("GSTNO");
+        cellHeader.setCellStyle(style);
+
+        sheet.addMergedRegion(new CellRangeAddress(
+                0, //first row (0-based)
+                0, //last row  (0-based)
+                8, //first column (0-based)
+                8  //last column  (0-based)
+        ));
+
+        cellHeader = rowHeader.createCell(9);
+        cellHeader.setCellValue("27AAJCM4570B1ZK");
+        cellHeader.setCellStyle(style);*/
+
+        sheet.addMergedRegion(new CellRangeAddress(
+                0, //first row (0-based)
+                0, //last row  (0-based)
+                9, //first column (0-based)
+                10  //last column  (0-based)
+        ));
+
+        Row row = sheet.createRow(1);
+        for (int i = 0; i < arr.length; i++) {
+            Cell c = row.createCell(i);
+            c.setCellValue(arr[i]);
+            c.setCellStyle(cs);
+        }
+
+        int count = 1;
+
+        for (int i = 0; i <= exportList.size(); i++) {
+            count++;
+            Row row1 = sheet.createRow(count);
+            if (i < exportList.size()) {
+                DispatchMasterClass gstDet = exportList.get(i);
+                DataFormat format = wb.createDataFormat();
+                for (int j = 0; j < arr.length; j++) {
+                    Cell cell = row1.createCell(j);
+                    if (j == 0) {
+                        cell.setCellValue(gstDet.getPartyName());
+                    } else if (j == 1) {
+                        cell.setCellValue(gstDet.getPONO());
+                    } else if (j == 2) {
+                        cell.setCellValue(gstDet.getDispatchDate());
+                    } else if (j == 3) {
+                        cell.setCellValue(Double.parseDouble(gstDet.getTotalQty()));
+                        totQty = totQty + Integer.parseInt(gstDet.getTotalQty());
+                    } else if (j == 4) {
+                        cell.setCellValue(gstDet.getTransporter());
+                    } else {
+                        cell.setCellValue(gstDet.getEmp_Name());
+                    }
+                }
+            } else {
+                for (int j = 0; j < arr.length; j++) {
+                    Cell cell = row1.createCell(j);
+                    if (j == 3) {
+                        cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+                        cell.setCellValue(Double.parseDouble(String.valueOf(totQty)));
+                    }
+                }
+            }
+        }
+        Constant.showLog("" + count);
+        writeLog("writeFile_exportGSTReport_called");
     }
 
     private void writeLog(String _data) {

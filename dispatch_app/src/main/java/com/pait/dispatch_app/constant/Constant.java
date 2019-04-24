@@ -23,7 +23,7 @@ public class Constant {
     //TODO: Check VersionCode and Version Name
 
     public static String folder_name = "MSPL FootwearDA",
-            gstFolderName = "GSTReport",
+            gstFolderName = "Report",
             zipFolderName = "Zip",
             unzipFolderName = "UnZip",
             image_folder = "Images",

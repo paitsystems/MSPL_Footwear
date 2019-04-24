@@ -43,19 +43,19 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class CheckOTPActivity extends AppCompatActivity implements View.OnClickListener,
-             MySMSBroadcastReceiver.OTPReceiveListener  {
+        MySMSBroadcastReceiver.OTPReceiveListener {
 
-    private EditText ed1,ed2,ed3,ed4,ed5,ed6;
-    private AppCompatButton btn_verifyotp,btn_resendotp;
+    private EditText ed1, ed2, ed3, ed4, ed5, ed6;
+    private AppCompatButton btn_verifyotp, btn_resendotp;
     private Toast toast;
     private CheckOtpClass otpClass;
     private Constant constant;
     private final Timer timer = new Timer();
     private int time = 0;
-    private TextView tv_timecount,tv_text1, tv_otp;
+    private TextView tv_timecount, tv_text1, tv_otp;
     private CountDownTimer countDown;
-    private String mobNo,imeiNo, imeino1, imeino2;
-    private  String response_value;
+    private String mobNo, imeiNo, imeino1, imeino2;
+    private String response_value;
     //private ReadSms receiver;
     //private MySMSReceiver receiver;
     private MySMSBroadcastReceiver receiver;
@@ -129,7 +129,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             case R.id.btn_resendotp:
                 Constant.showLog("resend btn click!!");
                 btn_resendotp.setEnabled(false);
-                btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),R.color.lightgray));
+                btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.lightgray));
                 resendOTP();
                 //autoOTP();
                 tv_text1.setText("Your OTP will get within 5 min..");
@@ -157,14 +157,14 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onDestroy() {
         try {
-            if(receiver!=null) {
+            if (receiver != null) {
                 //receiver.bindListener(null);
                 unregisterReceiver(receiver);
                 receiver = null;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("onDestroy_"+e.getMessage());
+            writeLog("onDestroy_" + e.getMessage());
         }
         super.onDestroy();
     }
@@ -209,33 +209,33 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
-    private void verifyOTP(){
-        if(ed1.getText().toString().length()==1 && ed2.getText().toString().length()==1 &&
-                ed3.getText().toString().length()==1 && ed4.getText().toString().length()==1 &&
-                ed5.getText().toString().length()==1 && ed6.getText().toString().length()==1) {
-            String otp = ed1.getText().toString()+ed2.getText().toString()+
-                    ed3.getText().toString()+ed4.getText().toString()+
-                    ed5.getText().toString()+ed6.getText().toString();
+    private void verifyOTP() {
+        if (ed1.getText().toString().length() == 1 && ed2.getText().toString().length() == 1 &&
+                ed3.getText().toString().length() == 1 && ed4.getText().toString().length() == 1 &&
+                ed5.getText().toString().length() == 1 && ed6.getText().toString().length() == 1) {
+            String otp = ed1.getText().toString() + ed2.getText().toString() +
+                    ed3.getText().toString() + ed4.getText().toString() +
+                    ed5.getText().toString() + ed6.getText().toString();
             Constant.showLog(otp);
-            Constant.showLog("response_value:"+response_value);
-            writeLog("response_value:"+response_value);
-            if(otp.equals(response_value)) {
-                Constant.showLog("response_value:"+response_value);
+            Constant.showLog("response_value:" + response_value);
+            writeLog("response_value:" + response_value);
+            if (otp.equals(response_value)) {
+                Constant.showLog("response_value:" + response_value);
                 writeLog("OTP_Matched");
                 showDia(1);
-            }else{
+            } else {
                 writeLog("Invalid_OTP");
                 toast.setText(R.string.invalid_otp);
                 toast.show();
             }
-        }else{
+        } else {
             writeLog("Enter_OTP");
             toast.setText(R.string.pleaseenterotp);
             toast.show();
         }
     }
 
-    private void timerCount(){
+    private void timerCount() {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -243,20 +243,20 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void run() {
                         time++;
-                        Constant.showLog("Time"+time);
-                        if(time == 180){
+                        Constant.showLog("Time" + time);
+                        if (time == 180) {
                             timer.cancel();
                             btn_resendotp.setEnabled(true);
                         }
                     }
                 });
             }
-        },0,1000);
+        }, 0, 1000);
 
     }
 
-    private void startTimerCount(int noOfMinutes){
-        countDown = new CountDownTimer(noOfMinutes,1000) {
+    private void startTimerCount(int noOfMinutes) {
+        countDown = new CountDownTimer(noOfMinutes, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 long millis = millisUntilFinished;
@@ -270,7 +270,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 tv_text1.setText("Time's up!!");
                 btn_resendotp.setEnabled(true);
                 response_value = "0";
-                btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),R.color.maroon));
+                btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.maroon));
                 //btn_resendotp.setBackgroundColor(getResources().getColor(R.color.maroon));
             }
         }.start();
@@ -287,7 +287,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
 
             //String url = Constant.ipaddress + "/GetOTPCode?mobileno="+_mobNo+"&IMEINo="+_imeiNo+"&type=E";
             String url = Constant.ipaddress + "/GetOTPCodeV6?mobileno=" + _mobNo + "&IMEINo1="
-                    + _imeiNo1 + "&IMEINo2=" + _imeiNo2 + "&type=E";
+                    + _imeiNo1 + "&IMEINo2=" + _imeiNo2 + "&type=D";
             Constant.showLog(url);
             writeLog("requestOTP_" + url);
             VolleyRequests requests = new VolleyRequests(CheckOTPActivity.this);
@@ -324,12 +324,12 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void doThis(String response, String _mobNo, String _imeino){
+    private void doThis(String response, String _mobNo, String _imeino) {
         String arr[] = response.split("-");
         if (arr.length > 1) {
             writeLog("requestOTP_Success_" + response);
-            response =  arr[1];
-            Constant.showLog("dothis:response"+response);
+            response = arr[1];
+            Constant.showLog("dothis:response" + response);
             response_value = response;
         } else {
             showDia(-1);
@@ -337,11 +337,11 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void getUserInfo(){
+    private void getUserInfo() {
         constant = new Constant(CheckOTPActivity.this);
         //String url = Constant.ipaddress+"/GetUserDetail?mobileno="+otpClass.getMobileno()+"&IMEINo="+otpClass.getImeino()+"&type=E";
-        String url = Constant.ipaddress+"/GetUserDetailV6?mobileno="+otpClass.getMobileno()+"&IMEINo1="+otpClass.getImeino1()
-                +"&IMEINo2="+otpClass.getImeino2()+"&type=E";
+        String url = Constant.ipaddress + "/GetUserDetailV6?mobileno=" + otpClass.getMobileno() + "&IMEINo1=" + otpClass.getImeino1()
+                + "&IMEINo2=" + otpClass.getImeino2() + "&type=E";
 
         Constant.showLog(url);
         writeLog("getUserInfo_" + url);
@@ -353,32 +353,34 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 constant.showPD();
                 doFinish();
             }
+
             @Override
             public void onFailure(String result) {
                 constant.showPD();
-                writeLog("getUserInfo_onFailure_"+result);
+                writeLog("getUserInfo_onFailure_" + result);
                 showDia(-1);
             }
         });
     }
 
-    private void doFinish(){
-        if(countDown!=null) {
+    private void doFinish() {
+        if (countDown != null) {
             countDown.cancel();
         }
         SharedPreferences.Editor editor = FirstActivity.pref.edit();
-        editor.putBoolean(getString(R.string.pref_isRegistered),true);
-        editor.putBoolean(getString(R.string.pref_imeino2),true);
+        //TODO: Comment
+        editor.putBoolean(getString(R.string.pref_isRegistered), true);
+        editor.putBoolean(getString(R.string.pref_imeino2), true);
         editor.apply();
         finish();
         Intent intent = new Intent(getApplicationContext(), CustomerDetailsActivity.class);
-        intent.putExtra("otp",otpClass);
+        intent.putExtra("otp", otpClass);
         startActivity(intent);
-        overridePendingTransition(R.anim.enter,R.anim.exit);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
     private void init() {
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
         ed1 = findViewById(R.id.ed1);
         ed2 = findViewById(R.id.ed2);
         ed3 = findViewById(R.id.ed3);
@@ -465,7 +467,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
                 editTexts[currentIndex].clearFocus();
                 hideKeyboard();
                 verifyOTP();
-                btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(),R.color.lightgray));
+                btn_resendotp.setSupportBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.lightgray));
 
             }
         }
@@ -595,8 +597,8 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         builder.create().show();
     }
 
-    private void writeLog(String _data){
-        new WriteLog().writeLog(getApplicationContext(),"CheckOTPActivity_"+_data);
+    private void writeLog(String _data) {
+        new WriteLog().writeLog(getApplicationContext(), "CheckOTPActivity_" + _data);
     }
 
 }

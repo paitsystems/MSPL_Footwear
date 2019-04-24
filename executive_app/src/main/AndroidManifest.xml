@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".App"
@@ -266,7 +267,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
 
-        <service
+        <!--<service
             android:name=".services.LocationUpdateJobService"
             android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
             <intent-filter>
@@ -278,7 +279,7 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".services.LocationServicePRM"
-            android:enabled="true" />
+            android:enabled="true" />-->
 
         <activity android:name=".ProductWiseImageActivity"
             android:screenOrientation="portrait"
