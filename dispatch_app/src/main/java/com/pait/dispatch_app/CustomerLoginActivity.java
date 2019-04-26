@@ -42,7 +42,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     private TextView tv_custname, tv_custaddress, tv_custmobile, tv_custemail;
     private ImageView img_cust;
     private EditText ed1, ed2, ed3, ed4, ed5, ed6, ed7, ed8, ed9, ed10, ed11, ed12;
-    private Button btn_save;
+    private Button btn_save, btn_order, btn_report;
     private Toast toast;
     private UserClass userClass;
     private CardView lay_setpin, lay_enterpin;
@@ -75,7 +75,6 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
         setData();
 
-        btn_save.setOnClickListener(this);
 
         Glide.with(getApplicationContext()).load(Constant.custimgUrl+userClass.getImagePath())
                 .thumbnail(0.5f)
@@ -89,8 +88,13 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String br = (String) adapterView.getItemAtPosition(i);
                 int id = dpMap.get(br);
-                userClass.setDpId(id);
-                Constant.showLog(br + " " + id);
+                if(id !=0) {
+                    userClass.setDpId(id);
+                    Constant.showLog(br + " " + id);
+                } else {
+                    toast.setText("Select Dispach Center First");
+                    toast.show();
+                }
             }
 
             @Override
@@ -101,12 +105,29 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View view) {
+        int id = dpMap.get(dpList.get(sp_dpCenter.getSelectedItemPosition()));
         switch (view.getId()) {
             case R.id.btn_save:
                 if (setEnterPINFlag == 0) {
                     setNewPIN();
                 } else if (setEnterPINFlag == 1) {
                     verifyPin();
+                }
+                break;
+            case R.id.btn_order:
+                if(id !=0) {
+                    startNewActivity();
+                } else {
+                    toast.setText("Select Dispach Center First");
+                    toast.show();
+                }
+                break;
+            case R.id.btn_report:
+                if(id !=0) {
+                    startNewActivity();
+                } else {
+                    toast.setText("Select Dispach Center First");
+                    toast.show();
                 }
                 break;
         }
@@ -256,6 +277,8 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     private void setDPCenter(){
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         int hoCode = FirstActivity.pref.getInt(getString(R.string.pref_branchid),0);
+        dpList.add("Select Dispatch Center");
+        dpMap.put("Select Dispatch Center",0);
         Cursor res = db.getDPCenter(hoCode);
         if(res.moveToFirst()){
             do{
@@ -270,6 +293,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
     }
 
     private void init() {
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         tv_custname = findViewById(R.id.tv_custname);
         tv_custaddress = findViewById(R.id.tv_custaddress);
         tv_custmobile = findViewById(R.id.tv_custmobile);
@@ -291,13 +315,19 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         lay_enterpin = findViewById(R.id.lay_enterpin);
         lay_spinner = findViewById(R.id.lay_spinner);
         btn_save = findViewById(R.id.btn_save);
+        btn_report = findViewById(R.id.btn_report);
+        sp_dpCenter = findViewById(R.id.sp_dpcenter);
         sp_dpCenter = findViewById(R.id.sp_dpcenter);
         dpList = new ArrayList<>();
         dpMap = new HashMap<>();
         db = new DBHandler(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+
+        btn_save.setOnClickListener(this);
+        btn_order.setOnClickListener(this);
+        btn_report.setOnClickListener(this);
+
         String custid = String.valueOf(userClass.getCustID());
         String PIN = db.getCustPIN(custid);
 

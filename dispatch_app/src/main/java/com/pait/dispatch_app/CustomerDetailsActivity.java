@@ -52,7 +52,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
     private DBHandler db;
     private Toast toast;
     private Constant constant;
-    private Button btn_save;
+    private Button btn_save, btn_order, btn_report;
     private String version = "", mobNo = "", id = "0";
     private TextView tv_version;
     private LocationProvider provider;
@@ -107,9 +107,14 @@ public class CustomerDetailsActivity extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String br = (String) adapterView.getItemAtPosition(i);
-                dpId = dpMap.get(br);
-                //userClass.setDpId(id);
-                Constant.showLog(br + " " + dpId);
+                int id = dpMap.get(br);
+                if(id !=0) {
+                    dpId = dpMap.get(br);
+                    Constant.showLog(br + " " + dpId);
+                } else {
+                    toast.setText("Select Dispatch Center First");
+                    toast.show();
+                }
             }
 
             @Override
@@ -145,9 +150,26 @@ public class CustomerDetailsActivity extends AppCompatActivity
 
     @Override
     public void onClick(View view) {
+        int id = dpMap.get(dpList.get(sp_dpCenter.getSelectedItemPosition()));
         switch (view.getId()) {
             case R.id.btn_save:
-                startNewActivity();
+                startNewActivity(0);
+                break;
+            case R.id.btn_order:
+                if(id !=0) {
+                    startNewActivity(0);
+                } else {
+                    toast.setText("Select Dispach Center First");
+                    toast.show();
+                }
+                break;
+            case R.id.btn_report:
+                if(id !=0) {
+                    startNewActivity(1);
+                } else {
+                    toast.setText("Select Dispach Center First");
+                    toast.show();
+                }
                 break;
         }
     }
@@ -166,23 +188,6 @@ public class CustomerDetailsActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
-
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case LocationProvider.REQUEST_CHECK_SETTINGS:
-                switch (resultCode) {
-                    case Activity.RESULT_OK:
-                        Constant.showLog("Success");
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        provider.checkLocationAvailability();
-                        Constant.showLog("Cancelled Success");
-                        break;
-                }
-                break;
-        }
-    }*/
 
     @Override
     public void handleNewLocation(Location location, String address) {
@@ -211,7 +216,11 @@ public class CustomerDetailsActivity extends AppCompatActivity
         dpList = new ArrayList<>();
         dpMap = new HashMap<>();
         btn_save = findViewById(R.id.btn_save);
+        btn_order = findViewById(R.id.btn_order);
+        btn_report = findViewById(R.id.btn_report);
         btn_save.setOnClickListener(this);
+        btn_order.setOnClickListener(this);
+        btn_report.setOnClickListener(this);
     }
 
     private void showDia(int a) {
@@ -451,7 +460,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
     private void checkVersion() {
         constant = new Constant(CustomerDetailsActivity.this);
         constant.showPD();
-        String url1 = Constant.ipaddress + "/GetVersionV5?type=E";
+        String url1 = Constant.ipaddress + "/GetVersionV5?type=D";
         Constant.showLog(url1);
         StringRequest versionRequest = new StringRequest(url1,
                 new Response.Listener<String>() {
@@ -529,6 +538,8 @@ public class CustomerDetailsActivity extends AppCompatActivity
     private void setDPCenter() {
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
         int hoCode = FirstActivity.pref.getInt(getString(R.string.pref_branchid), 0);
+        dpList.add("Select Dispatch Center");
+        dpMap.put("Select Dispatch Center",0);
         Cursor res = db.getDPCenter(hoCode);
         if (res.moveToFirst()) {
             do {
@@ -542,7 +553,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
 
     }
 
-    private void startNewActivity() {
+    private void startNewActivity(int id) {
         userClass = (UserClass) listView.getAdapter().getItem(0);
         userClass.setDpId(dpId);
         if (FirstActivity.pref.contains(getString(R.string.pref_dpId))) {
@@ -561,10 +572,14 @@ public class CustomerDetailsActivity extends AppCompatActivity
         editor.putString(getString(R.string.pref_mobno), userClass.getMobile());
         editor.putInt(getString(R.string.pref_dpId), userClass.getDpId());
         editor.apply();
-        finish();
         //TODO; Check
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent intent;
+        if (id==0){
+            intent = new Intent(getApplicationContext(), MainActivity.class);
+        } else {
+            intent = new Intent(getApplicationContext(), ReportActivity.class);
+        }
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("cust", userClass);
         startActivity(intent);
         overridePendingTransition(R.anim.enter, R.anim.exit);

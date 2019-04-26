@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (!str.equals("")) {
                     setData();
                 } else {
+                    tv_qty_Total.setText("0");
                     list.clear();
                     listView.setAdapter(null);
                 }
@@ -199,9 +200,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.report_error:
                 showDia(6);
-                break;
-            case R.id.report:
-                showDia(8);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -414,7 +412,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             DispatchDetailClass cheque = new DispatchDetailClass();
             cheque.setSrNo(++tot);
             cheque.setCBL("B");
-            cheque.setNoOfCartons("0");
+            cheque.setNoOfCartons(str);
             cheque.setImgName("NA");
             list.add(cheque);
         }
@@ -437,8 +435,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ed_bundles.setText("0");
         ed_cartons.setText("0");
         ed_cartons.setSelected(true);
-        ed_cartons.requestFocus();
-        img_slip.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.camera));
+        img_slip.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_camera_alt_black_24dp));
         psImagePath = "";
         flag = 0;
         imagePath = "NA";
@@ -697,6 +694,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void validations() {
+        int qty1 = Integer.parseInt(tv_poQty.getText().toString());
+        int qty2 = Integer.parseInt(tv_qty_Total.getText().toString());
         if (ed_custName.getText().toString().equals("")) {
             toast.setText("Please Select Party Name");
             toast.show();
@@ -705,6 +704,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             toast.show();
         } else if (psImagePath.equals("")) {
             toast.setText("Please Capture Packing Slip Image");
+            toast.show();
+        } else if(qty1!=qty2){
+            toast.setText("Total Quantity Mismatch");
             toast.show();
         } else {
             showDia(7);
@@ -727,11 +729,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     cq.getCBL() + "\n" +
                     cq.getNoOfCartons() + "\n" +
                     cq.getImgName());
-            notOfCartoon = notOfCartoon + cq.getNoOfCartons() + ",";
-            imageNames = imageNames + cq.getImgName() + ",";
 
             if (cq.getCBL().equals("L") || cq.getCBL().equals("B")) {
-                if (!cq.getNoOfCartons().equals("") || !cq.getNoOfCartons().equals("0")) {
+                if (!cq.getNoOfCartons().equals("0") && !cq.getNoOfCartons().equals("")) {
+                    notOfCartoon = notOfCartoon + cq.getNoOfCartons() + ".";
+                    imageNames = imageNames + cq.getImgName() + ",";
+                    if (cq.getImgName().equals("NA")) {
+                        _flag = 1;
+                        break;
+                    }
+                }
+            } else {
+                notOfCartoon = notOfCartoon + cq.getNoOfCartons() + ".";
+                imageNames = imageNames + cq.getImgName() + ",";
+                if (cq.getImgName().equals("NA")) {
+                    _flag = 1;
+                    break;
+                }
+            }
+
+            /*if (cq.getCBL().equals("L") || cq.getCBL().equals("B")) {
+                if (!cq.getNoOfCartons().equals("0") && !cq.getNoOfCartons().equals("")) {
                     if (cq.getImgName().equals("NA")) {
                         _flag = 1;
                         break;
@@ -740,7 +758,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else if (cq.getImgName().equals("NA")) {
                 _flag = 1;
                 break;
-            }
+            }*/
         }
         imageNames = imageNames + psImagePath;
         Constant.showLog(dm.getPartyName() + "\n" +
@@ -998,7 +1016,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 font.setBoldweight(Font.BOLDWEIGHT_BOLD);
                 cs.setFont(font);
                 writeLog("writeFile_exportReport_called");
-                exportGSTReport(wb, cs);
+                exportDispatchReport(wb, cs);
                 FileOutputStream os = new FileOutputStream(outputFile);
                 wb.write(os);
                 os.close();
@@ -1052,7 +1070,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void exportGSTReport(Workbook wb, CellStyle cs) {
+    private void exportDispatchReport(Workbook wb, CellStyle cs) {
 
         Constant.showLog("exportGSTReport");
         Sheet sheet = wb.createSheet("Order Dispatch Allotment Report");

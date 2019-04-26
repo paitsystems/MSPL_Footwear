@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="@dimen/ledgerreport_date_110"
+            android:layout_height="match_parent"
+            android:background="@drawable/line_left_right_bottom_draw"
+            android:gravity="left|center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/mobmargin2"
+                android:gravity="left|center"
+                android:text="25/Apr/2019"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/ledgerreport_against_180"
+            android:layout_height="match_parent"
+            android:background="@drawable/line_right_bottom_draw"
+            android:gravity="left|center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_partyName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="left|center"
+                android:layout_margin="@dimen/mobmargin2"
+                android:gravity="left|center"
+                android:text="AMIT FOOTWEAR, KUNJIRWADI"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/ledgerreport_po_90"
+            android:layout_height="match_parent"
+            android:background="@drawable/line_right_bottom_draw"
+            android:gravity="left|center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_pono"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/mobmargin2"
+                android:gravity="left|center"
+                android:text="UGNT/1920/2244"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/ledgerreport_qty_90"
+            android:layout_height="match_parent"
+            android:background="@drawable/line_right_bottom_draw"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_qty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/mobmargin2"
+                android:layout_marginBottom="@dimen/mobmargin2"
+                android:layout_marginLeft="@dimen/mobmargin2"
+                android:layout_marginRight="10dp"
+                android:gravity="right|center"
+                android:text="35"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/ledgerreport_date_90"
+            android:layout_height="match_parent"
+            android:background="@drawable/line_right_bottom_draw"
+            android:gravity="left|center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_dispatchBy"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/mobmargin2"
+                android:gravity="left|center"
+                android:text="RANJIT TUKARAM DEVAKATE"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/ledgerreport_date_90"
+            android:layout_height="match_parent"
+            android:background="@drawable/line_right_bottom_draw"
+            android:gravity="left|center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_transporter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/mobmargin2"
+                android:gravity="left|center"
+                android:text="Shinde Tempo Service Out"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/ledgerreport_against_180"
+            android:layout_height="match_parent"
+            android:background="@drawable/line_right_bottom_draw"
+            android:gravity="left|center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_remark"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="left"
+                android:text="Remark"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

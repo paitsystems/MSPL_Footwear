@@ -87,7 +87,7 @@ public class ParseJSON {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    data = jsonArray.getJSONObject(i).getString("mob_version");
+                    data = jsonArray.getJSONObject(i).getString("dmob_version");
                 }
             }
         } catch (Exception e) {

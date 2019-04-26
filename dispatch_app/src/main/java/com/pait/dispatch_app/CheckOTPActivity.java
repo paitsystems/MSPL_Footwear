@@ -369,7 +369,7 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
         }
         SharedPreferences.Editor editor = FirstActivity.pref.edit();
         //TODO: Comment
-        editor.putBoolean(getString(R.string.pref_isRegistered), true);
+        //editor.putBoolean(getString(R.string.pref_isRegistered), true);
         editor.putBoolean(getString(R.string.pref_imeino2), true);
         editor.apply();
         finish();

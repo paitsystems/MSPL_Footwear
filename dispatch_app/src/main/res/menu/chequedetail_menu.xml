@@ -19,11 +19,6 @@
                 android:icon="@drawable/ic_autorenew_black_24dp"
                 android:title="@string/refresh"/>
 
-            <item
-                android:id="@+id/report"
-                android:icon="@drawable/ic_markunread_black_24dp"
-                android:title="@string/report_send" />
-
             <!--<item
                 android:id="@+id/clear"
                 android:icon="@drawable/ic_delete_black_24dp"

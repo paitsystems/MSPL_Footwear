@@ -61,7 +61,7 @@
                     android:visibility="visible">
 
                     <TextView
-                        style="@style/textViewMobW"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.4"
@@ -72,7 +72,7 @@
 
                     <TextView
                         android:id="@+id/tv_poQty"
-                        style="@style/textViewMobW"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.4"
@@ -84,22 +84,22 @@
                         android:visibility="visible" />
 
                     <TextView
-                        style="@style/textViewMobW"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.4"
-                        android:background="@drawable/line_left_top_bottom_red_draw"
+                        android:background="@drawable/line_left_top_bottom_blue_draw"
                         android:gravity="center"
                         android:text="Packed Qty"
                         android:textAppearance="?android:attr/textAppearanceSmall" />
 
                     <TextView
                         android:id="@+id/tv_qtyTotal"
-                        style="@style/textViewMobW"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.4"
-                        android:background="@drawable/line_left_top_right_bottom_red_draw"
+                        android:background="@drawable/line_left_top_right_bottom_blue_draw"
                         android:ems="10"
                         android:gravity="center"
                         android:padding="5sp"
@@ -115,10 +115,10 @@
                     android:visibility="visible">
 
                     <TextView
-                        style="@style/textViewMobW"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.8"
+                        android:layout_weight="0.9"
                         android:background="@drawable/line_left_bottom_red_draw"
                         android:gravity="center_vertical"
                         android:text="Transporter"
@@ -126,7 +126,7 @@
 
                     <TextView
                         android:id="@+id/tv_transporter"
-                        style="@style/textViewMobW"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.30"
@@ -143,10 +143,10 @@
                     android:visibility="visible">
 
                     <TextView
-                        style="@style/textViewMobW"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.7"
+                        android:layout_weight="0.9"
                         android:background="@drawable/line_left_bottom_red_draw"
                         android:gravity="center_vertical"
                         android:text="Dispatch By"
@@ -156,7 +156,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="0.3"
+                        android:layout_weight="0.30"
                         android:background="@drawable/line_left_right_bottom_draw">
 
                         <EditText
@@ -176,7 +176,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        style="@style/textViewMobW"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"
@@ -197,7 +197,7 @@
                             android:id="@+id/img_slip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/camera" />
+                            app:srcCompat="@drawable/ic_camera_alt_black_24dp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -208,7 +208,7 @@
                     android:visibility="visible">
 
                     <TextView
-                        style="@style/textViewMobW"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.4"
@@ -227,7 +227,7 @@
                         <EditText
                             android:id="@+id/ed_cartons"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:ems="10"
                             android:gravity="center"
                             android:inputType="number"
@@ -239,11 +239,11 @@
                     </LinearLayout>
 
                     <TextView
-                        style="@style/textViewMobW"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.4"
-                        android:background="@drawable/line_left_top_bottom_red_draw"
+                        android:background="@drawable/line_left_top_bottom_orange_draw"
                         android:gravity="center_vertical"
                         android:text="No Of Pairs In Bundles"
                         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -271,7 +271,7 @@
                 </LinearLayout>
 
                 <TextView
-                    style="@style/textViewMobAddToCard"
+                    style="@style/textViewMob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/line_left_right_red_draw"
@@ -284,7 +284,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        style="@style/textViewMobAddToCard"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"
@@ -293,7 +293,7 @@
                         android:text="SrNo" />
 
                     <TextView
-                        style="@style/textViewMobAddToCard"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"
@@ -303,7 +303,7 @@
                         android:visibility="visible" />
 
                     <TextView
-                        style="@style/textViewMobAddToCard"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"
@@ -322,7 +322,7 @@
                         android:visibility="gone" />
 
                     <TextView
-                        style="@style/textViewMobAddToCard"
+                        style="@style/textViewMob"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"

@@ -654,7 +654,9 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public Cursor getDPCenter(int hoCode){
-        String str = "select * from "+Table_CompanyMaster + " where "+Company_HOCode+"="+hoCode +" and " + Company_DisplayCmp + " not like '%Damage%' order by "+Company_DisplayCmp;
+        String str = "select * from "+Table_CompanyMaster + " where "+Company_HOCode+"="+hoCode +" and " +
+                Company_DisplayCmp + " not like '%Damage%' and "+Company_DisplayCmp+" not like '%transfer%' " +
+                " and "+Company_Id +" not in (1,12,13) order by "+Company_DisplayCmp;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str,null);
     }
@@ -678,7 +680,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public void deleteOrderTableAfterSave(String pono) {
-        getWritableDatabase().execSQL("delete from " + Table_DispatchMaster + " where " + DM_PONO + "='" + pono+"'");
+        getWritableDatabase().delete(Table_DispatchMaster,DM_PONO+"=?",new String[]{pono});
     }
 
 }
