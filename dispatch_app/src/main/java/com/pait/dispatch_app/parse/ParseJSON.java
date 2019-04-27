@@ -64,6 +64,8 @@ public class ParseJSON {
                     userClass.setPintext("-1");
 
                     SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                    editor.putString(context.getString(R.string.pref_mobno), userClass.getMobile());
+                    editor.putInt(context.getString(R.string.pref_hocode), userClass.getHOCode());
                     editor.putInt(context.getString(R.string.pref_branchid), userClass.getBranchId());
                     editor.putInt(context.getString(R.string.pref_retailCustId), userClass.getCustID());
                     editor.putInt(context.getString(R.string.pref_cityid), userClass.getCityId());

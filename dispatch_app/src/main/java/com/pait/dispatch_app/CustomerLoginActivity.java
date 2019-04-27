@@ -92,7 +92,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                     userClass.setDpId(id);
                     Constant.showLog(br + " " + id);
                 } else {
-                    toast.setText("Select Dispach Center First");
+                    toast.setText("Select Dispatch Center First");
                     toast.show();
                 }
             }
@@ -118,7 +118,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                 if(id !=0) {
                     startNewActivity();
                 } else {
-                    toast.setText("Select Dispach Center First");
+                    toast.setText("Select Dispatch Center First");
                     toast.show();
                 }
                 break;
@@ -126,7 +126,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
                 if(id !=0) {
                     startNewActivity();
                 } else {
-                    toast.setText("Select Dispach Center First");
+                    toast.setText("Select Dispatch Center First");
                     toast.show();
                 }
                 break;
@@ -276,7 +276,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
 
     private void setDPCenter(){
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
-        int hoCode = FirstActivity.pref.getInt(getString(R.string.pref_branchid),0);
+        int hoCode = FirstActivity.pref.getInt(getString(R.string.pref_hocode),0);
         dpList.add("Select Dispatch Center");
         dpMap.put("Select Dispatch Center",0);
         Cursor res = db.getDPCenter(hoCode);

@@ -34,11 +34,14 @@ public class Constant {
             mail_subject = "Log File",
             mail_body = "Find the Attached Log File",
             mailReceipient = "anup.p@paitsystems.com",
-            ftp_adress = "ftp.lnbinfotech.com",
+            /*ftp_adress = "ftp.lnbinfotech.com",
             ftp_username = "supportftp@lnbinfotech.com",
             ftp_password = "support$456",
-            //ftp_directory = "Receipt Details";
-            ftp_directory = "Test",
+            ftp_directory = "Test",*/
+            ftp_adress = "103.109.13.200",
+            ftp_username = "ascpune/mobileapp",
+            ftp_password = "Mspl@3321",
+            ftp_directory = "Packed Goods",
             zip_file = "SmartGST.zip";
 
     //TODO: Check Ip Address
@@ -64,8 +67,8 @@ public class Constant {
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
     private static int showLogFlag = 1;
 
-    public static int TIMEOUT_CON = 10*1000;
-    public static int TIMEOUT_SO = 2*60*1000;
+    public static int TIMEOUT_CON = 10 * 1000;
+    public static int TIMEOUT_SO = 2 * 60 * 1000;
 
     private Activity activity;
     private Context context;
@@ -73,7 +76,7 @@ public class Constant {
     private static ProgressDialog pd;
 
     public static void showLog(String log) {
-        if(showLogFlag==0) {
+        if (showLogFlag == 0) {
             Log.d("Log", "" + log);
         }
     }
@@ -148,9 +151,9 @@ public class Constant {
         return myAndroidDeviceId;
     }
 
-    public String getIMEINo1(){
-        String imeino="";
-        TelephonyManager telephony = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+    public String getIMEINo1() {
+        String imeino = "";
+        TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         try {
             Class<?> telephonyClass = Class.forName(telephony.getClass().getName());
             Class<?>[] parameter = new Class[1];
@@ -165,10 +168,10 @@ public class Constant {
             obParameter[0] = 1;
             String second = (String) getFirstMethod.invoke(telephony, obParameter);
             Log.d("Log", "SECOND :" + second);
-            imeino = first+"^"+second;
+            imeino = first + "^" + second;
         } catch (Exception e) {
             e.printStackTrace();
-            writeLog("getIMEINo1_"+e.getMessage());
+            writeLog("getIMEINo1_" + e.getMessage());
         }
         return imeino;
     }

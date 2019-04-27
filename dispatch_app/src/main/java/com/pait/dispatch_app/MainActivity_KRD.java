@@ -8,13 +8,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -29,22 +29,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pait.dispatch_app.adapters.DispatchDetailAdapter;
-import com.pait.dispatch_app.connectivity.ConnectivityTest;
 import com.pait.dispatch_app.constant.Constant;
 import com.pait.dispatch_app.db.DBHandler;
 import com.pait.dispatch_app.interfaces.RetrofitApiInterface;
-import com.pait.dispatch_app.interfaces.ServerCallback;
 import com.pait.dispatch_app.interfaces.TestInterface;
-import com.pait.dispatch_app.log.CopyLog;
 import com.pait.dispatch_app.log.WriteLog;
-import com.pait.dispatch_app.mail.GMailSender;
 import com.pait.dispatch_app.model.DispatchDetailClass;
 import com.pait.dispatch_app.model.DispatchMasterClass;
 import com.pait.dispatch_app.model.EmployeeMasterClass;
 import com.pait.dispatch_app.parse.UserClass;
 import com.pait.dispatch_app.services.UploadImageService;
 import com.pait.dispatch_app.utility.RetrofitApiBuilder;
-import com.pait.dispatch_app.volleyrequests.VolleyRequests;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -54,16 +49,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DataFormat;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellRangeAddress;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
@@ -75,16 +60,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,TestInterface {
+public class MainActivity_KRD extends AppCompatActivity  implements View.OnClickListener,TestInterface {
 
-    private EditText ed_custName, ed_poNo, ed_dispatchBy, ed_cartons, ed_bundles;
+    private EditText ed_custName, ed_poNo, ed_dispatchBy, ed_cartons, ed_bundles, ed_total;
     private TextView tv_poQty, tv_qty_Total, tv_transporter;
     private Button btn_submit;
     private NonScrollListView listView;
@@ -107,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (Constant.liveTestFlag == 1) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main__krd);
 
         init();
 
@@ -410,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (!list.isEmpty()) {
             adapter = new DispatchDetailAdapter(getApplicationContext(), list);
-            adapter.initInterface(MainActivity.this);
+            adapter.initInterface(MainActivity_KRD.this);
             listView.setAdapter(adapter);
         }
     }
@@ -434,7 +418,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getDispatchMaster(int type) {
-        final Constant constant = new Constant(MainActivity.this);
+        final Constant constant = new Constant(MainActivity_KRD.this);
         constant.showPD();
         try {
             int maxAuto = db.getMaxAuto();
@@ -494,6 +478,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ed_poNo = findViewById(R.id.ed_poNo);
         ed_dispatchBy = findViewById(R.id.ed_dispatchBy);
         ed_cartons = findViewById(R.id.ed_cartons);
+        ed_total = findViewById(R.id.ed_total);
         ed_bundles = findViewById(R.id.ed_bundles);
         tv_poQty = findViewById(R.id.tv_poQty);
         tv_qty_Total = findViewById(R.id.tv_qtyTotal);
@@ -507,14 +492,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void showDia(int a) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity_KRD.this);
         builder.setCancelable(false);
         if (a == 1) {
             builder.setMessage("Do You Want To Go Back ?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    new Constant(MainActivity.this).doFinish();
+                    new Constant(MainActivity_KRD.this).doFinish();
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -540,7 +525,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     dialog.dismiss();
                     clearFields();
                     flag = 0;
-                    Intent intent = new Intent(MainActivity.this, UploadImageService.class);
+                    Intent intent = new Intent(MainActivity_KRD.this, UploadImageService.class);
                     startService(intent);
                     writeLog("UploadImageService_onHandleIntent_broadcastSend");
                     getDispatchMaster(1);
@@ -615,8 +600,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void validations() {
-        //int qty1 = Integer.parseInt(tv_poQty.getText().toString());
-        //int qty2 = Integer.parseInt(tv_qty_Total.getText().toString());
+        int qty1 = Integer.parseInt(tv_poQty.getText().toString());
+        int qty2 = Integer.parseInt(ed_total.getText().toString());
         if (ed_custName.getText().toString().equals("")) {
             toast.setText("Please Select Party Name");
             toast.show();
@@ -626,10 +611,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (psImagePath.equals("")) {
             toast.setText("Please Capture Packing Slip Image");
             toast.show();
-        } /*else if(qty1!=qty2){
+        } else if(qty1!=qty2){
             toast.setText("Total Quantity Mismatch");
             toast.show();
-        }*/ else {
+        } else {
             showDia(7);
         }
     }
@@ -668,18 +653,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 }
             }
-
-            /*if (cq.getCBL().equals("L") || cq.getCBL().equals("B")) {
-                if (!cq.getNoOfCartons().equals("0") && !cq.getNoOfCartons().equals("")) {
-                    if (cq.getImgName().equals("NA")) {
-                        _flag = 1;
-                        break;
-                    }
-                }
-            } else if (cq.getImgName().equals("NA")) {
-                _flag = 1;
-                break;
-            }*/
         }
         imageNames = imageNames + psImagePath;
         Constant.showLog(dm.getPartyName() + "\n" +
@@ -703,7 +676,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Constant.showLog(data);
 
         if (_flag == 0) {
-            new saveDispatchMaster(dm.getPONO()).execute(data);
+            new MainActivity_KRD.saveDispatchMaster(dm.getPONO()).execute(data);
         } else {
             toast.setText("Please Capture All Images");
             toast.show();
@@ -721,7 +694,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pd = new ProgressDialog(MainActivity.this);
+            pd = new ProgressDialog(MainActivity_KRD.this);
             pd.setMessage("Please Wait...");
             pd.setCancelable(false);
             pd.show();
@@ -803,6 +776,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void writeLog(String _data) {
-        new WriteLog().writeLog(getApplicationContext(), "MainActivity_" + _data);
+        new WriteLog().writeLog(getApplicationContext(), "MainActivityKRD_" + _data);
     }
 }
+

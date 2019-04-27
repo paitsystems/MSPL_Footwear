@@ -656,7 +656,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public Cursor getDPCenter(int hoCode){
         String str = "select * from "+Table_CompanyMaster + " where "+Company_HOCode+"="+hoCode +" and " +
                 Company_DisplayCmp + " not like '%Damage%' and "+Company_DisplayCmp+" not like '%transfer%' " +
-                " and "+Company_Id +" not in (1,12,13) order by "+Company_DisplayCmp;
+                " and "+Company_Id +" not in (1,7,12,13) order by "+Company_DisplayCmp;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str,null);
     }
@@ -677,6 +677,21 @@ public class DBHandler extends SQLiteOpenHelper {
         String str = "select " + EMP_EmpId + "," + EMP_Name + " from " + Table_Employee + " where " + EMP_DesignId + " in (6,7) and " + EMP_HoCode + "=" + hoCode + " order by " + EMP_Name;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str, null);
+    }
+
+    public String getDPINIT(int hoCode, int dpId){
+        String init = "";
+        String str = "select "+Company_Initial+" from "+Table_CompanyMaster + " where "+Company_HOCode+"="+hoCode +
+                " and "+Company_Id +"="+ dpId;
+        Constant.showLog(str);
+        Cursor res = getWritableDatabase().rawQuery(str,null);
+        if(res.moveToFirst()){
+            do{
+                init = res.getString(0);
+            }while (res.moveToNext());
+        }
+        res.close();
+        return init;
     }
 
     public void deleteOrderTableAfterSave(String pono) {

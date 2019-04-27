@@ -65,12 +65,10 @@ import retrofit2.Response;
 
 public class ReportActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Constant constant, constant1;
     private Toast toast;
     private ListView lv_ledger;
     private TextView tv_fdate, tv_tdate, tot_clb, tot_ob, tot_credit, tot_debit, tv_outstanding;
     private CheckBox cb_all;
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
     private SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
     private int day, month, year, hoCode, dpID, empId, custCode = 0, totQty = 0, flag = 0;;
     private Calendar cal = Calendar.getInstance();
@@ -229,6 +227,7 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void init() {
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         btn_view_ledger = findViewById(R.id.btn_view_ledger);
         btn_view_out = findViewById(R.id.btn_view_out);
         btn_view_credit = findViewById(R.id.btn_view_credit);
@@ -240,10 +239,7 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
         tot_ob = findViewById(R.id.tot_ob);
         tot_credit = findViewById(R.id.tot_credit);
         tot_debit = findViewById(R.id.tot_debit);
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         cb_all = findViewById(R.id.cb_all);
-        constant = new Constant(ReportActivity.this);
-        constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         flt_price = new DecimalFormat();
@@ -322,11 +318,14 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void exportToExcel() {
+        int hoCode = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
+        int dpId = FirstActivity.pref.getInt(getString(R.string.pref_dpId), 0);
+        String init = new DBHandler(getApplicationContext()).getDPINIT(hoCode,dpId);
         long datetime = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_hh_mm_ss", Locale.ENGLISH);
         Date resultdate = new Date(datetime);
         String cur_date = sdf.format(resultdate);
-        exportFileName = "Dispatch_Allotment_Report_" + cur_date + ".xls";
+        exportFileName = init+"_"+total_debit+"_" + cur_date + ".xls";
         writeLog("exportToExcel_" + exportFileName);
         new writeFile().execute(exportFileName);
     }
