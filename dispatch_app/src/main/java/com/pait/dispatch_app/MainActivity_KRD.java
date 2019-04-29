@@ -78,7 +78,7 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
     private List<DispatchDetailClass> list;
     private int requestCode = 1, requestCode2 = 2, edCustCode = 3, edPOCode = 4, edDPBy = 5, hoCode,
             dpID, empId, custCode = 0, flag = 0;
-    private String imagePath = "NA", psImagePath = "", imgType, pono, exportFileName;
+    private String imagePath = "NA", psImagePath = "", imgType, pono;
     private DBHandler db;
     private DispatchMasterClass dm;
     private EmployeeMasterClass em;
@@ -676,7 +676,7 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
         Constant.showLog(data);
 
         if (_flag == 0) {
-            new MainActivity_KRD.saveDispatchMaster(dm.getPONO()).execute(data);
+            new saveDispatchMaster(dm.getPONO()).execute(data);
         } else {
             toast.setText("Please Capture All Images");
             toast.show();

@@ -41,7 +41,7 @@ public class UploadImageService extends IntentService {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void startMyOwnForeground(){
-        String NOTIFICATION_CHANNEL_ID = "com.example.simpleapp";
+        String NOTIFICATION_CHANNEL_ID = "com.pait.dispatch_app";
         String channelName = "My Background Service";
         NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
         chan.setLightColor(Color.BLUE);
@@ -53,7 +53,7 @@ public class UploadImageService extends IntentService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
         Notification notification = notificationBuilder.setOngoing(true)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("App is running in background")
+                .setContentTitle("Uploading Images")
                 .setPriority(NotificationManager.IMPORTANCE_MIN)
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .build();
@@ -64,14 +64,7 @@ public class UploadImageService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         try{
             Constant.showLog("Service started..");
-            //String filename = intent.getStringExtra("filename");
-            File f;/*
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                f = new File(Environment.getExternalStorageDirectory() + File.separator +
-                        Constant.folder_name + File.separator + Constant.image_folder + File.separator + filename);
-            } else {
-                f = new File(getFilesDir(), filename);
-            }*/
+            File f;
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                 f = new File(Environment.getExternalStorageDirectory() + File.separator +
                         Constant.folder_name + File.separator + Constant.image_folder);
@@ -90,6 +83,19 @@ public class UploadImageService extends IntentService {
                         if (file != null && !file.isDirectory()) {
                             FileInputStream ifile = new FileInputStream(file);
                             client.cwd(Constant.ftp_directory);
+                            String str = file.getName();
+                            String arr[] = str.split("_");
+                            try {
+                                String month = arr[6];
+                                String day = arr[5];
+                                String dpCenter = arr[1];
+                                client.cwd(month + "/" + day + "/" + dpCenter);
+                            } catch (Exception e){
+                                if(!file.getName().equals("temp.jpg")) {
+                                    e.printStackTrace();
+                                    writeLog("onHandleIntent_" + e.getMessage());
+                                }
+                            }
                             if (client.storeFile(file.getName(), ifile)) {
                                 file.delete();
                                 Constant.showLog("Image deleted.."+file.getName());
@@ -104,6 +110,7 @@ public class UploadImageService extends IntentService {
             Constant.showLog("disconnected..");
         } catch (Exception e) {
             e.printStackTrace();
+            writeLog("onHandleIntent_"+e.getMessage());
         }
     }
 

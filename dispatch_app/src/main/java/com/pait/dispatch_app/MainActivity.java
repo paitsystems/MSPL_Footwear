@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<DispatchDetailClass> list;
     private int requestCode = 1, requestCode2 = 2, edCustCode = 3, edPOCode = 4, edDPBy = 5, hoCode,
             dpID, empId, custCode = 0, flag = 0;
-    private String imagePath = "NA", psImagePath = "", imgType, pono, exportFileName;
+    private String imagePath = "NA", psImagePath = "", imgType, pono = "", empName = "NA";
     private DBHandler db;
     private DispatchMasterClass dm;
     private EmployeeMasterClass em;
@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 long datetime = System.currentTimeMillis();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
                 Date resultdate = new Date(datetime);
-                imagePath = pono + "_" + imgType + "_" + custCode + "_" + sdf.format(resultdate) + ".jpg";
+                imagePath = pono + "_" + imgType + "_" + custCode + "_" + empName + "_" + sdf.format(resultdate) + ".jpg";
                 Constant.showLog(imagePath);
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator +
                         Constant.folder_name + File.separator + Constant.image_folder);
@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 long datetime = System.currentTimeMillis();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
                 Date resultdate = new Date(datetime);
-                psImagePath = pono + "_PS_" + custCode + "_" + sdf.format(resultdate) + ".jpg";
+                psImagePath = pono + "_PS_" + custCode + "_" + empName + "_" + sdf.format(resultdate) + ".jpg";
                 Constant.showLog(psImagePath);
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator +
                         Constant.folder_name + File.separator + Constant.image_folder);
@@ -337,6 +337,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             tv_qty_Total.setText("0");
             tv_transporter.setText("");
             ed_dispatchBy.setText(null);
+            empName = "NA";
             list.clear();
             listView.setAdapter(null);
         } else if (this.edPOCode == requestCode && resultCode == RESULT_OK) {
@@ -348,6 +349,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             tv_qty_Total.setText("0");
             tv_transporter.setText(dm.getTransporter());
             ed_dispatchBy.setText(dm.getEmp_Name());
+            String str = dm.getEmp_Name();
+            Constant.showLog(str);
+            try {
+                String arr1[] = str.split("\\s+");
+                if(arr1.length>1){
+                    empName = arr1[0];
+                } else {
+                    empName = str;
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+                writeLog(e.getMessage());
+            }
             em = new EmployeeMasterClass();
             em.setEmp_Id(Integer.parseInt(dm.getEmp_Id()));
             em.setName(dm.getEmp_Name());
@@ -431,6 +445,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         psImagePath = "";
         flag = 0;
         imagePath = "NA";
+        empName = "NA";
     }
 
     private void getDispatchMaster(int type) {
@@ -440,6 +455,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int maxAuto = db.getMaxAuto();
             //Auto + "|"+ CustId + "|"+ HOCode + "|"+ dispatchId + "|"+ empId + "|"+ type
             String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId + "|" + type;
+            if(pono!=null && !pono.equals("")) {
+                db.deleteOrderTableAfterSave(pono);
+            }
             writeLog("getDispatchMaster_" + url);
             final JSONObject jsonBody = new JSONObject();
             jsonBody.put("details", url);
@@ -668,18 +686,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 }
             }
-
-            /*if (cq.getCBL().equals("L") || cq.getCBL().equals("B")) {
-                if (!cq.getNoOfCartons().equals("0") && !cq.getNoOfCartons().equals("")) {
-                    if (cq.getImgName().equals("NA")) {
-                        _flag = 1;
-                        break;
-                    }
-                }
-            } else if (cq.getImgName().equals("NA")) {
-                _flag = 1;
-                break;
-            }*/
         }
         imageNames = imageNames + psImagePath;
         Constant.showLog(dm.getPartyName() + "\n" +
@@ -695,10 +701,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Constant.showLog(imageNames);
 
         //DCNO,PONO,DispatchBy,NoOfCartoon,DispatchPerson,CheckedPerson,Carton,Bundle,ImagePath,DTotal
-        int DTotal = Integer.parseInt(tv_qty_Total.getText().toString());
+        //int DTotal = Integer.parseInt(tv_qty_Total.getText().toString());
 
         String data = dm.getDcNo() + "|" + dm.getPONO() + "|" + dm.getEmp_Id() + "|" + notOfCartoon + "|" +
-                empId + "|" + empId + "|" + str1 + "|" + str + "|" + imageNames + "|" + DTotal;
+                empId + "|" + empId + "|" + str1 + "|" + str + "|" + imageNames;
 
         Constant.showLog(data);
 
@@ -711,11 +717,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private class saveDispatchMaster extends AsyncTask<String, Void, String> {
-        private String pono = "";
+        private String pono1 = "";
         private ProgressDialog pd;
 
         private saveDispatchMaster(String _pono) {
-            this.pono = _pono;
+            this.pono1 = _pono;
         }
 
         @Override
@@ -779,8 +785,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String[] retAutoBranchId = str.split("\\-");
                 if (retAutoBranchId.length > 1) {
                     if (!retAutoBranchId[0].equals("0") && !retAutoBranchId[0].equals("+2") && !retAutoBranchId[0].equals("+3")) {
-                        if (retAutoBranchId[1].equals(String.valueOf(pono))) {
-                            db.deleteOrderTableAfterSave(pono);
+                        if (retAutoBranchId[1].equals(String.valueOf(this.pono1))) {
+                            pono = this.pono1;
                             showDia(3);
                         } else {
                             showDia(4);
@@ -791,8 +797,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     showDia(4);
                 }
-                //counter++;
-                //saveCustOrder();
             } catch (Exception e) {
                 writeLog("saveDispatchMaster_" + e.getMessage());
                 e.printStackTrace();

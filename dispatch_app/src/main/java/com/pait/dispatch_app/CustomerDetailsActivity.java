@@ -42,6 +42,7 @@ import com.pait.dispatch_app.log.WriteLog;
 import com.pait.dispatch_app.mail.GMailSender;
 import com.pait.dispatch_app.parse.ParseJSON;
 import com.pait.dispatch_app.parse.UserClass;
+import com.pait.dispatch_app.services.UploadImageService;
 import com.pait.dispatch_app.volleyrequests.VolleyRequests;
 
 import java.io.File;
@@ -201,6 +202,11 @@ public class CustomerDetailsActivity extends AppCompatActivity
             case R.id.report_error:
                 showDia(11);
                 break;
+            case R.id.sync_image:
+                writeLog("Sync_Images_Started");
+                Intent intent = new Intent(CustomerDetailsActivity.this, UploadImageService.class);
+                startService(intent);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -331,7 +337,6 @@ public class CustomerDetailsActivity extends AppCompatActivity
             });
         } else if (a == 8) {
             builder.setTitle("Update App");
-            //TODO: Check App Name
             builder.setMessage("New App Version Is Available");
             builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
                 @Override

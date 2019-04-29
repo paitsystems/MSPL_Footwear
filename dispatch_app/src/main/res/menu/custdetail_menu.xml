@@ -17,6 +17,11 @@
                 android:id="@+id/report_error"
                 android:title="@string/report_error"
                 android:icon="@drawable/ic_error_outline_black_24dp" />
+
+            <item
+                android:id="@+id/sync_image"
+                android:title="Sync Image"
+                android:icon="@drawable/ic_cloud_upload_black_24dp"/>
         </menu>
     </item>
 
