@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,9 +26,12 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pait.dispatch_app.adapters.DispatchDetailAdapter;
 import com.pait.dispatch_app.constant.Constant;
 import com.pait.dispatch_app.db.DBHandler;
@@ -66,7 +70,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity_KRD extends AppCompatActivity  implements View.OnClickListener,TestInterface {
+public class MainActivity_KRD extends AppCompatActivity implements View.OnClickListener, TestInterface {
 
     private EditText ed_custName, ed_poNo, ed_dispatchBy, ed_cartons, ed_bundles, ed_total;
     private TextView tv_poQty, tv_qty_Total, tv_transporter;
@@ -78,11 +82,13 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
     private List<DispatchDetailClass> list;
     private int requestCode = 1, requestCode2 = 2, edCustCode = 3, edPOCode = 4, edDPBy = 5, hoCode,
             dpID, empId, custCode = 0, flag = 0;
-    private String imagePath = "NA", psImagePath = "", imgType, pono;
+    private String imagePath = "NA", psImagePath = "", imgType, pono = "", empName = "NA", userType;
     private DBHandler db;
     private DispatchMasterClass dm;
     private EmployeeMasterClass em;
     private UserClass userClass;
+    private LinearLayout lay_car, lay_header;
+    private TextView tv_car;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,9 +102,27 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
         init();
 
         userClass = (UserClass) getIntent().getExtras().get("cust");
+        userType = getIntent().getExtras().getString("type");
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(userClass.getName());
+        }
+
+        if (userType.equals("1")) {
+            lay_car.setVisibility(View.GONE);
+            lay_header.setVisibility(View.GONE);
+            tv_car.setVisibility(View.GONE);
+            listView.setVisibility(View.GONE);
+        } else {
+            ed_total.setFocusable(false);
+            ed_total.setClickable(false);
+            ed_total.setEnabled(false);
+            ed_dispatchBy.setFocusable(false);
+            ed_dispatchBy.setClickable(false);
+            ed_dispatchBy.setEnabled(false);
+            //img_slip.setFocusable(false);
+            //img_slip.setClickable(false);
+            //img_slip.setEnabled(false);
         }
 
         empId = userClass.getCustID();
@@ -148,13 +172,18 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
                     setData();
                 } else {
                     tv_qty_Total.setText("0");
+                    ed_total.setText("0");
                     list.clear();
                     listView.setAdapter(null);
                 }
             }
         });
 
-        getDispatchMaster(1);
+        if (userType.equals("1")) {
+            getDispatchMaster(1);
+        } else {
+            getDispatchMaster(3);
+        }
     }
 
     @Override
@@ -185,7 +214,11 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_slip:
-                takeImage(requestCode2);
+                if (userType.equals("1")) {
+                    takeImage(requestCode2);
+                } else {
+                    showPic();
+                }
                 break;
             case R.id.ed_custName:
                 Intent intent1 = new Intent(getApplicationContext(), ProductSearchActivity.class);
@@ -234,6 +267,7 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
     @Override
     public void onAmountChange(int amnt) {
         tv_qty_Total.setText(String.valueOf(amnt));
+        ed_total.setText(String.valueOf(amnt));
     }
 
     @Override
@@ -244,7 +278,7 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
                 long datetime = System.currentTimeMillis();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
                 Date resultdate = new Date(datetime);
-                imagePath = pono + "_" + imgType + "_" + custCode + "_" + sdf.format(resultdate) + ".jpg";
+                imagePath = pono + "_" + imgType + "_" + custCode + "_" + empName + "_" + sdf.format(resultdate) + ".jpg";
                 Constant.showLog(imagePath);
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator +
                         Constant.folder_name + File.separator + Constant.image_folder);
@@ -269,7 +303,7 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
                     adapter.returnImage(imagePath);
                     imagePath = "NA";
                 } catch (Exception e) {
-                    writeLog("onActivityResult():FileNotFoundException:" + e);
+                    writeLog("onActivityResult():FileNotFoundException:_" + e);
                     e.printStackTrace();
                 }
             } catch (Exception e) {
@@ -281,7 +315,7 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
                 long datetime = System.currentTimeMillis();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
                 Date resultdate = new Date(datetime);
-                psImagePath = pono + "_PS_" + custCode + "_" + sdf.format(resultdate) + ".jpg";
+                psImagePath = pono + "_PS_" + custCode + "_" + empName + "_" + sdf.format(resultdate) + ".jpg";
                 Constant.showLog(psImagePath);
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator +
                         Constant.folder_name + File.separator + Constant.image_folder);
@@ -328,10 +362,29 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
             ed_poNo.setText(dm.getPONO());
             String[] arr = dm.getPONO().split("\\/");
             pono = arr[2] + "_" + arr[0];
-            tv_poQty.setText(dm.getTotalQty());
-            tv_qty_Total.setText("0");
+            if (userType.equals("2")) {
+                tv_poQty.setText(dm.getDPTotal());
+                ed_total.setText(dm.getDPTotal());
+                psImagePath = dm.getPSImage();
+                loadImage();
+            } else {
+                tv_poQty.setText(dm.getTotalQty());
+            }
             tv_transporter.setText(dm.getTransporter());
             ed_dispatchBy.setText(dm.getEmp_Name());
+            String str = dm.getEmp_Name();
+            Constant.showLog(str);
+            try {
+                String arr1[] = str.split("\\s+");
+                if (arr1.length > 1) {
+                    empName = arr1[0];
+                } else {
+                    empName = str;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                writeLog(e.getMessage());
+            }
             em = new EmployeeMasterClass();
             em.setEmp_Id(Integer.parseInt(dm.getEmp_Id()));
             em.setName(dm.getEmp_Name());
@@ -340,6 +393,19 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
         } else if (this.edDPBy == requestCode && resultCode == RESULT_OK) {
             em = (EmployeeMasterClass) data.getSerializableExtra("result");
             ed_dispatchBy.setText(em.getName());
+            String str = dm.getEmp_Name();
+            Constant.showLog(str);
+            try {
+                String arr1[] = str.split("\\s+");
+                if (arr1.length > 1) {
+                    empName = arr1[0];
+                } else {
+                    empName = str;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                writeLog(e.getMessage());
+            }
         }
     }
 
@@ -406,6 +472,7 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
         ed_poNo.setText(null);
         tv_poQty.setText("0");
         tv_qty_Total.setText("0");
+        ed_total.setText("0");
         tv_transporter.setText("");
         ed_dispatchBy.setText(null);
         ed_bundles.setText("0");
@@ -415,6 +482,7 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
         psImagePath = "";
         flag = 0;
         imagePath = "NA";
+        empName = "NA";
     }
 
     private void getDispatchMaster(int type) {
@@ -425,6 +493,9 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
             //Auto + "|"+ CustId + "|"+ HOCode + "|"+ dispatchId + "|"+ empId + "|"+ type
             String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId + "|" + type;
             writeLog("getDispatchMaster_" + url);
+            if (pono != null && !pono.equals("")) {
+                db.deleteOrderTableAfterSave(pono);
+            }
             final JSONObject jsonBody = new JSONObject();
             jsonBody.put("details", url);
             RequestBody body = RequestBody.create(okhttp3.MediaType.
@@ -471,152 +542,34 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
         }
     }
 
-    private void init() {
-        toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        ed_custName = findViewById(R.id.ed_custName);
-        ed_poNo = findViewById(R.id.ed_poNo);
-        ed_dispatchBy = findViewById(R.id.ed_dispatchBy);
-        ed_cartons = findViewById(R.id.ed_cartons);
-        ed_total = findViewById(R.id.ed_total);
-        ed_bundles = findViewById(R.id.ed_bundles);
-        tv_poQty = findViewById(R.id.tv_poQty);
-        tv_qty_Total = findViewById(R.id.tv_qtyTotal);
-        tv_transporter = findViewById(R.id.tv_transporter);
-        btn_submit = findViewById(R.id.btn_submit);
-        listView = findViewById(R.id.listView);
-        img_slip = findViewById(R.id.img_slip);
-        list = new ArrayList<>();
-        db = new DBHandler(getApplicationContext());
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
-    }
-
-    private void showDia(int a) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity_KRD.this);
-        builder.setCancelable(false);
-        if (a == 1) {
-            builder.setMessage("Do You Want To Go Back ?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    new Constant(MainActivity_KRD.this).doFinish();
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
-        } else if (a == 2) {
-            builder.setMessage("Error While Loading Data");
-            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    new Constant();
-                    dialog.dismiss();
-                }
-            });
-        } else if (a == 3) {
-            builder.setMessage("Data Saved Successfully");
-            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    clearFields();
-                    flag = 0;
-                    Intent intent = new Intent(MainActivity_KRD.this, UploadImageService.class);
-                    startService(intent);
-                    writeLog("UploadImageService_onHandleIntent_broadcastSend");
-                    getDispatchMaster(1);
-                }
-            });
-        } else if (a == 4) {
-            builder.setMessage("Error While Saving Order");
-            builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    new Constant();
-                    dialog.dismiss();
-                }
-            });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-        } else if (a == 5) {
-            builder.setMessage("Do You Want To Refresh Data?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    db.deleteTable(DBHandler.Table_DispatchMaster);
-                    flag = 0;
-                    flag = 0;
-                    getDispatchMaster(1);
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-        } else if (a == 7) {
-            builder.setMessage("Do You Want To Save Data?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    getData();
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-        } else if (a == 8) {
-            builder.setMessage("Do You Want To Send Report?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    flag = 1;
-                    getDispatchMaster(2);
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-        }
-        builder.create().show();
-    }
-
     private void validations() {
+        int flag = 0;
         int qty1 = Integer.parseInt(tv_poQty.getText().toString());
         int qty2 = Integer.parseInt(ed_total.getText().toString());
         if (ed_custName.getText().toString().equals("")) {
             toast.setText("Please Select Party Name");
             toast.show();
+            flag = 1;
         } else if (ed_poNo.getText().toString().equals("")) {
             toast.setText("Please Select PO Number");
             toast.show();
+            flag = 1;
         } else if (psImagePath.equals("")) {
             toast.setText("Please Capture Packing Slip Image");
             toast.show();
-        } else if(qty1!=qty2){
-            toast.setText("Total Quantity Mismatch");
-            toast.show();
-        } else {
+            flag = 1;
+        }
+        if (userType.equals("2")) {
+            if (qty1 != qty2) {
+                toast.setText("Total Quantity Mismatch");
+                toast.show();
+                flag = 1;
+            }
+        }
+        if (flag == 0) {
             showDia(7);
         }
+
     }
 
     private void getData() {
@@ -654,7 +607,6 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
                 }
             }
         }
-        imageNames = imageNames + psImagePath;
         Constant.showLog(dm.getPartyName() + "\n" +
                 dm.getPONO() + "\n" +
                 dm.getDcNo() + "\n" +
@@ -663,15 +615,20 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
                 dm.getTransporter());
 
         Constant.showLog(em.getEmp_Id() + "\n" + em.getName());
-        notOfCartoon = notOfCartoon.substring(0, notOfCartoon.length() - 1);
+        if (notOfCartoon.length() > 1) {
+            notOfCartoon = notOfCartoon.substring(0, notOfCartoon.length() - 1);
+        }
+        if (imageNames.length() > 1) {
+            imageNames = imageNames.substring(0, imageNames.length() - 1);
+        }
         Constant.showLog(notOfCartoon);
         Constant.showLog(imageNames);
 
         //DCNO,PONO,DispatchBy,NoOfCartoon,DispatchPerson,CheckedPerson,Carton,Bundle,ImagePath,DTotal
-        int DTotal = Integer.parseInt(tv_qty_Total.getText().toString());
+        int DTotal = Integer.parseInt(ed_total.getText().toString());
 
         String data = dm.getDcNo() + "|" + dm.getPONO() + "|" + dm.getEmp_Id() + "|" + notOfCartoon + "|" +
-                empId + "|" + empId + "|" + str1 + "|" + str + "|" + imageNames + "|" + DTotal;
+                empId + "|" + empId + "|" + str1 + "|" + str + "|" + imageNames + "|" + psImagePath + "|" + DTotal;
 
         Constant.showLog(data);
 
@@ -684,11 +641,11 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
     }
 
     private class saveDispatchMaster extends AsyncTask<String, Void, String> {
-        private String pono = "";
+        private String pono1 = "";
         private ProgressDialog pd;
 
         private saveDispatchMaster(String _pono) {
-            this.pono = _pono;
+            this.pono1 = _pono;
         }
 
         @Override
@@ -752,8 +709,8 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
                 String[] retAutoBranchId = str.split("\\-");
                 if (retAutoBranchId.length > 1) {
                     if (!retAutoBranchId[0].equals("0") && !retAutoBranchId[0].equals("+2") && !retAutoBranchId[0].equals("+3")) {
-                        if (retAutoBranchId[1].equals(String.valueOf(pono))) {
-                            db.deleteOrderTableAfterSave(pono);
+                        if (retAutoBranchId[1].equals(String.valueOf(pono1))) {
+                            pono = this.pono1;
                             showDia(3);
                         } else {
                             showDia(4);
@@ -773,6 +730,183 @@ public class MainActivity_KRD extends AppCompatActivity  implements View.OnClick
                 pd.dismiss();
             }
         }
+    }
+
+    private void loadImage() {
+        try {
+            String img = psImagePath;
+            String arr[] = img.split("_");
+            String month = arr[6];
+            String day = arr[5];
+            String dpCenter = arr[1];
+            String path = Constant.dpAppUrl + month + "/" + day + "/" + dpCenter + "/";
+            //"http://103.109.13.200:24086/DPApp/May/03/UGNT/2731_UGNT_C_4723_ANIL_03_May_2019_12_56_19.jpg"
+            Constant.showLog(path + psImagePath);
+            Glide.with(getApplicationContext()).load(path + psImagePath)
+                    .thumbnail(0.5f)
+                    .crossFade()
+                    .placeholder(R.drawable.ic_camera_alt_black_24dp)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(img_slip);
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("loadImage_" + e.getMessage());
+        }
+    }
+
+    private void showPic() {
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity_KRD.this);
+            builder.setCancelable(true);
+            LayoutInflater inflater = getLayoutInflater();
+            View view = inflater.inflate(R.layout.pic_dialog, null);
+            ImageView _img = view.findViewById(R.id.dia_img);
+            String img = psImagePath;
+            String arr[] = img.split("_");
+            String month = arr[6];
+            String day = arr[5];
+            String dpCenter = arr[1];
+            String path = Constant.dpAppUrl + month + "/" + day + "/" + dpCenter + "/";
+            //"http://103.109.13.200:24086/DPApp/May/03/UGNT/2731_UGNT_C_4723_ANIL_03_May_2019_12_56_19.jpg"
+            Constant.showLog(path + psImagePath);
+            Glide.with(getApplicationContext()).load(path + psImagePath)
+                    .thumbnail(1f)
+                    .crossFade()
+                    .placeholder(R.drawable.ic_male)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .fitCenter()
+                    .into(_img);
+            builder.setView(view);
+            builder.create().show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("showPic_" + e.getMessage());
+        }
+    }
+
+    private void init() {
+        toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        ed_custName = findViewById(R.id.ed_custName);
+        ed_poNo = findViewById(R.id.ed_poNo);
+        ed_dispatchBy = findViewById(R.id.ed_dispatchBy);
+        ed_cartons = findViewById(R.id.ed_cartons);
+        ed_total = findViewById(R.id.ed_total);
+        ed_bundles = findViewById(R.id.ed_bundles);
+        tv_poQty = findViewById(R.id.tv_poQty);
+        tv_qty_Total = findViewById(R.id.tv_qtyTotal);
+        tv_transporter = findViewById(R.id.tv_transporter);
+        btn_submit = findViewById(R.id.btn_submit);
+        listView = findViewById(R.id.listView);
+        img_slip = findViewById(R.id.img_slip);
+
+        lay_car = findViewById(R.id.lay_car);
+        lay_header = findViewById(R.id.lay_header);
+        tv_car = findViewById(R.id.tv_car);
+
+        list = new ArrayList<>();
+        db = new DBHandler(getApplicationContext());
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
+    }
+
+    private void showDia(int a) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity_KRD.this);
+        builder.setCancelable(false);
+        if (a == 1) {
+            builder.setMessage("Do You Want To Go Back ?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    new Constant(MainActivity_KRD.this).doFinish();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+        } else if (a == 2) {
+            builder.setMessage("Error While Loading Data");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new Constant();
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 3) {
+            builder.setMessage("Data Saved Successfully");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    clearFields();
+                    flag = 0;
+                    Intent intent = new Intent(MainActivity_KRD.this, UploadImageService.class);
+                    startService(intent);
+                    writeLog("UploadImageService_onHandleIntent_broadcastSend");
+                    if (userType.equals("1")) {
+                        getDispatchMaster(1);
+                    } else {
+                        getDispatchMaster(3);
+                    }
+                }
+            });
+        } else if (a == 4) {
+            builder.setMessage("Error While Saving Order");
+            builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new Constant();
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 5) {
+            builder.setMessage("Do You Want To Refresh Data?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    db.deleteTable(DBHandler.Table_DispatchMaster);
+                    flag = 0;
+                    flag = 0;
+                    if (userType.equals("1")) {
+                        getDispatchMaster(1);
+                    } else {
+                        getDispatchMaster(3);
+                    }
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 7) {
+            builder.setMessage("Do You Want To Save Data?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    getData();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }
+        builder.create().show();
     }
 
     private void writeLog(String _data) {

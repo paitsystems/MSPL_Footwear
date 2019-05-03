@@ -34,11 +34,11 @@ public class Constant {
             mail_subject = "Log File",
             mail_body = "Find the Attached Log File",
             mailReceipient = "anup.p@paitsystems.com",
-            /*ftp_adress = "ftp.lnbinfotech.com",
-            ftp_username = "supportftp@lnbinfotech.com",
-            ftp_password = "support$456",
-            ftp_directory = "Test",*/
-            ftp_adress = "103.109.13.200",
+    /*ftp_adress = "ftp.lnbinfotech.com",
+    ftp_username = "supportftp@lnbinfotech.com",
+    ftp_password = "support$456",
+    ftp_directory = "Test",*/
+    ftp_adress = "103.109.13.200",
             ftp_username = "ascpune/mobileapp",
             ftp_password = "Mspl@3321",
             ftp_directory = "Packed Goods",
@@ -49,9 +49,9 @@ public class Constant {
     // PORT : 24085 - GRAVITY_PC
     // PORT : 24086 - SERVER
 
-    //public static String ipaddress = "http://172.30.1.209/MSPLD1/service.svc";
-    //public static String ipaddress = "http://license.lnbinfotech.com/MSPLD1/service.svc";
-    public static String ipaddress = "http://43.239.147.103:24085/MSPLD1/service.svc";
+    //public static String ipaddress = "http://172.30.1.209/MSPLD2/service.svc";
+    //public static String ipaddress = "http://license.lnbinfotech.com/MSPLD2/service.svc";
+    public static String ipaddress = "http://43.239.147.103:24085/MSPLD2/service.svc";
 
     //TODO: Check Image Url
     public static String imgUrl = "http://43.239.147.103:24085/IMAGES/";
@@ -59,13 +59,16 @@ public class Constant {
     //TODO: Check CustImage Url
     public static String custimgUrl = "http://43.239.147.103:24085/custImage/";
 
+    //TODO: Check DPApp Url
+    public static String dpAppUrl = "http://43.239.147.103:24086/DPApp/";
+
     private static int connectionFlag = 0;
 
     //TODO: Check liveTestFlag 1-ScreenShotDisable, 0-ScreenShotEnable
     public static int liveTestFlag = 1;
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
-    private static int showLogFlag = 1;
+    public static int showLogFlag = 0;
 
     public static int TIMEOUT_CON = 10 * 1000;
     public static int TIMEOUT_SO = 2 * 60 * 1000;
@@ -95,14 +98,16 @@ public class Constant {
     public Constant() {
         //TODO: Change Image Ip Also
         if (connectionFlag == 0) {
-            ipaddress = "http://103.109.13.200:24086/MSPLD1/service.svc";
+            ipaddress = "http://103.109.13.200:24086/MSPLD2/service.svc";
             imgUrl = "http://103.109.13.200:24086/IMAGES/";
             custimgUrl = "http://103.109.13.200:24086/custImage/";
+            dpAppUrl = "http://103.109.13.200:24086/DPApp/";
             connectionFlag = 1;
         } else if (connectionFlag == 1) {
-            ipaddress = "http://43.239.147.103:24085/MSPLD1/service.svc";
+            ipaddress = "http://43.239.147.103:24085/MSPLD2/service.svc";
             imgUrl = "http://43.239.147.103:24085/IMAGES/";
             custimgUrl = "http://43.239.147.103:24085/custImage/";
+            dpAppUrl = "http://43.239.147.103:24085/DPApp/";
             connectionFlag = 0;
         }
     }

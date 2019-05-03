@@ -36,6 +36,10 @@ public class DispatchMasterClass implements Serializable {
     public String DcNo;
     @SerializedName("DCdate")
     public String DCdate;
+    @SerializedName("DPTotal")
+    public String DPTotal;
+    @SerializedName("PSImage")
+    public String PSImage;
 
     public String getAuto() {
         return Auto;
@@ -155,5 +159,21 @@ public class DispatchMasterClass implements Serializable {
 
     public void setDCdate(String DCdate) {
         this.DCdate = DCdate;
+    }
+
+    public String getDPTotal() {
+        return DPTotal;
+    }
+
+    public void setDPTotal(String DPTotal) {
+        this.DPTotal = DPTotal;
+    }
+
+    public String getPSImage() {
+        return PSImage;
+    }
+
+    public void setPSImage(String PSImage) {
+        this.PSImage = PSImage;
     }
 }

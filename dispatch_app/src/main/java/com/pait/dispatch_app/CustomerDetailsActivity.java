@@ -116,7 +116,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String br = (String) adapterView.getItemAtPosition(i);
                 int id = dpMap.get(br);
-                if(id !=0) {
+                if (id != 0) {
                     dpId = dpMap.get(br);
                     Constant.showLog(br + " " + dpId);
                 } else {
@@ -164,7 +164,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                 startNewActivity(0);
                 break;
             case R.id.btn_order:
-                if(id !=0) {
+                if (id != 0) {
                     startNewActivity(0);
                 } else {
                     toast.setText("Select Dispatch Center First");
@@ -172,7 +172,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                 }
                 break;
             case R.id.btn_report:
-                if(id !=0) {
+                if (id != 0) {
                     startNewActivity(1);
                 } else {
                     toast.setText("Select Dispatch Center First");
@@ -210,7 +210,6 @@ public class CustomerDetailsActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public void handleNewLocation(Location location, String address) {
@@ -369,7 +368,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     new Constant(CustomerDetailsActivity.this).doFinish();
                 }
             });
-        }  else if (a == 10) {
+        } else if (a == 10) {
             builder.setMessage("Do You Want To Refresh Data?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -413,6 +412,30 @@ public class CustomerDetailsActivity extends AppCompatActivity
                 public void onClick(DialogInterface dialog, int which) {
                     new Constant();
                     dialog.dismiss();
+                }
+            });
+        } else if (a == 13) {
+            builder.setMessage("What Do You Want To Do?");
+            builder.setPositiveButton("Dispatch", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity_KRD.class);
+                    intent.putExtra("cust", userClass);
+                    intent.putExtra("type", "1");
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                }
+            });
+            builder.setNegativeButton("Packing", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity_KRD.class);
+                    intent.putExtra("cust", userClass);
+                    intent.putExtra("type", "2");
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
                 }
             });
         }
@@ -630,7 +653,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
         int hoCode = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
         dpList.add("Select Dispatch Center");
-        dpMap.put("Select Dispatch Center",0);
+        dpMap.put("Select Dispatch Center", 0);
         Cursor res = db.getDPCenter(hoCode);
         if (res.moveToFirst()) {
             do {
@@ -663,17 +686,27 @@ public class CustomerDetailsActivity extends AppCompatActivity
         editor.putString(getString(R.string.pref_mobno), userClass.getMobile());
         editor.putInt(getString(R.string.pref_dpId), userClass.getDpId());
         editor.apply();
-        //TODO; Check
-        Intent intent;
+
+        //TODO: Uncomment This
+        /*Intent intent;
         if (id==0){
             intent = new Intent(getApplicationContext(), MainActivity.class);
         } else {
             intent = new Intent(getApplicationContext(), ReportActivity.class);
         }
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("cust", userClass);
         startActivity(intent);
-        overridePendingTransition(R.anim.enter, R.anim.exit);
+        overridePendingTransition(R.anim.enter, R.anim.exit);*/
+
+        //TODO: Comment This
+        if (id == 0) {
+            showDia(13);
+        } else {
+            Intent intent = new Intent(getApplicationContext(), ReportActivity.class);
+            intent.putExtra("cust", userClass);
+            startActivity(intent);
+            overridePendingTransition(R.anim.enter, R.anim.exit);
+        }
     }
 
     private void exportFile() {

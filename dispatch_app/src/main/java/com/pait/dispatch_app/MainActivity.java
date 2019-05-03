@@ -285,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     adapter.returnImage(imagePath);
                     imagePath = "NA";
                 } catch (Exception e) {
-                    writeLog("onActivityResult():FileNotFoundException:" + e);
+                    writeLog("onActivityResult():FileNotFoundException:_" + e);
                     e.printStackTrace();
                 }
             } catch (Exception e) {
@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     outFile.close();
                     img_slip.setImageBitmap(bitmap);
                 } catch (Exception e) {
-                    writeLog("onActivityResult():FileNotFoundException:" + e);
+                    writeLog("onActivityResult():FileNotFoundException1:_" + e);
                     e.printStackTrace();
                 }
             } catch (Exception e) {
@@ -370,6 +370,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (this.edDPBy == requestCode && resultCode == RESULT_OK) {
             em = (EmployeeMasterClass) data.getSerializableExtra("result");
             ed_dispatchBy.setText(em.getName());
+            String str = dm.getEmp_Name();
+            Constant.showLog(str);
+            try {
+                String arr1[] = str.split("\\s+");
+                if(arr1.length>1){
+                    empName = arr1[0];
+                } else {
+                    empName = str;
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+                writeLog(e.getMessage());
+            }
         }
     }
 

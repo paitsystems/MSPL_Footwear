@@ -21,7 +21,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
     //TODO: Check DB Version
-    private static final int Database_Version = 1;
+    private static final int Database_Version = 2;
 
     private static final String Table_Customermaster = "CustomerMaster";
     private static final String CM_RetailCustID = "CustID";
@@ -310,6 +310,8 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DM_DispatchDate = "DispatchDate";
     public static final String DM_DCNo = "DCNo";
     public static final String DM_DCDate = "DCDate";
+    public static final String DM_DPTotal = "DPTotal";
+    public static final String DM_PSImage = "PSImage";
 
 
     public DBHandler(Context context) {
@@ -402,7 +404,8 @@ public class DBHandler extends SQLiteOpenHelper {
             +"("+ DM_Auto + " int,"+ DM_DispatchBy + " int," + DM_PONO + " text,"+ DM_TotalQty + " int,"+
             DM_Emp_Id + " int,"+ DM_Emp_Name + " text," +DM_TransId + " int,"+ DM_Transporter + " text,"+ DM_CustId + " int,"+
             DM_PartyName + " text,"+ DM_branchid + " int,"+ DM_DispatchCmp + " int," +
-            DM_DispatchDate + " text," + DM_DCNo + " text,"+ DM_DCDate +" text)";
+            DM_DispatchDate + " text," + DM_DCNo + " text,"+ DM_DCDate +" text," + DM_DPTotal + " text," +
+            DM_PSImage + " text)";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -446,6 +449,12 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if(oldVersion < 2){
+            String str = "alter table "+Table_DispatchMaster+" add "+DM_DPTotal+" text";
+            db.execSQL(str);
+            str = "alter table "+Table_DispatchMaster+" add "+DM_PSImage+" text";
+            db.execSQL(str);
+        }
     }
 
     @Override
@@ -628,6 +637,8 @@ public class DBHandler extends SQLiteOpenHelper {
             cv.put(DM_DispatchDate, dm.getDispatchDate());
             cv.put(DM_DCNo, dm.getDcNo());
             cv.put(DM_DCDate, dm.getDCdate());
+            cv.put(DM_DPTotal, dm.getDPTotal());
+            cv.put(DM_PSImage, dm.getPSImage());
             db.insert(Table_DispatchMaster, null, cv);
         }
         db.setTransactionSuccessful();
