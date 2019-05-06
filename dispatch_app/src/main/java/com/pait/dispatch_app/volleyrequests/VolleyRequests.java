@@ -3,10 +3,13 @@ package com.pait.dispatch_app.volleyrequests;
 //Created by lnb on 9/15/2017.
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.pait.dispatch_app.FirstActivity;
+import com.pait.dispatch_app.R;
 import com.pait.dispatch_app.constant.AppSingleton;
 import com.pait.dispatch_app.constant.Constant;
 import com.pait.dispatch_app.interfaces.ServerCallback;
@@ -122,6 +125,10 @@ public class VolleyRequests {
                             if (jsonArray.length() >= 1) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     status = jsonArray.getJSONObject(i).getString("status");
+                                    int design = jsonArray.getJSONObject(i).getInt("Desig_Id");
+                                    SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                                    editor.putInt(context.getString(R.string.pref_design),design);
+                                    editor.apply();
                                 }
                                 callback.onSuccess(status);
                             }else{

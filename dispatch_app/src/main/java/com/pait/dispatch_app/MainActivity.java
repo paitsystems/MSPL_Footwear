@@ -93,8 +93,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Toast toast;
     private List<DispatchDetailClass> list;
     private int requestCode = 1, requestCode2 = 2, edCustCode = 3, edPOCode = 4, edDPBy = 5, hoCode,
-            dpID, empId, custCode = 0, flag = 0;
-    private String imagePath = "NA", psImagePath = "", imgType, pono = "", empName = "NA";
+            dpID, empId, custCode = 0, flag = 0, designId = 0;
+    private String imagePath = "NA", psImagePath = "", imgType, pono = "", empName = "NA", userType;
     private DBHandler db;
     private DispatchMasterClass dm;
     private EmployeeMasterClass em;
@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         empId = userClass.getCustID();
         hoCode = userClass.getHOCode();
         dpID = userClass.getDpId();
+        designId = FirstActivity.pref.getInt(getString(R.string.pref_design), 0);
 
         ed_custName.setOnClickListener(this);
         ed_poNo.setOnClickListener(this);
@@ -467,11 +468,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             int maxAuto = db.getMaxAuto();
             //Auto + "|"+ CustId + "|"+ HOCode + "|"+ dispatchId + "|"+ empId + "|"+ type
-            String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId + "|" + type;
-            if(pono!=null && !pono.equals("")) {
+            String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId + "|" + type + "|" + designId;
+            writeLog("getDispatchMaster_" + url);
+            if (pono != null && !pono.equals("")) {
                 db.deleteOrderTableAfterSave(pono);
             }
-            writeLog("getDispatchMaster_" + url);
             final JSONObject jsonBody = new JSONObject();
             jsonBody.put("details", url);
             RequestBody body = RequestBody.create(okhttp3.MediaType.
@@ -700,7 +701,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
-        imageNames = imageNames + psImagePath;
         Constant.showLog(dm.getPartyName() + "\n" +
                 dm.getPONO() + "\n" +
                 dm.getDcNo() + "\n" +
@@ -709,15 +709,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 dm.getTransporter());
 
         Constant.showLog(em.getEmp_Id() + "\n" + em.getName());
-        notOfCartoon = notOfCartoon.substring(0, notOfCartoon.length() - 1);
+        if (notOfCartoon.length() > 1) {
+            notOfCartoon = notOfCartoon.substring(0, notOfCartoon.length() - 1);
+        }
+        if (imageNames.length() > 1) {
+            imageNames = imageNames.substring(0, imageNames.length() - 1);
+        }
         Constant.showLog(notOfCartoon);
         Constant.showLog(imageNames);
 
         //DCNO,PONO,DispatchBy,NoOfCartoon,DispatchPerson,CheckedPerson,Carton,Bundle,ImagePath,DTotal
-        //int DTotal = Integer.parseInt(tv_qty_Total.getText().toString());
+        int DTotal = Integer.parseInt(tv_qty_Total.getText().toString());
 
         String data = dm.getDcNo() + "|" + dm.getPONO() + "|" + dm.getEmp_Id() + "|" + notOfCartoon + "|" +
-                empId + "|" + empId + "|" + str1 + "|" + str + "|" + imageNames;
+                empId + "|" + empId + "|" + str1 + "|" + str + "|" + imageNames + "|" + psImagePath + "|" + DTotal;
 
         Constant.showLog(data);
 

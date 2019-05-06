@@ -34,11 +34,11 @@ public class Constant {
             mail_subject = "Log File",
             mail_body = "Find the Attached Log File",
             mailReceipient = "anup.p@paitsystems.com",
-    /*ftp_adress = "ftp.lnbinfotech.com",
-    ftp_username = "supportftp@lnbinfotech.com",
-    ftp_password = "support$456",
-    ftp_directory = "Test",*/
-    ftp_adress = "103.109.13.200",
+            /*ftp_adress = "ftp.lnbinfotech.com",
+            ftp_username = "supportftp@lnbinfotech.com",
+            ftp_password = "support$456",
+            ftp_directory = "Test",*/
+            ftp_adress = "103.109.13.200",
             ftp_username = "ascpune/mobileapp",
             ftp_password = "Mspl@3321",
             ftp_directory = "Packed Goods",
@@ -60,7 +60,7 @@ public class Constant {
     public static String custimgUrl = "http://43.239.147.103:24085/custImage/";
 
     //TODO: Check DPApp Url
-    public static String dpAppUrl = "http://43.239.147.103:24086/DPApp/";
+    public static String dpAppUrl = "http://43.239.147.103:24085/DPApp/";
 
     private static int connectionFlag = 0;
 
@@ -68,7 +68,7 @@ public class Constant {
     public static int liveTestFlag = 1;
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
-    public static int showLogFlag = 0;
+    public static int showLogFlag = 1;
 
     public static int TIMEOUT_CON = 10 * 1000;
     public static int TIMEOUT_SO = 2 * 60 * 1000;

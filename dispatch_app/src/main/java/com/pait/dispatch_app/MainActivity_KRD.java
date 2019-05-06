@@ -73,7 +73,7 @@ import retrofit2.Response;
 public class MainActivity_KRD extends AppCompatActivity implements View.OnClickListener, TestInterface {
 
     private EditText ed_custName, ed_poNo, ed_dispatchBy, ed_cartons, ed_bundles, ed_total;
-    private TextView tv_poQty, tv_qty_Total, tv_transporter;
+    private TextView tv_poQty, tv_qty_Total, tv_transporter, tv_orderQty;
     private Button btn_submit;
     private NonScrollListView listView;
     private ImageView img_slip;
@@ -81,7 +81,7 @@ public class MainActivity_KRD extends AppCompatActivity implements View.OnClickL
     private Toast toast;
     private List<DispatchDetailClass> list;
     private int requestCode = 1, requestCode2 = 2, edCustCode = 3, edPOCode = 4, edDPBy = 5, hoCode,
-            dpID, empId, custCode = 0, flag = 0;
+            dpID, empId, custCode = 0, flag = 0, designId = 0;
     private String imagePath = "NA", psImagePath = "", imgType, pono = "", empName = "NA", userType;
     private DBHandler db;
     private DispatchMasterClass dm;
@@ -113,6 +113,7 @@ public class MainActivity_KRD extends AppCompatActivity implements View.OnClickL
             lay_header.setVisibility(View.GONE);
             tv_car.setVisibility(View.GONE);
             listView.setVisibility(View.GONE);
+            tv_orderQty.setText("Checked Qty");
         } else {
             ed_total.setFocusable(false);
             ed_total.setClickable(false);
@@ -120,14 +121,13 @@ public class MainActivity_KRD extends AppCompatActivity implements View.OnClickL
             ed_dispatchBy.setFocusable(false);
             ed_dispatchBy.setClickable(false);
             ed_dispatchBy.setEnabled(false);
-            //img_slip.setFocusable(false);
-            //img_slip.setClickable(false);
-            //img_slip.setEnabled(false);
+            tv_orderQty.setText("Packed Qty");
         }
 
         empId = userClass.getCustID();
         hoCode = userClass.getHOCode();
         dpID = userClass.getDpId();
+        designId = FirstActivity.pref.getInt(getString(R.string.pref_design), 0);
 
         ed_custName.setOnClickListener(this);
         ed_poNo.setOnClickListener(this);
@@ -360,7 +360,7 @@ public class MainActivity_KRD extends AppCompatActivity implements View.OnClickL
         } else if (this.edPOCode == requestCode && resultCode == RESULT_OK) {
             dm = (DispatchMasterClass) data.getSerializableExtra("result");
             ed_poNo.setText(dm.getPONO());
-            String[] arr = dm.getPONO().split("\\/");
+            String[] arr = dm.getPONO().split("/");
             pono = arr[2] + "_" + arr[0];
             if (userType.equals("2")) {
                 tv_poQty.setText(dm.getDPTotal());
@@ -369,6 +369,7 @@ public class MainActivity_KRD extends AppCompatActivity implements View.OnClickL
                 loadImage();
             } else {
                 tv_poQty.setText(dm.getTotalQty());
+                dm.setCheckedPerson(String.valueOf(empId));
             }
             tv_transporter.setText(dm.getTransporter());
             ed_dispatchBy.setText(dm.getEmp_Name());
@@ -491,7 +492,7 @@ public class MainActivity_KRD extends AppCompatActivity implements View.OnClickL
         try {
             int maxAuto = db.getMaxAuto();
             //Auto + "|"+ CustId + "|"+ HOCode + "|"+ dispatchId + "|"+ empId + "|"+ type
-            String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId + "|" + type;
+            String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId + "|" + type + "|" + designId;
             writeLog("getDispatchMaster_" + url);
             if (pono != null && !pono.equals("")) {
                 db.deleteOrderTableAfterSave(pono);
@@ -628,7 +629,7 @@ public class MainActivity_KRD extends AppCompatActivity implements View.OnClickL
         int DTotal = Integer.parseInt(ed_total.getText().toString());
 
         String data = dm.getDcNo() + "|" + dm.getPONO() + "|" + dm.getEmp_Id() + "|" + notOfCartoon + "|" +
-                empId + "|" + empId + "|" + str1 + "|" + str + "|" + imageNames + "|" + psImagePath + "|" + DTotal;
+                empId + "|" + dm.getCheckedPerson() + "|" + str1 + "|" + str + "|" + imageNames + "|" + psImagePath + "|" + DTotal;
 
         Constant.showLog(data);
 
@@ -709,7 +710,7 @@ public class MainActivity_KRD extends AppCompatActivity implements View.OnClickL
                 String[] retAutoBranchId = str.split("\\-");
                 if (retAutoBranchId.length > 1) {
                     if (!retAutoBranchId[0].equals("0") && !retAutoBranchId[0].equals("+2") && !retAutoBranchId[0].equals("+3")) {
-                        if (retAutoBranchId[1].equals(String.valueOf(pono1))) {
+                        if (retAutoBranchId[1].equals(String.valueOf(this.pono1))) {
                             pono = this.pono1;
                             showDia(3);
                         } else {
@@ -721,8 +722,6 @@ public class MainActivity_KRD extends AppCompatActivity implements View.OnClickL
                 } else {
                     showDia(4);
                 }
-                //counter++;
-                //saveCustOrder();
             } catch (Exception e) {
                 writeLog("saveDispatchMaster_" + e.getMessage());
                 e.printStackTrace();
@@ -785,6 +784,7 @@ public class MainActivity_KRD extends AppCompatActivity implements View.OnClickL
     }
 
     private void init() {
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         ed_custName = findViewById(R.id.ed_custName);
@@ -796,6 +796,7 @@ public class MainActivity_KRD extends AppCompatActivity implements View.OnClickL
         tv_poQty = findViewById(R.id.tv_poQty);
         tv_qty_Total = findViewById(R.id.tv_qtyTotal);
         tv_transporter = findViewById(R.id.tv_transporter);
+        tv_orderQty = findViewById(R.id.tv_orderQty);
         btn_submit = findViewById(R.id.btn_submit);
         listView = findViewById(R.id.listView);
         img_slip = findViewById(R.id.img_slip);
@@ -806,7 +807,6 @@ public class MainActivity_KRD extends AppCompatActivity implements View.OnClickL
 
         list = new ArrayList<>();
         db = new DBHandler(getApplicationContext());
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
     }
 
     private void showDia(int a) {

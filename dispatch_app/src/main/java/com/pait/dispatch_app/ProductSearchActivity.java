@@ -179,6 +179,7 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
                 dm.setDCdate(res.getString(res.getColumnIndex(DBHandler.DM_DCDate)));
                 dm.setDPTotal(res.getString(res.getColumnIndex(DBHandler.DM_DPTotal)));
                 dm.setPSImage(res.getString(res.getColumnIndex(DBHandler.DM_PSImage)));
+                dm.setCheckedPerson(res.getString(res.getColumnIndex(DBHandler.DM_CheckedPerson)));
                 prodList.add(dm);
             }while(res.moveToNext());
         }

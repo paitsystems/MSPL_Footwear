@@ -312,6 +312,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String DM_DCDate = "DCDate";
     public static final String DM_DPTotal = "DPTotal";
     public static final String DM_PSImage = "PSImage";
+    public static final String DM_CheckedPerson = "CheckedPerson";
 
 
     public DBHandler(Context context) {
@@ -405,7 +406,7 @@ public class DBHandler extends SQLiteOpenHelper {
             DM_Emp_Id + " int,"+ DM_Emp_Name + " text," +DM_TransId + " int,"+ DM_Transporter + " text,"+ DM_CustId + " int,"+
             DM_PartyName + " text,"+ DM_branchid + " int,"+ DM_DispatchCmp + " int," +
             DM_DispatchDate + " text," + DM_DCNo + " text,"+ DM_DCDate +" text," + DM_DPTotal + " text," +
-            DM_PSImage + " text)";
+            DM_PSImage + " text,"+ DM_CheckedPerson+ " int)";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -453,6 +454,8 @@ public class DBHandler extends SQLiteOpenHelper {
             String str = "alter table "+Table_DispatchMaster+" add "+DM_DPTotal+" text";
             db.execSQL(str);
             str = "alter table "+Table_DispatchMaster+" add "+DM_PSImage+" text";
+            db.execSQL(str);
+            str = "alter table "+Table_DispatchMaster+" add "+DM_CheckedPerson+" int";
             db.execSQL(str);
         }
     }
@@ -639,6 +642,7 @@ public class DBHandler extends SQLiteOpenHelper {
             cv.put(DM_DCDate, dm.getDCdate());
             cv.put(DM_DPTotal, dm.getDPTotal());
             cv.put(DM_PSImage, dm.getPSImage());
+            cv.put(DM_CheckedPerson, dm.getCheckedPerson());
             db.insert(Table_DispatchMaster, null, cv);
         }
         db.setTransactionSuccessful();
@@ -679,7 +683,8 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public Cursor getPONo(String partyName){
-        String str = "select * from "+Table_DispatchMaster + " where "+ DM_PartyName+"='"+partyName +"' order by "+DM_PONO;
+        String str = "select * from "+Table_DispatchMaster + " where "+ DM_PartyName+"='"+partyName
+                +"' order by "+DM_PONO +" desc";
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str,null);
     }

@@ -40,6 +40,8 @@ public class DispatchMasterClass implements Serializable {
     public String DPTotal;
     @SerializedName("PSImage")
     public String PSImage;
+    @SerializedName("CheckedPerson")
+    public String CheckedPerson;
 
     public String getAuto() {
         return Auto;
@@ -175,5 +177,13 @@ public class DispatchMasterClass implements Serializable {
 
     public void setPSImage(String PSImage) {
         this.PSImage = PSImage;
+    }
+
+    public String getCheckedPerson() {
+        return CheckedPerson;
+    }
+
+    public void setCheckedPerson(String checkedPerson) {
+        CheckedPerson = checkedPerson;
     }
 }

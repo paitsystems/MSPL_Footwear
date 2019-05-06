@@ -416,24 +416,26 @@ public class CustomerDetailsActivity extends AppCompatActivity
             });
         } else if (a == 13) {
             builder.setMessage("What Do You Want To Do?");
-            builder.setPositiveButton("Dispatch", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Packing", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    db.deleteTable(DBHandler.Table_DispatchMaster);
                     Intent intent = new Intent(getApplicationContext(), MainActivity_KRD.class);
                     intent.putExtra("cust", userClass);
-                    intent.putExtra("type", "1");
+                    intent.putExtra("type", "2");
                     startActivity(intent);
                     overridePendingTransition(R.anim.enter, R.anim.exit);
                 }
             });
-            builder.setNegativeButton("Packing", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("Checking", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    db.deleteTable(DBHandler.Table_DispatchMaster);
                     Intent intent = new Intent(getApplicationContext(), MainActivity_KRD.class);
                     intent.putExtra("cust", userClass);
-                    intent.putExtra("type", "2");
+                    intent.putExtra("type", "1");
                     startActivity(intent);
                     overridePendingTransition(R.anim.enter, R.anim.exit);
                 }
@@ -684,25 +686,21 @@ public class CustomerDetailsActivity extends AppCompatActivity
         editor.putInt(getString(R.string.pref_cityid), userClass.getCityId());
         editor.putInt(getString(R.string.pref_hocode), userClass.getHOCode());
         editor.putString(getString(R.string.pref_mobno), userClass.getMobile());
-        editor.putInt(getString(R.string.pref_dpId), userClass.getDpId());
         editor.apply();
 
-        //TODO: Uncomment This
-        /*Intent intent;
-        if (id==0){
-            intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent;
+        if (id == 0) {
+            //TODO CHANGE HOCODE FROM 1 to 12
+            if (userClass.getHOCode() == 12) {
+                showDia(13);
+            } else {
+                intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("cust", userClass);
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+            }
         } else {
             intent = new Intent(getApplicationContext(), ReportActivity.class);
-        }
-        intent.putExtra("cust", userClass);
-        startActivity(intent);
-        overridePendingTransition(R.anim.enter, R.anim.exit);*/
-
-        //TODO: Comment This
-        if (id == 0) {
-            showDia(13);
-        } else {
-            Intent intent = new Intent(getApplicationContext(), ReportActivity.class);
             intent.putExtra("cust", userClass);
             startActivity(intent);
             overridePendingTransition(R.anim.enter, R.anim.exit);
