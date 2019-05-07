@@ -309,7 +309,7 @@
                         android:layout_weight="0.5"
                         android:background="@drawable/line_top_right_bottom_draw"
                         android:gravity="center"
-                        android:text="No of Cartons" />
+                        android:text="No of Pairs In Cartons" />
 
                     <TextView
                         style="@style/textViewMobAddToCard"

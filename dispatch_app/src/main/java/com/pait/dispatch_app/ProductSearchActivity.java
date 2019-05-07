@@ -69,6 +69,8 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
             setDPBy();
         }
 
+        writeLog("onCreate_"+from+"_"+hoCode);
+
         ed_search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -201,6 +203,7 @@ public class ProductSearchActivity extends AppCompatActivity implements View.OnC
         res.close();
         adapter = new ProductSearchAdapter(prodList, getApplicationContext(),from);
         listView.setAdapter(adapter);
+        writeLog("setDPBy_"+prodList.size());
     }
 
     private void showDia(int a) {

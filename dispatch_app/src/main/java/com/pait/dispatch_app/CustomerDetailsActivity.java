@@ -574,12 +574,11 @@ public class CustomerDetailsActivity extends AppCompatActivity
                                 SharedPreferences.Editor editor = FirstActivity.pref.edit();
                                 editor.putString(getString(R.string.pref_version), _data);
                                 editor.apply();
-                                loadEmployeeMaster();
+                                //loadEmployeeMaster();
                             } else if (currVersion < dataVersion) {
                                 showDia(8);
-                            } else {
-                                loadCompanyMaster();
                             }
+                            loadEmployeeMaster();
                         } else if (_data == null) {
                             showDia(4);
                         }
@@ -652,6 +651,8 @@ public class CustomerDetailsActivity extends AppCompatActivity
     }
 
     private void setDPCenter() {
+        dpList.clear();
+        dpMap.clear();
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
         int hoCode = FirstActivity.pref.getInt(getString(R.string.pref_hocode), 0);
         dpList.add("Select Dispatch Center");
@@ -672,12 +673,13 @@ public class CustomerDetailsActivity extends AppCompatActivity
     private void startNewActivity(int id) {
         userClass = (UserClass) listView.getAdapter().getItem(0);
         userClass.setDpId(dpId);
-        if (FirstActivity.pref.contains(getString(R.string.pref_dpId))) {
+        /*if (FirstActivity.pref.contains(getString(R.string.pref_dpId))) {
             int prevId = FirstActivity.pref.getInt(getString(R.string.pref_dpId), 0);
             if (prevId != userClass.getDpId()) {
                 db.deleteTable(DBHandler.Table_DispatchMaster);
             }
-        }
+        }*/
+        db.deleteTable(DBHandler.Table_DispatchMaster);
         String pin = userClass.getCustID() + "-" + "1234";
         SharedPreferences.Editor editor = FirstActivity.pref.edit();
         editor.putString(getString(R.string.pref_savedpin), pin);
@@ -686,6 +688,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
         editor.putInt(getString(R.string.pref_cityid), userClass.getCityId());
         editor.putInt(getString(R.string.pref_hocode), userClass.getHOCode());
         editor.putString(getString(R.string.pref_mobno), userClass.getMobile());
+        editor.putInt(getString(R.string.pref_dpId), userClass.getDpId());
         editor.apply();
 
         Intent intent;

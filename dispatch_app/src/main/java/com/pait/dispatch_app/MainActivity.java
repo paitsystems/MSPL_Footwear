@@ -601,7 +601,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     dialog.dismiss();
                     db.deleteTable(DBHandler.Table_DispatchMaster);
                     flag = 0;
-                    flag = 0;
+                    pono = "";
                     getDispatchMaster(1);
                 }
             });
