@@ -440,6 +440,12 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     overridePendingTransition(R.anim.enter, R.anim.exit);
                 }
             });
+            builder.setNeutralButton("Cancel",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
         }
         builder.create().show();
     }

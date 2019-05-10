@@ -70,7 +70,7 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
     private TextView tv_fdate, tv_tdate, tot_clb, tot_ob, tot_credit, tot_debit, tv_outstanding;
     private CheckBox cb_all;
     private SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-    private int day, month, year, hoCode, dpID, empId, custCode = 0, totQty = 0, flag = 0;;
+    private int day, month, year, hoCode, dpID, empId, custCode = 0, totQty = 0, flag = 0, designId = 0;
     private Calendar cal = Calendar.getInstance();
     private static final int fdt = 1, tdt = 2;
     private String fromdate = "", todate = "", all = "", exportFileName;
@@ -95,6 +95,7 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
         empId = userClass.getCustID();
         hoCode = userClass.getHOCode();
         dpID = userClass.getDpId();
+        designId = FirstActivity.pref.getInt(getString(R.string.pref_design), 0);
 
         todate = sdf1.format(cal.getTime());
         Constant.showLog("todate_dafault-" + todate);
@@ -173,7 +174,7 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
         try {
             int maxAuto = new DBHandler(getApplicationContext()).getMaxAuto();
             //Auto + "|"+ CustId + "|"+ HOCode + "|"+ dispatchId + "|"+ empId + "|"+ type
-            String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId + "|" + type;
+            String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId + "|" + type + "|" + designId;
             writeLog("getDispatchMaster_" + url);
             final JSONObject jsonBody = new JSONObject();
             jsonBody.put("details", url);
