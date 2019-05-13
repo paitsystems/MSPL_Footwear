@@ -82,14 +82,19 @@ public class UploadImageService extends IntentService {
                     for (File file : f.listFiles()) {
                         if (file != null && !file.isDirectory()) {
                             FileInputStream ifile = new FileInputStream(file);
-                            client.cwd(Constant.ftp_directory);
                             String str = file.getName();
                             String arr[] = str.split("_");
                             try {
                                 String month = arr[6];
                                 String day = arr[5];
                                 String dpCenter = arr[1];
-                                client.cwd(month + "/" + day + "/" + dpCenter);
+                                Constant.showLog(month + "/" + day + "/" + dpCenter);
+                                client.changeToParentDirectory();
+                                Constant.showLog(client.printWorkingDirectory());
+                                client.cwd(Constant.ftp_directory);
+                                Constant.showLog(client.printWorkingDirectory());
+                                client.changeWorkingDirectory(month + "/" + day + "/" + dpCenter);
+                                Constant.showLog(client.printWorkingDirectory());
                             } catch (Exception e){
                                 if(!file.getName().equals("temp.jpg")) {
                                     e.printStackTrace();
@@ -97,6 +102,18 @@ public class UploadImageService extends IntentService {
                                 }
                             }
                             if (client.storeFile(file.getName(), ifile)) {
+                                if(!client.printWorkingDirectory().equals(Constant.ftp_directory)){
+                                    client.changeToParentDirectory();
+                                    Constant.showLog(client.printWorkingDirectory());
+                                    if(!client.printWorkingDirectory().equals(Constant.ftp_directory)){
+                                        client.changeToParentDirectory();
+                                        Constant.showLog(client.printWorkingDirectory());
+                                        if(!client.printWorkingDirectory().equals(Constant.ftp_directory)){
+                                            client.changeToParentDirectory();
+                                            Constant.showLog(client.printWorkingDirectory());
+                                        }
+                                    }
+                                }
                                 file.delete();
                                 Constant.showLog("Image deleted.."+file.getName());
                             } else {
