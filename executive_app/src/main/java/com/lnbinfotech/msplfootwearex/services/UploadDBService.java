@@ -42,7 +42,7 @@ public class UploadDBService extends IntentService {
                     Constant.showLog("File Name " + file.getName());
                     if (file.getName().equals("SmartGST.zip")) {
                         FileInputStream iFile = new FileInputStream(file);
-                        client.cwd(Constant.ftp_directory);
+                        client.cwd(Constant.dir_data_sync);
                         if (client.storeFile(file.getName(), iFile)) {
                             writeLog("onHandleIntent_File_Store_Successfully");
                             Constant.showLog("File Stored " + file.getName());

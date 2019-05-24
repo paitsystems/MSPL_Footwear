@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--TODO: Check App Name-->
     <string name="app_name">MSPL Customer</string>
     <string name="title_activity_login">MSPL Customer</string>
 

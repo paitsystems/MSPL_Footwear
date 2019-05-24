@@ -246,7 +246,9 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
                 long datetime = System.currentTimeMillis();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
                 Date resultdate = new Date(datetime);
-                imagePath = "C_" + custId + "_Cheque_" + chequeNo + "_" + sdf.format(resultdate) + ".jpg";
+                int hocode = FirstActivity.pref.getInt(getString(R.string.pref_hocode),0);
+                String name = FirstActivity.pref.getString(getString(R.string.pref_name),"NA");
+                imagePath = "Q_" + custId + "_Cheque_" + chequeNo + "_" + name + "_" + hocode + "_" + sdf.format(resultdate) + ".jpg";
                 Constant.showLog(imagePath);
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator +
                         Constant.folder_name + File.separator + Constant.image_folder);
@@ -281,6 +283,7 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
     }
 
     private void init() {
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         selectAuto = new SelectAutoItemClass();
@@ -292,7 +295,6 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
         tv_amntTotal = findViewById(R.id.tv_amntTotal);
         ed_chq_serial = findViewById(R.id.ed_chqSerial);
         list = new ArrayList<>();
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
     }
 
     private void get_auto_banklist() {

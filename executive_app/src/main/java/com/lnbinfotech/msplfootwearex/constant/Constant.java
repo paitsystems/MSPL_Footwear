@@ -40,11 +40,17 @@ public class Constant {
             mail_subject = "Log File",
             mail_body = "Find the Attached Log File",
             mailReceipient = "anup.p@paitsystems.com",
-            ftp_adress = "ftp.lnbinfotech.com",
+            /*ftp_adress = "ftp.lnbinfotech.com",
             ftp_username = "supportftp@lnbinfotech.com",
             ftp_password = "support$456",
-            //ftp_directory = "Receipt Details";
-            ftp_directory = "Test",
+            ftp_directory = "Test",*/
+            ftp_adress = "103.109.13.200",
+            ftp_username = "ascpune/mobileapp",
+            ftp_password = "Mspl@3321",
+            dir_data_sync = "Data Sync",
+            dir_Customer_Master = "Customer Master",
+            dir_Feed_Back = "Feed Back",
+            dir_Cheque_Details = "Cheque Details",
             zip_file = "SmartGST.zip";
 
     //TODO: Check Ip Address
@@ -53,8 +59,8 @@ public class Constant {
     // PORT : 24086 - SERVER
 
     //public static String ipaddress = "http://172.30.1.209/MSPLV7/service.svc";
-    public static String ipaddress = "http://license.lnbinfotech.com/MSPLV7/service.svc";
-    //public static String ipaddress = "http://43.239.147.103:24085/MSPLV8/service.svc";
+    //public static String ipaddress = "http://license.lnbinfotech.com/MSPLV8/service.svc";
+    public static String ipaddress = "http://43.239.147.103:24085/MSPLV8/service.svc";
 
     //TODO: Check Image Url
     public static String imgUrl = "http://43.239.147.103:24085/IMAGES/";
@@ -68,7 +74,7 @@ public class Constant {
     public static int liveTestFlag = 1;
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
-    private static int showLogFlag = 0;
+    private static int showLogFlag = 1;
 
     public static int TIMEOUT_CON = 10*1000;
     public static int TIMEOUT_SO = 2*60*1000;

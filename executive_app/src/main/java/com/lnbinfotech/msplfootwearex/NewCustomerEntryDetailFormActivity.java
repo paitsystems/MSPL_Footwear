@@ -591,10 +591,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     //saveData();
-                    //catchCustLoc();
-                    Intent intent = new Intent(NewCustomerEntryDetailFormActivity.this, UploadImageService.class);
-                    startService(intent);
-
+                    catchCustLoc();
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {

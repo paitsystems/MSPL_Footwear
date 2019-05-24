@@ -51,10 +51,11 @@ public class Fragment_SchemeFullImage extends Fragment {
 
     private void saveImagesToInternal() {
         img_name = img_name.replace(" ", "%20");
-        url = Constant.imgUrl+img_name+".jpg";
-        Constant.showLog(url);
+        //url = Constant.imgUrl+"Scheme/"+img_name+".jpg";
+        //url = Constant.imgUrl+"Scheme/"+img_name;
+        Constant.showLog(img_name);
         Picasso.with(getContext())
-                .load("http://103.109.13.200:24086/IMAGES/Scheme/SchoolShoes.jpg")
+                .load(img_name)
                 .placeholder(R.drawable.placehoder)
                 .error(R.drawable.placehoder)
                 .into(imgv_img);

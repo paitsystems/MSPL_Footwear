@@ -108,25 +108,10 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
 
         setContactUs();
 
-        AddImagesUrlOnline();
+        //AddImagesUrlOnline();
 
-        for(String name : scImgHashMap.keySet()){
-            TextSliderView textSliderView = new TextSliderView(OptionsActivity.this);
-            textSliderView
-                    .description(name)
-                    .image(scImgHashMap.get(name))
-                    .setScaleType(BaseSliderView.ScaleType.Fit)
-                    .setOnSliderClickListener(this);
+        getSchemeData();
 
-            textSliderView.bundle(new Bundle());
-            textSliderView.getBundle().putString("extra",name);
-            sliderLayout.addSlider(textSliderView);
-        }
-        sliderLayout.setPresetTransformer(SliderLayout.Transformer.DepthPage);
-        sliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-        sliderLayout.setCustomAnimation(new DescriptionAnimation());
-        sliderLayout.setDuration(3000);
-        sliderLayout.addOnPageChangeListener(OptionsActivity.this);
     }
 
     @Override
@@ -158,13 +143,14 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_scheme:
-                ImagewiseAddToCartClass prod = new ImagewiseAddToCartClass();
-                prod.setImageName("SchoolShoe,");
+                /*ImagewiseAddToCartClass prod = new ImagewiseAddToCartClass();
+                prod.setImageName("SchoolShoes,VERTEXSCHEMEEIDSPECIALMAY2019");
                 Intent sintent = new Intent(getApplicationContext(), SchemeFullImageActivity.class);
                 sintent.putExtra("data",prod);
                 sintent.putExtra("pos","0");
                 startActivity(sintent);
-                overridePendingTransition(R.anim.enter, R.anim.exit);
+                overridePendingTransition(R.anim.enter, R.anim.exit);*/
+                showFullImage();
                 break;
             case R.id.card_whatsnew:
                /* toast.setText("Under Development");
@@ -268,13 +254,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
-        //Toast.makeText(this,slider.getBundle().get("extra") + "", Toast.LENGTH_SHORT).show();
-        ImagewiseAddToCartClass prod = new ImagewiseAddToCartClass();
-        prod.setImageName("SchoolShoe,");
-        Intent sintent = new Intent(getApplicationContext(), SchemeFullImageActivity.class);
-        sintent.putExtra("data",prod);
-        sintent.putExtra("pos","0");
-        startActivity(sintent);
+        showFullImage();
     }
 
     @Override
@@ -312,8 +292,8 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         tv_mobile2 = findViewById(R.id.tv_mobile2);
         tv_email = findViewById(R.id.tv_email);
         tv_lastSync = findViewById(R.id.tv_lastSync);
-
         sliderLayout = findViewById(R.id.slider);
+        scImgHashMap = new HashMap<>();
     }
 
     private void showDia(int a) {
@@ -460,8 +440,8 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     public void AddImagesUrlOnline(){
         scImgHashMap = new HashMap<>();
         scImgHashMap.put("School Shoes", "http://103.109.13.200:24086/IMAGES/Scheme/SchoolShoes.jpg");
-        /*scImgHashMap.put("Donut", "http://103.109.13.200:24086/IMAGES/2702FC_Foo%20Kids_Red_P1.jpg");
-        scImgHashMap.put("Eclair", "http://103.109.13.200:24086/IMAGES/2901_Aaram_Black_P1.jpg");
+        scImgHashMap.put("Vertex", "http://103.109.13.200:24086/IMAGES/Scheme/VERTEXSCHEMEEIDSPECIALMAY2019.jpg");
+        /*scImgHashMap.put("Eclair", "http://103.109.13.200:24086/IMAGES/2901_Aaram_Black_P1.jpg");
         scImgHashMap.put("Froyo", "http://103.109.13.200:24086/IMAGES/F196C_Foo%20Kids_Blue_P1.jpg");
         scImgHashMap.put("GingerBread", "http://103.109.13.200:24086/IMAGES/2902_Aaram_Black_P1.jpg");*/
     }
@@ -488,10 +468,14 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 public void onResponse(Call<List<SchemeMasterClass>> call, Response<List<SchemeMasterClass>> response) {
                     Constant.showLog("onResponse");
                     List<SchemeMasterClass> list = response.body();
+                    scImgHashMap = new HashMap<>();
                     if (list != null) {
                         if (list.size()!=0) {
-
+                            for(SchemeMasterClass mast : list){
+                                scImgHashMap.put(mast.getCat(),Constant.imgUrl+"/Scheme/"+mast.getImgName());
+                            }
                         }
+                        setScheme();
                     } else {
                         Constant.showLog("onResponse_list_null");
                         writeLog("getSchemeData_onResponse_list_null");
@@ -667,6 +651,42 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 pd.dismiss();
             }
         }
+    }
+
+    private void showFullImage() {
+        ImagewiseAddToCartClass prod = new ImagewiseAddToCartClass();
+        String str =  "";
+        for (Object value : scImgHashMap.values()) {
+            str = str + value + ",";
+        }
+        if(str.length()>1){
+            str = str.substring(0,str.length()-1);
+        }
+        prod.setImageName(str);
+        Intent sintent = new Intent(getApplicationContext(), SchemeFullImageActivity.class);
+        sintent.putExtra("data",prod);
+        sintent.putExtra("pos","0");
+        startActivity(sintent);
+    }
+
+    private void setScheme(){
+        for(String name : scImgHashMap.keySet()){
+            TextSliderView textSliderView = new TextSliderView(OptionsActivity.this);
+            textSliderView
+                    .description(name)
+                    .image(scImgHashMap.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                    .setOnSliderClickListener(this);
+
+            textSliderView.bundle(new Bundle());
+            textSliderView.getBundle().putString("extra",name);
+            sliderLayout.addSlider(textSliderView);
+        }
+        sliderLayout.setPresetTransformer(SliderLayout.Transformer.DepthPage);
+        sliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        sliderLayout.setCustomAnimation(new DescriptionAnimation());
+        sliderLayout.setDuration(3000);
+        sliderLayout.addOnPageChangeListener(OptionsActivity.this);
     }
 
     private void writeLog(String _data) {

@@ -286,7 +286,7 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
                 SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
                 Date resultdate = new Date(datetime);
 
-                imagePath = "GP_Img_" + sdf.format(resultdate) + ".jpg";
+                imagePath = "C_GP_Img_" + sdf.format(resultdate) + ".jpg";
 
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator +
                         Constant.folder_name + File.separator + Constant.image_folder);

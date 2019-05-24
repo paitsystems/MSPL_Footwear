@@ -89,7 +89,7 @@ public class SchemeFullImageActivity extends AppCompatActivity  implements View.
     private void getImgTitleList() {
         try {
             String imageName = prod.getImageName();
-            String[] arr = imageName.split("\\,");
+            String[] arr = imageName.split(",");
             if (arr.length >= 1) {
                 for (String img : arr) {
                     if(!img.equals("NA")) {

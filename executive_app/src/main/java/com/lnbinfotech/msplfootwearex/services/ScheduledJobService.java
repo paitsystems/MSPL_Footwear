@@ -70,7 +70,6 @@ public class ScheduledJobService extends JobService {
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME, MODE_PRIVATE);
         Constant.showLog("AutoSync_" + hour);
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             getApplicationContext().startForegroundService(new Intent(getApplicationContext(), UploadImageService.class));
         } else {
@@ -692,7 +691,7 @@ public class ScheduledJobService extends JobService {
                 client.login(Constant.ftp_username, Constant.ftp_password);
                 client.setFileType(FTP.BINARY_FILE_TYPE);
                 client.enterLocalPassiveMode();
-                if (client.changeWorkingDirectory(Constant.ftp_directory)) {
+                if (client.changeWorkingDirectory(Constant.dir_data_sync)) {
                     SDDBZipFilePath = Environment.getExternalStorageDirectory() + File.separator
                             + Constant.folder_name  + File.separator + Constant.unzipFolderName;
                     SDDBZipFileName = new File(SDDBZipFilePath, Constant.zip_file);

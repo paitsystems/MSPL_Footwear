@@ -2644,7 +2644,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                         Constant.showLog("File Name " + file.getName());
                         if (file.getName().equals(Constant.zip_file)) {
                             FileInputStream iFile = new FileInputStream(file);
-                            client.cwd(Constant.ftp_directory);
+                            client.cwd(Constant.dir_data_sync);
                             if (client.storeFile(file.getName(), iFile)) {
                                 file.delete();
                                 writeLog("onHandleIntent_File_Store_Successfully");
@@ -2759,7 +2759,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
                 client.login(Constant.ftp_username, Constant.ftp_password);
                 client.setFileType(FTP.BINARY_FILE_TYPE);
                 client.enterLocalPassiveMode();
-                if (client.changeWorkingDirectory(Constant.ftp_directory)) {
+                if (client.changeWorkingDirectory(Constant.dir_data_sync)) {
                     SDDBZipFilePath = Environment.getExternalStorageDirectory() + File.separator
                             + Constant.folder_name  + File.separator + Constant.unzipFolderName;
                     SDDBZipFileName = new File(SDDBZipFilePath, Constant.zip_file);

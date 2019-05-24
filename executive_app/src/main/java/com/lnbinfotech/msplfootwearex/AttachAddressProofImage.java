@@ -209,7 +209,7 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
                 SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
                 Date resultdate = new Date(datetime);
 
-                imagePath = "Address_Img_" + sdf.format(resultdate) + ".jpg";
+                imagePath = "C_Address_Img_" + sdf.format(resultdate) + ".jpg";
 
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name
                         + File.separator + Constant.image_folder);

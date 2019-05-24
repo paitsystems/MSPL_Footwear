@@ -427,6 +427,7 @@ public class CustomerLoginActivity extends AppCompatActivity implements View.OnC
         editor.putInt(getString(R.string.pref_cityid),userClass.getCityId());
         editor.putInt(getString(R.string.pref_hocode),userClass.getHOCode());
         editor.putString(getString(R.string.pref_mobno),userClass.getMobile());
+        editor.putString(getString(R.string.pref_name),userClass.getName());
         editor.apply();
         finish();
         Intent intent = new Intent(getApplicationContext(),OptionsActivity.class);

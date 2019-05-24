@@ -1200,7 +1200,8 @@ public class DBHandler extends SQLiteOpenHelper {
         if(type.equalsIgnoreCase("M")) {
             str = "select Distinct " + ARSD_Colour + "," + ARSD_HashCode + " from " + Table_AllRequiredSizesDesigns +
                     " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_InOutType + "='I' and " +
-                    ARSD_SizeGroup + " like '" + sizegroup + "' order by " + ARSD_Colour;
+                    //ARSD_SizeGroup + " like '" + sizegroup + "' order by " + ARSD_Colour;
+                    ARSD_typ + " like 'M' order by " + ARSD_Colour;
         }else {
             str = "select Distinct " + ARSD_Colour + "," + ARSD_HashCode + " from " + Table_AllRequiredSizesDesigns +
                 " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_InOutType + "='I' and " +

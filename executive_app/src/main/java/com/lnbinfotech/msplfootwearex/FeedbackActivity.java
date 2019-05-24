@@ -68,6 +68,8 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     private FeedbackClass feedbackClass;
     private Constant constant;
     private Toast toast;
+    private int hocode;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,7 +179,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     Bitmap bitmap = scaleBitmap(_imagePath);
                     Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
                     String dateformat = currentDateFormat();
-                    String file_name = "img_" + dateformat + ".jpg";
+                    String file_name = "F_IMG_" + name + "_" + hocode + "_" + dateformat + ".jpg";
                     store_CameraPhoto_InSdCard(bitmap, dateformat);
                     Bitmap mbitmap = get_Image_from_sd_card(file_name);
                     imgv_img1.setImageBitmap(mbitmap);
@@ -198,7 +200,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     Bitmap bitmap = scaleBitmap(_imagePath);
                     Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
                     String dateformat = currentDateFormat();
-                    String file_name = "img_" + dateformat + ".jpg";
+                    String file_name = "F_IMG_" + name + "_" + hocode + "_" + dateformat + ".jpg";
                     store_CameraPhoto_InSdCard(bitmap, dateformat);
                     Bitmap mbitmap = get_Image_from_sd_card(file_name);
                     // imgv_img3.setVisibility(View.VISIBLE);
@@ -218,7 +220,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     Bitmap bitmap = scaleBitmap(_imagePath);
                     Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
                     String dateformat = currentDateFormat();
-                    String file_name = "img_" + dateformat + ".jpg";
+                    String file_name = "F_IMG_" + name + "_" + hocode + "_" + dateformat + ".jpg";
                     store_CameraPhoto_InSdCard(bitmap, dateformat);
                     Bitmap mbitmap = get_Image_from_sd_card(file_name);
                     imgv_img3.setImageBitmap(mbitmap);
@@ -255,7 +257,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 }*/
                     try {
                         String dateformat = currentDateFormat();
-                        String file_name = "feedbkimg_" + dateformat + ".jpg";
+                        String file_name = "F_IMG_" + name + "_" + hocode + "_" + dateformat + ".jpg";
                         File destFile = new File((Environment.getExternalStorageDirectory() + File.separator +
                                 Constant.folder_name + File.separator + Constant.image_folder + File.separator + file_name));
                         copyFile(new File(getPath(data.getData())), destFile);
@@ -350,6 +352,8 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         service_or_team_cardlay = findViewById(R.id.service_or_team_cardlay);
         feedbk_type = new ArrayAdapter<>(this, R.layout.feedbk_type_list, arr);
         fedback_spinner.setAdapter(feedbk_type);
+        hocode = FirstActivity.pref.getInt(getString(R.string.pref_hocode),0);
+        name = FirstActivity.pref.getString(getString(R.string.pref_name),"NA");
     }
 
     private void setValue() {
@@ -691,7 +695,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
 
     private void store_CameraPhoto_InSdCard(Bitmap bitmap, String currentdate) {
         File file = new File(Environment.getExternalStorageDirectory() + File.separator +
-                Constant.folder_name + File.separator + Constant.image_folder + File.separator + "img_" + currentdate + ".jpg");
+                Constant.folder_name + File.separator + Constant.image_folder + File.separator + "F_IMG_" + name + "_" + hocode + "_" + currentdate + ".jpg");
         Log.d("Log", "File path:" + file);
         try {
             FileOutputStream fos = new FileOutputStream(file);
@@ -793,7 +797,6 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             //String _crtime = URLEncoder.encode(crtime, "UTF-8");
             //String _usertype = URLEncoder.encode(usertype, "UTF-8");
 
-
             url = Constant.ipaddress +"/SaveFeedbackDetail?feedbk_type=" + _feedtype + "&article_no=" + _articleno + "&invoice_no=" + _invoiceno + "&qty=" + _qty + "&salesman_id=" + _salesmanid + "&office_type=" + _officetype + "&description=" + _description + "&img1=" + _img1 + "&img2=" + _img2 + "&img3=" + _img3 + "&crby="+_crby+"&user_type=E"; //+ _usertype;
             Constant.showLog(url);
             writeLog("savefeedback():url called:" + url);
@@ -804,7 +807,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 public void onSuccess(String result) {
                     //constant.showPD();
                     show_popup(7);
-                    Constant.showLog("Volly request success");
+                    Constant.showLog("Volley request success");
                     writeLog("saveFeedbackdetail():Volley_success");
                 }
 
@@ -815,7 +818,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     writeLog("saveFeedbackdetail_" + result);
                 }
             });
+            constant.showPD();
         } catch (Exception e) {
+            constant.showPD();
             show_popup(7);
             e.printStackTrace();
             writeLog("saveFeedbackdetail_" + e.getMessage());

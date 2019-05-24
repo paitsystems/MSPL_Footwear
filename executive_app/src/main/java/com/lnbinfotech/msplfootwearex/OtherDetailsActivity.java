@@ -158,14 +158,17 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
         if (this.requestCode == requestCode && resultCode == RESULT_OK) {
             try {
                 imageView_cheque_img.setVisibility(View.VISIBLE);
-                String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + "temp.jpg");
+                String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator
+                        + Constant.folder_name + File.separator + Constant.image_folder + File.separator + "temp.jpg");
                 imageView_cheque_img.setImageBitmap(scaleBitmap(_imagePath));
                 long datetime = System.currentTimeMillis();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
                 Date resultdate = new Date(datetime);
                 String type = list.get(sp_sizeGroup.getSelectedItemPosition());
-                imagePath = "C_"+custId+"_Other_"+type+"_" + sdf.format(resultdate) + ".jpg";
-                File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name);
+                int hocode = FirstActivity.pref.getInt(getString(R.string.pref_hocode),0);
+                String name = FirstActivity.pref.getString(getString(R.string.pref_name),"NA");
+                imagePath = "Q_"+custId+"_Other_"+type + "_" + name + "_" + hocode +"_" + sdf.format(resultdate) + ".jpg";
+                File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + Constant.image_folder);
                 for (File temp : f.listFiles()) {
                     if (temp.getName().equals("temp.jpg")) {
                         f = temp;
@@ -177,7 +180,8 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
                 BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
                 bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
 
-                File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name, imagePath);
+                File file = new File(Environment.getExternalStorageDirectory()
+                        + File.separator + Constant.folder_name + File.separator + Constant.image_folder, imagePath);
                 try {
                     outFile = new FileOutputStream(file);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 15, outFile);
@@ -205,7 +209,8 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
                         Date resultdate = new Date(datetime);
                         String fname = "S_" + sdf.format(resultdate);
                         File sourcefile = new File(imgDecodedString);
-                        File destinationfile = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + "/" + fname + ".jpg");
+                        File destinationfile = new File(Environment.getExternalStorageDirectory() + File.separator
+                                + Constant.folder_name + File.separator + Constant.image_folder + "/" + fname + ".jpg");
                         copyImage(sourcefile, destinationfile);
                         cursor.close();
                     }
@@ -306,17 +311,37 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void takeimage(){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File f = Constant.checkFolder(Constant.folder_name);
         f = new File(f.getAbsolutePath(), "temp.jpg");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
         startActivityForResult(intent, requestCode);
+        overridePendingTransition(R.anim.enter, R.anim.exit);*/
+
+        Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
+        f = new File(f.getAbsolutePath(),"temp.jpg");
+        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                + ".provider", f);
+        intent1.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+        intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivityForResult(intent1,requestCode);
         overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
     private void openGallery(){
-        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(gallery,REQUEST_IMAGE_PICK_UP);
+       /* Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(gallery,REQUEST_IMAGE_PICK_UP);*/
+
+        Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
+        f = new File(f.getAbsolutePath(),"temp.jpg");
+        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                + ".provider", f);
+        intent1.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+        intent1.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION & Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        startActivityForResult(intent1,REQUEST_IMAGE_PICK_UP);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
     private void copyImage(File source, File destination){
@@ -349,7 +374,8 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
             imageView_cheque_img.setImageBitmap(bmp);
             File file;
             if(i == 0) {
-                String OImgPath = Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name+"/";
+                String OImgPath = Environment.getExternalStorageDirectory() + File.separator
+                        + Constant.folder_name + File.separator + "/" +Constant.image_folder;
                 if (f.delete()) {
                    Constant.showLog("Delete");
                 }

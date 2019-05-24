@@ -218,7 +218,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".SchemeFullImageActivity"></activity>
+        <activity android:name=".SchemeFullImageActivity"/>
     </application>
 
 </manifest>

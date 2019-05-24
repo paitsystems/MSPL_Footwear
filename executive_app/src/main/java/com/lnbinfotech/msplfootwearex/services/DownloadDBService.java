@@ -55,7 +55,7 @@ public class DownloadDBService extends IntentService {
                 ftp.login(Constant.ftp_username, Constant.ftp_password);
                 ftp.setFileType(FTP.BINARY_FILE_TYPE);
                 ftp.enterLocalPassiveMode();
-                if (ftp.changeWorkingDirectory(Constant.ftp_directory)) {
+                if (ftp.changeWorkingDirectory(Constant.dir_data_sync)) {
                     File fName = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name, DBHandler.Database_Name);
                     OutputStream outStream;
                     outStream = new BufferedOutputStream(new FileOutputStream(fName));

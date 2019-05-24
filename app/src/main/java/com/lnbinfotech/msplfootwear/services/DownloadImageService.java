@@ -40,7 +40,7 @@ public class DownloadImageService extends IntentService {
                 ftp.login(Constant.ftp_username, Constant.ftp_password);
                 ftp.setFileType(FTP.BINARY_FILE_TYPE);
                 ftp.enterLocalPassiveMode();
-                if (ftp.changeWorkingDirectory(Constant.ftp_directory)) {
+                if (ftp.changeWorkingDirectory(Constant.dir_Customer_Master)) {
                     File fname = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name, imageName);
                     OutputStream outstream = new BufferedOutputStream(new FileOutputStream(fname));
                     ftp.retrieveFile(imageName, outstream);

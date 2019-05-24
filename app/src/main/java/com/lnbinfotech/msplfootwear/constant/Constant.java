@@ -40,16 +40,21 @@ public class Constant {
             mail_subject = "Log File",
             mail_body = "Find the Attached Log File",
             mailReceipient = "anup.p@paitsystems.com",
-            ftp_adress = "ftp.lnbinfotech.com",
+            /*ftp_adress = "ftp.lnbinfotech.com",
             ftp_username = "supportftp@lnbinfotech.com",
             ftp_password = "support$456",
-            ftp_directory = "Test",
+            ftp_directory = "Test",*/
+            ftp_adress = "103.109.13.200",
+            ftp_username = "ascpune/mobileapp",
+            ftp_password = "Mspl@3321",
+            dir_data_sync = "Data Sync",
+            dir_Customer_Master = "Customer Master",
+            dir_Feed_Back = "Feed Back",
             zip_file = "SmartGST.zip";
 
     //TODO: Check Ip Address
     //public static String ipaddress = "http://172.30.1.209/MSPLC6/service.svc";
     //public static String ipaddress = "http://license.lnbinfotech.com/MSPLC6/service.svc";
-    //public static String ipaddress = "http://219.91.211.9:24086/MSPLC6/service.svc";
     public static String ipaddress = "http://43.239.147.103:24085/MSPLC8/service.svc";
 
     //TODO: Check Image Url

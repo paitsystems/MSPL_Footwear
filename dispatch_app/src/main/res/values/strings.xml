@@ -1,8 +1,5 @@
 <resources>
 
-
-    <!--TODO: Check App Name-->
-
     <string name="app_name">MSPL Dispatch</string>
     <string name="title_activity_login">MSPL Dispatch</string>
     <string name="error_invalid_password">This field is required</string>

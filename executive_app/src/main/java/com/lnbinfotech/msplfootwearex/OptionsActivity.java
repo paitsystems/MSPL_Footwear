@@ -29,6 +29,7 @@ import com.lnbinfotech.msplfootwearex.log.CopyLog;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.mail.GMailSender;
 import com.lnbinfotech.msplfootwearex.model.NewCustomerEntryClass;
+import com.lnbinfotech.msplfootwearex.services.UploadImageService;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -218,6 +219,11 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.clear:
                 showDia(7);
+                break;
+            case R.id.sync_image:
+                writeLog("Sync_Images_Started");
+                Intent intent1 = new Intent(getApplicationContext(), UploadImageService.class);
+                startService(intent1);
                 break;
         }
         return super.onOptionsItemSelected(item);

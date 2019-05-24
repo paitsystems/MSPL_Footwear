@@ -89,7 +89,7 @@ public class UploadImageService extends IntentService {
                     for (File file : f.listFiles()) {
                         if (file != null && !file.isDirectory()) {
                             FileInputStream ifile = new FileInputStream(file);
-                            client.cwd(Constant.ftp_directory);
+                            client.cwd(Constant.dir_Feed_Back);
                             if (client.storeFile(file.getName(), ifile)) {
                                 file.delete();
                                 Constant.showLog("Image deleted.."+file.getName());
