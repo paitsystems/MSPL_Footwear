@@ -193,7 +193,7 @@ public class MainActivity_KRD extends AppCompatActivity implements View.OnClickL
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.chequedetail_menu, menu);
+        getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
         return true;
     }
 

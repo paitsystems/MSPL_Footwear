@@ -29,22 +29,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pait.dispatch_app.adapters.DispatchDetailAdapter;
-import com.pait.dispatch_app.connectivity.ConnectivityTest;
 import com.pait.dispatch_app.constant.Constant;
 import com.pait.dispatch_app.db.DBHandler;
 import com.pait.dispatch_app.interfaces.RetrofitApiInterface;
-import com.pait.dispatch_app.interfaces.ServerCallback;
 import com.pait.dispatch_app.interfaces.TestInterface;
-import com.pait.dispatch_app.log.CopyLog;
 import com.pait.dispatch_app.log.WriteLog;
-import com.pait.dispatch_app.mail.GMailSender;
 import com.pait.dispatch_app.model.DispatchDetailClass;
 import com.pait.dispatch_app.model.DispatchMasterClass;
 import com.pait.dispatch_app.model.EmployeeMasterClass;
 import com.pait.dispatch_app.parse.UserClass;
 import com.pait.dispatch_app.services.UploadImageService;
 import com.pait.dispatch_app.utility.RetrofitApiBuilder;
-import com.pait.dispatch_app.volleyrequests.VolleyRequests;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -54,16 +49,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DataFormat;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellRangeAddress;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
@@ -75,7 +60,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -94,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<DispatchDetailClass> list;
     private int requestCode = 1, requestCode2 = 2, edCustCode = 3, edPOCode = 4, edDPBy = 5, hoCode,
             dpID, empId, custCode = 0, flag = 0, designId = 0;
-    private String imagePath = "NA", psImagePath = "", imgType, pono = "", empName = "NA", userType;
+    private String imagePath = "NA", psImagePath = "", imgType, pono = "", empName = "NA";
     private DBHandler db;
     private DispatchMasterClass dm;
     private EmployeeMasterClass em;
@@ -181,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.chequedetail_menu, menu);
+        getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
         return true;
     }
 

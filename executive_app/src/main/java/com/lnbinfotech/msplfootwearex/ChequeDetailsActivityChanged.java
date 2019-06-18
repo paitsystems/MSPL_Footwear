@@ -248,6 +248,15 @@ public class ChequeDetailsActivityChanged extends AppCompatActivity implements V
                 Date resultdate = new Date(datetime);
                 int hocode = FirstActivity.pref.getInt(getString(R.string.pref_hocode),0);
                 String name = FirstActivity.pref.getString(getString(R.string.pref_name),"NA");
+                try {
+                    String arr1[] = name.split("\\s+");
+                    if(arr1.length>1){
+                        name = arr1[0];
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                    writeLog(e.getMessage());
+                }
                 imagePath = "Q_" + custId + "_Cheque_" + chequeNo + "_" + name + "_" + hocode + "_" + sdf.format(resultdate) + ".jpg";
                 Constant.showLog(imagePath);
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator +

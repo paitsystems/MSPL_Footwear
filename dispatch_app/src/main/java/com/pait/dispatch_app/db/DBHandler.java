@@ -10,6 +10,7 @@ import com.pait.dispatch_app.constant.Constant;
 import com.pait.dispatch_app.model.CompanyMasterClass;
 import com.pait.dispatch_app.model.DispatchMasterClass;
 import com.pait.dispatch_app.model.EmployeeMasterClass;
+import com.pait.dispatch_app.model.StockTakeClass;
 import com.pait.dispatch_app.parse.UserClass;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static final String Database_Name = "SmartGST.db";
     //TODO: Check DB Version
-    private static final int Database_Version = 2;
+    private static final int Database_Version = 3;
 
     private static final String Table_Customermaster = "CustomerMaster";
     private static final String CM_RetailCustID = "CustID";
@@ -314,6 +315,31 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String DM_PSImage = "PSImage";
     public static final String DM_CheckedPerson = "CheckedPerson";
 
+    public static final String Table_StockTakeMaster = "StockTakeMaster";
+    public static String ST_Auto = "Auto";
+    public static String ST_Product_id = "Product_id";
+    public static String ST_ProductId = "ProductId";
+    public static String ST_ArticleName = "ArticleName";
+    public static String ST_PackQty = "PackQty";
+    public static String ST_LooseQty = "LooseQty";
+    public static String ST_TotalQty = "TotalQty";
+    public static String ST_StockQty = "StockQty";
+    public static String ST_Avail = "Avail";
+    public static String ST_Round = "Round";
+    public static String ST_MRP = "MRP";
+    public static String ST_Colour = "Colour";
+    public static String ST_HashCode = "HashCode";
+    public static String ST_HOCode = "HOCode";
+    public static String ST_BranchId = "BranchId";
+    public static String ST_CrBy = "CrBy";
+    public static String ST_CrDate = "CrDate";
+    public static String ST_CrTime = "CrTime";
+    public static String ST_SizeGroup = "SizeGroup";
+    public static String ST_GSTGroup = "GSTGroup";
+    public static String ST_DesignNo = "DesignNo";
+    public static String ST_InOutType = "InOutType";
+    public static String ST_Typ = "Typ";
+    public static String ST_Stock_Check_Date = "Stock_Check_Date";
 
     public DBHandler(Context context) {
         super(context, Database_Name, null, Database_Version);
@@ -408,6 +434,19 @@ public class DBHandler extends SQLiteOpenHelper {
             DM_DispatchDate + " text," + DM_DCNo + " text,"+ DM_DCDate +" text," + DM_DPTotal + " text," +
             DM_PSImage + " text,"+ DM_CheckedPerson+ " int)";
 
+    private String create_stock_take_table = "create table if not exists "+Table_StockTakeMaster
+            +"("+ST_Auto +" int," + ST_Product_id +" int," +
+            ST_ProductId +" text," + ST_ArticleName +" text," +
+            ST_PackQty +" int," + ST_LooseQty +" int," +
+            ST_TotalQty +" int," + ST_StockQty +" int," +
+            ST_Avail +" text," + ST_Round +" int," +
+            ST_MRP +" float," + ST_Colour +" text," +
+            ST_HashCode +" text," + ST_HOCode +" int," + ST_BranchId +" int," + ST_CrBy +" int," +
+            ST_CrDate +" text," + ST_CrTime +" text," +
+            ST_SizeGroup +" text," +  ST_GSTGroup +" text," +
+            ST_DesignNo +" text," + ST_InOutType +" text," +
+            ST_Typ +" text," + ST_Stock_Check_Date +" text)";
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         //Constant.showLog(create_cust_master);
@@ -446,6 +485,8 @@ public class DBHandler extends SQLiteOpenHelper {
         //db.execSQL(create_sizedesignmastdet_table);
         Constant.showLog(create_dispatchmaster_table);
         db.execSQL(create_dispatchmaster_table);
+        Constant.showLog(create_stock_take_table);
+        db.execSQL(create_stock_take_table);
     }
 
     @Override
@@ -457,6 +498,10 @@ public class DBHandler extends SQLiteOpenHelper {
             db.execSQL(str);
             str = "alter table "+Table_DispatchMaster+" add "+DM_CheckedPerson+" int";
             db.execSQL(str);
+        }
+        if(oldVersion < 3){
+            Constant.showLog(create_stock_take_table);
+            db.execSQL(create_stock_take_table);
         }
     }
 
@@ -668,6 +713,43 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().insert(Table_CompanyMaster, null, cv);
     }
 
+    public void addStockTakeMaster(List<StockTakeClass> list ) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        for (StockTakeClass st : list) {
+            Constant.showLog(st.getAuto());
+            ContentValues cv = new ContentValues();
+            cv.put(ST_Auto,st.getAuto());
+            cv.put(ST_Product_id,st.getProduct_id());
+            cv.put(ST_ProductId,st.getProductId());
+            cv.put(ST_ArticleName,st.getArticleName());
+            cv.put(ST_PackQty,st.getPackQty());
+            cv.put(ST_LooseQty,st.getLooseQty());
+            cv.put(ST_TotalQty,st.getTotalQty());
+            cv.put(ST_StockQty,st.getStockQty());
+            cv.put(ST_Avail,st.getAvail());
+            cv.put(ST_Round,st.getRound());
+            cv.put(ST_MRP,st.getMRP());
+            cv.put(ST_Colour,st.getColour());
+            cv.put(ST_HashCode,st.getHashCode());
+            cv.put(ST_HOCode,st.getHOCode());
+            cv.put(ST_BranchId,st.getBranchId());
+            cv.put(ST_CrBy,st.getCrBy());
+            cv.put(ST_CrDate,st.getCrDate());
+            cv.put(ST_CrTime,st.getCrTime());
+            cv.put(ST_SizeGroup,st.getSizeGroup());
+            cv.put(ST_GSTGroup,st.getGSTGroup());
+            cv.put(ST_DesignNo,st.getDesignNo());
+            cv.put(ST_InOutType,st.getInOutType());
+            cv.put(ST_Typ,st.getTyp());
+            cv.put(ST_Stock_Check_Date,st.getStock_Check_Date());
+            db.insert(Table_StockTakeMaster, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+    }
+
     public Cursor getDPCenter(int hoCode){
         String str = "select * from "+Table_CompanyMaster + " where "+Company_HOCode+"="+hoCode +" and " +
                 Company_DisplayCmp + " not like '%Damage%' and "+Company_DisplayCmp+" not like '%transfer%' " +
@@ -712,6 +794,23 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void deleteOrderTableAfterSave(String pono) {
         getWritableDatabase().delete(Table_DispatchMaster,DM_PONO+"=?",new String[]{pono});
+    }
+
+    public int getStockTakeMaxAuto() {
+            int a = 0;
+            String str = "select max(" + ST_Auto + ") from " + Table_StockTakeMaster;
+            Cursor res = getWritableDatabase().rawQuery(str, null);
+            if (res.moveToFirst()) {
+                a = res.getInt(0);
+            }
+            res.close();
+            return a;
+    }
+
+    public Cursor getStockData(){
+        String str = "select * from "+Table_StockTakeMaster +" order by "+ST_Auto;
+        Constant.showLog(str);
+        return getWritableDatabase().rawQuery(str,null);
     }
 
 }

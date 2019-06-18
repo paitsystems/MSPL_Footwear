@@ -57,6 +57,10 @@
             android:name=".services.ScheduledJobServicePL"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
+        <!--<service
+            android:name=".services.LocationUpdateJobServicePL"
+            android:permission="android.permission.BIND_JOB_SERVICE" />-->
+
         <receiver android:name=".braodcasts.AutoUpdateBroadcastReceiver" />
         <receiver
             android:name=".braodcasts.RebootBroadcastReceiver"

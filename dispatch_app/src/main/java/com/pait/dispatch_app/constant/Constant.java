@@ -65,10 +65,10 @@ public class Constant {
     private static int connectionFlag = 0;
 
     //TODO: Check liveTestFlag 1-ScreenShotDisable, 0-ScreenShotEnable
-    public static int liveTestFlag = 1;
+    public static int liveTestFlag = 0;
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
-    public static int showLogFlag = 1;
+    public static int showLogFlag = 0;
 
     public static int TIMEOUT_CON = 10 * 1000;
     public static int TIMEOUT_SO = 2 * 60 * 1000;
@@ -185,6 +185,16 @@ public class Constant {
         String str = "";
         try {
             str = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH).format(new Date());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
+    public String getTime() {
+        String str = "";
+        try {
+            str = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(new Date());
         } catch (Exception e) {
             e.printStackTrace();
         }

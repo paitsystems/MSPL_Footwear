@@ -89,8 +89,18 @@
             android:name=".ProductSearchActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible" />
-        <activity android:name=".ReportActivity" />
-        <activity android:name=".MainActivity_KRD"></activity>
+        <activity
+            android:name=".ReportActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".MainActivity_KRD"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".StockTakeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>

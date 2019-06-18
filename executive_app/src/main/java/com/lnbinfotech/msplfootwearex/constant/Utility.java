@@ -14,6 +14,7 @@ import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
+import com.lnbinfotech.msplfootwearex.services.LocationUpdateJobServicePL;
 import com.lnbinfotech.msplfootwearex.services.ScheduledJobService;
 import com.lnbinfotech.msplfootwearex.services.ScheduledJobServicePL;
 
@@ -26,14 +27,15 @@ public class Utility {
         Constant.checkFolder(Constant.folder_name+"/"+Constant.zipFolderName);
         Constant.checkFolder(Constant.folder_name+"/"+Constant.unzipFolderName);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            ComponentName component = new ComponentName(context, ScheduledJobServicePL.class);
-            JobInfo.Builder builder = new JobInfo.Builder(0, component);
-            builder.setPeriodic(period);
-            builder.setRequiresDeviceIdle(false);
-            builder.setRequiresCharging(false);
-            JobScheduler scheduler = context.getSystemService(JobScheduler.class);
-            scheduler.schedule(builder.build());
+            ComponentName component1 = new ComponentName(context, ScheduledJobServicePL.class);
+            JobInfo.Builder builder1 = new JobInfo.Builder(0, component1);
+            builder1.setPeriodic(period);
+            builder1.setRequiresDeviceIdle(false);
+            builder1.setRequiresCharging(false);
+            JobScheduler scheduler1 = context.getSystemService(JobScheduler.class);
+            scheduler1.schedule(builder1.build());
             Constant.showLog("scheduledJob_JobScheduler");
+
             /*ComponentName component = new ComponentName(context, LocationUpdateJobServicePL.class);
             JobInfo.Builder builder = new JobInfo.Builder(0, component);
             builder.setPeriodic(period);

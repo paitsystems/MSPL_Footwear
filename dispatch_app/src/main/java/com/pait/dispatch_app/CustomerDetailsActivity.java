@@ -60,7 +60,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
     private DBHandler db;
     private Toast toast;
     private Constant constant;
-    private Button btn_save, btn_order, btn_report;
+    private Button btn_save, btn_order, btn_report, btn_stock_take;
     private String version = "", mobNo = "", id = "0";
     private TextView tv_version;
     private LocationProvider provider;
@@ -179,6 +179,14 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     toast.show();
                 }
                 break;
+            case R.id.btn_stock_take:
+                if (id != 0) {
+                    startNewActivity(2);
+                } else {
+                    toast.setText("Select Dispatch Center First");
+                    toast.show();
+                }
+                break;
         }
     }
 
@@ -240,9 +248,11 @@ public class CustomerDetailsActivity extends AppCompatActivity
         btn_save = findViewById(R.id.btn_save);
         btn_order = findViewById(R.id.btn_order);
         btn_report = findViewById(R.id.btn_report);
+        btn_stock_take = findViewById(R.id.btn_stock_take);
         btn_save.setOnClickListener(this);
         btn_order.setOnClickListener(this);
         btn_report.setOnClickListener(this);
+        btn_stock_take.setOnClickListener(this);
     }
 
     private void showDia(int a) {
@@ -679,12 +689,6 @@ public class CustomerDetailsActivity extends AppCompatActivity
     private void startNewActivity(int id) {
         userClass = (UserClass) listView.getAdapter().getItem(0);
         userClass.setDpId(dpId);
-        /*if (FirstActivity.pref.contains(getString(R.string.pref_dpId))) {
-            int prevId = FirstActivity.pref.getInt(getString(R.string.pref_dpId), 0);
-            if (prevId != userClass.getDpId()) {
-                db.deleteTable(DBHandler.Table_DispatchMaster);
-            }
-        }*/
         db.deleteTable(DBHandler.Table_DispatchMaster);
         String pin = userClass.getCustID() + "-" + "1234";
         SharedPreferences.Editor editor = FirstActivity.pref.edit();
@@ -708,8 +712,13 @@ public class CustomerDetailsActivity extends AppCompatActivity
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
             }
-        } else {
+        } else if (id == 1) {
             intent = new Intent(getApplicationContext(), ReportActivity.class);
+            intent.putExtra("cust", userClass);
+            startActivity(intent);
+            overridePendingTransition(R.anim.enter, R.anim.exit);
+        } else if (id == 2) {
+            intent = new Intent(getApplicationContext(), StockTakeActivity.class);
             intent.putExtra("cust", userClass);
             startActivity(intent);
             overridePendingTransition(R.anim.enter, R.anim.exit);

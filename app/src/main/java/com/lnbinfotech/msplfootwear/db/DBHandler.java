@@ -1656,6 +1656,7 @@ public class DBHandler extends SQLiteOpenHelper {
         Constant.showLog("getDistinctColourImageWise :- " + str);
         return getWritableDatabase().rawQuery(str, null);
     }
+
     public Cursor getImageSubCategory2(String catName, String subCatName) {
         String str = "select "+Table_ProductMaster+"."+PM_ProductID+","+Table_ProductMaster+"."+PM_Cat2+","
                 +Table_ProductMaster+"."+PM_Finalprod+","+Table_ProductMaster+"."+PM_ProdId+","+

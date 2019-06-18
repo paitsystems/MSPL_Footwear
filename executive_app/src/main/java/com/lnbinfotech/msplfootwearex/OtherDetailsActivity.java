@@ -167,6 +167,15 @@ public class OtherDetailsActivity extends AppCompatActivity implements View.OnCl
                 String type = list.get(sp_sizeGroup.getSelectedItemPosition());
                 int hocode = FirstActivity.pref.getInt(getString(R.string.pref_hocode),0);
                 String name = FirstActivity.pref.getString(getString(R.string.pref_name),"NA");
+                try {
+                    String arr1[] = name.split("\\s+");
+                    if(arr1.length>1){
+                        name = arr1[0];
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                    writeLog(e.getMessage());
+                }
                 imagePath = "Q_"+custId+"_Other_"+type + "_" + name + "_" + hocode +"_" + sdf.format(resultdate) + ".jpg";
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name + File.separator + Constant.image_folder);
                 for (File temp : f.listFiles()) {
