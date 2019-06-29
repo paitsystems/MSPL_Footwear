@@ -310,4 +310,6 @@
     <string name="pref_design">design</string>
     <string name="pref_newDB">newDB</string>
     <string name="pref_name">name</string>
+    <string name="pref_execId">execId</string>
+    <string name="pref_execName">execName</string>
 </resources>

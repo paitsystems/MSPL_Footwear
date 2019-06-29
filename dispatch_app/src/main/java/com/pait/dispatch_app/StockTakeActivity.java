@@ -248,6 +248,7 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
                 list.add(st);
             }while (res.moveToNext());
         }
+        res.close();
         if (!list.isEmpty()) {
             adapter = new StockTakeAdapter(getApplicationContext(), list);
             adapter.initInterface(StockTakeActivity.this);

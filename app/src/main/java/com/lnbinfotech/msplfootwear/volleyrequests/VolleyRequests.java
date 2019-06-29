@@ -65,7 +65,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("getOTPCode_VolleyError_"+error.getMessage());
+                        callback.onFailure("getOTPCode_VolleyError_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("getOTPCode_" + error.getMessage());
                     }
@@ -84,14 +84,14 @@ public class VolleyRequests {
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
                         ArrayList<UserClass> list = new ParseJSON(response, context).parseUserDetail();
-                        if(list!=null){
-                            if(list.size()!=0){
+                        if (list != null) {
+                            if (list.size() != 0) {
                                 Constant.showLog(list.size() + "");
                                 callback.onSuccess(response);
-                            }else{
+                            } else {
                                 callback.onFailure("Error");
                             }
-                        }else{
+                        } else {
                             callback.onFailure("Error");
                         }
                     }
@@ -150,7 +150,7 @@ public class VolleyRequests {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                callback.onFailure("saveCustomerDetail_Error_"+error.getMessage());
+                callback.onFailure("saveCustomerDetail_Error_" + error.getMessage());
                 Constant.showLog(error.getMessage());
             }
         });
@@ -560,7 +560,7 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
-    public void refreshCompanyMaster(String url, final ServerCallback callback,final int max) {
+    public void refreshCompanyMaster(String url, final ServerCallback callback, final int max) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -739,9 +739,9 @@ public class VolleyRequests {
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
                         int a = new ParseJSON(response, context).parseloadDetailOrderChanged();
-                        if(a==1) {
+                        if (a == 1) {
                             callback.onSuccess(a);
-                        }else{
+                        } else {
                             callback.onFailure("Error");
                         }
 
@@ -758,7 +758,7 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
     }
 
-    public void refreshGSTMaster(String url, final ServerCallback callback,final int max) {
+    public void refreshGSTMaster(String url, final ServerCallback callback, final int max) {
         StringRequest request = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
@@ -778,7 +778,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("refreshGSTMaster_VolleyError_"+error.getMessage());
+                        callback.onFailure("refreshGSTMaster_VolleyError_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("refreshBankMaster_" + error.getMessage());
                     }
@@ -796,7 +796,7 @@ public class VolleyRequests {
                         //response = response.replace("\\", "");
                         //response = response.replace("\"", "");
                         //response = response.substring(1, response.length() - 1);
-                        List<CheckoutCustOrderClass> list = new ParseJSON(response, context). parseloadCheckoutOrder();
+                        List<CheckoutCustOrderClass> list = new ParseJSON(response, context).parseloadCheckoutOrder();
                         if (list.size() != 0) {
                             callback.onSuccess(list);
                         } else {
@@ -835,7 +835,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("loadCustOutstanding"+error.getMessage());
+                        callback.onFailure("loadCustOutstanding" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("loadCustOutstanding" + error.getMessage());
                     }
@@ -938,7 +938,7 @@ public class VolleyRequests {
                         //response = response.replace("''", "");
                         //response = response.substring(1, response.length() - 1);
                         List<CheckAvailStockClass> list = new ParseJSON(response, context).parseAvailQty();
-                        if (list.size()!=0) {
+                        if (list.size() != 0) {
                             callback.onSuccess(list);
                         } else {
                             callback.onFailure("Error");
@@ -973,10 +973,10 @@ public class VolleyRequests {
                                     status = jsonArray.getJSONObject(i).getString("status");
                                 }
                                 callback.onSuccess(status);
-                            }else{
+                            } else {
                                 callback.onFailure("Error");
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                             callback.onFailure("Error");
                         }
@@ -987,7 +987,7 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("getActiveStatus_" + error.getMessage());
                         Constant.showLog(error.getMessage());
-                        writeLog("getActiveStatus_"+error.getMessage());
+                        writeLog("getActiveStatus_" + error.getMessage());
                     }
                 }
         );
@@ -1012,7 +1012,7 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("getCustDiscLimit_" + error.getMessage());
                         Constant.showLog(error.getMessage());
-                        writeLog("getCustDiscLimit_"+error.getMessage());
+                        writeLog("getCustDiscLimit_" + error.getMessage());
                     }
                 }
         );
@@ -1029,9 +1029,9 @@ public class VolleyRequests {
                         response = response.replace("''", "");
                         response = response.substring(1, response.length() - 1);
                         int ret = new ParseJSON(response, context).parseGetMaxAuto();
-                        if(ret != 0) {
+                        if (ret != 0) {
                             callback.onSuccess(String.valueOf(ret));
-                        }else{
+                        } else {
                             callback.onFailure("Error");
                         }
                     }
@@ -1041,7 +1041,7 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("refreshAreaMaster_" + error.getMessage());
                         Constant.showLog(error.getMessage());
-                        writeLog("refreshAreaMaster_"+error.getMessage());
+                        writeLog("refreshAreaMaster_" + error.getMessage());
                     }
                 }
         );
@@ -1062,7 +1062,7 @@ public class VolleyRequests {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onFailure("updateIMEINo_VolleyError_"+error.getMessage());
+                        callback.onFailure("updateIMEINo_VolleyError_" + error.getMessage());
                         Constant.showLog(error.getMessage());
                         writeLog("updateIMEINo_" + error.getMessage());
                     }
@@ -1085,16 +1085,17 @@ public class VolleyRequests {
                             JSONArray jsonArray = new JSONArray(response);
                             if (jsonArray.length() >= 1) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
+                                    String id = jsonArray.getJSONObject(i).getString("Emp_Id");
                                     String name = jsonArray.getJSONObject(i).getString("Emp_Name");
                                     String contNo = jsonArray.getJSONObject(i).getString("Emo_Phno");
-                                    String VDate = jsonArray.getJSONObject(i).getString("VDate");
-                                    status = name+"^"+contNo+"^"+VDate;
+                                    String imgPath = jsonArray.getJSONObject(i).getString("ImagePath");
+                                    status = id + "^" + name + "^" + contNo + "^" + imgPath;
                                 }
                                 callback.onSuccess(status);
-                            }else{
+                            } else {
                                 callback.onFailure("Error");
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                             callback.onFailure("Error");
                         }
@@ -1105,7 +1106,7 @@ public class VolleyRequests {
                     public void onErrorResponse(VolleyError error) {
                         callback.onFailure("getActiveStatus_" + error.getMessage());
                         Constant.showLog(error.getMessage());
-                        writeLog("getActiveStatus_"+error.getMessage());
+                        writeLog("getActiveStatus_" + error.getMessage());
                     }
                 }
         );

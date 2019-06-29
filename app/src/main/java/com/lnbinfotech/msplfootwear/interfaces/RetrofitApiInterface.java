@@ -5,6 +5,7 @@ package com.lnbinfotech.msplfootwear.interfaces;
 
 import com.lnbinfotech.msplfootwear.model.BankBranchMasterClass;
 import com.lnbinfotech.msplfootwear.model.CustomerDetailClass;
+import com.lnbinfotech.msplfootwear.model.InvoiceNumberClass;
 import com.lnbinfotech.msplfootwear.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwear.model.SchemeMasterClass;
 import com.lnbinfotech.msplfootwear.model.SizeDesignMastDetClass;
@@ -43,5 +44,9 @@ public interface RetrofitApiInterface {
     @Headers("Content-Type: application/json")
     @POST("GetSchemeData")
     Call<List<SchemeMasterClass>> getSchemeData(@Body RequestBody url);
+
+    @Headers("Content-Type: application/json")
+    @POST("GetInvoiceData")
+    Call<List<InvoiceNumberClass>> getInvoiceNumber(@Body RequestBody url);
 
 }

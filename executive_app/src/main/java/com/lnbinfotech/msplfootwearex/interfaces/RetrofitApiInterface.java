@@ -4,6 +4,7 @@ package com.lnbinfotech.msplfootwearex.interfaces;
 
 import com.lnbinfotech.msplfootwearex.model.BankBranchMasterClass;
 import com.lnbinfotech.msplfootwearex.model.CustomerDetailClass;
+import com.lnbinfotech.msplfootwearex.model.InvoiceNumberClass;
 import com.lnbinfotech.msplfootwearex.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwearex.model.SizeDesignMastDetClass;
 import com.lnbinfotech.msplfootwearex.model.SizeNDesignClass;
@@ -38,4 +39,9 @@ public interface RetrofitApiInterface {
     @Headers("Content-Type: application/json")
     @POST("GetCustomerMasterV6")
     Call<List<CustomerDetailClass>> getCustomerMasterV6(@Body RequestBody url);
+
+    @Headers("Content-Type: application/json")
+    @POST("GetInvoiceData")
+    Call<List<InvoiceNumberClass>> getInvoiceNumber(@Body RequestBody url);
+
 }

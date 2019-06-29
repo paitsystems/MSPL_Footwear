@@ -4,7 +4,8 @@ package com.lnbinfotech.msplfootwear.model;
  * Created by SNEHA on 10/17/2017.
  */
 public class FeedbackClass {
-  public  String auto,crby,crdate,crtime,feedbk_type,article_no,invoice_no,qty,salesman_id,front_office,description,feed_img1,feed_img2,feed_img3,user_type;
+  public  String auto,crby,crdate,crtime,feedbk_type,article_no,invoice_no,qty,salesman_id,front_office,
+          description,feed_img1,feed_img2,feed_img3,user_type, sizeGroup, color;
 
     public String getAuto() {
         return auto;
@@ -126,5 +127,21 @@ public class FeedbackClass {
 
     public void setUser_type(String user_type) {
         this.user_type = user_type;
+    }
+
+    public String getSizeGroup() {
+        return sizeGroup;
+    }
+
+    public void setSizeGroup(String sizeGroup) {
+        this.sizeGroup = sizeGroup;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

@@ -1736,6 +1736,42 @@ public class DBHandler extends SQLiteOpenHelper {
         return custList;
     }
 
+    public ArrayList<String> getArticleNo(){
+        String str = "select "+ PM_Finalprod +" as ArtNo from "+Table_ProductMaster + " order by ArtNo";
+        Cursor res = getWritableDatabase().rawQuery(str,null);
+        ArrayList<String> list = new ArrayList<>();
+        if(res.moveToFirst()){
+            do {
+                list.add(res.getString(res.getColumnIndex("ArtNo")));
+            }while (res.moveToNext());
+        }
+        res.close();
+        return list;
+    }
+
+    public int getBranchId(String ini) {
+        int a = 0;
+        String str = "select "+Company_Id+" from "+Table_CompanyMaster+" where "+Company_Initial+"='"+ini+"'";
+        Constant.showLog(str);
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if (res.moveToFirst()) {
+            a = res.getInt(0);
+        }
+        res.close();
+        return a;
+    }
+
+    public int getProdId(String prodName) {
+        int a = 0;
+        String str = "select "+PM_ProductID+" from "+ Table_ProductMaster+" where "+ PM_Finalprod+"='"+prodName+"'";
+        Constant.showLog(str);
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if (res.moveToFirst()) {
+            a = res.getInt(0);
+        }
+        res.close();
+        return a;
+    }
 }
 
 

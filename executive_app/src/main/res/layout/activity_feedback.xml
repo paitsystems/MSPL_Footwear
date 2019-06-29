@@ -5,10 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.lnbinfotech.msplfootwear.FeedbackActivity">
+    tools:context="com.lnbinfotech.msplfootwearex.FeedbackActivity">
 
     <ScrollView
-
         android:id="@+id/scroll_lay"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -21,28 +20,31 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
-                style="@style/textViewMob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/feedbacktype" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="horizontal">
+
+                <TextView
+                    style="@style/textViewMob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:text="@string/feedbacktype" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_weight="0.3"
                     android:background="@drawable/border_draw_profile"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <Spinner
-                        android:id="@+id/fedback_spinner"
+                        android:id="@+id/feedback_spinner"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp" />
+                        android:layout_height="@dimen/feedback_spinner_height50" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -54,13 +56,13 @@
                 android:background="@drawable/border_draw_profile"
                 android:orientation="vertical"
                 android:padding="5sp"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <AutoCompleteTextView
-                    android:id="@+id/auto_"
+                    android:id="@+id/auto_invOrderNo"
                     style="@style/textViewMob"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="@dimen/feedback_auto_height30"
                     android:background="@null"
                     android:hint="@string/entertexthere"
                     android:inputType="textCapWords"
@@ -96,12 +98,85 @@
                             android:paddingLeft="4dp"
                             android:text="@string/article_no" />
 
-                        <EditText
-                            android:id="@+id/ed_article_no"
+                        <AutoCompleteTextView
+                            android:id="@+id/auto_article_no"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.3" />
+                            android:layout_weight="0.3"
+                            android:maxLines="1"
+                            android:singleLine="true" />
 
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/mobmargin2">
+
+                        <TextView
+                            style="@style/textViewMob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:text="Size Group" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="top"
+                            android:layout_weight="0.4"
+                            android:background="@drawable/sizegroup_spinner_draw"
+                            android:orientation="vertical"
+                            android:padding="@dimen/mobpadding2">
+
+                            <Spinner
+                                android:id="@+id/sp_sizegroup"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="top"
+                                android:imeOptions="actionNext"
+                                android:maxLines="1"
+                                android:spinnerMode="dropdown"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/mobmargin2">
+
+                        <TextView
+                            style="@style/textViewMob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:text="Colour" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="top"
+                            android:layout_weight="0.4"
+                            android:background="@drawable/sizegroup_spinner_draw"
+                            android:orientation="vertical"
+                            android:padding="@dimen/mobpadding2">
+
+                            <Spinner
+                                android:id="@+id/sp_color"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="top"
+                                android:imeOptions="actionNext"
+                                android:maxLines="1"
+                                android:spinnerMode="dropdown"
+                                android:textStyle="bold" />
+                        </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
@@ -121,7 +196,9 @@
                             android:id="@+id/auto_invoice_no"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.3" />
+                            android:layout_weight="0.3"
+                            android:maxLines="1"
+                            android:singleLine="true" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -141,7 +218,10 @@
                             android:id="@+id/ed_qty"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.3" />
+                            android:layout_weight="0.3"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:singleLine="true" />
 
                     </LinearLayout>
 
@@ -160,7 +240,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2sp"
                     android:background="@drawable/border_draw_profile"
-
                     android:orientation="vertical"
                     android:visibility="visible">
 
@@ -169,19 +248,20 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <TextView
-                            style="@style/textViewMob"
-                            android:layout_width="match_parent"
+
+                        <RadioButton
+                            android:id="@+id/rdo_salesman"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.7"
-                            android:paddingLeft="4dp"
+                            android:layout_weight="1"
                             android:text="@string/salesman" />
 
-                        <EditText
-                            android:id="@+id/ed_salesman"
-                            android:layout_width="match_parent"
+                        <RadioButton
+                            android:id="@+id/rdo_office"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.3" />
+                            android:layout_weight="1"
+                            android:text="@string/frontoffice" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -195,15 +275,49 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.7"
                             android:paddingLeft="4dp"
-                            android:text="@string/frontoffice" />
+                            android:text="@string/salesman"
+                            android:visibility="gone" />
 
                         <EditText
-                            android:id="@+id/ed_frontoffice"
+                            android:id="@+id/ed_salesman"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.3" />
+                            android:layout_weight="0.3"
+                            android:hint="Enter Salesman Name"
+                            android:maxLines="1"
+                            android:clickable="false"
+                            android:editable="false"
+                            android:focusable="false"
+                            android:singleLine="true"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/textViewMob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.7"
+                            android:paddingLeft="4dp"
+                            android:text="@string/frontoffice"
+                            android:visibility="gone" />
+
+                        <AutoCompleteTextView
+                            android:id="@+id/auto_staff"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:hint="Select Employee Name"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:visibility="gone" />
                     </LinearLayout>
                 </LinearLayout>
+
             </android.support.v7.widget.CardView>
 
             <TextView
@@ -213,6 +327,7 @@
                 android:text="@string/description" />
 
             <LinearLayout
+                android:id="@+id/lay_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -227,6 +342,7 @@
                     android:ems="10"
                     android:gravity="top"
                     android:hint="@string/enterdescription"
+                    android:inputType="textCapSentences|textMultiLine"
                     android:lines="5"
                     android:padding="5sp"
                     android:paddingLeft="4dp"
@@ -253,10 +369,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.90"
-                            android:src="@drawable/camera_p" />
+                            app:srcCompat="@drawable/ic_photo_camera" />
 
                         <TextView
-                            android:id="@+id/textView"
                             style="@style/textViewMob"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -283,8 +398,8 @@
 
 
                             <LinearLayout
-                                android:layout_width="100dp"
-                                android:layout_height="100dp"
+                                android:layout_width="@dimen/feedback_lay_height100"
+                                android:layout_height="@dimen/feedback_lay_height100"
                                 android:layout_gravity="center"
                                 android:background="@drawable/black_border_draw"
                                 android:gravity="center"
@@ -294,8 +409,8 @@
                                     android:id="@+id/imgv_img1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/camera"
-                                    android:visibility="visible" />
+                                    android:visibility="visible"
+                                    app:srcCompat="@drawable/ic_photo_camera" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -312,8 +427,8 @@
 
 
                             <LinearLayout
-                                android:layout_width="100dp"
-                                android:layout_height="100dp"
+                                android:layout_width="@dimen/feedback_lay_height100"
+                                android:layout_height="@dimen/feedback_lay_height100"
                                 android:layout_gravity="center"
                                 android:background="@drawable/black_border_draw"
                                 android:gravity="center"
@@ -324,8 +439,8 @@
                                     android:id="@+id/imgv_img2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/camera"
-                                    android:visibility="visible" />
+                                    android:visibility="visible"
+                                    app:srcCompat="@drawable/ic_photo_camera" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -354,8 +469,8 @@
                                     android:id="@+id/imgv_img3"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/camera"
-                                    android:visibility="visible" />
+                                    android:visibility="visible"
+                                    app:srcCompat="@drawable/ic_photo_camera" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -395,32 +510,22 @@
                      </LinearLayout>-->
                 </LinearLayout>
             </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/bt_send"
+                style="@style/textViewMob"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_sent_mail"
+                android:text="@string/sendfed"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/red" />
         </LinearLayout>
     </ScrollView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10sp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="1">
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/bt_send"
-
-            style="@style/textViewMob"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/btn_img_background"
-            android:text="@string/sendfed"
-            android:textColor="@color/white"
-            app:backgroundTint="@color/red" />
-    </LinearLayout>
 
     <TextView
         style="@style/footerstyleMob"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
 </LinearLayout>

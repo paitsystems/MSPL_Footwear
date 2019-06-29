@@ -89,13 +89,59 @@ public class UploadImageService extends IntentService {
                     for (File file : f.listFiles()) {
                         if (file != null && !file.isDirectory()) {
                             FileInputStream ifile = new FileInputStream(file);
+                            String str = file.getName();
+                            String arr[] = str.split("_");
+                            try {
+                                String imgType = arr[0];
+                                if (imgType.equals("F")) {
+                                    client.changeToParentDirectory();
+                                    Constant.showLog(client.printWorkingDirectory());
+                                    String month = arr[5];
+                                    String day = arr[4];
+                                    String hoCode = "HKHO";
+                                    client.cwd(Constant.dir_Feed_Back);
+                                    Constant.showLog(client.printWorkingDirectory());
+                                    if (arr[3].equals("01") || arr[3].equals("1")) {
+                                        hoCode = "HKHO";
+                                    } else if (arr[3].equals("12")) {
+                                        hoCode = "HKRD";
+                                    } else if (arr[3].equals("13")) {
+                                        hoCode = "HANR";
+                                    }
+                                    Constant.showLog("F/" + hoCode + "/" + month);
+                                    client.cwd(hoCode + "/" + month);
+                                    Constant.showLog(client.printWorkingDirectory());
+                                    if (client.storeFile(file.getName(), ifile)) {
+                                        if (!client.printWorkingDirectory().equals(Constant.dir_Feed_Back)) {
+                                            client.changeToParentDirectory();
+                                            Constant.showLog(client.printWorkingDirectory());
+                                            if (!client.printWorkingDirectory().equals(Constant.dir_Feed_Back)) {
+                                                client.changeToParentDirectory();
+                                                Constant.showLog(client.printWorkingDirectory());
+                                                if (!client.printWorkingDirectory().equals(Constant.dir_Feed_Back)) {
+                                                    client.changeToParentDirectory();
+                                                    Constant.showLog(client.printWorkingDirectory());
+                                                }
+                                            }
+                                        }
+                                        file.delete();
+                                        Constant.showLog("Feedback Image deleted.." + file.getName());
+                                    } else {
+                                        writeLog("onHandleIntent_Error_While_Storing_Feedback_File");
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                writeLog("onHandleIntent_" + e.getMessage());
+                            }
+                            /*FileInputStream ifile = new FileInputStream(file);
                             client.cwd(Constant.dir_Feed_Back);
                             if (client.storeFile(file.getName(), ifile)) {
                                 file.delete();
                                 Constant.showLog("Image deleted.."+file.getName());
                             } else {
                                 writeLog("onHandleIntent_Error_While_Storing_File");
-                            }
+                            }*/
                         }
                     }
                 }

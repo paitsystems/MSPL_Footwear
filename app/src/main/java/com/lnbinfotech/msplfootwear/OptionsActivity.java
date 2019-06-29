@@ -1,11 +1,9 @@
 package com.lnbinfotech.msplfootwear;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -16,13 +14,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -38,7 +40,6 @@ import com.lnbinfotech.msplfootwear.log.CopyLog;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.mail.GMailSender;
 import com.lnbinfotech.msplfootwear.model.ImagewiseAddToCartClass;
-import com.lnbinfotech.msplfootwear.model.ProductMasterClass;
 import com.lnbinfotech.msplfootwear.model.SchemeMasterClass;
 import com.lnbinfotech.msplfootwear.utility.RetrofitApiBuilder;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
@@ -48,7 +49,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import okhttp3.RequestBody;
@@ -63,12 +63,14 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     private CardView card_bank_details,card_give_order, card_account, card_track_order, card_profile, card_scheme, card_whats_new, card_feedback;
     public static float custDisc = 0;
     private Menu mMenu;
-    private TextView actionbar_noti_tv, tv_address, tv_phone1,tv_phone2,tv_mobile1, tv_mobile2, tv_email, tv_lastSync;
+    private TextView actionbar_noti_tv, tv_address, tv_phone1,tv_phone2,tv_mobile1,
+            tv_mobile2, tv_email, tv_lastSync, tv_custname, tv_custaddress, tv_custmobile, tv_custemail;
     private DBHandler db;
     private Toast toast;
     private SliderLayout sliderLayout;
     private HashMap<String, String> scImgHashMap;
-    private Constant constant;
+    private ImageView img_cust;
+    private String imgName = "NA.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +104,8 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         tv_phone2.setOnClickListener(this);
         tv_mobile1.setOnClickListener(this);
         tv_mobile2.setOnClickListener(this);
+        tv_custmobile.setOnClickListener(this);
+        img_cust.setOnClickListener(this);
 
         //TODO: JobScheduled
         Utitlity.scheduledJob(getApplicationContext());
@@ -111,6 +115,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         //AddImagesUrlOnline();
 
         getSchemeData();
+        //getSaleExe();
 
     }
 
@@ -191,6 +196,14 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 if(!mob2.equals("")&& !mob2.equals("0")){
                     makeCall(mob2);
                 }
+            case R.id.tv_custmobile:
+                String mob3 = tv_custmobile.getText().toString();
+                if(!mob3.equals("")&& !mob3.equals("0")){
+                    makeCall(mob3);
+                }
+                break;
+            case R.id.img_cust:
+                showPic();
                 break;
 
         }
@@ -294,6 +307,11 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         tv_lastSync = findViewById(R.id.tv_lastSync);
         sliderLayout = findViewById(R.id.slider);
         scImgHashMap = new HashMap<>();
+        tv_custname = findViewById(R.id.tv_custname);
+        tv_custaddress = findViewById(R.id.tv_custaddress);
+        tv_custmobile = findViewById(R.id.tv_custmobile);
+        tv_custemail = findViewById(R.id.tv_custemail);
+        img_cust = findViewById(R.id.img_cust);
     }
 
     private void showDia(int a) {
@@ -433,6 +451,14 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                     getSaleExe();
                 }
             });
+        }  else if (a == 9) {
+            builder.setMessage("Your Sales Executive is Changed Today.");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
         }
         builder.create().show();
     }
@@ -447,7 +473,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void getSchemeData() {
-        constant = new Constant(OptionsActivity.this);
+        final Constant constant = new Constant(OptionsActivity.this);
         constant.showPD();
         try {
             final DBHandler db = new DBHandler(getApplicationContext());
@@ -474,13 +500,17 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                             for(SchemeMasterClass mast : list){
                                 scImgHashMap.put(mast.getCat(),Constant.imgUrl+"/Scheme/"+mast.getImgName());
                             }
+                        } else {
+                            sliderLayout.setVisibility(View.GONE);
                         }
                         setScheme();
                     } else {
+                        sliderLayout.setVisibility(View.GONE);
                         Constant.showLog("onResponse_list_null");
                         writeLog("getSchemeData_onResponse_list_null");
                     }
                     constant.showPD();
+                    getSaleExe();
                 }
 
                 @Override
@@ -492,6 +522,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                     t.printStackTrace();
                     writeLog("getSchemeData_onFailure_" + t.getMessage());
                     constant.showPD();
+                    getSaleExe();
                 }
             });
         } catch (Exception e) {
@@ -511,13 +542,35 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
             writeLog("getSaleExe_" + url);
             constant.showPD();
             VolleyRequests requests = new VolleyRequests(OptionsActivity.this);
-            requests.getActiveStatus(url, new ServerCallback() {
+            requests.getSalesExe(url, new ServerCallback() {
                 @Override
                 public void onSuccess(String result) {
                     constant.showPD();
                     String arr[] = result.split("\\^");
                     if(arr.length>1){
+                        tv_custname.setText(arr[1]);
+                        tv_custmobile.setText(arr[2]);
+                        imgName = arr[3];
 
+                        if(FirstActivity.pref.contains(getString(R.string.pref_execId))) {
+                            int prevId = FirstActivity.pref.getInt(getString(R.string.pref_execId), 0);
+                            if (prevId != Integer.parseInt(arr[0])) {
+                                showDia(9);
+                            }
+                        }
+
+                        SharedPreferences.Editor editor = FirstActivity.pref.edit();
+                        editor.putInt(getString(R.string.pref_execId),Integer.parseInt(arr[0]));
+                        editor.putString(getString(R.string.pref_execName),(arr[1]));
+                        editor.apply();
+
+                        Constant.showLog(Constant.custimgUrl+imgName);
+                        Glide.with(getApplicationContext()).load(Constant.custimgUrl+imgName)
+                                .thumbnail(0.5f)
+                                .crossFade()
+                                .placeholder(R.drawable.ic_male)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(img_cust);
                     }
                 }
 
@@ -555,6 +608,23 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 "tel", number, null));
         startActivity(phoneIntent);
         overridePendingTransition(R.anim.enter,R.anim.exit);
+    }
+
+    private void showPic() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(OptionsActivity.this);
+        builder.setCancelable(true);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.pic_dialog, null);
+        ImageView _img = view.findViewById(R.id.dia_img);
+        Glide.with(getApplicationContext()).load(Constant.custimgUrl + imgName)
+                .thumbnail(1f)
+                .crossFade()
+                .placeholder(R.drawable.ic_male)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .fitCenter()
+                .into(_img);
+        builder.setView(view);
+        builder.create().show();
     }
 
     private void exportfile() {

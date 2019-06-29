@@ -86,9 +86,8 @@ public class CheckOTPActivity extends AppCompatActivity implements View.OnClickL
             getSupportActionBar().setTitle(R.string.title_activity_login);
         }
 
-        ArrayList<String> appCodes = new ArrayList<>();
         AppSignatureHelper hash = new AppSignatureHelper(getApplicationContext());
-        appCodes = hash.getAppSignatures();
+        ArrayList<String> appCodes = hash.getAppSignatures();
         String yourhash = appCodes.get(0);
         Constant.showLog("yourhash-" + yourhash);
         writeLog("HashCode " + yourhash);
