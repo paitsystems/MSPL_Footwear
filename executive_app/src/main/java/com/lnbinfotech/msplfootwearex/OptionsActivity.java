@@ -119,24 +119,32 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case R.id.card_visit:
-                startActivity(new Intent(getApplicationContext(), ArealinewiseAreaSelectionActivity.class));
-                //startActivity(new Intent(getApplicationContext(), AreawiseCustomerSelectionActivity.class));
-                overridePendingTransition(R.anim.enter, R.anim.exit);
+                if(checkHours()) {
+                    startActivity(new Intent(getApplicationContext(), ArealinewiseAreaSelectionActivity.class));
+                    //startActivity(new Intent(getApplicationContext(), AreawiseCustomerSelectionActivity.class));
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                }
                 break;
             case R.id.card_reports:
-                toast.setText("Under Development");
-                toast.show();
+                if(checkHours()) {
+                    toast.setText("Under Development");
+                    toast.show();
+                }
                 break;
             case R.id.card_new_cust_entry:
-                finish();
-                startActivity(new Intent(getApplicationContext(), NewCustomerEntryActivity.class));
-                overridePendingTransition(R.anim.enter, R.anim.exit);
+                if(checkHours()) {
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), NewCustomerEntryActivity.class));
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                }
                 break;
             case R.id.card_track_order:
-                Intent in1 = new Intent(getApplicationContext(), DisplayCustListActivity.class);
-                in1.putExtra("from","trackorder");
-                startActivity(in1);
-                overridePendingTransition(R.anim.enter, R.anim.exit);
+                if(checkHours()) {
+                    Intent in1 = new Intent(getApplicationContext(), DisplayCustListActivity.class);
+                    in1.putExtra("from", "trackorder");
+                    startActivity(in1);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                }
                 break;
             case R.id.tv_phone1:
                 String phone1 = tv_phone1.getText().toString();
@@ -389,6 +397,24 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 "tel", number, null));
         startActivity(phoneIntent);
         overridePendingTransition(R.anim.enter,R.anim.exit);
+    }
+
+    private boolean checkHours() {
+        int design = FirstActivity.pref.getInt(getString(R.string.pref_design), 0);
+        int serverHour = FirstActivity.pref.getInt(getString(R.string.pref_serverhour), 0);
+        int fromHour = FirstActivity.pref.getInt(getString(R.string.pref_fromhour), 0);
+        int toHour = FirstActivity.pref.getInt(getString(R.string.pref_tohour), 0);
+
+        if(design!=1) {
+            if (serverHour < fromHour && serverHour > toHour) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+
     }
 
     private void writeLog(String _data) {

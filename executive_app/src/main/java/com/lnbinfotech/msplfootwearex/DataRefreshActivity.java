@@ -2551,6 +2551,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
     private void CopyDBToSD() {
         try {
             Constant.showLog("------ In CopyDBToSD ------");
+            writeLog("------ In CopyDBToSD ------");
             DBSDFilePath = android.os.Environment.getExternalStorageDirectory() + File.separator +
                     Constant.folder_name + File.separator + Constant.zipFolderName;
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -2588,6 +2589,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
         int BUFFER = 1024;
         try {
             Constant.showLog("----- In Zip -----");
+            writeLog("----- In Zip -----");
             BufferedInputStream origin = null;
             FileOutputStream dest = new FileOutputStream(zipFileName);
             ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
@@ -2632,6 +2634,7 @@ public class DataRefreshActivity extends AppCompatActivity implements View.OnCli
             String ret = "0";
             try {
                 Constant.showLog("----- In UploadFileToFTP ------");
+                writeLog("----- In UploadFileToFTP ------");
                 client = new FTPClient();
                 client.connect(Constant.ftp_adress, 21);
                 client.login(Constant.ftp_username, Constant.ftp_password);

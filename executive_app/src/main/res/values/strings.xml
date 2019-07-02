@@ -312,4 +312,7 @@
     <string name="pref_name">name</string>
     <string name="pref_execId">execId</string>
     <string name="pref_execName">execName</string>
+    <string name="pref_serverhour">serverhour</string>
+    <string name="pref_fromhour">fromhour</string>
+    <string name="pref_tohour">tohour</string>
 </resources>

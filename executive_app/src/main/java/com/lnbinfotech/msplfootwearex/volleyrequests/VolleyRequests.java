@@ -997,8 +997,14 @@ public class VolleyRequests {
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     status = jsonArray.getJSONObject(i).getString("status");
                                     int design = jsonArray.getJSONObject(i).getInt("Desig_Id");
+                                    int SERVERHOUR = jsonArray.getJSONObject(i).getInt("SERVERHOUR");
+                                    int FROMHOUR = jsonArray.getJSONObject(i).getInt("FROMHOUR");
+                                    int TOHOUR = jsonArray.getJSONObject(i).getInt("TOHOUR");
                                     SharedPreferences.Editor editor = FirstActivity.pref.edit();
                                     editor.putInt(context.getString(R.string.pref_design),design);
+                                    editor.putInt(context.getString(R.string.pref_serverhour),SERVERHOUR);
+                                    editor.putInt(context.getString(R.string.pref_fromhour),FROMHOUR);
+                                    editor.putInt(context.getString(R.string.pref_tohour),TOHOUR);
                                     editor.apply();
                                 }
                                 callback.onSuccess(status);
