@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.lnbinfotech.msplfootwearex.FeedbackActivity">
+    tools:context="com.lnbinfotech.msplfootwear.FeedbackActivity">
 
     <ScrollView
         android:id="@+id/scroll_lay"
@@ -58,16 +58,53 @@
                 android:padding="5sp"
                 android:visibility="gone">
 
-                <AutoCompleteTextView
-                    android:id="@+id/auto_invOrderNo"
-                    style="@style/textViewMob"
+                <LinearLayout
+                    android:id="@+id/lay_invType"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/feedback_auto_height30"
-                    android:background="@null"
-                    android:hint="@string/entertexthere"
-                    android:inputType="textCapWords"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/rdo_gp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Goods_Packing - Packing Not Proper" />
+
+                    <RadioButton
+                        android:id="@+id/rdo_wgr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Wrong_Goods_Received - Wrong goods received as per order placed" />
+
+                    <RadioButton
+                        android:id="@+id/rdo_sgr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Short_Goods_Received - Invoice Made But Goods Not Received" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="2sp"
+                    android:background="@drawable/border_draw_profile"
+                    android:orientation="vertical"
+                    android:padding="5sp"
+                    android:visibility="visible">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/auto_invOrderNo"
+                        style="@style/textViewMob"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/feedback_auto_height30"
+                        android:background="@null"
+                        android:hint="@string/entertexthere"
+                        android:inputType="textCapWords"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+                </LinearLayout>
             </LinearLayout>
 
             <android.support.v7.widget.CardView
@@ -103,6 +140,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.3"
+                            android:hint="Select Article Number"
                             android:maxLines="1"
                             android:singleLine="true" />
 
@@ -197,6 +235,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.3"
+                            android:hint="First Select SizeGroup and Color"
                             android:maxLines="1"
                             android:singleLine="true" />
                     </LinearLayout>
@@ -219,6 +258,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.3"
+                            android:hint="Enter Qty"
                             android:inputType="number"
                             android:maxLines="1"
                             android:singleLine="true" />
@@ -247,7 +287,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
 
                         <RadioButton
                             android:id="@+id/rdo_salesman"
@@ -283,11 +322,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.3"
-                            android:hint="Enter Salesman Name"
-                            android:maxLines="1"
                             android:clickable="false"
                             android:editable="false"
                             android:focusable="false"
+                            android:hint="Enter Salesman Name"
+                            android:maxLines="1"
                             android:singleLine="true"
                             android:visibility="gone" />
                     </LinearLayout>

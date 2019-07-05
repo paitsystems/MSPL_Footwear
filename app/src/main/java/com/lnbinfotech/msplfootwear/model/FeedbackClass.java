@@ -5,7 +5,7 @@ package com.lnbinfotech.msplfootwear.model;
  */
 public class FeedbackClass {
   public  String auto,crby,crdate,crtime,feedbk_type,article_no,invoice_no,qty,salesman_id,front_office,
-          description,feed_img1,feed_img2,feed_img3,user_type, sizeGroup, color;
+          description,feed_img1,feed_img2,feed_img3,user_type, sizeGroup, color, invType;
 
     public String getAuto() {
         return auto;
@@ -95,8 +95,6 @@ public class FeedbackClass {
         this.description = description;
     }
 
-
-
     public String getFeed_img1() {
         return feed_img1;
     }
@@ -143,5 +141,13 @@ public class FeedbackClass {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getInvType() {
+        return invType;
+    }
+
+    public void setInvType(String invType) {
+        this.invType = invType;
     }
 }

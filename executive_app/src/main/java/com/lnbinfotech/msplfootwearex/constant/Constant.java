@@ -108,7 +108,7 @@ public class Constant {
             imgUrl = "http://103.109.13.200:24086/IMAGES/";
             custimgUrl = "http://103.109.13.200:24086/custImage/";
             connectionFlag = 1;
-        } else {
+        } else if (connectionFlag == 1) {
             ipaddress = "http://43.239.147.103:24085/MSPLV9/service.svc";
             imgUrl = "http://43.239.147.103:24085/IMAGES/";
             custimgUrl = "http://43.239.147.103:24085/custImage/";

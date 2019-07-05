@@ -89,12 +89,12 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     private Spinner feedback_spinner, sp_sizeGroup, sp_color;
     //private String imagePath;
     private ArrayAdapter<String> feedbk_type, artNoAdapter, invNoAdapter, invOrderNoAdapter, staffAdapter;
-    private String[] arr = {"Select Type", "Damage Goods", "Invoice", "Order", "Packing", "Service", "Others"};
+    private String[] arr = {"Select Type", "Damage Goods", "Invoice", "Order", "Service", "Others"};
     private EditText ed_description, ed_qty, ed_salesman;
     private AutoCompleteTextView auto_invoice_no, auto_article_no, auto_invOrderNo, auto_staff;
     private AppCompatButton bt_send;
     private ImageView imgv_img1, imgv_img2, imgv_img3;
-    private LinearLayout packing_order_inv_lay, lay_img1, lay_img2, lay_img3;
+    private LinearLayout packing_order_inv_lay, lay_img1, lay_img2, lay_img3, lay_invType;
     private CardView damaged_goods_cardlay, service_or_team_cardlay;
     private final int requestCode = 21;
     private ByteArrayOutputStream byteArray;
@@ -103,9 +103,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     private FeedbackClass feedbackClass;
     private Constant constant;
     private Toast toast;
-    private List<String> listArtNo, listInvNo, listStaffName, listOrderNo, sizeGroup_list, color_list;
+    private List<String> listArtNo, listInvNo, listStaffName, listOrderNo, sizeGroup_list, color_list, listDCNo;
     private DBHandler db;
-    private RadioButton rdo_salesman, rdo_office;
+    private RadioButton rdo_salesman, rdo_office, rdo_gp, rdo_wgr, rdo_sgr;
     private int hocode, custId;
     private String name, seName;
 
@@ -134,6 +134,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
 
         rdo_office.setOnClickListener(this);
         rdo_salesman.setOnClickListener(this);
+        rdo_gp.setOnClickListener(this);
+        rdo_wgr.setOnClickListener(this);
+        rdo_sgr.setOnClickListener(this);
 
         bt_send.setOnClickListener(this);
         feedback_spinner.setOnItemSelectedListener(this);
@@ -186,7 +189,8 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         auto_article_no.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String prodName = listArtNo.get(i);
+                //String prodName = listArtNo.get(i);
+                String prodName = (String) adapterView.getItemAtPosition(i);
                 AddToCartActivity.selProdId = db.getProdId(prodName);
                 sizeGroup_list.clear();
                 Cursor res1 = db.getDistinctSizeGroup("D");
@@ -230,6 +234,18 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
 
             }
         });
+
+        sp_color.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                getInvoices(4,"D");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     @Override
@@ -263,6 +279,21 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 ed_salesman.setVisibility(View.GONE);
                 auto_staff.setVisibility(View.VISIBLE);
                 break;
+            case R.id.rdo_gp:
+                rdo_gp.setChecked(true);
+                rdo_wgr.setChecked(false);
+                rdo_sgr.setChecked(false);
+                break;
+            case R.id.rdo_wgr:
+                rdo_gp.setChecked(false);
+                rdo_wgr.setChecked(true);
+                rdo_sgr.setChecked(false);
+                break;
+            case R.id.rdo_sgr:
+                rdo_gp.setChecked(false);
+                rdo_wgr.setChecked(false);
+                rdo_sgr.setChecked(true);
+                break;
         }
     }
 
@@ -289,6 +320,8 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             damaged_goods_cardlay.setVisibility(View.GONE);
             service_or_team_cardlay.setVisibility(View.GONE);
 
+            lay_invType.setVisibility(View.GONE);
+
             invNoAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.custom_spinner, listOrderNo);
             invNoAdapter.setDropDownViewResource(R.layout.custom_spinner);
             auto_invOrderNo.setAdapter(invNoAdapter);
@@ -298,6 +331,8 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             packing_order_inv_lay.setVisibility(View.VISIBLE);
             damaged_goods_cardlay.setVisibility(View.GONE);
             service_or_team_cardlay.setVisibility(View.GONE);
+
+            lay_invType.setVisibility(View.VISIBLE);
 
             invNoAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.custom_spinner, listInvNo);
             invNoAdapter.setDropDownViewResource(R.layout.custom_spinner);
@@ -309,15 +344,14 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             damaged_goods_cardlay.setVisibility(View.VISIBLE);
             service_or_team_cardlay.setVisibility(View.GONE);
 
-            invNoAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.custom_spinner, listOrderNo);
-            invNoAdapter.setDropDownViewResource(R.layout.custom_spinner);
-            auto_invoice_no.setAdapter(invNoAdapter);
-
         } else if (item.equals("Service")) {
             name = "SR";
             packing_order_inv_lay.setVisibility(View.GONE);
             damaged_goods_cardlay.setVisibility(View.GONE);
             service_or_team_cardlay.setVisibility(View.VISIBLE);
+            rdo_salesman.setChecked(true);
+            ed_salesman.setVisibility(View.VISIBLE);
+            ed_salesman.setText(seName);
         } else if (item.equals("Others")) {
             name = "OT";
             packing_order_inv_lay.setVisibility(View.GONE);
@@ -489,8 +523,18 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             int branchId = FirstActivity.pref.getInt(getString(R.string.pref_branchid),0);
             int seId = 0;
             int hocode = FirstActivity.pref.getInt(getString(R.string.pref_hocode),0);
-
-            String url = CustId + "|" + branchId + "|" + seId + "|" + hocode + "|" + "C" + "|" + orderType;
+            if (listArtNo.size() == 0) {
+                AddToCartActivity.selProdId = 0;
+            }
+            String sizeGroup = "0", color = "NA";
+            if (sizeGroup_list.size() != 0) {
+                sizeGroup = sizeGroup_list.get(sp_sizeGroup.getSelectedItemPosition());
+            }
+            if (color_list.size() != 0) {
+                color = color_list.get(sp_color.getSelectedItemPosition());
+            }
+            String url = CustId + "|" + branchId + "|" + seId + "|" + hocode + "|" + "C" + "|" +
+                    orderType + "|" + AddToCartActivity.selProdId + "|" + sizeGroup + "|" + color;
             writeLog("getInvoices_" + url);
             final JSONObject jsonBody = new JSONObject();
             jsonBody.put("details", url);
@@ -528,6 +572,15 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                             staffAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.custom_spinner, listStaffName);
                             staffAdapter.setDropDownViewResource(R.layout.custom_spinner);
                             auto_staff.setAdapter(staffAdapter);
+
+                        } else if (type == 4) {
+                            listDCNo.clear();
+                            for (InvoiceNumberClass inv : list)
+                                listDCNo.add(inv.getInvNo());
+
+                            invNoAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.custom_spinner, listDCNo);
+                            invNoAdapter.setDropDownViewResource(R.layout.custom_spinner);
+                            auto_invoice_no.setAdapter(invNoAdapter);
                         }
                         Constant.showLog(list.size() + "_getInvoices");
                     } else {
@@ -570,7 +623,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         if (!item.equals("Select Type")) {
             if (!description.equals("")) {
                 String article_no = auto_article_no.getText().toString();
-                String invoice_no = "0", sizeGroup = "NA", color = "NA";
+                String invoice_no = "0", sizeGroup = "NA", color = "NA", invType = "NA";
 
                 if (item.equals("Damage Goods")) {
                     invoice_no = auto_invoice_no.getText().toString();
@@ -583,13 +636,29 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 String qty = ed_qty.getText().toString();
                 String salesman = "0";
                 String front_office = "NA";
-                if (rdo_office.isChecked()) {
-                    front_office = "Front Office";
-                    salesman = auto_staff.getText().toString();
-                } else if (rdo_salesman.isChecked()) {
-                    front_office = "Salesman";
-                    salesman = ed_salesman.getText().toString();
+
+                if(item.equals("Service")) {
+                    if (rdo_office.isChecked()) {
+                        front_office = "Front Office";
+                        salesman = auto_staff.getText().toString();
+                    } else if (rdo_salesman.isChecked()) {
+                        front_office = "Salesman";
+                        salesman = ed_salesman.getText().toString();
+                    }
                 }
+
+                if(item.equals("Invoice")) {
+                    if (rdo_gp.isChecked()) {
+                        invType = rdo_gp.getText().toString();
+                    } else if (rdo_wgr.isChecked()) {
+                        invType = rdo_wgr.getText().toString();
+                    } else if (rdo_sgr.isChecked()) {
+                        invType = rdo_sgr.getText().toString();
+                    }
+                }
+
+                feedbackClass.setInvType(invType);
+
                 feedbackClass.setArticle_no(article_no);
                 feedbackClass.setInvoice_no(invoice_no);
                 feedbackClass.setQty(qty);
@@ -632,8 +701,15 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         ed_description.setText("");
         ed_qty.setText("");
 
-        rdo_salesman.setChecked(false);
+        rdo_salesman.setChecked(true);
         rdo_office.setChecked(false);
+        rdo_gp.setChecked(true);
+        rdo_wgr.setChecked(false);
+        rdo_sgr.setChecked(false);
+
+        feedbackClass.setFeed_img1("NA");
+        feedbackClass.setFeed_img2("NA");
+        feedbackClass.setFeed_img3("NA");
 
         imgv_img1.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_photo_camera));
         imgv_img2.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_photo_camera));
@@ -671,8 +747,12 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         lay_img1 = findViewById(R.id.lay_img1);
         lay_img2 = findViewById(R.id.lay_img2);
         lay_img3 = findViewById(R.id.lay_img3);
+        lay_invType = findViewById(R.id.lay_invType);
         rdo_salesman = findViewById(R.id.rdo_salesman);
         rdo_office = findViewById(R.id.rdo_office);
+        rdo_gp = findViewById(R.id.rdo_gp);
+        rdo_wgr = findViewById(R.id.rdo_wgr);
+        rdo_sgr = findViewById(R.id.rdo_sgr);
         damaged_goods_cardlay = findViewById(R.id.damaged_goods_cardlay);
         service_or_team_cardlay = findViewById(R.id.service_or_team_cardlay);
         feedbk_type = new ArrayAdapter<>(this, R.layout.feedbk_type_list, arr);
@@ -683,6 +763,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         listArtNo = new ArrayList<>();
         listInvNo = new ArrayList<>();
         listOrderNo = new ArrayList<>();
+        listDCNo = new ArrayList<>();
         sizeGroup_list = new ArrayList<>();
         color_list = new ArrayList<>();
         listStaffName = new ArrayList<>();
@@ -1136,7 +1217,8 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             url = feedtype + "|" + articleno + "|" + invoiceno + "|" + qty + "|" + "0" + "|" +
                     officetype + "|" + description + "|" + img1 + "|" + img2 + "|" + img3 + "|" +
                     crby + "|" + "C" + "|" + branchId + "|" + salesmanid + "|" +
-                    feedbackClass.getSizeGroup() + "|" + feedbackClass.getColor();
+                    feedbackClass.getSizeGroup() + "|" + feedbackClass.getColor() + "|" +
+                    feedbackClass.getInvType() + "|" + crby;
 
             Constant.showLog(url);
             writeLog("savefeedback_url called_" + url);
