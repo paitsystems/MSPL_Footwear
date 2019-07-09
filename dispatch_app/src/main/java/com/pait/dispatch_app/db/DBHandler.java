@@ -339,7 +339,10 @@ public class DBHandler extends SQLiteOpenHelper {
     public static String ST_DesignNo = "DesignNo";
     public static String ST_InOutType = "InOutType";
     public static String ST_Typ = "Typ";
-    public static String ST_Stock_Check_Date = "Stock_Check_Date";
+    public static String ST_AllotDate = "AllotDate";
+    public static String ST_NoOfPieces = "NoOfPieces";
+    public static String ST_Checker = "Checker";
+    public static String ST_Packer = "Packer";
 
     public DBHandler(Context context) {
         super(context, Database_Name, null, Database_Version);
@@ -445,7 +448,7 @@ public class DBHandler extends SQLiteOpenHelper {
             ST_CrDate +" text," + ST_CrTime +" text," +
             ST_SizeGroup +" text," +  ST_GSTGroup +" text," +
             ST_DesignNo +" text," + ST_InOutType +" text," +
-            ST_Typ +" text," + ST_Stock_Check_Date +" text)";
+            ST_Typ +" text," + ST_AllotDate +" text," + ST_NoOfPieces +" int," + ST_Checker +" int," + ST_Packer +" int)";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -720,29 +723,32 @@ public class DBHandler extends SQLiteOpenHelper {
             Constant.showLog(st.getAuto());
             ContentValues cv = new ContentValues();
             cv.put(ST_Auto,st.getAuto());
-            cv.put(ST_Product_id,st.getProduct_id());
+            cv.put(ST_Product_id,st.getItemid());
             cv.put(ST_ProductId,st.getProductId());
-            cv.put(ST_ArticleName,st.getArticleName());
+            //cv.put(ST_ArticleName,st.getArticleName());
             cv.put(ST_PackQty,st.getPackQty());
             cv.put(ST_LooseQty,st.getLooseQty());
             cv.put(ST_TotalQty,st.getTotalQty());
             cv.put(ST_StockQty,st.getStockQty());
-            cv.put(ST_Avail,st.getAvail());
+            //cv.put(ST_Avail,st.getAvail());
             cv.put(ST_Round,st.getRound());
-            cv.put(ST_MRP,st.getMRP());
-            cv.put(ST_Colour,st.getColour());
-            cv.put(ST_HashCode,st.getHashCode());
+            //cv.put(ST_MRP,st.getMRP());
+            //cv.put(ST_Colour,st.getColour());
+            //cv.put(ST_HashCode,st.getHashCode());
             cv.put(ST_HOCode,st.getHOCode());
-            cv.put(ST_BranchId,st.getBranchId());
+            cv.put(ST_BranchId,st.getBranchid());
             cv.put(ST_CrBy,st.getCrBy());
             cv.put(ST_CrDate,st.getCrDate());
             cv.put(ST_CrTime,st.getCrTime());
-            cv.put(ST_SizeGroup,st.getSizeGroup());
-            cv.put(ST_GSTGroup,st.getGSTGroup());
-            cv.put(ST_DesignNo,st.getDesignNo());
-            cv.put(ST_InOutType,st.getInOutType());
-            cv.put(ST_Typ,st.getTyp());
-            cv.put(ST_Stock_Check_Date,st.getStock_Check_Date());
+            //cv.put(ST_SizeGroup,st.getSizeGroup());
+            //cv.put(ST_GSTGroup,st.getGSTGroup());
+            //cv.put(ST_DesignNo,st.getDesignNo());
+            //cv.put(ST_InOutType,st.getInOutType());
+            //cv.put(ST_Typ,st.getTyp());
+            cv.put(ST_NoOfPieces,st.getNoOfPices());
+            cv.put(ST_Checker,st.getChecker());
+            cv.put(ST_Packer,st.getPacker());
+            cv.put(ST_AllotDate,st.getAllotDate());
             db.insert(Table_StockTakeMaster, null, cv);
         }
         db.setTransactionSuccessful();
@@ -808,9 +814,24 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public Cursor getStockData(){
-        String str = "select * from "+Table_StockTakeMaster +" order by "+ST_Auto;
+        String str = "select * from "+Table_StockTakeMaster +" order by "+ST_ProductId;
         Constant.showLog(str);
         return getWritableDatabase().rawQuery(str,null);
+    }
+
+    public void updateStockTakeMaster(List<StockTakeClass> list ) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        for (StockTakeClass st : list) {
+            Constant.showLog(st.getAuto());
+            ContentValues cv = new ContentValues();
+            cv.put(ST_StockQty,st.getStockQty());
+            db.update(Table_StockTakeMaster, cv, ST_Product_id+"=? and " + ST_AllotDate + "=? and "+ ST_BranchId+" = ? and " + ST_Checker +"=?",
+                    new String[]{st.getItemid(),st.getAllotDate(),st.getBranchid(),st.getChecker()});
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
     }
 
 }

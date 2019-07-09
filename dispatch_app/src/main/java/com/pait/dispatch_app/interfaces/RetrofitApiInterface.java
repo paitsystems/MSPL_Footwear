@@ -20,7 +20,7 @@ public interface RetrofitApiInterface {
     Call<List<DispatchMasterClass>> getDispatchMaster(@Body RequestBody url);
 
     @Headers("Content-Type: application/json")
-    @POST("GetStockData")
+    @POST("GetStockTakeData")
     Call<List<StockTakeClass>> getStockTakeMaster(@Body RequestBody url);
 
 }

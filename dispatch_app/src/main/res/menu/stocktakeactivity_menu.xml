@@ -19,12 +19,17 @@
                 android:title="Check Stock"/>
 
             <item
+                android:id="@+id/finalSave"
+                android:title="Final Save"/>
+
+            <item
                 android:id="@+id/reset"
                 android:title="Reset"/>
 
             <item
                 android:id="@+id/pause"
-                android:title="Pause"/>
+                android:title="Pause"
+                app:showAsAction="never"/>
 
         </menu>
     </item>

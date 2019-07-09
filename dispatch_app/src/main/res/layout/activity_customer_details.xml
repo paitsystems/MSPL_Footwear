@@ -74,6 +74,7 @@
             android:text="REPORT"
             android:textColor="@color/white"
             android:textStyle="bold"
+            android:visibility="gone"
             app:backgroundTint="@color/maroon" />
 
         <android.support.v7.widget.AppCompatButton

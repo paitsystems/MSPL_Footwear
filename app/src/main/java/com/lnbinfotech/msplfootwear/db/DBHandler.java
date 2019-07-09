@@ -1772,6 +1772,12 @@ public class DBHandler extends SQLiteOpenHelper {
         res.close();
         return a;
     }
+
+    public Cursor getDispatchCenterOnly(int hocode) {
+        String str = "select " + Company_Id+","+Company_Initial + " from " + Table_CompanyMaster + " where " + Company_Id +" in (2,3,4,6,10,11,14,15,16) order by "+Company_DisplayCmp;
+        Constant.showLog("getDispatch Center :- " + str);
+        return getWritableDatabase().rawQuery(str, null);
+    }
 }
 
 

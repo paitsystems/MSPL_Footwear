@@ -6,52 +6,39 @@ public class StockTakeClass {
 
     @SerializedName("Auto")
     private String Auto;
-    @SerializedName("Product_id")
-    private String Product_id;
-    @SerializedName("ProductId")
-    private String ProductId;
-    @SerializedName("ArticleName")
-    private String ArticleName;
-    @SerializedName("PackQty")
-    private String PackQty;
-    @SerializedName("LooseQty")
-    private String LooseQty;
-    @SerializedName("TotalQty")
-    private String TotalQty;
-    @SerializedName("StockQty")
-    private String StockQty;
-    @SerializedName("Avail")
-    private String Avail;
-    @SerializedName("Round")
-    private String Round;
-    @SerializedName("MRP")
-    private String MRP;
-    @SerializedName("Colour")
-    private String Colour;
-    @SerializedName("HashCode")
-    private String HashCode;
-    @SerializedName("HOCode")
-    private String HOCode;
-    @SerializedName("BranchId")
-    private String BranchId;
+    @SerializedName("AllotDate")
+    private String AllotDate;
+    @SerializedName("Branchid")
+    private String Branchid;
+    @SerializedName("Itemid")
+    private String Itemid;
+    @SerializedName("Checker")
+    private String Checker;
+    @SerializedName("Packer")
+    private String Packer;
     @SerializedName("CrBy")
     private String CrBy;
     @SerializedName("CrDate")
     private String CrDate;
     @SerializedName("CrTime")
     private String CrTime;
-    @SerializedName("SizeGroup")
-    private String SizeGroup;
-    @SerializedName("GSTGroup")
-    private String GSTGroup;
-    @SerializedName("DesignNo")
-    private String DesignNo;
-    @SerializedName("InOutType")
-    private String InOutType;
-    @SerializedName("Typ")
-    private String Typ;
-    @SerializedName("Stock_Check_Date")
-    private String Stock_Check_Date;
+    @SerializedName("productId")
+    private String ProductId;
+    @SerializedName("packQty")
+    private String PackQty;
+    @SerializedName("looseQty")
+    private String LooseQty;
+    @SerializedName("totalQty")
+    private String TotalQty;
+    @SerializedName("stockQty")
+    private String StockQty;
+    @SerializedName("hoCode")
+    private String HOCode;
+    @SerializedName("NoOfPices")
+    private String NoOfPices;
+    @SerializedName("Round")
+    private String Round;
+    private String stockCheckDate;
 
     public String getAuto() {
         return Auto;
@@ -61,28 +48,68 @@ public class StockTakeClass {
         Auto = auto;
     }
 
-    public String getProduct_id() {
-        return Product_id;
+    public String getAllotDate() {
+        return AllotDate;
     }
 
-    public void setProduct_id(String product_id) {
-        Product_id = product_id;
+    public void setAllotDate(String allotDate) {
+        AllotDate = allotDate;
     }
 
-    public String getProductId() {
-        return ProductId;
+    public String getBranchid() {
+        return Branchid;
     }
 
-    public void setProductId(String productId) {
-        ProductId = productId;
+    public void setBranchid(String branchid) {
+        Branchid = branchid;
     }
 
-    public String getArticleName() {
-        return ArticleName;
+    public String getItemid() {
+        return Itemid;
     }
 
-    public void setArticleName(String articleName) {
-        ArticleName = articleName;
+    public void setItemid(String itemid) {
+        Itemid = itemid;
+    }
+
+    public String getChecker() {
+        return Checker;
+    }
+
+    public void setChecker(String checker) {
+        Checker = checker;
+    }
+
+    public String getPacker() {
+        return Packer;
+    }
+
+    public void setPacker(String packer) {
+        Packer = packer;
+    }
+
+    public String getCrBy() {
+        return CrBy;
+    }
+
+    public void setCrBy(String crBy) {
+        CrBy = crBy;
+    }
+
+    public String getCrDate() {
+        return CrDate;
+    }
+
+    public void setCrDate(String crDate) {
+        CrDate = crDate;
+    }
+
+    public String getCrTime() {
+        return CrTime;
+    }
+
+    public void setCrTime(String crTime) {
+        CrTime = crTime;
     }
 
     public String getPackQty() {
@@ -117,118 +144,6 @@ public class StockTakeClass {
         StockQty = stockQty;
     }
 
-    public String getAvail() {
-        return Avail;
-    }
-
-    public void setAvail(String avail) {
-        Avail = avail;
-    }
-
-    public String getRound() {
-        return Round;
-    }
-
-    public void setRound(String round) {
-        Round = round;
-    }
-
-    public String getMRP() {
-        return MRP;
-    }
-
-    public void setMRP(String MRP) {
-        this.MRP = MRP;
-    }
-
-    public String getColour() {
-        return Colour;
-    }
-
-    public void setColour(String colour) {
-        Colour = colour;
-    }
-
-    public String getHashCode() {
-        return HashCode;
-    }
-
-    public void setHashCode(String hashCode) {
-        HashCode = hashCode;
-    }
-
-    public String getCrBy() {
-        return CrBy;
-    }
-
-    public void setCrBy(String crBy) {
-        CrBy = crBy;
-    }
-
-    public String getCrDate() {
-        return CrDate;
-    }
-
-    public void setCrDate(String crDate) {
-        CrDate = crDate;
-    }
-
-    public String getCrTime() {
-        return CrTime;
-    }
-
-    public void setCrTime(String crTime) {
-        CrTime = crTime;
-    }
-
-    public String getSizeGroup() {
-        return SizeGroup;
-    }
-
-    public void setSizeGroup(String sizeGroup) {
-        SizeGroup = sizeGroup;
-    }
-
-    public String getGSTGroup() {
-        return GSTGroup;
-    }
-
-    public void setGSTGroup(String GSTGroup) {
-        this.GSTGroup = GSTGroup;
-    }
-
-    public String getDesignNo() {
-        return DesignNo;
-    }
-
-    public void setDesignNo(String designNo) {
-        DesignNo = designNo;
-    }
-
-    public String getInOutType() {
-        return InOutType;
-    }
-
-    public void setInOutType(String inOutType) {
-        InOutType = inOutType;
-    }
-
-    public String getTyp() {
-        return Typ;
-    }
-
-    public void setTyp(String typ) {
-        Typ = typ;
-    }
-
-    public String getStock_Check_Date() {
-        return Stock_Check_Date;
-    }
-
-    public void setStock_Check_Date(String stock_Check_Date) {
-        Stock_Check_Date = stock_Check_Date;
-    }
-
     public String getHOCode() {
         return HOCode;
     }
@@ -237,11 +152,35 @@ public class StockTakeClass {
         this.HOCode = HOCode;
     }
 
-    public String getBranchId() {
-        return BranchId;
+    public String getProductId() {
+        return ProductId;
     }
 
-    public void setBranchId(String branchId) {
-        BranchId = branchId;
+    public void setProductId(String productId) {
+        ProductId = productId;
+    }
+
+    public String getStockCheckDate() {
+        return stockCheckDate;
+    }
+
+    public void setStockCheckDate(String stockCheckDate) {
+        this.stockCheckDate = stockCheckDate;
+    }
+
+    public String getNoOfPices() {
+        return NoOfPices;
+    }
+
+    public void setNoOfPices(String noOfPices) {
+        NoOfPices = noOfPices;
+    }
+
+    public String getRound() {
+        return Round;
+    }
+
+    public void setRound(String round) {
+        Round = round;
     }
 }

@@ -329,14 +329,24 @@ public class ViewCustomerOrderActiviy extends AppCompatActivity implements View.
 
         workingDispatchCenter = new ArrayList<>();
         //workingDispatchCenter.add("U5%");
-        workingDispatchCenter.add("UHWE");
-        workingDispatchCenter.add("UGNT");
-        workingDispatchCenter.add("ULKS");
-        workingDispatchCenter.add("USCH");
-        workingDispatchCenter.add("AMPU");
-        workingDispatchCenter.add("AMOT");
-        workingDispatchCenter.add("SKRD");
-        workingDispatchCenter.add("KRDA");
+        /*workingDispatchCenter.add("UHWE");//2
+        workingDispatchCenter.add("UGNT");//4
+        workingDispatchCenter.add("ULKS");//3
+        workingDispatchCenter.add("USCH");//6
+        workingDispatchCenter.add("AMPU");//10
+        workingDispatchCenter.add("AMOT");//15
+        workingDispatchCenter.add("SKRD");//14
+        workingDispatchCenter.add("KRDA");//11*/
+
+        int hoCode = FirstActivity.pref.getInt(getString(R.string.pref_hocode),0);
+        Cursor res1 = db.getDispatchCenterOnly(hoCode);
+        if (res1.moveToFirst()) {
+            do {
+                workingDispatchCenter.add(res1.getString(res1.getColumnIndex(DBHandler.Company_Initial)));
+                Constant.showLog(res1.getString(res1.getColumnIndex(DBHandler.Company_Initial)));
+            } while (res1.moveToNext());
+        }
+        res1.close();
     }
 
     private void showDia(int a) {
