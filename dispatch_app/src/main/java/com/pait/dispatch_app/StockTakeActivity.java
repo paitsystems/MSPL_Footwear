@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.ListView;
@@ -64,11 +65,16 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
     private StockTakeAdapter adapter;
     //private NonScrollListView listView;
     private ListView listView;
-    private TextView tv_stDate;
+    private TextView tv_stDate, tv_articleName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Constant.liveTestFlag==1) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         setContentView(R.layout.activity_stock_take_2);
 
         init();
@@ -80,17 +86,24 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
         dpID = userClass.getDpId();
         designId = FirstActivity.pref.getInt(getString(R.string.pref_design), 0);
 
-        if (db.getStockTakeMaxAuto() > 0) {
+        if (db.getRoundValue() == 1) {
             showDia(3);
-        } else {
-            //setData();
+        } else if (db.getRoundValue() == 0) {
             getStockTakeMaster(0);
+        } else if (db.getRoundValue() >1) {
+            tv_stDate.setClickable(false);
+            tv_stDate.setFocusable(false);
+            loadFromLocal(0);
         }
     }
 
     @Override
     public void onBackPressed() {
-        showDia(1);
+        if (!list.isEmpty()) {
+            showDia(1);
+        } else {
+            new Constant(StockTakeActivity.this).doFinish();
+        }
     }
 
     @Override
@@ -115,8 +128,11 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
                 showDia(6);
                 break;
             case R.id.finalSave:
-                saveToLocal(0);
-                getData();
+                if(roundFlag<3) {
+                    showDia(11);
+                } else {
+                    showDia(13);
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -147,8 +163,17 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
                 Date fdate = sdf.parse(dayOfMonth + "/" + (monthOfYear + 1) + "/" + yearSelected);
                 String dstr = (String) android.text.format.DateFormat.format("dd/MMM/yyyy", fdate);
-                tv_stDate.setText(dstr);
-                showDia(8);
+                Calendar c = Calendar.getInstance();
+                c.setTime(new Date());
+                c.add(Calendar.DATE, -3);
+                if (fdate.compareTo(c.getTime()) < 0) {
+                    tv_stDate.setText(new Constant().getDate());
+                    toast.setText("Can't Select Less Than 2 Days.");
+                    toast.show();
+                } else {
+                    tv_stDate.setText(dstr);
+                    showDia(8);
+                }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -157,7 +182,10 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onResumeFragment(String data1, String data2, Context context) {
-
+        Constant.showLog(data1);
+        tv_articleName.setVisibility(View.VISIBLE);
+        String prodDet = db.getProductDetail(data1);
+        tv_articleName.setText(prodDet);
     }
 
     @Override
@@ -177,7 +205,8 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
             int maxAuto = db.getMaxAuto();
             //Auto + "|"+ CustId + "|"+ HOCode + "|"+ dispatchId + "|"+ empId + "|"+ type
             //TODO: Remove empid
-            empId = 12;
+            //empId = 12;
+            tv_articleName.setVisibility(View.GONE);
             String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId + "|" +
                     type + "|" + designId + "|" + tv_stDate.getText().toString();
             writeLog("getStockTakeMaster_" + url);
@@ -230,14 +259,14 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    private void updateStockTakeMaster(int type) {
+    private void updateStockTakeMaster(int type, int saveToLive) {
         final Constant constant = new Constant(StockTakeActivity.this);
         constant.showPD();
         try {
             int maxAuto = db.getMaxAuto();
             //Auto + "|"+ CustId + "|"+ HOCode + "|"+ dispatchId + "|"+ empId + "|"+ type
             //TODO: Remove empid
-            empId = 12;
+            //empId = 12;
             String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId + "|" +
                     type + "|" + designId + "|" + tv_stDate.getText().toString();
             writeLog("updateStockTakeMaster_" + url);
@@ -259,8 +288,13 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
                     list = response.body();
                     if (list != null) {
                         db.updateStockTakeMaster(list);
-                        loadFromLocal(1);
                         Constant.showLog(list.size() + "_updateStockTakeMaster");
+                        if (saveToLive == 1) {
+                            loadFromLocal(0);
+                            getData();
+                        } else {
+                            loadFromLocal(1);
+                        }
                     } else {
                         Constant.showLog("onResponse_list_null");
                         writeLog("updateStockTakeMaster_onResponse_list_null");
@@ -318,6 +352,7 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
                 st.setRound(res.getString(res.getColumnIndex(DBHandler.ST_Round)));
                 roundFlag = res.getInt(res.getColumnIndex(DBHandler.ST_Round));
                 st.setAllotDate(res.getString(res.getColumnIndex(DBHandler.ST_AllotDate)));
+                tv_stDate.setText(res.getString(res.getColumnIndex(DBHandler.ST_AllotDate)));
                 list.add(st);
             } while (res.moveToNext());
         }
@@ -356,9 +391,9 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
             if (data.length() > 1) {
                 data = data.substring(0, data.length() - 1);
             }
-            String url = 1 + "|" + allotDate + "|" + branchId + "|" + checker + "|" + packer + "|" + crBy + "|" + data;
+            String url = roundFlag + "|" + allotDate + "|" + branchId + "|" + checker + "|" + packer + "|" + crBy + "|" + data;
             Constant.showLog(url);
-            if(roundFlag == 0) {
+            if(roundFlag == 1) {
                 new saveStockDetail(branchId).execute(url);
             } else {
                 new updateStockDetail(branchId).execute(url);
@@ -522,7 +557,11 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
                 String[] retAutoBranchId = str.split("\\-");
                 if (retAutoBranchId.length > 1) {
                     if (!retAutoBranchId[0].equals("0") && !retAutoBranchId[0].equals("+2") && !retAutoBranchId[0].equals("+3")) {
-                        showDia(9);
+                        if(roundFlag < 3) {
+                            showDia(9);
+                        } else {
+                            showDia(12);
+                        }
                     } else {
                         showDia(10);
                     }
@@ -548,6 +587,7 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
         list = new ArrayList<>();
         listView = findViewById(R.id.listView);
         tv_stDate = findViewById(R.id.tv_stDate);
+        tv_articleName = findViewById(R.id.tv_articlename);
         tv_stDate.setText(new Constant().getDate());
         tv_stDate.setOnClickListener(this);
 
@@ -571,7 +611,7 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
             builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    new Constant(StockTakeActivity.this).doFinish();
+                    saveToLocal(1);
                 }
             });
         } else if (a == 2) {
@@ -620,7 +660,7 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     saveToLocal(0);
-                    updateStockTakeMaster(0);
+                    updateStockTakeMaster(0,0);
                 }
             });
         } else if (a == 5) {
@@ -629,16 +669,20 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    getStockTakeMaster(0);
                 }
             });
             builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    db.deleteTable(DBHandler.Table_StockTakeMaster);
-                    list.clear();
-                    getStockTakeMaster(0);
+                    if(roundFlag == 1) {
+                        db.deleteTable(DBHandler.Table_StockTakeMaster);
+                        list.clear();
+                        getStockTakeMaster(0);
+                    } else {
+                        toast.setText("Can't Reset Data");
+                        toast.show();
+                    }
                 }
             });
         } else if (a == 6) {
@@ -662,7 +706,7 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    finish();
+                    new Constant(StockTakeActivity.this).doFinish();
                 }
             });
         } else if (a == 8) {
@@ -684,7 +728,7 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
                 }
             });
         } else if (a == 9) {
-            builder.setMessage("Round "+roundFlag+" Completed");
+            builder.setMessage("Round "+roundFlag+" Completed Out of 3");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -692,12 +736,55 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
                     db.deleteTable(DBHandler.Table_StockTakeMaster);
                     list.clear();
                     getStockTakeMaster(roundFlag);
-
                 }
             });
         } else if (a == 10) {
             builder.setMessage("Error While Saving Data");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 11) {
+            builder.setMessage("Do You Want To Save To Server?");
+            builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    saveToLocal(0);
+                    updateStockTakeMaster(0,1);
+                }
+            });
+        } else if (a == 12) {
+            builder.setMessage("All "+roundFlag + " Rounds Are Completed");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    list.clear();
+                    listView.setAdapter(null);
+                    db.deleteTable(DBHandler.Table_StockTakeMaster);
+                    finish();
+                }
+            });
+        } else if (a == 13) {
+            builder.setMessage("This Is Final Round. You Can't Updated Later This Round.");
+            builder.setNegativeButton("Proceed", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    saveToLocal(0);
+                    updateStockTakeMaster(0,1);
+                }
+            });
+            builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

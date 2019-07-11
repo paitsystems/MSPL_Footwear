@@ -62,6 +62,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -623,55 +624,60 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 } else if (item.equals("Invoice") || item.equals("Order") || item.equals("Packing")) {
                     invoice_no = auto_invOrderNo.getText().toString();
                 }
+                if (!invoice_no.equals("")) {
 
-                String qty = ed_qty.getText().toString();
-                String salesman = "0";
-                String front_office = "NA";
+                    String qty = ed_qty.getText().toString();
+                    String salesman = "0";
+                    String front_office = "NA";
 
-                if(item.equals("Service")) {
-                    if (rdo_office.isChecked()) {
-                        front_office = "Front Office";
-                        salesman = auto_staff.getText().toString();
-                    } else if (rdo_salesman.isChecked()) {
-                        front_office = "Salesman";
-                        salesman = ed_salesman.getText().toString();
+                    if (item.equals("Service")) {
+                        if (rdo_office.isChecked()) {
+                            front_office = "Front Office";
+                            salesman = auto_staff.getText().toString();
+                        } else if (rdo_salesman.isChecked()) {
+                            front_office = "Salesman";
+                            salesman = ed_salesman.getText().toString();
+                        }
                     }
-                }
 
-                if(item.equals("Invoice")) {
-                    if (rdo_gp.isChecked()) {
-                        invType = rdo_gp.getText().toString();
-                    } else if (rdo_wgr.isChecked()) {
-                        invType = rdo_wgr.getText().toString();
-                    } else if (rdo_sgr.isChecked()) {
-                        invType = rdo_sgr.getText().toString();
+                    if (item.equals("Invoice")) {
+                        if (rdo_gp.isChecked()) {
+                            invType = rdo_gp.getText().toString();
+                        } else if (rdo_wgr.isChecked()) {
+                            invType = rdo_wgr.getText().toString();
+                        } else if (rdo_sgr.isChecked()) {
+                            invType = rdo_sgr.getText().toString();
+                        }
                     }
-                }
 
-                feedbackClass.setInvType(invType);
+                    feedbackClass.setInvType(invType);
 
-                feedbackClass.setArticle_no(article_no);
-                feedbackClass.setInvoice_no(invoice_no);
-                feedbackClass.setQty(qty);
-                feedbackClass.setSalesman_id(salesman);
-                feedbackClass.setFront_office(front_office);
-                feedbackClass.setDescription(description);
-                feedbackClass.setSizeGroup(sizeGroup);
-                feedbackClass.setColor(color);
-                if (feedbackClass.getFeed_img1().equals("")) {
-                    feedbackClass.setFeed_img1("NA");
-                }
-                if (feedbackClass.getFeed_img2().equals("")) {
-                    feedbackClass.setFeed_img2("NA");
-                }
-                if (feedbackClass.getFeed_img3().equals("")) {
-                    feedbackClass.setFeed_img3("NA");
-                }
-                if(!feedbackClass.getFeed_img1().equals("NA") || !feedbackClass.getFeed_img2().equals("NA")
-                        || !feedbackClass.getFeed_img3().equals("NA")) {
-                    new uploadImage().execute();
+                    feedbackClass.setArticle_no(article_no);
+                    feedbackClass.setInvoice_no(invoice_no);
+                    feedbackClass.setQty(qty);
+                    feedbackClass.setSalesman_id(salesman);
+                    feedbackClass.setFront_office(front_office);
+                    feedbackClass.setDescription(description);
+                    feedbackClass.setSizeGroup(sizeGroup);
+                    feedbackClass.setColor(color);
+                    if (feedbackClass.getFeed_img1().equals("")) {
+                        feedbackClass.setFeed_img1("NA");
+                    }
+                    if (feedbackClass.getFeed_img2().equals("")) {
+                        feedbackClass.setFeed_img2("NA");
+                    }
+                    if (feedbackClass.getFeed_img3().equals("")) {
+                        feedbackClass.setFeed_img3("NA");
+                    }
+                    if (!feedbackClass.getFeed_img1().equals("NA") || !feedbackClass.getFeed_img2().equals("NA")
+                            || !feedbackClass.getFeed_img3().equals("NA")) {
+                        new uploadImage().execute();
+                    } else {
+                        saveFeedbackdetail();
+                    }
                 } else {
-                    saveFeedbackdetail();
+                    toast.setText("Please Fill All Fields");
+                    toast.show();
                 }
             } else {
                 toast.setText("Please Enter Description");
@@ -1205,6 +1211,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     _salesmanid + "&office_type=" + _officetype + "&description=" + _description + "&img1=" +
                     _img1 + "&img2=" + _img2 + "&img3=" + _img3 + "&crby=" + _crby + "&user_type=C";*/
 
+
+            //String _description = URLEncoder.encode(description, "UTF-8");
+
             url = feedtype + "|" + articleno + "|" + invoiceno + "|" + qty + "|" + "0" + "|" +
                     officetype + "|" + description + "|" + img1 + "|" + img2 + "|" + img3 + "|" +
                     crby + "|" + "E" + "|" + branchId + "|" + salesmanid + "|" +
@@ -1241,15 +1250,21 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private int getBranchId(String invNo){
+    private int getBranchId(String invNo) {
         int branchId = 0;
-        if(!invNo.equals("0")){
-            String arr [] = invNo.split("/");
-            if(arr.length>1){
-                branchId = db.getBranchId(arr[0]);
+        try {
+            if (!invNo.equals("0")) {
+                String arr[] = invNo.split("/");
+                if (arr.length > 1) {
+                    branchId = db.getBranchId(arr[0]);
+                }
+            } else {
+                branchId = hocode;
             }
-        } else {
-            branchId = hocode;
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getBranchId_" + e.getMessage());
+            branchId = 0;
         }
         return branchId;
     }

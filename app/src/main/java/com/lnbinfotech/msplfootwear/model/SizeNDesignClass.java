@@ -2,12 +2,45 @@ package com.lnbinfotech.msplfootwear.model;
 
 //Created by ANUP on 11/4/2017.
 
+import com.google.gson.annotations.SerializedName;
+
 public class SizeNDesignClass {
 
-    private String Cat1,Cat2,Cat3,Cat4,Cat5,Cat6,Final_prod,
-                    Uom,Vat,DesignNo,Colour,SizeGroup,typ,ActualInw,GSTGroup,
-                    InOutType, HashCode, ImageName;
-    private int Productid,SizeFrom,SizeTo, total;
+    private String Cat1;
+    private String Cat2;
+    private String Cat3;
+    private String Cat4;
+    private String Cat5;
+    private String Cat6;
+    private String Final_prod;
+    private String Uom;
+    private String Vat;
+    @SerializedName("DesignNo")
+    private String DesignNo;
+    @SerializedName("Colour")
+    private String Colour;
+    @SerializedName("SizeGroup")
+    private String SizeGroup;
+    @SerializedName("typ")
+    private String typ;
+    private String ActualInw;
+    @SerializedName("GSTGroup")
+    private String GSTGroup;
+    @SerializedName("InOutType")
+    private String InOutType;
+    @SerializedName("HashCode")
+    private String HashCode;
+    @SerializedName("ImageName")
+    private String ImageName;
+
+    @SerializedName("Productid")
+    private int Productid;
+    @SerializedName("SizeFrom")
+    private int SizeFrom;
+    @SerializedName("SizeTo")
+    private int SizeTo;
+    @SerializedName("Total")
+    private int total;
 
 
     public String getCat1() {

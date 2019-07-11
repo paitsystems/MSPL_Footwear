@@ -1,6 +1,7 @@
 package com.pait.dispatch_app;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,21 +36,30 @@ import com.pait.dispatch_app.connectivity.ConnectivityTest;
 import com.pait.dispatch_app.constant.AppSingleton;
 import com.pait.dispatch_app.constant.Constant;
 import com.pait.dispatch_app.db.DBHandler;
+import com.pait.dispatch_app.interfaces.RetrofitApiInterface;
 import com.pait.dispatch_app.interfaces.ServerCallback;
 import com.pait.dispatch_app.location.LocationProvider;
 import com.pait.dispatch_app.log.CopyLog;
 import com.pait.dispatch_app.log.WriteLog;
 import com.pait.dispatch_app.mail.GMailSender;
+import com.pait.dispatch_app.model.ProductMasterClass;
 import com.pait.dispatch_app.parse.ParseJSON;
 import com.pait.dispatch_app.parse.UserClass;
 import com.pait.dispatch_app.services.UploadImageService;
+import com.pait.dispatch_app.utility.RetrofitApiBuilder;
 import com.pait.dispatch_app.volleyrequests.VolleyRequests;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class CustomerDetailsActivity extends AppCompatActivity
         implements View.OnClickListener,
@@ -60,7 +70,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
     private DBHandler db;
     private Toast toast;
     private Constant constant;
-    private Button btn_save, btn_order, btn_report, btn_stock_take;
+    private Button btn_save, btn_order, btn_report, btn_stock_take, btn_stock_take_report;
     private String version = "", mobNo = "", id = "0";
     private TextView tv_version;
     private LocationProvider provider;
@@ -187,6 +197,14 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     toast.show();
                 }
                 break;
+            case R.id.btn_stock_take_report:
+                if (id != 0) {
+                    startNewActivity(3);
+                } else {
+                    toast.setText("Select Dispatch Center First");
+                    toast.show();
+                }
+                break;
         }
     }
 
@@ -249,10 +267,12 @@ public class CustomerDetailsActivity extends AppCompatActivity
         btn_order = findViewById(R.id.btn_order);
         btn_report = findViewById(R.id.btn_report);
         btn_stock_take = findViewById(R.id.btn_stock_take);
+        btn_stock_take_report = findViewById(R.id.btn_stock_take_report);
         btn_save.setOnClickListener(this);
         btn_order.setOnClickListener(this);
         btn_report.setOnClickListener(this);
         btn_stock_take.setOnClickListener(this);
+        btn_stock_take_report.setOnClickListener(this);
     }
 
     private void showDia(int a) {
@@ -450,7 +470,24 @@ public class CustomerDetailsActivity extends AppCompatActivity
                     overridePendingTransition(R.anim.enter, R.anim.exit);
                 }
             });
-            builder.setNeutralButton("Cancel",new DialogInterface.OnClickListener() {
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (a == 14) {
+            builder.setMessage("Another Branch Stock Take Is Paused");
+            builder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    db.deleteTable(DBHandler.Table_StockTakeMaster);
+                    FirstActivity.pref.edit().remove(getString(R.string.pref_olddpId)).apply();
+                    startNewActivity(2);
+                }
+            });
+            builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -590,7 +627,6 @@ public class CustomerDetailsActivity extends AppCompatActivity
                                 SharedPreferences.Editor editor = FirstActivity.pref.edit();
                                 editor.putString(getString(R.string.pref_version), _data);
                                 editor.apply();
-                                //loadEmployeeMaster();
                             } else if (currVersion < dataVersion) {
                                 showDia(8);
                             }
@@ -614,28 +650,6 @@ public class CustomerDetailsActivity extends AppCompatActivity
 
     }
 
-    private void loadCompanyMaster() {
-        int max = db.getMaxCompId();
-        String url = Constant.ipaddress + "/GetCompanyMaster?Id=" + max;
-        Constant.showLog(url);
-        writeLog("loadCompanyMaster_" + url);
-        constant.showPD();
-        VolleyRequests requests = new VolleyRequests(CustomerDetailsActivity.this);
-        requests.refreshCompanyMaster(url, new ServerCallback() {
-            @Override
-            public void onSuccess(String result) {
-                constant.showPD();
-                loadData();
-            }
-
-            @Override
-            public void onFailure(String result) {
-                constant.showPD();
-                showDia(12);
-            }
-        }, 0);
-    }
-
     private void loadEmployeeMaster() {
         int max = db.getMaxEmpId();
         String url = Constant.ipaddress + "/GetEmployeeMaster?Id=" + max;
@@ -657,6 +671,84 @@ public class CustomerDetailsActivity extends AppCompatActivity
                 showDia(12);
             }
         }, 0);
+    }
+
+    private void loadCompanyMaster() {
+        int max = db.getMaxCompId();
+        String url = Constant.ipaddress + "/GetCompanyMaster?Id=" + max;
+        Constant.showLog(url);
+        writeLog("loadCompanyMaster_" + url);
+        constant.showPD();
+        VolleyRequests requests = new VolleyRequests(CustomerDetailsActivity.this);
+        requests.refreshCompanyMaster(url, new ServerCallback() {
+            @Override
+            public void onSuccess(String result) {
+                constant.showPD();
+                getProductMasterV6();
+            }
+
+            @Override
+            public void onFailure(String result) {
+                constant.showPD();
+                showDia(12);
+            }
+        }, 0);
+    }
+
+    private void getProductMasterV6() {
+        constant = new Constant(CustomerDetailsActivity.this);
+        constant.showPD();
+        try {
+            int maxProdId = db.getMaxProdId();
+            String url = 0 + "|" + 100000 + "|" + "E";
+            writeLog("getProductMasterV6_"+url);
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("details", url);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.
+                    parse("application/json; charset=utf-8"), (jsonBody).toString());
+            Constant.showLog(jsonBody.toString());
+
+            Call<List<ProductMasterClass>> call = new RetrofitApiBuilder().getApiBuilder().
+                    create(RetrofitApiInterface.class).
+                    getProductMasterV6(body);
+            call.enqueue(new Callback<List<ProductMasterClass>>() {
+                @Override
+                public void onResponse(Call<List<ProductMasterClass>> call, retrofit2.Response<List<ProductMasterClass>> response) {
+                    Constant.showLog("onResponse");
+                    List<ProductMasterClass> list = response.body();
+                    if (list != null) {
+                        if (list.size()!=0) {
+                            db.deleteTable(DBHandler.Table_ProductMaster);
+                        }
+                        db.addProductMaster(list);
+                        loadData();
+                        Constant.showLog(list.size() + "_getProductMasterV6");
+                        writeLog("getProductMasterV6_onResponse_" + list.size());
+                    } else {
+                        Constant.showLog("onResponse_list_null");
+                        writeLog("getProductMasterV6_onResponse_list_null");
+                    }
+                    constant.showPD();
+                }
+
+                @Override
+                public void onFailure(Call<List<ProductMasterClass>> call, Throwable t) {
+                    Constant.showLog("onFailure");
+                    if (!call.isCanceled()) {
+                        call.cancel();
+                    }
+                    t.printStackTrace();
+                    writeLog("getProductMasterV6_onFailure_" + t.getMessage());
+                    constant.showPD();
+                    showDia(2);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("getProductMasterV6_" + e.getMessage());
+            constant.showPD();
+            showDia(2);
+        }
     }
 
     private void loadData() {
@@ -689,39 +781,62 @@ public class CustomerDetailsActivity extends AppCompatActivity
     private void startNewActivity(int id) {
         userClass = (UserClass) listView.getAdapter().getItem(0);
         userClass.setDpId(dpId);
-        db.deleteTable(DBHandler.Table_DispatchMaster);
-        String pin = userClass.getCustID() + "-" + "1234";
-        SharedPreferences.Editor editor = FirstActivity.pref.edit();
-        editor.putString(getString(R.string.pref_savedpin), pin);
-        editor.putInt(getString(R.string.pref_retailCustId), userClass.getCustID());
-        editor.putInt(getString(R.string.pref_branchid), userClass.getBranchId());
-        editor.putInt(getString(R.string.pref_cityid), userClass.getCityId());
-        editor.putInt(getString(R.string.pref_hocode), userClass.getHOCode());
-        editor.putString(getString(R.string.pref_mobno), userClass.getMobile());
-        editor.putInt(getString(R.string.pref_dpId), userClass.getDpId());
-        editor.apply();
+        int oldDPId = 0, flag = 0;
+        if(FirstActivity.pref.contains(getString(R.string.pref_olddpId))){
+            oldDPId = FirstActivity.pref.getInt(getString(R.string.pref_olddpId), 0);
+        } else {
+            oldDPId = dpId;
+        }
+        if(id == 2) {
+            if (db.getRoundValue() != 0) {
+                if (oldDPId == dpId) {
+                    flag = 0;
+                } else {
+                    flag = 1;
+                    showDia(14);
+                }
+            }
+        }
+        if(flag == 0) {
+            db.deleteTable(DBHandler.Table_DispatchMaster);
+            String pin = userClass.getCustID() + "-" + "1234";
+            SharedPreferences.Editor editor = FirstActivity.pref.edit();
+            editor.putString(getString(R.string.pref_savedpin), pin);
+            editor.putInt(getString(R.string.pref_retailCustId), userClass.getCustID());
+            editor.putInt(getString(R.string.pref_branchid), userClass.getBranchId());
+            editor.putInt(getString(R.string.pref_cityid), userClass.getCityId());
+            editor.putInt(getString(R.string.pref_hocode), userClass.getHOCode());
+            editor.putString(getString(R.string.pref_mobno), userClass.getMobile());
+            editor.putInt(getString(R.string.pref_dpId), userClass.getDpId());
 
-        Intent intent;
-        if (id == 0) {
-            //TODO CHANGE HOCODE FROM 1 to 12
-            if (userClass.getHOCode() == 12) {
-                showDia(13);
-            } else {
-                intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent;
+            if (id == 0) {
+                if (userClass.getHOCode() == 12) {
+                    showDia(13);
+                } else {
+                    intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.putExtra("cust", userClass);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                }
+            } else if (id == 1) {
+                intent = new Intent(getApplicationContext(), ReportActivity.class);
+                intent.putExtra("cust", userClass);
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+            } else if (id == 2) {
+                editor.putInt(getString(R.string.pref_olddpId), dpId);
+                intent = new Intent(getApplicationContext(), StockTakeActivity.class);
+                intent.putExtra("cust", userClass);
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+            } else if (id == 3) {
+                intent = new Intent(getApplicationContext(), StockTakeReportActivity.class);
                 intent.putExtra("cust", userClass);
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
             }
-        } else if (id == 1) {
-            intent = new Intent(getApplicationContext(), ReportActivity.class);
-            intent.putExtra("cust", userClass);
-            startActivity(intent);
-            overridePendingTransition(R.anim.enter, R.anim.exit);
-        } else if (id == 2) {
-            intent = new Intent(getApplicationContext(), StockTakeActivity.class);
-            intent.putExtra("cust", userClass);
-            startActivity(intent);
-            overridePendingTransition(R.anim.enter, R.anim.exit);
+            editor.apply();
         }
     }
 

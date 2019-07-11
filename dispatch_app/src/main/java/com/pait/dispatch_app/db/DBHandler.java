@@ -10,6 +10,7 @@ import com.pait.dispatch_app.constant.Constant;
 import com.pait.dispatch_app.model.CompanyMasterClass;
 import com.pait.dispatch_app.model.DispatchMasterClass;
 import com.pait.dispatch_app.model.EmployeeMasterClass;
+import com.pait.dispatch_app.model.ProductMasterClass;
 import com.pait.dispatch_app.model.StockTakeClass;
 import com.pait.dispatch_app.parse.UserClass;
 
@@ -47,7 +48,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String CM_PIN = "PIN";
     private static final String CM_Discount = "Discount";
 
-    private static final String Table_ProductMaster = "ProductMaster";
+    public static final String Table_ProductMaster = "ProductMaster";
     private static final String PM_ProductID = "Product_id";
     private static final String PM_Cat1 = "Cat1";
     private static final String PM_Cat2 = "Cat2";
@@ -454,8 +455,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //Constant.showLog(create_cust_master);
         //db.execSQL(create_cust_master);
-        //Constant.showLog(create_prod_master);
-        //db.execSQL(create_prod_master);
+        Constant.showLog(create_prod_master);
+        db.execSQL(create_prod_master);
         //Constant.showLog(create_si_master);
         //db.execSQL(create_si_master);
         Constant.showLog(create_emp_master);
@@ -505,6 +506,8 @@ public class DBHandler extends SQLiteOpenHelper {
         if(oldVersion < 3){
             Constant.showLog(create_stock_take_table);
             db.execSQL(create_stock_take_table);
+            Constant.showLog(create_prod_master);
+            db.execSQL(create_prod_master);
         }
     }
 
@@ -802,9 +805,9 @@ public class DBHandler extends SQLiteOpenHelper {
         getWritableDatabase().delete(Table_DispatchMaster,DM_PONO+"=?",new String[]{pono});
     }
 
-    public int getStockTakeMaxAuto() {
+    public int getRoundValue() {
             int a = 0;
-            String str = "select max(" + ST_Auto + ") from " + Table_StockTakeMaster;
+            String str = "select IFNULL(" + ST_Round + ",0) from " + Table_StockTakeMaster;
             Cursor res = getWritableDatabase().rawQuery(str, null);
             if (res.moveToFirst()) {
                 a = res.getInt(0);
@@ -832,6 +835,73 @@ public class DBHandler extends SQLiteOpenHelper {
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();
+    }
+
+    public int getMaxProdId() {
+        int a = 0;
+        String str = "select max(" + PM_ProductID + ") from " + Table_ProductMaster;
+        Cursor res = getWritableDatabase().rawQuery(str, null);
+        if (res.moveToFirst()) {
+            a = res.getInt(0);
+        }
+        res.close();
+        return a;
+    }
+
+    public void addProductMaster(List<ProductMasterClass> prodList) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        ContentValues cv = new ContentValues();
+        for (ProductMasterClass prodClass : prodList) {
+            cv.put(PM_ProductID, prodClass.getProduct_id());
+            cv.put(PM_Cat1, prodClass.getCat1());
+            cv.put(PM_Cat2, prodClass.getCat2());
+            cv.put(PM_Cat3, prodClass.getCat3());
+            cv.put(PM_Cat4, prodClass.getCat4());
+            cv.put(PM_Cat5, prodClass.getCat5());
+            cv.put(PM_Cat6, prodClass.getCat6());
+            cv.put(PM_Finalprod, prodClass.getFinal_prod());
+            cv.put(PM_UOM, prodClass.getUom());
+            cv.put(PM_SRate, prodClass.getSrate());
+            cv.put(PM_PRate, prodClass.getPrate());
+            cv.put(PM_BranchId, prodClass.getBranchid());
+            cv.put(PM_Status, prodClass.getStatus());
+            cv.put(PM_NoOfPieces, prodClass.getNoOfPices());
+            cv.put(PM_CompanyId, prodClass.getCompany_Id());
+            cv.put(PM_MRPRate, prodClass.getMRPRate());
+            cv.put(PM_ProdId, prodClass.getProductId());
+            cv.put(PM_Cat7, prodClass.getCat7());
+            cv.put(PM_Cat8, prodClass.getCat8());
+            cv.put(PM_MinStkQty, prodClass.getMinStkQty());
+            cv.put(PM_MaxStkQty, prodClass.getMaxStkQty());
+            cv.put(PM_GSTGroup, prodClass.getGSTGroup());
+            cv.put(PM_HSNCode, prodClass.getHSNCode());
+            cv.put(PM_Cat9, prodClass.getCat9());
+            cv.put(PM_Cat10, prodClass.getCat10());
+            cv.put(PM_HKHO, prodClass.getHKHO());
+            cv.put(PM_HKRD, prodClass.getHKRD());
+            cv.put(PM_HANR, prodClass.getHANR());
+            cv.put(PM_MarkUp,prodClass.getMarkUp());
+            cv.put(PM_MarkDown,prodClass.getMarkDown());
+            db.insert(Table_ProductMaster, null, cv);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+    }
+
+    public String getProductDetail(String productId){
+        String prodDet = "";
+        String str = "select "+PM_ProdId+","+PM_Cat2+","+PM_Cat3+ " from "+Table_ProductMaster + " where "+PM_ProdId +"='"+ productId+"'";
+        Constant.showLog(str);
+        Cursor res = getWritableDatabase().rawQuery(str,null);
+        if(res.moveToFirst()){
+            do{
+                prodDet = res.getString(0) +" " + res.getString(1) + " " + res.getString(2) ;
+            }while (res.moveToNext());
+        }
+        res.close();
+        return prodDet;
     }
 
 }
