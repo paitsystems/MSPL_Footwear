@@ -17,10 +17,10 @@
                     style="@style/textViewMob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/lpurple"
+                    android:background="@color/lipurple"
                     android:gravity="center_vertical"
                     android:text="Article Name"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
                     android:visibility="gone" />
 
                 <LinearLayout

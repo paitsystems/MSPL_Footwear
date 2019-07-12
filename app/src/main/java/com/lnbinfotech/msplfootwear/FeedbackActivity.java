@@ -48,6 +48,7 @@ import com.lnbinfotech.msplfootwear.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
 import com.lnbinfotech.msplfootwear.model.FeedbackClass;
 import com.lnbinfotech.msplfootwear.model.InvoiceNumberClass;
+import com.lnbinfotech.msplfootwear.post.Post;
 import com.lnbinfotech.msplfootwear.services.UploadImageService;
 import com.lnbinfotech.msplfootwear.utility.RetrofitApiBuilder;
 import com.lnbinfotech.msplfootwear.volleyrequests.VolleyRequests;
@@ -107,7 +108,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     private DBHandler db;
     private RadioButton rdo_salesman, rdo_office, rdo_gp, rdo_wgr, rdo_sgr;
     private int hocode, custId;
-    private String name, seName;
+    private String name = "", seName = "";
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -1202,7 +1203,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
 
             int branchId = getBranchId(invoiceno);
 
-            /*String _feedtype = URLEncoder.encode(feedtype, "UTF-8");
+            String _feedtype = URLEncoder.encode(feedtype, "UTF-8");
             String _articleno = URLEncoder.encode(articleno, "UTF-8");
             String _invoiceno = URLEncoder.encode(invoiceno, "UTF-8");
             String _qty = URLEncoder.encode(qty, "UTF-8");
@@ -1213,40 +1214,31 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             String _img2 = URLEncoder.encode(img2, "UTF-8");
             String _img3 = URLEncoder.encode(img3, "UTF-8");
             String _crby = URLEncoder.encode(crby, "UTF-8");
+            String _sizeGroup = URLEncoder.encode(feedbackClass.getSizeGroup(), "UTF-8");
+            String _color = URLEncoder.encode(feedbackClass.getColor(), "UTF-8");
+            String _invType = URLEncoder.encode(feedbackClass.getInvType(), "UTF-8");
 
-            url = Constant.ipaddress + "/SaveFeedbackDetail?feedbk_type=" + _feedtype + "&article_no=" +
-                    _articleno + "&invoice_no=" + _invoiceno + "&qty=" + _qty + "&salesman_id=" +
-                    _salesmanid + "&office_type=" + _officetype + "&description=" + _description + "&img1=" +
-                    _img1 + "&img2=" + _img2 + "&img3=" + _img3 + "&crby=" + _crby + "&user_type=C";*/
 
-            url = feedtype + "|" + articleno + "|" + invoiceno + "|" + qty + "|" + "0" + "|" +
-                    officetype + "|" + description + "|" + img1 + "|" + img2 + "|" + img3 + "|" +
+            /*url = feedtype + "|" + articleno + "|" + invoiceno + "|" + qty + "|" + "0" + "|" +
+                    officetype + "|" + _description + "|" + img1 + "|" + img2 + "|" + img3 + "|" +
                     crby + "|" + "C" + "|" + branchId + "|" + salesmanid + "|" +
                     feedbackClass.getSizeGroup() + "|" + feedbackClass.getColor() + "|" +
-                    feedbackClass.getInvType() + "|" + crby;
+                    feedbackClass.getInvType() + "|" + DisplayCustListActivity.custId;*/
+
+            //new saveFeedBackPOST("").execute(url);
+
+            url = Constant.ipaddress + "/SaveFeedbackDet?feedbk_type=" + _feedtype + "&article_no=" + _articleno +
+                    "&invoice_no=" + _invoiceno + "&qty=" + _qty + "&salesman_id=" + 0 + "&office_type=" + _officetype +
+                    "&description=" + _description + "&img1=" + _img1 + "&img2=" + _img2 + "&img3=" + _img3 +
+                    "&crby=" + _crby + "&user_type=C&compId=" + branchId + "&SEName=" + _salesmanid +
+                    "&sizeGroup=" + _sizeGroup + "&color=" +_color +
+                    "&invType=" + _invType + "&custId=" + crby;
 
             Constant.showLog(url);
             writeLog("savefeedback_url called_" + url);
 
-            new saveFeedBack("").execute(url);
+            new saveFeedBackGET().execute(url);
 
-            /*VolleyRequests requests = new VolleyRequests(FeedbackActivity.this);
-            requests.saveFeedbackDetail(url, new ServerCallback() {
-                @Override
-                public void onSuccess(String result) {
-                    constant.showPD();
-                    show_popup(7);
-                    Constant.showLog("Volly request success");
-                    writeLog("saveFeedbackdetail():Volley_success");
-                }
-
-                @Override
-                public void onFailure(String result) {
-                    constant.showPD();
-                    show_popup(8);
-                    writeLog("saveFeedbackdetail_" + result);
-                }
-            });*/
         } catch (Exception e) {
             constant.showPD();
             show_popup(7);
@@ -1274,13 +1266,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         return branchId;
     }
 
-    private class saveFeedBack extends AsyncTask<String, Void, String> {
-        private String pono1 = "";
-        private ProgressDialog pd;
+    private class saveFeedBackGET extends AsyncTask<String, Void, String> {
 
-        private saveFeedBack(String _pono) {
-            this.pono1 = _pono;
-        }
+        private ProgressDialog pd;
 
         @Override
         protected void onPreExecute() {
@@ -1292,55 +1280,21 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         }
 
         @Override
-        protected String doInBackground(String... url) {
-            String value = "";
-            DefaultHttpClient httpClient = null;
-            HttpPost request = new HttpPost(Constant.ipaddress + "/saveFeedbackDetails");
-            request.setHeader("Accept", "application/json");
-            request.setHeader("Content-type", "application/json");
-            try {
-                JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(url[0]).endObject().endObject();
-                StringEntity entity = new StringEntity(vehicle.toString());
-                Constant.showLog(vehicle.toString());
-                writeLog("saveFeedBack_" + vehicle.toString());
-                request.setEntity(entity);
-                HttpParams httpParams = new BasicHttpParams();
-                HttpConnectionParams.setConnectionTimeout(httpParams, Constant.TIMEOUT_CON);
-                HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);
-                httpClient = new DefaultHttpClient(httpParams);
-                //DefaultHttpClient httpClient = new DefaultHttpClient();
-                HttpResponse response = httpClient.execute(request);
-                Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
-                value = new BasicResponseHandler().handleResponse(response);
-                //return Post.POST(url[0]);
-            } catch (Exception e) {
-                e.printStackTrace();
-                writeLog("saveFeedBack_result_" + e.getMessage());
-            } finally {
-                try {
-                    if (httpClient != null) {
-                        httpClient.getConnectionManager().shutdown();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    writeLog("saveFeedBack_finally_" + e.getMessage());
-                }
-            }
-            return value;
+        protected String doInBackground(String... strings) {
+            return Post.POST(strings[0]);
         }
 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            pd.dismiss();
             try {
+                result = result.replace("\\", "");
+                result = result.replace("''", "");
+                result = result.replace("\"", "");
                 Constant.showLog(result);
-                //String str = new JSONObject(result).getString("SaveCustOrderMasterResult");
-                String str = new JSONObject(result).getString("SaveFeedbackDetailsResult");
-                str = str.replace("\"", "");
-                Constant.showLog(str);
-                pd.dismiss();
-                writeLog("saveFeedBack_result_" + str + "_" + result);
-                String[] retAutoBranchId = str.split("\\-");
+                writeLog("saveFeedBackGET_result_" + result);
+                String[] retAutoBranchId = result.split("\\-");
                 if (retAutoBranchId.length > 1) {
                     if (!retAutoBranchId[0].equals("0") && !retAutoBranchId[0].equals("+2") && !retAutoBranchId[0].equals("+3")) {
                         show_popup(7);
@@ -1351,10 +1305,8 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     show_popup(8);
                 }
             } catch (Exception e) {
-                writeLog("saveFeedBack_" + e.getMessage());
                 e.printStackTrace();
-                show_popup(8);
-                pd.dismiss();
+                writeLog("saveFeedBackGET_" + e.getMessage());
             }
         }
     }
@@ -1474,7 +1426,93 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    private class saveFeedBackPOST extends AsyncTask<String, Void, String> {
+        private String pono1 = "";
+        private ProgressDialog pd;
+
+        private saveFeedBackPOST(String _pono) {
+            this.pono1 = _pono;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(FeedbackActivity.this);
+            pd.setMessage("Please Wait...");
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+        @Override
+        protected String doInBackground(String... url) {
+            String value = "";
+            DefaultHttpClient httpClient = null;
+            HttpPost request = new HttpPost(Constant.ipaddress + "/saveFeedbackDetails");
+            request.setHeader("Accept", "application/json");
+            request.setHeader("Content-type", "application/json");
+            try {
+                JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(url[0]).endObject().endObject();
+                StringEntity entity = new StringEntity(vehicle.toString());
+                Constant.showLog(vehicle.toString());
+                writeLog("saveFeedBack_" + vehicle.toString());
+                request.setEntity(entity);
+                HttpParams httpParams = new BasicHttpParams();
+                HttpConnectionParams.setConnectionTimeout(httpParams, Constant.TIMEOUT_CON);
+                HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);
+                httpClient = new DefaultHttpClient(httpParams);
+                //DefaultHttpClient httpClient = new DefaultHttpClient();
+                HttpResponse response = httpClient.execute(request);
+                Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
+                value = new BasicResponseHandler().handleResponse(response);
+                //return Post.POST(url[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                writeLog("saveFeedBack_result_" + e.getMessage());
+            } finally {
+                try {
+                    if (httpClient != null) {
+                        httpClient.getConnectionManager().shutdown();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    writeLog("saveFeedBack_finally_" + e.getMessage());
+                }
+            }
+            return value;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            try {
+                Constant.showLog(result);
+                //String str = new JSONObject(result).getString("SaveCustOrderMasterResult");
+                String str = new JSONObject(result).getString("SaveFeedbackDetailsResult");
+                str = str.replace("\"", "");
+                Constant.showLog(str);
+                pd.dismiss();
+                writeLog("saveFeedBack_result_" + str + "_" + result);
+                String[] retAutoBranchId = str.split("\\-");
+                if (retAutoBranchId.length > 1) {
+                    if (!retAutoBranchId[0].equals("0") && !retAutoBranchId[0].equals("+2") && !retAutoBranchId[0].equals("+3")) {
+                        show_popup(7);
+                    } else {
+                        show_popup(8);
+                    }
+                } else {
+                    show_popup(8);
+                }
+            } catch (Exception e) {
+                writeLog("saveFeedBack_" + e.getMessage());
+                e.printStackTrace();
+                show_popup(8);
+                pd.dismiss();
+            }
+        }
+    }
+
     private void writeLog(String _data) {
         new WriteLog().writeLog(getApplicationContext(), "FeedbackActivity_" + _data);
     }
 }
+

@@ -1106,4 +1106,46 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue(request, "IMEINo");
     }
 
+    public void getSalesExe(String url, final ServerCallback callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Constant.showLog(response);
+                        response = response.replace("\\", "");
+                        response = response.replace("''", "");
+                        response = response.substring(1, response.length() - 1);
+                        String status = "C";
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+                            if (jsonArray.length() >= 1) {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    String id = jsonArray.getJSONObject(i).getString("Emp_Id");
+                                    String name = jsonArray.getJSONObject(i).getString("Emp_Name");
+                                    String contNo = jsonArray.getJSONObject(i).getString("Emo_Phno");
+                                    String imgPath = jsonArray.getJSONObject(i).getString("ImagePath");
+                                    status = id + "^" + name + "^" + contNo + "^" + imgPath;
+                                }
+                                callback.onSuccess(status);
+                            } else {
+                                callback.onFailure("Error");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("getActiveStatus_" + error.getMessage());
+                        Constant.showLog(error.getMessage());
+                        writeLog("getActiveStatus_" + error.getMessage());
+                    }
+                }
+        );
+        AppSingleton.getInstance(context).addToRequestQueue1(request, "AREA");
+    }
+
 }

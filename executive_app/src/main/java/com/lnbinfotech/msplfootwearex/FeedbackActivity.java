@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -35,14 +36,20 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.lnbinfotech.msplfootwearex.connectivity.ConnectivityTest;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
 import com.lnbinfotech.msplfootwearex.interfaces.RetrofitApiInterface;
+import com.lnbinfotech.msplfootwearex.interfaces.ServerCallback;
 import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.model.FeedbackClass;
 import com.lnbinfotech.msplfootwearex.model.InvoiceNumberClass;
+import com.lnbinfotech.msplfootwearex.post.Post;
 import com.lnbinfotech.msplfootwearex.services.UploadImageService;
 import com.lnbinfotech.msplfootwearex.utility.RetrofitApiBuilder;
+import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -98,7 +105,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     private DBHandler db;
     private RadioButton rdo_salesman, rdo_office, rdo_gp, rdo_wgr, rdo_sgr;
     private int hocode, custId;
-    private String name, seName;
+    private String name = "", seName = "";
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -114,6 +121,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         init();
         setArticleNo();
         getInvoices(1, "I");
+        getSaleExe();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -601,6 +609,39 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    private void getSaleExe() {
+        ProgressDialog pd = new ProgressDialog(FeedbackActivity.this);
+        pd.setCancelable(false);
+        pd.setMessage("Please Wait");
+        if (ConnectivityTest.getNetStat(getApplicationContext())) {
+            int id = DisplayCustListActivity.custId;
+            String url = Constant.ipaddress + "/GetSalesExe?id=" + id + "&type=C&IMEINo1=0&IMEINo2=0";
+            Constant.showLog(url);
+            writeLog("getSaleExe_" + url);
+            pd.show();
+            VolleyRequests requests = new VolleyRequests(FeedbackActivity.this);
+            requests.getSalesExe(url, new ServerCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    pd.dismiss();
+                    String arr[] = result.split("\\^");
+                    if(arr.length>1){
+                        seName = arr[1];
+                    }
+                }
+
+                @Override
+                public void onFailure(String result) {
+                    pd.dismiss();
+                    show_popup(10);
+                }
+            });
+        } else {
+            toast.setText("You Are Offline");
+            toast.show();
+        }
+    }
+
     private void setArticleNo() {
         listArtNo = db.getArticleNo();
         Constant.showLog("" + listArtNo.size());
@@ -767,7 +808,6 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         db = new DBHandler(getApplicationContext());
         hocode = FirstActivity.pref.getInt(getString(R.string.pref_hocode),0);
         custId = FirstActivity.pref.getInt(getString(R.string.pref_retailCustId),0);
-        seName = FirstActivity.pref.getString(getString(R.string.pref_execName),"");
 
     }
 
@@ -1000,6 +1040,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.dismiss();
                     getInvoices(0, "I");
+                    getSaleExe();
                 }
             });
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -1194,7 +1235,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
 
             int branchId = getBranchId(invoiceno);
 
-            /*String _feedtype = URLEncoder.encode(feedtype, "UTF-8");
+            String _feedtype = URLEncoder.encode(feedtype, "UTF-8");
             String _articleno = URLEncoder.encode(articleno, "UTF-8");
             String _invoiceno = URLEncoder.encode(invoiceno, "UTF-8");
             String _qty = URLEncoder.encode(qty, "UTF-8");
@@ -1205,43 +1246,30 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             String _img2 = URLEncoder.encode(img2, "UTF-8");
             String _img3 = URLEncoder.encode(img3, "UTF-8");
             String _crby = URLEncoder.encode(crby, "UTF-8");
+            String _sizeGroup = URLEncoder.encode(feedbackClass.getSizeGroup(), "UTF-8");
+            String _color = URLEncoder.encode(feedbackClass.getColor(), "UTF-8");
+            String _invType = URLEncoder.encode(feedbackClass.getInvType(), "UTF-8");
 
-            url = Constant.ipaddress + "/SaveFeedbackDetail?feedbk_type=" + _feedtype + "&article_no=" +
-                    _articleno + "&invoice_no=" + _invoiceno + "&qty=" + _qty + "&salesman_id=" +
-                    _salesmanid + "&office_type=" + _officetype + "&description=" + _description + "&img1=" +
-                    _img1 + "&img2=" + _img2 + "&img3=" + _img3 + "&crby=" + _crby + "&user_type=C";*/
-
-
-            //String _description = URLEncoder.encode(description, "UTF-8");
-
-            url = feedtype + "|" + articleno + "|" + invoiceno + "|" + qty + "|" + "0" + "|" +
-                    officetype + "|" + description + "|" + img1 + "|" + img2 + "|" + img3 + "|" +
+            /*url = feedtype + "|" + articleno + "|" + invoiceno + "|" + qty + "|" + "0" + "|" +
+                    officetype + "|" + _description + "|" + img1 + "|" + img2 + "|" + img3 + "|" +
                     crby + "|" + "E" + "|" + branchId + "|" + salesmanid + "|" +
                     feedbackClass.getSizeGroup() + "|" + feedbackClass.getColor() + "|" +
-                    feedbackClass.getInvType() + "|" + DisplayCustListActivity.custId;
+                    feedbackClass.getInvType() + "|" + DisplayCustListActivity.custId;*/
+
+            //new saveFeedBackPOST("").execute(url);
+
+            url = Constant.ipaddress + "/SaveFeedbackDet?feedbk_type=" + _feedtype + "&article_no=" + _articleno +
+                    "&invoice_no=" + _invoiceno + "&qty=" + _qty + "&salesman_id=" + 0 + "&office_type=" + _officetype +
+                    "&description=" + _description + "&img1=" + _img1 + "&img2=" + _img2 + "&img3=" + _img3 +
+                    "&crby=" + _crby + "&user_type=E&compId=" + branchId + "&SEName=" + _salesmanid +
+                    "&sizeGroup=" + _sizeGroup + "&color=" + _color +
+                    "&invType=" + _invType + "&custId=" + DisplayCustListActivity.custId;
 
             Constant.showLog(url);
             writeLog("savefeedback_url called_" + url);
 
-            new saveFeedBack("").execute(url);
+            new saveFeedBackGET().execute(url);
 
-            /*VolleyRequests requests = new VolleyRequests(FeedbackActivity.this);
-            requests.saveFeedbackDetail(url, new ServerCallback() {
-                @Override
-                public void onSuccess(String result) {
-                    constant.showPD();
-                    show_popup(7);
-                    Constant.showLog("Volly request success");
-                    writeLog("saveFeedbackdetail():Volley_success");
-                }
-
-                @Override
-                public void onFailure(String result) {
-                    constant.showPD();
-                    show_popup(8);
-                    writeLog("saveFeedbackdetail_" + result);
-                }
-            });*/
         } catch (Exception e) {
             constant.showPD();
             show_popup(7);
@@ -1269,13 +1297,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         return branchId;
     }
 
-    private class saveFeedBack extends AsyncTask<String, Void, String> {
-        private String pono1 = "";
-        private ProgressDialog pd;
+    private class saveFeedBackGET extends AsyncTask<String, Void, String> {
 
-        private saveFeedBack(String _pono) {
-            this.pono1 = _pono;
-        }
+        private ProgressDialog pd;
 
         @Override
         protected void onPreExecute() {
@@ -1287,55 +1311,21 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         }
 
         @Override
-        protected String doInBackground(String... url) {
-            String value = "";
-            DefaultHttpClient httpClient = null;
-            HttpPost request = new HttpPost(Constant.ipaddress + "/saveFeedbackDetails");
-            request.setHeader("Accept", "application/json");
-            request.setHeader("Content-type", "application/json");
-            try {
-                JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(url[0]).endObject().endObject();
-                StringEntity entity = new StringEntity(vehicle.toString());
-                Constant.showLog(vehicle.toString());
-                writeLog("saveFeedBack_" + vehicle.toString());
-                request.setEntity(entity);
-                HttpParams httpParams = new BasicHttpParams();
-                HttpConnectionParams.setConnectionTimeout(httpParams, Constant.TIMEOUT_CON);
-                HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);
-                httpClient = new DefaultHttpClient(httpParams);
-                //DefaultHttpClient httpClient = new DefaultHttpClient();
-                HttpResponse response = httpClient.execute(request);
-                Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
-                value = new BasicResponseHandler().handleResponse(response);
-                //return Post.POST(url[0]);
-            } catch (Exception e) {
-                e.printStackTrace();
-                writeLog("saveFeedBack_result_" + e.getMessage());
-            } finally {
-                try {
-                    if (httpClient != null) {
-                        httpClient.getConnectionManager().shutdown();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    writeLog("saveFeedBack_finally_" + e.getMessage());
-                }
-            }
-            return value;
+        protected String doInBackground(String... strings) {
+            return Post.POST(strings[0]);
         }
 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            pd.dismiss();
             try {
+                result = result.replace("\\", "");
+                result = result.replace("''", "");
+                result = result.replace("\"", "");
                 Constant.showLog(result);
-                //String str = new JSONObject(result).getString("SaveCustOrderMasterResult");
-                String str = new JSONObject(result).getString("SaveFeedbackDetailsResult");
-                str = str.replace("\"", "");
-                Constant.showLog(str);
-                pd.dismiss();
-                writeLog("saveFeedBack_result_" + str + "_" + result);
-                String[] retAutoBranchId = str.split("\\-");
+                writeLog("saveFeedBackGET_result_" + result);
+                String[] retAutoBranchId = result.split("\\-");
                 if (retAutoBranchId.length > 1) {
                     if (!retAutoBranchId[0].equals("0") && !retAutoBranchId[0].equals("+2") && !retAutoBranchId[0].equals("+3")) {
                         show_popup(7);
@@ -1346,10 +1336,8 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     show_popup(8);
                 }
             } catch (Exception e) {
-                writeLog("saveFeedBack_" + e.getMessage());
                 e.printStackTrace();
-                show_popup(8);
-                pd.dismiss();
+                writeLog("saveFeedBackGET_" + e.getMessage());
             }
         }
     }
@@ -1466,6 +1454,91 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             super.onPostExecute(s);
             pd.dismiss();
             saveFeedbackdetail();
+        }
+    }
+
+    private class saveFeedBackPOST extends AsyncTask<String, Void, String> {
+        private String pono1 = "";
+        private ProgressDialog pd;
+
+        private saveFeedBackPOST(String _pono) {
+            this.pono1 = _pono;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(FeedbackActivity.this);
+            pd.setMessage("Please Wait...");
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+        @Override
+        protected String doInBackground(String... url) {
+            String value = "";
+            DefaultHttpClient httpClient = null;
+            HttpPost request = new HttpPost(Constant.ipaddress + "/saveFeedbackDetails");
+            request.setHeader("Accept", "application/json");
+            request.setHeader("Content-type", "application/json");
+            try {
+                JSONStringer vehicle = new JSONStringer().object().key("rData").object().key("details").value(url[0]).endObject().endObject();
+                StringEntity entity = new StringEntity(vehicle.toString());
+                Constant.showLog(vehicle.toString());
+                writeLog("saveFeedBack_" + vehicle.toString());
+                request.setEntity(entity);
+                HttpParams httpParams = new BasicHttpParams();
+                HttpConnectionParams.setConnectionTimeout(httpParams, Constant.TIMEOUT_CON);
+                HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);
+                httpClient = new DefaultHttpClient(httpParams);
+                //DefaultHttpClient httpClient = new DefaultHttpClient();
+                HttpResponse response = httpClient.execute(request);
+                Constant.showLog("Saving : " + response.getStatusLine().getStatusCode());
+                value = new BasicResponseHandler().handleResponse(response);
+                //return Post.POST(url[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                writeLog("saveFeedBack_result_" + e.getMessage());
+            } finally {
+                try {
+                    if (httpClient != null) {
+                        httpClient.getConnectionManager().shutdown();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    writeLog("saveFeedBack_finally_" + e.getMessage());
+                }
+            }
+            return value;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            try {
+                Constant.showLog(result);
+                //String str = new JSONObject(result).getString("SaveCustOrderMasterResult");
+                String str = new JSONObject(result).getString("SaveFeedbackDetailsResult");
+                str = str.replace("\"", "");
+                Constant.showLog(str);
+                pd.dismiss();
+                writeLog("saveFeedBack_result_" + str + "_" + result);
+                String[] retAutoBranchId = str.split("\\-");
+                if (retAutoBranchId.length > 1) {
+                    if (!retAutoBranchId[0].equals("0") && !retAutoBranchId[0].equals("+2") && !retAutoBranchId[0].equals("+3")) {
+                        show_popup(7);
+                    } else {
+                        show_popup(8);
+                    }
+                } else {
+                    show_popup(8);
+                }
+            } catch (Exception e) {
+                writeLog("saveFeedBack_" + e.getMessage());
+                e.printStackTrace();
+                show_popup(8);
+                pd.dismiss();
+            }
         }
     }
 

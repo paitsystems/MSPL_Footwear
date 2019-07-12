@@ -51,7 +51,7 @@ public class Constant {
 
     //public static String ipaddress = "http://172.30.1.209/MSPLD3/service.svc";
     //public static String ipaddress = "http://license.lnbinfotech.com/MSPLD2/service.svc";
-    public static String ipaddress = "http://43.239.147.103:24086/MSPLD3/service.svc";
+    public static String ipaddress = "http://43.239.147.103:24085/MSPLD3/service.svc";
 
     //TODO: Check Image Url
     public static String imgUrl = "http://43.239.147.103:24085/IMAGES/";
@@ -68,7 +68,7 @@ public class Constant {
     public static int liveTestFlag = 0;
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
-    public static int showLogFlag = 0;
+    public static int showLogFlag = 1;
 
     public static int TIMEOUT_CON = 10 * 1000;
     public static int TIMEOUT_SO = 2 * 60 * 1000;
@@ -104,7 +104,7 @@ public class Constant {
             dpAppUrl = "http://103.109.13.200:24086/DPApp/";
             connectionFlag = 1;
         } else if (connectionFlag == 1) {
-            ipaddress = "http://43.239.147.103:24086/MSPLD3/service.svc";
+            ipaddress = "http://43.239.147.103:24085/MSPLD3/service.svc";
             imgUrl = "http://43.239.147.103:24085/IMAGES/";
             custimgUrl = "http://43.239.147.103:24085/custImage/";
             dpAppUrl = "http://43.239.147.103:24085/DPApp/";
