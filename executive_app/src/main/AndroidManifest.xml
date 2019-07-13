@@ -29,6 +29,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
         <activity android:name=".FirstActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,10 +42,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
-        <!--<service android:name=".services.AutoSyncService" />
+        <!--
+        <service android:name=".services.AutoSyncService" />
         <service android:name=".services.DataUpdateService" />
         <service android:name=".services.UploadDBService" />
-        <service android:name=".services.DownloadDBService" />-->
+        <service android:name=".services.DownloadDBService" />
+        -->
         <service android:name=".services.UploadImageService" />
         <service
             android:name=".services.ScheduledJobService"
@@ -57,9 +60,11 @@
             android:name=".services.ScheduledJobServicePL"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <!--<service
+        <!--
+            <service
             android:name=".services.LocationUpdateJobServicePL"
-            android:permission="android.permission.BIND_JOB_SERVICE" />-->
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        -->
 
         <receiver android:name=".braodcasts.AutoUpdateBroadcastReceiver" />
         <receiver
@@ -69,26 +74,32 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <!--<receiver android:name=".braodcasts.ImageUplaodBroadcastReceiver">
+        <!--
+        <receiver android:name=".braodcasts.ImageUplaodBroadcastReceiver">
             <intent-filter>
                 <action android:name="test" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
-        </receiver>-->
-        <!--<receiver
+        </receiver>
+        -->
+        <!--
+        <receiver
             android:name=".CheckOTPActivity$MySMSReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
-        </receiver>-->
-        <receiver android:name=".braodcasts.MySMSBroadcastReceiver"
-                  android:exported="true">
+        </receiver>
+        -->
+        <receiver
+            android:name=".braodcasts.MySMSBroadcastReceiver"
+            android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED"/>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
             </intent-filter>
         </receiver>
+
         <activity
             android:name=".RegistrationActivity"
             android:screenOrientation="portrait"
@@ -271,7 +282,8 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
 
-        <!--<service
+        <!--
+        <service
             android:name=".services.LocationUpdateJobService"
             android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
             <intent-filter>
@@ -283,11 +295,21 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".services.LocationServicePRM"
-            android:enabled="true" />-->
+            android:enabled="true" />
+        -->
 
-        <activity android:name=".ProductWiseImageActivity"
+        <activity
+            android:name=".ProductWiseImageActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".SchemeFullImageActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".TrackOrderImageActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>

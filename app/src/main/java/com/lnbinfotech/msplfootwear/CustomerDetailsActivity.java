@@ -273,6 +273,7 @@ public class CustomerDetailsActivity extends AppCompatActivity
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    new Constant();
                     checkVersion();
                 }
             });

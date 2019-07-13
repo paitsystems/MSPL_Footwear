@@ -1,253 +1,268 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".ProfileViewActivity">
 
     <ScrollView
-
+        android:id="@+id/scroll_lay"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/scroll_lay"
         android:layout_margin="5sp"
         android:layout_weight="1">
 
-
-
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_margin="5sp"
-                android:layout_height="0dp"
                 android:layout_weight="0.5"
                 android:visibility="visible">
+
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10sp">
+                        android:layout_margin="10sp"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:id="@+id/imgv_camera"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.90"
-                            android:src="@drawable/ic_man_user_det" />
+                            app:srcCompat="@drawable/ic_man_user_det" />
+
                         <TextView
+                            android:id="@+id/textView"
+                            style="@style/textViewMob"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/textView"
                             android:layout_gravity="center"
-                            android:text="@string/customer_name"
-                            style="@style/textViewMob"
-                            android:layout_weight="0.10" />
+                            android:layout_weight="0.10"
+                            android:text="@string/customer_name" />
                     </LinearLayout>
 
-
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="5sp"
-                        android:layout_gravity="center">
+                        android:layout_gravity="center"
+                        android:orientation="vertical"
+                        android:padding="5sp">
 
                         <EditText
-
+                            android:id="@+id/ed_cusname"
                             style="@style/textViewMob"
-                            android:inputType="number"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:id="@+id/ed_cusname"
                             android:clickable="false"
-                            android:focusable="false">
+                            android:focusable="false"
+                            android:inputType="number"
+                            android:textAppearance="?android:attr/textAppearanceSmall">
 
                         </EditText>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10sp">
+                        android:layout_margin="10sp"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:id="@+id/imgv_cgst"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.90"
-                            android:src="@drawable/ic_voucher_det" />
+                            app:srcCompat="@drawable/ic_voucher_det" />
+
                         <TextView
+                            style="@style/textViewMob"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/textView4"
                             android:layout_gravity="center"
-                            android:text="@string/cgst"
-                            style="@style/textViewMob"
-                            android:layout_weight="0.10" />
+                            android:layout_weight="0.10"
+                            android:text="@string/cgst" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="5sp"
-                        android:layout_gravity="center">
+                        android:layout_gravity="center"
+                        android:orientation="vertical"
+                        android:padding="5sp">
 
                         <EditText
-
+                            android:id="@+id/ed_cgst"
                             style="@style/textViewMob"
-                            android:inputType="number"
-                            android:clickable="false"
-                            android:focusable="false"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:id="@+id/ed_cgst" />
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
                     </LinearLayout>
+
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10sp">
+                        android:layout_margin="10sp"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:id="@+id/imgv_panno"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.90"
-                            android:src="@drawable/ic_business_card" />
+                            app:srcCompat="@drawable/ic_business_card" />
+
                         <TextView
+                            style="@style/textViewMob"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/textView5"
                             android:layout_gravity="center"
-                            android:text="@string/panno"
-                            style="@style/textViewMob"
-                            android:layout_weight="0.10" />
+                            android:layout_weight="0.10"
+                            android:text="@string/panno" />
                     </LinearLayout>
+
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="5sp"
-                        android:layout_gravity="center">
+                        android:layout_gravity="center"
+                        android:orientation="vertical"
+                        android:padding="5sp">
 
                         <EditText
-
+                            android:id="@+id/ed_pan_no"
                             style="@style/textViewMob"
-                            android:inputType="number"
-                            android:clickable="false"
-                            android:focusable="false"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:id="@+id/ed_pan_no" />
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
                     </LinearLayout>
+
+                    <!--<LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:orientation="vertical"
+                        android:padding="5sp">
+
+                        <EditText
+                            android:id="@+id/ed_pan_no"
+                            style="@style/textViewMob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:text="12356"
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
+                    </LinearLayout>-->
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_margin="5sp"
-                android:layout_height="0dp"
                 android:layout_weight="0.5">
+
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5sp"
+                        android:orientation="vertical"
                         android:visibility="gone">
 
                         <ImageView
+                            android:id="@+id/imgv_edit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/imgv_edit"
                             android:layout_gravity="right"
                             android:src="@drawable/edit_user" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5sp">
+                        android:layout_margin="5sp"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:id="@+id/imgv_mobno"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.90"
-                            android:src="@drawable/ic_phone_symbol" />
+                            app:srcCompat="@drawable/ic_phone_symbol" />
+
                         <TextView
+                            style="@style/textViewMob"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/textView1"
                             android:layout_gravity="center"
-                            android:text="@string/mobile_no"
-                            style="@style/textViewMob"
-                            android:layout_weight="0.10" />
+                            android:layout_weight="0.10"
+                            android:text="@string/mobile_no" />
                     </LinearLayout>
 
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="5sp"
-                        android:layout_gravity="center">
+                        android:layout_gravity="center"
+                        android:orientation="vertical"
+                        android:padding="5sp">
 
                         <EditText
 
+                            android:id="@+id/ed_mobno"
                             style="@style/textViewMob"
-                            android:inputType="number"
-                            android:clickable="false"
-                            android:focusable="false"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:id="@+id/ed_mobno" />
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:inputType="number"
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
                     </LinearLayout>
 
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5sp">
+                        android:layout_margin="5sp"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:id="@+id/imgv_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.90"
-                            android:src="@drawable/ic_close_envelope" />
+                            app:srcCompat="@drawable/ic_close_envelope" />
+
                         <TextView
+                            style="@style/textViewMob"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/textView2"
                             android:layout_gravity="center"
-                            android:text="@string/email_id"
-                            style="@style/textViewMob"
-                            android:layout_weight="0.10" />
+                            android:layout_weight="0.10"
+                            android:text="@string/email_id" />
                     </LinearLayout>
 
 
@@ -263,86 +278,87 @@
                         android:layout_marginTop="10dp"
                         android:layout_weight="0.02" />-->
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:orientation="vertical"
                         android:padding="5sp">
 
                         <EditText
 
+                            android:id="@+id/ed_emailid"
                             style="@style/textViewMob"
-                            android:inputType="textEmailAddress"
-                            android:clickable="false"
-                            android:focusable="false"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:id="@+id/ed_emailid" />
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:inputType="textEmailAddress"
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5sp">
+                        android:layout_margin="5sp"
+                        android:orientation="horizontal">
 
                         <ImageView
-                            android:id="@+id/imgv_cc"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.90"
-                            android:src="@drawable/ic_mail" />
+                            app:srcCompat="@drawable/ic_mail" />
+
                         <TextView
+                            android:id="@+id/cc"
+                            style="@style/textViewMob"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/cc"
                             android:layout_gravity="center"
-                            android:text="@string/_cc"
-                            style="@style/textViewMob"
-                            android:layout_weight="0.10" />
+                            android:layout_weight="0.10"
+                            android:text="@string/_cc" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:orientation="vertical"
                         android:padding="5sp">
 
                         <EditText
 
+                            android:id="@+id/ed_cc"
                             style="@style/textViewMob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:clickable="false"
                             android:focusable="false"
                             android:inputType="textEmailAddress"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:id="@+id/ed_cc" />
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
 
                     </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
     </ScrollView>
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5sp"
         android:gravity="center"
+        android:orientation="vertical"
         android:visibility="gone">
 
         <android.support.v7.widget.AppCompatButton
-            android:gravity="center"
-            app:backgroundTint="@color/red"
-            android:drawableLeft="@drawable/btn_img_background"
+            android:id="@+id/bt_save"
             style="@style/textViewMob"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/btn_img_background"
+            android:gravity="center"
             android:text="@string/save"
             android:textColor="@color/white"
-            android:id="@+id/bt_save"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:backgroundTint="@color/red" />
     </LinearLayout>
 
     <TextView

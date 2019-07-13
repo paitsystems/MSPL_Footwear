@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -88,10 +89,6 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
 
         init();
 
-       /* if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        }*/
-
         card_give_order.setOnClickListener(this);
         card_account.setOnClickListener(this);
         card_track_order.setOnClickListener(this);
@@ -106,16 +103,14 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         tv_mobile2.setOnClickListener(this);
         tv_custmobile.setOnClickListener(this);
         img_cust.setOnClickListener(this);
+        tv_email.setOnClickListener(this);
 
         //TODO: JobScheduled
         Utitlity.scheduledJob(getApplicationContext());
 
         setContactUs();
 
-        //AddImagesUrlOnline();
-
         getSchemeData();
-        //getSaleExe();
 
     }
 
@@ -161,7 +156,7 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                /* toast.setText("Under Development");
                 toast.show();*/
                 Intent intent = new Intent(getApplicationContext(), MainImagewiseSetwiseOrderActivity.class);
-                intent.putExtra("from","WhatsNew");
+                intent.putExtra("from", "WhatsNew");
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
@@ -175,37 +170,41 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.tv_phone1:
                 String phone1 = tv_phone1.getText().toString();
-                if(!phone1.equals("")&& !phone1.equals("0")){
+                if (!phone1.equals("") && !phone1.equals("0")) {
                     makeCall(phone1);
                 }
                 break;
             case R.id.tv_phone2:
                 String phone2 = tv_phone2.getText().toString();
-                if(!phone2.equals("")&& !phone2.equals("0")){
+                if (!phone2.equals("") && !phone2.equals("0")) {
                     makeCall(phone2);
                 }
                 break;
             case R.id.tv_mobile1:
                 String mob1 = tv_mobile1.getText().toString();
-                if(!mob1.equals("")&& !mob1.equals("0")){
-                    makeCall(mob1);
+                if (!mob1.equals("") && !mob1.equals("0")) {
+                    //makeCall(mob1);
+                    sendWhatsapp("Hi", mob1);
                 }
                 break;
             case R.id.tv_mobile2:
                 String mob2 = tv_mobile2.getText().toString();
-                if(!mob2.equals("")&& !mob2.equals("0")){
+                if (!mob2.equals("") && !mob2.equals("0")) {
                     makeCall(mob2);
                 }
+                break;
             case R.id.tv_custmobile:
                 String mob3 = tv_custmobile.getText().toString();
-                if(!mob3.equals("")&& !mob3.equals("0")){
-                    makeCall(mob3);
+                if (!mob3.equals("") && !mob3.equals("0")) {
+                    showDia(10);
                 }
                 break;
             case R.id.img_cust:
                 showPic();
                 break;
-
+            case R.id.tv_email:
+                sendGmail(tv_email.getText().toString());
+                break;
         }
     }
 
@@ -277,7 +276,6 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onPageSelected(int position) {
-       // Constant.showLog("Page Changed: " + position);
     }
 
     @Override
@@ -459,17 +457,30 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                     dialog.dismiss();
                 }
             });
+        } else if (a == 10) {
+            builder.setMessage("What Do You Want To Do?");
+            builder.setPositiveButton("Call", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    makeCall(tv_custmobile.getText().toString());
+                }
+            });
+            builder.setNegativeButton("WhatsApp", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    sendWhatsapp("Hi",tv_custmobile.getText().toString());
+                }
+            });
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
         }
         builder.create().show();
-    }
-
-    public void AddImagesUrlOnline(){
-        scImgHashMap = new HashMap<>();
-        scImgHashMap.put("School Shoes", "http://103.109.13.200:24086/IMAGES/Scheme/SchoolShoes.jpg");
-        scImgHashMap.put("Vertex", "http://103.109.13.200:24086/IMAGES/Scheme/VERTEXSCHEMEEIDSPECIALMAY2019.jpg");
-        /*scImgHashMap.put("Eclair", "http://103.109.13.200:24086/IMAGES/2901_Aaram_Black_P1.jpg");
-        scImgHashMap.put("Froyo", "http://103.109.13.200:24086/IMAGES/F196C_Foo%20Kids_Blue_P1.jpg");
-        scImgHashMap.put("GingerBread", "http://103.109.13.200:24086/IMAGES/2902_Aaram_Black_P1.jpg");*/
     }
 
     private void getSchemeData() {
@@ -608,6 +619,40 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
                 "tel", number, null));
         startActivity(phoneIntent);
         overridePendingTransition(R.anim.enter,R.anim.exit);
+    }
+
+    private void sendWhatsapp(String message, String mobNo){
+        String url = "https://api.whatsapp.com/send?phone=+91" + mobNo;
+        try {
+            PackageManager pm = getPackageManager();
+            pm.getPackageInfo("com.whatsapp", PackageManager.GET_ACTIVITIES);
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+        } catch (Exception e) {
+            toast.setText("Whatsapp app not installed in your phone");
+            toast.show();
+            e.printStackTrace();
+            writeLog("sendWhatsapp_"+e.getMessage());
+        }
+    }
+
+    private void sendGmail(String mailId) {
+        try {
+            Intent eintent = new Intent(Intent.ACTION_SEND);
+            eintent.putExtra(Intent.EXTRA_EMAIL, new String[]{mailId});
+            //eintent.putExtra(Intent.EXTRA_SUBJECT, "Subject text here...");
+            //eintent.putExtra(Intent.EXTRA_TEXT, "Body of the content here...");
+            //eintent.putExtra(Intent.EXTRA_CC, "mailcc@gmail.com");
+            eintent.setType("text/html");
+            //eintent.setPackage("com.google.android.gm");
+            startActivity(Intent.createChooser(eintent, "Send mail"));
+        } catch (Exception e) {
+            toast.setText("Gmail app not installed in your phone");
+            toast.show();
+            e.printStackTrace();
+            writeLog("setGmail_" + e.getMessage());
+        }
     }
 
     private void showPic() {

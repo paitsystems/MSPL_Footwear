@@ -82,6 +82,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Short_Goods_Received - Invoice Made But Goods Not Received" />
+
+                    <RadioButton
+                        android:id="@+id/rdo_transport"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Goods_Delivery" />
                 </LinearLayout>
 
 

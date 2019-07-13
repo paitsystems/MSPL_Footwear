@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.lnbinfotech.msplfootwearex.DisplayCustOutstandingActivity;
 import com.lnbinfotech.msplfootwearex.FirstActivity;
 import com.lnbinfotech.msplfootwearex.R;
+import com.lnbinfotech.msplfootwearex.TrackOrderDetailActivityChanged;
 import com.lnbinfotech.msplfootwearex.VisitPaymentFormActivity;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.db.DBHandler;
@@ -852,6 +853,12 @@ public class ParseJSON {
                     orderClass.setInvqty(jsonArray.getJSONObject(i).getInt("Invo"));
                     orderClass.setCanqty(jsonArray.getJSONObject(i).getInt("Can"));
                     orderClass.setStatus(jsonArray.getJSONObject(i).getString("STATUS"));
+                    TrackOrderDetailActivityChanged.carton = jsonArray.getJSONObject(i).getString("Carton");
+                    TrackOrderDetailActivityChanged.bundle = jsonArray.getJSONObject(i).getString("Bundle");
+                    TrackOrderDetailActivityChanged.noOfCartoon = jsonArray.getJSONObject(i).getString("NoOfCartoon");
+                    TrackOrderDetailActivityChanged.qty = jsonArray.getJSONObject(i).getString("Qty");
+                    TrackOrderDetailActivityChanged.imagePath = jsonArray.getJSONObject(i).getString("ImagePath");
+                    TrackOrderDetailActivityChanged.PSImage = jsonArray.getJSONObject(i).getString("PSImage");
                     list.add(orderClass);
                 }
                 db.deleteTable(DBHandler.Table_TrackCustomerOrder);

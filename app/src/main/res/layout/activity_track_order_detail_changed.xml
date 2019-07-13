@@ -92,6 +92,15 @@
         android:textColor="@color/black"
         android:gravity="left|center" />
 
+    <TextView
+        android:id="@+id/tv_packDet"
+        style="@style/textViewMob"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/trackorderc_detail_layheight40"
+        android:gravity="left|center"
+        android:text="Packing Details"
+        android:textColor="@color/black" />
+
     <!--<HorizontalScrollView
         android:id="@+id/horizontalScrollView"
         android:layout_width="match_parent"

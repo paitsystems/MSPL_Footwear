@@ -103,7 +103,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     private Toast toast;
     private List<String> listArtNo, listInvNo, listStaffName, listOrderNo, sizeGroup_list, color_list, listDCNo;
     private DBHandler db;
-    private RadioButton rdo_salesman, rdo_office, rdo_gp, rdo_wgr, rdo_sgr;
+    private RadioButton rdo_salesman, rdo_office, rdo_gp, rdo_wgr, rdo_sgr, rdo_transport;
     private int hocode, custId;
     private String name = "", seName = "";
 
@@ -136,6 +136,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         rdo_gp.setOnClickListener(this);
         rdo_wgr.setOnClickListener(this);
         rdo_sgr.setOnClickListener(this);
+        rdo_transport.setOnClickListener(this);
 
         bt_send.setOnClickListener(this);
         feedback_spinner.setOnItemSelectedListener(this);
@@ -282,16 +283,25 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 rdo_gp.setChecked(true);
                 rdo_wgr.setChecked(false);
                 rdo_sgr.setChecked(false);
+                rdo_transport.setChecked(false);
                 break;
             case R.id.rdo_wgr:
                 rdo_gp.setChecked(false);
                 rdo_wgr.setChecked(true);
                 rdo_sgr.setChecked(false);
+                rdo_transport.setChecked(false);
                 break;
             case R.id.rdo_sgr:
                 rdo_gp.setChecked(false);
                 rdo_wgr.setChecked(false);
                 rdo_sgr.setChecked(true);
+                rdo_transport.setChecked(false);
+                break;
+            case R.id.rdo_transport:
+                rdo_gp.setChecked(false);
+                rdo_wgr.setChecked(false);
+                rdo_sgr.setChecked(false);
+                rdo_transport.setChecked(true);
                 break;
         }
     }
@@ -688,6 +698,8 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                             invType = rdo_wgr.getText().toString();
                         } else if (rdo_sgr.isChecked()) {
                             invType = rdo_sgr.getText().toString();
+                        } else if (rdo_transport.isChecked()) {
+                            invType = rdo_transport.getText().toString();
                         }
                     }
 
@@ -744,6 +756,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         rdo_gp.setChecked(true);
         rdo_wgr.setChecked(false);
         rdo_sgr.setChecked(false);
+        rdo_transport.setChecked(false);
 
         feedbackClass.setFeed_img1("NA");
         feedbackClass.setFeed_img2("NA");
@@ -791,6 +804,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         rdo_gp = findViewById(R.id.rdo_gp);
         rdo_wgr = findViewById(R.id.rdo_wgr);
         rdo_sgr = findViewById(R.id.rdo_sgr);
+        rdo_transport = findViewById(R.id.rdo_transport);
         damaged_goods_cardlay = findViewById(R.id.damaged_goods_cardlay);
         service_or_team_cardlay = findViewById(R.id.service_or_team_cardlay);
         feedbk_type = new ArrayAdapter<>(this, R.layout.feedbk_type_list, arr);

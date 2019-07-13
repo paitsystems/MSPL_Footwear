@@ -1113,6 +1113,34 @@ public class VolleyRequests {
         AppSingleton.getInstance(context).addToRequestQueue1(request, "AREA");
     }
 
+    public void getUserDetailProfile(String url, final ServerCallbackList callback) {
+        StringRequest request = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        response = response.replace("\\", "");
+                        response = response.replace("''", "");
+                        response = response.substring(1, response.length() - 1);
+                        Constant.showLog(response);
+                        List<UserClass> list = new ParseJSON(response, context).parseUserDetailProfile();
+                        if (list.size() != 0) {
+                            callback.onSuccess(list);
+                        } else {
+                            callback.onFailure("Error");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onFailure("Error");
+                        Constant.showLog(error.getMessage());
+                        writeLog("getAvailStock_" + error.getMessage());
+                    }
+                });
+        AppSingleton.getInstance(context).addToRequestQueue(request, "OTP");
+    }
+
     private void writeLog(String _data) {
         new WriteLog().writeLog(context, "VolleyRequest_" + _data);
     }

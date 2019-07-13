@@ -49,7 +49,7 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
 
     private TextView tv_orderstatus, tv_invno, tv_transporter, tv_creditapp, tv_alltopckg, tv_taxinvmade,
             tv_invamnt,tv_totset, tv_totqty, tv_tot_inv_qty,tv_tot_can_qty, tv_totamnt, tv_tot_gstamt, tv_tot_grossamt,
-            tv_disc_per, tv_discamnt, tv_creaditlimit, tv_custName;
+            tv_disc_per, tv_discamnt, tv_creaditlimit, tv_custName, tv_packDet;
     private ListView lv_vOrder;
     private Button btn_proceed;
     private String filter = "", transporterNo = "0";;
@@ -62,6 +62,7 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
     private HashMap<Integer, Integer> dispatchCenterTotalMap;
     private List<String> workingDispatchCenter;
     private int allBranch = 1;
+    public static String carton = "", bundle = "", noOfCartoon = "", qty = "", imagePath = "", PSImage = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,21 +141,17 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        /*if (!from.equals("addtocard")) {
-            getMenuInflater().inflate(R.menu.vieworderactivity_menu, menu);
-        }*/
+        getMenuInflater().inflate(R.menu.trackorder_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                //showDia(0);
-                new Constant(TrackOrderDetailActivityChanged.this).doFinish();
-                break;
-            case R.id.add:
-                showDia(2);
+            case R.id.img:
+                Intent intent = new Intent(getApplicationContext(), TrackOrderImageActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -232,7 +229,15 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
     }
 
     private void loadOrderDetails() {
+        //TODO: Check URL
         String url = Constant.ipaddress + "/GetTrackOrderDetail?mastId=" + orderClass.getAuto();
+        //String url = Constant.ipaddress + "/GetTrackOrderDetail?mastId=246035";
+        carton = "";
+        bundle = "";
+        qty = "";
+        noOfCartoon = "";
+        imagePath = "";
+        PSImage = "";
         Constant.showLog(url);
         writeLog("loadOrderDetails_" + url);
         constant.showPD();
@@ -299,6 +304,8 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
         tv_invno.setText(invNo);
         transporter = "Transporter :- "+transporter + "  " + transporterNo;
         tv_transporter.setText(transporter);
+        String pckDet = "Packing Details :- Carton - "+carton+" Bundle - "+bundle+" ("+noOfCartoon+")";
+        tv_packDet.setText(pckDet);
         tv_creditapp.setText(creditApp);
         tv_alltopckg.setText(allotedTopck);
         tv_taxinvmade.setText(taxInvMade);
@@ -357,44 +364,57 @@ public class TrackOrderDetailActivityChanged extends AppCompatActivity implement
     }
 
     private void init() {
-        imgv_i = (ImageView) findViewById(R.id.imgv_i);
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+        imgv_i = findViewById(R.id.imgv_i);
         constant = new Constant(TrackOrderDetailActivityChanged.this);
         constant1 = new Constant(getApplicationContext());
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
-        lv_vOrder = (ListView) findViewById(R.id.lv_vOrder);
+        lv_vOrder = findViewById(R.id.lv_vOrder);
         db = new DBHandler(TrackOrderDetailActivityChanged.this);
         list = new ArrayList<>();
-        tv_orderstatus = (TextView) findViewById(R.id.tv_orderStatus);
-        tv_invno = (TextView) findViewById(R.id.tv_invoiceno);
-        tv_transporter = (TextView) findViewById(R.id.tv_trasporter);
-        tv_creditapp = (TextView) findViewById(R.id.tv_creditapp);
-        tv_alltopckg = (TextView) findViewById(R.id.tv_alltopckg);
-        tv_taxinvmade = (TextView) findViewById(R.id.tv_tavinvmade);
-        tv_invamnt = (TextView) findViewById(R.id.tv_invamnt);
-        tv_totset = (TextView) findViewById(R.id.tv_tot_set);
-        tv_totqty = (TextView) findViewById(R.id.tv_tot_ord_qty);
-        tv_tot_inv_qty = (TextView) findViewById(R.id.tv_tot_inv_qty);
-        tv_tot_can_qty = (TextView) findViewById(R.id.tv_tot_can_qty);
-        tv_totamnt = (TextView) findViewById(R.id.tv_amt);
-        tv_tot_gstamt = (TextView) findViewById(R.id.tv_gst_amt);
-        tv_tot_grossamt = (TextView) findViewById(R.id.tv_gross_amt);
-        tv_disc_per = (TextView) findViewById(R.id.tv_disc_per);
-        tv_discamnt = (TextView) findViewById(R.id.tv_disc_amt);
-        tv_creaditlimit = (TextView) findViewById(R.id.tv_creaditlimit);
-        btn_proceed = (Button) findViewById(R.id.btn_proceed);
-        rv_dispatchcenter = (RecyclerView) findViewById(R.id.rv_dispatchcenter);
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+        tv_orderstatus = findViewById(R.id.tv_orderStatus);
+        tv_invno = findViewById(R.id.tv_invoiceno);
+        tv_transporter = findViewById(R.id.tv_trasporter);
+        tv_creditapp = findViewById(R.id.tv_creditapp);
+        tv_packDet = findViewById(R.id.tv_packDet);
+        tv_alltopckg = findViewById(R.id.tv_alltopckg);
+        tv_taxinvmade = findViewById(R.id.tv_tavinvmade);
+        tv_invamnt = findViewById(R.id.tv_invamnt);
+        tv_totset = findViewById(R.id.tv_tot_set);
+        tv_totqty = findViewById(R.id.tv_tot_ord_qty);
+        tv_tot_inv_qty = findViewById(R.id.tv_tot_inv_qty);
+        tv_tot_can_qty = findViewById(R.id.tv_tot_can_qty);
+        tv_totamnt = findViewById(R.id.tv_amt);
+        tv_tot_gstamt = findViewById(R.id.tv_gst_amt);
+        tv_tot_grossamt = findViewById(R.id.tv_gross_amt);
+        tv_disc_per = findViewById(R.id.tv_disc_per);
+        tv_discamnt = findViewById(R.id.tv_disc_amt);
+        tv_creaditlimit = findViewById(R.id.tv_creaditlimit);
+        btn_proceed = findViewById(R.id.btn_proceed);
+        rv_dispatchcenter = findViewById(R.id.rv_dispatchcenter);
+        tv_custName = findViewById(R.id.tv_custname);
+
         workingDispatchCenter = new ArrayList<>();
-        workingDispatchCenter.add("UHWE");
+
+        /*workingDispatchCenter.add("UHWE");
         workingDispatchCenter.add("UGNT");
         workingDispatchCenter.add("ULKS");
         workingDispatchCenter.add("USCH");
         workingDispatchCenter.add("AMPU");
         workingDispatchCenter.add("AMOT");
         workingDispatchCenter.add("SKRD");
-        workingDispatchCenter.add("KRDA");
-        tv_custName = (TextView) findViewById(R.id.tv_custname);
+        workingDispatchCenter.add("KRDA");*/
+
+        int hoCode = FirstActivity.pref.getInt(getString(R.string.pref_hocode),0);
+        Cursor res1 = db.getDispatchCenterOnly(hoCode);
+        if (res1.moveToFirst()) {
+            do {
+                workingDispatchCenter.add(res1.getString(res1.getColumnIndex(DBHandler.Company_Initial)));
+                Constant.showLog(res1.getString(res1.getColumnIndex(DBHandler.Company_Initial)));
+            } while (res1.moveToNext());
+        }
+        res1.close();
     }
 
     private void showDia(int a) {

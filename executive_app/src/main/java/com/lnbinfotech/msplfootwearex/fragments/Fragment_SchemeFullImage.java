@@ -7,23 +7,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import com.lnbinfotech.msplfootwearex.R;
+import com.lnbinfotech.msplfootwearex.TouchImageView;
+import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.lnbinfotech.msplfootwearex.TouchImageView;
 import com.lnbinfotech.msplfootwearex.constant.Constant;
 import com.squareup.picasso.Picasso;
 
-//Created by Anup on 21-08-2018.
-
-public class Fragment_FullImage extends Fragment {
+public class Fragment_SchemeFullImage extends Fragment {
 
     private String img_name = "", url = "";
     private TouchImageView imgv_img;
     private ImageView img;
 
-    public static Fragment_FullImage newInstance(String imgName) {
-        Fragment_FullImage absFragment = new Fragment_FullImage();
+    public static Fragment_SchemeFullImage newInstance(String imgName) {
+        Fragment_SchemeFullImage absFragment = new Fragment_SchemeFullImage();
         Bundle args = new Bundle();
         args.putString("Imagename", imgName);
         absFragment.setArguments(args);
@@ -45,19 +44,20 @@ public class Fragment_FullImage extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_fullimage, container, false);
-        imgv_img = (TouchImageView) view.findViewById(R.id.touch_imageview);
-        img = (ImageView) view.findViewById(R.id.img);
+        View view = inflater.inflate(R.layout.fragment_schemefullimage, container, false);
+        imgv_img = view.findViewById(R.id.touch_imageview);
+        img = view.findViewById(R.id.img);
         saveImagesToInternal();
         return view;
     }
 
     private void saveImagesToInternal() {
         img_name = img_name.replace(" ", "%20");
-        url = Constant.imgUrl+img_name+".jpg";
-        Constant.showLog(url);
+        //url = Constant.imgUrl+"Scheme/"+img_name+".jpg";
+        //url = Constant.imgUrl+"Scheme/"+img_name;
+        Constant.showLog(img_name);
         Picasso.with(getContext())
-                .load(url)
+                .load(img_name)
                 .placeholder(R.drawable.placehoder)
                 .error(R.drawable.placehoder)
                 .into(imgv_img);
@@ -71,5 +71,5 @@ public class Fragment_FullImage extends Fragment {
                 .into(img);*/
 
     }
-
 }
+

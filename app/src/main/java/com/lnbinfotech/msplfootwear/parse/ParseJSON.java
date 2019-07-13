@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.lnbinfotech.msplfootwear.DisplayCustOutstandingActivity;
 import com.lnbinfotech.msplfootwear.FirstActivity;
 import com.lnbinfotech.msplfootwear.R;
+import com.lnbinfotech.msplfootwear.TrackOrderDetailActivityChanged;
 import com.lnbinfotech.msplfootwear.constant.Constant;
 import com.lnbinfotech.msplfootwear.db.DBHandler;
 import com.lnbinfotech.msplfootwear.log.WriteLog;
@@ -47,19 +48,19 @@ public class ParseJSON {
     private Context context;
     private DBHandler db;
 
-    public ParseJSON(String _json){
+    public ParseJSON(String _json) {
         this.json = _json;
     }
 
-    public ParseJSON(String _json, Context _context){
+    public ParseJSON(String _json, Context _context) {
         this.json = _json;
         this.context = _context;
         db = new DBHandler(context);
     }
 
-    public ArrayList<UserClass> parseUserDetail(){
+    public ArrayList<UserClass> parseUserDetail() {
         ArrayList<UserClass> list = new ArrayList<>();
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 db.deleteTable(DBHandler.Table_Usermaster);
@@ -88,9 +89,9 @@ public class ParseJSON {
                     userClass.setPintext("-1");
 
                     SharedPreferences.Editor editor = FirstActivity.pref.edit();
-                    editor.putInt(context.getString(R.string.pref_branchid),userClass.getBranchId());
-                    editor.putInt(context.getString(R.string.pref_retailCustId),userClass.getCustID());
-                    editor.putInt(context.getString(R.string.pref_cityid),userClass.getCityId());
+                    editor.putInt(context.getString(R.string.pref_branchid), userClass.getBranchId());
+                    editor.putInt(context.getString(R.string.pref_retailCustId), userClass.getCustID());
+                    editor.putInt(context.getString(R.string.pref_cityid), userClass.getCityId());
                     editor.apply();
 
                     db.addUserDetail(userClass);
@@ -98,16 +99,16 @@ public class ParseJSON {
                 }
                 db.close();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("parseCustDetail_"+e.getMessage());
+            writeLog("parseCustDetail_" + e.getMessage());
         }
         return list;
     }
 
-    public ArrayList<CustomerDetailClass> parseCustDetail(){
+    public ArrayList<CustomerDetailClass> parseCustDetail() {
         ArrayList<CustomerDetailClass> list = new ArrayList<>();
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -125,21 +126,21 @@ public class ParseJSON {
                     //db.addCustomerDetail(custClass);
                     list.add(custClass);
                 }
-                Constant.showLog(""+list.size());
+                Constant.showLog("" + list.size());
                 db.addCustomerDetail(list);
                 db.close();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("parseCustDetail_"+e.getMessage());
+            writeLog("parseCustDetail_" + e.getMessage());
         }
         return list;
     }
 
-    public int parseAreaMaster(){
+    public int parseAreaMaster() {
         int ret = 0;
         List<AreaMasterClass> areaList = new ArrayList<>();
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -155,17 +156,17 @@ public class ParseJSON {
                 db.close();
                 ret = 1;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("parseAreaMaster_"+e.getMessage());
+            writeLog("parseAreaMaster_" + e.getMessage());
         }
         return ret;
     }
 
-    public int parseCityMaster(){
+    public int parseCityMaster() {
         int ret = 0;
         List<CityMasterClass> cityList = new ArrayList<>();
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -181,19 +182,19 @@ public class ParseJSON {
                 db.close();
                 ret = 1;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("parseCityMaster_"+e.getMessage());
+            writeLog("parseCityMaster_" + e.getMessage());
         }
         return ret;
     }
 
-    public int parseHOMaster(int max){
+    public int parseHOMaster(int max) {
         int ret = 0;
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
-                if(max==0) {
+                if (max == 0) {
                     db.deleteTable(DBHandler.Table_HOMaster);
                 }
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -209,16 +210,16 @@ public class ParseJSON {
                 db.close();
                 ret = 1;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("parseHOMaster_"+e.getMessage());
+            writeLog("parseHOMaster_" + e.getMessage());
         }
         return ret;
     }
 
-    public int parseEmployeeMaster(){
+    public int parseEmployeeMaster() {
         int ret = 0;
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 db.deleteTable(DBHandler.Table_Employee);
@@ -241,15 +242,15 @@ public class ParseJSON {
                 db.close();
                 ret = 1;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("parseEmployeeMaster_"+e.getMessage());
+            writeLog("parseEmployeeMaster_" + e.getMessage());
         }
         return ret;
     }
 
-    public void parseStockInfo(){
-        try{
+    public void parseStockInfo() {
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 db.deleteTable(DBHandler.Table_StockInfo);
@@ -270,15 +271,15 @@ public class ParseJSON {
                 }
                 db.close();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("parseStockInfo_"+e.getMessage());
+            writeLog("parseStockInfo_" + e.getMessage());
         }
     }
 
-    public int parseProductMaster(int from, int to){
+    public int parseProductMaster(int from, int to) {
         int ret = 0;
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 List<ProductMasterClass> prodList = new ArrayList<>();
@@ -317,22 +318,22 @@ public class ParseJSON {
                     //db.addProductMaster(prodClass);
                     prodList.add(prodClass);
                 }
-                db.deleteProductTableFromToRange(DBHandler.Table_ProductMaster,from,to);
+                db.deleteProductTableFromToRange(DBHandler.Table_ProductMaster, from, to);
                 db.addProductMaster(prodList);
                 db.close();
                 ret = 1;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("parseProductMaster_"+e.getMessage());
+            writeLog("parseProductMaster_" + e.getMessage());
         }
         return ret;
     }
 
-    public int parseCustomerMaster(){
+    public int parseCustomerMaster() {
         int ret = 0;
         List<CustomerDetailClass> CustomerDetailList = new ArrayList<>();
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -363,19 +364,19 @@ public class ParseJSON {
                 db.close();
                 ret = 1;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("parseCustomerMaster_"+e.getMessage());
+            writeLog("parseCustomerMaster_" + e.getMessage());
         }
         return ret;
     }
 
-    public int parseCompanyMaster(int max){
+    public int parseCompanyMaster(int max) {
         int ret = 0;
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
-                if(max==0) {
+                if (max == 0) {
                     db.deleteTable(DBHandler.Table_CompanyMaster);
                 }
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -398,16 +399,16 @@ public class ParseJSON {
                 db.close();
                 ret = 1;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("parseCompanyMaster_"+e.getMessage());
+            writeLog("parseCompanyMaster_" + e.getMessage());
         }
         return ret;
     }
 
-    public int parseBankMaster(){
+    public int parseBankMaster() {
         int ret = 0;
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 db.deleteTable(DBHandler.Table_BankMaster);
@@ -427,17 +428,17 @@ public class ParseJSON {
                 db.close();
                 ret = 1;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("parseBankMaster_"+e.getMessage());
+            writeLog("parseBankMaster_" + e.getMessage());
         }
         return ret;
     }
 
-    public int parseBankBranchMaster(){
+    public int parseBankBranchMaster() {
         int ret = 0;
         List<BankBranchMasterClass> bankBranchList = new ArrayList<>();
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -457,16 +458,16 @@ public class ParseJSON {
                 db.close();
                 ret = 1;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             writeLog("parseBankBranchMaster_" + e.getMessage());
         }
         return ret;
     }
 
-    public int parseDocumentMaster(){
+    public int parseDocumentMaster() {
         int ret = 0;
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             db.deleteTable(DBHandler.Table_DocumentMaster);
             if (jsonArray.length() >= 1) {
@@ -481,17 +482,17 @@ public class ParseJSON {
                 db.close();
                 ret = 1;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             writeLog("parseDocumentMaster_" + e.getMessage());
         }
         return ret;
     }
 
-    public List<TrackOrderMasterClass> parseloadTrackOreder(){
+    public List<TrackOrderMasterClass> parseloadTrackOreder() {
 
         List<TrackOrderMasterClass> list = new ArrayList<>();
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -509,16 +510,16 @@ public class ParseJSON {
                     list.add(trackOrderClass);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             writeLog("parseloadTrackOreder_" + e.getMessage());
         }
         return list;
     }
 
-    public HashMap<Integer,List<TrackOrderDetailClass>> parseloadDetailOrder(){
-        HashMap<Integer,List<TrackOrderDetailClass>> map = new HashMap<>();
-        try{
+    public HashMap<Integer, List<TrackOrderDetailClass>> parseloadDetailOrder() {
+        HashMap<Integer, List<TrackOrderDetailClass>> map = new HashMap<>();
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -533,31 +534,31 @@ public class ParseJSON {
                     orderClass.setMrp(jsonArray.getJSONObject(i).getString("MRP"));
                     orderClass.setActLooseQty(jsonArray.getJSONObject(i).getString("ActLooseQty"));
                     orderClass.setLoosePackTyp(jsonArray.getJSONObject(i).getString("LoosePackTyp"));
-                    if(map.isEmpty()) {
+                    if (map.isEmpty()) {
                         list = new ArrayList<>();
                         list.add(orderClass);
-                        map.put(prodid,list);
-                    }else if(map.containsKey(prodid)){
+                        map.put(prodid, list);
+                    } else if (map.containsKey(prodid)) {
                         list = map.get(prodid);
                         list.add(orderClass);
-                        map.put(prodid,list);
-                    }else{
+                        map.put(prodid, list);
+                    } else {
                         list = new ArrayList<>();
                         list.add(orderClass);
-                        map.put(prodid,list);
+                        map.put(prodid, list);
                     }
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             writeLog("parseloadDetailOrder_" + e.getMessage());
         }
         return map;
     }
 
-    public int parseloadDetailOrderChanged(){
+    public int parseloadDetailOrderChanged() {
         int a = 0;
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             List<TrackOrderDetailChangedClass> list = new ArrayList<>();
             if (jsonArray.length() >= 1) {
@@ -584,13 +585,19 @@ public class ParseJSON {
                     orderClass.setInvqty(jsonArray.getJSONObject(i).getInt("Invo"));
                     orderClass.setCanqty(jsonArray.getJSONObject(i).getInt("Can"));
                     orderClass.setStatus(jsonArray.getJSONObject(i).getString("STATUS"));
+                    TrackOrderDetailActivityChanged.carton = jsonArray.getJSONObject(i).getString("Carton");
+                    TrackOrderDetailActivityChanged.bundle = jsonArray.getJSONObject(i).getString("Bundle");
+                    TrackOrderDetailActivityChanged.noOfCartoon = jsonArray.getJSONObject(i).getString("NoOfCartoon");
+                    TrackOrderDetailActivityChanged.qty = jsonArray.getJSONObject(i).getString("Qty");
+                    TrackOrderDetailActivityChanged.imagePath = jsonArray.getJSONObject(i).getString("ImagePath");
+                    TrackOrderDetailActivityChanged.PSImage = jsonArray.getJSONObject(i).getString("PSImage");
                     list.add(orderClass);
                 }
                 db.deleteTable(DBHandler.Table_TrackCustomerOrder);
                 db.addTrackOrderDetailChanged(list);
                 a = 1;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             writeLog("parseloadDetailOrderChanged_" + e.getMessage());
             a = 0;
@@ -598,12 +605,12 @@ public class ParseJSON {
         return a;
     }
 
-    public int parseGSTMaster(int max){
+    public int parseGSTMaster(int max) {
         int ret = 0;
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
-                if(max==0) {
+                if (max == 0) {
                     db.deleteTable(DBHandler.Table_GSTMASTER);
                 }
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -624,16 +631,16 @@ public class ParseJSON {
                 db.close();
                 ret = 1;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("parseGSTMaster_"+e.getMessage());
+            writeLog("parseGSTMaster_" + e.getMessage());
         }
         return ret;
     }
 
-    public List<CheckoutCustOrderClass> parseloadCheckoutOrder(){
+    public List<CheckoutCustOrderClass> parseloadCheckoutOrder() {
         List<CheckoutCustOrderClass> list = new ArrayList<>();
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(new JSONObject(json).get("CheckStockResult").toString());
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -650,16 +657,16 @@ public class ParseJSON {
                 }
                 db.updateAvailQty(list);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             writeLog("parseloadCheckoutOrder_" + e.getMessage());
         }
         return list;
     }
 
-    public int parseCustOutstanding(){
+    public int parseCustOutstanding() {
         int ret = 0;
-        try{
+        try {
             //retailCustId, name,ledgerBal,Creditlimit,Creditdays,PartName,PostDatedCheque,BalForPayment,OverDueAmnt,OverDueDays,OverLimit
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
@@ -680,17 +687,17 @@ public class ParseJSON {
                 }
                 ret = 1;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("parseCustOutstanding"+e.getMessage());
+            writeLog("parseCustOutstanding" + e.getMessage());
         }
         return ret;
     }
 
-    public List<LedgerReportClass> parseLedgerReport(){
+    public List<LedgerReportClass> parseLedgerReport() {
 
         List<LedgerReportClass> list = new ArrayList<>();
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -705,17 +712,17 @@ public class ParseJSON {
                     list.add(ledgerClass);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             writeLog("parseLedgerReport_" + e.getMessage());
         }
         return list;
     }
 
-    public List<OuststandingReportClass> parseOutStndReport(){
+    public List<OuststandingReportClass> parseOutStndReport() {
 
         List<OuststandingReportClass> list = new ArrayList<>();
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -728,17 +735,17 @@ public class ParseJSON {
                     list.add(outClass);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             writeLog("parseOutStndReport_" + e.getMessage());
         }
         return list;
     }
 
-    public List<OurBankDetailsClass> parseBankDetails(){
+    public List<OurBankDetailsClass> parseBankDetails() {
 
         List<OurBankDetailsClass> list = new ArrayList<>();
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -753,16 +760,16 @@ public class ParseJSON {
                     list.add(bankClass);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             writeLog("parseBankDetails" + e.getMessage());
         }
         return list;
     }
 
-    public List<CheckAvailStockClass> parseAvailQty(){
+    public List<CheckAvailStockClass> parseAvailQty() {
         List<CheckAvailStockClass> list = new ArrayList<>();
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(new JSONObject(json).get("CheckLooseStockResult").toString());
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -779,25 +786,25 @@ public class ParseJSON {
                     list.add(checkStock);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             writeLog("parseAvailQty_" + e.getMessage());
         }
         return list;
     }
 
-    public double parseCustDiscLimit(){
+    public double parseCustDiscLimit() {
         double ret = 0;
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ret = jsonArray.getJSONObject(i).getDouble("Limit");
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("parseCustDiscLimit_"+e.getMessage());
+            writeLog("parseCustDiscLimit_" + e.getMessage());
         }
         return ret;
     }
@@ -813,29 +820,65 @@ public class ParseJSON {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            writeLog("ParseJSON_parseVersion_"+e.getMessage());
+            writeLog("ParseJSON_parseVersion_" + e.getMessage());
         }
         return data;
     }
 
-    public int parseGetMaxAuto(){
+    public int parseGetMaxAuto() {
         int ret = 0;
-        try{
+        try {
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() >= 1) {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ret = jsonArray.getJSONObject(i).getInt("maxAuto");
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            writeLog("parseAreaMaster_"+e.getMessage());
+            writeLog("parseAreaMaster_" + e.getMessage());
         }
         return ret;
     }
 
-    private void writeLog(String _data){
-        new WriteLog().writeLog(context,"ParseJSON_"+_data);
+    public ArrayList<UserClass> parseUserDetailProfile() {
+        ArrayList<UserClass> list = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            if (jsonArray.length() >= 1) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    UserClass userClass = new UserClass();
+                    userClass.setCustID(jsonArray.getJSONObject(i).getInt("retailCustID"));
+                    userClass.setName(jsonArray.getJSONObject(i).getString("name"));
+                    userClass.setAddress(jsonArray.getJSONObject(i).getString("address"));
+                    userClass.setMobile(jsonArray.getJSONObject(i).getString("mobile"));
+                    userClass.setEmail(jsonArray.getJSONObject(i).getString("email"));
+                    userClass.setBranchId(jsonArray.getJSONObject(i).getInt("branchId"));
+                    userClass.setPANno(jsonArray.getJSONObject(i).getString("Panno"));
+                    userClass.setPartyName(jsonArray.getJSONObject(i).getString("PartyName"));
+                    userClass.setGSTNo(jsonArray.getJSONObject(i).getString("GSTNo"));
+                    userClass.setImagePath(jsonArray.getJSONObject(i).getString("ImagePath"));
+                    userClass.setStatus(jsonArray.getJSONObject(i).getString("Status"));
+                    userClass.setDistrict(jsonArray.getJSONObject(i).getString("District"));
+                    userClass.setTaluka(jsonArray.getJSONObject(i).getString("Taluka"));
+                    userClass.setCityId(jsonArray.getJSONObject(i).getInt("CityId"));
+                    userClass.setAreaId(jsonArray.getJSONObject(i).getInt("AreaId"));
+                    userClass.setHOCode(jsonArray.getJSONObject(i).getInt("HoCode"));
+                    userClass.setIMEINo(jsonArray.getJSONObject(i).getString("IMEINo"));
+                    userClass.setIsRegistered(jsonArray.getJSONObject(i).getString("isRegistered"));
+                    userClass.setAadharNo(jsonArray.getJSONObject(i).getString("AadharNo"));
+                    list.add(userClass);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("parseUserDetailProfile_" + e.getMessage());
+        }
+        return list;
+    }
+
+    private void writeLog(String _data) {
+        new WriteLog().writeLog(context, "ParseJSON_" + _data);
     }
 
 }
