@@ -87,7 +87,7 @@
                         android:id="@+id/rdo_transport"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Goods_Delivery" />
+                        android:text="Transport_Goods_Delivery" />
                 </LinearLayout>
 
 
@@ -443,6 +443,7 @@
 
 
                             <LinearLayout
+                                android:id="@+id/lay_img11"
                                 android:layout_width="@dimen/feedback_lay_height100"
                                 android:layout_height="@dimen/feedback_lay_height100"
                                 android:layout_gravity="center"
@@ -472,6 +473,7 @@
 
 
                             <LinearLayout
+                                android:id="@+id/lay_img22"
                                 android:layout_width="@dimen/feedback_lay_height100"
                                 android:layout_height="@dimen/feedback_lay_height100"
                                 android:layout_gravity="center"
@@ -502,6 +504,7 @@
 
 
                             <LinearLayout
+                                android:id="@+id/lay_img33"
                                 android:layout_width="100dp"
                                 android:layout_height="100dp"
                                 android:layout_gravity="center"

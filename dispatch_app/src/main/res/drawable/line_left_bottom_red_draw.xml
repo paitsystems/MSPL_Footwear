@@ -13,7 +13,7 @@
         android:bottom="1dp">
 
         <shape android:shape="rectangle">
-            <solid android:color="#B8860B"/>
+            <solid android:color="@color/lblue"/>
         </shape>
 
     </item>

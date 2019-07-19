@@ -1201,11 +1201,11 @@ public class DBHandler extends SQLiteOpenHelper {
             str = "select Distinct " + ARSD_Colour + "," + ARSD_HashCode + " from " + Table_AllRequiredSizesDesigns +
                     " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_InOutType + "='I' and " +
                     //ARSD_SizeGroup + " like '" + sizegroup + "' order by " + ARSD_Colour;
-                    ARSD_typ + " like 'M' order by " + ARSD_Colour;
+                    ARSD_typ + " like 'M' order by " + ARSD_HashCode;
         }else {
             str = "select Distinct " + ARSD_Colour + "," + ARSD_HashCode + " from " + Table_AllRequiredSizesDesigns +
                 " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_InOutType + "='I' and " +
-                ARSD_typ + " like 'D' order by " + ARSD_Colour;
+                ARSD_typ + " like 'D' order by " + ARSD_HashCode;
         }
         Constant.showLog("getDistinctColour :- " + str);
         return getWritableDatabase().rawQuery(str, null);
@@ -1586,7 +1586,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public String getDistinctColour(String sizegroup, String hashCode) {
         String str = "select Distinct " + ARSD_Colour + "," + ARSD_HashCode + " from " + Table_AllRequiredSizesDesigns +
                 " where " + ARSD_Productid + "=" + AddToCartActivity.selProdId + " and " + ARSD_InOutType + "='I' and " +
-                ARSD_SizeGroup + " like '" + sizegroup + "' and "+ARSD_HashCode+"='"+hashCode+"' order by " + ARSD_Colour;
+                ARSD_SizeGroup + " like '" + sizegroup + "' and "+ARSD_HashCode+"='"+hashCode+"' order by " + ARSD_HashCode;
         Constant.showLog("getDistinctColourConversion :- " + str);
         String colourHashcode = "";
         Cursor res1 = getWritableDatabase().rawQuery(str, null);
@@ -1789,7 +1789,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 ARSD_SizeGroup + " like '" + sizegroup + "' order by " + ARSD_Colour;*/
         String str = "select Distinct " + ARSD_Colour + "," + ARSD_HashCode + "," + ARSD_ImageName + " from " + Table_AllRequiredSizesDesigns +
                 " where " + ARSD_Productid + "=" + prodId + " and " + ARSD_InOutType + "='I' and " +
-                ARSD_typ + " like 'D' order by " + ARSD_Colour;
+                ARSD_typ + " like 'D' order by " + ARSD_HashCode;
         Constant.showLog("getDistinctColourImageWise :- " + str);
         return getWritableDatabase().rawQuery(str, null);
     }

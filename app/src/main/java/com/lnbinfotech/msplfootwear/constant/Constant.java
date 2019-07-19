@@ -53,9 +53,9 @@ public class Constant {
             zip_file = "SmartGST.zip";
 
     //TODO: Check Ip Address
-    public static String ipaddress = "http://172.30.1.209/MSPLC9/service.svc";
-    //public static String ipaddress = "http://license.lnbinfotech.com/MSPLC9/service.svc";
-    //public static String ipaddress = "http://43.239.147.103:24085/MSPLC9/service.svc";
+    public static String ipaddress = "http://172.30.1.209/MSPLC10/service.svc";
+    //public static String ipaddress = "http://license.lnbinfotech.com/MSPLC10/service.svc";
+    //public static String ipaddress = "http://43.239.147.103:24085/MSPLC10/service.svc";
 
     //TODO: Check Image Url
     public static String imgUrl = "http://43.239.147.103:24085/IMAGES/";
@@ -64,9 +64,9 @@ public class Constant {
     public static String custimgUrl = "http://43.239.147.103:24085/custImage/";
 
     //TODO: Check TrackOrder Url
-    public static String trackOrderUrl = "http://43.239.147.103:24086/TrackOrder/";
+    public static String trackOrderUrl = "http://43.239.147.103:24085/TrackOrder/";
 
-    private static int connectionFlag = 0;
+    private static int connectionFlag = 2;
 
     //TODO: Check liveTestFlag 1-ScreenShotDisable, 0-ScreenShotEnable
     public static int liveTestFlag = 1;
@@ -109,14 +109,16 @@ public class Constant {
 
     public Constant() {
         if(connectionFlag == 0) {
-            ipaddress = "http://103.109.13.200:24086/MSPLC9/service.svc";
+            ipaddress = "http://103.109.13.200:24086/MSPLC10/service.svc";
             imgUrl = "http://103.109.13.200:24086/IMAGES/";
             custimgUrl = "http://103.109.13.200:24086/custImage/";
+            trackOrderUrl = "http://103.109.13.200:24086/TrackOrder/";
             connectionFlag = 1;
         }else if(connectionFlag == 1) {
-            ipaddress = "http://43.239.147.103:24085/MSPLC9/service.svc";
+            ipaddress = "http://43.239.147.103:24085/MSPLC10/service.svc";
             imgUrl = "http://43.239.147.103:24085/IMAGES/";
             custimgUrl = "http://43.239.147.103:24085/custImage/";
+            trackOrderUrl = "http://43.239.147.103:24085/TrackOrder/";
             connectionFlag = 0;
         }
     }

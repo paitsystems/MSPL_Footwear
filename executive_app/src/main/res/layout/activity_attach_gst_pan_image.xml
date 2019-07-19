@@ -86,6 +86,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/lay_img"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
                     android:layout_gravity="center"
@@ -153,6 +154,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/lay_img1"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
                     android:layout_gravity="center"

@@ -642,7 +642,6 @@ public class AddToCartActivity extends AppCompatActivity implements
         }
         res2.close();
 
-        //TODO Change Here
         //Cursor res1 = db.getDistinctColour(sizeGroup_list.get(0));
         int a = sizeGroup_list.size()-1;
         if(a<0){
@@ -1434,7 +1433,6 @@ public class AddToCartActivity extends AppCompatActivity implements
         }
         res2.close();
 
-        //TODO Change Here
         //Cursor res1 = db.getDistinctColour(sizeGroup_list.get(0));
         int a = sizeGroup_list.size()-1;
         if(a<0){

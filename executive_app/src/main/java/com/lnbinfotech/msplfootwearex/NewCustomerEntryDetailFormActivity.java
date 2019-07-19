@@ -1,5 +1,6 @@
 package com.lnbinfotech.msplfootwearex;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,12 +10,14 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,9 +40,17 @@ import com.lnbinfotech.msplfootwearex.log.WriteLog;
 import com.lnbinfotech.msplfootwearex.services.UploadImageService;
 import com.lnbinfotech.msplfootwearex.volleyrequests.VolleyRequests;
 
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
+
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +74,8 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
     private int cust_id;
     private LocationProvider provider;
     private double lat = 0, lon = 0;
-    private String loc;
+    private String loc, custFolderName;
+    private List<String> imageList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +189,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
 
         provider = new LocationProvider(NewCustomerEntryDetailFormActivity.this,NewCustomerEntryDetailFormActivity.this,NewCustomerEntryDetailFormActivity.this);
 
+        imageList = new ArrayList<>();
     }
 
     @Override
@@ -263,7 +276,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
         AttachCustomerImage.flag = 0;
         String filename = OptionsActivity.new_cus.getCus_image();
         Constant.showLog("filename: " + OptionsActivity.new_cus.getCus_image());
-
+        imageList.add(OptionsActivity.new_cus.getCus_image());
         File file = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
         File fileArray[] = file.listFiles();
 
@@ -347,7 +360,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
         AttachAddressProofImage.flag = 0;
         String filename = OptionsActivity.new_cus.getAddress_proof_image();
         Constant.showLog("filename: " + OptionsActivity.new_cus.getAddress_proof_image());
-
+        imageList.add(OptionsActivity.new_cus.getAddress_proof_image());
         File file = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
         File fileArray[] = file.listFiles();
 
@@ -376,7 +389,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
         AttachIdProofImageActivity.flag = 0;
         String filename = OptionsActivity.new_cus.getId_proof_image();
         Constant.showLog("filename: " + OptionsActivity.new_cus.getId_proof_image());
-
+        imageList.add(OptionsActivity.new_cus.getId_proof_image());
         File file = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
         File fileArray[] = file.listFiles();
 
@@ -398,7 +411,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
         //AttachIdProofImageActivity.flag = 0;
         String filename = OptionsActivity.new_cus.getGst_no_image();
         Constant.showLog("filename: " + filename);
-
+        imageList.add(OptionsActivity.new_cus.getGst_no_image());
         File file = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
         File fileArray[] = file.listFiles();
 
@@ -420,6 +433,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
         //AttachIdProofImageActivity.flag = 0;
         String filename = OptionsActivity.new_cus.getPan_no_image();
         Constant.showLog("filename: " + filename);
+        imageList.add(OptionsActivity.new_cus.getPan_no_image());
 
         File file = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
         File fileArray[] = file.listFiles();
@@ -465,6 +479,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
         if (ConnectivityTest.getNetStat(NewCustomerEntryDetailFormActivity.this)) {
             try {
                 String url = "";
+                custFolderName = OptionsActivity.new_cus.getPartyName();
                 constant = new Constant(NewCustomerEntryDetailFormActivity.this);
                 constant.showPD();
                 String _cust_name = URLEncoder.encode(OptionsActivity.new_cus.getCust_name(), "UTF-8");
@@ -501,7 +516,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
                 cursor.close();
 
                 // OptionsActivity.new_cus.setCust_id(custId);
-                OptionsActivity.new_cus.setBranchId(BranchId);
+                /*OptionsActivity.new_cus.setBranchId(BranchId);
                 OptionsActivity.new_cus.setDistrict(District);
                 OptionsActivity.new_cus.setTaluka(Taluka);
                 OptionsActivity.new_cus.setCityId(CityId);
@@ -510,7 +525,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
                 OptionsActivity.new_cus.setIMEINo(IMEINo);
                 OptionsActivity.new_cus.setIsReg(isReg);
                 OptionsActivity.new_cus.setPin(pin);
-                OptionsActivity.new_cus.setPartyName(partyName);
+                OptionsActivity.new_cus.setPartyName(partyName);*/
 
                 String _custId = URLEncoder.encode(custId, "UTF-8");
                 String _BranchId = URLEncoder.encode(BranchId, "UTF-8");
@@ -570,6 +585,86 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
         }
     }
 
+    public class UploadImage extends AsyncTask<String, Integer, String> {
+        ProgressDialog pd;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(NewCustomerEntryDetailFormActivity.this);
+            pd.setCancelable(false);
+            pd.setMax(imageList.size());
+            pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            pd.setMessage("Uploading Images...");
+            pd.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String result = "Y";
+            try {
+                Constant.showLog("Service started..");
+                writeLog("UploadImage_Service started");
+                FTPClient client = new FTPClient();
+                client.connect(Constant.ftp_adress, 21);
+                client.login(Constant.ftp_username, Constant.ftp_password);
+                client.setFileType(FTP.BINARY_FILE_TYPE);
+                client.enterLocalPassiveMode();
+                client.changeToParentDirectory();
+                Constant.showLog(client.printWorkingDirectory());
+                client.cwd(Constant.dir_Customer_Master);
+                client.makeDirectory(custFolderName);
+                Constant.showLog(client.printWorkingDirectory());
+                client.cwd(custFolderName);
+                Constant.showLog(client.printWorkingDirectory());
+                writeLog("UploadImage_"+custFolderName);
+                int count = 0;
+                for (String imgName : imageList) {
+                    File file = new File(Environment.getExternalStorageDirectory() + File.separator +
+                            Constant.folder_name + File.separator + Constant.image_folder, imgName);
+                    Constant.showLog(file.getAbsolutePath());
+                    if (file.exists()) {
+                        FileInputStream iFile = new FileInputStream(file);
+                        try {
+                            if (client.storeFile(file.getName(), iFile)) {
+                                file.delete();
+                                Constant.showLog("Customer Image deleted.." + file.getName());
+                            } else {
+                                writeLog("UploadImage_Error_While_Storing_Customer_File");
+                            }
+                            result = "Y";
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            writeLog("UploadImage_" + e.getMessage());
+                            result = "N";
+                        }
+                    }
+                    writeLog("UploadImage_"+count+"_"+file.getAbsolutePath());
+                    count++;
+                    pd.setProgress(count);
+                }
+                client.disconnect();
+                Constant.showLog("disconnected..");
+            } catch (Exception e) {
+                e.printStackTrace();
+                writeLog("UploadImage_" + e.getMessage());
+                result = "Y";
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            pd.dismiss();
+            writeLog("UploadImage_" + result);
+            if(result.equals("Y"))
+                showPopup(5);
+            else
+                showPopup(6);
+        }
+    }
+
     private void catchCustLoc() {
         try {
             constant = new Constant(NewCustomerEntryDetailFormActivity.this);
@@ -611,7 +706,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
                     AttachIdProofImageActivity.flag = 4;
                     AttachGSTnoPANnoImageActivity.flag = 5;
 
-                    Intent intent = new Intent(NewCustomerEntryDetailFormActivity.this, UploadImageService.class);
+                    /*Intent intent = new Intent(NewCustomerEntryDetailFormActivity.this, UploadImageService.class);
                     startService(intent);
 
                     constant.showPD();
@@ -622,7 +717,11 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
                     finish();
                     Intent in = new Intent(NewCustomerEntryDetailFormActivity.this, OptionsActivity.class);
                     startActivity(in);
-                    overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
+                    overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);*/
+
+                    constant.showPD();
+                    db.addNewCustomer();
+                    new UploadImage().execute();
                 }
             });
         } else if (a == 2) {
@@ -670,6 +769,33 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.dismiss();
+                }
+            });
+        } else if (a == 5) {
+            builder.setMessage("Image Uploaded Successfully!");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                    finish();
+                    Intent in = new Intent(NewCustomerEntryDetailFormActivity.this, OptionsActivity.class);
+                    startActivity(in);
+                    overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
+                }
+            });
+        } else if (a == 6) {
+            builder.setMessage("Error While Uploading Images");
+            builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    new UploadImage().execute();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                    finish();
                 }
             });
         }

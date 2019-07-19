@@ -2,6 +2,8 @@ package com.lnbinfotech.msplfootwearex;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,8 +12,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -69,6 +73,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
@@ -92,12 +97,8 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     private AutoCompleteTextView auto_invoice_no, auto_article_no, auto_invOrderNo, auto_staff;
     private AppCompatButton bt_send;
     private ImageView imgv_img1, imgv_img2, imgv_img3;
-    private LinearLayout packing_order_inv_lay, lay_img1, lay_img2, lay_img3, lay_invType;
+    private LinearLayout packing_order_inv_lay, lay_img1, lay_img2, lay_img3, lay_invType, lay_img11, lay_img22, lay_img33;
     private CardView damaged_goods_cardlay, service_or_team_cardlay;
-    private final int requestCode = 21;
-    private ByteArrayOutputStream byteArray;
-    private Bitmap bmp;
-    private int flag;
     private FeedbackClass feedbackClass;
     private Constant constant;
     private Toast toast;
@@ -130,6 +131,10 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         imgv_img1.setOnClickListener(this);
         imgv_img2.setOnClickListener(this);
         imgv_img3.setOnClickListener(this);
+
+        lay_img11.setOnClickListener(this);
+        lay_img22.setOnClickListener(this);
+        lay_img33.setOnClickListener(this);
 
         rdo_office.setOnClickListener(this);
         rdo_salesman.setOnClickListener(this);
@@ -252,16 +257,22 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.imgv_img1:
-                //flag = 0;
-                show_popup(0);
+                //show_popup(12);
                 break;
             case R.id.imgv_img2:
-                //flag = 1;
-                show_popup(1);
+                //show_popup(13);
                 break;
             case R.id.imgv_img3:
-                //flag = 2;
-                show_popup(2);
+                //show_popup(14);
+                break;
+            case R.id.lay_img11:
+                show_popup(12);
+                break;
+            case R.id.lay_img22:
+                show_popup(13);
+                break;
+            case R.id.lay_img33:
+                show_popup(14);
                 break;
             case R.id.bt_send:
                 setValue();
@@ -403,7 +414,6 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         switch (requestCode) {
             case 1:
                 if (resultCode == RESULT_OK) {
-                    //Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
                     String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
                             File.separator + Constant.folder_name + File.separator +
@@ -415,17 +425,14 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     Bitmap mbitmap = get_Image_from_sd_card(file_name);
                     imgv_img1.setImageBitmap(mbitmap);
                     Log.d("Log", "imgename:" + mbitmap);
-                    //imgv_img2.setVisibility(View.VISIBLE);
                     lay_img2.setVisibility(View.VISIBLE);
                     feedbackClass.setFeed_img1(file_name);
                     Constant.showLog("file_name" + file_name);
                     Constant.showLog("" + mbitmap);
-                    // feedbackClass.setFeed_img1(String.valueOf(mbitmap));
                 }
                 break;
             case 2:
                 if (resultCode == RESULT_OK) {
-                    //Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
                             File.separator + Constant.folder_name + File.separator +
                             Constant.image_folder + File.separator + "temp.jpg");
@@ -435,18 +442,15 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     String file_name = "F_" + name + "_" + custId + "_" + hocode + "_" + dateformat + ".jpg";
                     store_CameraPhoto_InSdCard(bitmap, file_name);
                     Bitmap mbitmap = get_Image_from_sd_card(file_name);
-                    // imgv_img3.setVisibility(View.VISIBLE);
                     imgv_img2.setImageBitmap(mbitmap);
                     lay_img3.setVisibility(View.VISIBLE);
                     feedbackClass.setFeed_img2(file_name);
                     Constant.showLog("file_name" + file_name);
-                    //feedbackClass.setFeed_img2(String.valueOf(mbitmap));
                     Log.d("Log", "imgename:" + mbitmap);
                 }
                 break;
             case 3:
                 if (resultCode == RESULT_OK) {
-                    //Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() +
                             File.separator + Constant.folder_name + File.separator +
                             Constant.image_folder + File.separator + "temp.jpg");
@@ -460,63 +464,63 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     Log.d("Log", "imgename:" + mbitmap);
                     feedbackClass.setFeed_img3(file_name);
                     Constant.showLog("file_name" + file_name);
-                    //feedbackClass.setFeed_img3(String.valueOf(mbitmap));
                 }
                 break;
             case 4:
-                if (data != null && resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     try {
-                        String dateformat = currentDateFormat();
-                        String file_name = "feedbkimg_" + dateformat + ".jpg";
-                        File destFile = new File((Environment.getExternalStorageDirectory() + File.separator +
-                                Constant.folder_name + File.separator +
-                                Constant.image_folder + File.separator + file_name));
-                        copyFile(new File(getPath(data.getData())), destFile);
+                        Uri uri = data.getData();
+                        String filepath = getPath(getApplicationContext(),uri);
+                        String dateFormat = currentDateFormat();
+                        String file_name = "F_" + name + "_" + custId + "_" + hocode + "_" + dateFormat + ".jpg";
+                        File sourceFile = new File(filepath);
+                        File destinationFile = new File(Environment.getExternalStorageDirectory() +
+                                File.separator + Constant.folder_name + File.separator +
+                                Constant.image_folder + File.separator + file_name);
+                        copyImage(sourceFile, destinationFile,4);
                     } catch (Exception e) {
                         e.printStackTrace();
+                        toast.setText("Something Went Wrong");
+                        toast.show();
                     }
                 }
-
                 break;
             case 5:
-                if (data != null && resultCode == RESULT_OK) {
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String filePath = cursor.getString(columnIndex);
-                    cursor.close();
-
-                    if (bmp != null && !bmp.isRecycled()) {
-                        bmp = null;
+                if (resultCode == RESULT_OK) {
+                    try {
+                        Uri uri = data.getData();
+                        String filepath = getPath(getApplicationContext(),uri);
+                        String dateFormat = currentDateFormat();
+                        String file_name = "F_" + name + "_" + custId + "_" + hocode + "_" + dateFormat + ".jpg";
+                        File sourceFile = new File(filepath);
+                        File destinationFile = new File(Environment.getExternalStorageDirectory() +
+                                File.separator + Constant.folder_name + File.separator +
+                                Constant.image_folder + File.separator + file_name);
+                        copyImage(sourceFile, destinationFile,5);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        toast.setText("Something Went Wrong");
+                        toast.show();
                     }
-                    bmp = BitmapFactory.decodeFile(filePath);
-                    imgv_img2.setImageBitmap(bmp);
-                    imgv_img3.setVisibility(View.VISIBLE);
-                    feedbackClass.setFeed_img2(String.valueOf(bmp));
-                } else {
-                    writeLog("Statusimg2:Photopicker canceled");
                 }
                 break;
             case 6:
-                if (data != null && resultCode == RESULT_OK) {
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String filePath = cursor.getString(columnIndex);
-                    cursor.close();
-
-                    if (bmp != null && !bmp.isRecycled()) {
-                        bmp = null;
+                if (resultCode == RESULT_OK) {
+                    try {
+                        Uri uri = data.getData();
+                        String filepath = getPath(getApplicationContext(),uri);
+                        String dateFormat = currentDateFormat();
+                        String file_name = "F_" + name + "_" + custId + "_" + hocode + "_" + dateFormat + ".jpg";
+                        File sourceFile = new File(filepath);
+                        File destinationFile = new File(Environment.getExternalStorageDirectory() +
+                                File.separator + Constant.folder_name + File.separator +
+                                Constant.image_folder + File.separator + file_name);
+                        copyImage(sourceFile, destinationFile,6);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        toast.setText("Something Went Wrong");
+                        toast.show();
                     }
-                    bmp = BitmapFactory.decodeFile(filePath);//imgv_img3.setBackgroundResource(0);
-                    imgv_img3.setImageBitmap(bmp);
-                    feedbackClass.setFeed_img3(String.valueOf(bmp));
-                } else {
-                    writeLog("Statusimg3:Photopicker canceled");
                 }
                 break;
         }
@@ -798,6 +802,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         lay_img1 = findViewById(R.id.lay_img1);
         lay_img2 = findViewById(R.id.lay_img2);
         lay_img3 = findViewById(R.id.lay_img3);
+        lay_img11 = findViewById(R.id.lay_img11);
+        lay_img22 = findViewById(R.id.lay_img22);
+        lay_img33 = findViewById(R.id.lay_img33);
         lay_invType = findViewById(R.id.lay_invType);
         rdo_salesman = findViewById(R.id.rdo_salesman);
         rdo_office = findViewById(R.id.rdo_office);
@@ -900,129 +907,6 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     dialogInterface.dismiss();
                 }
             });
-        } else if (id == 3) {
-            builder.setMessage("Attach image:");
-            builder.setPositiveButton("Camera", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                    dialogInterface.dismiss();
-
-                    Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
-                    f = new File(f.getAbsolutePath(), "temp.jpg");
-                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
-                            + ".provider", f);
-                    intent1.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivityForResult(intent1, 1);
-                    overridePendingTransition(R.anim.enter, R.anim.exit);
-                }
-            });
-            builder.setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                    dialogInterface.dismiss();
-
-                    Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
-                    f = new File(f.getAbsolutePath(), "temp.jpg");
-                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
-                            + ".provider", f);
-                    intent1.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivityForResult(intent1, 4);
-                    overridePendingTransition(R.anim.enter, R.anim.exit);
-                }
-            });
-        } else if (id == 4) {
-            builder.setMessage("Attach image:");
-            builder.setPositiveButton("Camera", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                    dialogInterface.dismiss();
-
-                    Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
-                    f = new File(f.getAbsolutePath(), "temp.jpg");
-                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
-                            + ".provider", f);
-                    intent1.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivityForResult(intent1, 2);
-                    overridePendingTransition(R.anim.enter, R.anim.exit);
-                }
-            });
-            builder.setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                    dialogInterface.dismiss();
-
-                    Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
-                    f = new File(f.getAbsolutePath(), "temp.jpg");
-                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
-                            + ".provider", f);
-                    intent1.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivityForResult(intent1, 5);
-                    overridePendingTransition(R.anim.enter, R.anim.exit);
-                }
-            });
-        } else if (id == 5) {
-            builder.setMessage("Attach image:");
-            builder.setPositiveButton("Camera", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                    dialogInterface.dismiss();
-
-                    Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
-                    f = new File(f.getAbsolutePath(), "temp.jpg");
-                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
-                            + ".provider", f);
-                    intent1.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivityForResult(intent1, 3);
-                    overridePendingTransition(R.anim.enter, R.anim.exit);
-                }
-            });
-            builder.setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                    dialogInterface.dismiss();
-
-                    Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
-                    f = new File(f.getAbsolutePath(), "temp.jpg");
-                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
-                            + ".provider", f);
-                    intent1.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivityForResult(intent1, 6);
-                    overridePendingTransition(R.anim.enter, R.anim.exit);
-                }
-            });
-        } else if (id == 6) {
-            builder.setMessage("You can attach only three images do you want to delete it?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                    imgv_img3.setImageBitmap(null);
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
         } else if (id == 7) {
             builder.setMessage("Feedback Saved Successfully");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -1084,8 +968,233 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     new Constant(FeedbackActivity.this).doFinish();
                 }
             });
+        } else if (id == 12) {
+            builder.setMessage("Select Attachment From...");
+            builder.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    openGallery(4);
+                }
+            });
+            builder.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    takeImage(1);
+                }
+            });
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (id == 13) {
+            builder.setMessage("Select Attachment From...");
+            builder.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    openGallery(5);
+                }
+            });
+            builder.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    takeImage(2);
+                }
+            });
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        } else if (id == 14) {
+            builder.setMessage("Select Attachment From...");
+            builder.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    openGallery(6);
+                }
+            });
+            builder.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    takeImage(3);
+                }
+            });
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
         }
         builder.create().show();
+    }
+
+    private void takeImage(int requestCode) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
+        f = new File(f.getAbsolutePath(),"temp.jpg");
+        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                + ".provider", f);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivityForResult(intent,requestCode);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
+    }
+
+    private void openGallery(int requestCode) {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, requestCode);
+        /*Intent intent = new Intent(Intent.ACTION_PICK);
+        File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
+        f = new File(f.getAbsolutePath(),"temp.jpg");
+        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                + ".provider", f);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivityForResult(intent,requestCode);
+        overridePendingTransition(R.anim.enter, R.anim.exit);*/
+    }
+
+    private String getPath(Context context, Uri uri) {
+        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+
+        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+            }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri)) {
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                return getDataColumn(context, contentUri, null, null);
+            }
+            // MediaProvider
+            else
+            if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[] {split[1]};
+                return getDataColumn(context, contentUri, selection, selectionArgs);
+            }
+        }
+        // MediaStore (and general)
+        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // Return the remote address
+            if (isGooglePhotosUri(uri))
+                return uri.getLastPathSegment();
+            return getDataColumn(context, uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+        return null;
+    }
+
+    private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = { column };
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
+    private static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    private static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    private static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    private static boolean isGooglePhotosUri(Uri uri) {
+        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
+    private void copyImage(File source, File destination, int a) {
+        try {
+            FileChannel sourceChannel, destinationChannel;
+            sourceChannel = new FileInputStream(source).getChannel();
+            destinationChannel = new FileOutputStream(destination).getChannel();
+            if (sourceChannel != null) {
+                destinationChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+            }
+            if (sourceChannel != null) {
+                sourceChannel.close();
+            }
+            destinationChannel.close();
+            setImage(destination, a);
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("copyImage_"+e.getMessage());
+        }
+    }
+
+    private void setImage(File f, int a) {
+        try {
+            BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+            Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
+            Constant.showLog(f.getName() + "-" + f.getAbsolutePath());
+            if(a == 4) {
+                imgv_img1.setImageBitmap(bitmap);
+                lay_img1.setVisibility(View.VISIBLE);
+                feedbackClass.setFeed_img1(f.getName());
+                imgv_img2.setVisibility(View.VISIBLE);
+                lay_img2.setVisibility(View.VISIBLE);
+            } else if(a == 5) {
+                imgv_img2.setImageBitmap(bitmap);
+                lay_img2.setVisibility(View.VISIBLE);
+                feedbackClass.setFeed_img2(f.getName());
+                imgv_img3.setVisibility(View.VISIBLE);
+                lay_img3.setVisibility(View.VISIBLE);
+            } else if(a == 6) {
+                imgv_img3.setImageBitmap(bitmap);
+                lay_img3.setVisibility(View.VISIBLE);
+                feedbackClass.setFeed_img3(f.getName());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("setImage_"+e.getMessage());
+        }
     }
 
     private String getRealPathFromURI(String contentURI) {
@@ -1131,34 +1240,6 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             writeLog("FileNotFoundException and IOException found:" + e);
         }*/
         return resizedBitmap;
-    }
-
-    private String getPath(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        startManagingCursor(cursor);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-    }
-
-    private void copyFile(File sourceFile, File destFile) throws IOException {
-        if (!sourceFile.exists()) {
-            return;
-        }
-        FileChannel source = null;
-        FileChannel destination = null;
-        source = new FileInputStream(sourceFile).getChannel();
-        destination = new FileOutputStream(destFile).getChannel();
-        if (destination != null && source != null) {
-            destination.transferFrom(source, 0, source.size());
-        }
-        if (source != null) {
-            source.close();
-        }
-        if (destination != null) {
-            destination.close();
-        }
     }
 
     private void store_CameraPhoto_InSdCard(Bitmap _bitmap, String file_name) {
@@ -1399,7 +1480,6 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                                         Constant.showLog(client.printWorkingDirectory());
                                         String feedtype = arr[1];
                                         String month = arr[5];
-                                        String day = arr[4];
                                         String hoCode = "HKHO";
                                         String folderType = "";
                                         client.cwd(Constant.dir_Feed_Back);

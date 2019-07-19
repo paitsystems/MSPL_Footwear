@@ -1,5 +1,7 @@
 package com.lnbinfotech.msplfootwearex;
 
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -8,8 +10,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
@@ -36,20 +40,20 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.lnbinfotech.msplfootwearex.constant.Constant.currentDateFormat;
+
 public class AttachAddressProofImage extends AppCompatActivity implements View.OnClickListener {
     private ImageView imageView_addproof;
-    //private Bitmap bmp;
-    //private int position;
-    //private String file_name;
     private String imagePath;
     private AppCompatButton bt_next, bt_update, bt_cancel;
-    private LinearLayout save_lay, update_lay;
+    private LinearLayout save_lay, update_lay, lay_img;
     private Spinner spinner_addproof;
     private ArrayAdapter<String> adapter_address;
     public static int flag = 3;
@@ -75,18 +79,19 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
     }
 
     private void init() {
+        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
         doc_list = new ArrayList<>();
         db = new DBHandler(AttachAddressProofImage.this);
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
-        imageView_addproof = (ImageView) findViewById(R.id.imageView_addproof);
-        bt_next = (AppCompatButton) findViewById(R.id.btn_next);
-        bt_update = (AppCompatButton) findViewById(R.id.btn_update);
-        bt_cancel = (AppCompatButton) findViewById(R.id.btn_cancel);
-        save_lay = (LinearLayout) findViewById(R.id.save_lay);
-        update_lay = (LinearLayout) findViewById(R.id.update_lay);
-        spinner_addproof = (Spinner) findViewById(R.id.spinner_addproof);
-        FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
+        imageView_addproof = findViewById(R.id.imageView_addproof);
+        bt_next = findViewById(R.id.btn_next);
+        bt_update = findViewById(R.id.btn_update);
+        bt_cancel = findViewById(R.id.btn_cancel);
+        save_lay = findViewById(R.id.save_lay);
+        update_lay = findViewById(R.id.update_lay);
+        lay_img = findViewById(R.id.lay_img);
+        spinner_addproof = findViewById(R.id.spinner_addproof);
         setDocList();
         adapter_address = new ArrayAdapter<>(this, R.layout.address_list, doc_list);
         spinner_addproof.setAdapter(adapter_address);
@@ -106,6 +111,7 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
             update_lay.setVisibility(View.GONE);
 
             imageView_addproof.setOnClickListener(this);
+            lay_img.setOnClickListener(this);
             bt_next.setOnClickListener(this);
         }
     }
@@ -139,25 +145,19 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
                 OptionsActivity.new_cus.setAddress_proof(String.valueOf(position_));
                 setIdSpinnerValue();
 
+                finish();
                 Intent intent = new Intent(AttachAddressProofImage.this, NewCustomerEntryDetailFormActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
-                finish();
                 break;
             case R.id.btn_cancel:
+                finish();
                 Intent j = new Intent(AttachAddressProofImage.this, NewCustomerEntryDetailFormActivity.class);
                 startActivity(j);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
-                finish();
                 break;
             case R.id.imageView_addproof:
                 /*Intent intent_ = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File f = Constant.checkFolder(Constant.folder_name);
-                f = new File(f.getAbsolutePath(), "temp.jpg");
-                intent_.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                startActivityForResult(intent_, requestCode);*/
-
-                Intent intent_ = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
                 f = new File(f.getAbsolutePath(),"temp.jpg");
                 Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
@@ -165,19 +165,17 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
                 intent_.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 intent_.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivityForResult(intent_,requestCode);
-                overridePendingTransition(R.anim.enter, R.anim.exit);
+                overridePendingTransition(R.anim.enter, R.anim.exit);*/
+                break;
+            case R.id.lay_img:
+                showPopup(2);
                 break;
         }
     }
 
     @Override
     public void onBackPressed() {
-        showPopup();
-       /* super.onBackPressed();
-        Intent j = new Intent(AttachAddressProofImage.this, NewCustomerEntryDetailFormActivity.class);
-        startActivity(j);
-        writeLog("onBackPressed():data canceled and goes to DetailFormActivity ");
-        finish();*/
+        showPopup(1);
     }
 
     @Override
@@ -189,8 +187,7 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                //new Constant(AttachAddressProofImage.this).doFinish();
-                showPopup();
+                showPopup(1);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -205,11 +202,8 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
                 String _imagePath = getRealPathFromURI(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name
                         + File.separator + Constant.image_folder + File.separator + "temp.jpg");
                 imageView_addproof.setImageBitmap(scaleBitmap(_imagePath));
-                long datetime = System.currentTimeMillis();
-                SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
-                Date resultdate = new Date(datetime);
 
-                imagePath = "C_Address_Img_" + sdf.format(resultdate) + ".jpg";
+                imagePath = "C_Address_Img_" + currentDateFormat() + ".jpg";
 
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.folder_name
                         + File.separator + Constant.image_folder);
@@ -239,45 +233,23 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
                 writeLog("Exception_" + e.getMessage());
                 e.printStackTrace();
             }
+        } else if (resultCode == RESULT_OK) {
+            try {
+                Uri uri = data.getData();
+                String filepath = getPath(getApplicationContext(),uri);
+                imagePath = "C_Address_Img_" + currentDateFormat() + ".jpg";
+                File sourceFile = new File(filepath);
+                File destinationFile = new File(Environment.getExternalStorageDirectory() +
+                        File.separator + Constant.folder_name + File.separator +
+                        Constant.image_folder + File.separator + imagePath);
+                copyImage(sourceFile, destinationFile,4);
+            } catch (Exception e) {
+                e.printStackTrace();
+                toast.setText("Something Went Wrong");
+                toast.show();
+            }
         }
     }
-
-    /*private void store_CameraPhoto_InSdCard(Bitmap bitmap,String currentdate){
-        File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + "address_img_"+currentdate+".jpg");
-        //File file = new File(Environment.getExternalStorageDirectory() + "img_"+currentdate+".jpeg");
-
-        Log.d("Log","File path:"+file);
-        try{
-
-            FileOutputStream fos = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 15, fos);
-            fos.flush();
-            fos.close();
-        }catch (Exception f){
-            f.printStackTrace();
-            writeLog("FileNotFoundException and IOException found:"+f);
-       }
-    }
-
-    private Bitmap get_Image_from_sd_card(String filename){
-        Bitmap bitmap = null;
-        File imgfile = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + filename);
-
-        try {
-            FileInputStream fis = new FileInputStream(imgfile);
-            bitmap  = BitmapFactory.decodeStream(fis);
-        }catch (FileNotFoundException e){
-            e.printStackTrace();
-            writeLog("FileNotFoundException:"+e);
-        }
-        return bitmap;
-    }
-
-    private String currentDateFormat(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HH_mm");
-        String current_time = sdf.format(new Date());
-        return current_time;
-    }*/
 
     private void setDocList(){
         Cursor cursor = db.getDocName();
@@ -300,6 +272,140 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
             }while (cursor.moveToNext());
         }
         cursor.close();
+    }
+
+    private void takeImage(int requestCode) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
+        f = new File(f.getAbsolutePath(),"temp.jpg");
+        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                + ".provider", f);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivityForResult(intent,requestCode);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
+    }
+
+    private void openGallery(int requestCode) {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, requestCode);
+    }
+
+    private String getPath(Context context, Uri uri) {
+        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+
+        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+            }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri)) {
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                return getDataColumn(context, contentUri, null, null);
+            }
+            // MediaProvider
+            else
+            if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[] {split[1]};
+                return getDataColumn(context, contentUri, selection, selectionArgs);
+            }
+        }
+        // MediaStore (and general)
+        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // Return the remote address
+            if (isGooglePhotosUri(uri))
+                return uri.getLastPathSegment();
+            return getDataColumn(context, uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+        return null;
+    }
+
+    private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = { column };
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
+    private static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    private static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    private static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    private static boolean isGooglePhotosUri(Uri uri) {
+        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
+    private void copyImage(File source, File destination, int a) {
+        try {
+            FileChannel sourceChannel, destinationChannel;
+            sourceChannel = new FileInputStream(source).getChannel();
+            destinationChannel = new FileOutputStream(destination).getChannel();
+            if (sourceChannel != null) {
+                destinationChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+            }
+            if (sourceChannel != null) {
+                sourceChannel.close();
+            }
+            destinationChannel.close();
+            setImage(destination, a);
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("copyImage_"+e.getMessage());
+        }
+    }
+
+    private void setImage(File f, int a) {
+        try {
+            BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+            Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
+            Constant.showLog(f.getName() + "-" + f.getAbsolutePath());
+            imageView_addproof.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("setImage_"+e.getMessage());
+        }
     }
 
     private void set_value_attachAddressProof() {
@@ -376,10 +482,10 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
         return resizedBitmap;
     }
 
-    private void showPopup() {
+    private void showPopup(int id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Do you want to clear this data");
-
+        builder.setMessage("Do you want to clear this data?");
+        if(id == 1) {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -396,6 +502,29 @@ public class AttachAddressProofImage extends AppCompatActivity implements View.O
                 dialogInterface.dismiss();
             }
         });
+        }else if (id == 2) {
+            builder.setMessage("Select Attachment From...");
+            builder.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    openGallery(2);
+                }
+            });
+            builder.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    takeImage(1);
+                }
+            });
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }
 
         builder.create().show();
     }

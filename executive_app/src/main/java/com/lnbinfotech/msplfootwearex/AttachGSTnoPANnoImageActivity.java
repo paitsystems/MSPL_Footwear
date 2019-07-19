@@ -1,5 +1,7 @@
 package com.lnbinfotech.msplfootwearex;
 
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -8,8 +10,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
@@ -36,19 +40,21 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import static com.lnbinfotech.msplfootwearex.constant.Constant.currentDateFormat;
 
 public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements View.OnClickListener {
 
     private RadioButton rdo_gst, rdo_pan;
     private LinearLayout gst_lay, pan_lay;
     private AppCompatButton bt_next, bt_update, bt_cancel;
-    private LinearLayout save_lay, update_lay;
+    private LinearLayout save_lay, update_lay, lay_img, lay_img1;
     private ImageView imageView_pan_img, imageView_gst_img;
     private EditText ed_gstno, ed_panno;
-    //private Bitmap bmp;
     private String imagePath;
     private int _flag = 1;
     public static int radio_flag = 1;
@@ -119,8 +125,12 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
         bt_update = findViewById(R.id.btn_update);
         save_lay = findViewById(R.id.save_lay);
         update_lay = findViewById(R.id.update_lay);
+        lay_img = findViewById(R.id.lay_img);
+        lay_img1 = findViewById(R.id.lay_img1);
         imageView_gst_img = findViewById(R.id.imageView_gst_img);
         imageView_pan_img = findViewById(R.id.imageView_pan_img);
+        lay_img.setOnClickListener(this);
+        lay_img1.setOnClickListener(this);
         FirstActivity.pref = getSharedPreferences(FirstActivity.PREF_NAME,MODE_PRIVATE);
     }
 
@@ -167,25 +177,19 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
                    // OptionsActivity.new_cus.setPan_no_image(pan);
                     Log.d("Log","imagePath:"+imagePath);
                 }
+                finish();
                 Intent intent = new Intent(AttachGSTnoPANnoImageActivity.this, NewCustomerEntryDetailFormActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
-                finish();
                 break;
             case R.id.btn_cancel:
+                finish();
                 Intent j = new Intent(AttachGSTnoPANnoImageActivity.this, NewCustomerEntryDetailFormActivity.class);
                 startActivity(j);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
-                finish();
                 break;
             case R.id.imageView_gst_img:
                 /*Intent intent_ = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File f = Constant.checkFolder(Constant.folder_name);
-                f = new File(f.getAbsolutePath(), "temp.jpg");
-                intent_.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                startActivityForResult(intent_, requestCode);*/
-
-                Intent intent_ = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
                 f = new File(f.getAbsolutePath(),"temp.jpg");
                 Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
@@ -193,16 +197,10 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
                 intent_.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 intent_.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivityForResult(intent_,requestCode);
-                overridePendingTransition(R.anim.enter, R.anim.exit);
+                overridePendingTransition(R.anim.enter, R.anim.exit);*/
                 break;
             case R.id.imageView_pan_img:
                 /*Intent in = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File file = Constant.checkFolder(Constant.folder_name);
-                f = new File(file.getAbsolutePath(), "temp.jpg");
-                in.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                startActivityForResult(in, requestCode);*/
-
-                Intent in = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 File f1 = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
                 f1 = new File(f1.getAbsolutePath(),"temp.jpg");
                 Uri photoURI1 = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
@@ -210,7 +208,7 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
                 in.putExtra(MediaStore.EXTRA_OUTPUT, photoURI1);
                 in.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivityForResult(in,requestCode);
-                overridePendingTransition(R.anim.enter, R.anim.exit);
+                overridePendingTransition(R.anim.enter, R.anim.exit);*/
                 break;
             case R.id.rdo_gstno:
                 radio_flag = 1;
@@ -226,17 +224,18 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
                 gst_lay.setVisibility(View.GONE);
                 pan_lay.setVisibility(View.VISIBLE);
                 break;
+            case R.id.lay_img:
+                showPopup(2);
+                break;
+            case R.id.lay_img1:
+                showPopup(2);
+                break;
         }
     }
 
     @Override
     public void onBackPressed() {
-        showPopup();
-        /*Intent j = new Intent(AttachGSTnoPANnoImageActivity.this, NewCustomerEntryDetailFormActivity.class);
-        startActivity(j);
-        writeLog("Cancel button of onclick():data canceled and goes to DetailFormActivity ");
-        finish();*/
-
+        showPopup(1);
     }
 
     @Override
@@ -248,8 +247,7 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                //new Constant(AttachGSTnoPANnoImageActivity.this).doFinish();
-                showPopup();
+                showPopup(1);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -266,11 +264,9 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
                 if (flag == 0) {
                     if (_flag == 1) {
                         imageView_gst_img.setVisibility(View.VISIBLE);
-                        //OptionsActivity.new_cus.setGst_no_image(null);
                         imageView_gst_img.setImageBitmap(scaleBitmap(_imagePath));
                     } else if (_flag == 0) {
                         imageView_pan_img.setVisibility(View.VISIBLE);
-                        //OptionsActivity.new_cus.setPan_no_image(null);
                         imageView_pan_img.setImageBitmap(scaleBitmap(_imagePath));
                     }
                 } else {
@@ -282,11 +278,8 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
                         imageView_pan_img.setImageBitmap(scaleBitmap(_imagePath));
                     }
                 }
-                long datetime = System.currentTimeMillis();
-                SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
-                Date resultdate = new Date(datetime);
 
-                imagePath = "C_GP_Img_" + sdf.format(resultdate) + ".jpg";
+                imagePath = "C_GP_Img_" + currentDateFormat() + ".jpg";
 
                 File f = new File(Environment.getExternalStorageDirectory() + File.separator +
                         Constant.folder_name + File.separator + Constant.image_folder);
@@ -316,44 +309,23 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
                 writeLog("Exception_" + e.getMessage());
                 e.printStackTrace();
             }
+        } else if (resultCode == RESULT_OK) {
+            try {
+                Uri uri = data.getData();
+                String filepath = getPath(getApplicationContext(),uri);
+                imagePath = "C_GP_Img_" + currentDateFormat() + ".jpg";
+                File sourceFile = new File(filepath);
+                File destinationFile = new File(Environment.getExternalStorageDirectory() +
+                        File.separator + Constant.folder_name + File.separator +
+                        Constant.image_folder + File.separator + imagePath);
+                copyImage(sourceFile, destinationFile,4);
+            } catch (Exception e) {
+                e.printStackTrace();
+                toast.setText("Something Went Wrong");
+                toast.show();
+            }
         }
     }
-
-    /*private void store_CameraPhoto_InSdCard(Bitmap bitmap,String currentdate){
-        File file = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + "gp_img_"+currentdate+".jpg");
-        //File file = new File(Environment.getExternalStorageDirectory() + "img_"+currentdate+".jpeg");
-
-        Log.d("Log","File path:"+file);
-        try{
-
-            FileOutputStream fos = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 15, fos);
-            fos.flush();
-            fos.close();
-        }catch (Exception f){
-            f.printStackTrace();
-            writeLog("FileNotFoundException and IOException found:"+f);
-        }
-    }
-    private Bitmap get_Image_from_sd_card(String filename){
-        Bitmap bitmap = null;
-        File imgfile = new File(Environment.getExternalStorageDirectory() + File.separator + Constant.captured_images_folder+File.separator + filename);
-
-        try {
-            FileInputStream fis = new FileInputStream(imgfile);
-            bitmap  = BitmapFactory.decodeStream(fis);
-        }catch (FileNotFoundException e){
-            e.printStackTrace();
-            writeLog("FileNotFoundException:"+e);
-        }
-        return bitmap;
-    }
-
-    private String currentDateFormat(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HH_mm");
-        String current_time = sdf.format(new Date());
-        return current_time;
-    }*/
 
     private void setIdValue(){
 
@@ -383,6 +355,156 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
             Constant.showLog("pan_no: " + pan_no);
             OptionsActivity.new_cus.setGst_no("NA");
             OptionsActivity.new_cus.setPan_no(pan_no);
+        }
+    }
+
+    private void takeImage(int requestCode) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File f = Constant.checkFolder(Constant.folder_name + File.separator + Constant.image_folder);
+        f = new File(f.getAbsolutePath(),"temp.jpg");
+        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                + ".provider", f);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivityForResult(intent,requestCode);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
+    }
+
+    private void openGallery(int requestCode) {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, requestCode);
+    }
+
+    private String getPath(Context context, Uri uri) {
+        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+
+        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+            }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri)) {
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                return getDataColumn(context, contentUri, null, null);
+            }
+            // MediaProvider
+            else
+            if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[] {split[1]};
+                return getDataColumn(context, contentUri, selection, selectionArgs);
+            }
+        }
+        // MediaStore (and general)
+        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // Return the remote address
+            if (isGooglePhotosUri(uri))
+                return uri.getLastPathSegment();
+            return getDataColumn(context, uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+        return null;
+    }
+
+    private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = { column };
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
+    private static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    private static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    private static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    private static boolean isGooglePhotosUri(Uri uri) {
+        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
+    private void copyImage(File source, File destination, int a) {
+        try {
+            FileChannel sourceChannel, destinationChannel;
+            sourceChannel = new FileInputStream(source).getChannel();
+            destinationChannel = new FileOutputStream(destination).getChannel();
+            if (sourceChannel != null) {
+                destinationChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+            }
+            if (sourceChannel != null) {
+                sourceChannel.close();
+            }
+            destinationChannel.close();
+            setImage(destination, a);
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("copyImage_"+e.getMessage());
+        }
+    }
+
+    private void setImage(File f, int a) {
+        try {
+            BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+            Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
+            Constant.showLog(f.getName() + "-" + f.getAbsolutePath());
+            if (flag == 0) {
+                if (_flag == 1) {
+                    imageView_gst_img.setVisibility(View.VISIBLE);
+                    imageView_gst_img.setImageBitmap(bitmap);
+                } else if (_flag == 0) {
+                    imageView_pan_img.setVisibility(View.VISIBLE);
+                    imageView_pan_img.setImageBitmap(bitmap);
+                }
+            } else {
+                if (_flag == 1) {
+                    imageView_gst_img.setVisibility(View.VISIBLE);
+                    imageView_gst_img.setImageBitmap(bitmap);
+                } else if (_flag == 0) {
+                    imageView_pan_img.setVisibility(View.VISIBLE);
+                    imageView_pan_img.setImageBitmap(bitmap);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            writeLog("setImage_"+e.getMessage());
         }
     }
 
@@ -498,9 +620,10 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
         return resizedBitmap;
     }
 
-    private void showPopup() {
+    private void showPopup(int id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Do you want to clear this data");
+        builder.setMessage("Do you want to clear this data?");
+        if(id == 1) {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -517,6 +640,29 @@ public class AttachGSTnoPANnoImageActivity extends AppCompatActivity implements 
                 dialogInterface.dismiss();
             }
         });
+        }else if (id == 2) {
+            builder.setMessage("Select Attachment From...");
+            builder.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    openGallery(2);
+                }
+            });
+            builder.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    takeImage(1);
+                }
+            });
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }
 
         builder.create().show();
     }

@@ -10,7 +10,7 @@ android {
         applicationId "com.lnbinfotech.msplfootwearex"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 30
+        versionCode 32
         versionName "1.8.2"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true

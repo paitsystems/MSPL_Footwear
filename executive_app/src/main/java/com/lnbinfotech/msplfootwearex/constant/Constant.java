@@ -58,9 +58,9 @@ public class Constant {
     // PORT : 24085 - GRAVITY_PC
     // PORT : 24086 - SERVER
 
-    public static String ipaddress = "http://172.30.1.209/MSPLV9/service.svc";
+    public static String ipaddress = "http://172.30.1.209/MSPLV10/service.svc";
     //public static String ipaddress = "http://license.lnbinfotech.com/MSPLV9/service.svc";
-    //public static String ipaddress = "http://43.239.147.103:24085/MSPLV9/service.svc";
+    //public static String ipaddress = "http://43.239.147.103:24085/MSPLV10/service.svc";
 
     //TODO: Check Image Url
     public static String imgUrl = "http://43.239.147.103:24085/IMAGES/";
@@ -69,9 +69,9 @@ public class Constant {
     public static String custimgUrl = "http://43.239.147.103:24085/custImage/";
 
     //TODO: Check TrackOrder Url
-    public static String trackOrderUrl = "http://43.239.147.103:24086/TrackOrder/";
+    public static String trackOrderUrl = "http://43.239.147.103:24085/TrackOrder/";
 
-    private static int connectionFlag = 0;
+    private static int connectionFlag = 2;
 
     //TODO: Check liveTestFlag 1-ScreenShotDisable, 0-ScreenShotEnable
     public static int liveTestFlag = 1;
@@ -107,14 +107,16 @@ public class Constant {
     public Constant() {
         //TODO: Change Image Ip Also
         if (connectionFlag == 0) {
-            ipaddress = "http://103.109.13.200:24086/MSPLV9/service.svc";
+            ipaddress = "http://103.109.13.200:24086/MSPLV10/service.svc";
             imgUrl = "http://103.109.13.200:24086/IMAGES/";
             custimgUrl = "http://103.109.13.200:24086/custImage/";
+            trackOrderUrl = "http://103.109.13.200:24086/TrackOrder/";
             connectionFlag = 1;
         } else if (connectionFlag == 1) {
-            ipaddress = "http://43.239.147.103:24085/MSPLV9/service.svc";
+            ipaddress = "http://43.239.147.103:24085/MSPLV10/service.svc";
             imgUrl = "http://43.239.147.103:24085/IMAGES/";
             custimgUrl = "http://43.239.147.103:24085/custImage/";
+            trackOrderUrl = "http://43.239.147.103:24085/TrackOrder/";
             connectionFlag = 0;
         }
     }
@@ -210,6 +212,11 @@ public class Constant {
             e.printStackTrace();
         }
         return str;
+    }
+
+    public static String currentDateFormat() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd_MMM_yyyy_HH_mm_ss", Locale.ENGLISH);
+        return sdf.format(new Date());
     }
 
     private void writeLog(String _data) {

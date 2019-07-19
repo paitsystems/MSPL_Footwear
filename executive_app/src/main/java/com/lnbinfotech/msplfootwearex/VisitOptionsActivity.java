@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Location;
 import android.net.Uri;
@@ -130,9 +131,7 @@ public class VisitOptionsActivity extends AppCompatActivity implements
             case R.id.tv_phone1:
                 String str = tv_phone1.getText().toString();
                 if (!str.equals("") && !str.equals("0")) {
-                    Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", str, null));
-                    startActivity(phoneIntent);
-                    overridePendingTransition(R.anim.enter, R.anim.exit);
+                    showDia(5);
                 }
                 break;
             case R.id.card_track_order:
@@ -240,22 +239,22 @@ public class VisitOptionsActivity extends AppCompatActivity implements
                     dialog.dismiss();
                 }
             });
-        }else if (a == 1) {
+        } else if (a == 1) {
             builder.setTitle("Take Order");
             builder.setMessage("How do you want to take order?");
             builder.setPositiveButton("With Photos", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(getApplicationContext(),MainImagewiseSetwiseOrderActivity.class));
-                    overridePendingTransition(R.anim.enter,R.anim.exit);
+                    startActivity(new Intent(getApplicationContext(), MainImagewiseSetwiseOrderActivity.class));
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
                     dialog.dismiss();
                 }
             });
             builder.setNegativeButton("Without Photos", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(getApplicationContext(),CutsizeSetwiseOrderActivity.class));
-                    overridePendingTransition(R.anim.enter,R.anim.exit);
+                    startActivity(new Intent(getApplicationContext(), CutsizeSetwiseOrderActivity.class));
+                    overridePendingTransition(R.anim.enter, R.anim.exit);
                     dialog.dismiss();
                 }
             });
@@ -265,7 +264,7 @@ public class VisitOptionsActivity extends AppCompatActivity implements
                     dialog.dismiss();
                 }
             });
-        }else if (a == 2) {
+        } else if (a == 2) {
             builder.setMessage("Location Updated Successfully");
             builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
                 @Override
@@ -273,7 +272,7 @@ public class VisitOptionsActivity extends AppCompatActivity implements
                     dialog.dismiss();
                 }
             });
-        }else if (a == 3) {
+        } else if (a == 3) {
             builder.setMessage("Error While Updating Customer Location");
             builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                 @Override
@@ -289,7 +288,7 @@ public class VisitOptionsActivity extends AppCompatActivity implements
                     dialog.dismiss();
                 }
             });
-        }else if (a == 4) {
+        } else if (a == 4) {
             builder.setMessage("Do You Want To Update Customer Location?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -304,8 +303,53 @@ public class VisitOptionsActivity extends AppCompatActivity implements
                     dialog.dismiss();
                 }
             });
+        } else if (a == 5) {
+            builder.setMessage("What Do You Want To Do?");
+            builder.setPositiveButton("Call", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    makeCall(tv_phone1.getText().toString());
+                }
+            });
+            builder.setNegativeButton("WhatsApp", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    sendWhatsapp("Hi", tv_phone1.getText().toString());
+                }
+            });
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
         }
         builder.create().show();
+    }
+
+    private void makeCall(String number){
+        Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
+                "tel", number, null));
+        startActivity(phoneIntent);
+        overridePendingTransition(R.anim.enter,R.anim.exit);
+    }
+
+    private void sendWhatsapp(String message, String mobNo){
+        String url = "https://api.whatsapp.com/send?phone=+91" + mobNo;
+        try {
+            PackageManager pm = getPackageManager();
+            pm.getPackageInfo("com.whatsapp", PackageManager.GET_ACTIVITIES);
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+        } catch (Exception e) {
+            toast.setText("Whatsapp app not installed in your phone");
+            toast.show();
+            e.printStackTrace();
+            writeLog("sendWhatsapp_"+e.getMessage());
+        }
     }
 
     private void writeLog(String _data){

@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
-                android:background="@drawable/line_left_bottom_red_draw"
+                android:background="@drawable/line_left_bottom_brown_draw"
                 android:gravity="center_vertical"
                 android:text="Stock Take Date"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -45,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
-                android:background="@drawable/line_left_right_bottom_red_draw"
+                android:background="@drawable/line_left_right_bottom_brown_draw"
                 android:ems="10"
                 android:padding="5sp"
                 android:visibility="visible" />
