@@ -621,7 +621,6 @@ public class CheckoutCustOrderActivity extends AppCompatActivity
                 writeLog("getSaveOrderData_" + vehicle.toString());
                 request.setEntity(entity);
                 // Send request to WCF service
-                //TODO : Check Timeout
                 HttpParams httpParams = new BasicHttpParams();
                 HttpConnectionParams.setConnectionTimeout(httpParams,Constant.TIMEOUT_CON);
                 HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);

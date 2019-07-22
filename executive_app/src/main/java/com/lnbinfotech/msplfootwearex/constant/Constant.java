@@ -58,9 +58,9 @@ public class Constant {
     // PORT : 24085 - GRAVITY_PC
     // PORT : 24086 - SERVER
 
-    public static String ipaddress = "http://172.30.1.209/MSPLV10/service.svc";
+    //public static String ipaddress = "http://172.30.1.209/MSPLV10/service.svc";
     //public static String ipaddress = "http://license.lnbinfotech.com/MSPLV9/service.svc";
-    //public static String ipaddress = "http://43.239.147.103:24085/MSPLV10/service.svc";
+    public static String ipaddress = "http://43.239.147.103:24085/MSPLV10/service.svc";
 
     //TODO: Check Image Url
     public static String imgUrl = "http://43.239.147.103:24085/IMAGES/";
@@ -71,13 +71,13 @@ public class Constant {
     //TODO: Check TrackOrder Url
     public static String trackOrderUrl = "http://43.239.147.103:24085/TrackOrder/";
 
-    private static int connectionFlag = 2;
+    private static int connectionFlag = 0;
 
     //TODO: Check liveTestFlag 1-ScreenShotDisable, 0-ScreenShotEnable
     public static int liveTestFlag = 1;
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
-    private static int showLogFlag = 0;
+    private static int showLogFlag = 1;
 
     public static int TIMEOUT_CON = 10*1000;
     public static int TIMEOUT_SO = 2*60*1000;

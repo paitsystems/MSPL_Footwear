@@ -81,7 +81,6 @@ public class ScheduledJobServicePL extends JobService {
             getApplicationContext().startService(new Intent(getApplicationContext(), UploadImageService.class));
         }
 
-        //TODO : Set Time Limit
         //if(hour<13||hour>20) {
         if (ConnectivityTest.getNetStat(getApplicationContext())) {
             //startSync();

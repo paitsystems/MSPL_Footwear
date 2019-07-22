@@ -151,8 +151,6 @@ public class StockTakeReportActivity extends AppCompatActivity implements View.O
         try {
             int maxAuto = db.getMaxAuto();
             //Auto + "|"+ CustId + "|"+ HOCode + "|"+ dispatchId + "|"+ empId + "|"+ type
-            //TODO: Remove empid
-            //empId = 12;
             String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId + "|" +
                     type + "|" + designId + "|" + tv_stDate.getText().toString();
             writeLog("getStockTakeMaster_" + url);

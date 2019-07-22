@@ -204,8 +204,6 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
         try {
             int maxAuto = db.getMaxAuto();
             //Auto + "|"+ CustId + "|"+ HOCode + "|"+ dispatchId + "|"+ empId + "|"+ type
-            //TODO: Remove empid
-            //empId = 12;
             tv_articleName.setVisibility(View.GONE);
             String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId + "|" +
                     type + "|" + designId + "|" + tv_stDate.getText().toString();
@@ -265,8 +263,6 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
         try {
             int maxAuto = db.getMaxAuto();
             //Auto + "|"+ CustId + "|"+ HOCode + "|"+ dispatchId + "|"+ empId + "|"+ type
-            //TODO: Remove empid
-            //empId = 12;
             String url = maxAuto + "|" + 0 + "|" + hoCode + "|" + dpID + "|" + empId + "|" +
                     type + "|" + designId + "|" + tv_stDate.getText().toString();
             writeLog("updateStockTakeMaster_" + url);
@@ -431,7 +427,6 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
                 Constant.showLog(vehicle.toString());
                 writeLog("saveStockDetail_" + vehicle.toString());
                 request.setEntity(entity);
-                //TODO : Check Timeout
                 HttpParams httpParams = new BasicHttpParams();
                 HttpConnectionParams.setConnectionTimeout(httpParams, Constant.TIMEOUT_CON);
                 HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);
@@ -518,7 +513,6 @@ public class StockTakeActivity extends AppCompatActivity implements View.OnClick
                 Constant.showLog(vehicle.toString());
                 writeLog("updateStockDetail_" + vehicle.toString());
                 request.setEntity(entity);
-                //TODO : Check Timeout
                 HttpParams httpParams = new BasicHttpParams();
                 HttpConnectionParams.setConnectionTimeout(httpParams, Constant.TIMEOUT_CON);
                 HttpConnectionParams.setSoTimeout(httpParams, Constant.TIMEOUT_SO);

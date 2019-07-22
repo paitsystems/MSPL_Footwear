@@ -53,9 +53,9 @@ public class Constant {
             zip_file = "SmartGST.zip";
 
     //TODO: Check Ip Address
-    public static String ipaddress = "http://172.30.1.209/MSPLC10/service.svc";
+    //public static String ipaddress = "http://172.30.1.209/MSPLC10/service.svc";
     //public static String ipaddress = "http://license.lnbinfotech.com/MSPLC10/service.svc";
-    //public static String ipaddress = "http://43.239.147.103:24085/MSPLC10/service.svc";
+    public static String ipaddress = "http://43.239.147.103:24085/MSPLC10/service.svc";
 
     //TODO: Check Image Url
     public static String imgUrl = "http://43.239.147.103:24085/IMAGES/";
@@ -66,13 +66,13 @@ public class Constant {
     //TODO: Check TrackOrder Url
     public static String trackOrderUrl = "http://43.239.147.103:24085/TrackOrder/";
 
-    private static int connectionFlag = 2;
+    private static int connectionFlag = 0;
 
     //TODO: Check liveTestFlag 1-ScreenShotDisable, 0-ScreenShotEnable
     public static int liveTestFlag = 1;
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
-    public static int showLogFlag = 0;
+    public static int showLogFlag = 1;
 
     public static int TIMEOUT_CON = 10*1000;
     public static int TIMEOUT_SO = 2*60*1000;
