@@ -38,7 +38,8 @@ public class Constant {
             ftp_username = "supportftp@lnbinfotech.com",
             ftp_password = "support$456",
             ftp_directory = "Test",*/
-            ftp_adress = "103.109.13.200",
+            //ftp_adress = "103.109.13.200",
+            ftp_adress = "l2.mspl.shoes",
             ftp_username = "ascpune/mobileapp",
             ftp_password = "Mspl@3321",
             ftp_directory = "Packed Goods",
@@ -51,21 +52,25 @@ public class Constant {
 
     //public static String ipaddress = "http://172.30.1.209/MSPLD3/service.svc";
     //public static String ipaddress = "http://license.lnbinfotech.com/MSPLD2/service.svc";
-    public static String ipaddress = "http://43.239.147.103:24085/MSPLD3/service.svc";
+    //public static String ipaddress = "http://43.239.147.103:24085/MSPLD3/service.svc";
+      public static String ipaddress = "http://l1.mspl.shoes:24085/MSPLD3/service.svc";
 
     //TODO: Check Image Url
-    public static String imgUrl = "http://43.239.147.103:24085/IMAGES/";
+    //public static String imgUrl = "http://43.239.147.103:24085/IMAGES/";
+    public static String imgUrl = "http://l1.mspl.shoes:24085/IMAGES/";
 
     //TODO: Check CustImage Url
-    public static String custimgUrl = "http://43.239.147.103:24085/custImage/";
+    //public static String custimgUrl = "http://43.239.147.103:24085/custImage/";
+    public static String custimgUrl = "http://l1.mspl.shoes:24085/custImage/";
 
     //TODO: Check DPApp Url
-    public static String dpAppUrl = "http://43.239.147.103:24085/DPApp/";
+    //public static String dpAppUrl = "http://43.239.147.103:24085/DPApp/";
+    public static String dpAppUrl = "http://l1.mspl.shoes:24085/DPApp/";
 
     private static int connectionFlag = 0;
 
     //TODO: Check liveTestFlag 1-ScreenShotDisable, 0-ScreenShotEnable
-    public static int liveTestFlag = 0;
+    public static int liveTestFlag = 1;
 
     //TODO: Check liveTestFlag 1-HideLog, 0-ShowLog
     public static int showLogFlag = 1;
@@ -95,7 +100,7 @@ public class Constant {
         this.context = context;
     }
 
-    public Constant() {
+    /*public Constant() {
         //TODO: Change Image Ip Also
         if (connectionFlag == 0) {
             ipaddress = "http://103.109.13.200:24086/MSPLD3/service.svc";
@@ -108,6 +113,25 @@ public class Constant {
             imgUrl = "http://43.239.147.103:24085/IMAGES/";
             custimgUrl = "http://43.239.147.103:24085/custImage/";
             dpAppUrl = "http://43.239.147.103:24085/DPApp/";
+            connectionFlag = 0;
+        }
+    }*/
+
+    public Constant() {
+        //TODO: Change Image Ip Also
+        if (connectionFlag == 0) {
+            ipaddress = "http://l2.mspl.shoes:24086/MSPLD3/service.svc";
+            imgUrl = "http://l2.mspl.shoes:24086/IMAGES/";
+            custimgUrl = "http://l2.mspl.shoes:24086/custImage/";
+            dpAppUrl = "http://l2.mspl.shoes:24086/DPApp/";
+            ftp_adress = "l2.mspl.shoes";
+            connectionFlag = 1;
+        } else if (connectionFlag == 1) {
+            ipaddress = "http://l1.mspl.shoes:24085/MSPLD3/service.svc";
+            imgUrl = "http://l1.mspl.shoes:24085/IMAGES/";
+            custimgUrl = "http://l1.mspl.shoes:24085/custImage/";
+            dpAppUrl = "http://l1.mspl.shoes:24085/DPApp/";
+            ftp_adress = "l1.mspl.shoes";
             connectionFlag = 0;
         }
     }

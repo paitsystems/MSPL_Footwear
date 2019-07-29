@@ -71,7 +71,7 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
     private Constant constant;
     private DBHandler db;
     private Toast toast;
-    private int cust_id;
+    private int cust_id = 0;
     private LocationProvider provider;
     private double lat = 0, lon = 0;
     private String loc, custFolderName;
@@ -556,8 +556,9 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
                 requests.saveCustomerDetail(url, new ServerCallback() {
                     @Override
                     public void onSuccess(String result) {
-                        cust_id = Integer.parseInt(result);
                         if (!result.equals("0")) {
+                            cust_id = Integer.parseInt(result);
+                            custFolderName = cust_id+"_"+custFolderName;
                             OptionsActivity.new_cus.setCust_id(result);
                             Constant.showLog("result of newcust:" + result);
                             showPopup(1);

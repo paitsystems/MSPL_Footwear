@@ -44,7 +44,8 @@ public class Constant {
             ftp_username = "supportftp@lnbinfotech.com",
             ftp_password = "support$456",
             ftp_directory = "Test",*/
-            ftp_adress = "103.109.13.200",
+            //ftp_adress = "103.109.13.200",
+            ftp_adress = "l2.mspl.shoes",
             ftp_username = "ascpune/mobileapp",
             ftp_password = "Mspl@3321",
             dir_data_sync = "Data Sync",
@@ -55,16 +56,20 @@ public class Constant {
     //TODO: Check Ip Address
     //public static String ipaddress = "http://172.30.1.209/MSPLC10/service.svc";
     //public static String ipaddress = "http://license.lnbinfotech.com/MSPLC10/service.svc";
-    public static String ipaddress = "http://43.239.147.103:24085/MSPLC10/service.svc";
+    //public static String ipaddress = "http://43.239.147.103:24085/MSPLC10/service.svc";
+    public static String ipaddress = "http://l1.mspl.shoes:24085/MSPLC10/service.svc";
 
     //TODO: Check Image Url
-    public static String imgUrl = "http://43.239.147.103:24085/IMAGES/";
+    //public static String imgUrl = "http://43.239.147.103:24085/IMAGES/";
+    public static String imgUrl = "http://l1.mspl.shoes:24085/IMAGES/";
 
     //TODO: Check CustImage Url
-    public static String custimgUrl = "http://43.239.147.103:24085/custImage/";
+    //public static String custimgUrl = "http://43.239.147.103:24085/custImage/";
+    public static String custimgUrl = "http://l1.mspl.shoes:24085/custImage/";
 
     //TODO: Check TrackOrder Url
-    public static String trackOrderUrl = "http://43.239.147.103:24085/TrackOrder/";
+    //public static String trackOrderUrl = "http://43.239.147.103:24085/TrackOrder/";
+    public static String trackOrderUrl = "http://l1.mspl.shoes:24085/TrackOrder/";
 
     private static int connectionFlag = 0;
 
@@ -107,7 +112,7 @@ public class Constant {
         }
     }
 
-    public Constant() {
+    /*public Constant() {
         if(connectionFlag == 0) {
             ipaddress = "http://103.109.13.200:24086/MSPLC10/service.svc";
             imgUrl = "http://103.109.13.200:24086/IMAGES/";
@@ -119,6 +124,22 @@ public class Constant {
             imgUrl = "http://43.239.147.103:24085/IMAGES/";
             custimgUrl = "http://43.239.147.103:24085/custImage/";
             trackOrderUrl = "http://43.239.147.103:24085/TrackOrder/";
+            connectionFlag = 0;
+        }
+    }*/
+
+    public Constant() {
+        if(connectionFlag == 0) {
+            ipaddress = "http://l2.mspl.shoes:24086/MSPLC10/service.svc";
+            imgUrl = "http://l2.mspl.shoes:24086/IMAGES/";
+            custimgUrl = "http://l2.mspl.shoes:24086/custImage/";
+            trackOrderUrl = "http://l2.mspl.shoes:24086/TrackOrder/";
+            connectionFlag = 1;
+        }else if(connectionFlag == 1) {
+            ipaddress = "http://l1.mspl.shoes:24085/MSPLC10/service.svc";
+            imgUrl = "http://l1.mspl.shoes:24085/IMAGES/";
+            custimgUrl = "http://l1.mspl.shoes:24085/custImage/";
+            trackOrderUrl = "http://l1.mspl.shoes:24085/TrackOrder/";
             connectionFlag = 0;
         }
     }

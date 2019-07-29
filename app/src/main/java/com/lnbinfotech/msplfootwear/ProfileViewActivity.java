@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -102,6 +103,8 @@ public class ProfileViewActivity extends AppCompatActivity implements View.OnCli
         ed_cc = findViewById(R.id.ed_cc);
         bt_save = findViewById(R.id.bt_save);
         imgv_edit = findViewById(R.id.imgv_edit);
+        toast = Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER,0,0);
     }
 
     private void getMobNo() {

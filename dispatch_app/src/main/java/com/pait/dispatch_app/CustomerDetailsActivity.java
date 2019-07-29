@@ -12,6 +12,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -57,9 +58,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Retrofit;
 
 public class CustomerDetailsActivity extends AppCompatActivity
         implements View.OnClickListener,
@@ -934,6 +938,34 @@ public class CustomerDetailsActivity extends AppCompatActivity
                 pd.dismiss();
             }
         }
+    }
+
+    private void uploadToServer(String filePath) {
+        Retrofit retrofit = new RetrofitApiBuilder().getApiBuilder();
+        RetrofitApiInterface uploadAPIs = retrofit.create(RetrofitApiInterface.class);
+
+        //Create a file object using file path
+        File file = new File(Environment.getExternalStorageDirectory() + File.separator +
+                Constant.folder_name + File.separator + Constant.image_folder +"/test.jpg");
+        // Create a request body with file and image media type
+        RequestBody fileReqBody = RequestBody.create(MediaType.parse("image/*"), file);
+        // Create MultipartBody.Part using file request-body,file name and part name
+        MultipartBody.Part part = MultipartBody.Part.createFormData("upload", file.getName(), fileReqBody);
+        //Create request body with text description and text media type
+        RequestBody description = RequestBody.create(MediaType.parse("text/plain"), "image-type");
+        //
+        Call call = uploadAPIs.uploadImage(part, description);
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, retrofit2.Response response) {
+                Constant.showLog("onResponse");
+                Constant.showLog(response.message());
+            }
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Constant.showLog("onFailure");
+            }
+        });
     }
 
     private void writeLog(String _data) {
