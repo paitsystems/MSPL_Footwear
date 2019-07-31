@@ -39,7 +39,8 @@ public class Constant {
             ftp_password = "support$456",
             ftp_directory = "Test",*/
             //ftp_adress = "103.109.13.200",
-            ftp_adress = "l2.mspl.shoes",
+            ftp_adress1 = "l2.mspl.shoes",
+            ftp_adress2 = "l1.mspl.shoes",
             ftp_username = "ascpune/mobileapp",
             ftp_password = "Mspl@3321",
             ftp_directory = "Packed Goods",
@@ -124,14 +125,12 @@ public class Constant {
             imgUrl = "http://l2.mspl.shoes:24086/IMAGES/";
             custimgUrl = "http://l2.mspl.shoes:24086/custImage/";
             dpAppUrl = "http://l2.mspl.shoes:24086/DPApp/";
-            ftp_adress = "l2.mspl.shoes";
             connectionFlag = 1;
         } else if (connectionFlag == 1) {
             ipaddress = "http://l1.mspl.shoes:24085/MSPLD3/service.svc";
             imgUrl = "http://l1.mspl.shoes:24085/IMAGES/";
             custimgUrl = "http://l1.mspl.shoes:24085/custImage/";
             dpAppUrl = "http://l1.mspl.shoes:24085/DPApp/";
-            ftp_adress = "l1.mspl.shoes";
             connectionFlag = 0;
         }
     }

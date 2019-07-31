@@ -49,7 +49,13 @@ public class DownloadDBService extends IntentService {
             Constant.showLog("Service Started");
             ftp = new FTPClient();
             String imageName = DBHandler.Database_Name;
-            ftp.connect(Constant.ftp_adress, 21);
+            try {
+                ftp.connect(Constant.ftp_adress1, 21);
+            } catch (Exception e) {
+                e.printStackTrace();
+                writeLog("DownloadDBService_doInBackground_"+e.getMessage());
+                ftp.connect(Constant.ftp_adress2, 21);
+            }
             int reply = ftp.getReplyCode();
             if (FTPReply.isPositiveCompletion(reply)) {
                 ftp.login(Constant.ftp_username, Constant.ftp_password);

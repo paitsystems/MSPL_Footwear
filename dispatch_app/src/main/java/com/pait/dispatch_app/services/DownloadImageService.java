@@ -32,7 +32,13 @@ public class DownloadImageService extends IntentService {
             Constant.showLog("Service Started");
             String imageName = intent.getExtras().getString("imageName");
             FTPClient ftp = new FTPClient();
-            ftp.connect(Constant.ftp_adress, 21);
+            try {
+                ftp.connect(Constant.ftp_adress1, 21);
+            } catch (Exception e) {
+                e.printStackTrace();
+                writeLog("onHandleIntent_"+e.getMessage());
+                ftp.connect(Constant.ftp_adress2, 21);
+            }
             int reply = ftp.getReplyCode();
             if (FTPReply.isPositiveCompletion(reply)) {
                 ftp.login(Constant.ftp_username, Constant.ftp_password);

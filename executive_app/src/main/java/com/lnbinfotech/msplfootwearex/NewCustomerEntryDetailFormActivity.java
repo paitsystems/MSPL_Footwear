@@ -607,7 +607,13 @@ public class NewCustomerEntryDetailFormActivity extends AppCompatActivity
                 Constant.showLog("Service started..");
                 writeLog("UploadImage_Service started");
                 FTPClient client = new FTPClient();
-                client.connect(Constant.ftp_adress, 21);
+                try {
+                    client.connect(Constant.ftp_adress1, 21);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    writeLog("UploadImage_doInBackground_"+e.getMessage());
+                    client.connect(Constant.ftp_adress2, 21);
+                }
                 client.login(Constant.ftp_username, Constant.ftp_password);
                 client.setFileType(FTP.BINARY_FILE_TYPE);
                 client.enterLocalPassiveMode();

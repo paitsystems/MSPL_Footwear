@@ -45,7 +45,8 @@ public class Constant {
             ftp_password = "support$456",
             ftp_directory = "Test",*/
             //ftp_adress = "103.109.13.200",
-            ftp_adress = "l2.mspl.shoes",
+            ftp_adress1 = "l2.mspl.shoes",
+            ftp_adress2 = "l1.mspl.shoes",
             ftp_username = "ascpune/mobileapp",
             ftp_password = "Mspl@3321",
             dir_data_sync = "Data Sync",

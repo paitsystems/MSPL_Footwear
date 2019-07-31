@@ -1461,7 +1461,13 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     f = getApplicationContext().getFilesDir();
                 }
                 FTPClient client = new FTPClient();
-                client.connect(Constant.ftp_adress, 21);
+                try {
+                    client.connect(Constant.ftp_adress1, 21);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    writeLog("uploadImage_doInBackground_"+e.getMessage());
+                    client.connect(Constant.ftp_adress2, 21);
+                }
                 client.login(Constant.ftp_username, Constant.ftp_password);
                 client.setFileType(FTP.BINARY_FILE_TYPE);
                 client.enterLocalPassiveMode();
@@ -1529,7 +1535,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
-                                    writeLog("onHandleIntent_" + e.getMessage());
+                                    writeLog("uploadImage_doInBackground1_"+e.getMessage());
                                 }
                             }
                         }
@@ -1539,6 +1545,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                 Constant.showLog("disconnected..");
             } catch (Exception e) {
                 e.printStackTrace();
+                writeLog("uploadImage_doInBackground2_"+e.getMessage());
             }
             return null;
         }

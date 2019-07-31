@@ -781,7 +781,12 @@ public class OptionsActivity extends AppCompatActivity implements View.OnClickLi
         Intent sintent = new Intent(getApplicationContext(), SchemeFullImageActivity.class);
         sintent.putExtra("data",prod);
         sintent.putExtra("pos","0");
-        startActivity(sintent);
+        if(scImgHashMap.size()>0) {
+            startActivity(sintent);
+        } else {
+            toast.setText("No Scheme Available");
+            toast.show();
+        }
     }
 
     private void setScheme(){
